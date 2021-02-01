@@ -1,0 +1,3 @@
+./source/dynamical_systems/build
+./source/robot_model/build
+./source/state_representation/build

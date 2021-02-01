@@ -17,7 +17,7 @@ fi
 #create a shared volume to store the lib folder
 docker volume create --driver local \
     --opt type="none" \
-    --opt device="${PWD}/source/lib/" \
+    --opt device="${PWD}/source/" \
     --opt o="bind" \
     "${NAME}_lib_vol"
 
@@ -27,5 +27,5 @@ docker run \
 	--net="${NETWORK}" \
 	-it \
     --rm \
-	--volume="${NAME}_lib_vol:/lib/:rw" \
+	--volume="${NAME}_lib_vol:/root/control_lib/:rw" \
 	"${NAME}:${TAG}"

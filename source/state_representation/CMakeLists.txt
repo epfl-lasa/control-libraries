@@ -7,23 +7,23 @@ project(state_representation)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
-  	set(CMAKE_C_STANDARD 99)
+    set(CMAKE_C_STANDARD 99)
 endif()
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  	set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  	add_compile_options(-Wall -Wextra -Wpedantic)
+    add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
 find_package(Eigen3 REQUIRED)
 
 include_directories(
- 	include
- 	${Eigen3_INCLUDE_DIRS}
+  include
+  ${Eigen3_INCLUDE_DIRS}
 )
 
 set(CORE_SOURCES
@@ -31,7 +31,7 @@ set(CORE_SOURCES
   src/State.cpp
   src/Space/SpatialState.cpp
   src/Space/Cartesian/CartesianState.cpp
-	src/Space/Cartesian/CartesianPose.cpp
+  src/Space/Cartesian/CartesianPose.cpp
   src/Space/Cartesian/CartesianTwist.cpp
   src/Space/Cartesian/CartesianWrench.cpp
   src/Robot/JointState.cpp
@@ -55,17 +55,17 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 install(DIRECTORY include/
-  	DESTINATION include
+    DESTINATION include
 )
 
 install(TARGETS ${PROJECT_NAME}
-  	ARCHIVE DESTINATION lib
-  	LIBRARY DESTINATION lib
-  	RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
 )
 
 if (runtests)
-	  if (APPLE)
+    if (APPLE)
       add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
       add_definitions(-D__GLIBCXX__)
     endif (APPLE)
@@ -74,29 +74,29 @@ if (runtests)
 
     enable_testing()
 
-  	# Include the gtest library. gtest_SOURCE_DIR is available due to
-  	# 'project(gtest)' above.
-  	include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+    # Include the gtest library. gtest_SOURCE_DIR is available due to
+    # 'project(gtest)' above.
+    include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
     add_executable(runTestUnits tests/testUnits.cpp)
     target_link_libraries(runTestUnits
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
     add_test(NAME runTestUnits COMMAND runTestUnits)
 
-  	add_executable(runTestCartesianState tests/testCartesianState.cpp)
-  	target_link_libraries(runTestCartesianState
-  		gtest 
-  		gtest_main
-  		${PROJECT_NAME}
-  	)
-	  add_test(NAME runTestCartesianState COMMAND runTestCartesianState)
+    add_executable(runTestCartesianState tests/testCartesianState.cpp)
+    target_link_libraries(runTestCartesianState
+      gtest
+      gtest_main
+      ${PROJECT_NAME}
+    )
+    add_test(NAME runTestCartesianState COMMAND runTestCartesianState)
 
     add_executable(runTestJointState tests/testJointState.cpp)
     target_link_libraries(runTestJointState
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
@@ -104,7 +104,7 @@ if (runtests)
 
     add_executable(runTestDualQuaternionState tests/testDualQuaternionState.cpp)
     target_link_libraries(runTestDualQuaternionState
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
@@ -112,7 +112,7 @@ if (runtests)
 
     add_executable(runTestJacobian tests/testJacobian.cpp)
     target_link_libraries(runTestJacobian
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
@@ -120,7 +120,7 @@ if (runtests)
 
     add_executable(runTestTrajectory tests/testTrajectory.cpp)
     target_link_libraries(runTestTrajectory
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
@@ -128,7 +128,7 @@ if (runtests)
 
     add_executable(runTestParameter tests/testParameter.cpp)
     target_link_libraries(runTestParameter
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )
@@ -136,7 +136,7 @@ if (runtests)
 
     add_executable(runTestEllipsoid tests/testEllipsoid.cpp)
     target_link_libraries(runTestEllipsoid
-      gtest 
+      gtest
       gtest_main
       ${PROJECT_NAME}
     )

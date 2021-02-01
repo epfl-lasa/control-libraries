@@ -12,14 +12,15 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # import previously downloaded packages
-RUN mkdir -p lib
-WORKDIR lib
+WORKDIR /root/control_lib
 COPY ./source/ .
 # install libraries and dependencies
 RUN . ./install.sh
 
+# change directory
+WORKDIR /root
+
 # Clean image
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["entrypoint.sh"]
 CMD ["bash"]

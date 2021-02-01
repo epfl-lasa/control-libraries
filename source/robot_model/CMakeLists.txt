@@ -28,7 +28,7 @@ include_directories(
   include
   ${Eigen3_INCLUDE_DIRS}
   ${PINOCCHIO_INCLUDE_DIR}
-  /home/ros2/openrobots/include
+  ${PROJECT_SOURCE_DIR}/lib/openrobots/include
   ${OsqpEigen_INCLUDE_DIR}
 )
 

@@ -23,6 +23,10 @@ apt-get update && apt-get install -y \
     doxygen \
     texlive-latex-extra
 
+# install googletest
+mkdir ${SOURCE_PATH}/lib
+cd ${SOURCE_PATH}/lib && git clone https://github.com/google/googletest.git
+
 # install pinocchio
 cd ${SOURCE_PATH}/lib && git clone git://git.openrobots.org/robots/robotpkg
 cd ${SOURCE_PATH}/lib/robotpkg/bootstrap && ./bootstrap --prefix=${SOURCE_PATH}/lib/openrobots

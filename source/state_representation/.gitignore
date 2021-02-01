@@ -1,0 +1,7 @@
+cpp/build/*
+python/.pytest_cache
+python/src/state_representation/__pycache__
+python/src/state_representation/joint/__pycache__
+python/src/state_representation.egg-info
+python/tests/__pycache__
+python/tests/joint/__pycache__

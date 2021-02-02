@@ -1,9 +1,11 @@
 #!/bin/bash
-CURRPATH=${PWD}
+SCRIPT=$(readlink -f "$BASH_SOURCE")
+SOURCE_PATH=$(dirname "$SCRIPT")
+
 # turn on testing
 IS_TEST="OFF"
 
 # cpp
-cd "${CURRPATH}/state_representation" && . ./install.sh
-cd "${CURRPATH}/dynamical_systems" && . ./install.sh
-cd "${CURRPATH}/robot_model" && . ./install.sh
+cd "${SOURCE_PATH}/state_representation" && . ./install.sh
+cd "${SOURCE_PATH}/dynamical_systems" && . ./install.sh
+cd "${SOURCE_PATH}/robot_model" && . ./install.sh

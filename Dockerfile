@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install dependencies for building the robot_model library
+# install dependencies for building the libraries
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \

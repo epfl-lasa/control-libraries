@@ -13,11 +13,18 @@ shift "$(( OPTIND - 1 ))"
 NAME=$(echo "${PWD##*/}" | tr _ -)
 TAG="latest"
 
+UID="$(id -u "${USER}")"
+GID="$(id -g "${USER}")"
+
 if [ "$REBUILD" -eq 1 ]; then
     docker build \
         --no-cache \
+        --build-arg UID="${UID}" \
+        --build-arg GID="${GID}" \
         -t "${NAME}:${TAG}" .
 else
     docker build \
+        --build-arg UID="${UID}" \
+        --build-arg GID="${GID}" \
         -t "${NAME}:${TAG}" .
 fi

@@ -11,8 +11,11 @@ if [ "${ISISOLATED}" = true ]; then
 fi
 
 if [ -z "$TAG" ]; then
-	TAG="latest"
+    TAG="latest"
 fi
+
+UID="$(id -u "${USER}")"
+GID="$(id -g "${USER}")"
 
 #create a shared volume to store the lib folder
 docker volume create --driver local \
@@ -24,8 +27,8 @@ docker volume create --driver local \
 xhost +
 docker run \
     --privileged \
-	--net="${NETWORK}" \
-	-it \
+    --net="${NETWORK}" \
+    -it \
     --rm \
-	--volume="${NAME}_lib_vol:/root/control_lib/:rw" \
-	"${NAME}:${TAG}"
+    --volume="${NAME}_lib_vol:/home/udev/control_lib/:rw" \
+    "${NAME}:${TAG}"

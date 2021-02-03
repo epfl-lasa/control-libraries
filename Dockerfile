@@ -47,7 +47,7 @@ ARG GID=1000
 RUN addgroup --gid ${GID} ${USER}
 RUN adduser --gecos "udev User" --disabled-password --uid ${UID} --gid ${GID} ${USER}
 RUN usermod -a -G dialout ${USER}
-COPY config/99_aptget /etc/sudoers.d/99_aptget
+RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/99_aptget
 RUN chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_aptget
 
 # choose to run as user

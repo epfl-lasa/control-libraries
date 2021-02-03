@@ -12,6 +12,7 @@ shift "$(( OPTIND - 1 ))"
 
 NAME=$(echo "${PWD##*/}" | tr _ -)
 TAG="latest"
+MULTISTAGE_TARGET="development"
 
 UID="$(id -u "${USER}")"
 GID="$(id -g "${USER}")"
@@ -19,11 +20,13 @@ GID="$(id -g "${USER}")"
 if [ "$REBUILD" -eq 1 ]; then
     docker build \
         --no-cache \
+        --target "${MULTISTAGE_TARGET}" \
         --build-arg UID="${UID}" \
         --build-arg GID="${GID}" \
         -t "${NAME}:${TAG}" .
 else
     docker build \
+        --target "${MULTISTAGE_TARGET}" \
         --build-arg UID="${UID}" \
         --build-arg GID="${GID}" \
         -t "${NAME}:${TAG}" .

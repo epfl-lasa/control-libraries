@@ -14,9 +14,6 @@ if [ -z "$TAG" ]; then
     TAG="latest"
 fi
 
-UID="$(id -u "${USER}")"
-GID="$(id -g "${USER}")"
-
 #create a shared volume to store the lib folder
 docker volume create --driver local \
     --opt type="none" \

@@ -14,20 +14,24 @@ NAME=$(echo "${PWD##*/}" | tr _ -)
 TAG="latest"
 MULTISTAGE_TARGET="development"
 
-UID="$(id -u "${USER}")"
-GID="$(id -g "${USER}")"
+MYUID="$(id -u "${USER}")"
+MYGID="$(id -g "${USER}")"
+
+if [ "$(uname -s)" = "Darwin" ]; then
+    MYGID=1000
+fi
 
 if [ "$REBUILD" -eq 1 ]; then
     docker build \
         --no-cache \
         --target "${MULTISTAGE_TARGET}" \
-        --build-arg UID="${UID}" \
-        --build-arg GID="${GID}" \
+        --build-arg UID="${MYUID}" \
+        --build-arg GID="${MYGID}" \
         -t "${NAME}:${TAG}" .
 else
     docker build \
         --target "${MULTISTAGE_TARGET}" \
-        --build-arg UID="${UID}" \
-        --build-arg GID="${GID}" \
+        --build-arg UID="${MYUID}" \
+        --build-arg GID="${MYGID}" \
         -t "${NAME}:${TAG}" .
 fi

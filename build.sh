@@ -10,14 +10,29 @@ while getopts 'r' opt; do
 done
 shift "$(( OPTIND - 1 ))"
 
-NAME=$(echo "${PWD##*/}" | tr _ -)
+MULTISTAGE_TARGET="development"
+
+NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
 TAG="latest"
+
+MYUID="$(id -u "${USER}")"
+MYGID="$(id -g "${USER}")"
+
+if [ "$(uname -s)" = "Darwin" ]; then
+    MYGID=1000
+fi
 
 if [ "$REBUILD" -eq 1 ]; then
     docker build \
         --no-cache \
+        --target "${MULTISTAGE_TARGET}" \
+        --build-arg UID="${MYUID}" \
+        --build-arg GID="${MYGID}" \
         -t "${NAME}:${TAG}" .
 else
     docker build \
+        --target "${MULTISTAGE_TARGET}" \
+        --build-arg UID="${MYUID}" \
+        --build-arg GID="${MYGID}" \
         -t "${NAME}:${TAG}" .
 fi

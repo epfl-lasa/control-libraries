@@ -10,9 +10,10 @@ while getopts 'r' opt; do
 done
 shift "$(( OPTIND - 1 ))"
 
-NAME=$(echo "${PWD##*/}" | tr _ -)
-TAG="latest"
 MULTISTAGE_TARGET="development"
+
+NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
+TAG="latest"
 
 MYUID="$(id -u "${USER}")"
 MYGID="$(id -g "${USER}")"

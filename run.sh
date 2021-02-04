@@ -1,5 +1,7 @@
 #!/bin/bash
-NAME=$(echo "${PWD##*/}" | tr _ -)
+MULTISTAGE_TARGET="development"
+
+NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
 TAG=$(echo "$1" | tr _/ -)
 
 ISISOLATED=true # change to  false to use host network

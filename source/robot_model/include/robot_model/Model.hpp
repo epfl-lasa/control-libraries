@@ -5,6 +5,7 @@
 #include <pinocchio/algorithm/jacobian.hpp>
 #include <pinocchio/algorithm/joint-configuration.hpp>
 #include <pinocchio/algorithm/kinematics.hpp>
+#include <pinocchio/algorithm/frames.hpp>
 #include <pinocchio/parsers/urdf.hpp>
 #include <pinocchio/spatial/explog.hpp>
 #include <state_representation/Parameters/Parameter.hpp>
@@ -27,17 +28,28 @@ private:
   std::vector<std::string> joint_names_;                                          ///< name of the joints in the model
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
-  OsqpEigen::Solver solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> hessian_;                                           ///< hessian matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd gradient_;                                                      ///< gradient vector for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
+  OsqpEigen::Solver
+      solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double>
+      hessian_;                                           ///< hessian matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd
+      gradient_;                                                      ///< gradient vector for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double>
+      constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd
+      lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd
+      upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>>
+      alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>>
+      epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>>
+      linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>>
+      angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>>
+      proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
 
   /**
    * @brief initialize the constraints for the QP solver
@@ -109,38 +121,48 @@ public:
   void init_model();
 
   /**
-   * @brief Compute the jacobian from a given joint state at the joint level given in parameter
+   * @brief Compute the jacobian from a given joint state at the frame in parameter
    * @param joint_state containing the joint values of the robot
-   * @param joint_id id of the joint at which to compute the jacobian
+   * @param joint_id id of the frame at which to compute the jacobian
    * @return the jacobian matrix
    */
-  const StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state, unsigned int joint_id);
+  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state, int frame_id);
 
   /**
-   * @brief Compute the jacobian from a given joint state at the joint level given in parameter
+   * @brief Compute the jacobian from a given joint state at the frame given in parameter
    * @param joint_state containing the joint values of the robot
-   * @param jonint_name name of the joint at which to compute the jacobian, if empty computed for the last joint
+   * @param jonint_name name of the frame at which to compute the jacobian, if empty computed for the last frame
    * @return the jacobian matrix
    */
-  const StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state, const std::string& frame_name = "");
+  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
+                                                 const std::string& frame_name = "");
 
   /**
-   * @brief Compute the forward geometry, i.e. the pose of the end-effector from the joint values
+   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
    * @param joint_state the joint state of the robot
-   * @param joint_ids ids of the joint at wich we want to extract the pose
-   * @return the pose of the end-effector
+   * @param frame_ids ids of the frames at which we want to extract the pose
+   * @return the poses of the desired poses
    */
-  const std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                         const std::vector<unsigned int> joint_ids);
+  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                   const std::vector<unsigned int>& frame_ids);
 
   /**
-   * @brief Compute the forward geometry, i.e. the pose of the end-effector from the joint values
+   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
    * @param joint_state the joint state of the robot
-   * @param frame_names names of the frames at wich we want to extract the pose
-   * @return the pose of the end-effector
+   * @param frame_names names of the frames at which we want to extract the pose
+   * @return the pose of desired frames
    */
-  const std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                         const std::vector<std::string> frame_names);
+  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                   const std::vector<std::string>& frame_names);
+
+  /**
+ * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
+ * @param joint_state the joint state of the robot
+ * @param frame_name name of the frame at which we want to extract the pose
+ * @return the pose of the desired frame
+ */
+  StateRepresentation::CartesianPose forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                      const std::string& frame_names);
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
@@ -157,13 +179,13 @@ public:
   const StateRepresentation::CartesianTwist forward_kinematic(const StateRepresentation::JointState& joint_state);
 
   /**
-   * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
+   * @brief Compute the inverse kinematics, i.e. joint velocities from the velocities of the frames in parameter
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_states vector of twist
    * @return the joint velocities of the robot
    */
-  const StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
-                                                               const std::vector<StateRepresentation::CartesianState>& cartesian_states);
+  StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
+                                                         const std::vector<StateRepresentation::CartesianState>& cartesian_states);
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector
@@ -171,16 +193,8 @@ public:
    * @param cartesian_state containing the twist of the end-effector
    * @return the joint velocities of the robot
    */
-  const StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
-                                                               const StateRepresentation::CartesianState& cartesian_state);
-
-  /**
-   * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector as Eigen vectors
-   * @param joint_positions current joint positions to compute the jacobian
-   * @param cartesian_twist the twist of the end-effector
-   * @return the joint velocities of the robot
-   */
-  const Eigen::VectorXd inverse_kinematic(const Eigen::VectorXd& joint_positions, const Eigen::VectorXd& cartesian_twist);
+  StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
+                                                         const StateRepresentation::CartesianState& cartesian_state);
 
   /**
    * @brief Helper funtion to print the qp_problem (for debugging)
@@ -211,6 +225,7 @@ inline const std::vector<std::string>& Model::get_joint_names() const {
 }
 
 inline unsigned int Model::get_nb_joints() const {
+  // this is technically not correct
   return this->robot_model_.nv;
 }
 
@@ -220,7 +235,7 @@ inline void Model::init_model() {
   // get the joint names
   this->joint_names_ = this->robot_model_.names;
   // the first element is not a joint so remove it
-  this->joint_names_.erase(this->joint_names_.begin());
+//  this->joint_names_.erase(this->joint_names_.begin()); // dont erase this because the universe joint is everywhere
 }
 
 inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {

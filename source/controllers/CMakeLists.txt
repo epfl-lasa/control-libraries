@@ -28,7 +28,7 @@ include_directories(
 )
 
 set(CORE_SOURCES
-
+  src/impedance/Impedance.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED 

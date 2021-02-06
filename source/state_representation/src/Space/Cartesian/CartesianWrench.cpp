@@ -101,23 +101,16 @@ const CartesianWrench CartesianWrench::operator*(double lambda) const {
   return this->CartesianState::operator*(lambda);
 }
 
-void CartesianWrench::clamp(double max_force, double max_torque, double noise_ratio) {
-  if (noise_ratio != 0) {
-    // substract the noise ratio to both velocities
-    this->set_force(this->get_force() - noise_ratio * this->get_force().normalized());
-    this->set_torque(this->get_torque() - noise_ratio * this->get_torque().normalized());
-    // apply a deadzone
-    if (this->get_force().norm() < noise_ratio) this->set_force(Eigen::Vector3d::Zero());
-    if (this->get_torque().norm() < noise_ratio) this->set_torque(Eigen::Vector3d::Zero());
-  }
-  // clamp the velocities to their maximum amplitude provided
-  if (this->get_force().norm() > max_force) this->set_force(max_force * this->get_force().normalized());
-  if (this->get_torque().norm() > max_torque) this->set_torque(max_torque * this->get_torque().normalized());
+void CartesianWrench::clamp(double max_force, double max_torque, double force_noise_ratio, double torque_noise_ratio) {
+  // clamp force
+  this->clamp_field(max_force, CartesianStateFields::FORCE, force_noise_ratio);
+  // clamp torque
+  this->clamp_field(max_torque, CartesianStateFields::TORQUE, torque_noise_ratio);
 }
 
-const CartesianWrench CartesianWrench::clamped(double max_force, double max_torque, double noise_ratio) const {
+const CartesianWrench CartesianWrench::clamped(double max_force, double max_torque, double force_noise_ratio, double torque_noise_ratio) const {
   CartesianWrench result(*this);
-  result.clamp(max_force, max_torque, noise_ratio);
+  result.clamp(max_force, max_torque, force_noise_ratio, torque_noise_ratio);
   return result;
 }
 

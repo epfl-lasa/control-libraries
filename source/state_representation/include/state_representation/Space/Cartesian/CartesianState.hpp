@@ -16,14 +16,35 @@ namespace StateRepresentation {
 class CartesianState;
 
 /**
+ * @enum CartesianStateFields
+ * @brief Enum representing all the fields (position, orientation, angular_velocity, ...)
+ * of the CartesianState
+ */
+enum class CartesianStateFields {
+  POSITION,
+  ORIENTATION,
+  POSE,
+  LINEAR_VELOCITY,
+  ANGULAR_VELOCITY,
+  TWIST,
+  LINEAR_ACCELERATION,
+  ANGULAR_ACCELERATION,
+  ACCELERATIONS,
+  FORCE,
+  TORQUE,
+  WRENCH,
+  ALL
+};
+
+/**
  * @brief compute the distance between two CartesianStates
  * @param s1 the first CartesianState
  * @param s2 the second CartesianState
- * @param type of the distance between position, orientation, linear_velocity, etc...
- * default all for full distance across all dimensions
+ * @param field_name name of the field from the CartesianStateFields structure to apply
+ * the distance on. Default ALL for full distance across all dimensions
  * @return the distance beteen the two states
  */
-double dist(const CartesianState& s1, const CartesianState& s2, const std::string& distance_type = "all");
+double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateFields& field_name = CartesianStateFields::ALL);
 
 /**
  * @class CartesianState
@@ -39,6 +60,11 @@ private:
   Eigen::Vector3d angular_acceleration;///< angular_acceleration of the point
   Eigen::Vector3d force;               ///< force applied at the point
   Eigen::Vector3d torque;              ///< torque applied at the point
+
+protected:
+  const Eigen::VectorXd get_field(const CartesianStateFields& field_name) const;
+
+  void set_field(const Eigen::VectorXd& field_value, const CartesianStateFields& field_name);
 
 public:
   /**
@@ -74,6 +100,12 @@ public:
    * @brief Getter of the orientation attribute
    */
   const Eigen::Quaterniond& get_orientation() const;
+
+  /**
+   * @brief Getter of the orientation attribute as Vector4d of coefficients.
+   * Beware, quaternion coefficients are returned using the (w, x, y, z) convention
+   */
+  const Eigen::Vector4d get_orientation_coefficients() const;
 
   /**
    * @brief Getter of a pose from position and orientation attributes
@@ -244,6 +276,15 @@ public:
   void set_zero();
 
   /**
+   * @brief Clamp inplace the magnitude of the a specific field (velocity, acceleration or force)
+   * @param max_value the maximum absolute magnitude of the field
+   * @param field_name name of the field from the CartesianStateFields structure to clamp
+   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
+   * the velocity will be set to 0
+   */
+  void clamp_field(double max_value, const CartesianStateFields& field_name, double noise_ratio = 0);
+
+  /**
    * @brief Return a copy of the CartesianState
    * @return the copy
    */
@@ -314,11 +355,11 @@ public:
   /**
    * @brief Compute the distance between two states as the sum of distances between each features
    * @param state the second state
-   * @param type of the distance between position, orientation, linear_velocity, etc...
-   * default all for full distance across all dimensions
+   * @param field_name name of the field from the CartesianStateFields structure to apply
+   * the distance on. Default ALL for full distance across all dimensions
    * @return dist the distance value as a double
    */
-  double dist(const CartesianState& state, const std::string& distance_type = "all") const;
+  double dist(const CartesianState& state, const CartesianStateFields& field_name = CartesianStateFields::ALL) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -375,10 +416,13 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
   return this->orientation;
 }
 
+inline const Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
+  return Eigen::Vector4d(this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(), this->get_orientation().z());
+}
+
 inline const Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
   Eigen::Matrix<double, 7, 1> pose;
-  pose << this->get_position();
-  pose << this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(), this->get_orientation().z();
+  pose << this->get_position(), this->get_orientation_coefficients();
   return pose;
 }
 
@@ -428,6 +472,53 @@ inline const Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
   Eigen::Matrix<double, 6, 1> wrench;
   wrench << this->get_force(), this->get_torque();
   return wrench;
+}
+
+inline const Eigen::VectorXd CartesianState::get_field(const CartesianStateFields& field_name) const {
+  switch (field_name) {
+    case CartesianStateFields::POSITION:
+      return this->get_position();
+
+    case CartesianStateFields::ORIENTATION:
+      return this->get_orientation_coefficients();
+
+    case CartesianStateFields::POSE:
+      return this->get_pose();
+
+    case CartesianStateFields::LINEAR_VELOCITY:
+      return this->get_linear_velocity();
+
+    case CartesianStateFields::ANGULAR_VELOCITY:
+      return this->get_angular_velocity();
+
+    case CartesianStateFields::TWIST:
+      return this->get_twist();
+
+    case CartesianStateFields::LINEAR_ACCELERATION:
+      return this->get_linear_acceleration();
+
+    case CartesianStateFields::ANGULAR_ACCELERATION:
+      return this->get_angular_acceleration();
+
+    case CartesianStateFields::ACCELERATIONS:
+      return this->get_accelerations();
+
+    case CartesianStateFields::FORCE:
+      return this->get_force();
+
+    case CartesianStateFields::TORQUE:
+      return this->get_torque();
+
+    case CartesianStateFields::WRENCH:
+      return this->get_wrench();
+
+    case CartesianStateFields::ALL:
+      Eigen::Matrix<double, 25, 1> all_fields;
+      all_fields << this->get_pose(), this->get_twist(), this->get_accelerations(), this->get_wrench();
+      return all_fields;
+  }
+  // this never goes here but is compulsory to avoid a warning
+  return Eigen::Vector3d::Zero();
 }
 
 inline void CartesianState::set_position(const Eigen::Vector3d& position) {
@@ -517,5 +608,64 @@ inline void CartesianState::set_torque(const Eigen::Vector3d& torque) {
 inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) {
   this->set_force(wrench.head(3));
   this->set_torque(wrench.tail(3));
+}
+
+inline void CartesianState::set_field(const Eigen::VectorXd& field_value, const CartesianStateFields& field_name) {
+  switch (field_name) {
+    case CartesianStateFields::POSITION:
+      this->set_position(field_value);
+      break;
+
+    case CartesianStateFields::ORIENTATION:
+      this->set_orientation(field_value);
+      break;
+
+    case CartesianStateFields::POSE:
+      this->set_pose(field_value);
+      break;
+
+    case CartesianStateFields::LINEAR_VELOCITY:
+      this->set_linear_velocity(field_value);
+      break;
+
+    case CartesianStateFields::ANGULAR_VELOCITY:
+      this->set_angular_velocity(field_value);
+      break;
+
+    case CartesianStateFields::TWIST:
+      this->set_twist(field_value);
+      break;
+
+    case CartesianStateFields::LINEAR_ACCELERATION:
+      this->set_linear_acceleration(field_value);
+      break;
+
+    case CartesianStateFields::ANGULAR_ACCELERATION:
+      this->set_angular_acceleration(field_value);
+      break;
+
+    case CartesianStateFields::ACCELERATIONS:
+      this->set_accelerations(field_value);
+      break;
+
+    case CartesianStateFields::FORCE:
+      this->set_force(field_value);
+      break;
+
+    case CartesianStateFields::TORQUE:
+      this->set_torque(field_value);
+      break;
+
+    case CartesianStateFields::WRENCH:
+      this->set_wrench(field_value);
+      break;
+
+    case CartesianStateFields::ALL:
+      this->set_pose(field_value.segment(0, 7));
+      this->set_twist(field_value.segment(7, 6));
+      this->set_accelerations(field_value.segment(13, 6));
+      this->set_wrench(field_value.segment(19, 6));
+      break;
+  }
 }
 }// namespace StateRepresentation

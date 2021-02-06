@@ -160,23 +160,27 @@ public:
   const CartesianWrench operator*(double lambda) const;
 
   /**
-   * @brief Clamp inplace the magnitude of the force to the values in argument
+   * @brief Clamp inplace the magnitude of the wrench to the values in argument
    * @param max_force the maximum magnitude of the force
    * @param max_torque the maximum magnitude of the torque
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the signal will be set to 0
+   * @param force_noise_ratio if provided, this value will be used to apply a deadzone under which
+   * the force will be set to 0
+   * @param torque_noise_ratio if provided, this value will be used to apply a deadzone under which
+   * the torque will be set to 0
    */
-  void clamp(double max_force, double max_torque, double noise_ratio = 0);
+  void clamp(double max_force, double max_torque, double force_noise_ratio = 0, double torque_noise_ratio = 0);
 
   /**
-   * @brief Return the clamped velocity
+   * @brief Return the clamped wrench
    * @param max_force the maximum magnitude of the force
    * @param max_torque the maximum magnitude of the torque
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the signal will be set to 0
-   * @return the clamped velocity
+   * @param force_noise_ratio if provided, this value will be used to apply a deadzone under which
+   * the force will be set to 0
+   * @param torque_noise_ratio if provided, this value will be used to apply a deadzone under which
+   * the torque will be set to 0
+   * @return the clamped wrench
    */
-  const CartesianWrench clamped(double max_force, double max_torque, double noise_ratio = 0) const;
+  const CartesianWrench clamped(double max_force, double max_torque, double force_noise_ratio = 0, double torque_noise_ratio = 0) const;
 
   /**
    * @brief Return a copy of the CartesianWrench

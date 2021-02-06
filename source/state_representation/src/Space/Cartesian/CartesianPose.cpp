@@ -131,6 +131,10 @@ std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   return os;
 }
 
+const CartesianPose operator*(double lambda, const CartesianPose& pose) {
+  return pose * lambda;
+}
+
 const CartesianTwist operator/(const CartesianPose& pose, const std::chrono::nanoseconds& dt) {
   // sanity check
   if (pose.is_empty()) throw EmptyStateException(pose.get_name() + " state is empty");

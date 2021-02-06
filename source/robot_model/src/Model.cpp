@@ -1,4 +1,7 @@
 #include "robot_model/Model.hpp"
+
+#include <pinocchio/algorithm/frames.hpp>
+
 #include "robot_model/Exceptions/FrameNotFoundException.hpp"
 #include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
 

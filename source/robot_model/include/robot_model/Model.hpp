@@ -1,24 +1,16 @@
 #pragma once
 
-#include <OsqpEigen/OsqpEigen.h>
 #include <iostream>
-#include <pinocchio/algorithm/jacobian.hpp>
-#include <pinocchio/algorithm/joint-configuration.hpp>
-#include <pinocchio/algorithm/kinematics.hpp>
-#include <pinocchio/algorithm/frames.hpp>
+#include <string>
+#include <vector>
+#include <OsqpEigen/OsqpEigen.h>
 #include <pinocchio/parsers/urdf.hpp>
-#include <pinocchio/spatial/explog.hpp>
+#include <pinocchio/multibody/data.hpp>
 #include <state_representation/Parameters/Parameter.hpp>
 #include <state_representation/Parameters/ParameterInterface.hpp>
 #include <state_representation/Robot/Jacobian.hpp>
-#include <state_representation/Robot/JointPositions.hpp>
 #include <state_representation/Robot/JointState.hpp>
-#include <state_representation/Robot/JointVelocities.hpp>
-#include <state_representation/Space/Cartesian/CartesianPose.hpp>
 #include <state_representation/Space/Cartesian/CartesianState.hpp>
-#include <state_representation/Space/Cartesian/CartesianTwist.hpp>
-#include <string>
-#include <vector>
 
 namespace RobotModel {
 class Model {
@@ -52,7 +44,7 @@ public:
   explicit Model();
 
   /**
-   * @brief Constructor with path to URDF file
+   * @brief Constructor with robot name and path to URDF file
    */
   explicit Model(const std::string& robot_name, const std::string& urdf_path);
 
@@ -68,7 +60,7 @@ public:
   ~Model();
 
   /**
-   * @brief Copy assignement operator that have to be defined due to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined due to the custom assignment operator
    * @param model the model with value to assign
    * @return reference to the current model with new values
    */
@@ -120,7 +112,7 @@ public:
   /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
    * @param joint_state containing the joint values of the robot
-   * @param jonint_name name of the frame at which to compute the jacobian, if empty computed for the last frame
+   * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
    * @return the jacobian matrix
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
@@ -221,10 +213,6 @@ inline unsigned int Model::get_nb_joints() const {
 inline void Model::init_model() {
   pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
   this->robot_data_ = pinocchio::Data(this->robot_model_);
-  // get the joint names
-  this->joint_names_ = this->robot_model_.names;
-  // the first element is not a joint so remove it
-//  this->joint_names_.erase(this->joint_names_.begin()); // dont erase this because the universe joint is everywhere
 }
 
 inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {

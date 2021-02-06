@@ -23,34 +23,23 @@
 namespace RobotModel {
 class Model {
 private:
+  // @format:off
   std::shared_ptr<StateRepresentation::Parameter<std::string>> robot_name_;       ///< name of the robot
   std::shared_ptr<StateRepresentation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
-  std::vector<std::string> joint_names_;                                          ///< name of the joints in the model
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
-  OsqpEigen::Solver
-      solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double>
-      hessian_;                                           ///< hessian matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd
-      gradient_;                                                      ///< gradient vector for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double>
-      constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd
-      lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd
-      upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>>
-      alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>>
-      epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>>
-      linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>>
-      angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>>
-      proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
-
+  OsqpEigen::Solver solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> hessian_;                                           ///< hessian matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd gradient_;                                                      ///< gradient vector for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>> angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
+  std::shared_ptr<StateRepresentation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
+  // @format:on
   /**
    * @brief initialize the constraints for the QP solver
    */
@@ -247,4 +236,4 @@ inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>>
   param_list.push_back(this->proportional_gain_);
   return param_list;
 }
-}// namespace RobotModel
+}

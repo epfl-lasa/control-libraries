@@ -1,15 +1,12 @@
 #pragma once
 
 #include <exception>
-#include <iostream>
 
-namespace RobotModel {
-namespace Exceptions {
-class InvalidJointStateSizeException : public std::runtime_error {
+namespace RobotModel::Exceptions {
+class InvalidJointStateSizeException : public std::invalid_argument {
 public:
-  explicit InvalidJointStateSizeException(unsigned int state_nb_joints, int robot_nb_joints)
-      : runtime_error("The robot has " + std::to_string(robot_nb_joints) + " joints, but the current joint state size "
-                          + std::to_string(state_nb_joints) + ".") {};
+  explicit InvalidJointStateSizeException(int state_nb_joints, int robot_nb_joints) :
+      invalid_argument("The robot has " + std::to_string(robot_nb_joints) + " joints, but the current joint state size "
+                           + std::to_string(state_nb_joints) + ".") {};
 };
-}// namespace Exceptions
-}// namespace RobotModel
+}

@@ -3,58 +3,40 @@
 #include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
 
 namespace RobotModel {
-Model::Model() : robot_name_(std::make_shared<StateRepresentation::Parameter<std::string>>("robot_name")),
-                 urdf_path_(std::make_shared<StateRepresentation::Parameter<std::string>>("urdf_path")),
-                 alpha_(std::make_shared<StateRepresentation::Parameter<double>>("alpha", 0.1)),
-                 epsilon_(std::make_shared<StateRepresentation::Parameter<double>>("epsilon", 1e-2)),
-                 linear_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>("linear_velocity_limit",
-                                                                                                 2.0)),
-                 angular_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>(
-                     "angular_velocity_limit",
-                     100.0)),
-                 proportional_gain_(std::make_shared<StateRepresentation::Parameter<double>>("proportional_gain",
-                                                                                             1.0)) {}
+Model::Model() :
+    robot_name_(std::make_shared<StateRepresentation::Parameter<std::string>>("robot_name")),
+    urdf_path_(std::make_shared<StateRepresentation::Parameter<std::string>>("urdf_path")),
+    alpha_(std::make_shared<StateRepresentation::Parameter<double>>("alpha", 0.1)),
+    epsilon_(std::make_shared<StateRepresentation::Parameter<double>>("epsilon", 1e-2)),
+    linear_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>("linear_velocity_limit", 2.0)),
+    angular_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>("angular_velocity_limit", 100.0)),
+    proportional_gain_(std::make_shared<StateRepresentation::Parameter<double>>("proportional_gain", 1.0)) {}
 
-Model::Model(const std::string& robot_name, const std::string& urdf_path) : robot_name_(std::make_shared<
-    StateRepresentation::Parameter<std::string>>("robot_name", robot_name)),
-                                                                            urdf_path_(std::make_shared<
-                                                                                StateRepresentation::Parameter<std::string>>(
-                                                                                "urdf_path",
-                                                                                urdf_path)),
-                                                                            alpha_(std::make_shared<StateRepresentation::Parameter<
-                                                                                double>>("alpha", 0.1)),
-                                                                            epsilon_(std::make_shared<
-                                                                                StateRepresentation::Parameter<double>>(
-                                                                                "epsilon",
-                                                                                1e-2)),
-                                                                            linear_velocity_limit_(std::make_shared<
-                                                                                StateRepresentation::Parameter<double>>(
-                                                                                "linear_velocity_limit",
-                                                                                2.0)),
-                                                                            angular_velocity_limit_(std::make_shared<
-                                                                                StateRepresentation::Parameter<double>>(
-                                                                                "angular_velocity_limit",
-                                                                                100.0)),
-                                                                            proportional_gain_(std::make_shared<
-                                                                                StateRepresentation::Parameter<double>>(
-                                                                                "proportional_gain",
-                                                                                1.0)) {
+Model::Model(const std::string& robot_name, const std::string& urdf_path) :
+    robot_name_(std::make_shared<StateRepresentation::Parameter<std::string>>("robot_name", robot_name)),
+    urdf_path_(std::make_shared<StateRepresentation::Parameter<std::string>>("urdf_path", urdf_path)),
+    alpha_(std::make_shared<StateRepresentation::Parameter<double>>("alpha", 0.1)),
+    epsilon_(std::make_shared<StateRepresentation::Parameter<double>>("epsilon", 1e-2)),
+    linear_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>("linear_velocity_limit", 2.0)),
+    angular_velocity_limit_(std::make_shared<StateRepresentation::Parameter<double>>("angular_velocity_limit", 100.0)),
+    proportional_gain_(std::make_shared<StateRepresentation::Parameter<double>>("proportional_gain", 1.0)) {
+  this->init_model();
+  this->init_qp_solver();
+}
+
+Model::Model(const Model& model) :
+    robot_name_(model.robot_name_),
+    urdf_path_(model.urdf_path_),
+    alpha_(model.alpha_),
+    epsilon_(model.epsilon_),
+    linear_velocity_limit_(model.linear_velocity_limit_),
+    angular_velocity_limit_(model.angular_velocity_limit_),
+    proportional_gain_(model.proportional_gain_) {
   this->init_model();
   this->init_qp_solver();
 }
 
 Model::~Model() {}
-
-Model::Model(const Model& model) : robot_name_(model.robot_name_),
-                                   urdf_path_(model.urdf_path_),
-                                   alpha_(model.alpha_),
-                                   epsilon_(model.epsilon_),
-                                   linear_velocity_limit_(model.linear_velocity_limit_),
-                                   angular_velocity_limit_(model.angular_velocity_limit_),
-                                   proportional_gain_(model.proportional_gain_) {
-  this->init_model();
-  this->init_qp_solver();
-}
 
 Model& Model::operator=(const Model& model) {
   this->robot_name_ = model.robot_name_;
@@ -141,12 +123,8 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->robot_model_.nq);
   J.setZero();
-  pinocchio::computeFrameJacobian(this->robot_model_,
-                                  this->robot_data_,
-                                  joint_state.get_positions(),
-                                  frame_id,
-                                  pinocchio::LOCAL_WORLD_ALIGNED,
-                                  J);
+  pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
+                                  pinocchio::LOCAL_WORLD_ALIGNED, J);
   return StateRepresentation::Jacobian(this->get_robot_name(), J);
 }
 
@@ -239,9 +217,8 @@ StateRepresentation::JointVelocities Model::inverse_kinematic(const StateReprese
       coefficients.push_back(Eigen::Triplet<double>(static_cast<int>(i), static_cast<int>(j), hessian_matrix(i, j)));
     }
   }
-  coefficients.push_back(Eigen::Triplet<double>(static_cast<int>(nb_joints),
-                                                static_cast<int>(nb_joints),
-                                                this->alpha_->get_value()));
+  coefficients.push_back(
+      Eigen::Triplet<double>(static_cast<int>(nb_joints), static_cast<int>(nb_joints), this->alpha_->get_value()));
   this->hessian_.setFromTriplets(coefficients.begin(), coefficients.end());
 
   //set the gradient
@@ -288,4 +265,4 @@ void Model::print_qp_problem() {
     std::cout << this->upper_bound_constraints_(i) << std::endl;
   }
 }
-}// namespace RobotModel
+}

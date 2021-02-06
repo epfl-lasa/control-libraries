@@ -15,7 +15,7 @@ const StateRepresentation::CartesianState Impedance<StateRepresentation::Cartesi
   // compute force
   command.set_force(this->get_stiffness() * state_error.get_position() + this->get_damping() * state_error.get_linear_velocity() + this->get_inertia() * desired_state.get_linear_acceleration());
   // compute torque (orientation requires special care)
-  command.set_torque(this->get_stiffness() * state_error.get_orientation().vec() + this->get_damping() * state_error.get_linear_velocity() + this->get_inertia() * desired_state.get_linear_acceleration());
+  command.set_torque(this->get_stiffness() * state_error.get_orientation().vec() + this->get_damping() * state_error.get_angular_velocity() + this->get_inertia() * desired_state.get_angular_acceleration());
   return command;
 }
 }// namespace impedance

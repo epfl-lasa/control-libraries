@@ -50,6 +50,22 @@ public:
   explicit CartesianWrench(const std::string& name, const Eigen::Matrix<double, 6, 1>& wrench, const std::string& reference = "world");
 
   /**
+   * @brief Constructor for the zero wrench
+   * @param name the name of the state
+   * @param the name of the reference frame
+   * @return CartesianWrench with zero values
+   */
+  static const CartesianWrench Zero(const std::string& name, const std::string& reference = "world");
+
+  /**
+   * @brief Constructor for a random wrench
+   * @param name the name of the state
+   * @param the name of the reference frame
+   * @return CartesianWrench random wrench
+   */
+  static const CartesianWrench Random(const std::string& name, const std::string& reference = "world");
+
+  /**
    * @brief Copy assignement operator that have to be defined to the custom assignement operator
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values

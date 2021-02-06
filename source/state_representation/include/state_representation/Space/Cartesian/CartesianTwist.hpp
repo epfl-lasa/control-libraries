@@ -58,6 +58,22 @@ public:
   explicit CartesianTwist(const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference = "world");
 
   /**
+   * @brief Constructor for the zero twist
+   * @param name the name of the state
+   * @param the name of the reference frame
+   * @return CartesianTwist with zero values
+   */
+  static const CartesianTwist Zero(const std::string& name, const std::string& reference = "world");
+
+  /**
+   * @brief Constructor for a random twist
+   * @param name the name of the state
+   * @param the name of the reference frame
+   * @return CartesianTwist random twist
+   */
+  static const CartesianTwist Random(const std::string& name, const std::string& reference = "world");
+
+  /**
    * @brief Copy assignement operator that have to be defined to the custom assignement operator
    * @param twist the twist with value to assign
    * @return reference to the current twist with new values

@@ -121,7 +121,7 @@ bool Model::init_qp_solver() {
 StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                       int frame_id) {
   if ((int) joint_state.get_size() != this->robot_model_.nq) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->robot_model_.nq));
+    throw (Exceptions::InvalidJointStateSizeException(static_cast<int>(joint_state.get_size()), this->robot_model_.nq));
   }
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->robot_model_.nq);
@@ -149,7 +149,7 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
 std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
                                                                         const std::vector<unsigned int>& frame_ids) {
   if ((int) joint_state.get_size() != this->robot_model_.nq) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->robot_model_.nq));
+    throw (Exceptions::InvalidJointStateSizeException(static_cast<int>(joint_state.get_size()), this->robot_model_.nq));
   }
   std::vector<StateRepresentation::CartesianPose> pose_vector;
   pinocchio::forwardKinematics(this->robot_model_, this->robot_data_, joint_state.get_positions());

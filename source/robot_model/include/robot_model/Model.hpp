@@ -73,6 +73,12 @@ public:
   const std::string& get_robot_name() const;
 
   /**
+   * @brief Setter of the robot name
+   * @param robot_name the new value of the robot name
+   */
+  void set_robot_name(const std::string& robot_name);
+
+  /**
    * @brief Getter of the URDF path
    * @return the URDF path
    */
@@ -85,16 +91,10 @@ public:
   void set_urdf_path(const std::string& urdf_path);
 
   /**
-   * @brief Getter of the joint names attribute
-   * @return the vector of joint names
-   */
-  const std::vector<std::string>& get_joint_names() const;
-
-  /**
    * @brief Getter of the number of joints
    * @return the number of joints
    */
-  unsigned int get_nb_joints() const;
+  const int& get_nb_joints() const;
 
   /**
    * @brief Initialize the pinocchio model from the URDF
@@ -193,6 +193,10 @@ inline const std::string& Model::get_robot_name() const {
   return this->robot_name_->get_value();
 }
 
+inline void Model::set_robot_name(const std::string& robot_name) {
+  this->robot_name_->set_value(robot_name);
+}
+
 inline const std::string& Model::get_urdf_path() const {
   return this->urdf_path_->get_value();
 }
@@ -201,11 +205,7 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
   this->urdf_path_->set_value(urdf_path);
 }
 
-inline const std::vector<std::string>& Model::get_joint_names() const {
-  return this->joint_names_;
-}
-
-inline unsigned int Model::get_nb_joints() const {
+inline const int& Model::get_nb_joints() const {
   // this is technically not correct
   return this->robot_model_.nv;
 }

@@ -189,25 +189,25 @@ public:
   CartesianTwist& operator*=(const Eigen::Matrix<double, 6, 6>& lambda);
 
   /**
-   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @brief Clamp inplace the magnitude of the twist to the values in argument
    * @param max_linear the maximum magnitude of the linear velocity
    * @param max_angular the maximum magnitude of the angular velocity
    * @param linear_noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
+   * the linear velocity will be set to 0
    * @param angular_noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
+   * the angular velocity will be set to 0
    */
   void clamp(double max_linear, double max_angular, double linear_noise_ratio = 0, double angular_noise_ratio = 0);
 
   /**
-   * @brief Return the clamped velocity
+   * @brief Return the clamped twist
    * @param max_linear the maximum magnitude of the linear velocity
    * @param max_angular the maximum magnitude of the angular velocity
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
+   * the linear velocity will be set to 0
    * @param angular_noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
-   * @return the clamped velocity
+   * the angular velocity will be set to 0
+   * @return the clamped twist
    */
   const CartesianTwist clamped(double max_linear, double max_angular, double noise_ratio = 0, double angular_noise_ratio = 0) const;
 

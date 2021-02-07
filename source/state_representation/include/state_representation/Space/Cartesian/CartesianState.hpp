@@ -593,7 +593,7 @@ inline void CartesianState::set_orientation(const Eigen::Vector4d& orientation) 
 
 inline void CartesianState::set_orientation(const std::vector<double>& orientation) {
   if (orientation.size() != 4) throw Exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
-  this->set_orientation(Eigen::Quaterniond(orientation[0], orientation[1], orientation[2], orientation[3]));
+  this->set_orientation(Eigen::Vector4d::Map(orientation.data(), orientation.size()));
 }
 
 inline void CartesianState::set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) {

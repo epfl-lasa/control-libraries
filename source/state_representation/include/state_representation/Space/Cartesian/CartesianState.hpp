@@ -61,6 +61,36 @@ private:
   Eigen::Vector3d force;               ///< force applied at the point
   Eigen::Vector3d torque;              ///< torque applied at the point
 
+  /**
+   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
+   * @param state_variable the state variable to fill
+   * @param new_value the new value of the state variable
+   */
+  void set_state_variable(Eigen::Vector3d& state_variable, const Eigen::Vector3d& new_value);
+
+  /**
+   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
+   * @param state_variable the state variable to fill
+   * @param new_value the new value of the state variable
+   */
+  void set_state_variable(Eigen::Vector3d& state_variable, const std::vector<double>& new_value);
+
+  /**
+   * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
+   * @param linear_state_variable the linear part of the state variable to fill
+   * @param angular_state_variable the angular part of the state variable to fill
+   * @param new_value the new value of the state variable
+   */
+  void set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const Eigen::Matrix<double, 6, 1>& new_value);
+
+  /**
+   * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
+   * @param linear_state_variable the linear part of the state variable to fill
+   * @param angular_state_variable the angular part of the state variable to fill
+   * @param new_value the new value of the state variable
+   */
+  void set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value);
+
 protected:
   const Eigen::VectorXd get_field(const CartesianStateFields& field_name) const;
 
@@ -521,14 +551,31 @@ inline const Eigen::VectorXd CartesianState::get_field(const CartesianStateField
   return Eigen::Vector3d::Zero();
 }
 
-inline void CartesianState::set_position(const Eigen::Vector3d& position) {
+inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const Eigen::Vector3d& new_value) {
   this->set_filled();
-  this->position = position;
+  state_variable = new_value;
+}
+
+inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const std::vector<double>& new_value) {
+  this->set_state_variable(state_variable, Eigen::Vector3d::Map(new_value.data(), new_value.size()));
+}
+
+inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const Eigen::Matrix<double, 6, 1>& new_value) {
+  this->set_state_variable(linear_state_variable, new_value.head(3));
+  this->set_state_variable(angular_state_variable, new_value.tail(3));
+}
+
+inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value) {
+  this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
+  this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 4, new_value.end()));
+}
+
+inline void CartesianState::set_position(const Eigen::Vector3d& position) {
+  this->set_state_variable(this->position, position);
 }
 
 inline void CartesianState::set_position(const std::vector<double>& position) {
-  if (position.size() != 3) throw Exceptions::IncompatibleSizeException("The input vector is not of size 3 required for position");
-  this->set_position(Eigen::Vector3d::Map(position.data(), 3));
+  this->set_state_variable(this->position, position);
 }
 
 inline void CartesianState::set_position(const double& x, const double& y, const double& z) {
@@ -566,48 +613,39 @@ inline void CartesianState::set_pose(const std::vector<double>& pose) {
 }
 
 inline void CartesianState::set_linear_velocity(const Eigen::Vector3d& linear_velocity) {
-  this->set_filled();
-  this->linear_velocity = linear_velocity;
+  this->set_state_variable(this->linear_velocity, linear_velocity);
 }
 
 inline void CartesianState::set_angular_velocity(const Eigen::Vector3d& angular_velocity) {
-  this->set_filled();
-  this->angular_velocity = angular_velocity;
+  this->set_state_variable(this->angular_velocity, angular_velocity);
 }
 
 inline void CartesianState::set_twist(const Eigen::Matrix<double, 6, 1>& twist) {
-  this->set_linear_velocity(twist.head(3));
-  this->set_angular_velocity(twist.tail(3));
+  this->set_state_variable(this->linear_velocity, this->angular_velocity, twist);
 }
 
 inline void CartesianState::set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) {
-  this->set_filled();
-  this->linear_acceleration = linear_acceleration;
+  this->set_state_variable(this->linear_acceleration, linear_acceleration);
 }
 
 inline void CartesianState::set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) {
-  this->set_filled();
-  this->angular_acceleration = angular_acceleration;
+  this->set_state_variable(this->angular_acceleration, angular_acceleration);
 }
 
 inline void CartesianState::set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) {
-  this->set_linear_acceleration(accelerations.head(3));
-  this->set_angular_acceleration(accelerations.tail(3));
+  this->set_state_variable(this->linear_acceleration, this->angular_acceleration, accelerations);
 }
 
 inline void CartesianState::set_force(const Eigen::Vector3d& force) {
-  this->set_filled();
-  this->force = force;
+  this->set_state_variable(this->force, force);
 }
 
 inline void CartesianState::set_torque(const Eigen::Vector3d& torque) {
-  this->set_filled();
-  this->torque = torque;
+  this->set_state_variable(this->torque, torque);
 }
 
 inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) {
-  this->set_force(wrench.head(3));
-  this->set_torque(wrench.tail(3));
+  this->set_state_variable(this->force, this->torque, wrench);
 }
 
 inline void CartesianState::set_field(const Eigen::VectorXd& field_value, const CartesianStateFields& field_name) {

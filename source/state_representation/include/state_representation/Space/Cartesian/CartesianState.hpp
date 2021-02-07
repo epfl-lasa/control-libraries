@@ -567,7 +567,7 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_var
 
 inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value) {
   this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
-  this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 4, new_value.end()));
+  this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));
 }
 
 inline void CartesianState::set_position(const Eigen::Vector3d& position) {
@@ -609,7 +609,7 @@ inline void CartesianState::set_pose(const Eigen::Matrix<double, 7, 1>& pose) {
 inline void CartesianState::set_pose(const std::vector<double>& pose) {
   if (pose.size() != 7) throw Exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
   this->set_position(std::vector<double>(pose.begin(), pose.begin() + 3));
-  this->set_orientation(std::vector<double>(pose.begin() + 4, pose.end()));
+  this->set_orientation(std::vector<double>(pose.begin() + 3, pose.end()));
 }
 
 inline void CartesianState::set_linear_velocity(const Eigen::Vector3d& linear_velocity) {

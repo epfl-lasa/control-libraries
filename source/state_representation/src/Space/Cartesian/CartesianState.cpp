@@ -186,49 +186,49 @@ const CartesianState CartesianState::inverse() const {
   return result;
 }
 
-void CartesianState::clamp_field(double max_value, const CartesianStateFields& field_name, double noise_ratio) {
-  Eigen::VectorXd field_value = this->get_field(field_name);
+void CartesianState::clamp_state_variable(double max_value, const CartesianStateVariable& state_variable_type, double noise_ratio) {
+  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
   if (noise_ratio != 0) {
-    field_value -= noise_ratio * field_value.normalized();
+    state_variable_value -= noise_ratio * state_variable_value.normalized();
     // apply a deadzone
-    if (field_value.norm() < noise_ratio) field_value.setZero();
+    if (state_variable_value.norm() < noise_ratio) state_variable_value.setZero();
   }
   // clamp the values to their maximum amplitude provided
-  if (field_value.norm() > max_value) field_value = max_value * field_value.normalized();
-  this->set_field(field_value, field_name);
+  if (state_variable_value.norm() > max_value) state_variable_value = max_value * state_variable_value.normalized();
+  this->set_state_variable(state_variable_value, state_variable_type);
 }
 
-double CartesianState::dist(const CartesianState& state, const CartesianStateFields& field_name) const {
+double CartesianState::dist(const CartesianState& state, const CartesianStateVariable& state_variable_type) const {
   // sanity check
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
   if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
   if (!(this->get_reference_frame() == state.get_reference_frame())) throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
   // calculation
   double result = 0;
-  if (field_name == CartesianStateFields::POSITION || field_name == CartesianStateFields::POSE || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_position() - state.get_position()).norm();
   }
-  if (field_name == CartesianStateFields::ORIENTATION || field_name == CartesianStateFields::POSE || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE || state_variable_type == CartesianStateVariable::ALL) {
     // https://math.stackexchange.com/questions/90081/quaternion-distance for orientation
     double inner_product = this->get_orientation().dot(state.get_orientation());
     result += acos(2 * inner_product * inner_product - 1);
   }
-  if (field_name == CartesianStateFields::LINEAR_VELOCITY || field_name == CartesianStateFields::TWIST || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_linear_velocity() - state.get_linear_velocity()).norm();
   }
-  if (field_name == CartesianStateFields::ANGULAR_VELOCITY || field_name == CartesianStateFields::TWIST || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_angular_velocity() - state.get_angular_velocity()).norm();
   }
-  if (field_name == CartesianStateFields::LINEAR_ACCELERATION || field_name == CartesianStateFields::ACCELERATIONS || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION || state_variable_type == CartesianStateVariable::ACCELERATIONS || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_linear_acceleration() - state.get_linear_acceleration()).norm();
   }
-  if (field_name == CartesianStateFields::ANGULAR_ACCELERATION || field_name == CartesianStateFields::ACCELERATIONS || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION || state_variable_type == CartesianStateVariable::ACCELERATIONS || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_angular_acceleration() - state.get_angular_acceleration()).norm();
   }
-  if (field_name == CartesianStateFields::FORCE || field_name == CartesianStateFields::WRENCH || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_force() - state.get_force()).norm();
   }
-  if (field_name == CartesianStateFields::TORQUE || field_name == CartesianStateFields::WRENCH || field_name == CartesianStateFields::ALL) {
+  if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_torque() - state.get_torque()).norm();
   }
   return result;
@@ -277,8 +277,8 @@ const CartesianState operator*(double lambda, const CartesianState& state) {
   return state * lambda;
 }
 
-double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateFields& field_name) {
-  return s1.dist(s2, field_name);
+double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type) {
+  return s1.dist(s2, state_variable_type);
 }
 
 const std::vector<double> CartesianState::to_std_vector() const {

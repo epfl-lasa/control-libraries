@@ -115,9 +115,9 @@ const CartesianWrench CartesianWrench::operator*(double lambda) const {
 
 void CartesianWrench::clamp(double max_force, double max_torque, double force_noise_ratio, double torque_noise_ratio) {
   // clamp force
-  this->clamp_field(max_force, CartesianStateFields::FORCE, force_noise_ratio);
+  this->clamp_state_variable(max_force, CartesianStateVariable::FORCE, force_noise_ratio);
   // clamp torque
-  this->clamp_field(max_torque, CartesianStateFields::TORQUE, torque_noise_ratio);
+  this->clamp_state_variable(max_torque, CartesianStateVariable::TORQUE, torque_noise_ratio);
 }
 
 const CartesianWrench CartesianWrench::clamped(double max_force, double max_torque, double force_noise_ratio, double torque_noise_ratio) const {

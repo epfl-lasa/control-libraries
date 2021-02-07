@@ -16,11 +16,11 @@ namespace StateRepresentation {
 class CartesianState;
 
 /**
- * @enum CartesianStateFields
- * @brief Enum representing all the fields (position, orientation, angular_velocity, ...)
+ * @enum CartesianStateAttribute
+ * @brief Enum representing the attributes (position, orientation, angular_velocity, ...)
  * of the CartesianState
  */
-enum class CartesianStateFields {
+enum class CartesianStateVariable {
   POSITION,
   ORIENTATION,
   POSE,
@@ -40,11 +40,11 @@ enum class CartesianStateFields {
  * @brief compute the distance between two CartesianStates
  * @param s1 the first CartesianState
  * @param s2 the second CartesianState
- * @param field_name name of the field from the CartesianStateFields structure to apply
+ * @param state_variable_type name of the state variable from the CartesianStateVariable structure to apply
  * the distance on. Default ALL for full distance across all dimensions
  * @return the distance beteen the two states
  */
-double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateFields& field_name = CartesianStateFields::ALL);
+double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL);
 
 /**
  * @class CartesianState
@@ -92,9 +92,19 @@ private:
   void set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value);
 
 protected:
-  const Eigen::VectorXd get_field(const CartesianStateFields& field_name) const;
+  /**
+   * @brief Getter of the variable value corresponding to the input
+   * @param state_variable_type the type of variable to get
+   * @return the value of the variable as a vector
+   */
+  const Eigen::VectorXd get_state_variable(const CartesianStateVariable& state_variable_type) const;
 
-  void set_field(const Eigen::VectorXd& field_value, const CartesianStateFields& field_name);
+  /**
+   * @brief Setter of the variable value corresponding to the input
+   * @param new_value the new value of the variable
+   * @param state_variable_type the type of variable to get
+   */
+  void set_state_variable(const Eigen::VectorXd& new_value, const CartesianStateVariable& state_variable_type);
 
 public:
   /**
@@ -306,13 +316,13 @@ public:
   void set_zero();
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific field (velocity, acceleration or force)
-   * @param max_value the maximum absolute magnitude of the field
-   * @param field_name name of the field from the CartesianStateFields structure to clamp
+   * @brief Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force)
+   * @param max_value the maximum absolute magnitude of the state variable
+   * @param state_variable_type name of the variable from the CartesianStateVariable structure to clamp
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
    * the velocity will be set to 0
    */
-  void clamp_field(double max_value, const CartesianStateFields& field_name, double noise_ratio = 0);
+  void clamp_state_variable(double max_value, const CartesianStateVariable& state_variable_type, double noise_ratio = 0);
 
   /**
    * @brief Return a copy of the CartesianState
@@ -385,11 +395,11 @@ public:
   /**
    * @brief Compute the distance between two states as the sum of distances between each features
    * @param state the second state
-   * @param field_name name of the field from the CartesianStateFields structure to apply
+   * @param state_variable_type name of the variable from the CartesianStateVariable structure to apply
    * the distance on. Default ALL for full distance across all dimensions
    * @return dist the distance value as a double
    */
-  double dist(const CartesianState& state, const CartesianStateFields& field_name = CartesianStateFields::ALL) const;
+  double dist(const CartesianState& state, const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -504,45 +514,45 @@ inline const Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
   return wrench;
 }
 
-inline const Eigen::VectorXd CartesianState::get_field(const CartesianStateFields& field_name) const {
-  switch (field_name) {
-    case CartesianStateFields::POSITION:
+inline const Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVariable& state_variable_type) const {
+  switch (state_variable_type) {
+    case CartesianStateVariable::POSITION:
       return this->get_position();
 
-    case CartesianStateFields::ORIENTATION:
+    case CartesianStateVariable::ORIENTATION:
       return this->get_orientation_coefficients();
 
-    case CartesianStateFields::POSE:
+    case CartesianStateVariable::POSE:
       return this->get_pose();
 
-    case CartesianStateFields::LINEAR_VELOCITY:
+    case CartesianStateVariable::LINEAR_VELOCITY:
       return this->get_linear_velocity();
 
-    case CartesianStateFields::ANGULAR_VELOCITY:
+    case CartesianStateVariable::ANGULAR_VELOCITY:
       return this->get_angular_velocity();
 
-    case CartesianStateFields::TWIST:
+    case CartesianStateVariable::TWIST:
       return this->get_twist();
 
-    case CartesianStateFields::LINEAR_ACCELERATION:
+    case CartesianStateVariable::LINEAR_ACCELERATION:
       return this->get_linear_acceleration();
 
-    case CartesianStateFields::ANGULAR_ACCELERATION:
+    case CartesianStateVariable::ANGULAR_ACCELERATION:
       return this->get_angular_acceleration();
 
-    case CartesianStateFields::ACCELERATIONS:
+    case CartesianStateVariable::ACCELERATIONS:
       return this->get_accelerations();
 
-    case CartesianStateFields::FORCE:
+    case CartesianStateVariable::FORCE:
       return this->get_force();
 
-    case CartesianStateFields::TORQUE:
+    case CartesianStateVariable::TORQUE:
       return this->get_torque();
 
-    case CartesianStateFields::WRENCH:
+    case CartesianStateVariable::WRENCH:
       return this->get_wrench();
 
-    case CartesianStateFields::ALL:
+    case CartesianStateVariable::ALL:
       Eigen::Matrix<double, 25, 1> all_fields;
       all_fields << this->get_pose(), this->get_twist(), this->get_accelerations(), this->get_wrench();
       return all_fields;
@@ -648,61 +658,61 @@ inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench
   this->set_state_variable(this->force, this->torque, wrench);
 }
 
-inline void CartesianState::set_field(const Eigen::VectorXd& field_value, const CartesianStateFields& field_name) {
-  switch (field_name) {
-    case CartesianStateFields::POSITION:
-      this->set_position(field_value);
+inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value, const CartesianStateVariable& state_variable_type) {
+  switch (state_variable_type) {
+    case CartesianStateVariable::POSITION:
+      this->set_position(new_value);
       break;
 
-    case CartesianStateFields::ORIENTATION:
-      this->set_orientation(field_value);
+    case CartesianStateVariable::ORIENTATION:
+      this->set_orientation(new_value);
       break;
 
-    case CartesianStateFields::POSE:
-      this->set_pose(field_value);
+    case CartesianStateVariable::POSE:
+      this->set_pose(new_value);
       break;
 
-    case CartesianStateFields::LINEAR_VELOCITY:
-      this->set_linear_velocity(field_value);
+    case CartesianStateVariable::LINEAR_VELOCITY:
+      this->set_linear_velocity(new_value);
       break;
 
-    case CartesianStateFields::ANGULAR_VELOCITY:
-      this->set_angular_velocity(field_value);
+    case CartesianStateVariable::ANGULAR_VELOCITY:
+      this->set_angular_velocity(new_value);
       break;
 
-    case CartesianStateFields::TWIST:
-      this->set_twist(field_value);
+    case CartesianStateVariable::TWIST:
+      this->set_twist(new_value);
       break;
 
-    case CartesianStateFields::LINEAR_ACCELERATION:
-      this->set_linear_acceleration(field_value);
+    case CartesianStateVariable::LINEAR_ACCELERATION:
+      this->set_linear_acceleration(new_value);
       break;
 
-    case CartesianStateFields::ANGULAR_ACCELERATION:
-      this->set_angular_acceleration(field_value);
+    case CartesianStateVariable::ANGULAR_ACCELERATION:
+      this->set_angular_acceleration(new_value);
       break;
 
-    case CartesianStateFields::ACCELERATIONS:
-      this->set_accelerations(field_value);
+    case CartesianStateVariable::ACCELERATIONS:
+      this->set_accelerations(new_value);
       break;
 
-    case CartesianStateFields::FORCE:
-      this->set_force(field_value);
+    case CartesianStateVariable::FORCE:
+      this->set_force(new_value);
       break;
 
-    case CartesianStateFields::TORQUE:
-      this->set_torque(field_value);
+    case CartesianStateVariable::TORQUE:
+      this->set_torque(new_value);
       break;
 
-    case CartesianStateFields::WRENCH:
-      this->set_wrench(field_value);
+    case CartesianStateVariable::WRENCH:
+      this->set_wrench(new_value);
       break;
 
-    case CartesianStateFields::ALL:
-      this->set_pose(field_value.segment(0, 7));
-      this->set_twist(field_value.segment(7, 6));
-      this->set_accelerations(field_value.segment(13, 6));
-      this->set_wrench(field_value.segment(19, 6));
+    case CartesianStateVariable::ALL:
+      this->set_pose(new_value.segment(0, 7));
+      this->set_twist(new_value.segment(7, 6));
+      this->set_accelerations(new_value.segment(13, 6));
+      this->set_wrench(new_value.segment(19, 6));
       break;
   }
 }

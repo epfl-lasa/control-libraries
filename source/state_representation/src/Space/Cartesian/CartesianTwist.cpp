@@ -134,9 +134,9 @@ CartesianTwist& CartesianTwist::operator*=(const Eigen::Matrix<double, 6, 6>& la
 
 void CartesianTwist::clamp(double max_linear, double max_angular, double linear_noise_ratio, double angular_noise_ratio) {
   // clamp linear
-  this->clamp_field(max_linear, CartesianStateFields::LINEAR_VELOCITY, linear_noise_ratio);
+  this->clamp_state_variable(max_linear, CartesianStateVariable::LINEAR_VELOCITY, linear_noise_ratio);
   // clamp angular
-  this->clamp_field(max_angular, CartesianStateFields::ANGULAR_VELOCITY, angular_noise_ratio);
+  this->clamp_state_variable(max_angular, CartesianStateVariable::ANGULAR_VELOCITY, angular_noise_ratio);
 }
 
 const CartesianTwist CartesianTwist::clamped(double max_linear, double max_angular, double linear_noise_ratio, double angular_noise_ratio) const {

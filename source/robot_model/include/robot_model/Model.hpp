@@ -94,7 +94,7 @@ public:
    * @brief Getter of the number of joints
    * @return the number of joints
    */
-  const int& get_nb_joints() const;
+  unsigned int get_nb_joints() const;
 
   /**
    * @brief Initialize the pinocchio model from the URDF
@@ -107,7 +107,8 @@ public:
    * @param joint_id id of the frame at which to compute the jacobian
    * @return the jacobian matrix
    */
-  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state, int frame_id);
+  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
+                                                 unsigned int frame_id);
 
   /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
@@ -143,24 +144,24 @@ public:
  * @return the pose of the desired frame
  */
   StateRepresentation::CartesianPose forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                      const std::string& frame_names);
+                                                      std::string frame_name = "");
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
    * @param cartesian_state containing the pose of the end-effector
    * @return the joint state of the robot
    */
-  const StateRepresentation::JointPositions inverse_geometry(const StateRepresentation::CartesianState& cartesian_state) const;
+  StateRepresentation::JointPositions inverse_geometry(const StateRepresentation::CartesianState& cartesian_state) const;
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot
    * @return the twist of the end-effector
    */
-  const StateRepresentation::CartesianTwist forward_kinematic(const StateRepresentation::JointState& joint_state);
+  StateRepresentation::CartesianTwist forward_kinematic(const StateRepresentation::JointState& joint_state);
 
   /**
-   * @brief Compute the inverse kinematics, i.e. joint velocities from the velocities of the frames in parameter
+   * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_states vector of twist
    * @return the joint velocities of the robot
@@ -205,9 +206,9 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
   this->urdf_path_->set_value(urdf_path);
 }
 
-inline const int& Model::get_nb_joints() const {
-  // this is technically not correct
-  return this->robot_model_.nv;
+inline unsigned int Model::get_nb_joints() const {
+  // subtract 1 because of the 'universe' joint
+  return this->robot_model_.njoints - 1;
 }
 
 inline void Model::init_model() {
@@ -224,4 +225,4 @@ inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>>
   param_list.push_back(this->proportional_gain_);
   return param_list;
 }
-}
+}// namespace RobotModel

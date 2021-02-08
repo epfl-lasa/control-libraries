@@ -78,6 +78,21 @@ private:
    */
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 
+protected:
+  /**
+   * @brief Proxy function that multiply the specified state variable by an array of gain
+   * @param lambda the gain array to multiply with
+   * @param state_variable_type the state variable on which to apply the multiplication
+   */
+  void multiply_state_variable(const Eigen::ArrayXd& lambda, const JointStateVariable& state_variable_type);
+
+  /**
+   * @brief Proxy function that multiply the specified state variable by an array of gain
+   * @param lambda the gain array to multiply with
+   * @param state_variable_type the state variable on which to apply the multiplication
+   */
+  void multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type);
+
 public:
   /**
    * @brief Empty constructor for a JointState

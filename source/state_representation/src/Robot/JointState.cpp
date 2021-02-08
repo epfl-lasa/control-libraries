@@ -68,25 +68,31 @@ JointState& JointState::operator*=(double lambda) {
   return (*this);
 }
 
-JointState& JointState::operator*=(const Eigen::MatrixXd& lambda) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  // the size of the matrix should correspond to the number of joints times each features
-  // (positions, velocities, accelerations and torques, i.e 4)
-  int expected_size = this->get_size() * 4;
+void JointState::multiply_state_variable(const Eigen::ArrayXd& lambda, const JointStateVariable& state_variable_type) {
+  Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
+  int expected_size = state_variable.size();
+  if (lambda.size() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
+                                                                      + std::to_string(expected_size)
+                                                                      + ", given " + std::to_string(lambda.size()));
+  this->set_state_variable((lambda * state_variable.array()).matrix(), state_variable_type);
+}
+
+void JointState::multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type) {
+  Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
+  int expected_size = state_variable.size();
   if (lambda.rows() != expected_size || lambda.cols() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
                                                                                                         + std::to_string(expected_size) + "x" + std::to_string(expected_size)
                                                                                                         + ", given " + std::to_string(lambda.rows()) + "x" + std::to_string(lambda.cols()));
   this->set_all_state_variables(lambda * this->get_all_state_variables());
-  return (*this);
 }
 
 JointState& JointState::operator*=(const Eigen::ArrayXd& lambda) {
-  int expected_size = this->get_size() * 4;
-  if (lambda.size() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
-                                                                      + std::to_string(expected_size)
-                                                                      + ", given " + std::to_string(lambda.size()));
-  // transform the array of gain to a diagonal matrix and use the appropriate operator
-  this->set_all_state_variables((lambda * this->get_all_state_variables().array()).matrix());
+  this->multiply_state_variable(lambda, JointStateVariable::ALL);
+  return (*this);
+}
+
+JointState& JointState::operator*=(const Eigen::MatrixXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::ALL);
   return (*this);
 }
 

@@ -25,75 +25,82 @@ JointPositions::JointPositions(const JointState& state) : JointState(state) {}
 
 JointPositions::JointPositions(const JointVelocities& velocities) : JointState(std::chrono::seconds(1) * velocities) {}
 
-JointPositions& JointPositions::operator=(const Eigen::VectorXd& positions) {
-  this->set_positions(positions);
-  return (*this);
-}
-
-JointPositions& JointPositions::operator+=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_positions(this->get_positions() + vector);
-  return (*this);
-}
-
 JointPositions& JointPositions::operator+=(const JointPositions& positions) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  if (!this->is_compatible(positions)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
-  // operation
-  this->set_positions(this->get_positions() + positions.get_positions());
+  this->JointState::operator+=(positions);
   return (*this);
 }
 
-const JointPositions JointPositions::operator+(const Eigen::VectorXd& vector) const {
-  JointPositions result(*this);
-  result += vector;
-  return result;
-}
-
-const JointPositions JointPositions::operator+(const JointPositions& positions) const {
-  JointPositions result(*this);
-  result += positions;
-  return result;
-}
-
-JointPositions& JointPositions::operator-=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_positions(this->get_positions() - vector);
-  return (*this);
+JointPositions JointPositions::operator+(const JointPositions& positions) const {
+  return this->JointState::operator+(positions);
 }
 
 JointPositions& JointPositions::operator-=(const JointPositions& positions) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  if (!this->is_compatible(positions)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
-  // operation
-  this->set_positions(this->get_positions() - positions.get_positions());
+  this->JointState::operator-=(positions);
   return (*this);
 }
 
-const JointPositions JointPositions::operator-(const Eigen::VectorXd& vector) const {
+JointPositions JointPositions::operator-(const JointPositions& positions) const {
+  return this->JointState::operator-(positions);
+}
+
+JointPositions& JointPositions::operator*=(double lambda) {
+  this->JointState::operator*=(lambda);
+  return (*this);
+}
+
+JointPositions JointPositions::operator*(double lambda) const {
+  return this->JointState::operator*(lambda);
+}
+
+JointPositions& JointPositions::operator*=(const Eigen::ArrayXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::POSITIONS);
+  return (*this);
+}
+
+JointPositions JointPositions::operator*(const Eigen::ArrayXd& lambda) const {
   JointPositions result(*this);
-  result -= vector;
+  result *= lambda;
   return result;
 }
 
-const JointPositions JointPositions::operator-(const JointPositions& positions) const {
+JointPositions& JointPositions::operator*=(const Eigen::MatrixXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::POSITIONS);
+  return (*this);
+}
+
+JointPositions JointPositions::operator*(const Eigen::MatrixXd& lambda) const {
   JointPositions result(*this);
-  result -= positions;
+  result *= lambda;
   return result;
 }
 
-const JointPositions JointPositions::copy() const {
+JointPositions& JointPositions::operator/=(double lambda) {
+  this->JointState::operator/=(lambda);
+  return (*this);
+}
+
+JointPositions JointPositions::operator/(double lambda) const {
+  return this->JointState::operator/(lambda);
+}
+
+JointVelocities JointPositions::operator/(const std::chrono::nanoseconds& dt) const {
+  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  // operations
+  JointVelocities velocities(this->get_name(), this->get_names());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  // multiply the positions by this period value and assign it as velocity
+  velocities.set_velocities(this->get_positions() / period);
+  return velocities;
+}
+
+JointPositions JointPositions::copy() const {
   JointPositions result(*this);
   return result;
 }
 
-const Eigen::ArrayXd JointPositions::array() const {
+Eigen::ArrayXd JointPositions::array() const {
   return this->get_positions().array();
 }
 
@@ -112,57 +119,7 @@ std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   return os;
 }
 
-const JointPositions operator+(const Eigen::VectorXd& vector, const JointPositions& positions) {
-  return positions + vector;
-}
-
-const JointPositions operator-(const Eigen::VectorXd& vector, const JointPositions& positions) {
-  return vector + (-1) * positions;
-}
-
-const JointPositions operator*(double lambda, const JointPositions& positions) {
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  JointPositions result(positions);
-  result.set_positions(lambda * positions.get_positions());
-  return result;
-}
-
-const JointPositions operator*(const Eigen::ArrayXd& lambda, const JointPositions& positions) {
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  if (lambda.size() != positions.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size: expected " + std::to_string(positions.get_size()) + ", given " + std::to_string(lambda.size()));
-  JointPositions result(positions);
-  result.set_positions(lambda * positions.get_positions().array());
-  return result;
-}
-
-const JointPositions operator/(const JointPositions& positions, double lambda) {
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  JointPositions result(positions);
-  result.set_positions(positions.get_positions() / lambda);
-  return result;
-}
-
-const JointPositions operator/(const JointPositions& positions, const Eigen::ArrayXd& lambda) {
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  if (lambda.size() != positions.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size: expected " + std::to_string(positions.get_size()) + +", given " + std::to_string(lambda.size()));
-  JointPositions result(positions);
-  result.set_positions(positions.get_positions().array() / lambda);
-  return result;
-}
-
-const JointVelocities operator/(const JointPositions& positions, const std::chrono::nanoseconds& dt) {
-  if (positions.is_empty()) throw EmptyStateException(positions.get_name() + " state is empty");
-  // operations
-  JointVelocities velocities(positions.get_name(), positions.get_names());
-  // convert the period to a double with the second as reference
-  double period = dt.count();
-  period /= 1e9;
-  // multiply the positions by this period value
-  velocities.set_velocities(positions.get_positions() / period);
-  return velocities;
-}
-
-const std::vector<double> JointPositions::to_std_vector() const {
+std::vector<double> JointPositions::to_std_vector() const {
   std::vector<double> temp(this->get_positions().data(), this->get_positions().data() + this->get_size());
   return temp;
 }

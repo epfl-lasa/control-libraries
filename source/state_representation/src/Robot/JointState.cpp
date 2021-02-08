@@ -39,55 +39,121 @@ void JointState::set_zero() {
 }
 
 JointState& JointState::operator+=(const JointState& state) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
   if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
-  // operation
-  this->set_positions(this->get_positions() + state.get_positions());
-  this->set_velocities(this->get_velocities() + state.get_velocities());
-  this->set_accelerations(this->get_accelerations() + state.get_accelerations());
-  this->set_torques(this->get_torques() + state.get_torques());
+  this->set_all_state_variables(this->get_all_state_variables() + state.get_all_state_variables());
   return (*this);
 }
 
-const JointState JointState::operator+(const JointState& state) const {
+JointState JointState::operator+(const JointState& state) const {
   JointState result(*this);
   result += state;
   return result;
 }
 
 JointState& JointState::operator-=(const JointState& state) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
   if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
-  // operation
-  this->set_positions(this->get_positions() - state.get_positions());
-  this->set_velocities(this->get_velocities() - state.get_velocities());
-  this->set_accelerations(this->get_accelerations() - state.get_accelerations());
-  this->set_torques(this->get_torques() - state.get_torques());
+  this->set_all_state_variables(this->get_all_state_variables() - state.get_all_state_variables());
   return (*this);
 }
 
-const JointState JointState::operator-(const JointState& state) const {
+JointState JointState::operator-(const JointState& state) const {
   JointState result(*this);
   result -= state;
   return result;
 }
 
-JointState& JointState::operator*=(const Eigen::MatrixXd& lambda) {
+JointState& JointState::operator*=(double lambda) {
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (lambda.rows() != this->get_size() || lambda.cols() != this->get_size()) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected " + std::to_string(this->get_size()) + "x" + std::to_string(this->get_size()) + ", given " + std::to_string(lambda.cols()) + "x" + std::to_string(lambda.cols()));
-  this->set_positions(lambda * this->get_positions());
-  this->set_velocities(lambda * this->get_velocities());
-  this->set_accelerations(lambda * this->get_accelerations());
-  this->set_torques(lambda * this->get_torques());
+  this->set_all_state_variables(lambda * this->get_all_state_variables());
   return (*this);
 }
 
-const JointState JointState::copy() const {
+JointState& JointState::operator*=(const Eigen::MatrixXd& lambda) {
+  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  // the size of the matrix should correspond to the number of joints times each features
+  // (positions, velocities, accelerations and torques, i.e 4)
+  int expected_size = this->get_size() * 4;
+  if (lambda.rows() != expected_size || lambda.cols() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
+                                                                                                        + std::to_string(expected_size) + "x" + std::to_string(expected_size)
+                                                                                                        + ", given " + std::to_string(lambda.rows()) + "x" + std::to_string(lambda.cols()));
+  this->set_all_state_variables(lambda * this->get_all_state_variables());
+  return (*this);
+}
+
+JointState& JointState::operator*=(const Eigen::ArrayXd& lambda) {
+  int expected_size = this->get_size() * 4;
+  if (lambda.size() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
+                                                                      + std::to_string(expected_size)
+                                                                      + ", given " + std::to_string(lambda.size()));
+  // transform the array of gain to a diagonal matrix and use the appropriate operator
+  this->set_all_state_variables((lambda * this->get_all_state_variables().array()).matrix());
+  return (*this);
+}
+
+JointState JointState::operator*(double lambda) const {
   JointState result(*this);
+  result *= lambda;
+  return result;
+}
+
+JointState JointState::operator*(const Eigen::MatrixXd& lambda) const {
+  JointState result(*this);
+  result *= lambda;
+  return result;
+}
+
+JointState JointState::operator*(const Eigen::ArrayXd& lambda) const {
+  JointState result(*this);
+  result *= lambda;
+  return result;
+}
+
+JointState& JointState::operator/=(double lambda) {
+  return JointState::operator*=(1 / lambda);
+}
+
+JointState JointState::operator/(double lambda) const {
+  JointState result(*this);
+  result /= lambda;
+  return result;
+}
+
+JointState JointState::copy() const {
+  JointState result(*this);
+  return result;
+}
+
+void JointState::clamp_state_variable(double max_value, const JointStateVariable& state_variable_type, double noise_ratio) {
+  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
+  if (noise_ratio != 0) {
+    state_variable_value -= noise_ratio * state_variable_value.normalized();
+    // apply a deadzone
+    if (state_variable_value.norm() < noise_ratio) state_variable_value.setZero();
+  }
+  // clamp the values to their maximum amplitude provided
+  if (state_variable_value.norm() > max_value) state_variable_value = max_value * state_variable_value.normalized();
+  this->set_state_variable(state_variable_value, state_variable_type);
+}
+
+double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {
+  // sanity check
+  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
+  if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
+  // calculation
+  double result = 0;
+  if (state_variable_type == JointStateVariable::POSITIONS || state_variable_type == JointStateVariable::ALL) {
+    result += (this->get_positions() - state.get_positions()).norm();
+  }
+  if (state_variable_type == JointStateVariable::VELOCITIES || state_variable_type == JointStateVariable::ALL) {
+    result += (this->get_velocities() - state.get_velocities()).norm();
+  }
+  if (state_variable_type == JointStateVariable::ACCELERATIONS || state_variable_type == JointStateVariable::ALL) {
+    result += (this->get_accelerations() - state.get_accelerations()).norm();
+  }
+  if (state_variable_type == JointStateVariable::TORQUES || state_variable_type == JointStateVariable::ALL) {
+    result += (this->get_torques() - state.get_torques()).norm();
+  }
   return result;
 }
 
@@ -115,23 +181,30 @@ std::ostream& operator<<(std::ostream& os, const JointState& state) {
   return os;
 }
 
-const JointState operator*(double lambda, const JointState& state) {
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  JointState result(state);
-  result.set_positions(lambda * state.get_positions());
-  result.set_velocities(lambda * state.get_velocities());
-  result.set_accelerations(lambda * state.get_accelerations());
-  result.set_torques(lambda * state.get_torques());
-  return result;
+double dist(const JointState& s1, const JointState& s2, const JointStateVariable& state_variable_type) {
+  return s1.dist(s2, state_variable_type);
 }
 
-const JointState operator*(const Eigen::MatrixXd& lambda, const JointState& state) {
+JointState operator*(double lambda, const JointState& state) {
+  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
   JointState result(state);
   result *= lambda;
   return result;
 }
 
-const std::vector<double> JointState::to_std_vector() const {
+JointState operator*(const Eigen::MatrixXd& lambda, const JointState& state) {
+  JointState result(state);
+  result *= lambda;
+  return result;
+}
+
+JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
+  JointState result(state);
+  result *= lambda;
+  return result;
+}
+
+std::vector<double> JointState::to_std_vector() const {
   throw(NotImplementedException("to_std_vector() is not implemented for the base JointState class"));
   return std::vector<double>();
 }

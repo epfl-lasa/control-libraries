@@ -41,25 +41,25 @@ public:
    * @param feedback_state the real state of the system as read from feedback loop
    * @return the output command at the input state
    */
-  virtual const S compute_command(const S& desired_state, const S& feedback_state) const;
+  virtual S compute_command(const S& desired_state, const S& feedback_state) const;
 
   /**
    * @brief Getter of the stiffness matrix
    * @return the stiffness matrix
    */
-  const Eigen::MatrixXd& get_stiffness() const;
+  Eigen::MatrixXd& get_stiffness() const;
 
   /**
    * @brief Getter of the dmaping matrix
    * @return the damping matrix
    */
-  const Eigen::MatrixXd& get_damping() const;
+  Eigen::MatrixXd& get_damping() const;
 
   /**
    * @brief Getter of the inertia matrix
    * @return the inertia matrix
    */
-  const Eigen::MatrixXd& get_inertia() const;
+  Eigen::MatrixXd& get_inertia() const;
 
   /**
    * @brief Setter of the stiffness matrix
@@ -83,7 +83,7 @@ public:
    * @brief Return a list of all the parameters of the controller
    * @return the list of parameters
    */
-  virtual const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  virtual std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
 };
 
 template <class S>
@@ -92,17 +92,17 @@ Impedance<S>::Impedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd&
                                                                                                                             inertia_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("inertia", inertia)) {}
 
 template <class S>
-inline const Eigen::MatrixXd& Impedance<S>::get_stiffness() const {
+inline Eigen::MatrixXd& Impedance<S>::get_stiffness() const {
   return this->stiffness_->get_value();
 }
 
 template <class S>
-inline const Eigen::MatrixXd& Impedance<S>::get_damping() const {
+inline Eigen::MatrixXd& Impedance<S>::get_damping() const {
   return this->damping_->get_value();
 }
 
 template <class S>
-inline const Eigen::MatrixXd& Impedance<S>::get_inertia() const {
+inline Eigen::MatrixXd& Impedance<S>::get_inertia() const {
   return this->inertia_->get_value();
 }
 
@@ -122,7 +122,7 @@ inline void Impedance<S>::set_inertia(const Eigen::MatrixXd& inertia) {
 }
 
 template <class S>
-const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Impedance<S>::get_parameters() const {
+std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Impedance<S>::get_parameters() const {
   std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
   param_list.push_back(this->stiffness_);
   param_list.push_back(this->damping_);

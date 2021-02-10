@@ -62,4 +62,14 @@ if (runtests)
     # 'project(gtest)' above.
     include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+    add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
+    target_link_libraries(runTestImpedanceController
+      gtest
+      gtest_main
+      ${PROJECT_NAME}
+      state_representation
+    )
+    add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
+
+
 endif()

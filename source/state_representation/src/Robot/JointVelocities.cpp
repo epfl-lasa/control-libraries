@@ -25,18 +25,6 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {}
 
 JointVelocities::JointVelocities(const JointPositions& positions) : JointState(positions / std::chrono::seconds(1)) {}
 
-JointVelocities& JointVelocities::operator=(const Eigen::VectorXd& velocities) {
-  this->set_velocities(velocities);
-  return (*this);
-}
-
-JointVelocities& JointVelocities::operator+=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_velocities(this->get_velocities() + vector);
-  return (*this);
-}
-
 JointVelocities& JointVelocities::operator+=(const JointVelocities& velocities) {
   // sanity check
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
@@ -46,24 +34,10 @@ JointVelocities& JointVelocities::operator+=(const JointVelocities& velocities) 
   this->set_velocities(this->get_velocities() + velocities.get_velocities());
   return (*this);
 }
-
-const JointVelocities JointVelocities::operator+(const Eigen::VectorXd& vector) const {
-  JointVelocities result(*this);
-  result += vector;
-  return result;
-}
-
 const JointVelocities JointVelocities::operator+(const JointVelocities& velocities) const {
   JointVelocities result(*this);
   result += velocities;
   return result;
-}
-
-JointVelocities& JointVelocities::operator-=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_velocities(this->get_velocities() - vector);
-  return (*this);
 }
 
 JointVelocities& JointVelocities::operator-=(const JointVelocities& velocities) {
@@ -74,12 +48,6 @@ JointVelocities& JointVelocities::operator-=(const JointVelocities& velocities) 
   // operation
   this->set_velocities(this->get_velocities() - velocities.get_velocities());
   return (*this);
-}
-
-const JointVelocities JointVelocities::operator-(const Eigen::VectorXd& vector) const {
-  JointVelocities result(*this);
-  result -= vector;
-  return result;
 }
 
 const JointVelocities JointVelocities::operator-(const JointVelocities& velocities) const {
@@ -137,14 +105,6 @@ std::ostream& operator<<(std::ostream& os, const JointVelocities& velocities) {
     os << "]";
   }
   return os;
-}
-
-const JointVelocities operator+(const Eigen::VectorXd& vector, const JointVelocities& velocities) {
-  return velocities + vector;
-}
-
-const JointVelocities operator-(const Eigen::VectorXd& vector, const JointVelocities& velocities) {
-  return vector + (-1) * velocities;
 }
 
 const JointVelocities operator*(double lambda, const JointVelocities& velocities) {

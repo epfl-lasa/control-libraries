@@ -74,31 +74,11 @@ public:
   JointVelocities& operator=(const JointVelocities& state);
 
   /**
-   * @brief Set the values of the  velocities from an Eigen Vector
-   * @param velocities the velocities as an Eigen Vector
-   */
-  JointVelocities& operator=(const Eigen::VectorXd& velocities);
-
-  /**
-   * @brief Overload the += operator with an Eigen Vector
-   * @param vector Eigen Vector to add
-   * @return the JointVelocities added the vector given in argument
-   */
-  JointVelocities& operator+=(const Eigen::VectorXd& vector);
-
-  /**
    * @brief Overload the += operator
    * @param velocities JointVelocities to add
    * @return the current JointVelocities added the JointVelocities given in argument
    */
   JointVelocities& operator+=(const JointVelocities& velocities);
-
-  /**
-   * @brief Overload the + operator with a  Eigen Vector
-   * @param vector Eigen Vector to add
-   * @return the JointVelocities added the vector given in argument
-   */
-  const JointVelocities operator+(const Eigen::VectorXd& vector) const;
 
   /**
    * @brief Overload the + operator
@@ -108,25 +88,11 @@ public:
   const JointVelocities operator+(const JointVelocities& velocities) const;
 
   /**
-   * @brief Overload the -= operator with a  Eigen Vector
-   * @param vector Eigen Vector to substract
-   * @return the JointVelocities substracted the vector given in argument
-   */
-  JointVelocities& operator-=(const Eigen::VectorXd& vector);
-
-  /**
    * @brief Overload the -= operator
    * @param velocities JointVelocities to substract
    * @return the current JointVelocities substracted the JointVelocities given in argument
    */
   JointVelocities& operator-=(const JointVelocities& velocities);
-
-  /**
-   * @brief Overload the - operator with an Eigen Vector
-   * @param vector Eigen Vector to substract
-   * @return the JointVelocities substracted the vector given in argument
-   */
-  const JointVelocities operator-(const Eigen::VectorXd& vector) const;
 
   /**
    * @brief Overload the - operator
@@ -188,22 +154,6 @@ public:
    * @return the appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const JointVelocities& velocities);
-
-  /**
-   * @brief Overload the + operator with an Eigen Vector
-   * @param vector Eigen Vector to add
-   * @param velocities JointVelocities to add
-   * @return the Eigen Vector plus the JointVelocities represented as a JointVelocities
-   */
-  friend const JointVelocities operator+(const Eigen::VectorXd& vector, const JointVelocities& velocities);
-
-  /**
-   * @brief Overload the - operator with a  Eigen Vector
-   * @param vector Eigen Vector
-   * @param velocities JointVelocities to substract
-   * @return the Eigen Vector minus the JointVelocities represented as a JointVelocities
-   */
-  friend const JointVelocities operator-(const Eigen::VectorXd& vector, const JointVelocities& velocities);
 
   /**
    * @brief Overload the * operator with a scalar

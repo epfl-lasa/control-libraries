@@ -66,31 +66,11 @@ public:
   JointTorques& operator=(const JointTorques& state);
 
   /**
-   * @brief Set the values of the  torques from an Eigen Vector
-   * @param torques the torques as an Eigen Vector
-   */
-  JointTorques& operator=(const Eigen::VectorXd& torques);
-
-  /**
-   * @brief Overload the += operator with an Eigen Vector
-   * @param vector Eigen Vector to add
-   * @return the JointTorques added the vector given in argument
-   */
-  JointTorques& operator+=(const Eigen::VectorXd& vector);
-
-  /**
    * @brief Overload the += operator
    * @param torques JointTorques to add
    * @return the current JointTorques added the JointTorques given in argument
    */
   JointTorques& operator+=(const JointTorques& torques);
-
-  /**
-   * @brief Overload the + operator with a  Eigen Vector
-   * @param vector Eigen Vector to add
-   * @return the JointTorques added the vector given in argument
-   */
-  const JointTorques operator+(const Eigen::VectorXd& vector) const;
 
   /**
    * @brief Overload the + operator
@@ -100,25 +80,11 @@ public:
   const JointTorques operator+(const JointTorques& torques) const;
 
   /**
-   * @brief Overload the -= operator with a  Eigen Vector
-   * @param vector Eigen Vector to substract
-   * @return the JointTorques substracted the vector given in argument
-   */
-  JointTorques& operator-=(const Eigen::VectorXd& vector);
-
-  /**
    * @brief Overload the -= operator
    * @param torques JointTorques to substract
    * @return the current JointTorques substracted the JointTorques given in argument
    */
   JointTorques& operator-=(const JointTorques& torques);
-
-  /**
-   * @brief Overload the - operator with an Eigen Vector
-   * @param vector Eigen Vector to substract
-   * @return the JointTorques substracted the vector given in argument
-   */
-  const JointTorques operator-(const Eigen::VectorXd& vector) const;
 
   /**
    * @brief Overload the - operator
@@ -163,22 +129,6 @@ public:
    * @return the appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const JointTorques& torques);
-
-  /**
-   * @brief Overload the + operator with an Eigen Vector
-   * @param vector Eigen Vector to add
-   * @param torques JointTorques to add
-   * @return the Eigen Vector plus the JointTorques represented as a JointTorques
-   */
-  friend const JointTorques operator+(const Eigen::VectorXd& vector, const JointTorques& torques);
-
-  /**
-   * @brief Overload the - operator with a  Eigen Vector
-   * @param vector Eigen Vector
-   * @param torques JointTorques to substract
-   * @return the Eigen Vector minus the JointTorques represented as a JointTorques
-   */
-  friend const JointTorques operator-(const Eigen::VectorXd& vector, const JointTorques& torques);
 
   /**
    * @brief Overload the * operator with a scalar

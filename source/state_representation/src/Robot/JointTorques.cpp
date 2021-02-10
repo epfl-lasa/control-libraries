@@ -23,18 +23,6 @@ JointTorques::JointTorques(const JointTorques& torques) : JointState(torques) {}
 
 JointTorques::JointTorques(const JointState& state) : JointState(state) {}
 
-JointTorques& JointTorques::operator=(const Eigen::VectorXd& torques) {
-  this->set_torques(torques);
-  return (*this);
-}
-
-JointTorques& JointTorques::operator+=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_torques(this->get_torques() + vector);
-  return (*this);
-}
-
 JointTorques& JointTorques::operator+=(const JointTorques& torques) {
   // sanity check
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
@@ -45,23 +33,10 @@ JointTorques& JointTorques::operator+=(const JointTorques& torques) {
   return (*this);
 }
 
-const JointTorques JointTorques::operator+(const Eigen::VectorXd& vector) const {
-  JointTorques result(*this);
-  result += vector;
-  return result;
-}
-
 const JointTorques JointTorques::operator+(const JointTorques& torques) const {
   JointTorques result(*this);
   result += torques;
   return result;
-}
-
-JointTorques& JointTorques::operator-=(const Eigen::VectorXd& vector) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (this->get_size() != vector.size()) throw IncompatibleSizeException("Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given " + std::to_string(vector.size()));
-  this->set_torques(this->get_torques() - vector);
-  return (*this);
 }
 
 JointTorques& JointTorques::operator-=(const JointTorques& torques) {
@@ -72,12 +47,6 @@ JointTorques& JointTorques::operator-=(const JointTorques& torques) {
   // operation
   this->set_torques(this->get_torques() - torques.get_torques());
   return (*this);
-}
-
-const JointTorques JointTorques::operator-(const Eigen::VectorXd& vector) const {
-  JointTorques result(*this);
-  result -= vector;
-  return result;
 }
 
 const JointTorques JointTorques::operator-(const JointTorques& torques) const {
@@ -130,14 +99,6 @@ std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
     os << "]";
   }
   return os;
-}
-
-const JointTorques operator+(const Eigen::VectorXd& vector, const JointTorques& torques) {
-  return torques + vector;
-}
-
-const JointTorques operator-(const Eigen::VectorXd& vector, const JointTorques& torques) {
-  return vector + (-1) * torques;
 }
 
 const JointTorques operator*(double lambda, const JointTorques& torques) {

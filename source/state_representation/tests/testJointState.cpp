@@ -67,64 +67,6 @@ TEST(MultiplyByArray, PositiveNos) {
   }
 }
 
-TEST(TestVelocitiesOperatorsWithEigen, PositiveNos) {
-  Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
-  StateRepresentation::JointVelocities velocities("test", 6);
-  velocities = vec;
-  EXPECT_TRUE((vec - velocities.get_velocities()).norm() < 1e-4);
-  velocities = vec.array();
-  EXPECT_TRUE((vec - velocities.get_velocities()).norm() < 1e-4);
-
-  velocities += vec;
-  EXPECT_TRUE((2 * vec - velocities.get_velocities()).norm() < 1e-4);
-
-  Eigen::Matrix<double, 6, 1> arr = Eigen::Matrix<double, 6, 1>::Random();
-  velocities = velocities + arr;
-
-  EXPECT_TRUE(((2 * vec + arr) - velocities.get_velocities()).norm() < 1e-4);
-
-  velocities = arr + velocities;
-  EXPECT_TRUE(((2 * vec + 2 * arr) - velocities.get_velocities()).norm() < 1e-4);
-
-  velocities -= arr;
-  EXPECT_TRUE(((2 * vec + arr) - velocities.get_velocities()).norm() < 1e-4);
-
-  velocities = velocities - vec;
-  EXPECT_TRUE(((vec + arr) - velocities.get_velocities()).norm() < 1e-4);
-
-  velocities = vec - velocities;
-  EXPECT_TRUE((arr + velocities.get_velocities()).norm() < 1e-4);
-}
-
-TEST(TestTorquesOperatorsWithEigen, PositiveNos) {
-  Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
-  StateRepresentation::JointTorques torques("test", 6);
-  torques = vec;
-  EXPECT_TRUE((vec - torques.get_torques()).norm() < 1e-4);
-  torques = vec.array();
-  EXPECT_TRUE((vec - torques.get_torques()).norm() < 1e-4);
-
-  torques += vec;
-  EXPECT_TRUE((2 * vec - torques.get_torques()).norm() < 1e-4);
-
-  Eigen::Matrix<double, 6, 1> arr = Eigen::Matrix<double, 6, 1>::Random();
-  torques = torques + arr;
-
-  EXPECT_TRUE(((2 * vec + arr) - torques.get_torques()).norm() < 1e-4);
-
-  torques = arr + torques;
-  EXPECT_TRUE(((2 * vec + 2 * arr) - torques.get_torques()).norm() < 1e-4);
-
-  torques -= arr;
-  EXPECT_TRUE(((2 * vec + arr) - torques.get_torques()).norm() < 1e-4);
-
-  torques = torques - vec;
-  EXPECT_TRUE(((vec + arr) - torques.get_torques()).norm() < 1e-4);
-
-  torques = vec - torques;
-  EXPECT_TRUE((arr + torques.get_torques()).norm() < 1e-4);
-}
-
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

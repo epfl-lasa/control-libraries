@@ -167,7 +167,7 @@ public:
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
    * the torque will be set to 0
    */
-  void clamp(double max_absolute_value, double noise_ratio);
+  void clamp(double max_absolute_value, double noise_ratio = 0.);
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
@@ -176,7 +176,7 @@ public:
    * the torque will be set to 0
    * @return the clamped JointTorques
    */
-  JointTorques clamped(double max_absolute_value, double noise_ratio) const;
+  JointTorques clamped(double max_absolute_value, double noise_ratio = 0.) const;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument

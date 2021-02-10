@@ -33,7 +33,7 @@ JointTorques& JointTorques::operator+=(const JointTorques& torques) {
   return (*this);
 }
 
-const JointTorques JointTorques::operator+(const JointTorques& torques) const {
+JointTorques JointTorques::operator+(const JointTorques& torques) const {
   JointTorques result(*this);
   result += torques;
   return result;
@@ -49,18 +49,18 @@ JointTorques& JointTorques::operator-=(const JointTorques& torques) {
   return (*this);
 }
 
-const JointTorques JointTorques::operator-(const JointTorques& torques) const {
+JointTorques JointTorques::operator-(const JointTorques& torques) const {
   JointTorques result(*this);
   result -= torques;
   return result;
 }
 
-const JointTorques JointTorques::copy() const {
+JointTorques JointTorques::copy() const {
   JointTorques result(*this);
   return result;
 }
 
-const Eigen::ArrayXd JointTorques::array() const {
+Eigen::ArrayXd JointTorques::array() const {
   return this->get_torques().array();
 }
 
@@ -80,7 +80,7 @@ void JointTorques::clamp(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayX
   this->set_torques(torques);
 }
 
-const JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) const {
+JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) const {
   JointTorques result(*this);
   result.clamp(max_absolute, noise_ratio);
   return result;
@@ -101,14 +101,14 @@ std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
   return os;
 }
 
-const JointTorques operator*(double lambda, const JointTorques& torques) {
+JointTorques operator*(double lambda, const JointTorques& torques) {
   if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
   JointTorques result(torques);
   result.set_torques(lambda * torques.get_torques());
   return result;
 }
 
-const JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& torques) {
+JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& torques) {
   if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
   if (lambda.size() != torques.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size");
   JointTorques result(torques);
@@ -116,18 +116,4 @@ const JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& t
   return result;
 }
 
-const JointTorques operator/(const JointTorques& torques, double lambda) {
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
-  JointTorques result(torques);
-  result.set_torques(torques.get_torques() / lambda);
-  return result;
-}
-
-const JointTorques operator/(const JointTorques& torques, const Eigen::ArrayXd& lambda) {
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
-  if (lambda.size() != torques.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size");
-  JointTorques result(torques);
-  result.set_torques(torques.get_torques().array() / lambda);
-  return result;
-}
 }// namespace StateRepresentation

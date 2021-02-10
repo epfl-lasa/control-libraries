@@ -77,7 +77,7 @@ public:
    * @param torques JointTorques to add
    * @return the current JointTorques added the JointTorques given in argument
    */
-  const JointTorques operator+(const JointTorques& torques) const;
+  JointTorques operator+(const JointTorques& torques) const;
 
   /**
    * @brief Overload the -= operator
@@ -91,19 +91,75 @@ public:
    * @param torques JointTorques to substract
    * @return the current JointTorques substracted the JointTorques given in argument
    */
-  const JointTorques operator-(const JointTorques& torques) const;
+  JointTorques operator-(const JointTorques& torques) const;
+
+  /**
+   * @brief Overload the *= operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques& operator*=(double lambda);
+
+  /**
+   * @brief Overload the * operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques operator*(double lambda) const;
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques& operator*=(const Eigen::ArrayXd& lambda);
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques operator*(const Eigen::ArrayXd& lambda) const;
+
+  /**
+   * @brief Overload the *= operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques& operator*=(const Eigen::MatrixXd& lambda);
+
+  /**
+   * @brief Overload the * operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointTorques multiplied by lambda
+   */
+  JointTorques operator*(const Eigen::MatrixXd& lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointTorques divided by lambda
+   */
+  JointTorques& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointTorques divided by lambda
+   */
+  JointTorques operator/(double lambda) const;
 
   /**
    * @brief Return a copy of the JointTorques
    * @return the copy
    */
-  const JointTorques copy() const;
+  JointTorques copy() const;
 
   /**
    * @brief Return the value of the torques vector as Eigen array
    * @retrun the Eigen array representing the torques
    */
-  const Eigen::ArrayXd array() const;
+  Eigen::ArrayXd array() const;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
@@ -120,7 +176,7 @@ public:
    * the torque will be set to 0
    * @return the clamped JointTorques
    */
-  const JointTorques clamped(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) const;
+  JointTorques clamped(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -135,28 +191,21 @@ public:
    * @param lambda the scalar to multiply with
    * @return the JointTorques provided multiply by lambda
    */
-  friend const JointTorques operator*(double lambda, const JointTorques& torques);
+  friend JointTorques operator*(double lambda, const JointTorques& torques);
 
   /**
    * @brief Overload the * operator with an array of gains
    * @param lambda the array to multiply with
    * @return the JointTorques provided multiply by lambda
    */
-  friend const JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& torques);
+  friend JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& torques);
 
   /**
-   * @brief Overload the / operator with a scalar
-   * @param lambda the scalar to divide with
-   * @return the JointTorques provided divided by lambda
+   * @brief Overload the * operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointTorques provided multiply by lambda
    */
-  friend const JointTorques operator/(const JointTorques& torques, double lambda);
-
-  /**
-   * @brief Overload the / operator with an array of gains
-   * @param lambda the array to divide with
-   * @return the JointTorques provided divided by lambda
-   */
-  friend const JointTorques operator/(const JointTorques& torques, const Eigen::ArrayXd& lambda);
+  friend JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torques);
 };
 
 inline JointTorques& JointTorques::operator=(const JointTorques& state) {

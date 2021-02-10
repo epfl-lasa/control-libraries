@@ -7,21 +7,28 @@
 namespace controllers {
 namespace impedance {
 template <>
-const StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianState>::compute_command(const StateRepresentation::CartesianState& desired_state,
-                                                                                                          const StateRepresentation::CartesianState& feedback_state) const {
+StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianState>::compute_command(const StateRepresentation::CartesianState& desired_state,
+                                                                                                    const StateRepresentation::CartesianState& feedback_state) const {
   StateRepresentation::CartesianState state_error = desired_state - feedback_state;
   // compute the wrench using the forlmula W = K * e_pos + D * e_vel + I * acc_desired
   StateRepresentation::CartesianWrench command(feedback_state.get_name(), feedback_state.get_reference_frame());
+
+  std::cerr << state_error << std::endl;
+
   // compute force
-  command.set_force(this->get_stiffness() * state_error.get_position() + this->get_damping() * state_error.get_linear_velocity() + this->get_inertia() * desired_state.get_linear_acceleration());
+  command.set_force(this->get_stiffness().block<3, 3>(0, 0) * state_error.get_position()
+                    + this->get_damping().block<3, 3>(0, 0) * state_error.get_linear_velocity()
+                    + this->get_inertia().block<3, 3>(0, 0) * desired_state.get_linear_acceleration());
   // compute torque (orientation requires special care)
-  command.set_torque(this->get_stiffness() * state_error.get_orientation().vec() + this->get_damping() * state_error.get_angular_velocity() + this->get_inertia() * desired_state.get_angular_acceleration());
+  command.set_torque(this->get_stiffness().block<3, 3>(3, 3) * state_error.get_orientation().vec()
+                     + this->get_damping().block<3, 3>(3, 3) * state_error.get_angular_velocity()
+                     + this->get_inertia().block<3, 3>(3, 3) * desired_state.get_angular_acceleration());
   return command;
 }
 
 template <>
-const StateRepresentation::JointState Impedance<StateRepresentation::JointState>::compute_command(const StateRepresentation::JointState& desired_state,
-                                                                                                  const StateRepresentation::JointState& feedback_state) const {
+StateRepresentation::JointState Impedance<StateRepresentation::JointState>::compute_command(const StateRepresentation::JointState& desired_state,
+                                                                                            const StateRepresentation::JointState& feedback_state) const {
   StateRepresentation::JointState state_error = desired_state - feedback_state;
   // compute the wrench using the forlmula W = K * e_pos + D * e_vel + I * acc_desired
   StateRepresentation::JointTorques command(feedback_state.get_name(), feedback_state.get_names());

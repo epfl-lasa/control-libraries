@@ -142,5 +142,4 @@ JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torque
   result *= lambda;
   return result;
 }
-
 }// namespace StateRepresentation

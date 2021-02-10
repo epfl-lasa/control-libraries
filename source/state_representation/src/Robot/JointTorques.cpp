@@ -90,25 +90,25 @@ Eigen::ArrayXd JointTorques::array() const {
   return this->get_torques().array();
 }
 
-void JointTorques::clamp(double max_absolute, double noise_ratio) {
-  this->clamp_state_variable(max_absolute, JointStateVariable::TORQUES, noise_ratio);
+void JointTorques::clamp(double max_absolute_value, double noise_ratio) {
+  this->clamp_state_variable(max_absolute_value, JointStateVariable::TORQUES, noise_ratio);
 }
 
-JointTorques JointTorques::clamped(double max_absolute, double noise_ratio) const {
+JointTorques JointTorques::clamped(double max_absolute_value, double noise_ratio) const {
   JointTorques result(*this);
-  result.clamp(max_absolute, noise_ratio);
+  result.clamp(max_absolute_value, noise_ratio);
   return result;
 }
 
-/*void JointTorques::clamp(const Eigen::ArrayXd& max_absolute_array, const Eigen::ArrayXd& noise_ratio_array) {
-  this->clamp_state_variable(max_absolute_array, JointStateVariable::TORQUES, noise_ratio_array);
+void JointTorques::clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) {
+  this->clamp_state_variable(max_absolute_value_array, JointStateVariable::TORQUES, noise_ratio_array);
 }
 
-JointTorques JointTorques::clamped(const Eigen::ArrayXd& noise_ratio_array, const Eigen::ArrayXd& noise_ratio_array) const {
+JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const {
   JointTorques result(*this);
-  result.clamp(noise_ratio_array, noise_ratio_array);
+  result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;
-}*/
+}
 
 std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
   if (torques.is_empty()) {

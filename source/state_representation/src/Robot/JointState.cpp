@@ -129,16 +129,34 @@ JointState JointState::copy() const {
   return result;
 }
 
-void JointState::clamp_state_variable(double max_value, const JointStateVariable& state_variable_type, double noise_ratio) {
-  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
-  if (noise_ratio != 0) {
-    state_variable_value -= noise_ratio * state_variable_value.normalized();
-    // apply a deadzone
-    if (state_variable_value.norm() < noise_ratio) state_variable_value.setZero();
+void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array, const JointStateVariable& state_variable_type, const Eigen::ArrayXd& noise_ratio_array) {
+  Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
+  int expected_size = state_variable.size();
+  if (max_absolute_value_array.size() != expected_size) throw IncompatibleSizeException("Array of max values is of incorrect size: expected "
+                                                                                        + std::to_string(expected_size)
+                                                                                        + ", given " + std::to_string(max_absolute_value_array.size()));
+
+  if (noise_ratio_array.size() != expected_size) throw IncompatibleSizeException("Array of max values is of incorrect size: expected "
+                                                                                 + std::to_string(expected_size)
+                                                                                 + ", given " + std::to_string(noise_ratio_array.size()));
+  for (int i = 0; i < expected_size; ++i) {
+    if (state_variable(i) > 0) {
+      state_variable(i) -= noise_ratio_array(i);
+      state_variable(i) = (state_variable(i) < 0) ? 0 : state_variable(i);
+      state_variable(i) = (state_variable(i) > max_absolute_value_array(i)) ? max_absolute_value_array(i) : state_variable(i);
+    } else {
+      state_variable(i) += noise_ratio_array(i);
+      state_variable(i) = (state_variable(i) > 0) ? 0 : state_variable(i);
+      state_variable(i) = (state_variable(i) < -max_absolute_value_array(i)) ? -max_absolute_value_array(i) : state_variable(i);
+    }
   }
-  // clamp the values to their maximum amplitude provided
-  if (state_variable_value.norm() > max_value) state_variable_value = max_value * state_variable_value.normalized();
-  this->set_state_variable(state_variable_value, state_variable_type);
+  this->set_state_variable(state_variable, state_variable_type);
+}
+
+void JointState::clamp_state_variable(double max_absolute_value, const JointStateVariable& state_variable_type, double noise_ratio) {
+  Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
+  int expected_size = state_variable.size();
+  this->clamp_state_variable(max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type, noise_ratio * Eigen::ArrayXd::Ones(expected_size));
 }
 
 double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {

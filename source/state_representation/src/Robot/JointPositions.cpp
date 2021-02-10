@@ -119,6 +119,24 @@ std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   return os;
 }
 
+JointPositions operator*(double lambda, const JointPositions& positions) {
+  JointPositions result(positions);
+  result *= lambda;
+  return result;
+}
+
+JointPositions operator*(const Eigen::ArrayXd& lambda, const JointPositions& positions) {
+  JointPositions result(positions);
+  result *= lambda;
+  return result;
+}
+
+JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& positions) {
+  JointPositions result(positions);
+  result *= lambda;
+  return result;
+}
+
 std::vector<double> JointPositions::to_std_vector() const {
   std::vector<double> temp(this->get_positions().data(), this->get_positions().data() + this->get_size());
   return temp;

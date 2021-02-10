@@ -68,10 +68,10 @@ public:
 
   /**
    * @brief Copy assignement operator that have to be defined to the custom assignement operator
-   * @param state the state with value to assign
+   * @param positions the state with value to assign
    * @return reference to the current state with new values
    */
-  JointPositions& operator=(const JointPositions& state);
+  JointPositions& operator=(const JointPositions& positions);
 
   /**
    * @brief Overload the += operator
@@ -179,7 +179,7 @@ public:
   /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to append the string representing the state
-   * @param state the state to print
+   * @param positions the state to print
    * @return the appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const JointPositions& positions);
@@ -203,7 +203,7 @@ public:
    * @param lambda the matrix to multiply with
    * @return the JointPositions provided multiply by lambda
    */
-  friend JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& state);
+  friend JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& positions);
 
   /**
    * @brief Return the joint positions as a std vector of floats

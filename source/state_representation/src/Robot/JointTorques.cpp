@@ -24,35 +24,61 @@ JointTorques::JointTorques(const JointTorques& torques) : JointState(torques) {}
 JointTorques::JointTorques(const JointState& state) : JointState(state) {}
 
 JointTorques& JointTorques::operator+=(const JointTorques& torques) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
-  if (!this->is_compatible(torques)) throw IncompatibleStatesException("The two joint states are incompatible");
-  // operation
-  this->set_torques(this->get_torques() + torques.get_torques());
+  this->JointState::operator+=(torques);
   return (*this);
 }
 
 JointTorques JointTorques::operator+(const JointTorques& torques) const {
-  JointTorques result(*this);
-  result += torques;
-  return result;
+  return this->JointState::operator+(torques);
 }
 
 JointTorques& JointTorques::operator-=(const JointTorques& torques) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
-  if (!this->is_compatible(torques)) throw IncompatibleStatesException("The two joint states are incompatible");
-  // operation
-  this->set_torques(this->get_torques() - torques.get_torques());
+  this->JointState::operator-=(torques);
   return (*this);
 }
 
 JointTorques JointTorques::operator-(const JointTorques& torques) const {
+  return this->JointState::operator-(torques);
+}
+
+JointTorques& JointTorques::operator*=(double lambda) {
+  this->JointState::operator*=(lambda);
+  return (*this);
+}
+
+JointTorques JointTorques::operator*(double lambda) const {
+  return this->JointState::operator*(lambda);
+}
+
+JointTorques& JointTorques::operator*=(const Eigen::ArrayXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::TORQUES);
+  return (*this);
+}
+
+JointTorques JointTorques::operator*(const Eigen::ArrayXd& lambda) const {
   JointTorques result(*this);
-  result -= torques;
+  result *= lambda;
   return result;
+}
+
+JointTorques& JointTorques::operator*=(const Eigen::MatrixXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::TORQUES);
+  return (*this);
+}
+
+JointTorques JointTorques::operator*(const Eigen::MatrixXd& lambda) const {
+  JointTorques result(*this);
+  result *= lambda;
+  return result;
+}
+
+JointTorques& JointTorques::operator/=(double lambda) {
+  this->JointState::operator/=(lambda);
+  return (*this);
+}
+
+JointTorques JointTorques::operator/(double lambda) const {
+  return this->JointState::operator/(lambda);
 }
 
 JointTorques JointTorques::copy() const {
@@ -64,27 +90,25 @@ Eigen::ArrayXd JointTorques::array() const {
   return this->get_torques().array();
 }
 
-void JointTorques::clamp(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) {
-  Eigen::VectorXd torques = this->get_torques();
-  for (int i = 0; i < torques.size(); ++i) {
-    if (torques(i) > 0) {
-      torques(i) -= noise_ratio(i);
-      torques(i) = (torques(i) < 0) ? 0 : torques(i);
-      torques(i) = (torques(i) > max_absolute(i)) ? max_absolute(i) : torques(i);
-    } else {
-      torques(i) += noise_ratio(i);
-      torques(i) = (torques(i) > 0) ? 0 : torques(i);
-      torques(i) = (torques(i) < -max_absolute(i)) ? -max_absolute(i) : torques(i);
-    }
-  }
-  this->set_torques(torques);
+void JointTorques::clamp(double max_absolute, double noise_ratio) {
+  this->clamp_state_variable(max_absolute, JointStateVariable::TORQUES, noise_ratio);
 }
 
-JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute, const Eigen::ArrayXd& noise_ratio) const {
+JointTorques JointTorques::clamped(double max_absolute, double noise_ratio) const {
   JointTorques result(*this);
   result.clamp(max_absolute, noise_ratio);
   return result;
 }
+
+/*void JointTorques::clamp(const Eigen::ArrayXd& max_absolute_array, const Eigen::ArrayXd& noise_ratio_array) {
+  this->clamp_state_variable(max_absolute_array, JointStateVariable::TORQUES, noise_ratio_array);
+}
+
+JointTorques JointTorques::clamped(const Eigen::ArrayXd& noise_ratio_array, const Eigen::ArrayXd& noise_ratio_array) const {
+  JointTorques result(*this);
+  result.clamp(noise_ratio_array, noise_ratio_array);
+  return result;
+}*/
 
 std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
   if (torques.is_empty()) {
@@ -102,17 +126,20 @@ std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
 }
 
 JointTorques operator*(double lambda, const JointTorques& torques) {
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
   JointTorques result(torques);
-  result.set_torques(lambda * torques.get_torques());
+  result *= lambda;
   return result;
 }
 
 JointTorques operator*(const Eigen::ArrayXd& lambda, const JointTorques& torques) {
-  if (torques.is_empty()) throw EmptyStateException(torques.get_name() + " state is empty");
-  if (lambda.size() != torques.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size");
   JointTorques result(torques);
-  result.set_torques(lambda * torques.get_torques().array());
+  result *= lambda;
+  return result;
+}
+
+JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torques) {
+  JointTorques result(torques);
+  result *= lambda;
   return result;
 }
 

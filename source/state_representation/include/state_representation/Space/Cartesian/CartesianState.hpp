@@ -553,7 +553,7 @@ inline const Eigen::VectorXd CartesianState::get_state_variable(const CartesianS
       return this->get_wrench();
 
     case CartesianStateVariable::ALL:
-      Eigen::MatrixXd all_fields;
+      Eigen::VectorXd all_fields(25);
       all_fields << this->get_pose(), this->get_twist(), this->get_accelerations(), this->get_wrench();
       return all_fields;
   }

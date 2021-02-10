@@ -85,7 +85,7 @@ public:
    * @param velocities JointVelocities to add
    * @return the current JointVelocities added the JointVelocities given in argument
    */
-  const JointVelocities operator+(const JointVelocities& velocities) const;
+  JointVelocities operator+(const JointVelocities& velocities) const;
 
   /**
    * @brief Overload the -= operator
@@ -99,53 +99,116 @@ public:
    * @param velocities JointVelocities to substract
    * @return the current JointVelocities substracted the JointVelocities given in argument
    */
-  const JointVelocities operator-(const JointVelocities& velocities) const;
+  JointVelocities operator-(const JointVelocities& velocities) const;
+
+  /**
+   * @brief Overload the *= operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities& operator*=(double lambda);
+
+  /**
+   * @brief Overload the * operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities operator*(double lambda) const;
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities& operator*=(const Eigen::ArrayXd& lambda);
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities operator*(const Eigen::ArrayXd& lambda) const;
+
+  /**
+   * @brief Overload the *= operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities& operator*=(const Eigen::MatrixXd& lambda);
+
+  /**
+   * @brief Overload the * operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointVelocities multiplied by lambda
+   */
+  JointVelocities operator*(const Eigen::MatrixXd& lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointVelocities divided by lambda
+   */
+  JointVelocities& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointVelocities divided by lambda
+   */
+  JointVelocities operator/(double lambda) const;
+
+  /**
+   * @brief Overload the * operator with a time period
+   * @param dt the time period to multiply with
+   * @return the JointPositions corresponding to the displacement over the time period
+   */
+  JointPositions operator*(const std::chrono::nanoseconds& dt) const;
 
   /**
    * @brief Return a copy of the JointVelocities
    * @return the copy
    */
-  const JointVelocities copy() const;
+  JointVelocities copy() const;
 
   /**
    * @brief Return the value of the velocities as Eigen array
    * @retrun the Eigen array representing the velocities
    */
-  const Eigen::ArrayXd array() const;
+  Eigen::ArrayXd array() const;
 
   /**
-   * @brief Clamp inplace the magnitude of the joint velocities to the values in argument
-   * @param max_value the maximum magnitude of the velocities
+   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @param max_absolute_value the maximum magnitude of torque for all the joints
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
+   * the torque will be set to 0
    */
-  void clamp(double max_value, double noise_ratio = 0);
+  void clamp(double max_absolute_value, double noise_ratio = 0.);
 
   /**
-   * @brief Clamp inplace the magnitude of the joint velocities to the values in argument
-   * @param max_values the maximum magnitudes of the velocities for each join
+   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @param max_absolute_value the maximum magnitude of torque for all the joints
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocities will be set to 0
+   * the torque will be set to 0
+   * @return the clamped JointVelocities
    */
-  void clamp(const std::vector<double>& max_values, const std::vector<double>& noise_ratio = std::vector<double>());
+  JointVelocities clamped(double max_absolute_value, double noise_ratio = 0.) const;
 
   /**
-   * @brief Return the clamped velocity
-   * @param max_value the maximum magnitude of the velocities
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
-   * @return the clamped velocity
+   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @param max_absolute_value_array the maximum magnitude of torque for each joint
+   * @param noise_ratio_array if provided, this value will be used to apply a deadzone under which
+   * the torque will be set to 0
    */
-  const JointVelocities clamped(double max_value, double noise_ratio = 0) const;
+  void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
 
   /**
-   * @brief Return the clamped velocity
-   * @param max_value the maximum magnitude of the velocities
-   * @param max_values the maximum magnitudes of the velocities for each join
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocities will be set to 0
+   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @param max_absolute_value_array the maximum magnitude of torque for each joint
+   * @param noise_ratio_array if provided, this value will be used to apply a deadzone under which
+   * the torque will be set to 0
+   * @return the clamped JointVelocities
    */
-  const JointVelocities clamped(const std::vector<double>& max_values, const std::vector<double>& noise_ratio = std::vector<double>()) const;
+  JointVelocities clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -160,42 +223,28 @@ public:
    * @param lambda the scalar to multiply with
    * @return the JointVelocities provided multiply by lambda
    */
-  friend const JointVelocities operator*(double lambda, const JointVelocities& velocities);
+  friend JointVelocities operator*(double lambda, const JointVelocities& velocities);
 
   /**
    * @brief Overload the * operator with an array of gains
    * @param lambda the array to multiply with
    * @return the JointVelocities provided multiply by lambda
    */
-  friend const JointVelocities operator*(const Eigen::ArrayXd& lambda, const JointVelocities& velocities);
+  friend JointVelocities operator*(const Eigen::ArrayXd& lambda, const JointVelocities& velocities);
+
+  /**
+   * @brief Overload the * operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointVelocities provided multiply by lambda
+   */
+  friend JointVelocities operator*(const Eigen::MatrixXd& lambda, const JointVelocities& velocities);
 
   /**
    * @brief Overload the * operator with a time period
    * @param dt the time period to multiply with
    * @return the JointPositions corresponding to the displacement over the time period
    */
-  friend const JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities);
-
-  /**
-   * @brief Overload the * operator with a time period
-   * @param dt the time period to multiply with
-   * @return the JointPositions corresponding to the displacement over the time period
-   */
-  friend const JointPositions operator*(const JointVelocities& velocities, const std::chrono::nanoseconds& dt);
-
-  /**
-   * @brief Overload the / operator with a scalar
-   * @param lambda the scalar to divide with
-   * @return the JointVelocities provided divided by lambda
-   */
-  friend const JointVelocities operator/(const JointVelocities& positions, double lambda);
-
-  /**
-   * @brief Overload the / operator with an array of gains
-   * @param lambda the array to divide with
-   * @return the JointVelocities provided divided by lambda
-   */
-  friend const JointVelocities operator/(const JointVelocities& positions, const Eigen::ArrayXd& lambda);
+  friend JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities);
 };
 
 inline JointVelocities& JointVelocities::operator=(const JointVelocities& state) {

@@ -26,69 +26,101 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {}
 JointVelocities::JointVelocities(const JointPositions& positions) : JointState(positions / std::chrono::seconds(1)) {}
 
 JointVelocities& JointVelocities::operator+=(const JointVelocities& velocities) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
-  if (!this->is_compatible(velocities)) throw IncompatibleStatesException("The two joint states are incompatible");
-  // operation
-  this->set_velocities(this->get_velocities() + velocities.get_velocities());
+  this->JointState::operator+=(velocities);
   return (*this);
 }
-const JointVelocities JointVelocities::operator+(const JointVelocities& velocities) const {
-  JointVelocities result(*this);
-  result += velocities;
-  return result;
+
+JointVelocities JointVelocities::operator+(const JointVelocities& velocities) const {
+  return this->JointState::operator+(velocities);
 }
 
 JointVelocities& JointVelocities::operator-=(const JointVelocities& velocities) {
-  // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
-  if (!this->is_compatible(velocities)) throw IncompatibleStatesException("The two joint states are incompatible");
-  // operation
-  this->set_velocities(this->get_velocities() - velocities.get_velocities());
+  this->JointState::operator-=(velocities);
   return (*this);
 }
 
-const JointVelocities JointVelocities::operator-(const JointVelocities& velocities) const {
+JointVelocities JointVelocities::operator-(const JointVelocities& velocities) const {
+  return this->JointState::operator-(velocities);
+}
+
+JointVelocities& JointVelocities::operator*=(double lambda) {
+  this->JointState::operator*=(lambda);
+  return (*this);
+}
+
+JointVelocities JointVelocities::operator*(double lambda) const {
+  return this->JointState::operator*(lambda);
+}
+
+JointVelocities& JointVelocities::operator*=(const Eigen::ArrayXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::TORQUES);
+  return (*this);
+}
+
+JointVelocities JointVelocities::operator*(const Eigen::ArrayXd& lambda) const {
   JointVelocities result(*this);
-  result -= velocities;
+  result *= lambda;
   return result;
 }
 
-const JointVelocities JointVelocities::copy() const {
+JointVelocities& JointVelocities::operator*=(const Eigen::MatrixXd& lambda) {
+  this->multiply_state_variable(lambda, JointStateVariable::TORQUES);
+  return (*this);
+}
+
+JointVelocities JointVelocities::operator*(const Eigen::MatrixXd& lambda) const {
+  JointVelocities result(*this);
+  result *= lambda;
+  return result;
+}
+
+JointVelocities& JointVelocities::operator/=(double lambda) {
+  this->JointState::operator/=(lambda);
+  return (*this);
+}
+
+JointVelocities JointVelocities::operator/(double lambda) const {
+  return this->JointState::operator/(lambda);
+}
+
+JointPositions JointVelocities::operator*(const std::chrono::nanoseconds& dt) const {
+  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  // operations
+  JointPositions displacement(this->get_name(), this->get_names());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  // multiply the positions by this period value
+  displacement *= period;
+  return displacement;
+}
+
+JointVelocities JointVelocities::copy() const {
   JointVelocities result(*this);
   return result;
 }
 
-const Eigen::ArrayXd JointVelocities::array() const {
+Eigen::ArrayXd JointVelocities::array() const {
   return this->get_velocities().array();
 }
 
-void JointVelocities::clamp(const std::vector<double>& max_values, const std::vector<double>& noise_ratio) {
-  Eigen::VectorXd velocities(this->get_size());
-  for (unsigned int i; i < this->get_size(); ++i) {
-    // apply a deadzone
-    if (!noise_ratio.empty() && abs(this->get_velocities()(i)) < noise_ratio[i]) velocities(i) = 0.0;
-    // clamp the velocities to their maximum amplitude provided
-    if (abs(this->get_velocities()(i)) > max_values[i]) velocities(i) = copysign(1.0, this->get_velocities()(i)) * max_values[i];
-  }
-  this->set_velocities(velocities);
+void JointVelocities::clamp(double max_absolute_value, double noise_ratio) {
+  this->clamp_state_variable(max_absolute_value, JointStateVariable::VELOCITIES, noise_ratio);
 }
 
-void JointVelocities::clamp(double max_value, double noise_ratio) {
-  this->clamp(std::vector<double>(this->get_size(), max_value), std::vector<double>(this->get_size(), noise_ratio));
-}
-
-const JointVelocities JointVelocities::clamped(double max_value, double noise_ratio) const {
+JointVelocities JointVelocities::clamped(double max_absolute_value, double noise_ratio) const {
   JointVelocities result(*this);
-  result.clamp(max_value, noise_ratio);
+  result.clamp(max_absolute_value, noise_ratio);
   return result;
 }
 
-const JointVelocities JointVelocities::clamped(const std::vector<double>& max_values, const std::vector<double>& noise_ratio) const {
+void JointVelocities::clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) {
+  this->clamp_state_variable(max_absolute_value_array, JointStateVariable::VELOCITIES, noise_ratio_array);
+}
+
+JointVelocities JointVelocities::clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const {
   JointVelocities result(*this);
-  result.clamp(max_values, noise_ratio);
+  result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;
 }
 
@@ -107,49 +139,25 @@ std::ostream& operator<<(std::ostream& os, const JointVelocities& velocities) {
   return os;
 }
 
-const JointVelocities operator*(double lambda, const JointVelocities& velocities) {
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
+JointVelocities operator*(double lambda, const JointVelocities& velocities) {
   JointVelocities result(velocities);
-  result.set_velocities(lambda * velocities.get_velocities());
+  result *= lambda;
   return result;
 }
 
-const JointVelocities operator*(const Eigen::ArrayXd& lambda, const JointVelocities& velocities) {
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
-  if (lambda.size() != velocities.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size");
+JointVelocities operator*(const Eigen::ArrayXd& lambda, const JointVelocities& velocities) {
   JointVelocities result(velocities);
-  result.set_velocities(lambda * velocities.get_velocities().array());
+  result *= lambda;
   return result;
 }
 
-const JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities) {
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
-  // operations
-  JointPositions displacement(velocities.get_name(), velocities.get_names());
-  // convert the period to a double with the second as reference
-  double period = dt.count();
-  period /= 1e9;
-  // multiply the velocities by this period value
-  displacement.set_positions(period * velocities.get_velocities());
-  return displacement;
-}
-
-const JointPositions operator*(const JointVelocities& velocities, const std::chrono::nanoseconds& dt) {
-  return dt * velocities;
-}
-
-const JointVelocities operator/(const JointVelocities& velocities, double lambda) {
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
+JointVelocities operator*(const Eigen::MatrixXd& lambda, const JointVelocities& velocities) {
   JointVelocities result(velocities);
-  result.set_velocities(velocities.get_velocities() / lambda);
+  result *= lambda;
   return result;
 }
 
-const JointVelocities operator/(const JointVelocities& velocities, const Eigen::ArrayXd& lambda) {
-  if (velocities.is_empty()) throw EmptyStateException(velocities.get_name() + " state is empty");
-  if (lambda.size() != velocities.get_size()) throw IncompatibleSizeException("Gain vector is of incorrect size");
-  JointVelocities result(velocities);
-  result.set_velocities(velocities.get_velocities().array() / lambda);
-  return result;
+JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities) {
+  return velocities * dt;
 }
 }// namespace StateRepresentation

@@ -13,8 +13,6 @@ StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianStat
   // compute the wrench using the forlmula W = K * e_pos + D * e_vel + I * acc_desired
   StateRepresentation::CartesianWrench command(feedback_state.get_name(), feedback_state.get_reference_frame());
 
-  std::cerr << state_error << std::endl;
-
   // compute force
   command.set_force(this->get_stiffness().block<3, 3>(0, 0) * state_error.get_position()
                     + this->get_damping().block<3, 3>(0, 0) * state_error.get_linear_velocity()

@@ -97,7 +97,7 @@ protected:
    * @param state_variable_type the type of variable to get
    * @return the value of the variable as a vector
    */
-  const Eigen::VectorXd get_state_variable(const CartesianStateVariable& state_variable_type) const;
+  Eigen::VectorXd get_state_variable(const CartesianStateVariable& state_variable_type) const;
 
   /**
    * @brief Setter of the variable value corresponding to the input
@@ -145,20 +145,20 @@ public:
    * @brief Getter of the orientation attribute as Vector4d of coefficients.
    * Beware, quaternion coefficients are returned using the (w, x, y, z) convention
    */
-  const Eigen::Vector4d get_orientation_coefficients() const;
+  Eigen::Vector4d get_orientation_coefficients() const;
 
   /**
    * @brief Getter of a pose from position and orientation attributes
    * @return the pose as a 7d vector. Beware, quaternion coefficients are
    * returned using the (w, x, y, z) convention
    */
-  const Eigen::Matrix<double, 7, 1> get_pose() const;
+  Eigen::Matrix<double, 7, 1> get_pose() const;
 
   /**
    * @brief Getter of a pose from position and orientation attributes
    * @return the pose as a 4x4 transformation matrix
    */
-  const Eigen::Matrix4d get_transformation_matrix() const;
+  Eigen::Matrix4d get_transformation_matrix() const;
 
   /**
    * @brief Getter of the linear velocity attribute 
@@ -173,7 +173,7 @@ public:
   /**
    * @brief Getter of a twist from linear and angular velocities attribute
    */
-  const Eigen::Matrix<double, 6, 1> get_twist() const;
+  Eigen::Matrix<double, 6, 1> get_twist() const;
 
   /**
    * @brief Getter of the linear acceleration attribute 
@@ -188,7 +188,7 @@ public:
   /**
    * @brief Getter of accelerations from linear and angular accelerations attribute
    */
-  const Eigen::Matrix<double, 6, 1> get_accelerations() const;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const;
 
   /**
    * @brief Getter of the force attribute
@@ -203,7 +203,7 @@ public:
   /**
    * @brief Getter of a wrench from force and torque attributes
    */
-  const Eigen::Matrix<double, 6, 1> get_wrench() const;
+  Eigen::Matrix<double, 6, 1> get_wrench() const;
 
   /**
    * @brief Setter of the position
@@ -328,7 +328,7 @@ public:
    * @brief Return a copy of the CartesianState
    * @return the copy
    */
-  const CartesianState copy() const;
+  CartesianState copy() const;
 
   /**
    * @brief Overload the *= operator with another state by deriving the equations of motions
@@ -342,7 +342,7 @@ public:
    * @param state the state to compose with corresponding to b_S_c
    * @return the CartesianState corresponding f_S_c = f_S_b * b_S_c (assuming this is f_S_b)
    */
-  const CartesianState operator*(const CartesianState& state) const;
+  CartesianState operator*(const CartesianState& state) const;
 
   /**
    * @brief Overload the *= operator with a scalar
@@ -356,7 +356,7 @@ public:
    * @param lambda the scalar to multiply with
    * @return the CartesianState multiplied by lambda
    */
-  const CartesianState operator*(double lambda) const;
+  CartesianState operator*(double lambda) const;
 
   /**
    * @brief Overload the += operator
@@ -370,7 +370,7 @@ public:
    * @param state CartesianState to add
    * @return the current CartesianState added the CartesianState given in argument
    */
-  const CartesianState operator+(const CartesianState& state) const;
+  CartesianState operator+(const CartesianState& state) const;
 
   /**
    * @brief Overload the -= operator
@@ -384,13 +384,13 @@ public:
    * @param state CartesianState to substract
    * @return the current CartesianState minus the CartesianState given in argument
    */
-  const CartesianState operator-(const CartesianState& state) const;
+  CartesianState operator-(const CartesianState& state) const;
 
   /**
    * @brief compute the inverse of the current CartesianState
    * @return the inverse corresponding to b_S_f (assuming this is f_S_b) 
    */
-  const CartesianState inverse() const;
+  CartesianState inverse() const;
 
   /**
    * @brief Compute the distance between two states as the sum of distances between each features
@@ -414,7 +414,7 @@ public:
    * @param lambda the scalar to multiply with
    * @return the CartesianState provided multiply by lambda
    */
-  friend const CartesianState operator*(double lambda, const CartesianState& state);
+  friend CartesianState operator*(double lambda, const CartesianState& state);
 
   /**
    * @brief compute the distance between two CartesianStates
@@ -430,7 +430,7 @@ public:
    * @brief Return the state as a std vector of floats
    * @return std::vector<float> the state vector as a std vector
    */
-  virtual const std::vector<double> to_std_vector() const;
+  virtual std::vector<double> to_std_vector() const;
 
   /**
    * @brief Set the value from a std vector
@@ -456,17 +456,17 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
   return this->orientation;
 }
 
-inline const Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
+inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
   return Eigen::Vector4d(this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(), this->get_orientation().z());
 }
 
-inline const Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
+inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
   Eigen::Matrix<double, 7, 1> pose;
   pose << this->get_position(), this->get_orientation_coefficients();
   return pose;
 }
 
-inline const Eigen::Matrix4d CartesianState::get_transformation_matrix() const {
+inline Eigen::Matrix4d CartesianState::get_transformation_matrix() const {
   Eigen::Matrix4d pose;
   pose << this->orientation.toRotationMatrix(), this->position, 0., 0., 0., 1;
   return pose;
@@ -480,7 +480,7 @@ inline const Eigen::Vector3d& CartesianState::get_angular_velocity() const {
   return this->angular_velocity;
 }
 
-inline const Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
+inline Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
   Eigen::Matrix<double, 6, 1> twist;
   twist << this->get_linear_velocity(), this->get_angular_velocity();
   return twist;
@@ -494,7 +494,7 @@ inline const Eigen::Vector3d& CartesianState::get_angular_acceleration() const {
   return this->angular_acceleration;
 }
 
-inline const Eigen::Matrix<double, 6, 1> CartesianState::get_accelerations() const {
+inline Eigen::Matrix<double, 6, 1> CartesianState::get_accelerations() const {
   Eigen::Matrix<double, 6, 1> accelerations;
   accelerations << this->get_linear_acceleration(), this->get_angular_acceleration();
   return accelerations;
@@ -508,13 +508,13 @@ inline const Eigen::Vector3d& CartesianState::get_torque() const {
   return this->torque;
 }
 
-inline const Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
+inline Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
   Eigen::Matrix<double, 6, 1> wrench;
   wrench << this->get_force(), this->get_torque();
   return wrench;
 }
 
-inline const Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVariable& state_variable_type) const {
+inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVariable& state_variable_type) const {
   switch (state_variable_type) {
     case CartesianStateVariable::POSITION:
       return this->get_position();

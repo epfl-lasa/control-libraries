@@ -30,11 +30,11 @@ CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state
 
 CartesianPose::CartesianPose(const CartesianTwist& twist) : CartesianState(std::chrono::seconds(1) * twist) {}
 
-const CartesianPose CartesianPose::Identity(const std::string& name, const std::string& reference) {
+CartesianPose CartesianPose::Identity(const std::string& name, const std::string& reference) {
   return CartesianPose(name, Eigen::Vector3d::Zero(), Eigen::Quaterniond::Identity(), reference);
 }
 
-const CartesianPose CartesianPose::Random(const std::string& name, const std::string& reference) {
+CartesianPose CartesianPose::Random(const std::string& name, const std::string& reference) {
   return CartesianPose(name, Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom(), reference);
 }
 
@@ -43,17 +43,7 @@ CartesianPose& CartesianPose::operator=(const CartesianState& state) {
   return (*this);
 }
 
-CartesianPose& CartesianPose::operator=(const Eigen::Matrix<double, 7, 1>& pose) {
-  this->set_pose(pose);
-  return (*this);
-}
-
-CartesianPose& CartesianPose::operator=(const std::vector<double>& pose) {
-  this->set_pose(pose);
-  return (*this);
-}
-
-const Eigen::Vector3d CartesianPose::operator*(const Eigen::Vector3d& vector) const {
+Eigen::Vector3d CartesianPose::operator*(const Eigen::Vector3d& vector) const {
   return this->get_orientation() * vector + this->get_position();
 }
 
@@ -62,12 +52,8 @@ CartesianPose& CartesianPose::operator*=(const CartesianPose& pose) {
   return (*this);
 }
 
-const CartesianPose CartesianPose::operator*(const CartesianPose& pose) const {
+CartesianPose CartesianPose::operator*(const CartesianPose& pose) const {
   return this->CartesianState::operator*(pose);
-}
-
-const CartesianState CartesianPose::operator*(const CartesianState& state) const {
-  return this->CartesianState::operator*(state);
 }
 
 CartesianPose& CartesianPose::operator*=(double lambda) {
@@ -75,7 +61,7 @@ CartesianPose& CartesianPose::operator*=(double lambda) {
   return (*this);
 }
 
-const CartesianPose CartesianPose::operator*(double lambda) const {
+CartesianPose CartesianPose::operator*(double lambda) const {
   return this->CartesianState::operator*(lambda);
 }
 
@@ -84,12 +70,8 @@ CartesianPose& CartesianPose::operator+=(const CartesianPose& pose) {
   return (*this);
 }
 
-const CartesianPose CartesianPose::operator+(const CartesianPose& pose) const {
+CartesianPose CartesianPose::operator+(const CartesianPose& pose) const {
   return this->CartesianState::operator+(pose);
-}
-
-const CartesianState CartesianPose::operator+(const CartesianState& state) const {
-  return this->CartesianState::operator+(state);
 }
 
 CartesianPose& CartesianPose::operator-=(const CartesianPose& pose) {
@@ -97,15 +79,28 @@ CartesianPose& CartesianPose::operator-=(const CartesianPose& pose) {
   return (*this);
 }
 
-const CartesianPose CartesianPose::operator-(const CartesianPose& pose) const {
+CartesianPose CartesianPose::operator-(const CartesianPose& pose) const {
   return this->CartesianState::operator-(pose);
 }
 
-const CartesianState CartesianPose::operator-(const CartesianState& state) const {
-  return this->CartesianState::operator-(state);
+CartesianTwist CartesianPose::operator/(const std::chrono::nanoseconds& dt) const {
+  // sanity check
+  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  // operations
+  CartesianTwist twist(this->get_name(), this->get_reference_frame());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  // set linear velocity
+  twist.set_linear_velocity(this->get_position() / period);
+  // set angular velocity from the log of the quaternion error
+  Eigen::Quaterniond log_q = MathTools::log(this->get_orientation());
+  if (this->get_orientation().dot(log_q) < 0) log_q = Eigen::Quaterniond(-log_q.coeffs());
+  twist.set_angular_velocity(2 * log_q.vec() / period);
+  return twist;
 }
 
-const CartesianPose CartesianPose::copy() const {
+CartesianPose CartesianPose::copy() const {
   CartesianPose result(*this);
   return result;
 }
@@ -131,28 +126,11 @@ std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   return os;
 }
 
-const CartesianPose operator*(double lambda, const CartesianPose& pose) {
+CartesianPose operator*(double lambda, const CartesianPose& pose) {
   return pose * lambda;
 }
 
-const CartesianTwist operator/(const CartesianPose& pose, const std::chrono::nanoseconds& dt) {
-  // sanity check
-  if (pose.is_empty()) throw EmptyStateException(pose.get_name() + " state is empty");
-  // operations
-  CartesianTwist twist(pose.get_name(), pose.get_reference_frame());
-  // convert the period to a double with the second as reference
-  double period = dt.count();
-  period /= 1e9;
-  // set linear velocity
-  twist.set_linear_velocity(pose.get_position() / period);
-  // set angular velocity from the log of the quaternion error
-  Eigen::Quaterniond log_q = MathTools::log(pose.get_orientation());
-  if (pose.get_orientation().dot(log_q) < 0) log_q = Eigen::Quaterniond(-log_q.coeffs());
-  twist.set_angular_velocity(2 * log_q.vec() / period);
-  return twist;
-}
-
-const std::vector<double> CartesianPose::to_std_vector() const {
+std::vector<double> CartesianPose::to_std_vector() const {
   std::vector<double> pose = std::vector<double>(this->get_position().data(), this->get_position().data() + 3);
   pose.resize(7);
   pose[3] = this->get_orientation().w();

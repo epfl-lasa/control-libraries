@@ -52,13 +52,13 @@ CartesianState& CartesianState::operator*=(double lambda) {
   return (*this);
 }
 
-const CartesianState CartesianState::operator*(double lambda) const {
+CartesianState CartesianState::operator*(double lambda) const {
   CartesianState result(*this);
   result *= lambda;
   return result;
 }
 
-const CartesianState CartesianState::copy() const {
+CartesianState CartesianState::copy() const {
   CartesianState result(*this);
   return result;
 }
@@ -97,7 +97,7 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   return (*this);
 }
 
-const CartesianState CartesianState::operator*(const CartesianState& state) const {
+CartesianState CartesianState::operator*(const CartesianState& state) const {
   CartesianState result(*this);
   result *= state;
   return result;
@@ -122,7 +122,7 @@ CartesianState& CartesianState::operator+=(const CartesianState& state) {
   return (*this);
 }
 
-const CartesianState CartesianState::operator+(const CartesianState& state) const {
+CartesianState CartesianState::operator+(const CartesianState& state) const {
   CartesianState result(*this);
   result += state;
   return result;
@@ -147,13 +147,13 @@ CartesianState& CartesianState::operator-=(const CartesianState& state) {
   return (*this);
 }
 
-const CartesianState CartesianState::operator-(const CartesianState& state) const {
+CartesianState CartesianState::operator-(const CartesianState& state) const {
   CartesianState result(*this);
   result -= state;
   return result;
 }
 
-const CartesianState CartesianState::inverse() const {
+CartesianState CartesianState::inverse() const {
   CartesianState result(*this);
   // inverse name and reference frame
   std::string ref = result.get_reference_frame();
@@ -273,7 +273,7 @@ std::ostream& operator<<(std::ostream& os, const CartesianState& state) {
   return os;
 }
 
-const CartesianState operator*(double lambda, const CartesianState& state) {
+CartesianState operator*(double lambda, const CartesianState& state) {
   return state * lambda;
 }
 
@@ -281,7 +281,7 @@ double dist(const CartesianState& s1, const CartesianState& s2, const CartesianS
   return s1.dist(s2, state_variable_type);
 }
 
-const std::vector<double> CartesianState::to_std_vector() const {
+std::vector<double> CartesianState::to_std_vector() const {
   throw(NotImplementedException("to_std_vector() is not implemented for the base CartesianState class"));
   return std::vector<double>();
 }

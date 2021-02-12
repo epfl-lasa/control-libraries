@@ -47,19 +47,19 @@ public:
    * @brief Getter of the stiffness matrix
    * @return the stiffness matrix
    */
-  Eigen::MatrixXd& get_stiffness() const;
+  const Eigen::MatrixXd& get_stiffness() const;
 
   /**
    * @brief Getter of the dmaping matrix
    * @return the damping matrix
    */
-  Eigen::MatrixXd& get_damping() const;
+  const Eigen::MatrixXd& get_damping() const;
 
   /**
    * @brief Getter of the inertia matrix
    * @return the inertia matrix
    */
-  Eigen::MatrixXd& get_inertia() const;
+  const Eigen::MatrixXd& get_inertia() const;
 
   /**
    * @brief Setter of the stiffness matrix
@@ -92,17 +92,17 @@ Impedance<S>::Impedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd&
                                                                                                                             inertia_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("inertia", inertia)) {}
 
 template <class S>
-inline Eigen::MatrixXd& Impedance<S>::get_stiffness() const {
+inline const Eigen::MatrixXd& Impedance<S>::get_stiffness() const {
   return this->stiffness_->get_value();
 }
 
 template <class S>
-inline Eigen::MatrixXd& Impedance<S>::get_damping() const {
+inline const Eigen::MatrixXd& Impedance<S>::get_damping() const {
   return this->damping_->get_value();
 }
 
 template <class S>
-inline Eigen::MatrixXd& Impedance<S>::get_inertia() const {
+inline const Eigen::MatrixXd& Impedance<S>::get_inertia() const {
   return this->inertia_->get_value();
 }
 

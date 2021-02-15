@@ -40,19 +40,6 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (runtests)
-  if (APPLE)
-    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-    add_definitions(-D__GLIBCXX__)
-  endif (APPLE)
-
-  add_subdirectory(lib/googletest)
-
-  enable_testing()
-
-  # Include the gtest library. gtest_SOURCE_DIR is available due to
-  # 'project(gtest)' above.
-  include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
   add_executable(runTestRobotModel tests/testRobotModel.cpp)
   target_link_libraries(runTestRobotModel
     gtest

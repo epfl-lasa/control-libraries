@@ -14,14 +14,8 @@ RUN apt-get update && apt-get install -y \
 # import previously downloaded packages
 WORKDIR /root/control_lib
 # install libraries and dependencies
-COPY ./source/state_representation ./state_representation
-RUN /bin/bash -c "source ./state_representation/install.sh"
-
-COPY ./source/dynamical_systems ./dynamical_systems
-RUN /bin/bash -c "source ./dynamical_systems/install.sh"
-
-COPY ./source/robot_model ./robot_model
-RUN /bin/bash -c "source ./robot_model/install.sh"
+COPY ./source ./
+RUN /bin/bash -c "source ./install.sh"
 
 COPY ./source/controllers ./controllers
 RUN /bin/bash -c "source ./controllers/install.sh"

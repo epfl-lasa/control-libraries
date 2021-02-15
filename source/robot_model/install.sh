@@ -10,7 +10,7 @@ apt-get update && apt-get install -y \
 
 # install googletest
 mkdir ${SOURCE_PATH}/lib
-cd ${SOURCE_PATH}/lib && git clone https://github.com/google/googletest.git
+cd ${SOURCE_PATH}/lib && git clone --depth 1 --branch v1.10.x https://github.com/google/googletest.git
 
 # install pinocchio
 echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | tee /etc/apt/sources.list.d/robotpkg.list

@@ -16,6 +16,32 @@
 using namespace StateRepresentation::Exceptions;
 
 namespace StateRepresentation {
+class JointState;
+
+/**
+ * @enum JointStateVariable
+ * @brief Enum representing all the fields (positions, velocities, accelerations and torques)
+ * of the JointState
+ */
+enum class JointStateVariable {
+  POSITIONS,
+  VELOCITIES,
+  ACCELERATIONS,
+  TORQUES,
+  ALL
+};
+
+/**
+ * @brief compute the distance between two JointState
+ * @param s1 the first JointState
+ * @param s2 the second JointState
+ * @param state_variable_type name of the field from the JointStateVariable structure to apply
+ * the distance on. Default ALL for full distance across all dimensions
+ * @return the distance between the two states
+ */
+double dist(const JointState& s1, const JointState& s2,
+            const JointStateVariable& state_variable_type = JointStateVariable::ALL);
+
 /**
  * @class JointState
  * @brief Class to define a state in joint space
@@ -27,6 +53,12 @@ private:
   Eigen::VectorXd velocities;    ///< joints velocities
   Eigen::VectorXd accelerations; ///< joints accelerations
   Eigen::VectorXd torques;       ///< joints torques
+
+  /**
+   * @brief Getter of all the state variables (positions, velocities, accelerations and torques)
+   * @return the concatenated vector of all the state variables
+   */
+  Eigen::VectorXd get_all_state_variables() const;
 
   /**
    * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
@@ -41,6 +73,26 @@ private:
    * @param new_value the new value of the state variable
    */
   void set_state_variable(Eigen::VectorXd& state_variable, const std::vector<double>& new_value);
+
+  /**
+   * @brief Set new_value in the provided all the state variables (positions, velocities, accelerations and torques)
+   */
+  void set_all_state_variables(const Eigen::VectorXd& new_values);
+
+protected:
+  /**
+   * @brief Proxy function that multiply the specified state variable by an array of gain
+   * @param lambda the gain array to multiply with
+   * @param state_variable_type the state variable on which to apply the multiplication
+   */
+  void multiply_state_variable(const Eigen::ArrayXd& lambda, const JointStateVariable& state_variable_type);
+
+  /**
+   * @brief Proxy function that multiply the specified state variable by an array of gain
+   * @param lambda the gain array to multiply with
+   * @param state_variable_type the state variable on which to apply the multiplication
+   */
+  void multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type);
 
 public:
   /**
@@ -68,7 +120,7 @@ public:
   JointState(const JointState& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */
@@ -155,6 +207,20 @@ public:
   void set_torques(const std::vector<double>& torques);
 
   /**
+   * @brief Getter of the variable value corresponding to the input
+   * @param state_variable_type the type of variable to get
+   * @return the value of the variable as a vector
+   */
+  Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
+
+  /**
+   * @brief Setter of the variable value corresponding to the input
+   * @param new_value the new value of the variable
+   * @param state_variable_type the type of variable to get
+   */
+  void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
+
+  /**
    * @brief Check if the state is compatible for operations with the state given as argument
    * @param state the state to check compatibility with
    */
@@ -171,45 +237,124 @@ public:
   void set_zero();
 
   /**
+   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
+   * @param max_absolute_value the maximum absolute magnitude of the state variable
+   * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
+   * @param noise_ratio if provided, this value will be used to apply a dead zone under which
+   * the velocity will be set to 0
+   */
+  void clamp_state_variable(double max_absolute_value, const JointStateVariable& state_variable_type,
+                            double noise_ratio = 0);
+
+  /**
+   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
+   * for each individual joints
+   * @param max_absolute_value_array the maximum absolute magnitude of the state variable for each joints individually
+   * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
+   * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
+   * the velocity will be set to 0
+   */
+  void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
+                            const JointStateVariable& state_variable_type, const Eigen::ArrayXd& noise_ratio_array);
+
+  /**
    * @brief Return a copy of the JointState
    * @return the copy
    */
-  const JointState copy() const;
+  JointState copy() const;
 
   /**
    * @brief Overload the += operator
-   * @param js JointState to add
+   * @param state JointState to add
    * @return the current JointState added the JointState given in argument
    */
-  JointState& operator+=(const JointState& js);
+  JointState& operator+=(const JointState& state);
 
   /**
    * @brief Overload the + operator
-   * @param js JointState to add
+   * @param state JointState to add
    * @return the current JointState added the JointState given in argument
    */
-  const JointState operator+(const JointState& js) const;
+  JointState operator+(const JointState& state) const;
 
   /**
    * @brief Overload the -= operator
-   * @param js JointState to substract
-   * @return the current JointState substracted the JointState given in argument
+   * @param state JointState to subtract
+   * @return the current JointState subtracted the JointState given in argument
    */
-  JointState& operator-=(const JointState& js);
+  JointState& operator-=(const JointState& state);
 
   /**
    * @brief Overload the - operator
-   * @param js JointState to substract
-   * @return the current JointState substracted the JointState given in argument
+   * @param state JointState to subtract
+   * @return the current JointState subtracted the JointState given in argument
    */
-  const JointState operator-(const JointState& js) const;
+  JointState operator-(const JointState& state) const;
 
   /**
-   * @brief Overload the -= operator with a matrix of gains
+   * @brief Overload the *= operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointState multiplied by lambda
+   */
+  JointState& operator*=(double lambda);
+
+  /**
+   * @brief Overload the * operator with a double gain
+   * @param lambda the gain to multiply with
+   * @return the JointState multiplied by lambda
+   */
+  JointState operator*(double lambda) const;
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointState multiplied by lambda
+   */
+  JointState& operator*=(const Eigen::ArrayXd& lambda);
+
+  /**
+   * @brief Overload the *= operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointState multiplied by lambda
+   */
+  JointState operator*(const Eigen::ArrayXd& lambda) const;
+
+  /**
+   * @brief Overload the *= operator with a matrix of gains
    * @param lambda the matrix to multiply with
    * @return the JointState multiplied by lambda
    */
   JointState& operator*=(const Eigen::MatrixXd& lambda);
+
+  /**
+   * @brief Overload the * operator with a matrix of gains
+   * @param lambda the matrix to multiply with
+   * @return the JointState multiplied by lambda
+   */
+  JointState operator*(const Eigen::MatrixXd& lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointState divided by lambda
+   */
+  JointState& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the JointState divided by lambda
+   */
+  JointState operator/(double lambda) const;
+
+  /**
+   * @brief Compute the distance between two states as the sum of distances between each features
+   * @param state the second state
+   * @param state_variable_type name of the variable from the JointStateVariable structure to apply
+   * the distance on. Default ALL for full distance across all dimensions
+   * @return dist the distance value as a double
+   */
+  double dist(const JointState& state, const JointStateVariable& state_variable_type = JointStateVariable::ALL) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -224,20 +369,27 @@ public:
    * @param lambda the scalar to multiply with
    * @return the JointState provided multiply by lambda
    */
-  friend const JointState operator*(double lambda, const JointState& state);
+  friend JointState operator*(double lambda, const JointState& state);
+
+  /**
+   * @brief Overload the * operator with an array of gains
+   * @param lambda the gain array to multiply with
+   * @return the JointState provided multiply by lambda
+   */
+  friend JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state);
 
   /**
    * @brief Overload the * operator with a matrix of gains
    * @param lambda the matrix to multiply with
    * @return the JointState provided multiply by lambda
    */
-  friend const JointState operator*(const Eigen::MatrixXd& lambda, const JointState& state);
+  friend JointState operator*(const Eigen::MatrixXd& lambda, const JointState& state);
 
   /**
    * @brief Return the joint state as a std vector of floats
    * @return std::vector<float> the joint vector as a std vector
    */
-  virtual const std::vector<double> to_std_vector() const;
+  virtual std::vector<double> to_std_vector() const;
 
   /**
    * @brief Set the value from a std vector
@@ -246,12 +398,18 @@ public:
   virtual void from_std_vector(const std::vector<double>& value);
 };
 
+inline Eigen::VectorXd JointState::get_all_state_variables() const {
+  Eigen::VectorXd all_fields(this->get_size() * 4);
+  all_fields << this->get_positions(), this->get_velocities(), this->get_accelerations(), this->get_torques();
+  return all_fields;
+}
+
 inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, const Eigen::VectorXd& new_value) {
-  if (new_value.size() != this->get_size())
-    throw IncompatibleSizeException("Input vector is of incorrect size: expected "
-                                    + std::to_string(this->get_size())
-                                    + ", given "
-                                    + std::to_string(new_value.size()));
+  if (new_value.size() != this->get_size()) {
+    throw IncompatibleSizeException(
+        "Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
+            + std::to_string(new_value.size()));
+  }
   this->set_filled();
   state_variable = new_value;
 }
@@ -260,13 +418,17 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
   this->set_state_variable(state_variable, Eigen::VectorXd::Map(new_value.data(), new_value.size()));
 }
 
+inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  this->set_positions(new_values.segment(0, this->get_size()));
+  this->set_velocities(new_values.segment(this->get_size(), this->get_size()));
+  this->set_accelerations(new_values.segment(2 * this->get_size(), this->get_size()));
+  this->set_torques(new_values.segment(3 * this->get_size(), this->get_size()));
+}
+
 inline JointState& JointState::operator=(const JointState& state) {
   State::operator=(state);
   this->set_names(state.get_names());
-  this->set_positions(state.get_positions());
-  this->set_velocities(state.get_velocities());
-  this->set_accelerations(state.get_accelerations());
-  this->set_torques(state.get_torques());
+  this->set_all_state_variables(state.get_all_state_variables());
   return (*this);
 }
 
@@ -274,8 +436,9 @@ inline bool JointState::is_compatible(const State& state) const {
   bool compatible = this->State::is_compatible(state);
   compatible = compatible && (this->names.size() == static_cast<const JointState&>(state).names.size());
   if (compatible) {
-    for (unsigned int i = 0; i < this->names.size(); ++i)
+    for (unsigned int i = 0; i < this->names.size(); ++i) {
       compatible = (compatible && this->names[i] == static_cast<const JointState&>(state).names[i]);
+    }
   }
   return compatible;
 }
@@ -349,5 +512,51 @@ inline void JointState::set_torques(const Eigen::VectorXd& torques) {
 
 inline void JointState::set_torques(const std::vector<double>& torques) {
   this->set_state_variable(this->torques, torques);
+}
+
+inline Eigen::VectorXd JointState::get_state_variable(const JointStateVariable& state_variable_type) const {
+  switch (state_variable_type) {
+    case JointStateVariable::POSITIONS:
+      return this->get_positions();
+
+    case JointStateVariable::VELOCITIES:
+      return this->get_velocities();
+
+    case JointStateVariable::ACCELERATIONS:
+      return this->get_accelerations();
+
+    case JointStateVariable::TORQUES:
+      return this->get_torques();
+
+    case JointStateVariable::ALL:
+      return this->get_all_state_variables();
+  }
+  // this never goes here but is compulsory to avoid a warning
+  return Eigen::Vector3d::Zero();
+}
+
+inline void JointState::set_state_variable(const Eigen::VectorXd& new_value,
+                                           const JointStateVariable& state_variable_type) {
+  switch (state_variable_type) {
+    case JointStateVariable::POSITIONS:
+      this->set_positions(new_value);
+      break;
+
+    case JointStateVariable::VELOCITIES:
+      this->set_velocities(new_value);
+      break;
+
+    case JointStateVariable::ACCELERATIONS:
+      this->set_accelerations(new_value);
+      break;
+
+    case JointStateVariable::TORQUES:
+      this->set_torques(new_value);
+      break;
+
+    case JointStateVariable::ALL:
+      this->set_all_state_variables(new_value);
+      break;
+  }
 }
 }// namespace StateRepresentation

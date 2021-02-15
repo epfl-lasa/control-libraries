@@ -12,11 +12,9 @@ namespace StateRepresentation {
  */
 class Event : public Predicate {
 private:
+  bool previous_predicate_value_;///< value of the predicate
 
 public:
-
-  bool previous_predicate_value_;
-
   /**
    * @brief Constructor with name of the predicate and default false value
    */

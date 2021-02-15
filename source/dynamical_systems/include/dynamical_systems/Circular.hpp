@@ -5,14 +5,14 @@
 
 #pragma once
 
+#include "dynamical_systems/DynamicalSystem.hpp"
+#include "state_representation/Geometry/Ellipsoid.hpp"
+#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/Space/Cartesian/CartesianPose.hpp"
+#include "state_representation/Space/Cartesian/CartesianState.hpp"
+#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
 #include <cmath>
 #include <vector>
-#include "dynamical_systems/DynamicalSystem.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Geometry/Ellipsoid.hpp"
 
 namespace DynamicalSystems {
 /**
@@ -22,13 +22,13 @@ namespace DynamicalSystems {
 class Circular : public DynamicalSystem<StateRepresentation::CartesianState> {
 private:
   std::shared_ptr<StateRepresentation::Parameter<StateRepresentation::Ellipsoid>>
-      limit_cycle_; ///< limit_cycle of the dynamical system
+      limit_cycle_;///< limit_cycle of the dynamical system
   std::shared_ptr<StateRepresentation::Parameter<double>>
-      planar_gain_; ///< gain associate to the system in the plane of the circle
+      planar_gain_;///< gain associate to the system in the plane of the circle
   std::shared_ptr<StateRepresentation::Parameter<double>>
-      normal_gain_; ///< gain associate to the system normal to the plane of the circle
+      normal_gain_;///< gain associate to the system normal to the plane of the circle
   std::shared_ptr<StateRepresentation::Parameter<double>>
-      circular_velocity_; ///< velocity at wich to navigate the limit cycle
+      circular_velocity_;///< velocity at wich to navigate the limit cycle
 
 protected:
   /**
@@ -39,7 +39,7 @@ protected:
    * @param state the input state
    * @return the output state
    */
-  const StateRepresentation::CartesianState compute_dynamics(const StateRepresentation::CartesianState& state) const;
+  StateRepresentation::CartesianState compute_dynamics(const StateRepresentation::CartesianState& state) const;
 
 public:
   /**
@@ -163,7 +163,7 @@ public:
    * @brief Return a list of all the parameters of the dynamical system
    * @return the list of parameters
    */
-  const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const override;
+  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const override;
 };
 
 inline const StateRepresentation::CartesianPose& Circular::get_center() const {
@@ -230,4 +230,4 @@ inline const StateRepresentation::Ellipsoid& Circular::get_limit_cycle() const {
 inline void Circular::set_limit_cycle(const StateRepresentation::Ellipsoid& limit_cycle) {
   this->limit_cycle_->set_value(limit_cycle);
 }
-}
+}// namespace DynamicalSystems

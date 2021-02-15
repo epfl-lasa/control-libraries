@@ -58,12 +58,11 @@ TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameName) {
   EXPECT_THROW(franka.forward_geometry(joint_state, "panda_link99"), Exceptions::FrameNotFoundException);
 }
 
-// this fails, we should make forward geometry with frame ids either private or test for frame id existence
-//TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameID) {
-//  std::vector<unsigned int> frame_ids;
-//  frame_ids.push_back(99);
-//  EXPECT_THROW(franka.forward_geometry(joint_state, frame_ids), RobotModel::Exceptions::FrameNotFoundException);
-//}
+TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameID) {
+  std::vector<unsigned int> frame_ids;
+  frame_ids.push_back(99);
+  EXPECT_THROW(franka.forward_geometry(joint_state, frame_ids), RobotModel::Exceptions::FrameNotFoundException);
+}
 
 TEST_F(RobotModelTest, TestJacobianJointStateSize) {
   StateRepresentation::JointState dummy = StateRepresentation::JointState(robot_name, 6);
@@ -76,7 +75,7 @@ TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
 
 TEST_F(RobotModelTest, TestJacobianNbRows) {
   StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, 2);
-  EXPECT_EQ(jac.get_nb_rows(),6);
+  EXPECT_EQ(jac.get_nb_rows(), 6);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbCols) {

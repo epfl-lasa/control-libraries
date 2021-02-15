@@ -1,30 +1,9 @@
-cmake_minimum_required(VERSION 3.9)
-
-# Options. Turn on with 'cmake -Druntests=ON'.
-option(runtests "Build all tests." OFF) # Makes boolean 'test' available.
-
 project(dynamical_systems)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-    set(CMAKE_C_STANDARD 99)
-endif()
-
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 14)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-find_package(Eigen3 REQUIRED)
-
+get_target_property(STATE_REPRESENTATION_INCLUDES state_representation INCLUDE_DIRECTORIES)
 include_directories(
     include
-    state_representation/include
-    ${Eigen3_INCLUDE_DIRS}
+    ${STATE_REPRESENTATION_INCLUDES}
 )
 
 set(CORE_SOURCES

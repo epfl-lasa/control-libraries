@@ -8,16 +8,23 @@ JointState::JointState() : State(StateType::JOINTSTATE) {
   this->initialize();
 }
 
-JointState::JointState(const std::string& robot_name, unsigned int nb_joints) : State(StateType::JOINTSTATE, robot_name), names(nb_joints) {
+JointState::JointState(const std::string& robot_name, unsigned int nb_joints) :
+    State(StateType::JOINTSTATE, robot_name), names(nb_joints) {
   this->set_names(nb_joints);
 }
 
-JointState::JointState(const std::string& robot_name, const std::vector<std::string>& joint_names) : State(StateType::JOINTSTATE, robot_name) {
+JointState::JointState(const std::string& robot_name, const std::vector<std::string>& joint_names) :
+    State(StateType::JOINTSTATE, robot_name) {
   this->set_names(joint_names);
 }
 
-JointState::JointState(const JointState& state) : State(state), names(state.names), positions(state.positions), velocities(state.velocities),
-                                                  accelerations(state.accelerations), torques(state.torques) {}
+JointState::JointState(const JointState& state) :
+    State(state),
+    names(state.names),
+    positions(state.positions),
+    velocities(state.velocities),
+    accelerations(state.accelerations),
+    torques(state.torques) {}
 
 void JointState::initialize() {
   this->State::initialize();
@@ -39,7 +46,10 @@ void JointState::set_zero() {
 }
 
 JointState& JointState::operator+=(const JointState& state) {
-  if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
+  if (!this->is_compatible(state)) {
+    throw IncompatibleStatesException(
+        "The two joint states are incompatible, check name, joint names and order or size");
+  }
   this->set_all_state_variables(this->get_all_state_variables() + state.get_all_state_variables());
   return (*this);
 }
@@ -51,7 +61,10 @@ JointState JointState::operator+(const JointState& state) const {
 }
 
 JointState& JointState::operator-=(const JointState& state) {
-  if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
+  if (!this->is_compatible(state)) {
+    throw IncompatibleStatesException(
+        "The two joint states are incompatible, check name, joint names and order or size");
+  }
   this->set_all_state_variables(this->get_all_state_variables() - state.get_all_state_variables());
   return (*this);
 }
@@ -63,7 +76,7 @@ JointState JointState::operator-(const JointState& state) const {
 }
 
 JointState& JointState::operator*=(double lambda) {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
   this->set_all_state_variables(lambda * this->get_all_state_variables());
   return (*this);
 }
@@ -71,18 +84,22 @@ JointState& JointState::operator*=(double lambda) {
 void JointState::multiply_state_variable(const Eigen::ArrayXd& lambda, const JointStateVariable& state_variable_type) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
-  if (lambda.size() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
-                                                                      + std::to_string(expected_size)
-                                                                      + ", given " + std::to_string(lambda.size()));
+  if (lambda.size() != expected_size) {
+    throw IncompatibleSizeException(
+        "Gain matrix is of incorrect size: expected " + std::to_string(expected_size) + ", given "
+            + std::to_string(lambda.size()));
+  }
   this->set_state_variable((lambda * state_variable.array()).matrix(), state_variable_type);
 }
 
 void JointState::multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
-  if (lambda.rows() != expected_size || lambda.cols() != expected_size) throw IncompatibleSizeException("Gain matrix is of incorrect size: expected "
-                                                                                                        + std::to_string(expected_size) + "x" + std::to_string(expected_size)
-                                                                                                        + ", given " + std::to_string(lambda.rows()) + "x" + std::to_string(lambda.cols()));
+  if (lambda.rows() != expected_size || lambda.cols() != expected_size) {
+    throw IncompatibleSizeException("Gain matrix is of incorrect size: expected " + std::to_string(expected_size) + "x"
+                                        + std::to_string(expected_size) + ", given " + std::to_string(lambda.rows())
+                                        + "x" + std::to_string(lambda.cols()));
+  }
   this->set_all_state_variables(lambda * this->get_all_state_variables());
 }
 
@@ -129,41 +146,54 @@ JointState JointState::copy() const {
   return result;
 }
 
-void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array, const JointStateVariable& state_variable_type, const Eigen::ArrayXd& noise_ratio_array) {
+void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
+                                      const JointStateVariable& state_variable_type,
+                                      const Eigen::ArrayXd& noise_ratio_array) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
-  if (max_absolute_value_array.size() != expected_size) throw IncompatibleSizeException("Array of max values is of incorrect size: expected "
-                                                                                        + std::to_string(expected_size)
-                                                                                        + ", given " + std::to_string(max_absolute_value_array.size()));
+  if (max_absolute_value_array.size() != expected_size) {
+    throw IncompatibleSizeException(
+        "Array of max values is of incorrect size: expected " + std::to_string(expected_size) + ", given "
+            + std::to_string(max_absolute_value_array.size()));
+  }
 
-  if (noise_ratio_array.size() != expected_size) throw IncompatibleSizeException("Array of max values is of incorrect size: expected "
-                                                                                 + std::to_string(expected_size)
-                                                                                 + ", given " + std::to_string(noise_ratio_array.size()));
+  if (noise_ratio_array.size() != expected_size) {
+    throw IncompatibleSizeException(
+        "Array of max values is of incorrect size: expected " + std::to_string(expected_size) + ", given "
+            + std::to_string(noise_ratio_array.size()));
+  }
   for (int i = 0; i < expected_size; ++i) {
     if (state_variable(i) > 0) {
       state_variable(i) -= noise_ratio_array(i);
       state_variable(i) = (state_variable(i) < 0) ? 0 : state_variable(i);
-      state_variable(i) = (state_variable(i) > max_absolute_value_array(i)) ? max_absolute_value_array(i) : state_variable(i);
+      state_variable(i) =
+          (state_variable(i) > max_absolute_value_array(i)) ? max_absolute_value_array(i) : state_variable(i);
     } else {
       state_variable(i) += noise_ratio_array(i);
       state_variable(i) = (state_variable(i) > 0) ? 0 : state_variable(i);
-      state_variable(i) = (state_variable(i) < -max_absolute_value_array(i)) ? -max_absolute_value_array(i) : state_variable(i);
+      state_variable(i) =
+          (state_variable(i) < -max_absolute_value_array(i)) ? -max_absolute_value_array(i) : state_variable(i);
     }
   }
   this->set_state_variable(state_variable, state_variable_type);
 }
 
-void JointState::clamp_state_variable(double max_absolute_value, const JointStateVariable& state_variable_type, double noise_ratio) {
+void JointState::clamp_state_variable(double max_absolute_value, const JointStateVariable& state_variable_type,
+                                      double noise_ratio) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
-  this->clamp_state_variable(max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type, noise_ratio * Eigen::ArrayXd::Ones(expected_size));
+  this->clamp_state_variable(max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type,
+                             noise_ratio * Eigen::ArrayXd::Ones(expected_size));
 }
 
 double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  if (!this->is_compatible(state)) throw IncompatibleStatesException("The two joint states are incompatible, check name, joint names and order or size");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (!this->is_compatible(state)) {
+    throw IncompatibleStatesException(
+        "The two joint states are incompatible, check name, joint names and order or size");
+  }
   // calculation
   double result = 0;
   if (state_variable_type == JointStateVariable::POSITIONS || state_variable_type == JointStateVariable::ALL) {
@@ -187,19 +217,19 @@ std::ostream& operator<<(std::ostream& os, const JointState& state) {
   } else {
     os << state.get_name() << " JointState" << std::endl;
     os << "names: [";
-    for (auto& n : state.names) os << n << ", ";
+    for (auto& n : state.names) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
-    for (unsigned int i = 0; i < state.positions.size(); ++i) os << state.positions(i) << ", ";
+    for (unsigned int i = 0; i < state.positions.size(); ++i) { os << state.positions(i) << ", "; }
     os << "]" << std::endl;
     os << "velocities: [";
-    for (unsigned int i = 0; i < state.velocities.size(); ++i) os << state.velocities(i) << ", ";
+    for (unsigned int i = 0; i < state.velocities.size(); ++i) { os << state.velocities(i) << ", "; }
     os << "]" << std::endl;
     os << "accelerations: [";
-    for (unsigned int i = 0; i < state.accelerations.size(); ++i) os << state.accelerations(i) << ", ";
+    for (unsigned int i = 0; i < state.accelerations.size(); ++i) { os << state.accelerations(i) << ", "; }
     os << "]" << std::endl;
     os << "torques: [";
-    for (unsigned int i = 0; i < state.torques.size(); ++i) os << state.torques(i) << ", ";
+    for (unsigned int i = 0; i < state.torques.size(); ++i) { os << state.torques(i) << ", "; }
     os << "]";
   }
   return os;
@@ -210,7 +240,7 @@ double dist(const JointState& s1, const JointState& s2, const JointStateVariable
 }
 
 JointState operator*(double lambda, const JointState& state) {
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
+  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
   JointState result(state);
   result *= lambda;
   return result;
@@ -229,11 +259,11 @@ JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
 }
 
 std::vector<double> JointState::to_std_vector() const {
-  throw(NotImplementedException("to_std_vector() is not implemented for the base JointState class"));
+  throw (NotImplementedException("to_std_vector() is not implemented for the base JointState class"));
   return std::vector<double>();
 }
 
 void JointState::from_std_vector(const std::vector<double>&) {
-  throw(NotImplementedException("from_std_vector() is not implemented for the base JointState class"));
+  throw (NotImplementedException("from_std_vector() is not implemented for the base JointState class"));
 }
 }// namespace StateRepresentation

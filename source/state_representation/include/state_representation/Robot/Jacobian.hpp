@@ -68,7 +68,8 @@ public:
    * @brief joint_names the list of joint names
    * @brief data the value of the jacobian matrix
    */
-  explicit Jacobian(const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::MatrixXd& data);
+  explicit Jacobian(const std::string& robot_name, const std::vector<std::string>& joint_names,
+                    const Eigen::MatrixXd& data);
 
   /**
    * @brief Copy constructor of a Jacobian
@@ -76,7 +77,7 @@ public:
   Jacobian(const Jacobian& jacobian);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param matrix the matrix with value to assign
    * @return reference to the current matrix with new values
    */
@@ -163,7 +164,7 @@ public:
   /**
    * @brief Solve the system X = inv(J)*M to obtain X which is more efficient than multiplying with the pseudo-inverse
    * @param matrix the matrix to solve the system with
-   * @return result of X = J.solve(M) from Eigne decomposition
+   * @return result of X = J.solve(M) from Eigen decomposition
    */
   const Eigen::MatrixXd solve(const Eigen::MatrixXd& matrix) const;
 
@@ -261,7 +262,9 @@ inline const Eigen::MatrixXd& Jacobian::get_data() const {
 }
 
 inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
-  if (this->get_nb_rows() != data.rows() || this->get_nb_cols() != data.cols()) throw IncompatibleSizeException("Input matrix is of incorrect size");
+  if (this->get_nb_rows() != data.rows() || this->get_nb_cols() != data.cols()) {
+    throw IncompatibleSizeException("Input matrix is of incorrect size");
+  }
   this->set_filled();
   this->data = data;
 }
@@ -269,12 +272,15 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
 inline bool Jacobian::is_compatible(const State& state) const {
   bool compatible = false;
   if (state.get_type() == StateType::JOINTSTATE) {
-    compatible = (this->get_name() == state.get_name()) && (this->get_nb_cols() == static_cast<const JointState&>(state).get_size());
+    compatible = (this->get_name() == state.get_name())
+        && (this->get_nb_cols() == static_cast<const JointState&>(state).get_size());
     if (compatible) {
-      for (unsigned int i = 0; i < this->get_nb_cols(); ++i) compatible = (compatible && this->joint_names[i] == static_cast<const JointState&>(state).get_names()[i]);
+      for (unsigned int i = 0; i < this->get_nb_cols(); ++i) {
+        compatible = (compatible && this->joint_names[i] == static_cast<const JointState&>(state).get_names()[i]);
+      }
     }
   }
-  // there is no possibilities to check that a correct frame associated to the robot is sent
+    // there is no possibilities to check that a correct frame associated to the robot is sent
   else if (state.get_type() == StateType::CARTESIANSTATE) {
     compatible = true;
   }
@@ -282,14 +288,22 @@ inline bool Jacobian::is_compatible(const State& state) const {
 }
 
 inline double& Jacobian::operator()(unsigned int row, unsigned int col) {
-  if (row > this->get_nb_rows()) throw std::out_of_range("Given row is out of range: number of rows = " + this->get_nb_rows());
-  if (col > this->get_nb_cols()) throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
+  if (row > this->get_nb_rows()) {
+    throw std::out_of_range("Given row is out of range: number of rows = " + this->get_nb_rows());
+  }
+  if (col > this->get_nb_cols()) {
+    throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
+  }
   return this->data(row, col);
 }
 
 inline const double& Jacobian::operator()(unsigned int row, unsigned int col) const {
-  if (row > this->get_nb_rows()) throw std::out_of_range("Given row is out of range: number of rows = " + this->get_nb_rows());
-  if (col > this->get_nb_cols()) throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
+  if (row > this->get_nb_rows()) {
+    throw std::out_of_range("Given row is out of range: number of rows = " + this->get_nb_rows());
+  }
+  if (col > this->get_nb_cols()) {
+    throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
+  }
   return this->data(row, col);
 }
 }// namespace StateRepresentation

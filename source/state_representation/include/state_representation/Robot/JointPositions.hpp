@@ -49,7 +49,8 @@ public:
    * @brief joint_names list of joint names
    * @brief positions the vector of positions
    */
-  explicit JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions);
+  explicit JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
+                          const Eigen::VectorXd& positions);
 
   /**
    * @brief Copy constructor
@@ -67,7 +68,7 @@ public:
   JointPositions(const JointVelocities& positions);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param positions the state with value to assign
    * @return reference to the current state with new values
    */
@@ -89,15 +90,15 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param positions JointPositions to substract
-   * @return the current JointPositions substracted the JointPositions given in argument
+   * @param positions JointPositions to subtract
+   * @return the current JointPositions subtracted the JointPositions given in argument
    */
   JointPositions& operator-=(const JointPositions& positions);
 
   /**
    * @brief Overload the - operator
-   * @param positions JointPositions to substract
-   * @return the current JointPositions substracted the JointPositions given in argument
+   * @param positions JointPositions to subtract
+   * @return the current JointPositions subtracted the JointPositions given in argument
    */
   JointPositions operator-(const JointPositions& positions) const;
 

@@ -9,13 +9,16 @@ JointTorques::JointTorques() {}
 
 JointTorques::JointTorques(const std::string& robot_name, unsigned int nb_joints) : JointState(robot_name, nb_joints) {}
 
-JointTorques::JointTorques(const std::string& robot_name, const Eigen::VectorXd& torques) : JointState(robot_name, torques.size()) {
+JointTorques::JointTorques(const std::string& robot_name, const Eigen::VectorXd& torques) :
+    JointState(robot_name, torques.size()) {
   this->set_torques(torques);
 }
 
-JointTorques::JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names) : JointState(robot_name, joint_names) {}
+JointTorques::JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names) :
+    JointState(robot_name, joint_names) {}
 
-JointTorques::JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& torques) : JointState(robot_name, joint_names) {
+JointTorques::JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names,
+                           const Eigen::VectorXd& torques) : JointState(robot_name, joint_names) {
   this->set_torques(torques);
 }
 
@@ -104,7 +107,8 @@ void JointTorques::clamp(const Eigen::ArrayXd& max_absolute_value_array, const E
   this->clamp_state_variable(max_absolute_value_array, JointStateVariable::TORQUES, noise_ratio_array);
 }
 
-JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const {
+JointTorques JointTorques::clamped(const Eigen::ArrayXd& max_absolute_value_array,
+                                   const Eigen::ArrayXd& noise_ratio_array) const {
   JointTorques result(*this);
   result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;
@@ -116,10 +120,10 @@ std::ostream& operator<<(std::ostream& os, const JointTorques& torques) {
   } else {
     os << torques.get_name() << " JointTorques" << std::endl;
     os << "names: [";
-    for (auto& n : torques.get_names()) os << n << ", ";
+    for (auto& n : torques.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "torques: [";
-    for (unsigned int i = 0; i < torques.get_size(); ++i) os << torques.get_torques()(i) << ", ";
+    for (unsigned int i = 0; i < torques.get_size(); ++i) { os << torques.get_torques()(i) << ", "; }
     os << "]";
   }
   return os;

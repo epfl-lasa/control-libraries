@@ -46,7 +46,8 @@ public:
    * @brief joint_names list of joint names
    * @brief torques the vector of torques
    */
-  explicit JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& torques);
+  explicit JointTorques(const std::string& robot_name, const std::vector<std::string>& joint_names,
+                        const Eigen::VectorXd& torques);
 
   /**
    * @brief Copy constructor
@@ -59,7 +60,7 @@ public:
   JointTorques(const JointState& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */
@@ -81,15 +82,15 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param torques JointTorques to substract
-   * @return the current JointTorques substracted the JointTorques given in argument
+   * @param torques JointTorques to subtract
+   * @return the current JointTorques subtracted the JointTorques given in argument
    */
   JointTorques& operator-=(const JointTorques& torques);
 
   /**
    * @brief Overload the - operator
-   * @param torques JointTorques to substract
-   * @return the current JointTorques substracted the JointTorques given in argument
+   * @param torques JointTorques to subtract
+   * @return the current JointTorques subtracted the JointTorques given in argument
    */
   JointTorques operator-(const JointTorques& torques) const;
 
@@ -164,7 +165,7 @@ public:
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
    * @param max_absolute_value the maximum magnitude of torque for all the joints
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
+   * @param noise_ratio if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0
    */
   void clamp(double max_absolute_value, double noise_ratio = 0.);
@@ -172,7 +173,7 @@ public:
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
    * @param max_absolute_value the maximum magnitude of torque for all the joints
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
+   * @param noise_ratio if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0
    * @return the clamped JointTorques
    */
@@ -181,7 +182,7 @@ public:
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
    * @param max_absolute_value_array the maximum magnitude of torque for each joint
-   * @param noise_ratio_array if provided, this value will be used to apply a deadzone under which
+   * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0
    */
   void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
@@ -189,7 +190,7 @@ public:
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
    * @param max_absolute_value_array the maximum magnitude of torque for each joint
-   * @param noise_ratio_array if provided, this value will be used to apply a deadzone under which
+   * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0
    * @return the clamped JointTorques
    */

@@ -7,15 +7,19 @@ using namespace StateRepresentation::Exceptions;
 namespace StateRepresentation {
 JointPositions::JointPositions() {}
 
-JointPositions::JointPositions(const std::string& robot_name, unsigned int nb_joints) : JointState(robot_name, nb_joints) {}
+JointPositions::JointPositions(const std::string& robot_name, unsigned int nb_joints) :
+    JointState(robot_name, nb_joints) {}
 
-JointPositions::JointPositions(const std::string& robot_name, const Eigen::VectorXd& positions) : JointState(robot_name, positions.size()) {
+JointPositions::JointPositions(const std::string& robot_name, const Eigen::VectorXd& positions) :
+    JointState(robot_name, positions.size()) {
   this->set_positions(positions);
 }
 
-JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names) : JointState(robot_name, joint_names) {}
+JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names) :
+    JointState(robot_name, joint_names) {}
 
-JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions) : JointState(robot_name, joint_names) {
+JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
+                               const Eigen::VectorXd& positions) : JointState(robot_name, joint_names) {
   this->set_positions(positions);
 }
 
@@ -84,7 +88,7 @@ JointPositions JointPositions::operator/(double lambda) const {
 }
 
 JointVelocities JointPositions::operator/(const std::chrono::nanoseconds& dt) const {
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
   // operations
   JointVelocities velocities(this->get_name(), this->get_names());
   // convert the period to a double with the second as reference
@@ -110,10 +114,10 @@ std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   } else {
     os << positions.get_name() << " JointPositions" << std::endl;
     os << "names: [";
-    for (auto& n : positions.get_names()) os << n << ", ";
+    for (auto& n : positions.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
-    for (unsigned int i = 0; i < positions.get_size(); ++i) os << positions.get_positions()(i) << ", ";
+    for (unsigned int i = 0; i < positions.get_size(); ++i) { os << positions.get_positions()(i) << ", "; }
     os << "]";
   }
   return os;

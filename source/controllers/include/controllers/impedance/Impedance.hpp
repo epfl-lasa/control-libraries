@@ -35,7 +35,7 @@ public:
    * @param feedback_state the real state of the system as read from feedback loop
    * @return the output command at the input state
    */
-  virtual S compute_command(const S& desired_state, const S& feedback_state) const;
+  virtual S compute_command(const S& desired_state, const S& feedback_state);
 
   /**
    * @brief Getter of the stiffness matrix

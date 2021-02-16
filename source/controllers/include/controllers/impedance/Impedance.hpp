@@ -13,7 +13,7 @@ namespace impedance {
  * @tparam S the space of the controller either CartesianState or JointState
  */
 template <class S>
-class Impedance : Controller<S, S> {
+class Impedance : public Controller<S, S> {
 private:
   std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>> stiffness_;///< stiffness matrix of the controller associated to position
   std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>> damping_;  ///< damping matrix of the controller associated to velocity

@@ -33,17 +33,17 @@ enum class ComputationalSpaceType {
  * @class Dissipative
  * @brief Definition of a dissipative impedance controller (PassiveDS) in task space
  */
-class Dissipative : Impedance<StateRepresentation::CartesianState> {
+class Dissipative : public Impedance<StateRepresentation::CartesianState> {
 private:
   ComputationalSpaceType computational_space_;                                          ///< the space in which to compute the command vector
   Eigen::Matrix<double, 6, 6> basis_;                                                   ///< basis matrix used to compute the damping matrix
   std::shared_ptr<StateRepresentation::Parameter<Eigen::VectorXd>> damping_eigenvalues_;///< coefficient of eigenvalues used in the damping matrix computation
 
+public:
   /**
-   * @brief Orthonormalize inplace the basis matrix given in argument
-   * @param basis the basis matrix to orthonormalize
+   * @brief Constructor with specified computational space. Default is DECOUPLED_TWIST
    */
-  static void orthonormalize(Eigen::MatrixXd& basis);
+  explicit Dissipative(const ComputationalSpaceType& computational_space = ComputationalSpaceType::DECOUPLED_TWIST);
 
   /**
    * @brief Compute the orthonormal basis based on the main eigenvector in parameter
@@ -60,17 +60,6 @@ private:
    * of motion is extracted to compute the basis
    */
   void compute_damping(const Eigen::VectorXd& desired_velocity);
-
-  /**
-   * @brief Get the eigenvalues in a diagonal matrix form
-   */
-  Eigen::DiagonalMatrix<double, 6, 6> get_diagonal_eigenvalues() const;
-
-public:
-  /**
-   * @brief Constructor with specified computational space. Default is DECOUPLED_TWIST
-   */
-  explicit Dissipative(const ComputationalSpaceType& computational_space = ComputationalSpaceType::DECOUPLED_TWIST);
 
   /**
    * @brief Getter of the damping eigenvalues parameter
@@ -97,6 +86,11 @@ public:
    * @param index the index of the eigenvalue (number between 0 and 5)
    */
   void set_damping_eigenvalue(double damping_eigenvalue, unsigned int index);
+
+  /**
+   * @brief Get the eigenvalues in a diagonal matrix form
+   */
+  Eigen::DiagonalMatrix<double, 6, 6> get_diagonal_eigenvalues() const;
 
   /**
    * @brief Compute the force (task space) or torque (joint space) command based on the input state

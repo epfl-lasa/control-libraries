@@ -17,9 +17,6 @@ WORKDIR /root/control_lib
 COPY ./source ./
 RUN /bin/bash -c "source ./install.sh"
 
-COPY ./source/controllers ./controllers
-RUN /bin/bash -c "source ./controllers/install.sh"
-
 # change directory
 WORKDIR /root
 

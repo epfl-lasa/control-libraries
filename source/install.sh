@@ -5,6 +5,7 @@ SOURCE_PATH=$(dirname "$SCRIPT")
 # options
 # TODO: parse arguments and provide --help to set these options
 BUILD_TESTS="ON"
+BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
 
@@ -44,7 +45,8 @@ fi
 
 # build and install the specified modules
 cd "${SOURCE_PATH}" && mkdir -p build && cd build \
-  && cmake -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
+  && cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
+           -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
            -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
            -Druntests="${BUILD_TESTS}" .. \
   && make -j && make install

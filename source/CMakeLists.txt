@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 project(control_libraries)
 
 option(runtests "Build all tests." OFF)
+option(BUILD_CONTROLLERS "Build and install controllers library" ON)
 option(BUILD_DYNAMICAL_SYSTEMS "Build and install dynamical systems library" ON)
 option(BUILD_ROBOT_MODEL "Build and install robot model library" ON)
 
@@ -39,6 +40,10 @@ if(runtests)
 endif()
 
 add_subdirectory(state_representation)
+
+if(BUILD_CONTROLLERS)
+    add_subdirectory(controllers)
+endif()
 
 if(BUILD_DYNAMICAL_SYSTEMS)
     add_subdirectory(dynamical_systems)

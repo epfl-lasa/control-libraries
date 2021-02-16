@@ -1,30 +1,9 @@
-cmake_minimum_required(VERSION 3.9)
-
-# Options. Turn on with 'cmake -Druntests=ON'.
-option(runtests "Build all tests." OFF) # Makes boolean 'test' available.
-
 project(controllers)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-    set(CMAKE_C_STANDARD 99)
-endif()
-
-# Default to C++17
-if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 17)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-find_package(Eigen3 REQUIRED)
-
+get_target_property(STATE_REPRESENTATION_INCLUDES state_representation INCLUDE_DIRECTORIES)
 include_directories(
     include
-    state_representation/include
-    ${Eigen3_INCLUDE_DIRS}
+    ${STATE_REPRESENTATION_INCLUDES}
 )
 
 set(CORE_SOURCES
@@ -49,19 +28,6 @@ install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin)
 
 if (runtests)
-    if (APPLE)
-      add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-      add_definitions(-D__GLIBCXX__)
-    endif (APPLE)
-
-    add_subdirectory(lib/googletest)
-
-    enable_testing()
-
-    # Include the gtest library. gtest_SOURCE_DIR is available due to
-    # 'project(gtest)' above.
-    include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
     add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
     target_link_libraries(runTestImpedanceController
       gtest
@@ -70,6 +36,4 @@ if (runtests)
       state_representation
     )
     add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
-
-
 endif()

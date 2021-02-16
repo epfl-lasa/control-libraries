@@ -6,6 +6,15 @@
 
 namespace controllers {
 namespace impedance {
+
+template <class S>
+Impedance<S>::Impedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd& damping, const Eigen::MatrixXd& inertia) : stiffness_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("stiffness", stiffness)),
+                                                                                                                            damping_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("damping", damping)),
+                                                                                                                            inertia_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("inertia", inertia)) {}
+
+template Impedance<StateRepresentation::CartesianState>::Impedance(const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::MatrixXd&);
+template Impedance<StateRepresentation::JointState>::Impedance(const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::MatrixXd&);
+
 template <>
 StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianState>::compute_command(const StateRepresentation::CartesianState& desired_state,
                                                                                                     const StateRepresentation::CartesianState& feedback_state) const {

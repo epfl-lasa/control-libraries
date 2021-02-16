@@ -87,11 +87,6 @@ public:
 };
 
 template <class S>
-Impedance<S>::Impedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd& damping, const Eigen::MatrixXd& inertia) : stiffness_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("stiffness", stiffness)),
-                                                                                                                            damping_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("damping", damping)),
-                                                                                                                            inertia_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("inertia", inertia)) {}
-
-template <class S>
 inline const Eigen::MatrixXd& Impedance<S>::get_stiffness() const {
   return this->stiffness_->get_value();
 }

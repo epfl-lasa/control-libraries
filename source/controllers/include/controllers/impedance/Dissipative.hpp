@@ -1,9 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2021/02
- *
- */
-
 #pragma once
 
 #include "controllers/impedance/Impedance.hpp"

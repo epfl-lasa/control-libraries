@@ -37,12 +37,28 @@ public:
   /**
    * @brief Compute the command based on the desired state and a feedback state
    * To be redefined based on the actual controller implementation.
-   * This function accept any number of extra arguments.
    * @param desired_state the desired state of the system.
    * @param feedback_state the real state of the system as read from feedback loop
    * @return the output command at the input state
    */
   virtual SOut compute_command(const SIn& desired_state, const SIn& feedback_state) const;
+
+  /**
+   * @brief Compute the command based on the input state in a non const fashion
+   * To be redefined based on the actual controller implementation
+   * @param state the input state of the system. This function accept any number of extra arguments.
+   * @return the output command at the input state
+   */
+  virtual SOut compute_command(const SIn& state, ...);
+
+  /**
+   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
+   * To be redefined based on the actual controller implementation.
+   * @param desired_state the desired state of the system.
+   * @param feedback_state the real state of the system as read from feedback loop
+   * @return the output command at the input state
+   */
+  virtual SOut compute_command(const SIn& desired_state, const SIn& feedback_state);
 
   /**
    * @brief Return a list of all the parameters of the controller
@@ -52,9 +68,6 @@ public:
 };
 
 template <class SIn, class SOut>
-Controller<SIn, SOut>::Controller() {}
-
-template <class SIn, class SOut>
 std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Controller<SIn, SOut>::get_parameters() const {
   std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
   return param_list;
@@ -62,11 +75,22 @@ std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Controller<S
 
 template <class SIn, class SOut>
 SOut Controller<SIn, SOut>::compute_command(const SIn&, ...) const {
-  throw exceptions::NotImplementedException("compute_command(const SIn& state, ...) not implemented for the base controller class");
+  throw exceptions::NotImplementedException("compute_command(state, ...) const not implemented for the base controller class");
 }
 
 template <class SIn, class SOut>
 SOut Controller<SIn, SOut>::compute_command(const SIn&, const SIn&) const {
-  throw exceptions::NotImplementedException("compute_command(const SIn& state, ...) not implemented for the base controller class");
+  throw exceptions::NotImplementedException("compute_command(desired_state, feedback_state) const not implemented for the base controller class");
 }
+
+template <class SIn, class SOut>
+SOut Controller<SIn, SOut>::compute_command(const SIn&, ...) {
+  throw exceptions::NotImplementedException("compute_command(state, ...) not implemented for the base controller class");
+}
+
+template <class SIn, class SOut>
+SOut Controller<SIn, SOut>::compute_command(const SIn&, const SIn&) {
+  throw exceptions::NotImplementedException("compute_command(desired_state, feedback_state) not implemented for the base controller class");
+}
+
 }// namespace controllers

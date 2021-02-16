@@ -23,6 +23,9 @@ RUN /bin/bash -c "source ./dynamical_systems/install.sh"
 COPY ./source/robot_model ./robot_model
 RUN /bin/bash -c "source ./robot_model/install.sh"
 
+COPY ./source/controllers ./controllers
+RUN /bin/bash -c "source ./controllers/install.sh"
+
 # change directory
 WORKDIR /root
 

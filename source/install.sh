@@ -9,3 +9,4 @@ IS_TEST="OFF"
 cd "${CURRENT_PATH}/state_representation" && . ./install.sh
 cd "${CURRENT_PATH}/dynamical_systems" && . ./install.sh
 cd "${CURRENT_PATH}/robot_model" && . ./install.sh
+cd "${CURRENT_PATH}/controllers" && . ./install.sh

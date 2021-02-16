@@ -1,5 +1,6 @@
 #!/bin/bash
-MULTISTAGE_TARGET="development"
+# Requires running the build script with the same multi-stage target first
+MULTISTAGE_TARGET="development-user"
 
 NAME=$(echo "${PWD##*/}" | tr _ -)/"${MULTISTAGE_TARGET}"
 TAG=$(echo "$1" | tr _/ -)

@@ -1,9 +1,9 @@
 project(dynamical_systems)
 
-get_target_property(STATE_REPRESENTATION_INCLUDES state_representation INCLUDE_DIRECTORIES)
+get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
 include_directories(
-    include
-    ${STATE_REPRESENTATION_INCLUDES}
+  include
+  ${STATE_REPRESENTATION_INCLUDE_DIR}
 )
 
 set(CORE_SOURCES
@@ -12,7 +12,7 @@ set(CORE_SOURCES
   src/Linear.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}
 )
 
@@ -22,29 +22,31 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(DIRECTORY include/
-    DESTINATION include)
+  DESTINATION includ
+)
 
 install(TARGETS ${PROJECT_NAME}
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
-if (runtests)
-    add_executable(runTestLinear tests/testLinear.cpp)
-    target_link_libraries(runTestLinear
-      gtest
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestLinear COMMAND runTestLinear)
+if (BUILD_TESTING)
+  add_executable(runTestLinear tests/testLinear.cpp)
+  target_link_libraries(runTestLinear
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestLinear COMMAND runTestLinear)
 
-    add_executable(runTestCircular tests/testCircular.cpp)
-    target_link_libraries(runTestCircular
-      gtest 
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestCircular COMMAND runTestCircular)
-endif()
+  add_executable(runTestCircular tests/testCircular.cpp)
+  target_link_libraries(runTestCircular
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestCircular COMMAND runTestCircular)
+endif ()

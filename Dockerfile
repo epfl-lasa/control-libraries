@@ -1,37 +1,110 @@
-FROM ubuntu:20.04 AS builder
+FROM ubuntu:20.04 AS core-build-dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install dependencies for building the libraries
+# install core compilation and access dependencies for building the libraries
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     make \
-    git \
-    wget \
     cmake \
+    git \
+    curl \
+    wget \
+    lsb-release \
+    gnupg2 \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# import previously downloaded packages
-WORKDIR /root/control_lib
-# install libraries and dependencies
+
+FROM core-build-dependencies as project-dependencies
+
+# add pinocchio to package list
+RUN echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
+    | tee /etc/apt/sources.list.d/robotpkg.list \
+    && curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key \
+    | apt-key add -
+
+# install dependencies for building the libraries
+RUN apt-get update && apt-get install -y \
+    libeigen3-dev \
+    robotpkg-py38-pinocchio \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install osqp and eigen wrapper
+WORKDIR /tmp/osqp_build
+RUN git clone --recursive https://github.com/oxfordcontrol/osqp \
+    && cd osqp && mkdir build && cd build && cmake -G "Unix Makefiles" .. && cmake --build . --target install
+  # install osqp eigen wrapper
+WORKDIR /tmp/osqp_build
+RUN git clone https://github.com/robotology/osqp-eigen.git \
+    && cd osqp-eigen && mkdir build && cd build && cmake .. && make -j && make install
+
+
+FROM project-dependencies as development-dependencies
+
+RUN apt-get update && apt-get install -y \
+    libgtest-dev \
+    build-essential \
+    ssh \
+    libssl-dev \
+    gdb \
+    clang \
+    rsync \
+    tar \
+    python \
+    sudo \
+    iputils-ping \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install gtest
+WORKDIR /tmp/gtest_build
+RUN cmake /usr/src/gtest \
+  && make \
+  && cp lib/* /usr/local/lib
+
+
+FROM development-dependencies as remote-development
+
+RUN ( \
+    echo 'LogLevel DEBUG2'; \
+    echo 'PermitRootLogin yes'; \
+    echo 'PasswordAuthentication yes'; \
+    echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
+  ) > /etc/ssh/sshd_config_development \
+  && mkdir /run/sshd
+
+ENV DEBIAN_FRONTEND=keyboard-interactive
+RUN useradd -m remote && yes password | passwd remote
+
+CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_development"]
+
+
+FROM development-dependencies as build-testing
+ARG BUILD_TESTING=ON
+ARG BUILD_CONTROLLERS=OFF
+ARG BUILD_DYNAMICAL_SYSTEMS=OFF
+ARG BUILD_ROBOT_MODEL=OFF
+
+WORKDIR /tmp/control_lib
 COPY ./source ./
-RUN /bin/bash -c "source ./install.sh"
 
-# change directory
-WORKDIR /root
+RUN mkdir -p build && cd build \
+  && cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
+           -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
+           -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
+           -DBUILD_TESTING="${BUILD_TESTING}" .. \
+  && make -j all \
+  && make test
 
-# clean image
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # secondary target for development purposes
-FROM builder AS development
+FROM development-dependencies AS development-user
 
-# install development tools
-RUN apt-get update && apt-get install -y \
-    sudo \
-    gdb \
-    iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /tmp/control_lib
+COPY ./source ./
+
 
 ENV USER udev
 
@@ -51,12 +124,12 @@ USER ${USER}
 ENV HOME /home/${USER}
 WORKDIR ${HOME}
 
-# copy lib from root folder
-COPY --from=builder --chown=${USER} /root/control_lib ./control_lib
+# copy lib
+COPY ./source ./control_lib
 
 # change entrypoint to source ~/.bashrc and start in ~
-COPY config/entrypoint.sh /entrypoint.sh 
-RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh ; 
+COPY config/entrypoint.sh /entrypoint.sh
+RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh ;
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

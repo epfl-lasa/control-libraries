@@ -10,7 +10,7 @@ while getopts 'r' opt; do
 done
 shift "$(( OPTIND - 1 ))"
 
-MULTISTAGE_TARGET="development"
+MULTISTAGE_TARGET="build-testing"
 
 NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
 TAG="latest"

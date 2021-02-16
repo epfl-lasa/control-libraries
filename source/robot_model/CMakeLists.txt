@@ -1,13 +1,14 @@
 project(robot_model)
 
+list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 find_package(pinocchio REQUIRED)
 find_package(OsqpEigen REQUIRED)
 find_package(osqp REQUIRED)
 
-get_target_property(STATE_REPRESENTATION_INCLUDES state_representation INCLUDE_DIRECTORIES)
+get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
 include_directories(
   include
-  ${STATE_REPRESENTATION_INCLUDES}
+  ${STATE_REPRESENTATION_INCLUDE_DIR}
   ${PINOCCHIO_INCLUDE_DIR}
   ${OsqpEigen_INCLUDE_DIR}
   /opt/openrobots/include
@@ -17,7 +18,7 @@ set(CORE_SOURCES
   src/Model.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}
 )
 
@@ -39,12 +40,12 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
 )
 
-if (runtests)
+if (BUILD_TESTING)
   add_executable(runTestRobotModel tests/testRobotModel.cpp)
   target_link_libraries(runTestRobotModel
-    gtest
-    gtest_main
     ${PROJECT_NAME}
+    ${GTEST_LIBRARIES}
+    pthread
   )
   add_test(NAME runTestRobotModel COMMAND runTestRobotModel)
-endif()
+endif ()

@@ -31,21 +31,21 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
-    add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
-    target_link_libraries(runTestImpedanceController
-      gtest
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
+  add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
+  target_link_libraries(runTestImpedanceController
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
 
-    add_executable(runTestDissipativeImpedanceController tests/testDissipativeImpedanceController.cpp)
-    target_link_libraries(runTestDissipativeImpedanceController
-      gtest
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestDissipativeImpedanceController COMMAND runTestDissipativeImpedanceController)
+  add_executable(runTestDissipativeImpedanceController tests/testDissipativeImpedanceController.cpp)
+  target_link_libraries(runTestDissipativeImpedanceController
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestDissipativeImpedanceController COMMAND runTestDissipativeImpedanceController)
 endif()

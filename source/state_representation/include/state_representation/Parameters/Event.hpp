@@ -12,7 +12,7 @@ namespace StateRepresentation {
  */
 class Event : public Predicate {
 private:
-  bool previous_predicate_value_;///< value of the predicate
+  bool previous_predicate_value_;///< previous value of the predicate
 
 public:
   /**
@@ -21,7 +21,8 @@ public:
   explicit Event(const std::string& name);
 
   /**
-   * @brief Read the value of the
+   * @brief Read the value of the event, modifying its value as it has been
+   * accessed once.
    */
   bool read_value();
 
@@ -30,6 +31,12 @@ public:
    * @param the new value attribute
    */
   void set_value(const bool& value) override;
+
+  /**
+   * @brief Getter of the previous value. Does not
+   * affect the behavior of the event (as opposed to read_value)
+   */
+  bool get_previous_value() const;
 
   /**
     * @brief Overload the ostream operator for printing
@@ -51,5 +58,9 @@ inline void Event::set_value(const bool& value) {
   bool result = value && (current_value || !this->previous_predicate_value_);
   this->previous_predicate_value_ = value;
   this->Predicate::set_value(result);
+}
+
+inline bool Event::get_previous_value() const {
+  return this->previous_predicate_value_;
 }
 }// namespace StateRepresentation

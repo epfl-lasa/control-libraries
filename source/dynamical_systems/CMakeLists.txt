@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(DIRECTORY include/
-  DESTINATION includ
+  DESTINATION include
 )
 
 install(TARGETS ${PROJECT_NAME}

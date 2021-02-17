@@ -83,9 +83,9 @@ CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_development"]
 
 FROM development-dependencies as build-testing
 ARG BUILD_TESTING=ON
-ARG BUILD_CONTROLLERS=OFF
-ARG BUILD_DYNAMICAL_SYSTEMS=OFF
-ARG BUILD_ROBOT_MODEL=OFF
+ARG BUILD_CONTROLLERS=ON
+ARG BUILD_DYNAMICAL_SYSTEMS=ON
+ARG BUILD_ROBOT_MODEL=ON
 
 WORKDIR /tmp/control_lib
 COPY ./source ./
@@ -95,41 +95,6 @@ RUN mkdir -p build && cd build \
            -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
            -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
            -DBUILD_TESTING="${BUILD_TESTING}" .. \
-  && make -j all \
-  && make test
+  && make -j all
 
-
-# secondary target for development purposes
-FROM development-dependencies AS development-user
-
-WORKDIR /tmp/control_lib
-COPY ./source ./
-
-
-ENV USER udev
-
-# create the same user as the host itself
-ARG UID=1000
-ARG GID=1000
-RUN addgroup --gid ${GID} ${USER}
-RUN adduser --gecos "udev User" --disabled-password --uid ${UID} --gid ${GID} ${USER}
-RUN usermod -a -G dialout ${USER}
-RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/99_aptget
-RUN chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_aptget
-
-# choose to run as user
-USER ${USER}
-
-# change HOME environment variable
-ENV HOME /home/${USER}
-WORKDIR ${HOME}
-
-# copy lib
-COPY ./source ./control_lib
-
-# change entrypoint to source ~/.bashrc and start in ~
-COPY config/entrypoint.sh /entrypoint.sh
-RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh ;
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bash"]
+RUN make test

@@ -45,6 +45,9 @@ public:
 };
 
 template <class SIn, class SOut>
+Controller<SIn, SOut>::Controller() {}
+
+template <class SIn, class SOut>
 std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Controller<SIn, SOut>::get_parameters() const {
   std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
   return param_list;

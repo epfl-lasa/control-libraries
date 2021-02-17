@@ -21,7 +21,8 @@ public:
   explicit Event(const std::string& name);
 
   /**
-   * @brief Read the value of the
+   * @brief Read the value of the event, modifying its value as it has been
+   * accessed once.
    */
   bool read_value();
 
@@ -33,7 +34,7 @@ public:
 
   /**
    * @brief Getter of the previous value. Does not
-   * affect the behavior of the even (as opposed to read_value)
+   * affect the behavior of the event (as opposed to read_value)
    */
   bool get_previous_value() const;
 

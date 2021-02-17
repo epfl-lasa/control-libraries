@@ -90,13 +90,13 @@ if (BUILD_TESTING)
   add_test(NAME runTestTrajectory COMMAND runTestTrajectory)
 
   # testParameter fails to build for accessing private member line 23 |  EXPECT_FALSE(e.previous_predicate_value_);
-#  add_executable(runTestParameter tests/testParameter.cpp)
-#  target_link_libraries(runTestParameter
-#    ${PROJECT_NAME}
-#    ${GTEST_LIBRARIES}
-#    pthread
-#  )
-#  add_test(NAME runTestParameter COMMAND runTestParameter)
+  add_executable(runTestParameter tests/testParameter.cpp)
+  target_link_libraries(runTestParameter
+    ${PROJECT_NAME}
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestParameter COMMAND runTestParameter)
 
   add_executable(runTestEllipsoid tests/testEllipsoid.cpp)
   target_link_libraries(runTestEllipsoid

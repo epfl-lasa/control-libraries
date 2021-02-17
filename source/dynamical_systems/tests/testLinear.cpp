@@ -28,8 +28,7 @@ TEST(EvaluateDynamicalSystemOrientationOnly, PositiveNos) {
   srand(time(NULL));
 
   StateRepresentation::CartesianPose current_pose("robot", Eigen::Vector3d(0, 0, 0));
-  Eigen::Array4d orientation = Eigen::Array4d::Random();
-  StateRepresentation::CartesianPose target_pose("robot", Eigen::Vector3d(0, 0, 0), Eigen::Quaterniond(orientation(0), orientation(1), orientation(2), orientation(3)));
+  StateRepresentation::CartesianPose target_pose("robot", Eigen::Vector3d(0, 0, 0), Eigen::Quaterniond::UnitRandom());
 
   DynamicalSystems::Linear<StateRepresentation::CartesianState> linearDS(target_pose);
 

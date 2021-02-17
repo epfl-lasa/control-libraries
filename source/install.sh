@@ -4,7 +4,7 @@ SOURCE_PATH=$(dirname "$SCRIPT")
 
 # options
 # TODO: parse arguments and provide --help to set these options
-BUILD_TESTS="ON"
+BUILD_TESTING="ON"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
@@ -38,7 +38,7 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
 fi
 
 # install testing dependencies
-if [ "${BUILD_TESTS}" == "ON" ]; then
+if [ "${BUILD_TESTING}" == "ON" ]; then
   mkdir "${SOURCE_PATH}"/lib
   cd "${SOURCE_PATH}"/lib && git clone --depth 1 --branch v1.10.x https://github.com/google/googletest.git
 fi
@@ -48,7 +48,7 @@ cd "${SOURCE_PATH}" && mkdir -p build && cd build \
   && cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
            -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
            -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
-           -Druntests="${BUILD_TESTS}" .. \
+           -DBUILD_TESTING="${BUILD_TESTING}" .. \
   && make -j && make install
 
 # reset location

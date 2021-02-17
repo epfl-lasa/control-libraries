@@ -1,16 +1,16 @@
 project(controllers)
 
-get_target_property(STATE_REPRESENTATION_INCLUDES state_representation INCLUDE_DIRECTORIES)
+get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
 include_directories(
-    include
-    ${STATE_REPRESENTATION_INCLUDES}
+  include
+  ${STATE_REPRESENTATION_INCLUDE_DIR}
 )
 
 set(CORE_SOURCES
   src/impedance/Impedance.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}
 )
 
@@ -20,20 +20,22 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 install(DIRECTORY include/
-    DESTINATION include)
+  DESTINATION include
+)
 
 install(TARGETS ${PROJECT_NAME}
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
-if (runtests)
-    add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
-    target_link_libraries(runTestImpedanceController
-      gtest
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
-endif()
+if (BUILD_TESTING)
+  add_executable(runTestImpedanceController tests/testImpedanceController.cpp)
+  target_link_libraries(runTestImpedanceController
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
+endif ()

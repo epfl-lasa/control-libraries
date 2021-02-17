@@ -90,11 +90,11 @@ ARG BUILD_ROBOT_MODEL=ON
 WORKDIR /tmp/control_lib
 COPY ./source ./
 
-RUN mkdir -p build && cd build \
-  && cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
-           -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
-           -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
-           -DBUILD_TESTING="${BUILD_TESTING}" .. \
+WORKDIR /tmp/control_lib/build
+RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
+    -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
+    -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
+    -DBUILD_TESTING="${BUILD_TESTING}" .. \
   && make -j all
 
 RUN make test

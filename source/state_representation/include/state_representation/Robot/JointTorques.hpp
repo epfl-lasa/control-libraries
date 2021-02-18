@@ -157,8 +157,14 @@ public:
   JointTorques copy() const;
 
   /**
-   * @brief Return the value of the torques vector as Eigen array
-   * @retrun the Eigen array representing the torques
+   * @brief Returns the torques data as an Eigen vector
+   * @return the torque data vector
+   */
+  Eigen::VectorXd data() const;
+
+  /**
+   * @brief Returns the data vector as an Eigen Array
+   * @return the torque data array
    */
   Eigen::ArrayXd array() const;
 

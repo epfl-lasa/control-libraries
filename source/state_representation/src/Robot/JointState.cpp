@@ -146,6 +146,14 @@ JointState JointState::copy() const {
   return result;
 }
 
+Eigen::VectorXd JointState::data() const {
+  return this->get_all_state_variables();
+}
+
+Eigen::ArrayXd JointState::array() const {
+  return this->data().array();
+}
+
 void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
                                       const JointStateVariable& state_variable_type,
                                       const Eigen::ArrayXd& noise_ratio_array) {
@@ -259,11 +267,11 @@ JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
 }
 
 std::vector<double> JointState::to_std_vector() const {
-  throw (NotImplementedException("to_std_vector() is not implemented for the base JointState class"));
+  throw NotImplementedException("to_std_vector() is not implemented for the base JointState class");
   return std::vector<double>();
 }
 
 void JointState::from_std_vector(const std::vector<double>&) {
-  throw (NotImplementedException("from_std_vector() is not implemented for the base JointState class"));
+  throw NotImplementedException("from_std_vector() is not implemented for the base JointState class");
 }
 }// namespace StateRepresentation

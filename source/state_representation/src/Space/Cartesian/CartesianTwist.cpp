@@ -130,8 +130,8 @@ CartesianTwist CartesianTwist::copy() const {
   return result;
 }
 
-Eigen::Array<double, 6, 1> CartesianTwist::array() const {
-  return this->get_twist().array();
+Eigen::VectorXd CartesianTwist::data() const {
+  return this->get_twist();
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {

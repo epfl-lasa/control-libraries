@@ -105,6 +105,10 @@ CartesianPose CartesianPose::copy() const {
   return result;
 }
 
+Eigen::VectorXd CartesianPose::data() const {
+  return this->get_pose();
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   if (pose.is_empty()) {
     os << "Empty CartesianPose";

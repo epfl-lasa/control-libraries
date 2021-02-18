@@ -172,10 +172,10 @@ public:
   JointVelocities copy() const;
 
   /**
-   * @brief Return the value of the velocities as Eigen array
-   * @retrun the Eigen array representing the velocities
+   * @brief Returns the velocities data as an Eigen vector
+   * @return the velocities data vector
    */
-  Eigen::ArrayXd array() const;
+  Eigen::VectorXd data() const;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument

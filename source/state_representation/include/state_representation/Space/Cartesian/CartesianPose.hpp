@@ -180,6 +180,12 @@ public:
   CartesianPose copy() const;
 
   /**
+   * @brief Returns the pose data as an Eigen vector
+   * @return the pose data vector
+   */
+  Eigen::VectorXd data() const;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to happend the string representing the CartesianPose to
    * @param CartesianPose the CartesianPose to print

@@ -1,17 +1,11 @@
 #pragma once
 
-#include <iostream>
 #include <exception>
+#include <iostream>
 
-namespace StateRepresentation
-{
-	namespace Exceptions
-	{
-		class NotImplementedException: public std::logic_error
-		{
-		public:
-			explicit NotImplementedException(const std::string& msg) : logic_error(msg)
-			{};
-		};
-	}
-}
+namespace StateRepresentation::Exceptions {
+class NotImplementedException : public std::logic_error {
+public:
+  explicit NotImplementedException(const std::string& msg) : logic_error(msg) {};
+};
+}// namespace StateRepresentation::Exceptions

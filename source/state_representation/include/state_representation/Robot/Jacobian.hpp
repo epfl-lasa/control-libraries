@@ -30,10 +30,10 @@ class JointTorques;
  */
 class Jacobian : public State {
 private:
-  std::vector<std::string> joint_names;///< names of the joints
-  unsigned int nb_rows;                ///< number of rows
-  unsigned int nb_cols;                ///< number of columns
-  Eigen::MatrixXd data;                ///< internal storage of the jacobian matrix
+  std::vector<std::string> joint_names_;///< names of the joints
+  unsigned int nb_rows_;                ///< number of rows
+  unsigned int nb_cols_;                ///< number of columns
+  Eigen::MatrixXd data_matrix_;         ///< internal storage of the jacobian matrix
 
 public:
   /**
@@ -121,7 +121,7 @@ public:
   /**
    * @brief Getter of the data attribute
    */
-  const Eigen::MatrixXd& get_data() const;
+  const Eigen::MatrixXd& data() const;
 
   /**
    * @brief Setter of the data attribute
@@ -140,17 +140,31 @@ public:
   void initialize();
 
   /**
-   * @brief Return the transpose of the jacobian matrix
-   * @return the Jacobian transposed
+    * @brief Return the transpose of the jacobian matrix
+    * @return the Jacobian transposed
+    */
+  Jacobian transpose() const;
+
+  /**
+   * @brief Return the inverse of the Jacobian matrix
+   * If the matrix is not invertible, an error is thrown advising to use the
+   * pseudoinverse function instead
+   * @return the inverse of the Jacobian
    */
-  const Jacobian transpose();
+  Jacobian inverse() const;
+
+  /**
+   * @brief Return the pseudoinverse of the Jacobian matrix
+   * @return the pseudoinverse of the Jacobian
+   */
+  Jacobian pseudoinverse() const;
 
   /**
    * @brief Overload the * operator with an non specific matrix
    * @param matrix the vector to multiply with
-   * @return the vector multiply by the jacobian matrix
+   * @return the matrix multiply by the jacobian matrix
    */
-  const Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
+  Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
 
   /**
    * @brief Overload the * operator with a JointVelocities
@@ -159,28 +173,35 @@ public:
    * the name of the output CartesianTwist will be "robot"_end_effector and
    * the reference frame will be "robot"_base 
    */
-  const CartesianTwist operator*(const JointVelocities& dq) const;
+  CartesianTwist operator*(const JointVelocities& dq) const;
+
+  /**
+   * @brief Overload the * operator with a CartesianTwist.
+   * @param twist the cartesian velocity to multiply with
+   * @return this result into a JointVelocities
+   */
+  JointVelocities operator*(const CartesianTwist& twist) const;
+
+  /**
+   * @brief Overload the * operator with a CartesianWrench.
+   * @param wrench the cartesian wrench to multiply with
+   * @return this result into a JointTorques
+   */
+  JointTorques operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Solve the system X = inv(J)*M to obtain X which is more efficient than multiplying with the pseudo-inverse
    * @param matrix the matrix to solve the system with
    * @return result of X = J.solve(M) from Eigen decomposition
    */
-  const Eigen::MatrixXd solve(const Eigen::MatrixXd& matrix) const;
+  Eigen::MatrixXd solve(const Eigen::MatrixXd& matrix) const;
 
   /**
    * @brief Solve the system dX = J*dq to obtain dq which is more efficient than multiplying with the pseudo-inverse
    * @param dX the cartesian velocity to multiply with
    * @return this result into a JointVelocities
    */
-  const JointVelocities solve(const CartesianTwist& dX) const;
-
-  /**
-   * @brief Overload the * operator with a CartesianTwist. This is equivalent to using the solve function
-   * @param dX the cartesian velocity to multiply with
-   * @return this result into a JointVelocities
-   */
-  const JointVelocities operator*(const CartesianTwist& dX) const;
+  JointVelocities solve(const CartesianTwist& twist) const;
 
   /**
    * @brief Overload the () operator in a non const fashion to modify the value at given (row, col)
@@ -202,7 +223,7 @@ public:
    * @brief Return a copy of the JointPositions
    * @return the copy
    */
-  const Jacobian copy() const;
+  Jacobian copy() const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -215,50 +236,50 @@ public:
 
 inline Jacobian& Jacobian::operator=(const Jacobian& matrix) {
   State::operator=(matrix);
-  this->joint_names = matrix.joint_names;
-  this->nb_cols = matrix.nb_cols;
-  this->nb_rows = matrix.nb_rows;
-  this->data = matrix.data;
+  this->joint_names_ = matrix.joint_names_;
+  this->nb_cols_ = matrix.nb_cols_;
+  this->nb_rows_ = matrix.nb_rows_;
+  this->data_matrix_ = matrix.data_matrix_;
   return (*this);
 }
 
 inline unsigned int Jacobian::get_nb_rows() const {
-  return this->nb_rows;
+  return this->nb_rows_;
 }
 
 inline unsigned int Jacobian::get_nb_cols() const {
-  return this->nb_cols;
+  return this->nb_cols_;
 }
 
 inline void Jacobian::set_nb_rows(unsigned int nb_rows) {
-  this->nb_rows = nb_rows;
+  this->nb_rows_ = nb_rows;
 }
 
 inline void Jacobian::set_nb_cols(unsigned int nb_cols) {
-  this->nb_cols = nb_cols;
+  this->nb_cols_ = nb_cols;
 }
 
 inline const std::vector<std::string>& Jacobian::get_joint_names() const {
-  return this->joint_names;
+  return this->joint_names_;
 }
 
 inline void Jacobian::set_joint_names(unsigned int nb_joints) {
-  this->joint_names.resize(nb_joints);
-  this->nb_cols = nb_joints;
+  this->joint_names_.resize(nb_joints);
+  this->nb_cols_ = nb_joints;
   for (unsigned int i = 0; i < nb_joints; ++i) {
-    this->joint_names[i] = "joint" + std::to_string(i);
+    this->joint_names_[i] = "joint" + std::to_string(i);
   }
   this->initialize();
 }
 
 inline void Jacobian::set_joint_names(const std::vector<std::string>& joint_names) {
-  this->joint_names = joint_names;
-  this->nb_cols = joint_names.size();
+  this->joint_names_ = joint_names;
+  this->nb_cols_ = joint_names.size();
   this->initialize();
 }
 
-inline const Eigen::MatrixXd& Jacobian::get_data() const {
-  return this->data;
+inline const Eigen::MatrixXd& Jacobian::data() const {
+  return this->data_matrix_;
 }
 
 inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
@@ -266,7 +287,7 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
     throw IncompatibleSizeException("Input matrix is of incorrect size");
   }
   this->set_filled();
-  this->data = data;
+  this->data_matrix_ = data;
 }
 
 inline bool Jacobian::is_compatible(const State& state) const {
@@ -276,7 +297,7 @@ inline bool Jacobian::is_compatible(const State& state) const {
         && (this->get_nb_cols() == static_cast<const JointState&>(state).get_size());
     if (compatible) {
       for (unsigned int i = 0; i < this->get_nb_cols(); ++i) {
-        compatible = (compatible && this->joint_names[i] == static_cast<const JointState&>(state).get_names()[i]);
+        compatible = (compatible && this->joint_names_[i] == static_cast<const JointState&>(state).get_names()[i]);
       }
     }
   }
@@ -294,7 +315,7 @@ inline double& Jacobian::operator()(unsigned int row, unsigned int col) {
   if (col > this->get_nb_cols()) {
     throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
   }
-  return this->data(row, col);
+  return this->data_matrix_(row, col);
 }
 
 inline const double& Jacobian::operator()(unsigned int row, unsigned int col) const {
@@ -304,6 +325,6 @@ inline const double& Jacobian::operator()(unsigned int row, unsigned int col) co
   if (col > this->get_nb_cols()) {
     throw std::out_of_range("Given column is out of range: number of columns = " + this->get_nb_cols());
   }
-  return this->data(row, col);
+  return this->data_matrix_(row, col);
 }
 }// namespace StateRepresentation

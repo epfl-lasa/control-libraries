@@ -95,7 +95,7 @@ JointVelocities Jacobian::operator*(const CartesianTwist& twist) const {
 
 JointTorques Jacobian::operator*(const CartesianWrench& wrench) const {
   Eigen::VectorXd joint_torques = (*this) * wrench.data();
-  JointVelocities result(this->get_name(), this->get_joint_names(), joint_torques);
+  JointTorques result(this->get_name(), this->get_joint_names(), joint_torques);
   return result;
 }
 

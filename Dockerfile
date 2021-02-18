@@ -97,4 +97,4 @@ RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
     -DBUILD_TESTING="${BUILD_TESTING}" .. \
   && make -j all
 
-RUN make test
+RUN CTEST_OUTPUT_ON_FAILURE=1 make test

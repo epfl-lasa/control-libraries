@@ -6,8 +6,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
-namespace controllers {
-namespace impedance {
+namespace controllers::impedance {
 /**
  * @enum ComputationalSpaceType
  * @brief Selector of the space in which the controller should be computed
@@ -29,9 +28,12 @@ enum class ComputationalSpaceType {
  */
 class Dissipative : public Impedance<StateRepresentation::CartesianState> {
 private:
-  ComputationalSpaceType computational_space_;                                          ///< the space in which to compute the command vector
-  Eigen::Matrix<double, 6, 6> basis_;                                                   ///< basis matrix used to compute the damping matrix
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::VectorXd>> damping_eigenvalues_;///< coefficient of eigenvalues used in the damping matrix computation
+  ComputationalSpaceType
+      computational_space_;///< the space in which to compute the command vector
+  Eigen::Matrix<double, 6, 6>
+      basis_;///< basis matrix used to compute the damping matrix
+  std::shared_ptr<StateRepresentation::Parameter<Eigen::VectorXd>>
+      damping_eigenvalues_;///< coefficient of eigenvalues used in the damping matrix computation
 
 public:
   /**
@@ -45,7 +47,8 @@ public:
    * @param main_eigenvector the main eigenvector used to compute the basis.
    * Other eigenvectora are orthogonal and selected randomly
    */
-  Eigen::MatrixXd compute_orthonormal_basis(const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector) const;
+  Eigen::MatrixXd compute_orthonormal_basis(const Eigen::MatrixXd& basis,
+                                            const Eigen::VectorXd& main_eigenvector) const;
 
   /**
    * @brief Compute the damping matrix as the orthonormal basis
@@ -131,5 +134,4 @@ inline std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Dissi
   param_list.push_back(this->damping_eigenvalues_);
   return param_list;
 }
-}// namespace impedance
 }// namespace controllers

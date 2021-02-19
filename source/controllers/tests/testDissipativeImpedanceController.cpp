@@ -1,4 +1,6 @@
 #include "controllers/impedance/Dissipative.hpp"
+#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
 #include <numeric>
 #include <gtest/gtest.h>
 
@@ -117,6 +119,26 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingTwist) {
       EXPECT_NEAR(damping(i, j), identity6(i, j), tolerance_);
     }
   }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeCommandWithColinearVelocity) {
+  set_controller_space(ComputationalSpaceType::LINEAR);
+  // set different damping
+  double e1 = 10;
+  controller_.set_damping_eigenvalue(e1, 0);
+  // set a desired and feeadback velocity
+  CartesianTwist desired_twist("test", Eigen::Vector3d(1, 0, 0));
+  CartesianTwist feedback_twist("test", Eigen::Vector3d(1, 1, 0));
+  // first compute the command with a 0 feedback
+  CartesianWrench command = controller_.compute_command(desired_twist, CartesianTwist::Zero("test"));
+  EXPECT_NEAR(command.get_force()(0), 10, tolerance_);
+  EXPECT_NEAR(command.get_force()(1), 0, tolerance_);
+  EXPECT_NEAR(command.get_force()(2), 0, tolerance_);
+  // then compute it with respect to the feedback
+  command = controller_.compute_command(desired_twist, feedback_twist);
+  EXPECT_NEAR(command.get_force()(0), 0, tolerance_);
+  EXPECT_NEAR(command.get_force()(1), -1, tolerance_);
+  EXPECT_NEAR(command.get_force()(2), 0, tolerance_);
 }
 
 int main(int argc, char** argv) {

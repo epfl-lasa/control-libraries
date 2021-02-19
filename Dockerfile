@@ -67,8 +67,6 @@ RUN cmake /usr/src/gtest \
 
 FROM development-dependencies as remote-development
 
-COPY ./source/robot_model/tests/panda_arm.urdf /tmp/control_lib/robot_model/tests/panda_arm.urdf
-
 RUN ( \
     echo 'LogLevel DEBUG2'; \
     echo 'PermitRootLogin yes'; \

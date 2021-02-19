@@ -11,7 +11,7 @@ class RobotModelTest : public testing::Test {
 protected:
   void SetUp() override {
     robot_name = "franka";
-    urdf = "/tmp/control_lib/robot_model/tests/panda_arm.urdf";
+    urdf = std::string(TEST_FIXTURES) + "/panda_arm.urdf";
     franka = Model(robot_name, urdf);
     joint_state = StateRepresentation::JointState(robot_name, 7);
   }

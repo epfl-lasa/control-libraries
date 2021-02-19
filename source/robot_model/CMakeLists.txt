@@ -47,5 +47,7 @@ if (BUILD_TESTING)
     ${GTEST_LIBRARIES}
     pthread
   )
+  target_compile_definitions(runTestRobotModel PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
+
   add_test(NAME runTestRobotModel COMMAND runTestRobotModel)
 endif ()

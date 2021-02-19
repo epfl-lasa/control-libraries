@@ -53,6 +53,11 @@ Model& Model::operator=(const Model& model) {
 }
 
 bool Model::init_qp_solver() {
+  // clear the solver
+  this->solver_.data()->clearHessianMatrix();
+  this->solver_.data()->clearLinearConstraintsMatrix();
+  this->solver_.clearSolver();
+
   unsigned int nb_joints = this->get_nb_joints();
   // initialize the matrices
   this->hessian_ = Eigen::SparseMatrix<double>(nb_joints + 1, nb_joints + 1);

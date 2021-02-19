@@ -11,7 +11,7 @@ class RobotModelTest : public testing::Test {
 protected:
   void SetUp() override {
     robot_name = "franka";
-    urdf = "/tmp/panda_arm.urdf";
+    urdf = "/tmp/control_lib/robot_model/tests/panda_arm.urdf";
     franka = Model(robot_name, urdf);
     joint_state = StateRepresentation::JointState(robot_name, 7);
   }
@@ -24,15 +24,30 @@ protected:
   StateRepresentation::JointState joint_state;
 };
 
-// test setters and getters
-TEST_F(RobotModelTest, TestName) {
+TEST_F(RobotModelTest, TestInitEmptyModel) {
+  bool except_thrown = false;
+  try {
+    empty.init_model();
+  } catch (const std::invalid_argument& e) {
+    except_thrown = true;
+  }
+  EXPECT_TRUE(except_thrown);
+}
+
+TEST_F(RobotModelTest, TestSetName) {
   empty.set_robot_name(robot_name);
   EXPECT_EQ(empty.get_robot_name(), robot_name);
 }
 
-TEST_F(RobotModelTest, TestUrdfPath) {
+TEST_F(RobotModelTest, TestSetUrdfPath) {
   empty.set_urdf_path(urdf);
   EXPECT_EQ(empty.get_urdf_path(), urdf);
+}
+
+TEST_F(RobotModelTest, TestInitModel) {
+  empty.set_robot_name(robot_name);
+  empty.set_urdf_path(urdf);
+  EXPECT_NO_THROW(empty.init_model());
 }
 
 TEST_F(RobotModelTest, TestConstructor) {

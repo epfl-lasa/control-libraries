@@ -8,6 +8,7 @@ include_directories(
 
 set(CORE_SOURCES
   src/impedance/Impedance.cpp
+  src/impedance/Dissipative.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
@@ -38,4 +39,13 @@ if (BUILD_TESTING)
     pthread
   )
   add_test(NAME runTestImpedanceController COMMAND runTestImpedanceController)
-endif ()
+
+  add_executable(runTestDissipativeImpedanceController tests/testDissipativeImpedanceController.cpp)
+  target_link_libraries(runTestDissipativeImpedanceController
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME runTestDissipativeImpedanceController COMMAND runTestDissipativeImpedanceController)
+endif()

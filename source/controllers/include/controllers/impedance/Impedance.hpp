@@ -13,7 +13,7 @@ namespace impedance {
  * @tparam S the space of the controller either CartesianState or JointState
  */
 template <class S>
-class Impedance : Controller<S, S> {
+class Impedance : public Controller<S, S> {
 private:
   std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>> stiffness_;///< stiffness matrix of the controller associated to position
   std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>> damping_;  ///< damping matrix of the controller associated to velocity
@@ -35,7 +35,7 @@ public:
    * @param feedback_state the real state of the system as read from feedback loop
    * @return the output command at the input state
    */
-  virtual S compute_command(const S& desired_state, const S& feedback_state) const;
+  virtual S compute_command(const S& desired_state, const S& feedback_state);
 
   /**
    * @brief Getter of the stiffness matrix

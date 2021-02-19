@@ -17,7 +17,7 @@ template Impedance<StateRepresentation::JointState>::Impedance(const Eigen::Matr
 
 template <>
 StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianState>::compute_command(const StateRepresentation::CartesianState& desired_state,
-                                                                                                    const StateRepresentation::CartesianState& feedback_state) const {
+                                                                                                    const StateRepresentation::CartesianState& feedback_state) {
   StateRepresentation::CartesianState state_error = desired_state - feedback_state;
   // compute the wrench using the forlmula W = K * e_pos + D * e_vel + I * acc_desired
   StateRepresentation::CartesianWrench command(feedback_state.get_name(), feedback_state.get_reference_frame());
@@ -35,7 +35,7 @@ StateRepresentation::CartesianState Impedance<StateRepresentation::CartesianStat
 
 template <>
 StateRepresentation::JointState Impedance<StateRepresentation::JointState>::compute_command(const StateRepresentation::JointState& desired_state,
-                                                                                            const StateRepresentation::JointState& feedback_state) const {
+                                                                                            const StateRepresentation::JointState& feedback_state) {
   StateRepresentation::JointState state_error = desired_state - feedback_state;
   // compute the wrench using the forlmula W = K * e_pos + D * e_vel + I * acc_desired
   StateRepresentation::JointTorques command(feedback_state.get_name(), feedback_state.get_names());

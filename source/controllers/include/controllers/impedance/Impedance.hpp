@@ -79,7 +79,7 @@ public:
   const Eigen::MatrixXd& get_stiffness() const;
 
   /**
-   * @brief Getter of the dmaping matrix
+   * @brief Getter of the damping matrix
    * @return the damping matrix
    */
   const Eigen::MatrixXd& get_damping() const;

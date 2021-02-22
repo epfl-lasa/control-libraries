@@ -186,10 +186,10 @@ public:
   CartesianTwist copy() const;
 
   /**
-   * @brief Return the value of the 6D twist as Eigen array
-   * @retrun the Eigen array representing the twist
+   * @brief Returns the twist data as an Eigen vector
+   * @return the twist data vector
    */
-  Eigen::Array<double, 6, 1> array() const;
+  Eigen::VectorXd data() const;
 
   /**
    * @brief Overload the ostream operator for printing

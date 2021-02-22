@@ -214,13 +214,13 @@ StateRepresentation::JointVelocities Model::inverse_kinematic(const StateReprese
     // extract only the position for intermediate points
     delta_r.segment<3>(3 * i) = state.get_linear_velocity();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
-        this->compute_jacobian(joint_state, state.get_name()).get_data().block(0, 0, 3, nb_joints);
+        this->compute_jacobian(joint_state, state.get_name()).data().block(0, 0, 3, nb_joints);
   }
   // extract the orientation for the end-effector
   CartesianState state = cartesian_states.back();
   delta_r.segment<3>(3 * (cartesian_states.size() - 1)) = state.get_linear_velocity();
   delta_r.tail(3) = state.get_angular_velocity();
-  jacobian.bottomRows(6) = this->compute_jacobian(joint_state, state.get_name()).get_data();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_state, state.get_name()).data();
   // compute the Jacobian
   Eigen::MatrixXd hessian_matrix = jacobian.transpose() * jacobian;
 

@@ -172,10 +172,10 @@ public:
   JointPositions copy() const;
 
   /**
-   * @brief Return the value of the positions as Eigen array
-   * @retrun the Eigen array representing the positions
+   * @brief Returns the positions data as an Eigen vector
+   * @return the positions data vector
    */
-  Eigen::ArrayXd array() const;
+  Eigen::VectorXd data() const;
 
   /**
    * @brief Overload the ostream operator for printing

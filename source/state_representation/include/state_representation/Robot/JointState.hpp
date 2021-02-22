@@ -264,6 +264,19 @@ public:
   JointState copy() const;
 
   /**
+   * @brief Returns the data as the concatenation of
+   * all the state variables in a single vector
+   * @return the concatenated data vector
+   */
+  virtual Eigen::VectorXd data() const;
+
+  /**
+   * @brief Returns the data vector as an Eigen Array
+   * @return the concatenated data array
+   */
+  Eigen::ArrayXd array() const;
+
+  /**
    * @brief Overload the += operator
    * @param state JointState to add
    * @return the current JointState added the JointState given in argument
@@ -408,7 +421,7 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
   if (new_value.size() != this->get_size()) {
     throw IncompatibleSizeException(
         "Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
-            + std::to_string(new_value.size()));
+        + std::to_string(new_value.size()));
   }
   this->set_filled();
   state_variable = new_value;

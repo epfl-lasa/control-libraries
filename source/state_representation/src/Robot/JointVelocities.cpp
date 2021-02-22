@@ -104,8 +104,8 @@ JointVelocities JointVelocities::copy() const {
   return result;
 }
 
-Eigen::ArrayXd JointVelocities::array() const {
-  return this->get_velocities().array();
+Eigen::VectorXd JointVelocities::data() const {
+  return this->get_velocities();
 }
 
 void JointVelocities::clamp(double max_absolute_value, double noise_ratio) {

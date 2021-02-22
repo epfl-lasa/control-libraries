@@ -89,8 +89,8 @@ JointTorques JointTorques::copy() const {
   return result;
 }
 
-Eigen::ArrayXd JointTorques::array() const {
-  return this->get_torques().array();
+Eigen::VectorXd JointTorques::data() const {
+  return this->get_torques();
 }
 
 void JointTorques::clamp(double max_absolute_value, double noise_ratio) {

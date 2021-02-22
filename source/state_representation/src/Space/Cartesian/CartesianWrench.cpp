@@ -98,6 +98,10 @@ CartesianWrench CartesianWrench::copy() const {
   return result;
 }
 
+Eigen::VectorXd CartesianWrench::data() const {
+  return this->get_wrench();
+}
+
 Eigen::Array<double, 6, 1> CartesianWrench::array() const {
   return this->get_wrench().array();
 }

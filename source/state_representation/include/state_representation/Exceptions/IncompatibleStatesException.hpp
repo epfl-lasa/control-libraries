@@ -1,17 +1,11 @@
 #pragma once
 
-#include <iostream>
 #include <exception>
+#include <iostream>
 
-namespace StateRepresentation
-{
-	namespace Exceptions
-	{
-		class IncompatibleStatesException: public std::logic_error
-		{
-		public:
-			explicit IncompatibleStatesException(const std::string& msg) : logic_error(msg)
-			{};
-		};
-	}
-}
+namespace StateRepresentation::Exceptions {
+class IncompatibleStatesException : public std::logic_error {
+public:
+  explicit IncompatibleStatesException(const std::string& msg) : logic_error(msg) {};
+};
+}// namespace StateRepresentation::Exceptions

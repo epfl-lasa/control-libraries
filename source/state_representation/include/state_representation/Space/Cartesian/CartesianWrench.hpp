@@ -164,6 +164,12 @@ public:
   CartesianWrench copy() const;
 
   /**
+   * @brief Returns the wrench data as an Eigen vector
+   * @return the wrench data vector
+   */
+  Eigen::VectorXd data() const;
+
+  /**
    * @brief Return the value of the 6D wrench as Eigen array
    * @retrun the Eigen array representing the wrench
    */

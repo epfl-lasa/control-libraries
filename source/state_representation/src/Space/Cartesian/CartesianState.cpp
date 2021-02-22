@@ -63,6 +63,14 @@ CartesianState CartesianState::copy() const {
   return result;
 }
 
+Eigen::VectorXd CartesianState::data() const {
+  return this->get_state_variable(CartesianStateVariable::ALL);
+}
+
+Eigen::ArrayXd CartesianState::array() const {
+  return this->data().array();
+}
+
 CartesianState& CartesianState::operator*=(const CartesianState& state) {
   // sanity check
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");

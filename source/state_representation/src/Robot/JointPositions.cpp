@@ -104,8 +104,8 @@ JointPositions JointPositions::copy() const {
   return result;
 }
 
-Eigen::ArrayXd JointPositions::array() const {
-  return this->get_positions().array();
+Eigen::VectorXd JointPositions::data() const {
+  return this->get_positions();
 }
 
 std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {

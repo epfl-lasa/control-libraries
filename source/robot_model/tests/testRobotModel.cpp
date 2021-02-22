@@ -1,5 +1,6 @@
 #include "robot_model/Model.hpp"
 
+#include <stdexcept>
 #include <gtest/gtest.h>
 
 #include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
@@ -25,13 +26,7 @@ protected:
 };
 
 TEST_F(RobotModelTest, TestInitEmptyModel) {
-  bool except_thrown = false;
-  try {
-    empty.init_model();
-  } catch (const std::invalid_argument& e) {
-    except_thrown = true;
-  }
-  EXPECT_TRUE(except_thrown);
+  EXPECT_THROW(empty.init_model(), std::invalid_argument);
 }
 
 TEST_F(RobotModelTest, TestSetName) {
@@ -96,6 +91,10 @@ TEST_F(RobotModelTest, TestJacobianNbRows) {
 TEST_F(RobotModelTest, TestJacobianNbCols) {
   StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, 2);
   EXPECT_EQ(jac.get_nb_cols(), joint_state.get_size());
+}
+
+TEST_F(RobotModelTest, TestType) {
+  
 }
 
 int main(int argc, char** argv) {

@@ -30,11 +30,26 @@ public:
    */
   explicit Impedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd& damping, const Eigen::MatrixXd& inertia);
 
+  /**
+   * @brief Copy constructor
+   * @param other the controller to copy
+   */
   Impedance(const Impedance<S>& other);
 
+  /**
+   * @brief Swap the values of the two controllers
+   * @tparam U space of the controller
+   * @param controller1 controller to be swapped with 2
+   * @param controller2 controller to be swapped with 1
+   */
   template<class U>
   friend void swap(Impedance<U>& controller1, Impedance<U>& controller2);
 
+  /**
+   * @param Assignment operator
+   * @param other the controller to copy
+   * @return reference to the controller with values from other
+   */
   Impedance<S>& operator=(const Impedance<S>& other);
   /**
    * @brief Compute the force (task space) or torque (joint space) command based on the input state 

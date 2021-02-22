@@ -55,11 +55,26 @@ public:
    */
   explicit Dissipative(unsigned int nb_dimensions);
 
+  /**
+   * @brief Copy constructor
+   * @param other the controller to copy
+   */
   Dissipative(const Dissipative<S>& other);
 
+  /**
+   * @brief Swap the values of the two controllers
+   * @tparam U space of the controller
+   * @param controller1 controller to be swapped with 2
+   * @param controller2 controller to be swapped with 1
+   */
   template<class U>
   friend void swap(Dissipative<U>& controller1, Dissipative<U>& controller2);
 
+  /**
+   * @param Assignment operator
+   * @param other the controller to copy
+   * @return reference to the controller with values from other
+   */
   Dissipative<S>& operator=(const Dissipative<S>& other);
 
   /**

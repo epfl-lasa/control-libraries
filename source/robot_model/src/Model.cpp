@@ -53,6 +53,11 @@ Model& Model::operator=(const Model& model) {
 }
 
 bool Model::init_qp_solver() {
+  // clear the solver
+  this->solver_.data()->clearHessianMatrix();
+  this->solver_.data()->clearLinearConstraintsMatrix();
+  this->solver_.clearSolver();
+
   unsigned int nb_joints = this->get_nb_joints();
   // initialize the matrices
   this->hessian_ = Eigen::SparseMatrix<double>(nb_joints + 1, nb_joints + 1);
@@ -145,14 +150,17 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
   return this->compute_jacobian(joint_state, frame_id);
 }
 
-std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                        const std::vector<unsigned int>& frame_ids) {
+std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
+    const StateRepresentation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_nb_joints()) {
     throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_nb_joints()));
   }
   std::vector<StateRepresentation::CartesianPose> pose_vector;
   pinocchio::forwardKinematics(this->robot_model_, this->robot_data_, joint_state.get_positions());
   for (unsigned int id : frame_ids) {
+    if (id >= static_cast<unsigned int>(this->robot_model_.nframes)) {
+      throw (Exceptions::FrameNotFoundException(std::to_string(id)));
+    }
     pinocchio::updateFramePlacement(this->robot_model_, this->robot_data_, id);
     pinocchio::SE3 pose = this->robot_data_.oMf[id];
     Eigen::Vector3d translation = pose.translation();
@@ -164,8 +172,8 @@ std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const St
   return pose_vector;
 }
 
-std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                        const std::vector<std::string>& frame_names) {
+std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
+    const StateRepresentation::JointState& joint_state, const std::vector<std::string>& frame_names) {
   std::vector<unsigned int> frame_ids(frame_names.size());
   for (unsigned int i = 0; i < frame_names.size(); ++i) {
     std::string name = frame_names[i];

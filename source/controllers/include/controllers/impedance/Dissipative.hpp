@@ -155,8 +155,8 @@ public:
 
 template<class S>
 Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int nb_dimensions) :
-    Impedance<S>(Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
-                 Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
+    Impedance<S>(Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
+                 Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
                  Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions)),
     computational_space_(computational_space),
     nb_dimensions_(nb_dimensions),

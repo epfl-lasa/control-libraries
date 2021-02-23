@@ -70,7 +70,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestOrthonormalize) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingLinear) {
   Eigen::MatrixXd damping;
   Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while(eigenvector.norm() < 1e-4);
   Eigen::Matrix3d block;
   // case LINEAR
   set_controller_space(ComputationalSpaceType::LINEAR);
@@ -95,7 +98,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingLinear) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingAngular) {
   Eigen::MatrixXd damping;
   Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while(eigenvector.norm() < 1e-4);
   Eigen::Matrix3d block;
   set_controller_space(ComputationalSpaceType::ANGULAR);
   task_controller_.compute_damping(eigenvector);
@@ -119,7 +125,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingAngular) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingDecoupledTwist) {
   Eigen::MatrixXd damping;
   Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while(eigenvector.norm() < 1e-4);
   // case DECOUPLED_TWIST
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
   task_controller_.compute_damping(eigenvector);
@@ -135,7 +144,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingDecoupledTwist) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingFull) {
   Eigen::MatrixXd damping;
   Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while(eigenvector.norm() < 1e-4);
   // case TWIST
   set_controller_space(ComputationalSpaceType::FULL);
   task_controller_.compute_damping(eigenvector);

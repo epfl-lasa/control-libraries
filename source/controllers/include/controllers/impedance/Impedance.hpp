@@ -51,6 +51,7 @@ public:
    * @return reference to the controller with values from other
    */
   Impedance<S>& operator=(const Impedance<S>& other);
+
   /**
    * @brief Compute the force (task space) or torque (joint space) command based on the input state 
    * of the system as the error between the desired state and the real state.

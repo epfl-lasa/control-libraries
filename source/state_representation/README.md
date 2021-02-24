@@ -28,45 +28,33 @@ By default, quaternions are normalized on setting, therefore:
 s2.set_orientation(Eigen::Quaterniond(1, 1, 0, 0));
 ```
 
-The state variables are also grouped in `pose` (`position` and `orientation`), `twist` (`linear_velocity` and `angular_velocity`), `accelerations` (`linear_acceleration` and `angular_acceleration`) and `wrench` (`force` and `torque`).
+The state variables are also grouped in `pose` (`position` and `orientation`), `twist` (`linear_velocity` and
+`angular_velocity`), `accelerations` (`linear_acceleration` and `angular_acceleration`) and `wrench` (`force` and `torque`).
 Getter and setters are also implemented to do those bulk operations.
 
 ```cpp
-s2.set_twist(Eigen::VectorXd::Random(6))
+s2.set_twist(Eigen::VectorXd::Random(6));
 ```
 
 Note that for `pose`, it will be a `7d` vector (3 for `position` and 4 for `orientation`):
 
 ```cpp
-s2.set_pose(Eigen::VectorXd::Random(7))
+s2.set_pose(Eigen::VectorXd::Random(7));
 ```
 
 ### States operations
 
-Basic operations between frames such as addition, substractions, scaling are defined, and applied on all the state variables.
+Basic operations between frames such as addition, subtractions, scaling are defined, and applied on all the state variables.
 
 ```cpp
 StateRepresentation::CartesianState s1("a"); // reference frame is world by default
 StateRepresentation::CartesianState s2("b");
-
-// for this operation to be valid both s1 and s2
-// should be expressed in the same reference frame
-StateRepresentation::CartesianState ssum = s1 + s2;
-```
-
-```cpp
-StateRepresentation::CartesianState s1("a"); // reference frame is world by default
-StateRepresentation::CartesianState s2("b");
-
-// for this operation to be valid both s1 and s2
-// should be expressed in the same reference frame
-StateRepresentation::CartesianState sdiff = s1 - s2;
-```
-
-```cpp
-StateRepresentation::CartesianState s1("a"); // reference frame is world by default
 double lamda = 0.5
 
+// for those operation to be valid both s1 and s2
+// should be expressed in the same reference frame
+StateRepresentation::CartesianState ssum = s1 + s2;
+StateRepresentation::CartesianState sdiff = s1 - s2;
 StateRepresentation::CartesianState sscaled = lambda * s1;
 ```
 
@@ -83,11 +71,16 @@ StateRepresentation::CartesianState aSb("b", "a");
 StateRepresentation::CartesianState wSb = wSa + aSb; 
 ```
 
-Not only does that apply a changing of reference frame but it also express all the state variables of `aSb` in the desired reference frame (here `world`), taking into account the dynamic of the frame `wSa`, i.e. if `wSa` has a `twist` or `acceleration` it will affect the state variables of `wSb`.
+Not only does that apply a changing of reference frame but it also express all the state variables of `aSb`
+in the desired reference frame (here `world`), taking into account the dynamic of the frame `wSa`,
+i.e. if `wSa` has a `twist` or `acceleration` it will affect the state variables of `wSb`.
 
 ### Specific state variables
 
-Full `CartesianState` can be difficult to handle as they contain all the dynamics of the frame when, sometime, you just want to express a `pose` without `twist`, `accelerations` or `wrench`. Therefore, extra classes representing only those specific state variables have been defined, `CartesianPose`, `CartesianTwist` and `CartesianWrench`.
+Full `CartesianState` can be difficult to handle as they contain all the dynamics of the frame when, sometime,
+you just want to express a `pose` without `twist`, `accelerations` or `wrench`.
+Therefore, extra classes representing only those specific state variables have been defined, `CartesianPose`,
+`CartesianTwist` and `CartesianWrench`.
 Effectively, they all extend from `CartesianState` hence they can be intertwined as will.
 
 ```cpp
@@ -108,16 +101,17 @@ StateRepresentation::CartesianTwist wVa = wPa + aVb;
 
 ### Conversion between state variables
 
-The distinction with those specific extra variables allows to define some extra conversion operations. Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns a `CartesianTwist`:
+The distinction with those specific extra variables allows to define some extra conversion operations.
+Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns a `CartesianTwist`:
 
 ```cpp
 using namespace std::chrono_literals;
 auto period = 1h;
 
-CartesianPose wPa("a", Eigen::Vector3d(1,0,0))
+StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1,0,0));
 
 // the result is a twist of 1m/h in x direction converted in m/s
-CartesianTwist wVa = wPa / period;
+StateRepresentation::CartesianTwist wVa = wPa / period;
 ```
 
 Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose` is simply multiplying it by a time period:
@@ -126,9 +120,9 @@ Conversely, multiplying a `CartesianTwist` (by default expressed internally in `
 using namespace std::chrono_literals;
 auto period = 10s;
 
-CartesianTwist wVa("a", Eigen::Vector3d(1,0,0))
+StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1,0,0));
 
-CartesianPose wPa = period * wVa // note that wVa * period is also implemented
+StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 
 ## Joint state

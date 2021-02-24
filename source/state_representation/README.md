@@ -1,8 +1,8 @@
 # state_representation
 
 This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, or **geometrical shapes** that can be used as obstacles.
-Those are set of helpers functions to handle common concepts in robotics such as transformations between frames and the link between then and the robot state.
-This description covers most of the functionalities starting from the spatial tranformations.
+Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and the link between them and the robot state.
+This description covers most of the functionalities starting from the spatial transformations.
 
 ## Cartesian state
 
@@ -21,7 +21,7 @@ s1.set_position(Eigen::Vector3d(0, 1, 0)); // 1 meter in y direction
 s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
 ```
 
-By default, quaternions are nomarlized on setting, therefore:
+By default, quaternions are normalized on setting, therefore:
 
 ```cpp
 s2.set_orientation(Eigen::Quaterniond(1, 1, 0, 0)); // will be rendered as Eigen::Quaterniond(0.70710678, 0.70710678, 0. , 0.)
@@ -75,8 +75,8 @@ One of the most useful operation is the multiplication between two states that c
 StateRepresentation::CartesianState wSa("a"); // reference frame is world by default
 StateRepresentation::CartesianState aSb("b", "a");
 
-// for this operation to be valid s2 should be expressed a (s1)
-StateRepresentation::CartesianState wSb = wSa + aSb; // the result is b espressed in world
+// for this operation to be valid aSb should be expressed in a (wSa)
+StateRepresentation::CartesianState wSb = wSa + aSb; // the result is b expressed in world
 ```
 
 Not only does that apply a changing of reference frame but it also express all the state variables of `aSb` in the desired reference frame (here `world`), taking into account the dynamic of the frame `wSa`, i.e. if `wSa` has a `twist` or `acceleration` it will affect the state variables of `wSb`.

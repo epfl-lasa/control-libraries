@@ -147,4 +147,82 @@ StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period
 
 ## Joint state
 
-TODO
+`JointState` follow the same logic as `CartesianState` but for representing robot states.
+Similarly to the `CartesianState` the class `JointState`, `JointPositions`, `JointVelocities` and `JointTorques` have been developed.
+The API follows exactly the same logic with the similar operations being define.
+
+A `JointState` is defined by the name of the corresponding robot and the name of each joints.
+
+```cpp
+// create a state for myrobot with 3 joints
+StateRepresentation::JointState js("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+```
+
+Note that if the joints of the robot are named `{"joint0", "joint1", ..., "jointN"}` as above,
+you can also use the constructor that takes the number of joints as input which will name them accordingly:
+
+```cpp
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+StateRepresentation::JointState js("myrobot", 3);
+```
+
+All the getters and setters for the `positions`, `velocities`, `accelerations` and `torques` are defined:
+
+```cpp
+js.set_positions(Eigen::Vector3d(.5, 1., 0.));
+```
+
+Note that when using those setters, the size of the input vector should correspond to the number of joints of the state:
+
+```cpp
+js.set_positions(Eigen::Vector4d::Random()); // will throw an IncompatibleSizeException
+```
+
+Also, `positions` values are expressed in radiant and automatically modulated between `-pi` and `pi`.
+
+### States operations
+
+Basic operations such as addition, subtraction and scaling have been implemented:
+
+```cpp
+StateRepresentation::JointState js1("myrobot", 3);
+StateRepresentation::JointState js2("myrobot", 3);
+double lamda = 0.5
+
+// for those operation to be valid both js1 and js2
+// should correspond to the same robot and have the
+// same number of joints
+StateRepresentation::JointState jssum = js1 + js2;
+StateRepresentation::JointState jsdiff = js1 - js2;
+StateRepresentation::JointState jsscaled = lambda * js1;
+```
+
+Multiplication, that does not have a physical meaning, is not implemented.
+
+### Conversion between state variables
+
+Similarly to `CartesianState`, the conversion between `JointPositions` and `JointVelocities`
+happens through operations with `std::chrono_literals`.
+
+```cpp
+using namespace std::chrono_literals;
+auto period = 1h;
+
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+// and provide the position values
+StateRepresentation::JointPositions jp("myrobot", Eigen::Vector3d(1, 0, 0));
+
+// result are velocities of 1 rad/h for joint0 expressed in rad/s
+StateRepresentation::JointVelocities jv = jp / period;
+```
+
+```cpp
+using namespace std::chrono_literals;
+auto period = 10s;
+
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+// and provide the velocities values
+StateRepresentation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
+
+StateRepresentation::JointPositions jp = period * jv; // note that jv * period is also implemented
+```

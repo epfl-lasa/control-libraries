@@ -89,8 +89,8 @@ stiffness matrix (e.g. `Dissipative`), it should extend from it and reuse the ma
 ```cpp
 using namespace StateRepresentation;
 
-class MyController:
-public Controller<CartesianState> {
+class MyImpedanceController:
+public Impedance<CartesianState> {
 private:
   ...
 public:
@@ -116,7 +116,7 @@ CartesianState MyImpedanceController::compute_command(const CartesianState& desi
                                                       const CartesianState& feedback_state,
                                                       const Jacobian& jacobian) {
   // simply call the compute_command from impedance
-  return this->Impedance<CartesianState>(desire_state, feedback_state, jacobian);
+  return this->Impedance<CartesianState>(desired_state, feedback_state, jacobian);
 }
 ```
 

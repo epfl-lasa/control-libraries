@@ -56,7 +56,7 @@ JointTorques joint_command = robot_jacobian.transpose() * task_command;
 ## Creating a new controller
 
 To create a new controller, you need to create a class that derives from the `Controller` base class or any derived
-controller such as `Impedance`. This class can be template to accept different input spaces (e.g. `CartesianState`
+controller such as `Impedance`. This class can be templated to accept different input spaces (e.g. `CartesianState`
 or `JointState`) or specify the desired input space.
 
 ```cpp

@@ -70,7 +70,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestOrthonormalize) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingLinear) {
   Eigen::MatrixXd damping;
   Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while (eigenvector.norm() < 1e-4);
   Eigen::Matrix3d block;
   // case LINEAR
   set_controller_space(ComputationalSpaceType::LINEAR);
@@ -95,7 +98,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingLinear) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingAngular) {
   Eigen::MatrixXd damping;
   Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while (eigenvector.norm() < 1e-4);
   Eigen::Matrix3d block;
   set_controller_space(ComputationalSpaceType::ANGULAR);
   task_controller_.compute_damping(eigenvector);
@@ -119,7 +125,10 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingAngular) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingDecoupledTwist) {
   Eigen::MatrixXd damping;
   Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while (eigenvector.norm() < 1e-4);
   // case DECOUPLED_TWIST
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
   task_controller_.compute_damping(eigenvector);
@@ -135,8 +144,11 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingDecoupledTwist) {
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingFull) {
   Eigen::MatrixXd damping;
   Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Random(6);
-  // case TWIST
+  Eigen::VectorXd eigenvector;
+  do {
+    eigenvector = Eigen::VectorXd::Random(6);
+  } while (eigenvector.norm() < 1e-4);
+  // case FULL
   set_controller_space(ComputationalSpaceType::FULL);
   task_controller_.compute_damping(eigenvector);
   damping = task_controller_.get_damping();
@@ -145,6 +157,104 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingFull) {
     for (int j = 0; j < 6; ++j) {
       EXPECT_NEAR(damping(i, j), identity6(i, j), tolerance_);
     }
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullVelocityLinear) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::LINEAR);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // damping matrix not changed
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullVelocityAngular) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::ANGULAR);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // damping matrix not changed
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullDecoupledTwist) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // damping matrix not changed
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingPartialNonNullLinearDecoupledTwist) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd(6);
+  eigenvector << 1, 1, 1, 0, 0, 0;
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // the whole damping matrix is updated linear uses the eigenvector while angular part uses the random values
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_TRUE(damping.col(i).norm() != computed_damping.col(i).norm());
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingPartialNonNullAngularDecoupledTwist) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd(6);
+  eigenvector << 0, 0, 0, 1, 1, 1;
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // the whole damping matrix is updated linear uses the eigenvector while angular part uses the random values
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_TRUE(damping.col(i).norm() != computed_damping.col(i).norm());
+  }
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullFull) {
+  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
+  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
+  // case LINEAR
+  set_controller_space(ComputationalSpaceType::FULL);
+  // voluntarily set a random damping
+  task_controller_.set_damping(damping);
+  // then compute it
+  task_controller_.compute_damping(eigenvector);
+  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
+  // damping matrix not changed
+  for (int i = 0; i < 6; ++i) {
+    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
   }
 }
 

@@ -155,8 +155,8 @@ public:
 
 template<class S>
 Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int nb_dimensions) :
-    Impedance<S>(Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
-                 Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
+    Impedance<S>(Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
+                 Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
                  Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions)),
     computational_space_(computational_space),
     nb_dimensions_(nb_dimensions),
@@ -243,33 +243,61 @@ Eigen::MatrixXd Dissipative<S>::compute_orthonormal_basis(const Eigen::MatrixXd&
 
 template<class S>
 void Dissipative<S>::compute_damping(const Eigen::VectorXd& desired_velocity) {
+  double tolerance = 1e-4;
   Eigen::MatrixXd updated_basis = Eigen::MatrixXd::Zero(this->nb_dimensions_, this->nb_dimensions_);
   switch (this->computational_space_) {
-    case ComputationalSpaceType::LINEAR:
+    case ComputationalSpaceType::LINEAR: {
+      Eigen::Vector3d linear_velocity = desired_velocity.segment(0, 3);
+      // only update the damping if the commanded linear velocity is non null
+      if (linear_velocity.norm() < tolerance) {
+        return;
+      }
       //return only the linear block
       updated_basis.block<3, 3>(0, 0) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0),
-                                          desired_velocity.segment(0, 3));
+          this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0), linear_velocity);
       break;
-    case ComputationalSpaceType::ANGULAR:
+    }
+    case ComputationalSpaceType::ANGULAR: {
+      Eigen::Vector3d angular_velocity = desired_velocity.segment(3, 3);
+      // only update the damping if the commanded angular velocity is non null
+      if (angular_velocity.norm() < tolerance) {
+        return;
+      }
       // return only the angular block
       updated_basis.block<3, 3>(3, 3) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3),
-                                          desired_velocity.segment(3, 3));
+          this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3), angular_velocity);
       break;
-    case ComputationalSpaceType::DECOUPLED_TWIST:
+    }
+    case ComputationalSpaceType::DECOUPLED_TWIST: {
       // compute per block
-      updated_basis.block<3, 3>(0, 0) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0),
-                                          desired_velocity.segment(0, 3));
-      updated_basis.block<3, 3>(3, 3) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3),
-                                          desired_velocity.segment(3, 3));
+      bool updated = false;
+      Eigen::Vector3d linear_velocity = desired_velocity.segment(0, 3);
+      Eigen::Vector3d angular_velocity = desired_velocity.segment(3, 3);
+      if (linear_velocity.norm() > tolerance) {
+        updated_basis.block<3, 3>(0, 0) =
+            this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0), linear_velocity);
+        updated = true;
+      }
+      if (angular_velocity.norm() > tolerance) {
+        updated_basis.block<3, 3>(3, 3) =
+            this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3), angular_velocity);
+        updated = true;
+      }
+      // at least the linear or angular parts have been updated
+      if (!updated) {
+        return;
+      }
       break;
-    case ComputationalSpaceType::FULL:
+    }
+    case ComputationalSpaceType::FULL: {
+      // only update the damping if the commanded velocity is non null
+      if (desired_velocity.norm() < tolerance) {
+        return;
+      }
       // return the full damping matrix
       updated_basis = this->compute_orthonormal_basis(this->basis_, desired_velocity);
       break;
+    }
   }
   this->basis_ = updated_basis;
   this->set_damping(this->basis_ * this->get_diagonal_eigenvalues() * this->basis_.transpose());

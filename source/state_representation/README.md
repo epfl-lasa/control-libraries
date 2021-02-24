@@ -1,14 +1,18 @@
 # state_representation
 
-This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, or **geometrical shapes** that can be used as obstacles.
-Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and the link between them and the robot state.
+This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, 
+or **geometrical shapes** that can be used as obstacles.
+Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and 
+the link between them and the robot state.
 This description covers most of the functionalities starting from the spatial transformations.
 
 ## Cartesian state
 
-A `CartesianState` represents the transformations between frames in space as well as their dynamic properties (velocities, accelerations and forces).
+A `CartesianState` represents the transformations between frames in space as well as their dynamic properties
+(velocities, accelerations and forces).
 It comprises the name of the frame it is associated to and is expressed in a reference frame (by default `world`).
-A state contains all the variables that define its dynamic properties, i.e `position`, `orientation`, `linear_velocity`, `angular_velocity`, `linear_acceleration`, `angular_acceleration`, `force` and `torque`.
+A state contains all the variables that define its dynamic properties, i.e `position`, `orientation`, `linear_velocity`,
+`angular_velocity`, `linear_acceleration`, `angular_acceleration`, `force` and `torque`.
 All those state variables use `Eigen::Vector3d` internally, except for the orientation that is `Eigen::Quaterniond` based.
 All getters and setters are implemented.
 
@@ -66,7 +70,7 @@ If both frames have the same orientation then the `+` operator is commutative.
 ```cpp
 StateRepresentation::CartesianState s1("a");
 StateRepresentation::CartesianState s2("b");
-s1.set_orientation(Eigen::Quaterniond(0,1,0,0));
+s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
 s2.set_orientation(Eigen::Quaterniond::UnitRandom());
 
 StateRepresentation::CartesianState ssum1 = s1 + s2;
@@ -125,12 +129,13 @@ Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns
 using namespace std::chrono_literals;
 auto period = 1h;
 
-StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1,0,0));
+StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1, 0, 0));
 // the result is a twist of 1m/h in x direction converted in m/s
 StateRepresentation::CartesianTwist wVa = wPa / period;
 ```
 
-Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose` is simply multiplying it by a time period:
+Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose`
+is simply multiplying it by a time period:
 
 ```cpp
 using namespace std::chrono_literals;

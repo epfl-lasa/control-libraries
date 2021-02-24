@@ -12,7 +12,6 @@ A state contains all the variables that define its dynamic properties, i.e `posi
 All those state variables use `Eigen::Vector3d` internally, except for the orientation that is `Eigen::Quaterniond` based.
 All getters and setters are implemented.
 
-
 ```cpp
 StateRepresentation::CartesianState s1("a"); // frame a expressed in world (default)
 StateRepresentation::CartesianState s2("b", "a"); // frame b expressed in a
@@ -127,7 +126,6 @@ using namespace std::chrono_literals;
 auto period = 1h;
 
 StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1,0,0));
-
 // the result is a twist of 1m/h in x direction converted in m/s
 StateRepresentation::CartesianTwist wVa = wPa / period;
 ```
@@ -139,7 +137,6 @@ using namespace std::chrono_literals;
 auto period = 10s;
 
 StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1,0,0));
-
 StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 

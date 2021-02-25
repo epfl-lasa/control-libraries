@@ -94,7 +94,7 @@ JointVelocities JointPositions::operator/(const std::chrono::nanoseconds& dt) co
   // convert the period to a double with the second as reference
   double period = dt.count();
   period /= 1e9;
-  // multiply the positions by this period value and assign it as velocity
+  // divide the positions by this period value and assign it as velocities
   velocities.set_velocities(this->get_positions() / period);
   return velocities;
 }

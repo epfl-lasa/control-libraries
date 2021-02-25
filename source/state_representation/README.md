@@ -68,7 +68,7 @@ StateRepresentation::CartesianState aSb("b", "a");
 
 // for this operation to be valid aSb should be expressed in a (wSa)
 // the result is b expressed in world
-StateRepresentation::CartesianState wSb = wSa + aSb; 
+StateRepresentation::CartesianState wSb = wSa * aSb;
 ```
 
 Not only does that apply a changing of reference frame but it also express all the state variables of `aSb`

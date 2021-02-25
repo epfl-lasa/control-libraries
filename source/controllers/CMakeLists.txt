@@ -8,6 +8,7 @@ include_directories(
 
 set(CORE_SOURCES
   src/impedance/Impedance.cpp
+  src/impedance/VelocityImpedance.cpp
   src/impedance/Dissipative.cpp
 )
 

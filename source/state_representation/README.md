@@ -42,9 +42,10 @@ Note that for `pose`, it will be a `7d` vector (3 for `position` and 4 for `orie
 s2.set_pose(Eigen::VectorXd::Random(7));
 ```
 
-### States operations
+### State operations
 
 Basic operations between frames such as addition, subtractions, scaling are defined, and applied on all the state variables.
+It is very important to note that those operations are only valid if both states are expressed in the same reference frame.
 
 ```cpp
 StateRepresentation::CartesianState s1("a"); // reference frame is world by default
@@ -56,6 +57,23 @@ double lamda = 0.5
 StateRepresentation::CartesianState ssum = s1 + s2;
 StateRepresentation::CartesianState sdiff = s1 - s2;
 StateRepresentation::CartesianState sscaled = lambda * s1;
+```
+
+Also, despite common mathematical interpretation, the `+` operator is **not commutative** due to the orientation part of the state.
+The addition `s1 + s2` corresponds to the transformation from the `world` frame to frame `a` followed by the transformation
+from `world` frame to frame `b`.
+If both frames have the same orientation then the `+` operator is commutative.
+
+```cpp
+StateRepresentation::CartesianState s1("a");
+StateRepresentation::CartesianState s2("b");
+s1.set_orientation(Eigen::Quaterniond(0,1,0,0));
+s2.set_orientation(Eigen::Quaterniond::UnitRandom());
+
+StateRepresentation::CartesianState ssum1 = s1 + s2;
+StateRepresentation::CartesianState ssum2 = s2 + s1;
+
+ssum1 != ssum2;
 ```
 
 ### Changing of reference frame

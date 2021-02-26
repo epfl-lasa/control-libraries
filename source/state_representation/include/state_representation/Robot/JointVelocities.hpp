@@ -71,7 +71,7 @@ public:
    * @brief Constructor for the zero JointVelocities
    * @param robot_name the name of the associated robot
    * @param nb_joints the number of joints for initialization
-   * @return JointState with zero values in all attributes
+   * @return JointVelocities with zero velocities values
    */
   static JointVelocities Zero(const std::string& robot_name, unsigned int nb_joints);
 
@@ -79,7 +79,7 @@ public:
    * @brief Constructor for the zero JointVelocities
    * @param robot_name the name of the associated robot
    * @param joint_names list of joint names
-   * @return JointState with zero values in all attributes
+   * @return JointVelocities with zero velocities values
    */
   static JointVelocities Zero(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
@@ -87,7 +87,7 @@ public:
    * @brief Constructor for the random JointVelocities
    * @param robot_name the name of the associated robot
    * @param nb_joints the number of joints for initialization
-   * @return JointState with random values in all attributes
+   * @return JointVelocities with random velocities values
    */
   static JointVelocities Random(const std::string& robot_name, unsigned int nb_joints);
 
@@ -95,7 +95,7 @@ public:
    * @brief Constructor for the random JointVelocities
    * @param robot_name the name of the associated robot
    * @param joint_names list of joint names
-   * @return JointState with random values in all attributes
+   * @return JointVelocities with random velocities values
    */
   static JointVelocities Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
 

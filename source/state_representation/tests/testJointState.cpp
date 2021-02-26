@@ -106,7 +106,7 @@ TEST(RandomPositionsInitialization, PositiveNos) {
   StateRepresentation::JointPositions random2 =
       StateRepresentation::JointPositions::Random("test",
                                               std::vector<std::string>{"j0", "j1"});
-  // all data should be random (non 0)
+  // only position should be random
   EXPECT_TRUE(random2.get_positions().norm() > 0);
   EXPECT_TRUE(random2.get_velocities().norm() == 0);
   EXPECT_TRUE(random2.get_accelerations().norm() == 0);
@@ -115,7 +115,7 @@ TEST(RandomPositionsInitialization, PositiveNos) {
 
 TEST(RandomVelocitiesInitialization, PositiveNos) {
   StateRepresentation::JointVelocities random = StateRepresentation::JointVelocities::Random("test", 3);
-  // only position should be random
+  // only velocities should be random
   EXPECT_TRUE(random.get_positions().norm() == 0);
   EXPECT_TRUE(random.get_velocities().norm() > 0);
   EXPECT_TRUE(random.get_accelerations().norm() == 0);
@@ -124,7 +124,7 @@ TEST(RandomVelocitiesInitialization, PositiveNos) {
   StateRepresentation::JointVelocities random2 =
       StateRepresentation::JointVelocities::Random("test",
                                                   std::vector<std::string>{"j0", "j1"});
-  // all data should be random (non 0)
+  // only velocities should be random
   EXPECT_TRUE(random2.get_positions().norm() == 0);
   EXPECT_TRUE(random2.get_velocities().norm() > 0);
   EXPECT_TRUE(random2.get_accelerations().norm() == 0);
@@ -133,7 +133,7 @@ TEST(RandomVelocitiesInitialization, PositiveNos) {
 
 TEST(RandomTorquesInitialization, PositiveNos) {
   StateRepresentation::JointTorques random = StateRepresentation::JointTorques::Random("test", 3);
-  // only position should be random
+  // only torques should be random
   EXPECT_TRUE(random.get_positions().norm() == 0);
   EXPECT_TRUE(random.get_velocities().norm() == 0);
   EXPECT_TRUE(random.get_accelerations().norm() == 0);
@@ -142,7 +142,7 @@ TEST(RandomTorquesInitialization, PositiveNos) {
   StateRepresentation::JointTorques random2 =
       StateRepresentation::JointTorques::Random("test",
                                                    std::vector<std::string>{"j0", "j1"});
-  // all data should be random (non 0)
+  // only torques should be random
   EXPECT_TRUE(random2.get_positions().norm() == 0);
   EXPECT_TRUE(random2.get_velocities().norm() == 0);
   EXPECT_TRUE(random2.get_accelerations().norm() == 0);

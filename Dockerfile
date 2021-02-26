@@ -35,10 +35,11 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /tmp/osqp_build
 RUN git clone --recursive https://github.com/oxfordcontrol/osqp \
     && cd osqp && mkdir build && cd build && cmake -G "Unix Makefiles" .. && cmake --build . --target install
-  # install osqp eigen wrapper
-WORKDIR /tmp/osqp_build
+
 RUN git clone https://github.com/robotology/osqp-eigen.git \
     && cd osqp-eigen && mkdir build && cd build && cmake .. && make -j && make install
+
+RUN rm -rf /tmp/*
 
 
 FROM project-dependencies as development-dependencies
@@ -62,7 +63,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /tmp/gtest_build
 RUN cmake /usr/src/gtest \
   && make \
-  && cp lib/* /usr/local/lib
+  && cp lib/* /usr/local/lib || cp *.a /usr/local/lib
+
+RUN rm -rf /tmp/*
 
 
 FROM development-dependencies as remote-development

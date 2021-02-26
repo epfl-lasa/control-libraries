@@ -68,6 +68,38 @@ public:
   JointPositions(const JointVelocities& positions);
 
   /**
+   * @brief Constructor for the zero JointPositions
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints for initialization
+   * @return JointState with zero values in all attributes
+   */
+  static JointPositions Zero(const std::string& robot_name, unsigned int nb_joints);
+
+  /**
+   * @brief Constructor for the zero JointPositions
+   * @param robot_name the name of the associated robot
+   * @param joint_names list of joint names
+   * @return JointState with zero values in all attributes
+   */
+  static JointPositions Zero(const std::string& robot_name, const std::vector<std::string>& joint_names);
+
+  /**
+   * @brief Constructor for the random JointPositions
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints for initialization
+   * @return JointState with random values in all attributes
+   */
+  static JointPositions Random(const std::string& robot_name, unsigned int nb_joints);
+
+  /**
+   * @brief Constructor for the random JointPositions
+   * @param robot_name the name of the associated robot
+   * @param joint_names list of joint names
+   * @return JointState with random values in all attributes
+   */
+  static JointPositions Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
+
+  /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param positions the state with value to assign
    * @return reference to the current state with new values

@@ -5,63 +5,6 @@
 #include <gtest/gtest.h>
 #include <unistd.h>
 
-TEST(AddTwoState, PositiveNos) {
-  Eigen::VectorXd pos1 = Eigen::VectorXd::Random(4);
-  Eigen::VectorXd pos2 = Eigen::VectorXd::Random(4);
-
-  StateRepresentation::JointState j1("test_robot", 4);
-  j1.set_positions(pos1);
-
-  StateRepresentation::JointState j2("test_robot", 4);
-  j2.set_positions(pos2);
-
-  StateRepresentation::JointState jsum = j1 + j2;
-  for (unsigned int i = 0; i < j1.get_size(); ++i) {
-    EXPECT_TRUE(jsum.get_positions()(i) == j1.get_positions()(i) + j2.get_positions()(i));
-  }
-}
-
-TEST(SubstractTwoState, PositiveNos) {
-  Eigen::VectorXd pos1 = Eigen::VectorXd::Random(4);
-  Eigen::VectorXd pos2 = Eigen::VectorXd::Random(4);
-
-  StateRepresentation::JointState j1("test_robot", 4);
-  j1.set_positions(pos1);
-
-  StateRepresentation::JointState j2("test_robot", 4);
-  j2.set_positions(pos2);
-
-  StateRepresentation::JointState jdiff = j1 - j2;
-  for (unsigned int i = 0; i < j1.get_size(); ++i) {
-    EXPECT_TRUE(jdiff.get_positions()(i) == j1.get_positions()(i) - j2.get_positions()(i));
-  }
-}
-
-TEST(MultiplyByScalar, PositiveNos) {
-  Eigen::VectorXd pos1 = Eigen::VectorXd::Random(4);
-
-  StateRepresentation::JointState j1("test_robot", 4);
-  j1.set_positions(pos1);
-
-  StateRepresentation::JointState jsum = 0.5 * j1;
-  for (unsigned int i = 0; i < j1.get_size(); ++i) {
-    EXPECT_TRUE(jsum.get_positions()(i) == 0.5 * j1.get_positions()(i));
-  }
-}
-
-TEST(MultiplyByArray, PositiveNos) {
-  Eigen::VectorXd pos1 = Eigen::VectorXd::Random(4);
-  Eigen::MatrixXd gain = Eigen::VectorXd::Random(16).asDiagonal();
-
-  StateRepresentation::JointState j1("test_robot", 4);
-  j1.set_positions(pos1);
-
-  StateRepresentation::JointState jsum = gain * j1;
-  for (unsigned int i = 0; i < j1.get_size(); ++i) {
-    EXPECT_TRUE(jsum.get_positions()(i) == gain(i, i) * j1.get_positions()(i));
-  }
-}
-
 TEST(ZeroInitialization, PositiveNos) {
   StateRepresentation::JointState zero = StateRepresentation::JointState::Zero("test", 3);
   // the joint state should not be considered empty (as it is properly initialized)
@@ -105,7 +48,7 @@ TEST(RandomPositionsInitialization, PositiveNos) {
   // same for the second initializer
   StateRepresentation::JointPositions random2 =
       StateRepresentation::JointPositions::Random("test",
-                                              std::vector<std::string>{"j0", "j1"});
+                                                  std::vector<std::string>{"j0", "j1"});
   // only position should be random
   EXPECT_TRUE(random2.get_positions().norm() > 0);
   EXPECT_TRUE(random2.get_velocities().norm() == 0);
@@ -123,7 +66,7 @@ TEST(RandomVelocitiesInitialization, PositiveNos) {
   // same for the second initializer
   StateRepresentation::JointVelocities random2 =
       StateRepresentation::JointVelocities::Random("test",
-                                                  std::vector<std::string>{"j0", "j1"});
+                                                   std::vector<std::string>{"j0", "j1"});
   // only velocities should be random
   EXPECT_TRUE(random2.get_positions().norm() == 0);
   EXPECT_TRUE(random2.get_velocities().norm() > 0);
@@ -141,12 +84,46 @@ TEST(RandomTorquesInitialization, PositiveNos) {
   // same for the second initializer
   StateRepresentation::JointTorques random2 =
       StateRepresentation::JointTorques::Random("test",
-                                                   std::vector<std::string>{"j0", "j1"});
+                                                std::vector<std::string>{"j0", "j1"});
   // only torques should be random
   EXPECT_TRUE(random2.get_positions().norm() == 0);
   EXPECT_TRUE(random2.get_velocities().norm() == 0);
   EXPECT_TRUE(random2.get_accelerations().norm() == 0);
   EXPECT_TRUE(random2.get_torques().norm() > 0);
+}
+
+TEST(GetData, PositiveNos) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("test_robot", 4);
+  Eigen::VectorXd concatenated_state(js.get_size() * 4);
+  concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
+  EXPECT_NEAR(concatenated_state.norm(), js.data().norm(), 1e-4);
+}
+
+TEST(AddTwoState, PositiveNos) {
+  StateRepresentation::JointState j1 = StateRepresentation::JointState::Random("test_robot", 4);
+  StateRepresentation::JointState j2 = StateRepresentation::JointState::Random("test_robot", 4);
+  StateRepresentation::JointState jsum = j1 + j2;
+  EXPECT_NEAR(jsum.data().norm(), (j1.data() + j2.data()).norm(), 1e-4);
+}
+
+TEST(SubstractTwoState, PositiveNos) {
+  StateRepresentation::JointState j1 = StateRepresentation::JointState::Random("test_robot", 4);
+  StateRepresentation::JointState j2 = StateRepresentation::JointState::Random("test_robot", 4);
+  StateRepresentation::JointState jdiff = j1 - j2;
+  EXPECT_NEAR(jdiff.data().norm(), (j1.data() - j2.data()).norm(), 1e-4);
+}
+
+TEST(MultiplyByScalar, PositiveNos) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("test_robot", 4);
+  StateRepresentation::JointState jscaled = 0.5 * js;
+  EXPECT_NEAR(jscaled.data().norm(), (0.5 * js.data()).norm(), 1e-4);
+}
+
+TEST(MultiplyByArray, PositiveNos) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("test_robot", 4);
+  Eigen::MatrixXd gain = Eigen::VectorXd::Random(16).asDiagonal();
+  StateRepresentation::JointState jscaled = gain * js;
+  EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
 }
 
 int main(int argc, char** argv) {

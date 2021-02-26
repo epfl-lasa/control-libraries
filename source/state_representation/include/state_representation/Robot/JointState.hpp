@@ -483,8 +483,6 @@ inline const Eigen::VectorXd& JointState::get_positions() const {
 
 inline void JointState::set_positions(const Eigen::VectorXd& positions) {
   this->set_state_variable(this->positions, positions);
-  // positions are angles between -pi and pi
-  this->positions = positions.unaryExpr([](double x) { return atan2(sin(x), cos(x)); });
 }
 
 inline void JointState::set_positions(const std::vector<double>& positions) {

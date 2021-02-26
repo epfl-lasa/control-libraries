@@ -1,0 +1,23 @@
+name: Build and Test
+
+# Run workflow on pushes to main and develop branches, on any pull request, or by manual dispatch
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+  workflow_dispatch:
+
+# Define the build test job
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    name: Build the source code and run all unit tests
+    steps:
+      # First check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Load the repository build-test action
+      - name: Build and Test
+        uses: ./.github/actions/build-test

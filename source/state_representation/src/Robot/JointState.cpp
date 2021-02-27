@@ -45,6 +45,36 @@ void JointState::set_zero() {
   this->torques.setZero();
 }
 
+JointState JointState::Zero(const std::string& robot_name, unsigned int nb_joints) {
+  JointState zero = JointState(robot_name, nb_joints);
+  // as opposed to the constructor specify this state to be filled
+  zero.set_filled();
+  return zero;
+}
+
+JointState JointState::Zero(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  JointState zero = JointState(robot_name, joint_names);
+  // as opposed to the constructor specify this state to be filled
+  zero.set_filled();
+  return zero;
+}
+
+JointState JointState::Random(const std::string& robot_name, unsigned int nb_joints) {
+  JointState random = JointState(robot_name, nb_joints);
+  // set all the state variables to random
+  random.set_state_variable(Eigen::VectorXd::Random(random.get_size() * 4),
+                            JointStateVariable::ALL);
+  return random;
+}
+
+JointState JointState::Random(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  JointState random = JointState(robot_name, joint_names);
+  // set all the state variables to random
+  random.set_state_variable(Eigen::VectorXd::Random(random.get_size() * 4),
+                            JointStateVariable::ALL);
+  return random;
+}
+
 JointState& JointState::operator+=(const JointState& state) {
   if (!this->is_compatible(state)) {
     throw IncompatibleStatesException(

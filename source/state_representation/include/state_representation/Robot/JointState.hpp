@@ -102,15 +102,15 @@ public:
 
   /**
    * @brief Constructor with name and number of joints provided
-   * @brief name the name of the state
-   * @brief nb_joints the number of joints for initialization
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints for initialization
    */
   explicit JointState(const std::string& robot_name, unsigned int nb_joints = 0);
 
   /**
    * @brief Constructor with name and list of joint names provided
-   * @brief name the name of the state
-   * @brief joint_names list of joint names
+   * @param robot_name the name of the associated robot
+   * @param joint_names list of joint names
    */
   explicit JointState(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
@@ -118,6 +118,38 @@ public:
    * @brief Copy constructor of a JointState
    */
   JointState(const JointState& state);
+
+  /**
+   * @brief Constructor for the zero JointState
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints for initialization
+   * @return JointState with zero values in all attributes
+   */
+  static JointState Zero(const std::string& robot_name, unsigned int nb_joints);
+
+  /**
+   * @brief Constructor for the zero JointState
+   * @param robot_name the name of the associated robot
+   * @param joint_names list of joint names
+   * @return JointState with zero values in all attributes
+   */
+  static JointState Zero(const std::string& robot_name, const std::vector<std::string>& joint_names);
+
+  /**
+   * @brief Constructor for the random JointState
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints for initialization
+   * @return JointState with random values in all attributes
+   */
+  static JointState Random(const std::string& robot_name, unsigned int nb_joints);
+
+  /**
+   * @brief Constructor for the random JointState
+   * @param robot_name the name of the associated robot
+   * @param joint_names list of joint names
+   * @return JointState with random values in all attributes
+   */
+  static JointState Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator

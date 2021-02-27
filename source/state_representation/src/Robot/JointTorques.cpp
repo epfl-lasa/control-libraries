@@ -26,6 +26,22 @@ JointTorques::JointTorques(const JointTorques& torques) : JointState(torques) {}
 
 JointTorques::JointTorques(const JointState& state) : JointState(state) {}
 
+JointTorques JointTorques::Zero(const std::string& robot_name, unsigned int nb_joints) {
+  return JointState::Zero(robot_name, nb_joints);
+}
+
+JointTorques JointTorques::Zero(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  return JointState::Zero(robot_name, joint_names);
+}
+
+JointTorques JointTorques::Random(const std::string& robot_name, unsigned int nb_joints) {
+  return JointTorques(robot_name, Eigen::VectorXd::Random(nb_joints));
+}
+
+JointTorques JointTorques::Random(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  return JointTorques(robot_name, joint_names, Eigen::VectorXd::Random(joint_names.size()));
+}
+
 JointTorques& JointTorques::operator+=(const JointTorques& torques) {
   this->JointState::operator+=(torques);
   return (*this);

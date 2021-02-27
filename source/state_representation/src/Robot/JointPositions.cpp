@@ -29,6 +29,22 @@ JointPositions::JointPositions(const JointState& state) : JointState(state) {}
 
 JointPositions::JointPositions(const JointVelocities& velocities) : JointState(std::chrono::seconds(1) * velocities) {}
 
+JointPositions JointPositions::Zero(const std::string& robot_name, unsigned int nb_joints) {
+  return JointState::Zero(robot_name, nb_joints);
+}
+
+JointPositions JointPositions::Zero(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  return JointState::Zero(robot_name, joint_names);
+}
+
+JointPositions JointPositions::Random(const std::string& robot_name, unsigned int nb_joints) {
+  return JointPositions(robot_name, Eigen::VectorXd::Random(nb_joints));
+}
+
+JointPositions JointPositions::Random(const std::string& robot_name, const std::vector<std::string>& joint_names) {
+  return JointPositions(robot_name, joint_names, Eigen::VectorXd::Random(joint_names.size()));
+}
+
 JointPositions& JointPositions::operator+=(const JointPositions& positions) {
   this->JointState::operator+=(positions);
   return (*this);

@@ -44,7 +44,9 @@ enum class CartesianStateVariable {
  * the distance on. Default ALL for full distance across all dimensions
  * @return the distance beteen the two states
  */
-double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL);
+double dist(const CartesianState& s1,
+            const CartesianState& s2,
+            const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL);
 
 /**
  * @class CartesianState
@@ -81,7 +83,9 @@ private:
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
    */
-  void set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const Eigen::Matrix<double, 6, 1>& new_value);
+  void set_state_variable(Eigen::Vector3d& linear_state_variable,
+                          Eigen::Vector3d& angular_state_variable,
+                          const Eigen::Matrix<double, 6, 1>& new_value);
 
   /**
    * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
@@ -89,7 +93,9 @@ private:
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
    */
-  void set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value);
+  void set_state_variable(Eigen::Vector3d& linear_state_variable,
+                          Eigen::Vector3d& angular_state_variable,
+                          const std::vector<double>& new_value);
 
 protected:
   /**
@@ -125,27 +131,30 @@ public:
   CartesianState(const CartesianState& state);
 
   /**
- * @brief Constructor for the identity CartesianState (identity pose and 0 for the rest)
- * @param name the name of the state
- * @param reference the name of the reference frame
- * @return CartesianState identity state
- */
+   * @brief Constructor for the identity CartesianState (identity pose and 0 for the rest)
+   * @param name the name of the state
+   * @param reference the name of the reference frame
+   * @return CartesianState identity state
+   */
   static CartesianState Identity(const std::string& name, const std::string& reference = "world");
 
   /**
- * @brief Constructor for a random state
- * @param name the name of the state
- * @param reference the name of the reference frame
- * @return CartesianState random state
- */
+   * @brief Constructor for a random state
+   * @param name the name of the state
+   * @param reference the name of the reference frame
+   * @return CartesianState random state
+   */
   static CartesianState Random(const std::string& name, const std::string& reference = "world");
+
+  /**
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */
   CartesianState& operator=(const CartesianState& state);
 
   /**
-   * @brief Getter of the posistion attribute
+   * @brief Getter of the position attribute
    */
   const Eigen::Vector3d& get_position() const;
 
@@ -335,7 +344,9 @@ public:
    * @param noise_ratio if provided, this value will be used to apply a deadzone under which
    * the velocity will be set to 0
    */
-  void clamp_state_variable(double max_value, const CartesianStateVariable& state_variable_type, double noise_ratio = 0);
+  void clamp_state_variable(double max_value,
+                            const CartesianStateVariable& state_variable_type,
+                            double noise_ratio = 0);
 
   /**
    * @brief Return a copy of the CartesianState
@@ -425,7 +436,8 @@ public:
    * the distance on. Default ALL for full distance across all dimensions
    * @return dist the distance value as a double
    */
-  double dist(const CartesianState& state, const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
+  double dist(const CartesianState& state,
+              const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -483,7 +495,10 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
 }
 
 inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
-  return Eigen::Vector4d(this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(), this->get_orientation().z());
+  return Eigen::Vector4d(this->get_orientation().w(),
+                         this->get_orientation().x(),
+                         this->get_orientation().y(),
+                         this->get_orientation().z());
 }
 
 inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
@@ -596,12 +611,16 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, 
   this->set_state_variable(state_variable, Eigen::Vector3d::Map(new_value.data(), new_value.size()));
 }
 
-inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const Eigen::Matrix<double, 6, 1>& new_value) {
+inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable,
+                                               Eigen::Vector3d& angular_state_variable,
+                                               const Eigen::Matrix<double, 6, 1>& new_value) {
   this->set_state_variable(linear_state_variable, new_value.head(3));
   this->set_state_variable(angular_state_variable, new_value.tail(3));
 }
 
-inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable, const std::vector<double>& new_value) {
+inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable,
+                                               Eigen::Vector3d& angular_state_variable,
+                                               const std::vector<double>& new_value) {
   this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
   this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));
 }
@@ -628,7 +647,9 @@ inline void CartesianState::set_orientation(const Eigen::Vector4d& orientation) 
 }
 
 inline void CartesianState::set_orientation(const std::vector<double>& orientation) {
-  if (orientation.size() != 4) throw Exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
+  if (orientation.size() != 4) {
+    throw Exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
+  }
   this->set_orientation(Eigen::Vector4d::Map(orientation.data(), orientation.size()));
 }
 
@@ -643,7 +664,9 @@ inline void CartesianState::set_pose(const Eigen::Matrix<double, 7, 1>& pose) {
 }
 
 inline void CartesianState::set_pose(const std::vector<double>& pose) {
-  if (pose.size() != 7) throw Exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
+  if (pose.size() != 7) {
+    throw Exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
+  }
   this->set_position(std::vector<double>(pose.begin(), pose.begin() + 3));
   this->set_orientation(std::vector<double>(pose.begin() + 3, pose.end()));
 }
@@ -684,7 +707,8 @@ inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench
   this->set_state_variable(this->force, this->torque, wrench);
 }
 
-inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value, const CartesianStateVariable& state_variable_type) {
+inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value,
+                                               const CartesianStateVariable& state_variable_type) {
   switch (state_variable_type) {
     case CartesianStateVariable::POSITION:
       this->set_position(new_value);

@@ -434,7 +434,7 @@ public:
    * @brief Return the joint state as a std vector of floats
    * @return std::vector<float> the joint vector as a std vector
    */
-  virtual std::vector<double> to_std_vector() const;
+  std::vector<double> to_std_vector() const;
 
   /**
    * @brief Set the value from a std vector
@@ -601,5 +601,10 @@ inline void JointState::set_state_variable(const Eigen::VectorXd& new_value,
       this->set_all_state_variables(new_value);
       break;
   }
+}
+
+inline std::vector<double> JointState::to_std_vector() const {
+  Eigen::VectorXd data = this->data();
+  return std::vector<double>(data.data(),data.data() + data.size());
 }
 }// namespace StateRepresentation

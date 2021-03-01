@@ -99,6 +99,41 @@ TEST(GetData, PositiveNos) {
   EXPECT_NEAR(concatenated_state.norm(), js.data().norm(), 1e-4);
 }
 
+TEST(JointStateToStdVector, PositiveNos) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("test_robot", 4);
+  std::vector<double> vec_data = js.to_std_vector();
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(js.data()(i) == vec_data[i]);
+  }
+}
+
+TEST(JointPositionsToStdVector, PositiveNos) {
+  StateRepresentation::JointPositions jp = StateRepresentation::JointPositions::Random("test_robot", 4);
+  std::vector<double> vec_data = jp.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == jp.get_size());
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(jp.get_positions()(i) == vec_data[i]);
+  }
+}
+
+TEST(JointVelocitiesToStdVector, PositiveNos) {
+  StateRepresentation::JointVelocities jv = StateRepresentation::JointVelocities::Random("test_robot", 4);
+  std::vector<double> vec_data = jv.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == jv.get_size());
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(jv.get_velocities()(i) == vec_data[i]);
+  }
+}
+
+TEST(JointTorquesToStdVector, PositiveNos) {
+  StateRepresentation::JointTorques jt = StateRepresentation::JointTorques::Random("test_robot", 4);
+  std::vector<double> vec_data = jt.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == jt.get_size());
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(jt.get_torques()(i) == vec_data[i]);
+  }
+}
+
 TEST(AddTwoState, PositiveNos) {
   StateRepresentation::JointState j1 = StateRepresentation::JointState::Random("test_robot", 4);
   StateRepresentation::JointState j2 = StateRepresentation::JointState::Random("test_robot", 4);

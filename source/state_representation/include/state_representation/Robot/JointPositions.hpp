@@ -239,12 +239,6 @@ public:
   friend JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& positions);
 
   /**
-   * @brief Return the joint positions as a std vector of floats
-   * @return std::vector<float> the joint positions vector as a std vector
-   */
-  std::vector<double> to_std_vector() const;
-
-  /**
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */

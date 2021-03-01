@@ -68,6 +68,49 @@ TEST(RandomWrenchInitialization, PositiveNos) {
   EXPECT_TRUE(random.get_wrench().norm() > 0);
 }
 
+TEST(GetData, PositiveNos) {
+  CartesianState cs = CartesianState::Random("test");
+  Eigen::VectorXd concatenated_state(25);
+  concatenated_state << cs.get_pose(), cs.get_twist(), cs.get_accelerations(), cs.get_wrench();
+  EXPECT_NEAR(concatenated_state.norm(), cs.data().norm(), 1e-4);
+}
+
+TEST(CartesianStateToStdVector, PositiveNos) {
+  CartesianState cs = CartesianState::Random("test");
+  std::vector<double> vec_data = cs.to_std_vector();
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(cs.data()(i) == vec_data[i]);
+  }
+}
+
+TEST(CartesianPoseToStdVector, PositiveNos) {
+  CartesianPose cp = CartesianPose::Random("test");
+  std::vector<double> vec_data = cp.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == 7);
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(cp.data()(i) == vec_data[i]);
+  }
+}
+
+TEST(CartesianTwistToStdVector, PositiveNos) {
+  CartesianTwist ct = CartesianTwist::Random("test");
+  std::vector<double> vec_data = ct.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == 6);
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(ct.data()(i) == vec_data[i]);
+  }
+}
+
+TEST(CartesianWrenchToStdVector, PositiveNos) {
+  CartesianWrench cw = CartesianWrench::Random("test");
+  std::vector<double> vec_data = cw.to_std_vector();
+  EXPECT_TRUE(vec_data.size() == 6);
+  for (size_t i = 0; i < vec_data.size(); ++i) {
+    EXPECT_TRUE(cw.data()(i) == vec_data[i]);
+  }
+}
+
+
 TEST(NegateQuaternion, PositiveNos) {
   Eigen::Quaterniond q = Eigen::Quaterniond::UnitRandom();
   Eigen::Quaterniond q2 = Eigen::Quaterniond(-q.coeffs());

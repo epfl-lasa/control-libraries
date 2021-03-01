@@ -468,7 +468,7 @@ public:
    * @brief Return the state as a std vector of floats
    * @return std::vector<float> the state vector as a std vector
    */
-  virtual std::vector<double> to_std_vector() const;
+  std::vector<double> to_std_vector() const;
 
   /**
    * @brief Set the value from a std vector
@@ -765,5 +765,10 @@ inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value,
       this->set_wrench(new_value.segment(19, 6));
       break;
   }
+}
+
+inline std::vector<double> CartesianState::to_std_vector() const {
+  Eigen::VectorXd data = this->data();
+  return std::vector<double>(data.data(),data.data() + data.size());
 }
 }// namespace StateRepresentation

@@ -79,6 +79,15 @@ TEST_F(RobotModelTest, TestJacobianJointStateSize) {
   EXPECT_THROW(franka.compute_jacobian(dummy, 99), Exceptions::InvalidJointStateSizeException);
 }
 
+TEST_F(RobotModelTest, TestJacobianJointNames) {
+  StateRepresentation::JointState dummy = StateRepresentation::JointState(robot_name, 7);
+  StateRepresentation::Jacobian jac = franka.compute_jacobian(dummy);
+  for (int i = 0; i < 7; ++i) {
+    std::string jname = "panda_joint" + std::to_string(i + 1);
+    EXPECT_TRUE(jname.compare(jac.get_joint_names()[i]) == 0);
+  }
+}
+
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
   EXPECT_THROW(franka.compute_jacobian(joint_state, "panda_link99"), Exceptions::FrameNotFoundException);
 }
@@ -94,7 +103,7 @@ TEST_F(RobotModelTest, TestJacobianNbCols) {
 }
 
 TEST_F(RobotModelTest, TestType) {
-  
+
 }
 
 int main(int argc, char** argv) {

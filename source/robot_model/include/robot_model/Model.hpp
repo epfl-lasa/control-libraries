@@ -97,6 +97,12 @@ public:
   unsigned int get_nb_joints() const;
 
   /**
+   * Getter of the joint names from the model
+   * @return the joint names
+   */
+  std::vector<std::string> get_joint_names() const;
+
+  /**
    * @brief Initialize the pinocchio model from the URDF
    */
   void init_model();
@@ -208,7 +214,14 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
 
 inline unsigned int Model::get_nb_joints() const {
   // subtract 1 because of the 'universe' joint
-  return this->robot_model_.njoints - 1;
+  return this->robot_model_.nq;
+}
+
+inline std::vector<std::string> Model::get_joint_names() const {
+  // model contains a first joint called universe that needs to be discarded
+  std::vector<std::string> joint_names(this->robot_model_.names.begin() + 1,
+                                       this->robot_model_.names.end());
+  return joint_names;
 }
 
 inline void Model::init_model() {

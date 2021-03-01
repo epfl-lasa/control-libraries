@@ -129,11 +129,11 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
     throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_nb_joints()));
   }
   // compute the jacobian from the joint state
-  pinocchio::Data::Matrix6x J(6, this->robot_model_.nq);
+  pinocchio::Data::Matrix6x J(6, this->get_nb_joints());
   J.setZero();
   pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
                                   pinocchio::LOCAL_WORLD_ALIGNED, J);
-  return StateRepresentation::Jacobian(this->get_robot_name(), J);
+  return StateRepresentation::Jacobian(this->get_robot_name(), this->get_joint_names(), J);
 }
 
 StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation::JointState& joint_state,

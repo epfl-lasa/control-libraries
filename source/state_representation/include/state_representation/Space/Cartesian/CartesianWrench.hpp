@@ -52,7 +52,7 @@ public:
   /**
    * @brief Constructor for the zero wrench
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianWrench with zero values
    */
   static CartesianWrench Zero(const std::string& name, const std::string& reference = "world");
@@ -60,7 +60,7 @@ public:
   /**
    * @brief Constructor for a random wrench
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianWrench random wrench
    */
   static CartesianWrench Random(const std::string& name, const std::string& reference = "world");

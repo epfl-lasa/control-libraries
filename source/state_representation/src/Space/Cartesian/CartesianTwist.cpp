@@ -30,9 +30,7 @@ CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(sta
 CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianState(pose / std::chrono::seconds(1)) {}
 
 CartesianTwist CartesianTwist::Zero(const std::string& name, const std::string& reference) {
-  // separating in the two lines in needed to avoid compilation error due to ambiguous constructor call
-  Eigen::Matrix<double, 6, 1> zero = Eigen::Matrix<double, 6, 1>::Zero();
-  return CartesianTwist(name, zero, reference);
+  return CartesianState::Identity(name, reference);
 }
 
 CartesianTwist CartesianTwist::Random(const std::string& name, const std::string& reference) {

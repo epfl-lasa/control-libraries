@@ -125,7 +125,20 @@ public:
   CartesianState(const CartesianState& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+ * @brief Constructor for the identity CartesianState (identity pose and 0 for the rest)
+ * @param name the name of the state
+ * @param reference the name of the reference frame
+ * @return CartesianState identity state
+ */
+  static CartesianState Identity(const std::string& name, const std::string& reference = "world");
+
+  /**
+ * @brief Constructor for a random state
+ * @param name the name of the state
+ * @param reference the name of the reference frame
+ * @return CartesianState random state
+ */
+  static CartesianState Random(const std::string& name, const std::string& reference = "world");
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */

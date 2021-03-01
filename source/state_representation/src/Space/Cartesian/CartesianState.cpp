@@ -36,6 +36,21 @@ void CartesianState::set_zero() {
   this->torque.setZero();
 }
 
+CartesianState CartesianState::Identity(const std::string& name, const std::string& reference) {
+  CartesianState identity = CartesianState(name, reference);
+  // as opposed to the constructor specify this state to be filled
+  identity.set_filled();
+  return identity;
+}
+
+CartesianState CartesianState::Random(const std::string& name, const std::string& reference){
+  CartesianState random = CartesianState(name, reference);
+  // set all the state variables to random
+  random.set_state_variable(Eigen::VectorXd::Random(25),
+                            CartesianStateVariable::ALL);
+  return random;
+}
+
 CartesianState& CartesianState::operator*=(double lambda) {
   // sanity check
   if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");

@@ -50,8 +50,8 @@ TEST_F(RobotModelTest, TestConstructor) {
   EXPECT_NO_THROW(franka = tmp);
 }
 
-TEST_F(RobotModelTest, TestNbJoint) {
-  EXPECT_EQ(franka.get_nb_joints(), 7);
+TEST_F(RobotModelTest, TestNumberOfJoints) {
+  EXPECT_EQ(franka.get_number_of_joints(), 7);
 }
 
 TEST_F(RobotModelTest, TestForwardGeometryJointStateSize) {

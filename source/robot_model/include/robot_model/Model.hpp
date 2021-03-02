@@ -18,6 +18,7 @@ private:
   // @format:off
   std::shared_ptr<StateRepresentation::Parameter<std::string>> robot_name_;       ///< name of the robot
   std::shared_ptr<StateRepresentation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
+  std::vector<std::string> frame_names_;                                          ///< name of the frames
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
   OsqpEigen::Solver solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
@@ -94,13 +95,19 @@ public:
    * @brief Getter of the number of joints
    * @return the number of joints
    */
-  unsigned int get_nb_joints() const;
+  unsigned int get_number_of_joints() const;
 
   /**
-   * Getter of the joint names from the model
-   * @return the joint names
+   * Getter of the joint frames from the model
+   * @return the joint frames
    */
-  std::vector<std::string> get_joint_names() const;
+  std::vector<std::string> get_joint_frames() const;
+
+  /**
+   * Getter of the frames from the model
+   * @return the frame names
+   */
+  std::vector<std::string> get_frames() const;
 
   /**
    * @brief Initialize the pinocchio model from the URDF
@@ -212,21 +219,20 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
   this->urdf_path_->set_value(urdf_path);
 }
 
-inline unsigned int Model::get_nb_joints() const {
+inline unsigned int Model::get_number_of_joints() const {
   // subtract 1 because of the 'universe' joint
   return this->robot_model_.nq;
 }
 
-inline std::vector<std::string> Model::get_joint_names() const {
+inline std::vector<std::string> Model::get_joint_frames() const {
   // model contains a first joint called universe that needs to be discarded
-  std::vector<std::string> joint_names(this->robot_model_.names.begin() + 1,
+  std::vector<std::string> joint_frames(this->robot_model_.names.begin() + 1,
                                        this->robot_model_.names.end());
-  return joint_names;
+  return joint_frames;
 }
 
-inline void Model::init_model() {
-  pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
-  this->robot_data_ = pinocchio::Data(this->robot_model_);
+inline std::vector<std::string> Model::get_frames() const {
+  return this->frame_names_;
 }
 
 inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {

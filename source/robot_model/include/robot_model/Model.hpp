@@ -38,6 +38,24 @@ private:
    */
   bool init_qp_solver();
 
+  /**
+   * @brief Compute the jacobian from a given joint state at the frame in parameter
+   * @param joint_state containing the joint values of the robot
+   * @param joint_id id of the frame at which to compute the jacobian
+   * @return the jacobian matrix
+   */
+  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
+                                                 unsigned int frame_id);
+
+  /**
+   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
+   * @param joint_state the joint state of the robot
+   * @param frame_ids ids of the frames at which we want to extract the pose
+   * @return the poses of the desired poses
+   */
+  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                   const std::vector<unsigned int>& frame_ids);
+
 public:
   /**
    * @brief Empty constructor
@@ -56,7 +74,7 @@ public:
   Model(const Model& model);
 
   /**
-   * @brief Desctructor
+   * @brief Destructor
    */
   ~Model();
 
@@ -115,15 +133,6 @@ public:
   void init_model();
 
   /**
-   * @brief Compute the jacobian from a given joint state at the frame in parameter
-   * @param joint_state containing the joint values of the robot
-   * @param joint_id id of the frame at which to compute the jacobian
-   * @return the jacobian matrix
-   */
-  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
-                                                 unsigned int frame_id);
-
-  /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
    * @param joint_state containing the joint values of the robot
    * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
@@ -131,15 +140,6 @@ public:
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                  const std::string& frame_name = "");
-
-  /**
-   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
-   * @param joint_state the joint state of the robot
-   * @param frame_ids ids of the frames at which we want to extract the pose
-   * @return the poses of the desired poses
-   */
-  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                   const std::vector<unsigned int>& frame_ids);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -192,7 +192,7 @@ public:
                                                          const StateRepresentation::CartesianState& cartesian_state);
 
   /**
-   * @brief Helper funtion to print the qp_problem (for debugging)
+   * @brief Helper function to print the qp_problem (for debugging)
    */
   void print_qp_problem();
 

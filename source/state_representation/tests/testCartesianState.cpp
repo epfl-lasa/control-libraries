@@ -7,6 +7,67 @@
 
 using namespace StateRepresentation;
 
+TEST(IdentityInitialization, PositiveNos) {
+  CartesianState identity = CartesianState::Identity("test");
+  // the joint state should not be considered empty (as it is properly initialized)
+  EXPECT_FALSE(identity.is_empty());
+  // all data should be zero except for orientation that should be identity
+  EXPECT_TRUE(identity.get_position().norm() == 0);
+  EXPECT_TRUE(identity.get_orientation().norm() == 1);
+  EXPECT_TRUE(identity.get_orientation().w() == 1);
+  EXPECT_TRUE(identity.get_twist().norm() == 0);
+  EXPECT_TRUE(identity.get_accelerations().norm() == 0);
+  EXPECT_TRUE(identity.get_wrench().norm() == 0);
+}
+
+TEST(RandomStateInitialization, PositiveNos) {
+  CartesianState random = CartesianState::Random("test");
+  // all data should be random (non 0)
+  EXPECT_TRUE(random.get_position().norm() > 0);
+  EXPECT_TRUE(abs(random.get_orientation().w()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().x()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().y()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().z()) > 0);
+  EXPECT_TRUE(random.get_twist().norm() > 0);
+  EXPECT_TRUE(random.get_accelerations().norm() > 0);
+  EXPECT_TRUE(random.get_wrench().norm() > 0);
+}
+
+TEST(RandomPoseInitialization, PositiveNos) {
+  CartesianPose random = CartesianPose::Random("test");
+  // only position should be random
+  EXPECT_TRUE(random.get_position().norm() > 0);
+  EXPECT_TRUE(abs(random.get_orientation().w()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().x()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().y()) > 0);
+  EXPECT_TRUE(abs(random.get_orientation().z()) > 0);
+  EXPECT_TRUE(random.get_twist().norm() == 0);
+  EXPECT_TRUE(random.get_accelerations().norm() == 0);
+  EXPECT_TRUE(random.get_wrench().norm() == 0);
+}
+
+TEST(RandomTwistInitialization, PositiveNos) {
+  CartesianTwist random = CartesianTwist::Random("test");
+  // only position should be random
+  EXPECT_TRUE(random.get_position().norm() == 0);
+  EXPECT_TRUE(random.get_orientation().norm() == 1);
+  EXPECT_TRUE(random.get_orientation().w() == 1);
+  EXPECT_TRUE(random.get_twist().norm() > 0);
+  EXPECT_TRUE(random.get_accelerations().norm() == 0);
+  EXPECT_TRUE(random.get_wrench().norm() == 0);
+}
+
+TEST(RandomWrenchInitialization, PositiveNos) {
+  CartesianWrench random = CartesianWrench::Random("test");
+  // only position should be random
+  EXPECT_TRUE(random.get_position().norm() == 0);
+  EXPECT_TRUE(random.get_orientation().norm() == 1);
+  EXPECT_TRUE(random.get_orientation().w() == 1);
+  EXPECT_TRUE(random.get_twist().norm() == 0);
+  EXPECT_TRUE(random.get_accelerations().norm() == 0);
+  EXPECT_TRUE(random.get_wrench().norm() > 0);
+}
+
 TEST(NegateQuaternion, PositiveNos) {
   Eigen::Quaterniond q = Eigen::Quaterniond::UnitRandom();
   Eigen::Quaterniond q2 = Eigen::Quaterniond(-q.coeffs());

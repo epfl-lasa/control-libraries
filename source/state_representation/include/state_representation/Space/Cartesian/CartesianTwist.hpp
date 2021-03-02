@@ -60,7 +60,7 @@ public:
   /**
    * @brief Constructor for the zero twist
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianTwist with zero values
    */
   static CartesianTwist Zero(const std::string& name, const std::string& reference = "world");
@@ -68,7 +68,7 @@ public:
   /**
    * @brief Constructor for a random twist
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianTwist random twist
    */
   static CartesianTwist Random(const std::string& name, const std::string& reference = "world");

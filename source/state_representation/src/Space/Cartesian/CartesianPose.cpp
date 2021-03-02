@@ -1,8 +1,6 @@
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 #include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/Exceptions/IncompatibleSizeException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
 
 using namespace StateRepresentation::Exceptions;
 
@@ -31,7 +29,7 @@ CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state
 CartesianPose::CartesianPose(const CartesianTwist& twist) : CartesianState(std::chrono::seconds(1) * twist) {}
 
 CartesianPose CartesianPose::Identity(const std::string& name, const std::string& reference) {
-  return CartesianPose(name, Eigen::Vector3d::Zero(), Eigen::Quaterniond::Identity(), reference);
+  return CartesianState::Identity(name, reference);
 }
 
 CartesianPose CartesianPose::Random(const std::string& name, const std::string& reference) {

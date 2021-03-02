@@ -28,9 +28,7 @@ CartesianWrench::CartesianWrench(const CartesianWrench& wrench) : CartesianState
 CartesianWrench::CartesianWrench(const CartesianState& state) : CartesianState(state) {}
 
 CartesianWrench CartesianWrench::Zero(const std::string& name, const std::string& reference) {
-  // separating in the two lines in needed to avoid compilation error due to ambiguous constructor call
-  Eigen::Matrix<double, 6, 1> zero = Eigen::Matrix<double, 6, 1>::Zero();
-  return CartesianWrench(name, zero, reference);
+  return CartesianState::Identity(name, reference);
 }
 
 CartesianWrench CartesianWrench::Random(const std::string& name, const std::string& reference) {

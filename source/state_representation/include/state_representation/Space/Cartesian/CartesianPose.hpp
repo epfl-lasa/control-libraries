@@ -62,7 +62,7 @@ public:
   /**
    * @brief Constructor for the identity pose
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianPose identity pose
    */
   static CartesianPose Identity(const std::string& name, const std::string& reference = "world");
@@ -70,7 +70,7 @@ public:
   /**
    * @brief Constructor for a random pose
    * @param name the name of the state
-   * @param the name of the reference frame
+   * @param reference the name of the reference frame
    * @return CartesianPose random pose
    */
   static CartesianPose Random(const std::string& name, const std::string& reference = "world");

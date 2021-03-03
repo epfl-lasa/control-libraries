@@ -6,6 +6,16 @@ Those are a set of helpers functions to handle common concepts in robotics such 
 the link between them and the robot state.
 This description covers most of the functionalities starting from the spatial transformations.
 
+Table of contents:
+* [Cartesian state](#cartesian-state)
+  * [Cartesian state operations](#cartesian-state-operations)
+  * [Changing of reference frame](#changing-of-reference-frame)
+  * [Specific state variables](#specific-state-variables)
+  * [Conversion between Cartesian state variables](#conversion-between-cartesian-state-variables)
+* [Joint state](#joint-state)
+  * [Joint state operations](#joint-state-operations)
+  * [Conversion between Cartesian state variables](#conversion-between-joint-state-variables)
+
 ## Cartesian state
 
 A `CartesianState` represents the transformations between frames in space as well as their dynamic properties
@@ -45,7 +55,7 @@ Note that for `pose`, it will be a `7d` vector (3 for `position` and 4 for `orie
 s2.set_pose(Eigen::VectorXd::Random(7));
 ```
 
-### State operations
+### Cartesian state operations
 
 Basic operations between frames such as addition, subtractions, scaling are defined, and applied on all the state variables.
 It is very important to note that those operations are only valid if both states are expressed in the same reference frame.
@@ -120,7 +130,7 @@ StateRepresentation::CartesianTwist aVb("b", "a");
 StateRepresentation::CartesianTwist wVa = wPa + aVb;
 ```
 
-### Conversion between state variables
+### Conversion between Cartesian state variables
 
 The distinction with those specific extra variables allows to define some extra conversion operations.
 Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns a `CartesianTwist`:
@@ -147,9 +157,9 @@ StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period
 
 ## Joint state
 
-`JointState` follow the same logic as `CartesianState` but for representing robot states.
+`JointState` follows the same logic as `CartesianState` but for representing robot states.
 Similarly to the `CartesianState` the class `JointState`, `JointPositions`, `JointVelocities` and `JointTorques` have been developed.
-The API follows exactly the same logic with the similar operations being define.
+The API follows exactly the same logic with similar operations implemented.
 
 A `JointState` is defined by the name of the corresponding robot and the name of each joints.
 
@@ -166,10 +176,12 @@ you can also use the constructor that takes the number of joints as input which 
 StateRepresentation::JointState js("myrobot", 3);
 ```
 
-All the getters and setters for the `positions`, `velocities`, `accelerations` and `torques` are defined:
+All the getters and setters for the `positions`, `velocities`, `accelerations` and `torques` are defined for both
+`Eigen::VectorXd` and `std::vector<double>`:
 
 ```cpp
 js.set_positions(Eigen::Vector3d(.5, 1., 0.));
+js.set_positions(std::vector<double>{.5, 1., 0.});
 ```
 
 Note that when using those setters, the size of the input vector should correspond to the number of joints of the state:
@@ -178,16 +190,14 @@ Note that when using those setters, the size of the input vector should correspo
 js.set_positions(Eigen::Vector4d::Random()); // will throw an IncompatibleSizeException
 ```
 
-Also, `positions` values are expressed in radiant and automatically modulated between `-pi` and `pi`.
-
-### States operations
+### Joint state operations
 
 Basic operations such as addition, subtraction and scaling have been implemented:
 
 ```cpp
 StateRepresentation::JointState js1("myrobot", 3);
 StateRepresentation::JointState js2("myrobot", 3);
-double lamda = 0.5
+double lambda = 0.5;
 
 // for those operation to be valid both js1 and js2
 // should correspond to the same robot and have the
@@ -197,9 +207,9 @@ StateRepresentation::JointState jsdiff = js1 - js2;
 StateRepresentation::JointState jsscaled = lambda * js1;
 ```
 
-Multiplication, that does not have a physical meaning, is not implemented.
+Multiplication of joint states doesn't have a physical meaning and is, therefore, not implemented.
 
-### Conversion between state variables
+### Conversion between Joint state variables
 
 Similarly to `CartesianState`, the conversion between `JointPositions` and `JointVelocities`
 happens through operations with `std::chrono_literals`.

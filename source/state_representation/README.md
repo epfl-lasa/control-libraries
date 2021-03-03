@@ -11,10 +11,10 @@ Table of contents:
   * [Cartesian state operations](#cartesian-state-operations)
   * [Changing of reference frame](#changing-of-reference-frame)
   * [Specific state variables](#specific-state-variables)
-  * [Conversion between Cartesian state variables](#conversion-between-cartesian-state-variables)
+  * [Conversion between cartesian state variables](#conversion-between-cartesian-state-variables)
 * [Joint state](#joint-state)
   * [Joint state operations](#joint-state-operations)
-  * [Conversion between Cartesian state variables](#conversion-between-joint-state-variables)
+  * [Conversion between joint state variables](#conversion-between-joint-state-variables)
 
 ## Cartesian state
 
@@ -130,7 +130,7 @@ StateRepresentation::CartesianTwist aVb("b", "a");
 StateRepresentation::CartesianTwist wVa = wPa + aVb;
 ```
 
-### Conversion between Cartesian state variables
+### Conversion between cartesian state variables
 
 The distinction with those specific extra variables allows to define some extra conversion operations.
 Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns a `CartesianTwist`:
@@ -209,7 +209,7 @@ StateRepresentation::JointState jsscaled = lambda * js1;
 
 Multiplication of joint states doesn't have a physical meaning and is, therefore, not implemented.
 
-### Conversion between Joint state variables
+### Conversion between joint state variables
 
 Similarly to `CartesianState`, the conversion between `JointPositions` and `JointVelocities`
 happens through operations with `std::chrono_literals`.

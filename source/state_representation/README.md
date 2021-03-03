@@ -6,7 +6,7 @@ Those are a set of helpers functions to handle common concepts in robotics such 
 the link between them and the robot state.
 This description covers most of the functionalities starting from the spatial transformations.
 
-Table of contents:
+## Table of contents:
 * [Cartesian state](#cartesian-state)
   * [Cartesian state operations](#cartesian-state-operations)
   * [Changing of reference frame](#changing-of-reference-frame)

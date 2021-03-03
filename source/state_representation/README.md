@@ -318,10 +318,12 @@ StateRepresentation::JointTorques jt = jac.transpose() * eef_wrench;
 
 ### Matrix multiplication
 
-Because the `Jacobian` is also simply a matrix underlying, additional multiplication operation with `Eigen::MatrixXd`
-has been implemented. It simply returns an `Eigen::MatrixXd`.
+The `Jacobian` object contains an underlying `Eigen::MatrixXd` which can be retrieved using the `Jacobian::data()` method.
+Direct multiplication of the `Jacobian` object with another `Eigen::MatrixXd` has also been implemented and returns the
+`Eigen::MatrixXd` product.
 
 ```cpp
 StateRepresentation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
-Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4);
+Eigen::MatrixXd mat = jac.data();
+Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4); // equivalent to  jac.data() * Eigen::MatrixXd(3, 4);
 ```

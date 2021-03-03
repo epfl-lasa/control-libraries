@@ -51,10 +51,19 @@ private:
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
    * @param joint_state the joint state of the robot
    * @param frame_ids ids of the frames at which we want to extract the pose
-   * @return the poses of the desired poses
+   * @return the desired poses
    */
   std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
                                                                    const std::vector<unsigned int>& frame_ids);
+
+  /**
+   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values for a single frame
+   * @param joint_state the joint state of the robot
+   * @param frame_id id of the frames at which we want to extract the pose
+   * @return the desired pose
+   */
+  StateRepresentation::CartesianPose forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                      unsigned int frame_id);
 
 public:
   /**
@@ -232,6 +241,20 @@ inline std::vector<std::string> Model::get_joint_frames() const {
 
 inline std::vector<std::string> Model::get_frames() const {
   return this->frame_names_;
+}
+
+inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                  unsigned int frame_id) {
+  return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
+}
+
+inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                           std::string frame_name) {
+  if (frame_name.empty()) {
+    // get last frame if none specified
+    frame_name = this->robot_model_.frames.back().name;
+  }
+  return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
 inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {

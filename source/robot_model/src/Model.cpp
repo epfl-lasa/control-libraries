@@ -189,19 +189,12 @@ std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
   std::vector<unsigned int> frame_ids(frame_names.size());
   for (unsigned int i = 0; i < frame_names.size(); ++i) {
     std::string name = frame_names[i];
-    if (!this->robot_model_.existFrame(name)) { throw (Exceptions::FrameNotFoundException(name)); }
+    if (!this->robot_model_.existFrame(name)) {
+      throw (Exceptions::FrameNotFoundException(name));
+    }
     frame_ids[i] = this->robot_model_.getFrameId(name);
   }
   return this->forward_geometry(joint_state, frame_ids);
-}
-
-StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                           std::string frame_name) {
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_name = this->robot_model_.frames.back().name;
-  }
-  return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
 StateRepresentation::JointPositions Model::inverse_geometry(const StateRepresentation::CartesianState&) const {

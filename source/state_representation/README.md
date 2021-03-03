@@ -141,7 +141,7 @@ is simply multiplying it by a time period:
 using namespace std::chrono_literals;
 auto period = 10s;
 
-StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1,0,0));
+StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1, 0, 0));
 StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 

@@ -1,17 +1,30 @@
 # state_representation
 
-This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, or **geometrical shapes** that can be used as obstacles.
-Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and the link between them and the robot state.
+This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, 
+or **geometrical shapes** that can be used as obstacles.
+Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and 
+the link between them and the robot state.
 This description covers most of the functionalities starting from the spatial transformations.
+
+Table of contents:
+* [Cartesian state](#cartesian-state)
+  * [Cartesian state operations](#cartesian-state-operations)
+  * [Changing of reference frame](#changing-of-reference-frame)
+  * [Specific state variables](#specific-state-variables)
+  * [Conversion between Cartesian state variables](#conversion-between-cartesian-state-variables)
+* [Joint state](#joint-state)
+  * [Joint state operations](#joint-state-operations)
+  * [Conversion between joint state variables](#conversion-between-joint-state-variables)
 
 ## Cartesian state
 
-A `CartesianState` represents the transformations between frames in space as well as their dynamic properties (velocities, accelerations and forces).
+A `CartesianState` represents the transformations between frames in space as well as their dynamic properties
+(velocities, accelerations and forces).
 It comprises the name of the frame it is associated to and is expressed in a reference frame (by default `world`).
-A state contains all the variables that define its dynamic properties, i.e `position`, `orientation`, `linear_velocity`, `angular_velocity`, `linear_acceleration`, `angular_acceleration`, `force` and `torque`.
+A state contains all the variables that define its dynamic properties, i.e `position`, `orientation`, `linear_velocity`,
+`angular_velocity`, `linear_acceleration`, `angular_acceleration`, `force` and `torque`.
 All those state variables use `Eigen::Vector3d` internally, except for the orientation that is `Eigen::Quaterniond` based.
 All getters and setters are implemented.
-
 
 ```cpp
 StateRepresentation::CartesianState s1("a"); // frame a expressed in world (default)
@@ -42,7 +55,7 @@ Note that for `pose`, it will be a `7d` vector (3 for `position` and 4 for `orie
 s2.set_pose(Eigen::VectorXd::Random(7));
 ```
 
-### State operations
+### Cartesian state operations
 
 Basic operations between frames such as addition, subtractions, scaling are defined, and applied on all the state variables.
 It is very important to note that those operations are only valid if both states are expressed in the same reference frame.
@@ -67,7 +80,7 @@ If both frames have the same orientation then the `+` operator is commutative.
 ```cpp
 StateRepresentation::CartesianState s1("a");
 StateRepresentation::CartesianState s2("b");
-s1.set_orientation(Eigen::Quaterniond(0,1,0,0));
+s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
 s2.set_orientation(Eigen::Quaterniond::UnitRandom());
 
 StateRepresentation::CartesianState ssum1 = s1 + s2;
@@ -117,7 +130,7 @@ StateRepresentation::CartesianTwist aVb("b", "a");
 StateRepresentation::CartesianTwist wVa = wPa + aVb;
 ```
 
-### Conversion between state variables
+### Conversion between Cartesian state variables
 
 The distinction with those specific extra variables allows to define some extra conversion operations.
 Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns a `CartesianTwist`:
@@ -126,23 +139,100 @@ Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns
 using namespace std::chrono_literals;
 auto period = 1h;
 
-StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1,0,0));
-
+StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1, 0, 0));
 // the result is a twist of 1m/h in x direction converted in m/s
 StateRepresentation::CartesianTwist wVa = wPa / period;
 ```
 
-Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose` is simply multiplying it by a time period:
+Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose`
+is simply multiplying it by a time period:
 
 ```cpp
 using namespace std::chrono_literals;
 auto period = 10s;
 
-StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1,0,0));
-
+StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1, 0, 0));
 StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 
 ## Joint state
 
-TODO
+`JointState` follows the same logic as `CartesianState` but for representing robot states.
+Similarly to the `CartesianState` the class `JointState`, `JointPositions`, `JointVelocities` and `JointTorques` have been developed.
+The API follows exactly the same logic with similar operations implemented.
+
+A `JointState` is defined by the name of the corresponding robot and the name of each joints.
+
+```cpp
+// create a state for myrobot with 3 joints
+StateRepresentation::JointState js("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+```
+
+Note that if the joints of the robot are named `{"joint0", "joint1", ..., "jointN"}` as above,
+you can also use the constructor that takes the number of joints as input which will name them accordingly:
+
+```cpp
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+StateRepresentation::JointState js("myrobot", 3);
+```
+
+All the getters and setters for the `positions`, `velocities`, `accelerations` and `torques` are defined for both
+`Eigen::VectorXd` and `std::vector<double>`:
+
+```cpp
+js.set_positions(Eigen::Vector3d(.5, 1., 0.));
+js.set_positions(std::vector<double>{.5, 1., 0.});
+```
+
+Note that when using those setters, the size of the input vector should correspond to the number of joints of the state:
+
+```cpp
+js.set_positions(Eigen::Vector4d::Random()); // will throw an IncompatibleSizeException
+```
+
+### Joint state operations
+
+Basic operations such as addition, subtraction and scaling have been implemented:
+
+```cpp
+StateRepresentation::JointState js1("myrobot", 3);
+StateRepresentation::JointState js2("myrobot", 3);
+double lambda = 0.5;
+
+// for those operation to be valid both js1 and js2
+// should correspond to the same robot and have the
+// same number of joints
+StateRepresentation::JointState jssum = js1 + js2;
+StateRepresentation::JointState jsdiff = js1 - js2;
+StateRepresentation::JointState jsscaled = lambda * js1;
+```
+
+Multiplication of joint states doesn't have a physical meaning and is, therefore, not implemented.
+
+### Conversion between joint state variables
+
+Similarly to `CartesianState`, the conversion between `JointPositions` and `JointVelocities`
+happens through operations with `std::chrono_literals`.
+
+```cpp
+using namespace std::chrono_literals;
+auto period = 1h;
+
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+// and provide the position values
+StateRepresentation::JointPositions jp("myrobot", Eigen::Vector3d(1, 0, 0));
+
+// result are velocities of 1 rad/h for joint0 expressed in rad/s
+StateRepresentation::JointVelocities jv = jp / period;
+```
+
+```cpp
+using namespace std::chrono_literals;
+auto period = 10s;
+
+// create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+// and provide the velocities values
+StateRepresentation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
+
+StateRepresentation::JointPositions jp = period * jv; // note that jv * period is also implemented
+```

@@ -49,6 +49,7 @@ void Model::init_model() {
   for (auto& f : this->robot_model_.frames) {
     frames.push_back(f.name);
   }
+  // remove universe and root_joint frame added by Pinocchio
   this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
 }
 

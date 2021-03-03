@@ -15,6 +15,10 @@ Table of contents:
 * [Joint state](#joint-state)
   * [Joint state operations](#joint-state-operations)
   * [Conversion between joint state variables](#conversion-between-joint-state-variables)
+* [The Jacobian matrix](#the-jacobian-matrix)
+  * [Conversion between JointVelocities and CartesianTwist](#conversion-between-jointvelocities-and-cartesiantwist)
+  * [Conversion between JointTorques and CartesianWrench](#conversion-between-jointtorques-and-cartesianwrench)
+  * [Matrix multiplication](#matrix-multiplication)
 
 ## Cartesian state
 
@@ -312,7 +316,7 @@ StateRepresentation::CartesianWrench eef_wrench("eef")
 StateRepresentation::JointTorques jt = jac.transpose() * eef_wrench;
 ```
 
-### Matrix multiplications
+### Matrix multiplication
 
 Because the `Jacobian` is also simply a matrix underlying, additional multiplication operation with `Eigen::MatrixXd`
 has been implemented. It simply returns an `Eigen::MatrixXd`.

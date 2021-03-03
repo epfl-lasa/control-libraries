@@ -304,11 +304,6 @@ double dist(const CartesianState& s1, const CartesianState& s2, const CartesianS
   return s1.dist(s2, state_variable_type);
 }
 
-std::vector<double> CartesianState::to_std_vector() const {
-  throw(NotImplementedException("to_std_vector() is not implemented for the base CartesianState class"));
-  return std::vector<double>();
-}
-
 void CartesianState::from_std_vector(const std::vector<double>&) {
   throw(NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
 }

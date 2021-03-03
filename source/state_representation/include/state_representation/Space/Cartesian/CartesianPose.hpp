@@ -201,12 +201,6 @@ public:
   friend CartesianPose operator*(double lambda, const CartesianPose& pose);
 
   /**
-   * @brief Return the pose as a std vector of floats
-   * @return std::vector<float> the pose vector as a 7 elements vector
-   */
-  std::vector<double> to_std_vector() const override;
-
-  /**
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */

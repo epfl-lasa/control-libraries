@@ -132,16 +132,6 @@ CartesianPose operator*(double lambda, const CartesianPose& pose) {
   return pose * lambda;
 }
 
-std::vector<double> CartesianPose::to_std_vector() const {
-  std::vector<double> pose = std::vector<double>(this->get_position().data(), this->get_position().data() + 3);
-  pose.resize(7);
-  pose[3] = this->get_orientation().w();
-  pose[4] = this->get_orientation().x();
-  pose[5] = this->get_orientation().y();
-  pose[6] = this->get_orientation().z();
-  return pose;
-}
-
 void CartesianPose::from_std_vector(const std::vector<double>& value) {
   if (value.size() == 3) {
     this->set_position(value);

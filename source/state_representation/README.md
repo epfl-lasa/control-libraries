@@ -237,7 +237,7 @@ StateRepresentation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
 StateRepresentation::JointPositions jp = period * jv; // note that jv * period is also implemented
 ```
 
-## Conversion between Joint and Cartesian states through the Jacobian
+## The Jacobian matrix
 
 The `Jacobian` matrix of a robot ensures the conversion between both `CartesianState` and `JointState`.
 Similarly to the `JointState`, a `Jacobian` is associated to a robot and defined by the robot and the number of joints.

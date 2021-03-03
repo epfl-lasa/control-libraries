@@ -769,6 +769,6 @@ inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value,
 
 inline std::vector<double> CartesianState::to_std_vector() const {
   Eigen::VectorXd data = this->data();
-  return std::vector<double>(data.data(),data.data() + data.size());
+  return std::vector<double>(data.data(), data.data() + data.size());
 }
 }// namespace StateRepresentation

@@ -220,7 +220,6 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
 }
 
 inline unsigned int Model::get_number_of_joints() const {
-  // subtract 1 because of the 'universe' joint
   return this->robot_model_.nq;
 }
 

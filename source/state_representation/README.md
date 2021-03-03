@@ -6,7 +6,7 @@ Those are a set of helpers functions to handle common concepts in robotics such 
 the link between them and the robot state.
 This description covers most of the functionalities starting from the spatial transformations.
 
-Table of contents:
+## Table of contents:
 * [Cartesian state](#cartesian-state)
   * [Cartesian state operations](#cartesian-state-operations)
   * [Changing of reference frame](#changing-of-reference-frame)
@@ -15,6 +15,10 @@ Table of contents:
 * [Joint state](#joint-state)
   * [Joint state operations](#joint-state-operations)
   * [Conversion between joint state variables](#conversion-between-joint-state-variables)
+* [The Jacobian matrix](#the-jacobian-matrix)
+  * [Conversion between JointVelocities and CartesianTwist](#conversion-between-jointvelocities-and-cartesiantwist)
+  * [Conversion between JointTorques and CartesianWrench](#conversion-between-jointtorques-and-cartesianwrench)
+  * [Matrix multiplication](#matrix-multiplication)
 
 ## Cartesian state
 
@@ -235,4 +239,91 @@ auto period = 10s;
 StateRepresentation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
 
 StateRepresentation::JointPositions jp = period * jv; // note that jv * period is also implemented
+```
+
+## The Jacobian matrix
+
+The `Jacobian` matrix of a robot ensures the conversion between both `CartesianState` and `JointState`.
+Similarly to the `JointState`, a `Jacobian` is associated to a robot and defined by the robot and the number of joints.
+
+```cpp
+// create a jacobian for myrobot with 3 joints
+StateRepresentation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+```
+
+The API is the same as the `JointState`, hence the constructor can also accept the number of joints to initialize the
+joint names vector.
+
+```cpp
+// create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
+StateRepresentation::Jacobian jac("myrobot", 3);
+```
+
+The `Jacobian` is simply a `6 x N` matrix where `N` is the number of joints.
+Therefore, the data can be set from an `Eigen::MatrixXd` of correct dimensions.
+
+```cpp
+jac.set_data(Eigen::MatrixXd::Random(6, 3)); // throw an IncompatibleSizeException if the size is not correct
+```
+
+All the functionalities of the `Jacobian` have been implemented such as `transpose`, `inverse` or `pseudoinverse` functions.
+
+```cpp
+/// returns the 3 x 6 transposed matrix
+StateRepresentation::Jacobian jacT = jac.transpose();
+// will throw an error as a 6 x 3 matrix is not invertible
+StateRepresentation::Jacobian jacInv = jac.inverse();
+// compute the pseudoinverse without the need of being invertible
+StateRepresentation::Jacobian jacPinv = jac.pseudoinverse();
+```
+
+Those operations are very useful to convert `JointState` from `CartesianState` and vice versa.
+
+### Conversion between JointVelocities and CartesianTwist
+
+The simplest conversion is to transform a `JointVelocities` into a `CartesiantTwist` by multiplication with the `Jacobian`
+
+```cpp
+StateRepresentation::JointVelocities jv("myrobot", 3);
+StateRepresentation::CartesianTwist eef_twist = jac * js;
+```
+
+The opposite transformation, from `CartesianTwist` to `JointVelocities` requires the multiplication with the `inverse`
+(or `pseudoinverse`).
+
+```cpp
+StateRepresentation::CartesianTwist eef_twist("eef")
+StateRepresentation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
+```
+
+Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies
+on the solving of the system `Ax = b` using `Eigen` has been implemented.
+
+```cpp
+StateRepresentation::CartesianTwist eef_twist("eef")
+// faster than doing jac.pseudoinverse() * eef_twist
+StateRepresentation::JointVelocities jv = jac.solve(eef_twist);
+```
+
+### Conversion between JointTorques and CartesianWrench
+
+The other conversion that is implemented is the transformation from `CartesianWrench` to `JointTorques`, this one using
+the `transpose`.
+
+```cpp
+StateRepresentation::CartesianWrench eef_wrench("eef")
+// faster than doing jac.pseudoinverse() * eef_twist
+StateRepresentation::JointTorques jt = jac.transpose() * eef_wrench;
+```
+
+### Matrix multiplication
+
+The `Jacobian` object contains an underlying `Eigen::MatrixXd` which can be retrieved using the `Jacobian::data()` method.
+Direct multiplication of the `Jacobian` object with another `Eigen::MatrixXd` has also been implemented and returns the
+`Eigen::MatrixXd` product.
+
+```cpp
+StateRepresentation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
+Eigen::MatrixXd mat = jac.data();
+Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4); // equivalent to  jac.data() * Eigen::MatrixXd(3, 4);
 ```

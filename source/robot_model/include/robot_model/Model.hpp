@@ -18,6 +18,7 @@ private:
   // @format:off
   std::shared_ptr<StateRepresentation::Parameter<std::string>> robot_name_;       ///< name of the robot
   std::shared_ptr<StateRepresentation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
+  std::vector<std::string> frame_names_;                                          ///< name of the frames
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
   OsqpEigen::Solver solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
@@ -37,6 +38,24 @@ private:
    */
   bool init_qp_solver();
 
+  /**
+   * @brief Compute the jacobian from a given joint state at the frame in parameter
+   * @param joint_state containing the joint values of the robot
+   * @param joint_id id of the frame at which to compute the jacobian
+   * @return the jacobian matrix
+   */
+  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
+                                                 unsigned int frame_id);
+
+  /**
+   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
+   * @param joint_state the joint state of the robot
+   * @param frame_ids ids of the frames at which we want to extract the pose
+   * @return the poses of the desired poses
+   */
+  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                   const std::vector<unsigned int>& frame_ids);
+
 public:
   /**
    * @brief Empty constructor
@@ -55,7 +74,7 @@ public:
   Model(const Model& model);
 
   /**
-   * @brief Desctructor
+   * @brief Destructor
    */
   ~Model();
 
@@ -94,21 +113,24 @@ public:
    * @brief Getter of the number of joints
    * @return the number of joints
    */
-  unsigned int get_nb_joints() const;
+  unsigned int get_number_of_joints() const;
+
+  /**
+   * Getter of the joint frames from the model
+   * @return the joint frames
+   */
+  std::vector<std::string> get_joint_frames() const;
+
+  /**
+   * Getter of the frames from the model
+   * @return the frame names
+   */
+  std::vector<std::string> get_frames() const;
 
   /**
    * @brief Initialize the pinocchio model from the URDF
    */
   void init_model();
-
-  /**
-   * @brief Compute the jacobian from a given joint state at the frame in parameter
-   * @param joint_state containing the joint values of the robot
-   * @param joint_id id of the frame at which to compute the jacobian
-   * @return the jacobian matrix
-   */
-  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
-                                                 unsigned int frame_id);
 
   /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
@@ -118,15 +140,6 @@ public:
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                  const std::string& frame_name = "");
-
-  /**
-   * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
-   * @param joint_state the joint state of the robot
-   * @param frame_ids ids of the frames at which we want to extract the pose
-   * @return the poses of the desired poses
-   */
-  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                   const std::vector<unsigned int>& frame_ids);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -179,7 +192,7 @@ public:
                                                          const StateRepresentation::CartesianState& cartesian_state);
 
   /**
-   * @brief Helper funtion to print the qp_problem (for debugging)
+   * @brief Helper function to print the qp_problem (for debugging)
    */
   void print_qp_problem();
 
@@ -206,14 +219,19 @@ inline void Model::set_urdf_path(const std::string& urdf_path) {
   this->urdf_path_->set_value(urdf_path);
 }
 
-inline unsigned int Model::get_nb_joints() const {
-  // subtract 1 because of the 'universe' joint
-  return this->robot_model_.njoints - 1;
+inline unsigned int Model::get_number_of_joints() const {
+  return this->robot_model_.nq;
 }
 
-inline void Model::init_model() {
-  pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
-  this->robot_data_ = pinocchio::Data(this->robot_model_);
+inline std::vector<std::string> Model::get_joint_frames() const {
+  // model contains a first joint called universe that needs to be discarded
+  std::vector<std::string> joint_frames(this->robot_model_.names.begin() + 1,
+                                       this->robot_model_.names.end());
+  return joint_frames;
+}
+
+inline std::vector<std::string> Model::get_frames() const {
+  return this->frame_names_;
 }
 
 inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {

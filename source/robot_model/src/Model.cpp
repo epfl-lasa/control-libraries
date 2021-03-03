@@ -41,6 +41,18 @@ Model::Model(const Model& model) :
 
 Model::~Model() {}
 
+void Model::init_model() {
+  pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
+  this->robot_data_ = pinocchio::Data(this->robot_model_);
+  // get the frame names
+  std::vector<std::string> frames;
+  for (auto& f : this->robot_model_.frames) {
+    frames.push_back(f.name);
+  }
+  // remove universe and root_joint frame added by Pinocchio
+  this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
+}
+
 Model& Model::operator=(const Model& model) {
   this->robot_name_ = model.robot_name_;
   this->urdf_path_ = model.urdf_path_;
@@ -58,7 +70,7 @@ bool Model::init_qp_solver() {
   this->solver_.data()->clearLinearConstraintsMatrix();
   this->solver_.clearSolver();
 
-  unsigned int nb_joints = this->get_nb_joints();
+  unsigned int nb_joints = this->get_number_of_joints();
   // initialize the matrices
   this->hessian_ = Eigen::SparseMatrix<double>(nb_joints + 1, nb_joints + 1);
   this->gradient_ = Eigen::VectorXd::Zero(nb_joints + 1);
@@ -125,15 +137,15 @@ bool Model::init_qp_solver() {
 
 StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                       unsigned int frame_id) {
-  if (joint_state.get_size() != this->get_nb_joints()) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_nb_joints()));
+  if (joint_state.get_size() != this->get_number_of_joints()) {
+    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
   // compute the jacobian from the joint state
-  pinocchio::Data::Matrix6x J(6, this->robot_model_.nq);
+  pinocchio::Data::Matrix6x J(6, this->get_number_of_joints());
   J.setZero();
   pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
                                   pinocchio::LOCAL_WORLD_ALIGNED, J);
-  return StateRepresentation::Jacobian(this->get_robot_name(), J);
+  return StateRepresentation::Jacobian(this->get_robot_name(), this->get_joint_frames(), J);
 }
 
 StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation::JointState& joint_state,
@@ -152,8 +164,8 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
 
 std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
     const StateRepresentation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
-  if (joint_state.get_size() != this->get_nb_joints()) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_nb_joints()));
+  if (joint_state.get_size() != this->get_number_of_joints()) {
+    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
   std::vector<StateRepresentation::CartesianPose> pose_vector;
   pinocchio::forwardKinematics(this->robot_model_, this->robot_data_, joint_state.get_positions());
@@ -203,7 +215,7 @@ StateRepresentation::CartesianTwist Model::forward_kinematic(const StateRepresen
 
 StateRepresentation::JointVelocities Model::inverse_kinematic(const StateRepresentation::JointState& joint_state,
                                                               const std::vector<StateRepresentation::CartesianState>& cartesian_states) {
-  const unsigned int nb_joints = this->get_nb_joints();
+  const unsigned int nb_joints = this->get_number_of_joints();
   using namespace StateRepresentation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
   Eigen::VectorXd delta_r(3 * cartesian_states.size() + 3);

@@ -50,8 +50,8 @@ TEST_F(RobotModelTest, TestConstructor) {
   EXPECT_NO_THROW(franka = tmp);
 }
 
-TEST_F(RobotModelTest, TestNbJoint) {
-  EXPECT_EQ(franka.get_nb_joints(), 7);
+TEST_F(RobotModelTest, TestNumberOfJoints) {
+  EXPECT_EQ(franka.get_number_of_joints(), 7);
 }
 
 TEST_F(RobotModelTest, TestForwardGeometryJointStateSize) {
@@ -68,15 +68,13 @@ TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameName) {
   EXPECT_THROW(franka.forward_geometry(joint_state, "panda_link99"), Exceptions::FrameNotFoundException);
 }
 
-TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameID) {
-  std::vector<unsigned int> frame_ids;
-  frame_ids.push_back(99);
-  EXPECT_THROW(franka.forward_geometry(joint_state, frame_ids), RobotModel::Exceptions::FrameNotFoundException);
-}
-
-TEST_F(RobotModelTest, TestJacobianJointStateSize) {
-  StateRepresentation::JointState dummy = StateRepresentation::JointState(robot_name, 6);
-  EXPECT_THROW(franka.compute_jacobian(dummy, 99), Exceptions::InvalidJointStateSizeException);
+TEST_F(RobotModelTest, TestJacobianJointNames) {
+  StateRepresentation::JointState dummy = StateRepresentation::JointState(robot_name, 7);
+  StateRepresentation::Jacobian jac = franka.compute_jacobian(dummy);
+  for (int i = 0; i < 7; ++i) {
+    std::string jname = "panda_joint" + std::to_string(i + 1);
+    EXPECT_TRUE(jname.compare(jac.get_joint_names()[i]) == 0);
+  }
 }
 
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
@@ -84,17 +82,17 @@ TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
 }
 
 TEST_F(RobotModelTest, TestJacobianNbRows) {
-  StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, 2);
+  StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, "panda_joint2");
   EXPECT_EQ(jac.get_nb_rows(), 6);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbCols) {
-  StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, 2);
+  StateRepresentation::Jacobian jac = franka.compute_jacobian(joint_state, "panda_joint2");
   EXPECT_EQ(jac.get_nb_cols(), joint_state.get_size());
 }
 
 TEST_F(RobotModelTest, TestType) {
-  
+
 }
 
 int main(int argc, char** argv) {

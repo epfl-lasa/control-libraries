@@ -311,3 +311,13 @@ StateRepresentation::CartesianWrench eef_wrench("eef")
 // faster than doing jac.pseudoinverse() * eef_twist
 StateRepresentation::JointTorques jt = jac.transpose() * eef_wrench;
 ```
+
+### Matrix multiplications
+
+Because the `Jacobian` is also simply a matrix underlying, additional multiplication operation with `Eigen::MatrixXd`
+has been implemented. It simply returns an `Eigen::MatrixXd`.
+
+```cpp
+StateRepresentation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
+Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4);
+```

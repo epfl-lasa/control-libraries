@@ -249,7 +249,7 @@ inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRep
 }
 
 inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                           std::string frame_name) {
+                                                                  std::string frame_name) {
   if (frame_name.empty()) {
     // get last frame if none specified
     frame_name = this->robot_model_.frames.back().name;

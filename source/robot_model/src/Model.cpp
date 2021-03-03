@@ -162,8 +162,8 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
   return this->compute_jacobian(joint_state, frame_id);
 }
 
-std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
-    const StateRepresentation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
+std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                        const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_number_of_joints()) {
     throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
@@ -184,8 +184,8 @@ std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
   return pose_vector;
 }
 
-std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(
-    const StateRepresentation::JointState& joint_state, const std::vector<std::string>& frame_names) {
+std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+                                                                        const std::vector<std::string>& frame_names) {
   std::vector<unsigned int> frame_ids(frame_names.size());
   for (unsigned int i = 0; i < frame_names.size(); ++i) {
     std::string name = frame_names[i];

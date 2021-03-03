@@ -247,7 +247,8 @@ Similarly to the `JointState`, a `Jacobian` is associated to a robot and defined
 StateRepresentation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
 ```
 
-The API is the same as the `JointState`, hence the constructor can also accept the number of joints to initialize the joint names vector.
+The API is the same as the `JointState`, hence the constructor can also accept the number of joints to initialize the
+joint names vector.
 
 ```cpp
 // create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
@@ -283,14 +284,16 @@ StateRepresentation::JointVelocities jv("myrobot", 3);
 StateRepresentation::CartesianTwist eef_twist = jac * js;
 ```
 
-The opposite transformation, from `CartesianTwist` to `JointVelocities` requires the multiplication with the `inverse` (or `pseudoinverse`).
+The opposite transformation, from `CartesianTwist` to `JointVelocities` requires the multiplication with the `inverse`
+(or `pseudoinverse`).
 
 ```cpp
 StateRepresentation::CartesianTwist eef_twist("eef")
 StateRepresentation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
 ```
 
-Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies on the solving of the system `Ax = b` using `Eigen` has been implemented.
+Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies
+on the solving of the system `Ax = b` using `Eigen` has been implemented.
 
 ```cpp
 StateRepresentation::CartesianTwist eef_twist("eef")
@@ -300,7 +303,8 @@ StateRepresentation::JointVelocities jv = jac.solve(eef_twist);
 
 ### Conversion between JointTorques and CartesianWrench
 
-The other conversion that is implemented is the transformation from `CartesianWrench` to `JointTorques`, this one using the `transpose`.
+The other conversion that is implemented is the transformation from `CartesianWrench` to `JointTorques`, this one using
+the `transpose`.
 
 ```cpp
 StateRepresentation::CartesianWrench eef_wrench("eef")

@@ -75,7 +75,7 @@ public:
   State(const State& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */

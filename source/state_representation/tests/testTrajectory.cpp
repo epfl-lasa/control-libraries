@@ -5,91 +5,87 @@
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Robot/JointState.hpp"
 
-TEST(CreateTrajectory, PositiveNos)
-{
-	state_representation::Trajectory<state_representation::JointState> trajectory;
-	std::deque<state_representation::JointState> points = trajectory.get_points();
-	std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
-	EXPECT_TRUE(points.empty());
-	EXPECT_TRUE(times.empty());
+TEST(CreateTrajectory, PositiveNos) {
+  state_representation::Trajectory<state_representation::JointState> trajectory;
+  std::deque<state_representation::JointState> points = trajectory.get_points();
+  std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
+  EXPECT_TRUE(points.empty());
+  EXPECT_TRUE(times.empty());
 }
 
-TEST(AddPoint, PositiveNos)
-{
-	state_representation::Trajectory<state_representation::JointState> trajectory;
-	state_representation::JointState point("robot", 1);
+TEST(AddPoint, PositiveNos) {
+  state_representation::Trajectory<state_representation::JointState> trajectory;
+  state_representation::JointState point("robot", 1);
 
-	std::deque<state_representation::JointState> points = trajectory.get_points();
-	std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
+  std::deque<state_representation::JointState> points = trajectory.get_points();
+  std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
 
-	unsigned int prev_size_points = points.size();
-	unsigned int prev_size_times = times.size();
+  unsigned int prev_size_points = points.size();
+  unsigned int prev_size_times = times.size();
 
-	std::chrono::nanoseconds period(100);
-	Eigen::ArrayXd positions(1);
-	positions << 0.2;
-	point.set_positions(positions);
-	trajectory.add_point(point, period);
-	
-	points = trajectory.get_points();
-	times = trajectory.get_times();
+  std::chrono::nanoseconds period(100);
+  Eigen::ArrayXd positions(1);
+  positions << 0.2;
+  point.set_positions(positions);
+  trajectory.add_point(point, period);
 
-	unsigned int new_size_points = points.size();
-	unsigned int new_size_times = times.size();
+  points = trajectory.get_points();
+  times = trajectory.get_times();
 
-	EXPECT_TRUE(new_size_points == prev_size_points+1);
-	EXPECT_TRUE(new_size_times == prev_size_times+1);
+  unsigned int new_size_points = points.size();
+  unsigned int new_size_times = times.size();
+
+  EXPECT_TRUE(new_size_points == prev_size_points + 1);
+  EXPECT_TRUE(new_size_times == prev_size_times + 1);
 }
 
-TEST(ClearPoint, PositiveNos)
-{
-	state_representation::Trajectory<state_representation::JointState> trajectory;
-	state_representation::JointState point("robot", 1);
+TEST(ClearPoint, PositiveNos) {
+  state_representation::Trajectory<state_representation::JointState> trajectory;
+  state_representation::JointState point("robot", 1);
 
-	std::chrono::nanoseconds period(100);
-	Eigen::ArrayXd positions(1);
-	positions << 0.2;
-	point.set_positions(positions);
-	trajectory.add_point(point, period);
-	
-	std::deque<state_representation::JointState> points = trajectory.get_points();
-	std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
+  std::chrono::nanoseconds period(100);
+  Eigen::ArrayXd positions(1);
+  positions << 0.2;
+  point.set_positions(positions);
+  trajectory.add_point(point, period);
 
-	unsigned int size_points = points.size();
-	unsigned int size_times = times.size();
+  std::deque<state_representation::JointState> points = trajectory.get_points();
+  std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
 
-	EXPECT_TRUE(size_points == 1);
-	EXPECT_TRUE(size_times == 1);
+  unsigned int size_points = points.size();
+  unsigned int size_times = times.size();
 
-	trajectory.clear();
-	points = trajectory.get_points();
-	times = trajectory.get_times();
+  EXPECT_TRUE(size_points == 1);
+  EXPECT_TRUE(size_times == 1);
 
-	EXPECT_TRUE(points.empty());
-	EXPECT_TRUE(times.empty());
+  trajectory.clear();
+  points = trajectory.get_points();
+  times = trajectory.get_times();
+
+  EXPECT_TRUE(points.empty());
+  EXPECT_TRUE(times.empty());
 }
 
-TEST(OverloadIndex, PositiveNos)
-{
-	state_representation::Trajectory<state_representation::JointState> trajectory;
-	state_representation::JointState point("robot", 1);
+TEST(OverloadIndex, PositiveNos) {
+  state_representation::Trajectory<state_representation::JointState> trajectory;
+  state_representation::JointState point("robot", 1);
 
-	std::chrono::nanoseconds period(100);
-	Eigen::ArrayXd positions(1);
-	positions << 0.2;
-	point.set_positions(positions);
-	trajectory.add_point(point, period);
-	positions << 0.7;
-	point.set_positions(positions);
-	trajectory.add_point(point, period);
+  std::chrono::nanoseconds period(100);
+  Eigen::ArrayXd positions(1);
+  positions << 0.2;
+  point.set_positions(positions);
+  trajectory.add_point(point, period);
+  positions << 0.7;
+  point.set_positions(positions);
+  trajectory.add_point(point, period);
 
-	std::pair<state_representation::JointState, std::chrono::nanoseconds> point0 = trajectory[0];
-	std::pair<state_representation::JointState, std::chrono::nanoseconds> point1 = trajectory[1];
+  std::pair<state_representation::JointState, std::chrono::nanoseconds> point0 = trajectory[0];
+  std::pair<state_representation::JointState, std::chrono::nanoseconds> point1 = trajectory[1];
 
-	EXPECT_TRUE(point0.first.get_positions()[0] == 0.2);
-	EXPECT_TRUE(point1.first.get_positions()[0] == 0.7);
-	EXPECT_TRUE(point0.second == period);
-	EXPECT_TRUE(point1.second == 2*period);
+  EXPECT_TRUE(point0.first.get_positions()[0] == 0.2);
+  EXPECT_TRUE(point1.first.get_positions()[0] == 0.7);
+  EXPECT_TRUE(point0.second == period);
+  EXPECT_TRUE(point1.second == 2 * period);
 }
 
 // TEST(InsertPoint, PositiveNos)
@@ -132,8 +128,7 @@ TEST(OverloadIndex, PositiveNos)
 // 	EXPECT_TRUE(last_point.second == 3*period);
 // }
 
-int main(int argc, char **argv) 
-{
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "controllers/Controller.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 

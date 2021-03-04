@@ -1,6 +1,6 @@
 #pragma once
 
-#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 
 namespace state_representation {
 /**

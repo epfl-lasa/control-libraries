@@ -1,5 +1,5 @@
-#include "state_representation/Parameters/Event.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/parameters/Event.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include <gtest/gtest.h>

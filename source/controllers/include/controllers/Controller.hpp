@@ -1,7 +1,7 @@
 #pragma once
 
 #include "controllers/exceptions/NotImplementedException.hpp"
-#include "state_representation/Parameters/ParameterInterface.hpp"
+#include "state_representation/parameters/ParameterInterface.hpp"
 #include "state_representation/Robot/Jacobian.hpp"
 #include <list>
 #include <memory>

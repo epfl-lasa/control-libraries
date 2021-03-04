@@ -18,10 +18,10 @@ set(CORE_SOURCES
   src/Space/DualQuaternion/DualQuaternionState.cpp
   src/Space/DualQuaternion/DualQuaternionPose.cpp
   src/Space/DualQuaternion/DualQuaternionTwist.cpp
-  src/Parameters/ParameterInterface.cpp
-  src/Parameters/Parameter.cpp
-  src/Parameters/Predicate.cpp
-  src/Parameters/Event.cpp
+        src/parameters/ParameterInterface.cpp
+        src/parameters/Parameter.cpp
+        src/parameters/Predicate.cpp
+        src/parameters/Event.cpp
         src/geometry/Shape.cpp
         src/geometry/Ellipsoid.cpp
 )

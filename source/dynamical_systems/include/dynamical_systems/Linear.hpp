@@ -8,7 +8,7 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/IncompatibleSizeException.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/Robot/JointPositions.hpp"
 #include "state_representation/Robot/JointState.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"

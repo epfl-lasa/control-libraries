@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "state_representation/Parameters/ParameterInterface.hpp"
+#include "state_representation/parameters/ParameterInterface.hpp"
 #include <list>
 #include <memory>
 

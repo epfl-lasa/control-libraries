@@ -1,4 +1,4 @@
-#include "state_representation/Parameters/ParameterInterface.hpp"
+#include "state_representation/parameters/ParameterInterface.hpp"
 
 namespace state_representation {
 ParameterInterface::ParameterInterface(const StateType& type, const std::string& name) : State(type, name) {}

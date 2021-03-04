@@ -1,6 +1,6 @@
 #pragma once
 
-#include "state_representation/Parameters/Predicate.hpp"
+#include "state_representation/parameters/Predicate.hpp"
 
 namespace state_representation {
 /**

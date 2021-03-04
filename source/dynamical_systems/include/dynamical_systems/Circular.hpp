@@ -7,7 +7,7 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "state_representation/geometry/Ellipsoid.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"

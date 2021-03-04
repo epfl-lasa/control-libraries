@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-using namespace state_representation::Exceptions;
+using namespace state_representation::exceptions;
 
 namespace state_representation {
 class JointState;

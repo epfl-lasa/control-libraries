@@ -136,7 +136,7 @@ const Ellipsoid Ellipsoid::fit(const std::string& name,
 
     // no solution case
     if (eigenvalue < 0) {
-      throw Exceptions::NoSolutionToFitException("No solution found for the ellipse fitting");
+      throw exceptions::NoSolutionToFitException("No solution found for the ellipse fitting");
     }
 
     // extract the solution

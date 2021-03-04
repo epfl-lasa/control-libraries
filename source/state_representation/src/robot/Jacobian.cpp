@@ -51,7 +51,7 @@ Jacobian Jacobian::transpose() const {
 
 Jacobian Jacobian::inverse() const {
   if (this->get_nb_rows() != this->get_nb_cols()) {
-    throw Exceptions::IncompatibleSizeException(
+    throw exceptions::IncompatibleSizeException(
         "The Jacobian matrix is not invertible, use the pseudoinverse function instead");
   }
   Jacobian result(*this);

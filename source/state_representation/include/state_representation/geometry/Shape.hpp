@@ -133,7 +133,7 @@ inline void Shape::set_center_state(const CartesianState& state) {
 
 inline void Shape::set_center_pose(const CartesianPose& pose) {
   if (this->center_state_.get_reference_frame() != pose.get_reference_frame()) {
-    throw Exceptions::IncompatibleReferenceFramesException(
+    throw exceptions::IncompatibleReferenceFramesException(
         "The shape state and the given pose are not expressed in the same reference frame");
   }
   this->center_state_.set_pose(pose.get_position(), pose.get_orientation());

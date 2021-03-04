@@ -2,7 +2,7 @@
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
-using namespace state_representation::Exceptions;
+using namespace state_representation::exceptions;
 
 namespace state_representation {
 CartesianPose::CartesianPose() {}

@@ -1,7 +1,7 @@
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
-using namespace state_representation::Exceptions;
+using namespace state_representation::exceptions;
 
 namespace state_representation {
 CartesianTwist::CartesianTwist() {}

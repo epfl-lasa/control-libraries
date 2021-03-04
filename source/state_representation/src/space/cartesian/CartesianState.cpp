@@ -3,7 +3,7 @@
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/NotImplementedException.hpp"
 
-using namespace state_representation::Exceptions;
+using namespace state_representation::exceptions;
 
 namespace state_representation {
 CartesianState::CartesianState() : SpatialState(StateType::CARTESIANSTATE) {

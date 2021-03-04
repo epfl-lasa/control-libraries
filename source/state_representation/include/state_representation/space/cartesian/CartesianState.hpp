@@ -648,7 +648,7 @@ inline void CartesianState::set_orientation(const Eigen::Vector4d& orientation) 
 
 inline void CartesianState::set_orientation(const std::vector<double>& orientation) {
   if (orientation.size() != 4) {
-    throw Exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
   }
   this->set_orientation(Eigen::Vector4d::Map(orientation.data(), orientation.size()));
 }
@@ -665,7 +665,7 @@ inline void CartesianState::set_pose(const Eigen::Matrix<double, 7, 1>& pose) {
 
 inline void CartesianState::set_pose(const std::vector<double>& pose) {
   if (pose.size() != 7) {
-    throw Exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
   }
   this->set_position(std::vector<double>(pose.begin(), pose.begin() + 3));
   this->set_orientation(std::vector<double>(pose.begin() + 3, pose.end()));

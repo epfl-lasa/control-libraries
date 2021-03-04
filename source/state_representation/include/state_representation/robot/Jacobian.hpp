@@ -13,7 +13,7 @@
 #include "state_representation/State.hpp"
 #include <eigen3/Eigen/Core>
 
-using namespace state_representation::Exceptions;
+using namespace state_representation::exceptions;
 
 namespace state_representation {
 class CartesianTwist;

@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Robot/JointVelocities.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointVelocities.hpp"
 
 namespace state_representation {
 class JointVelocities;

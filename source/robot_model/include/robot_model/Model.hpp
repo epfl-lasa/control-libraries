@@ -10,8 +10,8 @@
 #include <pinocchio/algorithm/rnea.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
-#include <state_representation/Robot/Jacobian.hpp>
-#include <state_representation/Robot/JointState.hpp>
+#include <state_representation/robot/Jacobian.hpp>
+#include <state_representation/robot/JointState.hpp>
 #include <state_representation/Space/Cartesian/CartesianState.hpp>
 
 namespace RobotModel {

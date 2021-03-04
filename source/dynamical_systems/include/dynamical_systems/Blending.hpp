@@ -8,7 +8,7 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/NotImplementedException.hpp"
-#include "state_representation/Robot/JointState.hpp"
+#include "state_representation/robot/JointState.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"

@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include "state_representation/Trajectories/Trajectory.hpp"
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Robot/JointState.hpp"
+#include "state_representation/robot/JointState.hpp"
 
 TEST(CreateTrajectory, PositiveNos) {
   state_representation::Trajectory<state_representation::JointState> trajectory;

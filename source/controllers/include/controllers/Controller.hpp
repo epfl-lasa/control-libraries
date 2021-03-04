@@ -2,7 +2,7 @@
 
 #include "controllers/exceptions/NotImplementedException.hpp"
 #include "state_representation/parameters/ParameterInterface.hpp"
-#include "state_representation/Robot/Jacobian.hpp"
+#include "state_representation/robot/Jacobian.hpp"
 #include <list>
 #include <memory>
 

@@ -1,6 +1,6 @@
-#include "state_representation/Robot/JointPositions.hpp"
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Robot/JointTorques.hpp"
+#include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointTorques.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>

@@ -10,11 +10,11 @@ set(CORE_SOURCES
   src/Space/Cartesian/CartesianPose.cpp
   src/Space/Cartesian/CartesianTwist.cpp
   src/Space/Cartesian/CartesianWrench.cpp
-  src/Robot/JointState.cpp
-  src/Robot/JointPositions.cpp
-  src/Robot/JointVelocities.cpp
-  src/Robot/JointTorques.cpp
-  src/Robot/Jacobian.cpp
+        src/robot/JointState.cpp
+        src/robot/JointPositions.cpp
+        src/robot/JointVelocities.cpp
+        src/robot/JointTorques.cpp
+        src/robot/Jacobian.cpp
   src/Space/DualQuaternion/DualQuaternionState.cpp
   src/Space/DualQuaternion/DualQuaternionPose.cpp
   src/Space/DualQuaternion/DualQuaternionTwist.cpp

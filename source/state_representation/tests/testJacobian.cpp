@@ -1,4 +1,4 @@
-#include "state_representation/Robot/Jacobian.hpp"
+#include "state_representation/robot/Jacobian.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>

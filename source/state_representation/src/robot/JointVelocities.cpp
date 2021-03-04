@@ -1,4 +1,4 @@
-#include "state_representation/Robot/JointVelocities.hpp"
+#include "state_representation/robot/JointVelocities.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 

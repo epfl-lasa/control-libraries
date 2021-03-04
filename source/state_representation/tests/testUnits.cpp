@@ -4,8 +4,8 @@
 #include "state_representation/Units/Angle.hpp"
 #include "state_representation/Units/Velocity.hpp"
 
-using namespace state_representation::Units;
-using namespace state_representation::Units::literals;
+using namespace state_representation::units;
+using namespace state_representation::units::literals;
 
 TEST(CreateDistances, PositiveNos) {
   Distance d1 = 1.0_dm;

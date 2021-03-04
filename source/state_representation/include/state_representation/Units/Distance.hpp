@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace state_representation::Units {
+namespace state_representation::units {
 class Distance;
 
 inline namespace literals {

@@ -6,7 +6,7 @@
 
 using namespace std::chrono_literals;
 
-namespace state_representation::Units {
+namespace state_representation::units {
 template<class T>
 class Velocity;
 

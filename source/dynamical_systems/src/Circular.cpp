@@ -1,34 +1,32 @@
 #include "dynamical_systems/Circular.hpp"
 
+using namespace state_representation;
+
 namespace DynamicalSystems {
-Circular::Circular(const state_representation::CartesianState& center,
-                   double radius,
-                   double gain,
-                   double circular_velocity) : DynamicalSystem(state_representation::CartesianPose::Identity(center.get_reference_frame())),
-                                               limit_cycle_(std::make_shared<state_representation::Parameter<state_representation::Ellipsoid>>("limit_cycle",
-                                                                                                                                               state_representation::Ellipsoid(center.get_name(), center.get_reference_frame()))),
-                                               planar_gain_(std::make_shared<state_representation::Parameter<double>>("planar_gain", gain)),
-                                               normal_gain_(std::make_shared<state_representation::Parameter<double>>("normal_gain", gain)),
-                                               circular_velocity_(std::make_shared<state_representation::Parameter<double>>("circular_velocity",
-                                                                                                                            circular_velocity)) {
+Circular::Circular(const CartesianState& center, double radius, double gain, double circular_velocity) :
+    DynamicalSystem(center.get_reference_frame()),
+    limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle",
+                                                        Ellipsoid(center.get_name(), center.get_reference_frame()))),
+    planar_gain_(std::make_shared<Parameter<double>>("planar_gain", gain)),
+    normal_gain_(std::make_shared<Parameter<double>>("normal_gain", gain)),
+    circular_velocity_(std::make_shared<Parameter<double>>("circular_velocity", circular_velocity)) {
   this->limit_cycle_->get_value().set_center_state(center);
   this->limit_cycle_->get_value().set_axis_lengths({radius, radius});
 }
 
-Circular::Circular(const state_representation::Ellipsoid& limit_cycle, double gain, double circular_velocity) : DynamicalSystem(state_representation::CartesianPose::Identity(limit_cycle.get_center_pose().get_reference_frame())),
-                                                                                                                limit_cycle_(std::make_shared<state_representation::Parameter<state_representation::Ellipsoid>>("limit_cycle",
-                                                                                                                                                                                                                limit_cycle)),
-                                                                                                                planar_gain_(std::make_shared<state_representation::Parameter<double>>("planar_gain", gain)),
-                                                                                                                normal_gain_(std::make_shared<state_representation::Parameter<double>>("normal_gain", gain)),
-                                                                                                                circular_velocity_(std::make_shared<state_representation::Parameter<double>>("circular_velocity",
-                                                                                                                                                                                             circular_velocity)) {}
+Circular::Circular(const Ellipsoid& limit_cycle, double gain, double circular_velocity) :
+    DynamicalSystem(limit_cycle.get_center_pose().get_reference_frame()),
+    limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle", limit_cycle)),
+    planar_gain_(std::make_shared<Parameter<double>>("planar_gain", gain)),
+    normal_gain_(std::make_shared<Parameter<double>>("normal_gain", gain)),
+    circular_velocity_(std::make_shared<Parameter<double>>("circular_velocity", circular_velocity)) {}
 
-state_representation::CartesianState Circular::compute_dynamics(const state_representation::CartesianState& state) const {
+CartesianState Circular::compute_dynamics(const CartesianState& state) const {
   // put the point in the reference of the center
-  state_representation::CartesianPose pose = static_cast<const state_representation::CartesianPose&>(state);
+  auto pose = CartesianPose(state);
   pose = this->get_limit_cycle().get_rotation().inverse() * this->get_center().inverse() * pose;
 
-  state_representation::CartesianTwist velocity(pose.get_name(), pose.get_reference_frame());
+  CartesianTwist velocity(pose.get_name(), pose.get_reference_frame());
   Eigen::Vector3d linear_velocity;
   linear_velocity(2) = -this->get_normal_gain() * pose.get_position()(2);
 
@@ -47,16 +45,24 @@ state_representation::CartesianState Circular::compute_dynamics(const state_repr
   velocity.set_angular_velocity(Eigen::Vector3d::Zero());
 
   //compute back the linear velocity in the desired frame
-  velocity = this->get_center() * this->get_limit_cycle().get_rotation() * velocity;
-  return velocity;
+  auto frame = this->get_center() * this->get_limit_cycle().get_rotation();
+  return CartesianTwist(frame) * velocity;
 }
 
-std::list<std::shared_ptr<state_representation::ParameterInterface>> Circular::get_parameters() const {
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<ParameterInterface>> Circular::get_parameters() const {
+  std::list<std::shared_ptr<ParameterInterface>> param_list;
   param_list.push_back(this->limit_cycle_);
   param_list.push_back(this->planar_gain_);
   param_list.push_back(this->normal_gain_);
   param_list.push_back(this->circular_velocity_);
   return param_list;
+}
+
+void Circular::set_base_frame(const CartesianState& base_frame) {
+  DynamicalSystem<CartesianState>::set_base_frame(base_frame);
+  // update reference frame of center
+  auto center_state = this->limit_cycle_->get_value().get_center_state();
+  center_state.set_reference_frame(base_frame.get_name());
+  this->limit_cycle_->get_value().set_center_state(center_state);
 }
 }// namespace DynamicalSystems

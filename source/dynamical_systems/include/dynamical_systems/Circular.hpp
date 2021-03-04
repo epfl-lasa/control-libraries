@@ -77,6 +77,12 @@ public:
   void set_center(const state_representation::CartesianPose& center);
 
   /**
+   * @brief Setter of the DS base frame as a new value
+   * @param base_frame the new base frame
+   */
+  void set_base_frame(const state_representation::CartesianState& base_frame) override;
+
+  /**
    * @brief Getter of the planar gain attribute
    * @return The gain value in the plane of the circle
    */

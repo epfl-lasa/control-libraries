@@ -8,6 +8,7 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
@@ -21,7 +22,7 @@ namespace DynamicalSystems {
  * @brief Represent a Linear dynamical system to move toward an attractor
  * @tparam S the type of space of the dynamical system (e.g. Cartesian or Joint)
  */
-template <class S>
+template<class S>
 class Linear : public DynamicalSystem<S> {
 private:
   std::shared_ptr<state_representation::Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
@@ -73,6 +74,12 @@ public:
   void set_attractor(const S& attractor);
 
   /**
+   * @brief Setter of the base frame as a new value
+   * @param base_frame the new base frame
+   */
+  void set_base_frame(const S& base_frame) override;
+
+  /**
    * @brief Getter of the gain attribute
    * @return The gain value
    */
@@ -103,22 +110,52 @@ public:
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
-template <class S>
+template<class S>
 inline const S& Linear<S>::get_attractor() const {
   return this->attractor_->get_value();
 }
 
-template <class S>
+template<class S>
 inline void Linear<S>::set_attractor(const S& attractor) {
   this->attractor_->set_value(attractor);
 }
+template<>
+inline void Linear<state_representation::CartesianState>::set_attractor(const state_representation::CartesianState& attractor) {
+  // validate that the reference frame of the attractor is always compatible with the DS reference frame
+  if (attractor.get_reference_frame() != this->get_base_frame().get_name()) {
+    if (attractor.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
+      throw state_representation::exceptions::IncompatibleReferenceFramesException(
+          "The reference frame of the attractor " + attractor.get_name() + " in frame " + attractor.get_reference_frame()
+              + " is incompatible with the base frame of the dynamical system "
+              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + "."
+      );
+    }
+    this->attractor_->set_value(this->get_base_frame().inverse() * attractor);
+  } else {
+    this->attractor_->set_value(attractor);
+  }
+}
 
-template <class S>
+
+template<class S>
+inline void Linear<S>::set_base_frame(const S& base_frame) {
+  DynamicalSystem<S>::set_base_frame(base_frame);
+}
+template<>
+inline void Linear<state_representation::CartesianState>::set_base_frame(const state_representation::CartesianState& base_frame) {
+  DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
+  // update reference frame of attractor
+  auto attractor = this->get_attractor();
+  attractor.set_reference_frame(base_frame.get_name());
+  this->set_attractor(attractor);
+}
+
+template<class S>
 inline const Eigen::MatrixXd& Linear<S>::get_gain() const {
   return this->gain_->get_value();
 }
 
-template <class S>
+template<class S>
 std::list<std::shared_ptr<state_representation::ParameterInterface>> Linear<S>::get_parameters() const {
   std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->attractor_);

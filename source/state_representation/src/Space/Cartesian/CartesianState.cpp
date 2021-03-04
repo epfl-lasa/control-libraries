@@ -1,11 +1,11 @@
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/Exceptions/NotImplementedException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/NotImplementedException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 CartesianState::CartesianState() : SpatialState(StateType::CARTESIANSTATE) {
   this->initialize();
 }
@@ -307,4 +307,4 @@ double dist(const CartesianState& s1, const CartesianState& s2, const CartesianS
 void CartesianState::from_std_vector(const std::vector<double>&) {
   throw(NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
 }
-}// namespace StateRepresentation
+}// namespace state_representation

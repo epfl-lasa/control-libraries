@@ -2,7 +2,7 @@
 
 #include "state_representation/Parameters/Predicate.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 /**
  * @class Event
  * @brief An event is a predicate with memory. Its purpose is
@@ -63,4 +63,4 @@ inline void Event::set_value(const bool& value) {
 inline bool Event::get_previous_value() const {
   return this->previous_predicate_value_;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

@@ -1,10 +1,10 @@
 #include "state_representation/Robot/JointPositions.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 JointPositions::JointPositions() {}
 
 JointPositions::JointPositions(const std::string& robot_name, unsigned int nb_joints) :
@@ -160,4 +160,4 @@ JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& po
 void JointPositions::from_std_vector(const std::vector<double>& value) {
   this->set_positions(value);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

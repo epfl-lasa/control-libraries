@@ -7,7 +7,7 @@
 
 #include "state_representation/Robot/JointState.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 /**
  * @class JointTorques
  * @brief Class to define torques of the joints
@@ -268,4 +268,4 @@ inline JointTorques& JointTorques::operator=(const JointTorques& state) {
   JointState::operator=(state);
   return (*this);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

@@ -1,9 +1,9 @@
 #include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
-#include "state_representation/Exceptions/NotImplementedException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/NotImplementedException.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 JointState::JointState() : State(StateType::JOINTSTATE) {
   this->initialize();
 }
@@ -299,4 +299,4 @@ JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
 void JointState::from_std_vector(const std::vector<double>&) {
   throw NotImplementedException("from_std_vector() is not implemented for the base JointState class");
 }
-}// namespace StateRepresentation
+}// namespace state_representation

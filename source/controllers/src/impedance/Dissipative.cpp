@@ -1,6 +1,6 @@
 #include "controllers/impedance/Dissipative.hpp"
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 namespace controllers::impedance {
 template<class S>

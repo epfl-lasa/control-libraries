@@ -1,10 +1,10 @@
 #include "state_representation/Robot/JointVelocities.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 JointVelocities::JointVelocities() {}
 
 JointVelocities::JointVelocities(const std::string& robot_name, unsigned int nb_joints) :
@@ -181,4 +181,4 @@ JointVelocities operator*(const Eigen::MatrixXd& lambda, const JointVelocities& 
 JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities) {
   return velocities * dt;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

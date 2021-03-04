@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "state_representation/Exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/Robot/JointTorques.hpp"
 #include "state_representation/Robot/JointVelocities.hpp"
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"
@@ -13,9 +13,9 @@
 #include "state_representation/State.hpp"
 #include <eigen3/Eigen/Core>
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 class CartesianTwist;
 
 class CartesianWrench;
@@ -327,4 +327,4 @@ inline const double& Jacobian::operator()(unsigned int row, unsigned int col) co
   }
   return this->data_matrix_(row, col);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

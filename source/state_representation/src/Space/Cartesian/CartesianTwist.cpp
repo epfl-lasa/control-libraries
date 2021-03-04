@@ -1,11 +1,11 @@
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 CartesianTwist::CartesianTwist() {}
 
 CartesianTwist::CartesianTwist(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
@@ -160,4 +160,4 @@ CartesianTwist operator*(const Eigen::Matrix<double, 6, 6>& lambda, const Cartes
 CartesianPose operator*(const std::chrono::nanoseconds& dt, const CartesianTwist& twist) {
   return twist * dt;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

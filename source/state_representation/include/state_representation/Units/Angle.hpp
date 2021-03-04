@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-namespace StateRepresentation
+namespace state_representation
 {
 	namespace Units
 	{

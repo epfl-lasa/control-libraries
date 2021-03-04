@@ -4,7 +4,7 @@
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 namespace DynamicalSystems {
 template <class S>

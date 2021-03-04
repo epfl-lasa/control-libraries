@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 
 using namespace controllers::impedance;
-using namespace StateRepresentation;
+using namespace state_representation;
 
 TEST(TestCopyConstructor, PositiveNos) {
   Impedance<CartesianState> impedance_controller(Eigen::MatrixXd::Random(6, 6),

@@ -14,11 +14,11 @@ namespace controllers::impedance {
 template<class S>
 class Impedance : public Controller<S> {
 private:
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>>
+  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>>
       stiffness_;///< stiffness matrix of the controller associated to position
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>>
+  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>>
       damping_;  ///< damping matrix of the controller associated to velocity
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>>
+  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>>
       inertia_;  ///< inertia matrix of the controller associated to acceleration
 
 public:
@@ -69,9 +69,9 @@ public:
    * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
    * @return the output command at the input state
    */
-  virtual StateRepresentation::JointState compute_command(const S& desired_state,
-                                                          const S& feedback_state,
-                                                          const StateRepresentation::Jacobian& jacobian);
+  virtual state_representation::JointState compute_command(const S& desired_state,
+                                                           const S& feedback_state,
+                                                           const state_representation::Jacobian& jacobian);
 
   /**
    * @brief Getter of the stiffness matrix
@@ -113,17 +113,17 @@ public:
    * @brief Return a list of all the parameters of the controller
    * @return the list of parameters
    */
-  virtual std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  virtual std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 template<class S>
 Impedance<S>::Impedance(const Impedance<S>& other):
-    stiffness_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("stiffness",
-                                                                                 other.get_stiffness())),
-    damping_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("damping",
-                                                                               other.get_damping())),
-    inertia_(std::make_shared<StateRepresentation::Parameter<Eigen::MatrixXd>>("inertia",
-                                                                               other.get_inertia())) {}
+    stiffness_(std::make_shared<state_representation::Parameter<Eigen::MatrixXd>>("stiffness",
+                                                                                  other.get_stiffness())),
+    damping_(std::make_shared<state_representation::Parameter<Eigen::MatrixXd>>("damping",
+                                                                                other.get_damping())),
+    inertia_(std::make_shared<state_representation::Parameter<Eigen::MatrixXd>>("inertia",
+                                                                                other.get_inertia())) {}
 
 template<class U>
 inline void swap(Impedance<U>& controller1, Impedance<U>& controller2) {
@@ -170,8 +170,8 @@ inline void Impedance<S>::set_inertia(const Eigen::MatrixXd& inertia) {
 }
 
 template<class S>
-std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Impedance<S>::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> Impedance<S>::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->stiffness_);
   param_list.push_back(this->damping_);
   param_list.push_back(this->inertia_);

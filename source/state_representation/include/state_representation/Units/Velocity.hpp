@@ -7,7 +7,7 @@
 
 using namespace std::chrono_literals;
 
-namespace StateRepresentation
+namespace state_representation
 {
 	namespace Units
 	{

@@ -8,7 +8,7 @@
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Space/Cartesian/CartesianTwist.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 class CartesianTwist;
 
 /**
@@ -211,4 +211,4 @@ inline CartesianPose& CartesianPose::operator=(const CartesianPose& pose) {
   CartesianState::operator=(pose);
   return (*this);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

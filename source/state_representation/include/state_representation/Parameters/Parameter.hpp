@@ -2,7 +2,7 @@
 
 #include "state_representation/Parameters/ParameterInterface.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 template <typename T>
 class Parameter : public ParameterInterface {
 private:
@@ -89,4 +89,4 @@ inline void Parameter<T>::set_value(const T& value) {
   this->set_filled();
   this->value = value;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

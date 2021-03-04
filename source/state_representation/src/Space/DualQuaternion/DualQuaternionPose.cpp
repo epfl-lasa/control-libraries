@@ -1,6 +1,6 @@
 #include "state_representation/Space/DualQuaternion/DualQuaternionPose.hpp"
 
-namespace StateRepresentation 
+namespace state_representation
 {
 	DualQuaternionPose::DualQuaternionPose(const std::string& name, const std::string& reference):
 	DualQuaternionState(name, reference)

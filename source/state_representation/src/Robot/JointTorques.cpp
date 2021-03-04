@@ -1,10 +1,10 @@
 #include "state_representation/Robot/JointTorques.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 JointTorques::JointTorques() {}
 
 JointTorques::JointTorques(const std::string& robot_name, unsigned int nb_joints) : JointState(robot_name, nb_joints) {}
@@ -162,4 +162,4 @@ JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torque
   result *= lambda;
   return result;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

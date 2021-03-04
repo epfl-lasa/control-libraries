@@ -1,6 +1,6 @@
 #include "state_representation/MathTools.hpp"
 
-namespace StateRepresentation
+namespace state_representation
 {
 	namespace MathTools
 	{

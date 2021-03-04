@@ -1,6 +1,6 @@
 #include "state_representation/Space/DualQuaternion/DualQuaternionState.hpp"
 
-namespace StateRepresentation 
+namespace state_representation
 {
 	DualQuaternionState::DualQuaternionState():
 	SpatialState(StateType::DUALQUATERNIONSTATE)

@@ -4,15 +4,15 @@
 #include <vector>
 
 TEST(EvaluateDynamicalSystemPositionOnly, PositiveNos) {
-  StateRepresentation::CartesianPose current_pose("robot", 10 * Eigen::Vector3d::Random());
-  StateRepresentation::CartesianPose target_pose("robot", 10 * Eigen::Vector3d::Random());
-  DynamicalSystems::Linear<StateRepresentation::CartesianState> linearDS(target_pose);
+  state_representation::CartesianPose current_pose("robot", 10 * Eigen::Vector3d::Random());
+  state_representation::CartesianPose target_pose("robot", 10 * Eigen::Vector3d::Random());
+  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   unsigned int nb_steps = 100;
   double dt = 0.1;
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    StateRepresentation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
 
@@ -27,16 +27,16 @@ TEST(EvaluateDynamicalSystemPositionOnly, PositiveNos) {
 TEST(EvaluateDynamicalSystemOrientationOnly, PositiveNos) {
   srand(time(NULL));
 
-  StateRepresentation::CartesianPose current_pose("robot", Eigen::Vector3d(0, 0, 0));
-  StateRepresentation::CartesianPose target_pose("robot", Eigen::Vector3d(0, 0, 0), Eigen::Quaterniond::UnitRandom());
+  state_representation::CartesianPose current_pose("robot", Eigen::Vector3d(0, 0, 0));
+  state_representation::CartesianPose target_pose("robot", Eigen::Vector3d(0, 0, 0), Eigen::Quaterniond::UnitRandom());
 
-  DynamicalSystems::Linear<StateRepresentation::CartesianState> linearDS(target_pose);
+  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   unsigned int nb_steps = 100;
   double dt = 0.1;
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    StateRepresentation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
 
@@ -51,16 +51,16 @@ TEST(EvaluateDynamicalSystemOrientationOnly, PositiveNos) {
 TEST(EvaluateDynamicalSystem, PositiveNos) {
   srand(time(NULL));
 
-  StateRepresentation::CartesianPose current_pose("robot", 10 * Eigen::Vector3d::Random());
-  StateRepresentation::CartesianPose target_pose("robot", 10 * Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
+  state_representation::CartesianPose current_pose("robot", 10 * Eigen::Vector3d::Random());
+  state_representation::CartesianPose target_pose("robot", 10 * Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
-  DynamicalSystems::Linear<StateRepresentation::CartesianState> linearDS(target_pose);
+  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   unsigned int nb_steps = 100;
   double dt = 0.1;
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    StateRepresentation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
 

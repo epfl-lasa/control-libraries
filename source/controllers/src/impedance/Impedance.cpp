@@ -4,7 +4,7 @@
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 #include "state_representation/Space/Cartesian/CartesianWrench.hpp"
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 namespace controllers::impedance {
 template<class S>
@@ -61,16 +61,16 @@ JointState Impedance<JointState>::compute_command(const JointState& desired_stat
 template<class S>
 JointState Impedance<S>::compute_command(const S&,
                                          const S&,
-                                         const StateRepresentation::Jacobian&) {
+                                         const state_representation::Jacobian&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for this input class");
   return JointState();
 }
 
 template<>
-StateRepresentation::JointState Impedance<CartesianState>::compute_command(const CartesianState& desired_state,
-                                                                           const CartesianState& feedback_state,
-                                                                           const Jacobian& jacobian) {
+state_representation::JointState Impedance<CartesianState>::compute_command(const CartesianState& desired_state,
+                                                                            const CartesianState& feedback_state,
+                                                                            const Jacobian& jacobian) {
   CartesianWrench command = compute_command(desired_state, feedback_state);
   return jacobian.transpose() * command;
 }

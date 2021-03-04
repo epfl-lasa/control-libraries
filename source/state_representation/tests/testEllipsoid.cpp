@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 TEST(Sampling, PositiveNos)
 {

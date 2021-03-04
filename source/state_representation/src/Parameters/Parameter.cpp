@@ -3,7 +3,7 @@
 #include "state_representation/Robot/JointPositions.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 template <>
 Parameter<double>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_DOUBLE, name) {
@@ -194,4 +194,4 @@ std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<std::stri
   }
   return os;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

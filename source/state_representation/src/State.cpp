@@ -1,6 +1,6 @@
 #include "state_representation/State.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 State::State() : type_(StateType::STATE), name_("none"), empty_(true) {}
 
 State::State(const StateType& type) : type_(type), name_("none"), empty_(true) {}
@@ -16,4 +16,4 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
   os << " State: " << state.get_name() << std::endl;
   return os;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

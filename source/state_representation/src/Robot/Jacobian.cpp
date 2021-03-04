@@ -1,8 +1,8 @@
 #include "state_representation/Robot/Jacobian.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 Jacobian::Jacobian() : State(StateType::JACOBIANMATRIX), nb_rows_(6) {}
 
 Jacobian::Jacobian(const std::string& robot_name, unsigned int nb_joints) :
@@ -139,4 +139,4 @@ std::ostream& operator<<(std::ostream& os, const Jacobian& matrix) {
   }
   return os;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

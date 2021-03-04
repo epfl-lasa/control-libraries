@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "state_representation/Exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/Space/SpatialState.hpp"
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 #include <iostream>
 #include <vector>
 
-namespace StateRepresentation {
+namespace state_representation {
 class CartesianState;
 
 /**
@@ -771,4 +771,4 @@ inline std::vector<double> CartesianState::to_std_vector() const {
   Eigen::VectorXd data = this->data();
   return std::vector<double>(data.data(), data.data() + data.size());
 }
-}// namespace StateRepresentation
+}// namespace state_representation

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <typeinfo>
 
-namespace StateRepresentation {
+namespace state_representation {
 enum class StateType {
   STATE,
   CARTESIANSTATE,
@@ -203,4 +203,4 @@ inline bool State::is_compatible(const State& state) const {
 inline void State::initialize() {
   this->empty_ = true;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

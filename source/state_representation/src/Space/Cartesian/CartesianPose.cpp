@@ -1,10 +1,10 @@
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 CartesianPose::CartesianPose() {}
 
 CartesianPose::CartesianPose(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
@@ -143,4 +143,4 @@ void CartesianPose::from_std_vector(const std::vector<double>& value) {
     throw IncompatibleSizeException("The input vector is of incorrect size");
   }
 }
-}// namespace StateRepresentation
+}// namespace state_representation

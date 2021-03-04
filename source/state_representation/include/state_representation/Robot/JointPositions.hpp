@@ -8,7 +8,7 @@
 #include "state_representation/Robot/JointState.hpp"
 #include "state_representation/Robot/JointVelocities.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 class JointVelocities;
 
 /**
@@ -249,4 +249,4 @@ inline JointPositions& JointPositions::operator=(const JointPositions& state) {
   JointState::operator=(state);
   return (*this);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

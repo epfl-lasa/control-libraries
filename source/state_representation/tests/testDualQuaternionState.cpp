@@ -7,13 +7,13 @@ TEST(MultiplyTransformsBothOperators, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(1,0,0,0);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	Eigen::Vector3d pos2(4,5,6);
 	Eigen::Quaterniond rot2(1,0,0,0);
-	StateRepresentation::DualQuaternionPose tf2("t2", pos2, rot2);
+	state_representation::DualQuaternionPose tf2("t2", pos2, rot2);
 
-	StateRepresentation::DualQuaternionPose tf3 = tf1 * tf2;
+	state_representation::DualQuaternionPose tf3 = tf1 * tf2;
 	tf1 *= tf2;
 	
 	EXPECT_EQ(tf3.get_name(), "t2");
@@ -24,11 +24,11 @@ TEST(MultiplyTransformsSameOrientation, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(1,0,0,0);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	Eigen::Vector3d pos2(4,5,6);
 	Eigen::Quaterniond rot2(1,0,0,0);
-	StateRepresentation::DualQuaternionPose tf2("t2", pos2, rot2);
+	state_representation::DualQuaternionPose tf2("t2", pos2, rot2);
 
 	tf1 *= tf2;
 	
@@ -40,11 +40,11 @@ TEST(MultiplyTransformsDifferentOrientation, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	Eigen::Vector3d pos2(4,5,6);
 	Eigen::Quaterniond rot2(0., 0., 0.70710678, 0.70710678);
-	StateRepresentation::DualQuaternionPose tf2("t2", pos2, rot2);
+	state_representation::DualQuaternionPose tf2("t2", pos2, rot2);
 
 	tf1 *= tf2;
 	
@@ -64,7 +64,7 @@ TEST(TestInverseNullOrientation, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(1., 0., 0., 0.);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	tf1 = tf1.inverse();
 	
@@ -86,7 +86,7 @@ TEST(TestInverseNonNullOrientation, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	tf1 = tf1.inverse();
 	
@@ -106,7 +106,7 @@ TEST(TestMultiplyInverseNonNullOrientation, PositiveNos)
 {
 	Eigen::Vector3d pos1(1,2,3);
 	Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-	StateRepresentation::DualQuaternionPose tf1("t1", pos1, rot1);
+	state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
 
 	tf1 *= tf1.inverse();
 	

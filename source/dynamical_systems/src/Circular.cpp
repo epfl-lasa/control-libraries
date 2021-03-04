@@ -1,34 +1,34 @@
 #include "dynamical_systems/Circular.hpp"
 
 namespace DynamicalSystems {
-Circular::Circular(const StateRepresentation::CartesianState& center,
+Circular::Circular(const state_representation::CartesianState& center,
                    double radius,
                    double gain,
-                   double circular_velocity) : DynamicalSystem(StateRepresentation::CartesianPose::Identity(center.get_reference_frame())),
-                                               limit_cycle_(std::make_shared<StateRepresentation::Parameter<StateRepresentation::Ellipsoid>>("limit_cycle",
-                                                                                                                                             StateRepresentation::Ellipsoid(center.get_name(), center.get_reference_frame()))),
-                                               planar_gain_(std::make_shared<StateRepresentation::Parameter<double>>("planar_gain", gain)),
-                                               normal_gain_(std::make_shared<StateRepresentation::Parameter<double>>("normal_gain", gain)),
-                                               circular_velocity_(std::make_shared<StateRepresentation::Parameter<double>>("circular_velocity",
-                                                                                                                           circular_velocity)) {
+                   double circular_velocity) : DynamicalSystem(state_representation::CartesianPose::Identity(center.get_reference_frame())),
+                                               limit_cycle_(std::make_shared<state_representation::Parameter<state_representation::Ellipsoid>>("limit_cycle",
+                                                                                                                                               state_representation::Ellipsoid(center.get_name(), center.get_reference_frame()))),
+                                               planar_gain_(std::make_shared<state_representation::Parameter<double>>("planar_gain", gain)),
+                                               normal_gain_(std::make_shared<state_representation::Parameter<double>>("normal_gain", gain)),
+                                               circular_velocity_(std::make_shared<state_representation::Parameter<double>>("circular_velocity",
+                                                                                                                            circular_velocity)) {
   this->limit_cycle_->get_value().set_center_state(center);
   this->limit_cycle_->get_value().set_axis_lengths({radius, radius});
 }
 
-Circular::Circular(const StateRepresentation::Ellipsoid& limit_cycle, double gain, double circular_velocity) : DynamicalSystem(StateRepresentation::CartesianPose::Identity(limit_cycle.get_center_pose().get_reference_frame())),
-                                                                                                               limit_cycle_(std::make_shared<StateRepresentation::Parameter<StateRepresentation::Ellipsoid>>("limit_cycle",
-                                                                                                                                                                                                             limit_cycle)),
-                                                                                                               planar_gain_(std::make_shared<StateRepresentation::Parameter<double>>("planar_gain", gain)),
-                                                                                                               normal_gain_(std::make_shared<StateRepresentation::Parameter<double>>("normal_gain", gain)),
-                                                                                                               circular_velocity_(std::make_shared<StateRepresentation::Parameter<double>>("circular_velocity",
-                                                                                                                                                                                           circular_velocity)) {}
+Circular::Circular(const state_representation::Ellipsoid& limit_cycle, double gain, double circular_velocity) : DynamicalSystem(state_representation::CartesianPose::Identity(limit_cycle.get_center_pose().get_reference_frame())),
+                                                                                                                limit_cycle_(std::make_shared<state_representation::Parameter<state_representation::Ellipsoid>>("limit_cycle",
+                                                                                                                                                                                                                limit_cycle)),
+                                                                                                                planar_gain_(std::make_shared<state_representation::Parameter<double>>("planar_gain", gain)),
+                                                                                                                normal_gain_(std::make_shared<state_representation::Parameter<double>>("normal_gain", gain)),
+                                                                                                                circular_velocity_(std::make_shared<state_representation::Parameter<double>>("circular_velocity",
+                                                                                                                                                                                             circular_velocity)) {}
 
-StateRepresentation::CartesianState Circular::compute_dynamics(const StateRepresentation::CartesianState& state) const {
+state_representation::CartesianState Circular::compute_dynamics(const state_representation::CartesianState& state) const {
   // put the point in the reference of the center
-  StateRepresentation::CartesianPose pose = static_cast<const StateRepresentation::CartesianPose&>(state);
+  state_representation::CartesianPose pose = static_cast<const state_representation::CartesianPose&>(state);
   pose = this->get_limit_cycle().get_rotation().inverse() * this->get_center().inverse() * pose;
 
-  StateRepresentation::CartesianTwist velocity(pose.get_name(), pose.get_reference_frame());
+  state_representation::CartesianTwist velocity(pose.get_name(), pose.get_reference_frame());
   Eigen::Vector3d linear_velocity;
   linear_velocity(2) = -this->get_normal_gain() * pose.get_position()(2);
 
@@ -51,8 +51,8 @@ StateRepresentation::CartesianState Circular::compute_dynamics(const StateRepres
   return velocity;
 }
 
-std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Circular::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> Circular::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->limit_cycle_);
   param_list.push_back(this->planar_gain_);
   param_list.push_back(this->normal_gain_);

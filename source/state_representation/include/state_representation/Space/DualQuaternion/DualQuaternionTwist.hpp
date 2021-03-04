@@ -10,7 +10,7 @@
 
 #include "state_representation/Space/DualQuaternion/DualQuaternionState.hpp"
 
-namespace StateRepresentation 
+namespace state_representation
 {
 	class DualQuaternionTwist: public DualQuaternionState
 	{

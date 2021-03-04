@@ -4,7 +4,7 @@
 #include <deque>
 #include "state_representation/State.hpp"
 
-namespace StateRepresentation
+namespace state_representation
 {
 	template <class StateT>
 	class Trajectory : public State

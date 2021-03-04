@@ -2,7 +2,7 @@
 
 #include "state_representation/State.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 class ParameterInterface : public State {
 public:
   /**
@@ -30,4 +30,4 @@ inline ParameterInterface& ParameterInterface::operator=(const ParameterInterfac
   State::operator=(state);
   return (*this);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

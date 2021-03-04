@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <unistd.h>
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 TEST(IdentityInitialization, PositiveNos) {
   CartesianState identity = CartesianState::Identity("test");

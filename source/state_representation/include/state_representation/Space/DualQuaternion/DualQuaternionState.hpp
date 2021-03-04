@@ -10,7 +10,7 @@
 
 #include "state_representation/Space/SpatialState.hpp"
 
-namespace StateRepresentation 
+namespace state_representation
 {
 	class DualQuaternionState: public SpatialState
 	{

@@ -7,7 +7,7 @@
 
 #include "state_representation/Space/Cartesian/CartesianState.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 /**
  * @class CartesianWrench
  * @brief Class to define wrench in cartesian space as 3D force and torque vectors
@@ -195,4 +195,4 @@ inline CartesianWrench& CartesianWrench::operator=(const CartesianWrench& wrench
   CartesianState::operator=(wrench);
   return (*this);
 }
-}// namespace StateRepresentation
+}// namespace state_representation

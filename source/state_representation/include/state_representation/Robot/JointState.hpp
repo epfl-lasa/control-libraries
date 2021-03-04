@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "state_representation/Exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/State.hpp"
 #include <eigen3/Eigen/Core>
 #include <iostream>
@@ -13,9 +13,9 @@
 #include <string>
 #include <vector>
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 class JointState;
 
 /**
@@ -607,4 +607,4 @@ inline std::vector<double> JointState::to_std_vector() const {
   Eigen::VectorXd data = this->data();
   return std::vector<double>(data.data(), data.data() + data.size());
 }
-}// namespace StateRepresentation
+}// namespace state_representation

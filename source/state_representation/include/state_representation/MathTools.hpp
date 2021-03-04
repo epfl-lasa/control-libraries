@@ -4,7 +4,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
-namespace StateRepresentation
+namespace state_representation
 {
 	namespace MathTools
 	{

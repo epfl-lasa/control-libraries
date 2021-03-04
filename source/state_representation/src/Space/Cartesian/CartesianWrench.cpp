@@ -1,11 +1,11 @@
 #include "state_representation/Space/Cartesian/CartesianWrench.hpp"
-#include "state_representation/Exceptions/EmptyStateException.hpp"
-#include "state_representation/Exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/Exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
-using namespace StateRepresentation::Exceptions;
+using namespace state_representation::Exceptions;
 
-namespace StateRepresentation {
+namespace state_representation {
 CartesianWrench::CartesianWrench() {}
 
 CartesianWrench::CartesianWrench(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
@@ -122,4 +122,4 @@ std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {
 CartesianWrench operator*(double lambda, const CartesianWrench& wrench) {
   return wrench * lambda;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

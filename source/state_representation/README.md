@@ -31,8 +31,8 @@ All those state variables use `Eigen::Vector3d` internally, except for the orien
 All getters and setters are implemented.
 
 ```cpp
-StateRepresentation::CartesianState s1("a"); // frame a expressed in world (default)
-StateRepresentation::CartesianState s2("b", "a"); // frame b expressed in a
+state_representation::CartesianState s1("a"); // frame a expressed in world (default)
+state_representation::CartesianState s2("b", "a"); // frame b expressed in a
 
 s1.set_position(Eigen::Vector3d(0, 1, 0)); // 1 meter in y direction
 s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
@@ -65,15 +65,15 @@ Basic operations between frames such as addition, subtractions, scaling are defi
 It is very important to note that those operations are only valid if both states are expressed in the same reference frame.
 
 ```cpp
-StateRepresentation::CartesianState s1("a"); // reference frame is world by default
-StateRepresentation::CartesianState s2("b");
+state_representation::CartesianState s1("a"); // reference frame is world by default
+state_representation::CartesianState s2("b");
 double lamda = 0.5
 
 // for those operation to be valid both s1 and s2
 // should be expressed in the same reference frame
-StateRepresentation::CartesianState ssum = s1 + s2;
-StateRepresentation::CartesianState sdiff = s1 - s2;
-StateRepresentation::CartesianState sscaled = lambda * s1;
+state_representation::CartesianState ssum = s1 + s2;
+state_representation::CartesianState sdiff = s1 - s2;
+state_representation::CartesianState sscaled = lambda * s1;
 ```
 
 Also, despite common mathematical interpretation, the `+` operator is **not commutative** due to the orientation part of the state.
@@ -82,13 +82,13 @@ from `world` frame to frame `b`.
 If both frames have the same orientation then the `+` operator is commutative.
 
 ```cpp
-StateRepresentation::CartesianState s1("a");
-StateRepresentation::CartesianState s2("b");
+state_representation::CartesianState s1("a");
+state_representation::CartesianState s2("b");
 s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
 s2.set_orientation(Eigen::Quaterniond::UnitRandom());
 
-StateRepresentation::CartesianState ssum1 = s1 + s2;
-StateRepresentation::CartesianState ssum2 = s2 + s1;
+state_representation::CartesianState ssum1 = s1 + s2;
+state_representation::CartesianState ssum2 = s2 + s1;
 
 ssum1 != ssum2;
 ```
@@ -98,12 +98,12 @@ ssum1 != ssum2;
 One of the most useful operation is the multiplication between two states that corresponds to a changing of reference frame:
 
 ```cpp
-StateRepresentation::CartesianState wSa("a"); // reference frame is world by default
-StateRepresentation::CartesianState aSb("b", "a");
+state_representation::CartesianState wSa("a"); // reference frame is world by default
+state_representation::CartesianState aSb("b", "a");
 
 // for this operation to be valid aSb should be expressed in a (wSa)
 // the result is b expressed in world
-StateRepresentation::CartesianState wSb = wSa * aSb;
+state_representation::CartesianState wSb = wSa * aSb;
 ```
 
 Not only does that apply a changing of reference frame but it also express all the state variables of `aSb`
@@ -119,19 +119,19 @@ Therefore, extra classes representing only those specific state variables have b
 Effectively, they all extend from `CartesianState` hence they can be intertwined as will.
 
 ```cpp
-StateRepresentation::CartesianPose wPa("a");
-StateRepresentation::CartesianState aSb("b", "a");
+state_representation::CartesianPose wPa("a");
+state_representation::CartesianState aSb("b", "a");
 
 // the result is state b expressed in world
-StateRepresentation::CartesianState wSa = wPa + aSb;
+state_representation::CartesianState wSa = wPa + aSb;
 ```
 
 ```cpp
-StateRepresentation::CartesianPose wPa("a");
-StateRepresentation::CartesianTwist aVb("b", "a");
+state_representation::CartesianPose wPa("a");
+state_representation::CartesianTwist aVb("b", "a");
 
 // the result is twist b expressed in world
-StateRepresentation::CartesianTwist wVa = wPa + aVb;
+state_representation::CartesianTwist wVa = wPa + aVb;
 ```
 
 ### Conversion between Cartesian state variables
@@ -143,9 +143,9 @@ Therefore, dividing a `CartesianPose` by a time (`std::chrono_literals`) returns
 using namespace std::chrono_literals;
 auto period = 1h;
 
-StateRepresentation::CartesianPose wPa("a", Eigen::Vector3d(1, 0, 0));
+state_representation::CartesianPose wPa("a", Eigen::Vector3d(1, 0, 0));
 // the result is a twist of 1m/h in x direction converted in m/s
-StateRepresentation::CartesianTwist wVa = wPa / period;
+state_representation::CartesianTwist wVa = wPa / period;
 ```
 
 Conversely, multiplying a `CartesianTwist` (by default expressed internally in `m/s` and `rad/s`) to a `CartesianPose`
@@ -155,8 +155,8 @@ is simply multiplying it by a time period:
 using namespace std::chrono_literals;
 auto period = 10s;
 
-StateRepresentation::CartesianTwist wVa("a", Eigen::Vector3d(1, 0, 0));
-StateRepresentation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
+state_representation::CartesianTwist wVa("a", Eigen::Vector3d(1, 0, 0));
+state_representation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 
 ## Joint state
@@ -169,7 +169,7 @@ A `JointState` is defined by the name of the corresponding robot and the name of
 
 ```cpp
 // create a state for myrobot with 3 joints
-StateRepresentation::JointState js("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+state_representation::JointState js("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
 ```
 
 Note that if the joints of the robot are named `{"joint0", "joint1", ..., "jointN"}` as above,
@@ -177,7 +177,7 @@ you can also use the constructor that takes the number of joints as input which 
 
 ```cpp
 // create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
-StateRepresentation::JointState js("myrobot", 3);
+state_representation::JointState js("myrobot", 3);
 ```
 
 All the getters and setters for the `positions`, `velocities`, `accelerations` and `torques` are defined for both
@@ -199,16 +199,16 @@ js.set_positions(Eigen::Vector4d::Random()); // will throw an IncompatibleSizeEx
 Basic operations such as addition, subtraction and scaling have been implemented:
 
 ```cpp
-StateRepresentation::JointState js1("myrobot", 3);
-StateRepresentation::JointState js2("myrobot", 3);
+state_representation::JointState js1("myrobot", 3);
+state_representation::JointState js2("myrobot", 3);
 double lambda = 0.5;
 
 // for those operation to be valid both js1 and js2
 // should correspond to the same robot and have the
 // same number of joints
-StateRepresentation::JointState jssum = js1 + js2;
-StateRepresentation::JointState jsdiff = js1 - js2;
-StateRepresentation::JointState jsscaled = lambda * js1;
+state_representation::JointState jssum = js1 + js2;
+state_representation::JointState jsdiff = js1 - js2;
+state_representation::JointState jsscaled = lambda * js1;
 ```
 
 Multiplication of joint states doesn't have a physical meaning and is, therefore, not implemented.
@@ -224,10 +224,10 @@ auto period = 1h;
 
 // create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
 // and provide the position values
-StateRepresentation::JointPositions jp("myrobot", Eigen::Vector3d(1, 0, 0));
+state_representation::JointPositions jp("myrobot", Eigen::Vector3d(1, 0, 0));
 
 // result are velocities of 1 rad/h for joint0 expressed in rad/s
-StateRepresentation::JointVelocities jv = jp / period;
+state_representation::JointVelocities jv = jp / period;
 ```
 
 ```cpp
@@ -236,9 +236,9 @@ auto period = 10s;
 
 // create a state for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
 // and provide the velocities values
-StateRepresentation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
+state_representation::JointVelocities wVa("a", Eigen::Vector3d(1, 0, 0));
 
-StateRepresentation::JointPositions jp = period * jv; // note that jv * period is also implemented
+state_representation::JointPositions jp = period * jv; // note that jv * period is also implemented
 ```
 
 ## The Jacobian matrix
@@ -248,7 +248,7 @@ Similarly to the `JointState`, a `Jacobian` is associated to a robot and defined
 
 ```cpp
 // create a jacobian for myrobot with 3 joints
-StateRepresentation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+state_representation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
 ```
 
 The API is the same as the `JointState`, hence the constructor can also accept the number of joints to initialize the
@@ -256,7 +256,7 @@ joint names vector.
 
 ```cpp
 // create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
-StateRepresentation::Jacobian jac("myrobot", 3);
+state_representation::Jacobian jac("myrobot", 3);
 ```
 
 The `Jacobian` is simply a `6 x N` matrix where `N` is the number of joints.
@@ -270,11 +270,11 @@ All the functionalities of the `Jacobian` have been implemented such as `transpo
 
 ```cpp
 /// returns the 3 x 6 transposed matrix
-StateRepresentation::Jacobian jacT = jac.transpose();
+state_representation::Jacobian jacT = jac.transpose();
 // will throw an error as a 6 x 3 matrix is not invertible
-StateRepresentation::Jacobian jacInv = jac.inverse();
+state_representation::Jacobian jacInv = jac.inverse();
 // compute the pseudoinverse without the need of being invertible
-StateRepresentation::Jacobian jacPinv = jac.pseudoinverse();
+state_representation::Jacobian jacPinv = jac.pseudoinverse();
 ```
 
 Those operations are very useful to convert `JointState` from `CartesianState` and vice versa.
@@ -284,25 +284,25 @@ Those operations are very useful to convert `JointState` from `CartesianState` a
 The simplest conversion is to transform a `JointVelocities` into a `CartesiantTwist` by multiplication with the `Jacobian`
 
 ```cpp
-StateRepresentation::JointVelocities jv("myrobot", 3);
-StateRepresentation::CartesianTwist eef_twist = jac * js;
+state_representation::JointVelocities jv("myrobot", 3);
+state_representation::CartesianTwist eef_twist = jac * js;
 ```
 
 The opposite transformation, from `CartesianTwist` to `JointVelocities` requires the multiplication with the `inverse`
 (or `pseudoinverse`).
 
 ```cpp
-StateRepresentation::CartesianTwist eef_twist("eef")
-StateRepresentation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
+state_representation::CartesianTwist eef_twist("eef")
+state_representation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
 ```
 
 Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies
 on the solving of the system `Ax = b` using `Eigen` has been implemented.
 
 ```cpp
-StateRepresentation::CartesianTwist eef_twist("eef")
+state_representation::CartesianTwist eef_twist("eef")
 // faster than doing jac.pseudoinverse() * eef_twist
-StateRepresentation::JointVelocities jv = jac.solve(eef_twist);
+state_representation::JointVelocities jv = jac.solve(eef_twist);
 ```
 
 ### Conversion between JointTorques and CartesianWrench
@@ -311,9 +311,9 @@ The other conversion that is implemented is the transformation from `CartesianWr
 the `transpose`.
 
 ```cpp
-StateRepresentation::CartesianWrench eef_wrench("eef")
+state_representation::CartesianWrench eef_wrench("eef")
 // faster than doing jac.pseudoinverse() * eef_twist
-StateRepresentation::JointTorques jt = jac.transpose() * eef_wrench;
+state_representation::JointTorques jt = jac.transpose() * eef_wrench;
 ```
 
 ### Matrix multiplication
@@ -323,7 +323,7 @@ Direct multiplication of the `Jacobian` object with another `Eigen::MatrixXd` ha
 `Eigen::MatrixXd` product.
 
 ```cpp
-StateRepresentation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
+state_representation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
 Eigen::MatrixXd mat = jac.data();
 Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4); // equivalent to  jac.data() * Eigen::MatrixXd(3, 4);
 ```

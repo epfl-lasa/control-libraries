@@ -1,18 +1,18 @@
 # controllers library
 
 This library introduces a set of controllers to be used in robotic control-loop schemes. Each controller are templated
-to accepted an input space from `StateRepresentation` and is derived from the `Controller` base class, e.g.,
+to accepted an input space from `state_representation` and is derived from the `Controller` base class, e.g.,
 
 ```cpp
-Impedance<StateRepresentation::JointState> joint_space_impedance;
-Disspative<StateRepresentation::CartesianState> task_space_dissipative;
+Impedance<state_representation::JointState> joint_space_impedance;
+Disspative<state_representation::CartesianState> task_space_dissipative;
 ```
 
 The main functions of each controllers are the `compute_command` variations. They implement the main algorithms of the
 controllers. Depending on the controller, they are used to define a command from some input parameters.
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 
 Impedance<JointState> joint_space_impedance;
 JointVelocities desired_velocities;
@@ -25,7 +25,7 @@ JointTorques command = joint_space_impedance.compute_command(desired_velocities,
 Some `compute_command` variations allows to transform one space to the other using extra parameters.
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 
 Dissipative<CartesianState> task_space_dissipative;
 CartesianTwist desired_twist;
@@ -40,7 +40,7 @@ JointTorques command = task_space_dissipative.compute_command(desired_twist,
 The above formulation is equivalent to:
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 
 Dissipative<CartesianState> task_space_dissipative;
 CartesianTwist desired_twist;
@@ -60,7 +60,7 @@ controller such as `Impedance`. This class can be templated to accept different 
 or `JointState`) or specify the desired input space.
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 
 class MyController:
 public Controller<CartesianState> {
@@ -87,7 +87,7 @@ your controller is a variation of an impedance controller that simply adds extra
 stiffness matrix (e.g. `Dissipative`), it should extend from it and reuse the main function calls.
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 
 class MyImpedanceController:
 public Impedance<CartesianState> {

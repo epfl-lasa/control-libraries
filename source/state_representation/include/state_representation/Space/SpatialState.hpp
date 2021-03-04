@@ -2,7 +2,7 @@
 
 #include "state_representation/State.hpp"
 
-namespace StateRepresentation 
+namespace state_representation
 {
 	class SpatialState : public State
 	{

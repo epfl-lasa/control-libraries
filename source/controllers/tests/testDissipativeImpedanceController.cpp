@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 
 using namespace controllers::impedance;
-using namespace StateRepresentation;
+using namespace state_representation;
 
 class DissipativeImpedanceControllerTest : public testing::Test {
 protected:

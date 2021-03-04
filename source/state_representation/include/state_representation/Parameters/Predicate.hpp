@@ -2,7 +2,7 @@
 
 #include "state_representation/Parameters/Parameter.hpp"
 
-namespace StateRepresentation {
+namespace state_representation {
 /**
  * @class Predicate
  * @brief A predicate is a boolean parameter as in the logic formalism.
@@ -29,4 +29,4 @@ public:
    */
   friend std::ostream& operator<<(std::ostream& os, const Predicate& predicate);
 };
-}// namespace StateRepresentation
+}// namespace state_representation

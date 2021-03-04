@@ -1,4 +1,4 @@
-#include "state_representation/Space/SpatialState.hpp"
+#include "state_representation/space/SpatialState.hpp"
 
 namespace state_representation {
 SpatialState::SpatialState(const StateType& type) :

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "state_representation/Space/SpatialState.hpp"
+#include "state_representation/space/SpatialState.hpp"
 
 namespace state_representation {
 /**

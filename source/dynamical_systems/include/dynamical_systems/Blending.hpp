@@ -1,17 +1,11 @@
-/**
- * @author Baptiste Busch
- * @date 2019/07/18
- *
- */
-
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/NotImplementedException.hpp"
 #include "state_representation/robot/JointState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianTwist.hpp"
 
 namespace DynamicalSystems {
 /**

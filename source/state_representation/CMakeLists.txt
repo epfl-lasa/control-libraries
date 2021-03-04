@@ -5,19 +5,19 @@ include_directories(include)
 set(CORE_SOURCES
   src/MathTools.cpp
   src/State.cpp
-  src/Space/SpatialState.cpp
-  src/Space/Cartesian/CartesianState.cpp
-  src/Space/Cartesian/CartesianPose.cpp
-  src/Space/Cartesian/CartesianTwist.cpp
-  src/Space/Cartesian/CartesianWrench.cpp
+        src/space/SpatialState.cpp
+        src/space/Cartesian/CartesianState.cpp
+        src/space/Cartesian/CartesianPose.cpp
+        src/space/Cartesian/CartesianTwist.cpp
+        src/space/Cartesian/CartesianWrench.cpp
         src/robot/JointState.cpp
         src/robot/JointPositions.cpp
         src/robot/JointVelocities.cpp
         src/robot/JointTorques.cpp
         src/robot/Jacobian.cpp
-  src/Space/DualQuaternion/DualQuaternionState.cpp
-  src/Space/DualQuaternion/DualQuaternionPose.cpp
-  src/Space/DualQuaternion/DualQuaternionTwist.cpp
+        src/space/DualQuaternion/DualQuaternionState.cpp
+        src/space/DualQuaternion/DualQuaternionPose.cpp
+        src/space/DualQuaternion/DualQuaternionTwist.cpp
         src/parameters/ParameterInterface.cpp
         src/parameters/Parameter.cpp
         src/parameters/Predicate.cpp

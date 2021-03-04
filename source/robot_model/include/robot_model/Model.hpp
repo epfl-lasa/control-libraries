@@ -12,7 +12,7 @@
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/robot/Jacobian.hpp>
 #include <state_representation/robot/JointState.hpp>
-#include <state_representation/Space/Cartesian/CartesianState.hpp>
+#include <state_representation/space/Cartesian/CartesianState.hpp>
 
 namespace RobotModel {
 class Model {

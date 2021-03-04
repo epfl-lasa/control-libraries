@@ -1,6 +1,6 @@
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/Cartesian/CartesianWrench.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>

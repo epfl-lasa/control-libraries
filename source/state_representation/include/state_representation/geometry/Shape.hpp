@@ -1,15 +1,10 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
 #include <eigen3/Eigen/Core>
 #include "state_representation/State.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianTwist.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 

@@ -1,8 +1,8 @@
 #include "controllers/impedance/Impedance.hpp"
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/robot/JointTorques.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianWrench.hpp"
 
 using namespace state_representation;
 

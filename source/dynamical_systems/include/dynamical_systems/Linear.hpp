@@ -11,9 +11,9 @@
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianTwist.hpp"
 
 namespace DynamicalSystems {
 /**

@@ -2,7 +2,7 @@
 
 #include "controllers/impedance/Impedance.hpp"
 #include "state_representation/parameters/Parameter.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 

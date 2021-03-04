@@ -1,4 +1,4 @@
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 

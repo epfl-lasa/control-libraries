@@ -2,7 +2,7 @@
 #include <fstream>
 #include <unistd.h>
 #include "state_representation/Trajectories/Trajectory.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
 #include "state_representation/robot/JointState.hpp"
 
 TEST(CreateTrajectory, PositiveNos) {

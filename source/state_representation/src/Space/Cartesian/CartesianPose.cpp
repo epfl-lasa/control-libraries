@@ -92,7 +92,7 @@ CartesianTwist CartesianPose::operator/(const std::chrono::nanoseconds& dt) cons
   // set linear velocity
   twist.set_linear_velocity(this->get_position() / period);
   // set angular velocity from the log of the quaternion error
-  Eigen::Quaterniond log_q = MathTools::log(this->get_orientation());
+  Eigen::Quaterniond log_q = math_tools::log(this->get_orientation());
   if (this->get_orientation().dot(log_q) < 0) log_q = Eigen::Quaterniond(-log_q.coeffs());
   twist.set_angular_velocity(2 * log_q.vec() / period);
   return twist;

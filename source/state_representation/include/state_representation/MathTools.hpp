@@ -4,7 +4,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
-namespace state_representation::MathTools {
+namespace state_representation::math_tools {
 /**
  * @brief Calculate the log of a quaternion as a non-unit quaternion
  * @param  q the quaternion to apply the log on

@@ -1,6 +1,6 @@
 #include "state_representation/MathTools.hpp"
 
-namespace state_representation::MathTools {
+namespace state_representation::math_tools {
 const Eigen::Quaterniond log(const Eigen::Quaterniond& q) {
   Eigen::Quaterniond log_q = Eigen::Quaterniond(0, 0, 0, 0);
   double q_norm = q.vec().norm();

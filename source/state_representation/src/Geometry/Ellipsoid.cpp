@@ -16,7 +16,7 @@ Ellipsoid::Ellipsoid(const Ellipsoid& ellipsoid) :
 
 const std::list<CartesianPose> Ellipsoid::sample_from_parameterization(unsigned int nb_samples) const {
   // use a linespace to have a full rotation angle between [0, 2pi]
-  std::vector<double> alpha = MathTools::linspace(0, 2 * M_PI, nb_samples);
+  std::vector<double> alpha = math_tools::linspace(0, 2 * M_PI, nb_samples);
 
   std::list<CartesianPose> samples;
   for (unsigned int i = 0; i < nb_samples; ++i) {

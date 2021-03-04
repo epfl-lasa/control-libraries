@@ -1,4 +1,4 @@
-#include "state_representation/Geometry/Ellipsoid.hpp"
+#include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/exceptions/NoSolutionToFitException.hpp"
 
 namespace state_representation {

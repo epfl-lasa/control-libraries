@@ -1,4 +1,4 @@
-#include "state_representation/Geometry/Shape.hpp"
+#include "state_representation/geometry/Shape.hpp"
 
 namespace state_representation {
 Shape::Shape(const StateType& type, const std::string& name, const std::string& reference_frame) :

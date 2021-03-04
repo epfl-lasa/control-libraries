@@ -1,5 +1,5 @@
 #include "state_representation/Parameters/Parameter.hpp"
-#include "state_representation/Geometry/Ellipsoid.hpp"
+#include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/Robot/JointPositions.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 

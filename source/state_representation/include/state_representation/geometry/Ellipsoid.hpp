@@ -10,7 +10,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
 #include <random>
-#include "state_representation/Geometry/Shape.hpp"
+#include "state_representation/geometry/Shape.hpp"
 #include "state_representation/Space/Cartesian/CartesianPose.hpp"
 
 namespace state_representation {

@@ -22,8 +22,8 @@ set(CORE_SOURCES
   src/Parameters/Parameter.cpp
   src/Parameters/Predicate.cpp
   src/Parameters/Event.cpp
-  src/Geometry/Shape.cpp
-  src/Geometry/Ellipsoid.cpp
+        src/geometry/Shape.cpp
+        src/geometry/Ellipsoid.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED

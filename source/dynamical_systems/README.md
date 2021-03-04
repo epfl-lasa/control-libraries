@@ -10,10 +10,12 @@ This description covers most of the functionalities starting from the spatial tr
 * [Base DynamicalSystem](#base-dynamicalsystem)
   * [Base frame](#base-frame)
 * [Linear](#linear)
-  * [Evaluating the Linear DS](#evaluating-the-linear-ds)
   * [Configuring the Linear DS](#configuring-the-linear-ds)
+  * [Evaluating the Linear DS](#evaluating-the-linear-ds)
   * [Reference frames](#reference-frames)
 * [Circular](#circular)
+* [Ring](#ring)
+  * [Configuring the Ring DS](#configuring-the-ring-ds)
 
 ## Base DynamicalSystem
 
@@ -209,3 +211,22 @@ while (...) {
 ## Circular
 
 TODO
+
+
+## Ring
+
+The **Ring** DS is similar to the **Circular** DS but is more parameterizable. 
+
+### Configuring the Ring DS
+
+The parameters are:
+- **center**; the ring center CartesianPose expressed in the DS base reference frame.
+This sets both the origin center and the inclination of the ring plane.
+- **rotation_offset**; the orientation offset of the orientational attractor in the ring frame. 
+- **radius**; the ring radius. [m]
+- **width**; the distance from the radius where the velocity has tangential components around the ring.
+Beyond this width, the velocity is always perpendicular towards the radius. [m]
+- **speed**; the desired linear speed when travelling along the circle radius. [m/s]
+- **field_strength**; the scale factor applied to the ring speed outside of the radius + width zone.
+- **normal_gain**; the scale factor for the speed normal to the ring plane.
+- **angular_gain**; the scale factor for angular velocity restitution.

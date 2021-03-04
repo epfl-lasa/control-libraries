@@ -91,8 +91,22 @@ TEST_F(RobotModelTest, TestJacobianNbCols) {
   EXPECT_EQ(jac.get_nb_cols(), joint_state.get_size());
 }
 
-TEST_F(RobotModelTest, TestType) {
+TEST_F(RobotModelTest, TestComputeCoriolisMatrix) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("robot", 7);
+  Eigen::MatrixXd coriolis = franka.compute_coriolis_matrix(js);
+  EXPECT_TRUE(coriolis.rows() == js.get_size() && coriolis.cols() == js.get_size());
+}
 
+TEST_F(RobotModelTest, TestComputeCoriolisForces) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("robot", 7);
+  StateRepresentation::JointTorques coriolis_forces = franka.compute_coriolis_forces(js);
+  EXPECT_TRUE(coriolis_forces.data().norm() > 0);
+}
+
+TEST_F(RobotModelTest, TestComputeGravityTorques) {
+  StateRepresentation::JointPositions jp = StateRepresentation::JointPositions::Random("robot", 7);
+  StateRepresentation::JointTorques gravity_torques = franka.compute_gravity_torques(jp);
+  EXPECT_TRUE(gravity_torques.data().norm() > 0);
 }
 
 int main(int argc, char** argv) {

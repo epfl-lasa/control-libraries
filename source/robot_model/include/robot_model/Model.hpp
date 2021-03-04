@@ -6,6 +6,7 @@
 #include <OsqpEigen/OsqpEigen.h>
 #include <pinocchio/parsers/urdf.hpp>
 #include <pinocchio/multibody/data.hpp>
+#include <pinocchio/algorithm/rnea.hpp>
 #include <state_representation/Parameters/Parameter.hpp>
 #include <state_representation/Parameters/ParameterInterface.hpp>
 #include <state_representation/Robot/Jacobian.hpp>
@@ -149,6 +150,28 @@ public:
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                  const std::string& frame_name = "");
+
+  /**
+   * @brief Compute the Coriolis matrix from a given joint state
+   * @param joint_state containing the joint positions & velocities values of the robot
+   * @return the Coriolis matrix
+   */
+  Eigen::MatrixXd compute_coriolis_matrix(const StateRepresentation::JointState& joint_state);
+
+  /**
+   * @brief Compute the Coriolis forces, i.e. the coriolis matrix multiplied by the joint velocities and express the
+   * result as a JointTorques
+   * @param joint_state containing the joint positions & velocities values of the robot
+   * @return the Coriolis forces as a JointTorques
+   */
+  StateRepresentation::JointTorques compute_coriolis_forces(const StateRepresentation::JointState& joint_state);
+
+  /**
+   * @brief Compute the gravity torques
+   * @param joint_positions containing the joint positions of the robot
+   * @return the gravity torque as a JointTorques
+   */
+  StateRepresentation::JointTorques compute_gravity_torques(const StateRepresentation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values

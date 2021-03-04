@@ -1,4 +1,4 @@
-#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/NotImplementedException.hpp"
@@ -10,15 +10,20 @@ CartesianState::CartesianState() : SpatialState(StateType::CARTESIANSTATE) {
   this->initialize();
 }
 
-CartesianState::CartesianState(const std::string& robot_name, const std::string& reference) : SpatialState(StateType::CARTESIANSTATE, robot_name, reference) {
+CartesianState::CartesianState(const std::string& robot_name, const std::string& reference) :
+    SpatialState(StateType::CARTESIANSTATE, robot_name, reference) {
   this->initialize();
 }
 
 CartesianState::CartesianState(const CartesianState& state) : SpatialState(state),
-                                                              position(state.position), orientation(state.orientation),
-                                                              linear_velocity(state.linear_velocity), angular_velocity(state.angular_velocity),
-                                                              linear_acceleration(state.linear_acceleration), angular_acceleration(state.angular_acceleration),
-                                                              force(state.force), torque(state.torque) {}
+                                                              position(state.position),
+                                                              orientation(state.orientation),
+                                                              linear_velocity(state.linear_velocity),
+                                                              angular_velocity(state.angular_velocity),
+                                                              linear_acceleration(state.linear_acceleration),
+                                                              angular_acceleration(state.angular_acceleration),
+                                                              force(state.force),
+                                                              torque(state.torque) {}
 
 void CartesianState::initialize() {
   this->State::initialize();
@@ -43,7 +48,7 @@ CartesianState CartesianState::Identity(const std::string& name, const std::stri
   return identity;
 }
 
-CartesianState CartesianState::Random(const std::string& name, const std::string& reference){
+CartesianState CartesianState::Random(const std::string& name, const std::string& reference) {
   CartesianState random = CartesianState(name, reference);
   // set all the state variables to random
   random.set_state_variable(Eigen::VectorXd::Random(25),
@@ -53,7 +58,9 @@ CartesianState CartesianState::Random(const std::string& name, const std::string
 
 CartesianState& CartesianState::operator*=(double lambda) {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
   // operation
   this->set_position(lambda * this->get_position());
   // calculate the scaled rotation as a displacement from identity
@@ -88,9 +95,15 @@ Eigen::ArrayXd CartesianState::array() const {
 
 CartesianState& CartesianState::operator*=(const CartesianState& state) {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  if (this->get_name() != state.get_reference_frame()) throw IncompatibleReferenceFramesException("Expected " + this->get_name() + ", got " + state.get_reference_frame());
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
+  if (this->get_name() != state.get_reference_frame()) {
+    throw IncompatibleReferenceFramesException("Expected " + this->get_name() + ", got " + state.get_reference_frame());
+  }
   this->set_name(state.get_name());
   // intermediate variables for f_S_b
   Eigen::Vector3d f_P_b = this->get_position();
@@ -101,7 +114,8 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   Eigen::Vector3d f_alpha_b = this->get_angular_acceleration();
   // intermediate variables for b_S_c
   Eigen::Vector3d b_P_c = state.get_position();
-  Eigen::Quaterniond b_R_c = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond b_R_c = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
+                                                                                        : Eigen::Quaterniond(-state.get_orientation().coeffs());
   Eigen::Vector3d b_v_c = state.get_linear_velocity();
   Eigen::Vector3d b_omega_c = state.get_angular_velocity();
   Eigen::Vector3d b_a_c = state.get_linear_acceleration();
@@ -113,7 +127,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   this->set_linear_velocity(f_v_b + f_R_b * b_v_c + f_omega_b.cross(f_R_b * b_P_c));
   this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
-  this->set_linear_acceleration(f_a_b + f_R_b * b_a_c + f_alpha_b.cross(f_R_b * b_P_c) + 2 * f_omega_b.cross(f_R_b * b_v_c) + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
+  this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
+                                    + f_alpha_b.cross(f_R_b * b_P_c) + 2 * f_omega_b.cross(f_R_b * b_v_c)
+                                    + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
   this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
   // wrench
   //TODO
@@ -128,13 +144,16 @@ CartesianState CartesianState::operator*(const CartesianState& state) const {
 
 CartesianState& CartesianState::operator+=(const CartesianState& state) {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  if (!(this->get_reference_frame() == state.get_reference_frame())) throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (!(this->get_reference_frame() == state.get_reference_frame())) {
+    throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  }
   // operation on pose
   this->set_position(this->get_position() + state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
+                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation);
   // operation on twist
   this->set_twist(this->get_twist() + state.get_twist());
@@ -153,13 +172,16 @@ CartesianState CartesianState::operator+(const CartesianState& state) const {
 
 CartesianState& CartesianState::operator-=(const CartesianState& state) {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  if (!(this->get_reference_frame() == state.get_reference_frame())) throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (!(this->get_reference_frame() == state.get_reference_frame())) {
+    throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  }
   // operation on pose
   this->set_position(this->get_position() - state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
+                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation.conjugate());
   // operation on twist
   this->set_twist(this->get_twist() - state.get_twist());
@@ -209,49 +231,63 @@ CartesianState CartesianState::inverse() const {
   return result;
 }
 
-void CartesianState::clamp_state_variable(double max_value, const CartesianStateVariable& state_variable_type, double noise_ratio) {
+void CartesianState::clamp_state_variable(double max_value,
+                                          const CartesianStateVariable& state_variable_type,
+                                          double noise_ratio) {
   Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
   if (noise_ratio != 0) {
     state_variable_value -= noise_ratio * state_variable_value.normalized();
     // apply a deadzone
-    if (state_variable_value.norm() < noise_ratio) state_variable_value.setZero();
+    if (state_variable_value.norm() < noise_ratio) { state_variable_value.setZero(); }
   }
   // clamp the values to their maximum amplitude provided
-  if (state_variable_value.norm() > max_value) state_variable_value = max_value * state_variable_value.normalized();
+  if (state_variable_value.norm() > max_value) { state_variable_value = max_value * state_variable_value.normalized(); }
   this->set_state_variable(state_variable_value, state_variable_type);
 }
 
 double CartesianState::dist(const CartesianState& state, const CartesianStateVariable& state_variable_type) const {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
-  if (state.is_empty()) throw EmptyStateException(state.get_name() + " state is empty");
-  if (!(this->get_reference_frame() == state.get_reference_frame())) throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (!(this->get_reference_frame() == state.get_reference_frame())) {
+    throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
+  }
   // calculation
   double result = 0;
-  if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_position() - state.get_position()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
     // https://math.stackexchange.com/questions/90081/quaternion-distance for orientation
     double inner_product = this->get_orientation().dot(state.get_orientation());
     result += acos(2 * inner_product * inner_product - 1);
   }
-  if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_linear_velocity() - state.get_linear_velocity()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_angular_velocity() - state.get_angular_velocity()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION || state_variable_type == CartesianStateVariable::ACCELERATIONS || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_linear_acceleration() - state.get_linear_acceleration()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION || state_variable_type == CartesianStateVariable::ACCELERATIONS || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_angular_acceleration() - state.get_angular_acceleration()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_force() - state.get_force()).norm();
   }
-  if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH || state_variable_type == CartesianStateVariable::ALL) {
+  if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_torque() - state.get_torque()).norm();
   }
   return result;
@@ -305,6 +341,6 @@ double dist(const CartesianState& s1, const CartesianState& s2, const CartesianS
 }
 
 void CartesianState::from_std_vector(const std::vector<double>&) {
-  throw(NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
+  throw (NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
 }
 }// namespace state_representation

@@ -1,7 +1,7 @@
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "state_representation/robot/JointState.hpp"
-#include "state_representation/space/Cartesian/CartesianPose.hpp"
-#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 
 using namespace state_representation;
 

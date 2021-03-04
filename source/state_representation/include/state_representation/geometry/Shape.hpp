@@ -2,9 +2,9 @@
 
 #include <eigen3/Eigen/Core>
 #include "state_representation/State.hpp"
-#include "state_representation/space/Cartesian/CartesianState.hpp"
-#include "state_representation/space/Cartesian/CartesianPose.hpp"
-#include "state_representation/space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 

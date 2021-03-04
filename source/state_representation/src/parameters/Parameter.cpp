@@ -1,7 +1,7 @@
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/robot/JointPositions.hpp"
-#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
 
 namespace state_representation {
 template <>

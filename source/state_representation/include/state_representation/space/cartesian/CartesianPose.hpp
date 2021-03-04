@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "state_representation/space/Cartesian/CartesianState.hpp"
-#include "state_representation/space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 
 namespace state_representation {
 class CartesianTwist;

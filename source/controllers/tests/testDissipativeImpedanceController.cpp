@@ -1,6 +1,6 @@
 #include "controllers/impedance/Dissipative.hpp"
-#include "state_representation/space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include "state_representation/robot/JointVelocities.hpp"
 #include "state_representation/robot/JointTorques.hpp"
 #include <numeric>

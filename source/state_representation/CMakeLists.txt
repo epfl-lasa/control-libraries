@@ -6,10 +6,10 @@ set(CORE_SOURCES
   src/MathTools.cpp
   src/State.cpp
         src/space/SpatialState.cpp
-        src/space/Cartesian/CartesianState.cpp
-        src/space/Cartesian/CartesianPose.cpp
-        src/space/Cartesian/CartesianTwist.cpp
-        src/space/Cartesian/CartesianWrench.cpp
+        src/space/cartesian/CartesianState.cpp
+        src/space/cartesian/CartesianPose.cpp
+        src/space/cartesian/CartesianTwist.cpp
+        src/space/cartesian/CartesianWrench.cpp
         src/robot/JointState.cpp
         src/robot/JointPositions.cpp
         src/robot/JointVelocities.cpp

@@ -6,7 +6,7 @@
 #include <eigen3/Eigen/Sparse>
 #include <random>
 #include "state_representation/geometry/Shape.hpp"
-#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
 
 namespace state_representation {
 /**

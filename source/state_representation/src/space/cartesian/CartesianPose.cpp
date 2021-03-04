@@ -1,4 +1,4 @@
-#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
@@ -9,15 +9,23 @@ CartesianPose::CartesianPose() {}
 
 CartesianPose::CartesianPose(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
 
-CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference) :
+    CartesianState(name, reference) {
   this->set_position(position);
 }
 
-CartesianPose::CartesianPose(const std::string& name, const double& x, const double& y, const double& z, const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(const std::string& name,
+                             const double& x,
+                             const double& y,
+                             const double& z,
+                             const std::string& reference) : CartesianState(name, reference) {
   this->set_position(x, y, z);
 }
 
-CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation, const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(const std::string& name,
+                             const Eigen::Vector3d& position,
+                             const Eigen::Quaterniond& orientation,
+                             const std::string& reference) : CartesianState(name, reference) {
   this->set_position(position);
   this->set_orientation(orientation);
 }
@@ -83,7 +91,9 @@ CartesianPose CartesianPose::operator-(const CartesianPose& pose) const {
 
 CartesianTwist CartesianPose::operator/(const std::chrono::nanoseconds& dt) const {
   // sanity check
-  if (this->is_empty()) throw EmptyStateException(this->get_name() + " state is empty");
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
   // operations
   CartesianTwist twist(this->get_name(), this->get_reference_frame());
   // convert the period to a double with the second as reference
@@ -93,7 +103,9 @@ CartesianTwist CartesianPose::operator/(const std::chrono::nanoseconds& dt) cons
   twist.set_linear_velocity(this->get_position() / period);
   // set angular velocity from the log of the quaternion error
   Eigen::Quaterniond log_q = math_tools::log(this->get_orientation());
-  if (this->get_orientation().dot(log_q) < 0) log_q = Eigen::Quaterniond(-log_q.coeffs());
+  if (this->get_orientation().dot(log_q) < 0) {
+    log_q = Eigen::Quaterniond(-log_q.coeffs());
+  }
   twist.set_angular_velocity(2 * log_q.vec() / period);
   return twist;
 }

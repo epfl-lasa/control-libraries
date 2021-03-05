@@ -1,8 +1,8 @@
 #pragma once
 
 #include <chrono>
-#include "state_representation/Units/Distance.hpp"
-#include "state_representation/Units/Angle.hpp"
+#include "state_representation/units/Distance.hpp"
+#include "state_representation/units/Angle.hpp"
 
 using namespace std::chrono_literals;
 

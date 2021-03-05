@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <fstream>
-#include "state_representation/Units/Distance.hpp"
-#include "state_representation/Units/Angle.hpp"
-#include "state_representation/Units/Velocity.hpp"
+#include "state_representation/units/Distance.hpp"
+#include "state_representation/units/Angle.hpp"
+#include "state_representation/units/Velocity.hpp"
 
 using namespace state_representation::units;
 using namespace state_representation::units::literals;

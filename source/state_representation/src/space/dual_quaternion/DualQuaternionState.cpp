@@ -1,4 +1,4 @@
-#include "state_representation/space/DualQuaternion/DualQuaternionState.hpp"
+#include "state_representation/space/dual_quaternion/DualQuaternionState.hpp"
 
 namespace state_representation {
 DualQuaternionState::DualQuaternionState() :

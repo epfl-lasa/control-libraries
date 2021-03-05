@@ -1,4 +1,4 @@
-#include "state_representation/space/DualQuaternion/DualQuaternionTwist.hpp"
+#include "state_representation/space/dual_quaternion/DualQuaternionTwist.hpp"
 
 namespace state_representation {
 DualQuaternionTwist::DualQuaternionTwist(const std::string& name, const std::string& reference) :

@@ -15,9 +15,9 @@ set(CORE_SOURCES
         src/robot/JointVelocities.cpp
         src/robot/JointTorques.cpp
         src/robot/Jacobian.cpp
-        src/space/DualQuaternion/DualQuaternionState.cpp
-        src/space/DualQuaternion/DualQuaternionPose.cpp
-        src/space/DualQuaternion/DualQuaternionTwist.cpp
+        src/space/dual_quaternion/DualQuaternionState.cpp
+        src/space/dual_quaternion/DualQuaternionPose.cpp
+        src/space/dual_quaternion/DualQuaternionTwist.cpp
         src/parameters/ParameterInterface.cpp
         src/parameters/Parameter.cpp
         src/parameters/Predicate.cpp

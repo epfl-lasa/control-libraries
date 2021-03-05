@@ -15,7 +15,7 @@ public:
 
   /**
     * @brief Constructor with name and reference frame specification
-    * @param type the type of SpatialState (cartesian or DualQuaternion)
+    * @param type the type of SpatialState (Cartesian or DualQuaternion)
     * @param name the name of the State
     * @param reference_frame the reference frame in which the state is expressed, by default world
     * @param empty specify if the state is initialized as empty, default true
@@ -31,7 +31,7 @@ public:
   SpatialState(const SpatialState& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */

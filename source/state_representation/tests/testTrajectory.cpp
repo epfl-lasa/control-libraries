@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <unistd.h>
-#include "state_representation/Trajectories/Trajectory.hpp"
+#include "state_representation/trajectories/Trajectory.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/robot/JointState.hpp"
 

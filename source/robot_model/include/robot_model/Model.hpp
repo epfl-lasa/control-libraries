@@ -138,6 +138,18 @@ public:
   std::vector<std::string> get_frames() const;
 
   /**
+   * @brief Getter of the gravity vector
+   * @return Eigen::Vector3d the gravity vector
+   */
+  Eigen::Vector3d get_gravity_vector() const;
+
+  /**
+   * @brief Setter of the gravity vector
+   * @param gravity the gravity vector
+   */
+  void set_gravity_vector(const Eigen::Vector3d& gravity);
+
+  /**
    * @brief Initialize the pinocchio model from the URDF
    */
   void init_model();
@@ -269,6 +281,27 @@ inline std::vector<std::string> Model::get_frames() const {
 inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
                                                                   unsigned int frame_id) {
   return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
+}
+
+inline Eigen::Vector3d Model::get_gravity_vector() const {
+  return this->robot_model_.gravity.linear();
+}
+
+inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
+  this->robot_model_.gravity.linear(gravity);
+}
+
+inline Eigen::MatrixXd Model::compute_coriolis_matrix(const StateRepresentation::JointState& joint_state) {
+  return pinocchio::computeCoriolisMatrix(this->robot_model_,
+                                          this->robot_data_,
+                                          joint_state.get_positions(),
+                                          joint_state.get_velocities());
+}
+
+inline StateRepresentation::JointTorques Model::compute_coriolis_forces(const StateRepresentation::JointState& joint_state) {
+  Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
+  return StateRepresentation::JointTorques(joint_state.get_name(), joint_state.get_names(),
+                                           coriolis_matrix * joint_state.get_velocities());
 }
 
 inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,

@@ -109,6 +109,14 @@ TEST_F(RobotModelTest, TestComputeGravityTorques) {
   EXPECT_TRUE(gravity_torques.data().norm() > 0);
 }
 
+TEST_F(RobotModelTest, TestGravityGetterAndSetters) {
+  Eigen::Vector3d dummy_vector = Eigen::Vector3d::Random();
+  EXPECT_FALSE((dummy_vector - franka.get_gravity_vector()).norm() < 1e-4);
+  // set new gravity as dummy_vector and expect equality
+  franka.set_gravity_vector(dummy_vector);
+  EXPECT_TRUE((dummy_vector - franka.get_gravity_vector()).norm() < 1e-4);
+}
+
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

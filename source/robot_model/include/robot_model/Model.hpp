@@ -260,7 +260,7 @@ public:
    * @brief Return a list of all the parameters of the model
    * @return the list of parameters
    */
-  const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
 };
 
 inline const std::string& Model::get_robot_name() const {
@@ -316,7 +316,7 @@ inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRep
   return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
-inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {
+inline std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {
   std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
   param_list.push_back(this->alpha_);
   param_list.push_back(this->epsilon_);

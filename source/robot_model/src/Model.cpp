@@ -160,6 +160,26 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
   return this->compute_jacobian(joint_state, frame_id);
 }
 
+Eigen::MatrixXd Model::compute_coriolis_matrix(const StateRepresentation::JointState& joint_state) {
+  return pinocchio::computeCoriolisMatrix(this->robot_model_,
+                                          this->robot_data_,
+                                          joint_state.get_positions(),
+                                          joint_state.get_velocities());
+}
+
+StateRepresentation::JointTorques Model::compute_coriolis_forces(const StateRepresentation::JointState& joint_state) {
+  Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
+  return StateRepresentation::JointTorques(joint_state.get_name(), joint_state.get_names(),
+                                           coriolis_matrix * joint_state.get_velocities());
+}
+
+StateRepresentation::JointTorques Model::compute_gravity_torques(const StateRepresentation::JointPositions& joint_positions) {
+  Eigen::VectorXd gravity_torque = pinocchio::computeGeneralizedGravity(this->robot_model_,
+                                                                        this->robot_data_,
+                                                                        joint_positions.data());
+  return StateRepresentation::JointTorques(joint_positions.get_name(), joint_positions.get_names(), gravity_torque);
+}
+
 std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,
                                                                         const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_number_of_joints()) {

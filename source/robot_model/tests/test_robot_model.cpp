@@ -36,48 +36,39 @@ protected:
   void set_test_configurations() {
     // Random test configuration 1:
     StateRepresentation::JointState config1("robot", 7);
-    config1.set_positions({-2.620392, -1.572496, -2.777827, -1.026002, 0.571513, 0.412393, 1.716623});
-    config1.set_velocities({0.235701, -0.859573, -0.861442, -0.727985, 0.577783, -0.815203, -0.524262});
-    config1.set_accelerations({-0.512704, -0.790356, 0.716706, 0.396400, 0.467484, 0.301061, 0.032541});
+    config1.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+    config1.set_velocities({-0.106398, 0.631975, -0.803325, 0.719187, -0.944742, 0.798313, 0.799871});
+    config1.set_accelerations({0.048212, -0.759601, -0.644412, 0.412215, 0.662720, -0.930332, 0.515677});
+    test_configs.push_back(config1);
 
     // Expected results for configuration 1:
-    std::vector<double> gravity1 = {0.000000, 42.403751, 8.385425, 11.174609, 1.037264, -1.409007, 0.030247};
-    std::vector<double> coriolis1 = {-1.157227, 1.025361, -0.330843, 0.121310, -0.016832, -0.225056, -0.005523};
-    std::vector<double> inertia1 = {-0.451450, -1.131146, -0.300849, -0.291475, 0.007975, 0.028511, -0.008446};
-    test_configs.push_back(config1);
-    test_gravity_expects.push_back(gravity1);
-    test_coriolis_expects.push_back(coriolis1);
-    test_inertia_expects.push_back(inertia1);
+    test_gravity_expects.push_back({-0.000000, -37.179122, 22.968841, -0.658312, 1.120245, 0.576686, 0.060074});
+    test_coriolis_expects.push_back({0.337476, 0.366005, -0.389938, -0.858310, 0.017088, -0.173611, 0.001417});
+    test_inertia_expects.push_back({-0.554977, -0.609051, 0.115905, 0.355741, -0.022378, -0.035718, 0.008713});
 
     // Random test configuration 2:
     StateRepresentation::JointState config2("robot", 7);
-    config2.set_positions({-1.006011, 0.570358, -2.216055, -2.628052, -2.782772, 3.617880, 2.725623});
-    config2.set_velocities({-0.752279, -0.065180, 0.313388, -0.419629, 0.509073, 0.116236, -0.144415});
-    config2.set_accelerations({-0.465612, 0.507472, 0.796753, 0.456888, -0.186340, 0.876632, -0.489145});
+    config2.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
+    config2.set_velocities({-0.442322, 0.164863, -0.157988, -0.815863, -0.951945, -0.017708, -0.443466});
+    config2.set_accelerations({-0.320486, -0.425301, -0.658194, -0.201473, 0.395299, -0.592647, 0.332653});
+    test_configs.push_back(config2);
 
     // Expected results for configuration 2:
-    std::vector<double> gravity2 = {0.000000, -0.710151, -7.641822, 13.320224, -0.781159, 1.066494, 0.035576};
-    std::vector<double> coriolis2 = {0.094769, 0.016642, -0.048129, -0.039403, 0.011669, 0.028053, 0.000460};
-    std::vector<double> inertia2 = {0.232165, 0.468344, 0.303575, 0.304581, 0.003182, 0.020870, -0.006630};
-    test_configs.push_back(config2);
-    test_gravity_expects.push_back(gravity2);
-    test_coriolis_expects.push_back(coriolis2);
-    test_inertia_expects.push_back(inertia2);
+    test_gravity_expects.push_back({0.000000, 0.342126, -9.938223, 16.752369, 1.208900, -0.346888, 0.073840});
+    test_coriolis_expects.push_back({0.536237, -0.632604, 0.070196, -0.034678, -0.018236, 0.143008, 0.001937});
+    test_inertia_expects.push_back({-0.554062, 0.089175, -0.760300, -0.002785, -0.007597, -0.082136, 0.009440});
 
     // Random test configuration 3:
     StateRepresentation::JointState config3("robot", 7);
-    config3.set_positions({0.192168, 1.603284, -1.345810, -2.321046, 2.478192, 0.241055, -1.162395});
-    config3.set_velocities({0.183167, -0.593402, 0.271766, 0.596741, 0.003402, 0.301624, 0.591910});
-    config3.set_accelerations({-0.533252, 0.201678, -0.775075, 0.031531, 0.675681, 0.841580, -0.003544});
+    config3.set_positions({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+    config3.set_velocities({0.889568, 0.428943, 0.358439, 0.918761, 0.550669, 0.215454, 0.896005});
+    config3.set_accelerations({-0.880717, -0.462575, 0.973360, 0.544413, -0.049291, 0.361799, -0.166130});
+    test_configs.push_back(config3);
 
     // Expected results for configuration 3:
-    std::vector<double> gravity3 = {-0.000000, -23.696483, -22.561093, -2.000746, 1.601137, -0.443108, -0.062740};
-    std::vector<double> coriolis3 = {0.571410, -0.328103, -0.369781, 0.066655, 0.038111, -0.074594, -0.003282};
-    std::vector<double> inertia3 = {-0.963637, -0.089442, -0.746291, -0.328516, 0.086413, 0.082525, -0.006675};
-    test_configs.push_back(config3);
-    test_gravity_expects.push_back(gravity3);
-    test_coriolis_expects.push_back(coriolis3);
-    test_inertia_expects.push_back(inertia3);
+    test_gravity_expects.push_back({-0.000000, 9.074281, 4.750870, 12.948832, 0.865387, -0.924859, -0.043955});
+    test_coriolis_expects.push_back({1.306320, 0.394845, 1.544151, -0.895624, 0.013075, -0.217746, -0.010039});
+    test_inertia_expects.push_back({-0.204865, -0.173593, -0.076119, 0.453052, 0.045487, 0.026416, -0.007190});
   }
 };
 

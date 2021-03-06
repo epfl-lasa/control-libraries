@@ -53,14 +53,10 @@ for conf = 1:nConfigurations
     fprintf('config%i.set_positions(%s);\n', conf, num2stdvec(q));
     fprintf('config%i.set_velocities(%s);\n', conf, num2stdvec(v));
     fprintf('config%i.set_accelerations(%s);\n', conf, num2stdvec(a));
+    fprintf('test_configs.push_back(config%i);\n', conf);
     
     fprintf('\n// Expected results for configuration %i:\n', conf);
-    fprintf('std::vector<double> gravity%i = %s;\n', conf, num2stdvec(G));
-    fprintf('std::vector<double> coriolis%i = %s;\n', conf, num2stdvec(C));
-    fprintf('std::vector<double> inertia%i = %s;\n', conf, num2stdvec(M));
-    
-    fprintf('test_configs.push_back(config%i);\n', conf);
-    fprintf('test_gravity_expects.push_back(gravity%i);\n', conf);
-    fprintf('test_coriolis_expects.push_back(coriolis%i);\n', conf);
-    fprintf('test_inertia_expects.push_back(inertia%i);\n', conf);
+    fprintf('test_gravity_expects.push_back(%s);\n', num2stdvec(G));
+    fprintf('test_coriolis_expects.push_back(%s);\n', num2stdvec(C));
+    fprintf('test_inertia_expects.push_back(%s);\n', num2stdvec(M));
 end

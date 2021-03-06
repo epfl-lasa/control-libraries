@@ -6,6 +6,7 @@
 #include <OsqpEigen/OsqpEigen.h>
 #include <pinocchio/parsers/urdf.hpp>
 #include <pinocchio/multibody/data.hpp>
+#include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
 #include <state_representation/Parameters/Parameter.hpp>
 #include <state_representation/Parameters/ParameterInterface.hpp>
@@ -162,6 +163,21 @@ public:
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                  const std::string& frame_name = "");
+
+  /**
+   * @brief Compute the Inertia matrix from a given joint positions
+   * @param joint_positions containing the joint positions values of the robot
+   * @return the inertia matrix
+   */
+  Eigen::MatrixXd compute_inertia_matrix(const StateRepresentation::JointPositions& joint_positions);
+
+  /**
+   * @brief Compute the Inertia torques, i.e the inertia matrix multiplied by the joint accelerations. Joint positions
+   * are needed as well for computations of the inertia matrix
+   * @param joint_state containing the joint positions and accelerations values of the robot
+   * @return the inertia matrix
+   */
+  StateRepresentation::JointTorques compute_inertia_torques(const StateRepresentation::JointState& joint_state);
 
   /**
    * @brief Compute the Coriolis matrix from a given joint state

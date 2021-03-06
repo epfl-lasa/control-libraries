@@ -91,6 +91,22 @@ TEST_F(RobotModelTest, TestJacobianNbCols) {
   EXPECT_EQ(jac.get_nb_cols(), joint_state.get_size());
 }
 
+TEST_F(RobotModelTest, TestComputeInertiaMatrix) {
+  StateRepresentation::JointPositions jp = StateRepresentation::JointPositions::Random("robot", 7);
+  Eigen::MatrixXd inertia = franka.compute_inertia_matrix(jp);
+  EXPECT_TRUE(inertia.rows() == jp.get_size() && inertia.cols() == jp.get_size());
+  // expect the matrix to be symmetric
+  Eigen::MatrixXd upper_part = inertia.triangularView<Eigen::StrictlyUpper>();
+  Eigen::MatrixXd lower_part = inertia.triangularView<Eigen::StrictlyLower>();
+  EXPECT_TRUE(upper_part.isApprox(lower_part.transpose()));
+}
+
+TEST_F(RobotModelTest, TestComputeInertiaTorques) {
+  StateRepresentation::JointState js = StateRepresentation::JointState::Random("robot", 7);
+  StateRepresentation::JointTorques inertia_torques = franka.compute_inertia_torques(js);
+  EXPECT_TRUE(inertia_torques.data().norm() > 0);
+}
+
 TEST_F(RobotModelTest, TestComputeCoriolisMatrix) {
   StateRepresentation::JointState js = StateRepresentation::JointState::Random("robot", 7);
   Eigen::MatrixXd coriolis = franka.compute_coriolis_matrix(js);

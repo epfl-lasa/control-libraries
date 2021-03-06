@@ -160,6 +160,22 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
   return this->compute_jacobian(joint_state, frame_id);
 }
 
+Eigen::MatrixXd Model::compute_inertia_matrix(const StateRepresentation::JointPositions& joint_positions) {
+  // compute only the upper part of the triangular inertia matrix stored in robot_data_.M
+  pinocchio::crba(this->robot_model_, this->robot_data_, joint_positions.data());
+  // copy the symmetric lower part
+  this->robot_data_.M.triangularView<Eigen::StrictlyLower>()
+      = this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
+  return this->robot_data_.M;
+}
+
+StateRepresentation::JointTorques Model::compute_inertia_torques(const StateRepresentation::JointState& joint_state) {
+  Eigen::MatrixXd inertia = this->compute_inertia_matrix(joint_state);
+  return StateRepresentation::JointTorques(joint_state.get_name(),
+                                           joint_state.get_names(),
+                                           inertia * joint_state.get_accelerations());
+}
+
 Eigen::MatrixXd Model::compute_coriolis_matrix(const StateRepresentation::JointState& joint_state) {
   return pinocchio::computeCoriolisMatrix(this->robot_model_,
                                           this->robot_data_,

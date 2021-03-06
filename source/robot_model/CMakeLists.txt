@@ -41,13 +41,13 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
-  add_executable(runTestRobotModel tests/testRobotModel.cpp)
+  add_executable(runTestRobotModel tests/test_robot_model.cpp)
   target_link_libraries(runTestRobotModel
     ${PROJECT_NAME}
     ${GTEST_LIBRARIES}
     pthread
   )
-  target_compile_definitions(runTestRobotModel PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
+  target_compile_definitions(runTestRobotModel PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/")
 
   add_test(NAME runTestRobotModel COMMAND runTestRobotModel)
 endif ()

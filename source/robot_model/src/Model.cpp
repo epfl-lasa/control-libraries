@@ -183,7 +183,7 @@ Eigen::MatrixXd Model::compute_coriolis_matrix(const StateRepresentation::JointS
                                           joint_state.get_velocities());
 }
 
-StateRepresentation::JointTorques Model::compute_coriolis_forces(const StateRepresentation::JointState& joint_state) {
+StateRepresentation::JointTorques Model::compute_coriolis_torques(const StateRepresentation::JointState& joint_state) {
   Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
   return StateRepresentation::JointTorques(joint_state.get_name(), joint_state.get_names(),
                                            coriolis_matrix * joint_state.get_velocities());

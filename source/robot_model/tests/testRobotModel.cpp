@@ -113,9 +113,9 @@ TEST_F(RobotModelTest, TestComputeCoriolisMatrix) {
   EXPECT_TRUE(coriolis.rows() == js.get_size() && coriolis.cols() == js.get_size());
 }
 
-TEST_F(RobotModelTest, TestComputeCoriolisForces) {
+TEST_F(RobotModelTest, TestComputeCoriolisTorques) {
   StateRepresentation::JointState js = StateRepresentation::JointState::Random("robot", 7);
-  StateRepresentation::JointTorques coriolis_forces = franka.compute_coriolis_forces(js);
+  StateRepresentation::JointTorques coriolis_forces = franka.compute_coriolis_torques(js);
   EXPECT_TRUE(coriolis_forces.data().norm() > 0);
 }
 

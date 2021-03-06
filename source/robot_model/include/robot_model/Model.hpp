@@ -175,7 +175,7 @@ public:
    * @brief Compute the Inertia torques, i.e the inertia matrix multiplied by the joint accelerations. Joint positions
    * are needed as well for computations of the inertia matrix
    * @param joint_state containing the joint positions and accelerations values of the robot
-   * @return the inertia matrix
+   * @return the inertia torques as a JointTorques
    */
   StateRepresentation::JointTorques compute_inertia_torques(const StateRepresentation::JointState& joint_state);
 
@@ -187,12 +187,12 @@ public:
   Eigen::MatrixXd compute_coriolis_matrix(const StateRepresentation::JointState& joint_state);
 
   /**
-   * @brief Compute the Coriolis forces, i.e. the coriolis matrix multiplied by the joint velocities and express the
+   * @brief Compute the Coriolis torques, i.e. the Coriolis matrix multiplied by the joint velocities and express the
    * result as a JointTorques
    * @param joint_state containing the joint positions & velocities values of the robot
-   * @return the Coriolis forces as a JointTorques
+   * @return the Coriolis torques as a JointTorques
    */
-  StateRepresentation::JointTorques compute_coriolis_forces(const StateRepresentation::JointState& joint_state);
+  StateRepresentation::JointTorques compute_coriolis_torques(const StateRepresentation::JointState& joint_state);
 
   /**
    * @brief Compute the gravity torques

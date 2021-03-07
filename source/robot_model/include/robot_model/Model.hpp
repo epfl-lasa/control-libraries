@@ -6,6 +6,8 @@
 #include <OsqpEigen/OsqpEigen.h>
 #include <pinocchio/parsers/urdf.hpp>
 #include <pinocchio/multibody/data.hpp>
+#include <pinocchio/algorithm/crba.hpp>
+#include <pinocchio/algorithm/rnea.hpp>
 #include <state_representation/Parameters/Parameter.hpp>
 #include <state_representation/Parameters/ParameterInterface.hpp>
 #include <state_representation/Robot/Jacobian.hpp>
@@ -137,6 +139,18 @@ public:
   std::vector<std::string> get_frames() const;
 
   /**
+   * @brief Getter of the gravity vector
+   * @return Eigen::Vector3d the gravity vector
+   */
+  Eigen::Vector3d get_gravity_vector() const;
+
+  /**
+   * @brief Setter of the gravity vector
+   * @param gravity the gravity vector
+   */
+  void set_gravity_vector(const Eigen::Vector3d& gravity);
+
+  /**
    * @brief Initialize the pinocchio model from the URDF
    */
   void init_model();
@@ -149,6 +163,43 @@ public:
    */
   StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
                                                  const std::string& frame_name = "");
+
+  /**
+   * @brief Compute the Inertia matrix from a given joint positions
+   * @param joint_positions containing the joint positions values of the robot
+   * @return the inertia matrix
+   */
+  Eigen::MatrixXd compute_inertia_matrix(const StateRepresentation::JointPositions& joint_positions);
+
+  /**
+   * @brief Compute the Inertia torques, i.e the inertia matrix multiplied by the joint accelerations. Joint positions
+   * are needed as well for computations of the inertia matrix
+   * @param joint_state containing the joint positions and accelerations values of the robot
+   * @return the inertia torques as a JointTorques
+   */
+  StateRepresentation::JointTorques compute_inertia_torques(const StateRepresentation::JointState& joint_state);
+
+  /**
+   * @brief Compute the Coriolis matrix from a given joint state
+   * @param joint_state containing the joint positions & velocities values of the robot
+   * @return the Coriolis matrix
+   */
+  Eigen::MatrixXd compute_coriolis_matrix(const StateRepresentation::JointState& joint_state);
+
+  /**
+   * @brief Compute the Coriolis torques, i.e. the Coriolis matrix multiplied by the joint velocities and express the
+   * result as a JointTorques
+   * @param joint_state containing the joint positions & velocities values of the robot
+   * @return the Coriolis torques as a JointTorques
+   */
+  StateRepresentation::JointTorques compute_coriolis_torques(const StateRepresentation::JointState& joint_state);
+
+  /**
+   * @brief Compute the gravity torques
+   * @param joint_positions containing the joint positions of the robot
+   * @return the gravity torque as a JointTorques
+   */
+  StateRepresentation::JointTorques compute_gravity_torques(const StateRepresentation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -209,7 +260,7 @@ public:
    * @brief Return a list of all the parameters of the model
    * @return the list of parameters
    */
-  const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
 };
 
 inline const std::string& Model::get_robot_name() const {
@@ -243,6 +294,14 @@ inline std::vector<std::string> Model::get_frames() const {
   return this->frame_names_;
 }
 
+inline Eigen::Vector3d Model::get_gravity_vector() const {
+  return this->robot_model_.gravity.linear();
+}
+
+inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
+  this->robot_model_.gravity.linear(gravity);
+}
+
 inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
                                                                   unsigned int frame_id) {
   return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
@@ -257,7 +316,7 @@ inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRep
   return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
-inline const std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {
+inline std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {
   std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
   param_list.push_back(this->alpha_);
   param_list.push_back(this->epsilon_);

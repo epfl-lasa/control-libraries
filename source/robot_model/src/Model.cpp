@@ -1,7 +1,5 @@
 #include "robot_model/Model.hpp"
-
 #include <pinocchio/algorithm/frames.hpp>
-
 #include "robot_model/Exceptions/FrameNotFoundException.hpp"
 #include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
 
@@ -160,6 +158,42 @@ StateRepresentation::Jacobian Model::compute_jacobian(const StateRepresentation:
     frame_id = this->robot_model_.getFrameId(frame_name);
   }
   return this->compute_jacobian(joint_state, frame_id);
+}
+
+Eigen::MatrixXd Model::compute_inertia_matrix(const StateRepresentation::JointPositions& joint_positions) {
+  // compute only the upper part of the triangular inertia matrix stored in robot_data_.M
+  pinocchio::crba(this->robot_model_, this->robot_data_, joint_positions.data());
+  // copy the symmetric lower part
+  this->robot_data_.M.triangularView<Eigen::StrictlyLower>()
+      = this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
+  return this->robot_data_.M;
+}
+
+StateRepresentation::JointTorques Model::compute_inertia_torques(const StateRepresentation::JointState& joint_state) {
+  Eigen::MatrixXd inertia = this->compute_inertia_matrix(joint_state);
+  return StateRepresentation::JointTorques(joint_state.get_name(),
+                                           joint_state.get_names(),
+                                           inertia * joint_state.get_accelerations());
+}
+
+Eigen::MatrixXd Model::compute_coriolis_matrix(const StateRepresentation::JointState& joint_state) {
+  return pinocchio::computeCoriolisMatrix(this->robot_model_,
+                                          this->robot_data_,
+                                          joint_state.get_positions(),
+                                          joint_state.get_velocities());
+}
+
+StateRepresentation::JointTorques Model::compute_coriolis_torques(const StateRepresentation::JointState& joint_state) {
+  Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
+  return StateRepresentation::JointTorques(joint_state.get_name(), joint_state.get_names(),
+                                           coriolis_matrix * joint_state.get_velocities());
+}
+
+StateRepresentation::JointTorques Model::compute_gravity_torques(const StateRepresentation::JointPositions& joint_positions) {
+  Eigen::VectorXd gravity_torque = pinocchio::computeGeneralizedGravity(this->robot_model_,
+                                                                        this->robot_data_,
+                                                                        joint_positions.data());
+  return StateRepresentation::JointTorques(joint_positions.get_name(), joint_positions.get_names(), gravity_torque);
 }
 
 std::vector<StateRepresentation::CartesianPose> Model::forward_geometry(const StateRepresentation::JointState& joint_state,

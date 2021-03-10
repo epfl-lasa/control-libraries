@@ -108,10 +108,6 @@ Eigen::VectorXd CartesianWrench::data() const {
   return this->get_wrench();
 }
 
-Eigen::Array<double, 6, 1> CartesianWrench::array() const {
-  return this->get_wrench().array();
-}
-
 std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {
   if (wrench.is_empty()) {
     os << "Empty CartesianWrench";

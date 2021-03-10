@@ -460,9 +460,11 @@ public:
    * @param s2 the second CartesianState
    * @param type of the distance between position, orientation, linear_velocity, etc...
    * default all for full distance across all dimensions
-   * @return the distance beteen the two states
+   * @return the distance between the two states
    */
-  friend double dist(const CartesianState& s1, const CartesianState& s2, const std::string& distance_type);
+  friend double dist(const CartesianState& s1,
+                     const CartesianState& s2,
+                     const CartesianStateVariable& state_variable_type);
 
   /**
    * @brief Return the state as a std vector of floats

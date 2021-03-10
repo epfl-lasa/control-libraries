@@ -170,7 +170,7 @@ CartesianState cs1 = CartesianState::Random("test");
 CartesianState cs2 = CartesianState::Random("test");
 
 double d = cs1.dist(cs2);
-// alternatively one cas used the friend type notation
+// alternatively one can use the friend type notation
 d = dist(cs1, cs2)
 ```
 

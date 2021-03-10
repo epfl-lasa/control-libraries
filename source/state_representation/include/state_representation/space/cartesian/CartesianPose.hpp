@@ -186,6 +186,20 @@ public:
   Eigen::VectorXd data() const;
 
   /**
+   * @brief Compute the norms of the state variable specified by the input type (default is full pose)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the norms of the state variables as a vector
+   */
+  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::POSE) const override;
+
+  /**
+   * @brief Compute the normalized pose at the state variable given in argument (default is full pose)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the normalized pose
+   */
+  CartesianPose normalized(const CartesianStateVariable& state_variable_type = CartesianStateVariable::POSE) const;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to happend the string representing the CartesianPose to
    * @param CartesianPose the CartesianPose to print
@@ -210,5 +224,13 @@ public:
 inline CartesianPose& CartesianPose::operator=(const CartesianPose& pose) {
   CartesianState::operator=(pose);
   return (*this);
+}
+
+inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const{
+  return CartesianState::norms(state_variable_type);
+}
+
+inline CartesianPose CartesianPose::normalized(const CartesianStateVariable& state_variable_type) const {
+  return CartesianState::normalized(state_variable_type);
 }
 }// namespace state_representation

@@ -110,7 +110,6 @@ TEST(CartesianWrenchToStdVector, PositiveNos) {
   }
 }
 
-
 TEST(NegateQuaternion, PositiveNos) {
   Eigen::Quaterniond q = Eigen::Quaterniond::UnitRandom();
   Eigen::Quaterniond q2 = Eigen::Quaterniond(-q.coeffs());
@@ -132,7 +131,10 @@ TEST(MultiplyTransformsBothOperators, PositiveNos) {
   tf1 *= tf2;
 
   EXPECT_EQ(tf3.get_name(), "t2");
-  for (int i = 0; i < tf1.get_position().size(); ++i) EXPECT_NEAR(tf1.get_position()(i), tf3.get_position()(i), 0.00001);
+  for (int i = 0; i < tf1.get_position().size(); ++i)
+    EXPECT_NEAR(tf1.get_position()(i),
+                tf3.get_position()(i),
+                0.00001);
 }
 
 TEST(MultiplyTransformsSameOrientation, PositiveNos) {
@@ -239,7 +241,10 @@ TEST(MultiplyPoseAndState, PositiveNos) {
   CartesianState res = p * s;
   CartesianPose res2 = p * static_cast<CartesianPose>(s);
 
-  for (int i = 0; i < res.get_position().size(); ++i) EXPECT_NEAR(res.get_position()(i), res2.get_position()(i), 0.00001);
+  for (int i = 0; i < res.get_position().size(); ++i)
+    EXPECT_NEAR(res.get_position()(i),
+                res2.get_position()(i),
+                0.00001);
   EXPECT_TRUE(abs(res.get_orientation().dot(res2.get_orientation())) > 1 - 10E-4);
 }
 
@@ -370,6 +375,133 @@ TEST(TestToSTDVector, PositiveNos) {
   EXPECT_NEAR(p.get_orientation().x(), v[4], 0.00001);
   EXPECT_NEAR(p.get_orientation().y(), v[5], 0.00001);
   EXPECT_NEAR(p.get_orientation().z(), v[6], 0.00001);
+}
+
+TEST(TestAllNorms, PositiveNos) {
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  // first test all norms
+  std::vector<double> norms = cs.norms();
+  EXPECT_TRUE(norms.size() == 8);
+  EXPECT_NEAR(norms[0], cs.get_position().norm(), tolerance);
+  EXPECT_NEAR(norms[1], cs.get_orientation().norm(), tolerance);
+  EXPECT_NEAR(norms[2], cs.get_linear_velocity().norm(), tolerance);
+  EXPECT_NEAR(norms[3], cs.get_angular_velocity().norm(), tolerance);
+  EXPECT_NEAR(norms[4], cs.get_linear_acceleration().norm(), tolerance);
+  EXPECT_NEAR(norms[5], cs.get_angular_acceleration().norm(), tolerance);
+  EXPECT_NEAR(norms[6], cs.get_force().norm(), tolerance);
+  EXPECT_NEAR(norms[7], cs.get_torque().norm(), tolerance);
+
+}
+
+TEST(TestPoseNorms, PositiveNos) {
+  std::vector<double> norms;
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  // independent variables first
+  norms = cs.norms(CartesianStateVariable::POSITION);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_position().norm(), tolerance);
+  norms = cs.norms(CartesianStateVariable::ORIENTATION);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_orientation().norm(), tolerance);
+  // then grouped by two
+  norms = cs.norms(CartesianStateVariable::POSE);
+  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_NEAR(norms[0], cs.get_position().norm(), tolerance);
+  EXPECT_NEAR(norms[1], cs.get_orientation().norm(), tolerance);
+  // test with CartesianPose default variable
+  CartesianPose cp = CartesianPose::Random("cp");
+  std::vector<double> pose_norms = cp.norms();
+  EXPECT_TRUE(pose_norms.size() == 2);
+  EXPECT_NEAR(pose_norms[0], cp.get_position().norm(), tolerance);
+  EXPECT_NEAR(pose_norms[1], cp.get_orientation().norm(), tolerance);
+}
+
+TEST(TestTwistNorms, PositiveNos) {
+  std::vector<double> norms;
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  // independent variables first
+  norms = cs.norms(CartesianStateVariable::LINEAR_VELOCITY);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_linear_velocity().norm(), tolerance);
+  norms = cs.norms(CartesianStateVariable::ANGULAR_VELOCITY);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_angular_velocity().norm(), tolerance);
+  // then grouped by two
+  norms = cs.norms(CartesianStateVariable::TWIST);
+  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_NEAR(norms[0], cs.get_linear_velocity().norm(), tolerance);
+  EXPECT_NEAR(norms[1], cs.get_angular_velocity().norm(), tolerance);
+  // test with CartesianTwist default variable
+  CartesianTwist ct = CartesianTwist::Random("ct");
+  std::vector<double> twist_norms = ct.norms();
+  EXPECT_TRUE(twist_norms.size() == 2);
+  EXPECT_NEAR(twist_norms[0], ct.get_linear_velocity().norm(), tolerance);
+  EXPECT_NEAR(twist_norms[1], ct.get_angular_velocity().norm(), tolerance);
+}
+
+TEST(TestAccelerationNorms, PositiveNos) {
+  std::vector<double> norms;
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  // independent variables first
+  norms = cs.norms(CartesianStateVariable::LINEAR_ACCELERATION);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_linear_acceleration().norm(), tolerance);
+  norms = cs.norms(CartesianStateVariable::ANGULAR_ACCELERATION);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_angular_acceleration().norm(), tolerance);
+  // then grouped by two
+  norms = cs.norms(CartesianStateVariable::ACCELERATIONS);
+  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_NEAR(norms[0], cs.get_linear_acceleration().norm(), tolerance);
+  EXPECT_NEAR(norms[1], cs.get_angular_acceleration().norm(), tolerance);
+}
+
+TEST(TestWrenchNorms, PositiveNos) {
+  std::vector<double> norms;
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  // independent variables first
+  norms = cs.norms(CartesianStateVariable::FORCE);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_force().norm(), tolerance);
+  norms = cs.norms(CartesianStateVariable::TORQUE);
+  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_NEAR(norms[0], cs.get_torque().norm(), tolerance);
+  // then grouped by two
+  norms = cs.norms(CartesianStateVariable::WRENCH);
+  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_NEAR(norms[0], cs.get_force().norm(), tolerance);
+  EXPECT_NEAR(norms[1], cs.get_torque().norm(), tolerance);
+  // test with CartesianTwist default variable
+  CartesianWrench cw = CartesianWrench::Random("cw");
+  std::vector<double> wrench_norms = cw.norms();
+  EXPECT_TRUE(wrench_norms.size() == 2);
+  EXPECT_NEAR(wrench_norms[0], cw.get_force().norm(), tolerance);
+  EXPECT_NEAR(wrench_norms[1], cw.get_torque().norm(), tolerance);
+}
+
+TEST(TestNormalize, PositiveNos) {
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  cs.normalize();
+  std::vector<double> norms = cs.norms();
+  for (double n : norms) {
+    EXPECT_NEAR(n, 1.0, tolerance);
+  }
+}
+
+TEST(TestNormalized, PositiveNos) {
+  double tolerance = 1e-4;
+  CartesianState cs = CartesianState::Random("cs");
+  CartesianState csn = cs.normalized();
+  std::vector<double> norms = csn.norms();
+  for (double n : norms) {
+    EXPECT_NEAR(n, 1.0, tolerance);
+  }
 }
 
 int main(int argc, char** argv) {

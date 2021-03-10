@@ -159,6 +159,53 @@ state_representation::CartesianTwist wVa("a", Eigen::Vector3d(1, 0, 0));
 state_representation::CartesianPose wPa = period * wVa; // note that wVa * period is also implemented
 ```
 
+### Cartesian state distance and norms
+
+As a `CartesianState` represents a spatial transformation, distance between states and norms computations have been
+implemented. The distance functions is represented as the sum of the distance over all the state variables:
+
+```cpp
+using namespace StateRepresentation;
+CartesianState cs1 = CartesianState::Random("test");
+CartesianState cs2 = CartesianState::Random("test");
+
+double d = cs1.dist(cs2);
+// alternatively one cas used the friend type notation
+d = dist(cs1, cs2)
+```
+
+By default, the distance is computed over all the state variables.
+One can specify the state variable to consider using the `CartesianStateVariable` enumeration:
+
+```cpp
+// only the distance in position
+double d_pos = cs1.dist(cs2, CartesianStateVariable::POSITION);
+// distance over the wrench
+double d_wrench = cs1.dist(cs2, CartesianStateVariable::WRENCH);
+```
+
+The norm of a state is using a similar API and returns the norms of each state variable:
+
+```cpp
+using namespace StateRepresentation;
+CartesianState cs = CartesianState::Random("test");
+// default is norm over all the state variables, hence vector is of size 8
+std::vector<double> norms = cs.norms();
+// for only norm over the pose you need to specify it
+std::vector<double> pose_norms = cs.norms(CartesianStateVariable::POSE);
+```
+
+`normalize`, inplace normalization, and the copy normalization, `normalized`, are also implemented:
+
+```cpp
+using namespace StateRepresentation;
+CartesianState cs = CartesianState::Random("test");
+// inplace, default is normalization over all the state variables
+cs.normalize()
+// copied normalized state, with only linear velocity normalized
+CartesianState csn = cs.normalized(CartesianStateVariable::LINEAR_VELOCITY)
+```
+
 ## Joint state
 
 `JointState` follows the same logic as `CartesianState` but for representing robot states.

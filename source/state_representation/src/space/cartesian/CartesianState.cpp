@@ -128,8 +128,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
   this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
-                                    + f_alpha_b.cross(f_R_b * b_P_c) + 2 * f_omega_b.cross(f_R_b * b_v_c)
-                                    + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
+                                + f_alpha_b.cross(f_R_b * b_P_c) 
+                                + 2 * f_omega_b.cross(f_R_b * b_v_c)
+                                + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
   this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
   // wrench
   //TODO
@@ -290,6 +291,90 @@ double CartesianState::dist(const CartesianState& state, const CartesianStateVar
       || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_torque() - state.get_torque()).norm();
   }
+  return result;
+}
+
+std::vector<double> CartesianState::norms(const CartesianStateVariable& state_variable_type) const {
+  // compute the norms for each independent state variable
+  std::vector<double> norms;
+  if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_position().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_orientation().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_linear_velocity().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_angular_velocity().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_linear_acceleration().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_angular_acceleration().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_force().norm());
+  }
+  if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
+    norms.push_back(this->get_torque().norm());
+  }
+  return norms;
+}
+
+void CartesianState::normalize(const CartesianStateVariable& state_variable_type) {
+  if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->position.normalize();
+  }
+  // there shouldn't be a need to renormalize orientation as it is already normalized
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->orientation.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+    this->linear_velocity.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY
+      || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
+    this->angular_velocity.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->linear_acceleration.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
+      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->angular_acceleration.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->force.normalize();
+  }
+  if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH
+      || state_variable_type == CartesianStateVariable::ALL) {
+    this->torque.normalize();
+  }
+}
+
+CartesianState CartesianState::normalized(const CartesianStateVariable& state_variable_type) const {
+  CartesianState result(*this);
+  result.normalize(state_variable_type);
   return result;
 }
 

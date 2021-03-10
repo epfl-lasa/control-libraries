@@ -192,6 +192,20 @@ public:
   Eigen::VectorXd data() const;
 
   /**
+   * @brief Compute the norms of the state variable specified by the input type (default is full twist)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the norms of the state variables as a vector
+   */
+  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const override;
+
+  /**
+   * @brief Compute the normalized twist at the state variable given in argument (default is full twist)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the normalized twist
+   */
+  CartesianTwist normalized(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to happend the string representing the CartesianTwist to
    * @param CartesianTwist the CartesianTwist to print
@@ -224,5 +238,13 @@ public:
 inline CartesianTwist& CartesianTwist::operator=(const CartesianTwist& twist) {
   CartesianState::operator=(twist);
   return (*this);
+}
+
+inline std::vector<double> CartesianTwist::norms(const CartesianStateVariable& state_variable_type) const{
+  return CartesianState::norms(state_variable_type);
+}
+
+inline CartesianTwist CartesianTwist::normalized(const CartesianStateVariable& state_variable_type) const {
+  return CartesianState::normalized(state_variable_type);
 }
 }// namespace state_representation

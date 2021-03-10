@@ -440,6 +440,26 @@ public:
               const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
 
   /**
+   * @brief Compute the norms of the state variable specified by the input type (default is full state)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the norms of the state variables as a vector
+   */
+  virtual std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
+
+  /**
+   * @brief Normalize inplace the state at the state variable given in argument (default is full state)
+   * @param state_variable_type the type of state variable to compute the norms on
+   */
+  void normalize(const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL);
+
+  /**
+   * @brief Compute the normalized state at the state variable given in argument (default is full state)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the normalized state
+   */
+  CartesianState normalized(const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to happend the string representing the state to
    * @param state the state to print

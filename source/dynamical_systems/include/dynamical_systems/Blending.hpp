@@ -17,7 +17,7 @@ template <class S>
 class Blending : public DynamicalSystem<S> {
 private:
   std::vector<std::shared_ptr<DynamicalSystem<S>>> systems_;                    ///< pointer to the individual systmes
-  std::shared_ptr<StateRepresentation::Parameter<std::vector<double>>> weights_;///< weights of each system
+  std::shared_ptr<state_representation::Parameter<std::vector<double>>> weights_;///< weights of each system
 
   /**
    * @brief Normalize the weight vector

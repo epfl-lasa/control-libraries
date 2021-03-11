@@ -8,4 +8,4 @@ class IncompatibleReferenceFramesException : public std::logic_error {
 public:
   explicit IncompatibleReferenceFramesException(const std::string& msg) : logic_error(msg) {};
 };
-}// namespace StateRepresentation::exceptions
+}// namespace state_representation::exceptions

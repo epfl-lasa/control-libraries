@@ -135,7 +135,7 @@ public:
   S compute_command(const S& desired_state, const S& feedback_state) override;
 
   /**
-   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
+   * @brief Compute the command based on the desired state and a feedback state
    * To be redefined based on the actual controller implementation.
    * @param desired_state the desired state of the system.
    * @param feedback_state the real state of the system as read from feedback loop
@@ -157,7 +157,7 @@ template<class S>
 Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int nb_dimensions) :
     Impedance<S>(Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
                  Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
-                 Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions)),
+                 Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions)),
     computational_space_(computational_space),
     nb_dimensions_(nb_dimensions),
     basis_(Eigen::MatrixXd::Random(nb_dimensions, nb_dimensions)),

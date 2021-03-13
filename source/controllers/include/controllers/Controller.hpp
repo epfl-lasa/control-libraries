@@ -22,7 +22,7 @@ public:
   explicit Controller();
 
   /**
-   * @brief Compute the command based on the input state in a non const fashion
+   * @brief Compute the command based on the input state
    * To be redefined based on the actual controller implementation
    * @param state the input state of the system. This function accept any number of extra arguments.
    * @return the output command at the input state
@@ -30,7 +30,7 @@ public:
   virtual S compute_command(const S& state, ...);
 
   /**
-   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
+   * @brief Compute the command based on the desired state and a feedback state
    * To be redefined based on the actual controller implementation.
    * @param desired_state the desired state of the system.
    * @param feedback_state the real state of the system as read from feedback loop
@@ -39,7 +39,7 @@ public:
   virtual S compute_command(const S& desired_state, const S& feedback_state);
 
   /**
-   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
+   * @brief Compute the command based on the desired state and a feedback state
    * To be redefined based on the actual controller implementation.
    * @param desired_state the desired state of the system.
    * @param feedback_state the real state of the system as read from feedback loop

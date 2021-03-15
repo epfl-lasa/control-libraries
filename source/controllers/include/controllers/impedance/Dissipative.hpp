@@ -304,17 +304,9 @@ void Dissipative<S>::compute_damping(const Eigen::VectorXd& desired_velocity) {
 }
 
 template<class S>
-S Dissipative<S>::compute_command(const S& desired_state, const S& feedback_state) {
-  // compute the damping matrix out of the desired_state twist
-  this->compute_damping(desired_state.data());
-  // apply the impedance control law
-  return this->Impedance<S>::compute_command(desired_state, feedback_state);
-}
-
-template<class S>
 state_representation::JointState Dissipative<S>::compute_command(const S& desired_state,
-                                                                 const S& feedback_state,
-                                                                 const state_representation::Jacobian& jacobian) {
+                                                                const S& feedback_state,
+                                                                const state_representation::Jacobian& jacobian) {
   return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
 }
 }// namespace controllers

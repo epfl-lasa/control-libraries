@@ -26,6 +26,7 @@ template<class S>
 S Impedance<S>::compute_command(const S&, const S&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for this input class");
+  return S();
 }
 
 template<>

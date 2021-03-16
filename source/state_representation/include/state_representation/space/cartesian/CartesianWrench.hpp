@@ -170,10 +170,18 @@ public:
   Eigen::VectorXd data() const;
 
   /**
-   * @brief Return the value of the 6D wrench as Eigen array
-   * @retrun the Eigen array representing the wrench
+   * @brief Compute the norms of the state variable specified by the input type (default is full wrench)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the norms of the state variables as a vector
    */
-  Eigen::Array<double, 6, 1> array() const;
+  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::WRENCH) const override;
+
+  /**
+   * @brief Compute the normalized wrench at the state variable given in argument (default is full wrench)
+   * @param state_variable_type the type of state variable to compute the norms on
+   * @return the normalized wrench
+   */
+  CartesianWrench normalized(const CartesianStateVariable& state_variable_type = CartesianStateVariable::WRENCH) const;
 
   /**
    * @brief Overload the ostream operator for printing
@@ -194,5 +202,13 @@ public:
 inline CartesianWrench& CartesianWrench::operator=(const CartesianWrench& wrench) {
   CartesianState::operator=(wrench);
   return (*this);
+}
+
+inline std::vector<double> CartesianWrench::norms(const CartesianStateVariable& state_variable_type) const{
+  return CartesianState::norms(state_variable_type);
+}
+
+inline CartesianWrench CartesianWrench::normalized(const CartesianStateVariable& state_variable_type) const {
+  return CartesianState::normalized(state_variable_type);
 }
 }// namespace state_representation

@@ -1,11 +1,11 @@
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 TEST(IdentityInitialization, PositiveNos) {
   CartesianState identity = CartesianState::Identity("test");

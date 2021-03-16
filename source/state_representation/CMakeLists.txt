@@ -5,25 +5,25 @@ include_directories(include)
 set(CORE_SOURCES
   src/MathTools.cpp
   src/State.cpp
-  src/Space/SpatialState.cpp
-  src/Space/Cartesian/CartesianState.cpp
-  src/Space/Cartesian/CartesianPose.cpp
-  src/Space/Cartesian/CartesianTwist.cpp
-  src/Space/Cartesian/CartesianWrench.cpp
-  src/Robot/JointState.cpp
-  src/Robot/JointPositions.cpp
-  src/Robot/JointVelocities.cpp
-  src/Robot/JointTorques.cpp
-  src/Robot/Jacobian.cpp
-  src/Space/DualQuaternion/DualQuaternionState.cpp
-  src/Space/DualQuaternion/DualQuaternionPose.cpp
-  src/Space/DualQuaternion/DualQuaternionTwist.cpp
-  src/Parameters/ParameterInterface.cpp
-  src/Parameters/Parameter.cpp
-  src/Parameters/Predicate.cpp
-  src/Parameters/Event.cpp
-  src/Geometry/Shape.cpp
-  src/Geometry/Ellipsoid.cpp
+        src/space/SpatialState.cpp
+        src/space/cartesian/CartesianState.cpp
+        src/space/cartesian/CartesianPose.cpp
+        src/space/cartesian/CartesianTwist.cpp
+        src/space/cartesian/CartesianWrench.cpp
+        src/robot/JointState.cpp
+        src/robot/JointPositions.cpp
+        src/robot/JointVelocities.cpp
+        src/robot/JointTorques.cpp
+        src/robot/Jacobian.cpp
+        src/space/dual_quaternion/DualQuaternionState.cpp
+        src/space/dual_quaternion/DualQuaternionPose.cpp
+        src/space/dual_quaternion/DualQuaternionTwist.cpp
+        src/parameters/ParameterInterface.cpp
+        src/parameters/Parameter.cpp
+        src/parameters/Predicate.cpp
+        src/parameters/Event.cpp
+        src/geometry/Shape.cpp
+        src/geometry/Ellipsoid.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED

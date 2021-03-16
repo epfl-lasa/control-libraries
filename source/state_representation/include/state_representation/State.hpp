@@ -13,7 +13,7 @@
 #include <iostream>
 #include <typeinfo>
 
-namespace StateRepresentation {
+namespace state_representation {
 enum class StateType {
   STATE,
   CARTESIANSTATE,
@@ -75,7 +75,7 @@ public:
   State(const State& state);
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
    */
@@ -203,4 +203,4 @@ inline bool State::is_compatible(const State& state) const {
 inline void State::initialize() {
   this->empty_ = true;
 }
-}// namespace StateRepresentation
+}// namespace state_representation

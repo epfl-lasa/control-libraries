@@ -1,10 +1,10 @@
-#include "state_representation/Robot/Jacobian.hpp"
+#include "state_representation/robot/Jacobian.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>
 
 TEST(TestCreate, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
 
   EXPECT_TRUE(jac.get_nb_rows() == 6);
   EXPECT_TRUE(jac.get_nb_cols() == 7);
@@ -19,7 +19,7 @@ TEST(TestCreate, PositiveNos) {
 }
 
 TEST(TestTranspose, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   jac = jac.transpose();
 
   EXPECT_TRUE(jac.get_nb_rows() == 7);
@@ -35,7 +35,7 @@ TEST(TestTranspose, PositiveNos) {
 }
 
 TEST(TestMutltiplyWithEigen, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   Eigen::MatrixXd res1 = jac * mat1;
 
@@ -57,7 +57,7 @@ TEST(TestMutltiplyWithEigen, PositiveNos) {
 }
 
 TEST(TestSolve, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   bool except_thrown = false;
   try {
@@ -75,12 +75,12 @@ TEST(TestSolve, PositiveNos) {
 }
 
 TEST(TestJointToCartesian, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  StateRepresentation::JointVelocities jvel("robot", Eigen::VectorXd::Random(7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::JointVelocities jvel("robot", Eigen::VectorXd::Random(7));
 
   bool except_thrown = false;
   try {
-    StateRepresentation::CartesianTwist cvel = jac * jvel;
+    state_representation::CartesianTwist cvel = jac * jvel;
   } catch (const IncompatibleSizeException& e) {
     except_thrown = true;
   }
@@ -88,11 +88,11 @@ TEST(TestJointToCartesian, PositiveNos) {
 }
 
 TEST(TestCartesianToJoint, PositiveNos) {
-  StateRepresentation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
-  StateRepresentation::CartesianTwist cvel("robot", vec);
+  state_representation::CartesianTwist cvel("robot", vec);
 
-  StateRepresentation::JointVelocities jvel1;
+  state_representation::JointVelocities jvel1;
   bool except_thrown1 = false;
   try {
     jvel1 = jac.solve(cvel);
@@ -101,7 +101,7 @@ TEST(TestCartesianToJoint, PositiveNos) {
   }
   EXPECT_FALSE(except_thrown1);
 
-  StateRepresentation::JointVelocities jvel2;
+  state_representation::JointVelocities jvel2;
   bool except_thrown2 = false;
   try {
     jvel2 = jac.pseudoinverse() * cvel;

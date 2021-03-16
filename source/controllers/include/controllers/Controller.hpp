@@ -1,8 +1,8 @@
 #pragma once
 
 #include "controllers/exceptions/NotImplementedException.hpp"
-#include "state_representation/Parameters/ParameterInterface.hpp"
-#include "state_representation/Robot/Jacobian.hpp"
+#include "state_representation/parameters/ParameterInterface.hpp"
+#include "state_representation/robot/Jacobian.hpp"
 #include <list>
 #include <memory>
 
@@ -46,23 +46,23 @@ public:
    * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
    * @return the output command at the input state
    */
-  virtual StateRepresentation::JointState compute_command(const S& desired_state,
-                                                          const S& feedback_state,
-                                                          const StateRepresentation::Jacobian& jacobian);
+  virtual state_representation::JointState compute_command(const S& desired_state,
+                                                           const S& feedback_state,
+                                                           const state_representation::Jacobian& jacobian);
 
   /**
    * @brief Return a list of all the parameters of the controller
    * @return the list of parameters
    */
-  virtual std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  virtual std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 template<class S>
 Controller<S>::Controller() {}
 
 template<class S>
-std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Controller<S>::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> Controller<S>::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   return param_list;
 }
 
@@ -80,11 +80,11 @@ S Controller<S>::compute_command(const S&, const S&) {
 }
 
 template<class S>
-StateRepresentation::JointState Controller<S>::compute_command(const S&,
-                                                               const S&,
-                                                               const StateRepresentation::Jacobian&) {
+state_representation::JointState Controller<S>::compute_command(const S&,
+                                                                const S&,
+                                                                const state_representation::Jacobian&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for the base controller class");
-  return StateRepresentation::JointState();
+  return state_representation::JointState();
 }
 }// namespace controllers

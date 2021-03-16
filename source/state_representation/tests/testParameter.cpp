@@ -1,11 +1,11 @@
-#include "state_representation/Parameters/Event.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
+#include "state_representation/parameters/Event.hpp"
+#include "state_representation/parameters/Parameter.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 #include <gtest/gtest.h>
 
 TEST(Conversion, PositiveNos) {
-  using namespace StateRepresentation;
+  using namespace state_representation;
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);
   EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANPOSE);
@@ -15,7 +15,7 @@ TEST(Conversion, PositiveNos) {
 }
 
 TEST(Event, PositiveNos) {
-  using namespace StateRepresentation;
+  using namespace state_representation;
   Event e("test");
   EXPECT_FALSE(e.get_value());
   EXPECT_FALSE(e.get_previous_value());

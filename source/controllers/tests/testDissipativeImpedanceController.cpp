@@ -1,13 +1,13 @@
 #include "controllers/impedance/Dissipative.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
-#include "state_representation/Robot/JointVelocities.hpp"
-#include "state_representation/Robot/JointTorques.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
+#include "state_representation/robot/JointVelocities.hpp"
+#include "state_representation/robot/JointTorques.hpp"
 #include <numeric>
 #include <gtest/gtest.h>
 
 using namespace controllers::impedance;
-using namespace StateRepresentation;
+using namespace state_representation;
 
 class DissipativeImpedanceControllerTest : public testing::Test {
 protected:

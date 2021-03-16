@@ -8,12 +8,12 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/IncompatibleSizeException.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
-#include "state_representation/Robot/JointPositions.hpp"
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/parameters/Parameter.hpp"
+#include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 
 namespace DynamicalSystems {
 /**
@@ -24,8 +24,8 @@ namespace DynamicalSystems {
 template <class S>
 class Linear : public DynamicalSystem<S> {
 private:
-  std::shared_ptr<StateRepresentation::Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
+  std::shared_ptr<state_representation::Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
+  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
 
 protected:
   /**
@@ -100,7 +100,7 @@ public:
    * @brief Return a list of all the parameters of the dynamical system
    * @return the list of parameters
    */
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 template <class S>
@@ -119,8 +119,8 @@ inline const Eigen::MatrixXd& Linear<S>::get_gain() const {
 }
 
 template <class S>
-std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Linear<S>::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> Linear<S>::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->attractor_);
   param_list.push_back(this->gain_);
   return param_list;

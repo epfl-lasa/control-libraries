@@ -1,17 +1,11 @@
-/**
- * @author Baptiste Busch
- * @date 2019/07/18
- *
- */
-
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/Exceptions/NotImplementedException.hpp"
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/Cartesian/CartesianPose.hpp"
+#include "state_representation/space/Cartesian/CartesianState.hpp"
+#include "state_representation/space/Cartesian/CartesianTwist.hpp"
 
 namespace DynamicalSystems {
 /**
@@ -23,7 +17,7 @@ template <class S>
 class Blending : public DynamicalSystem<S> {
 private:
   std::vector<std::shared_ptr<DynamicalSystem<S>>> systems_;                    ///< pointer to the individual systmes
-  std::shared_ptr<StateRepresentation::Parameter<std::vector<double>>> weights_;///< weights of each system
+  std::shared_ptr<state_representation::Parameter<std::vector<double>>> weights_;///< weights of each system
 
   /**
    * @brief Normalize the weight vector

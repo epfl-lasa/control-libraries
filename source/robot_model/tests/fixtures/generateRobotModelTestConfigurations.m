@@ -29,7 +29,7 @@ robot.Gravity = [0 0 -9.81];
 num2stdvec = @(A) (['{', strjoin(compose('%f', A), ', ') '}']);
 
 % code generation (declarations)
-fprintf('std::vector<StateRepresentation::JointState> test_configs;\n');
+fprintf('std::vector<state_representation::JointState> test_configs;\n');
 fprintf('std::vector<std::vector<double>> test_gravity_expects;\n');
 fprintf('std::vector<std::vector<double>> test_coriolis_expects;\n');
 fprintf('std::vector<std::vector<double>> test_inertia_expects;\n');
@@ -48,7 +48,7 @@ for conf = 1:nConfigurations
     
     % code generation (definitions)
     fprintf('\n// Random test configuration %i:\n', conf);
-    fprintf('StateRepresentation::JointState config%i("robot", %i);\n', ...
+    fprintf('state_representation::JointState config%i("robot", %i);\n', ...
         conf, numel(q));
     fprintf('config%i.set_positions(%s);\n', conf, num2stdvec(q));
     fprintf('config%i.set_velocities(%s);\n', conf, num2stdvec(v));

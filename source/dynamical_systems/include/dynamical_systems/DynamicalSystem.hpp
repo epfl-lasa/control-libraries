@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "state_representation/Parameters/ParameterInterface.hpp"
+#include "state_representation/parameters/ParameterInterface.hpp"
 #include <list>
 #include <memory>
 
@@ -54,7 +54,7 @@ public:
    * @brief Return a list of all the parameters of the dynamical system
    * @return the list of parameters
    */
-  virtual std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  virtual std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   const S& get_reference_frame() const;
 
@@ -65,8 +65,8 @@ template <class S>
 DynamicalSystem<S>::DynamicalSystem(const S& reference_frame) : reference_frame_(reference_frame) {}
 
 template <class S>
-std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> DynamicalSystem<S>::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> DynamicalSystem<S>::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   return param_list;
 }
 

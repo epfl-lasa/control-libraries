@@ -8,18 +8,18 @@
 #include <pinocchio/multibody/data.hpp>
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
-#include <state_representation/Parameters/Parameter.hpp>
-#include <state_representation/Parameters/ParameterInterface.hpp>
-#include <state_representation/Robot/Jacobian.hpp>
-#include <state_representation/Robot/JointState.hpp>
-#include <state_representation/Space/Cartesian/CartesianState.hpp>
+#include <state_representation/parameters/Parameter.hpp>
+#include <state_representation/parameters/ParameterInterface.hpp>
+#include <state_representation/robot/Jacobian.hpp>
+#include <state_representation/robot/JointState.hpp>
+#include <state_representation/space/cartesian/CartesianState.hpp>
 
 namespace RobotModel {
 class Model {
 private:
   // @format:off
-  std::shared_ptr<StateRepresentation::Parameter<std::string>> robot_name_;       ///< name of the robot
-  std::shared_ptr<StateRepresentation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
+  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;       ///< name of the robot
+  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
   std::vector<std::string> frame_names_;                                          ///< name of the frames
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
@@ -29,11 +29,11 @@ private:
   Eigen::SparseMatrix<double> constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
   Eigen::VectorXd lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
   Eigen::VectorXd upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
-  std::shared_ptr<StateRepresentation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
+  std::shared_ptr<state_representation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<state_representation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
+  std::shared_ptr<state_representation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
+  std::shared_ptr<state_representation::Parameter<double>> angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
+  std::shared_ptr<state_representation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
   // @format:on
   /**
    * @brief initialize the constraints for the QP solver
@@ -46,8 +46,8 @@ private:
    * @param joint_id id of the frame at which to compute the jacobian
    * @return the jacobian matrix
    */
-  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
-                                                 unsigned int frame_id);
+  state_representation::Jacobian compute_jacobian(const state_representation::JointState& joint_state,
+                                                  unsigned int frame_id);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -55,8 +55,8 @@ private:
    * @param frame_ids ids of the frames at which we want to extract the pose
    * @return the desired poses
    */
-  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                   const std::vector<unsigned int>& frame_ids);
+  std::vector<state_representation::CartesianPose> forward_geometry(const state_representation::JointState& joint_state,
+                                                                    const std::vector<unsigned int>& frame_ids);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values for a single frame
@@ -64,8 +64,8 @@ private:
    * @param frame_id id of the frames at which we want to extract the pose
    * @return the desired pose
    */
-  StateRepresentation::CartesianPose forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                      unsigned int frame_id);
+  state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
+                                                       unsigned int frame_id);
 
 public:
   /**
@@ -161,15 +161,15 @@ public:
    * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
    * @return the jacobian matrix
    */
-  StateRepresentation::Jacobian compute_jacobian(const StateRepresentation::JointState& joint_state,
-                                                 const std::string& frame_name = "");
+  state_representation::Jacobian compute_jacobian(const state_representation::JointState& joint_state,
+                                                  const std::string& frame_name = "");
 
   /**
    * @brief Compute the Inertia matrix from a given joint positions
    * @param joint_positions containing the joint positions values of the robot
    * @return the inertia matrix
    */
-  Eigen::MatrixXd compute_inertia_matrix(const StateRepresentation::JointPositions& joint_positions);
+  Eigen::MatrixXd compute_inertia_matrix(const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the Inertia torques, i.e the inertia matrix multiplied by the joint accelerations. Joint positions
@@ -177,14 +177,14 @@ public:
    * @param joint_state containing the joint positions and accelerations values of the robot
    * @return the inertia torques as a JointTorques
    */
-  StateRepresentation::JointTorques compute_inertia_torques(const StateRepresentation::JointState& joint_state);
+  state_representation::JointTorques compute_inertia_torques(const state_representation::JointState& joint_state);
 
   /**
    * @brief Compute the Coriolis matrix from a given joint state
    * @param joint_state containing the joint positions & velocities values of the robot
    * @return the Coriolis matrix
    */
-  Eigen::MatrixXd compute_coriolis_matrix(const StateRepresentation::JointState& joint_state);
+  Eigen::MatrixXd compute_coriolis_matrix(const state_representation::JointState& joint_state);
 
   /**
    * @brief Compute the Coriolis torques, i.e. the Coriolis matrix multiplied by the joint velocities and express the
@@ -192,14 +192,14 @@ public:
    * @param joint_state containing the joint positions & velocities values of the robot
    * @return the Coriolis torques as a JointTorques
    */
-  StateRepresentation::JointTorques compute_coriolis_torques(const StateRepresentation::JointState& joint_state);
+  state_representation::JointTorques compute_coriolis_torques(const state_representation::JointState& joint_state);
 
   /**
    * @brief Compute the gravity torques
    * @param joint_positions containing the joint positions of the robot
    * @return the gravity torque as a JointTorques
    */
-  StateRepresentation::JointTorques compute_gravity_torques(const StateRepresentation::JointPositions& joint_positions);
+  state_representation::JointTorques compute_gravity_torques(const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -207,8 +207,8 @@ public:
    * @param frame_names names of the frames at which we want to extract the pose
    * @return the pose of desired frames
    */
-  std::vector<StateRepresentation::CartesianPose> forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                                   const std::vector<std::string>& frame_names);
+  std::vector<state_representation::CartesianPose> forward_geometry(const state_representation::JointState& joint_state,
+                                                                    const std::vector<std::string>& frame_names);
 
   /**
  * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
@@ -216,22 +216,22 @@ public:
  * @param frame_name name of the frame at which we want to extract the pose
  * @return the pose of the desired frame
  */
-  StateRepresentation::CartesianPose forward_geometry(const StateRepresentation::JointState& joint_state,
-                                                      std::string frame_name = "");
+  state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
+                                                       std::string frame_name = "");
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
    * @param cartesian_state containing the pose of the end-effector
    * @return the joint state of the robot
    */
-  StateRepresentation::JointPositions inverse_geometry(const StateRepresentation::CartesianState& cartesian_state) const;
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& cartesian_state) const;
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot
    * @return the twist of the end-effector
    */
-  StateRepresentation::CartesianTwist forward_kinematic(const StateRepresentation::JointState& joint_state);
+  state_representation::CartesianTwist forward_kinematic(const state_representation::JointState& joint_state);
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
@@ -239,8 +239,8 @@ public:
    * @param cartesian_states vector of twist
    * @return the joint velocities of the robot
    */
-  StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
-                                                         const std::vector<StateRepresentation::CartesianState>& cartesian_states);
+  state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
+                                                          const std::vector<state_representation::CartesianState>& cartesian_states);
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector
@@ -248,8 +248,8 @@ public:
    * @param cartesian_state containing the twist of the end-effector
    * @return the joint velocities of the robot
    */
-  StateRepresentation::JointVelocities inverse_kinematic(const StateRepresentation::JointState& joint_state,
-                                                         const StateRepresentation::CartesianState& cartesian_state);
+  state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
+                                                          const state_representation::CartesianState& cartesian_state);
 
   /**
    * @brief Helper function to print the qp_problem (for debugging)
@@ -260,7 +260,7 @@ public:
    * @brief Return a list of all the parameters of the model
    * @return the list of parameters
    */
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 inline const std::string& Model::get_robot_name() const {
@@ -302,12 +302,12 @@ inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
   this->robot_model_.gravity.linear(gravity);
 }
 
-inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
                                                                   unsigned int frame_id) {
   return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
 }
 
-inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRepresentation::JointState& joint_state,
+inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
                                                                   std::string frame_name) {
   if (frame_name.empty()) {
     // get last frame if none specified
@@ -316,8 +316,8 @@ inline StateRepresentation::CartesianPose Model::forward_geometry(const StateRep
   return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
-inline std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> Model::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+inline std::list<std::shared_ptr<state_representation::ParameterInterface>> Model::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->alpha_);
   param_list.push_back(this->epsilon_);
   param_list.push_back(this->linear_velocity_limit_);

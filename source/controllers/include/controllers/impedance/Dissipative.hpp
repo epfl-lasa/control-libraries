@@ -1,8 +1,8 @@
 #pragma once
 
 #include "controllers/impedance/Impedance.hpp"
-#include "state_representation/Parameters/Parameter.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
+#include "state_representation/parameters/Parameter.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
@@ -32,7 +32,7 @@ private:
   ComputationalSpaceType computational_space_;///< the space in which to compute the command vector
   unsigned int nb_dimensions_;///< the number of dimensions of the input space
   Eigen::MatrixXd basis_;///< basis matrix used to compute the damping matrix
-  std::shared_ptr<StateRepresentation::Parameter<Eigen::VectorXd>>
+  std::shared_ptr<state_representation::Parameter<Eigen::VectorXd>>
       damping_eigenvalues_;///< coefficient of eigenvalues used in the damping matrix computation
 
   /**
@@ -142,15 +142,15 @@ public:
    * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
    * @return the output command at the input state
    */
-  StateRepresentation::JointState compute_command(const S& desired_state,
-                                                  const S& feedback_state,
-                                                  const StateRepresentation::Jacobian& jacobian) override;
+  state_representation::JointState compute_command(const S& desired_state,
+                                                   const S& feedback_state,
+                                                   const state_representation::Jacobian& jacobian) override;
 
   /**
    * @brief Return a list of all the parameters of the controller
    * @return the list of parameters
    */
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 template<class S>
@@ -161,8 +161,8 @@ Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, u
     computational_space_(computational_space),
     nb_dimensions_(nb_dimensions),
     basis_(Eigen::MatrixXd::Random(nb_dimensions, nb_dimensions)),
-    damping_eigenvalues_(std::make_shared<StateRepresentation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
-                                                                                           Eigen::ArrayXd::Ones(
+    damping_eigenvalues_(std::make_shared<state_representation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
+                                                                                            Eigen::ArrayXd::Ones(
                                                                                                nb_dimensions))) {}
 
 template<class S>
@@ -171,8 +171,8 @@ Dissipative<S>::Dissipative(const Dissipative<S>& other):
     computational_space_(other.computational_space_),
     nb_dimensions_(other.nb_dimensions_),
     basis_(other.basis_),
-    damping_eigenvalues_(std::make_shared<StateRepresentation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
-                                                                                           other.get_damping_eigenvalues())) {}
+    damping_eigenvalues_(std::make_shared<state_representation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
+                                                                                            other.get_damping_eigenvalues())) {}
 
 template<class U>
 inline void swap(Dissipative<U>& controller1, Dissipative<U>& controller2) {
@@ -219,9 +219,9 @@ inline Eigen::MatrixXd Dissipative<S>::get_diagonal_eigenvalues() const {
 }
 
 template<class S>
-inline std::list<std::shared_ptr<StateRepresentation::ParameterInterface>>
+inline std::list<std::shared_ptr<state_representation::ParameterInterface>>
 Dissipative<S>::get_parameters() const {
-  std::list<std::shared_ptr<StateRepresentation::ParameterInterface>> param_list;
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->damping_eigenvalues_);
   return param_list;
 }
@@ -312,9 +312,9 @@ S Dissipative<S>::compute_command(const S& desired_state, const S& feedback_stat
 }
 
 template<class S>
-StateRepresentation::JointState Dissipative<S>::compute_command(const S& desired_state,
-                                                                const S& feedback_state,
-                                                                const StateRepresentation::Jacobian& jacobian) {
+state_representation::JointState Dissipative<S>::compute_command(const S& desired_state,
+                                                                 const S& feedback_state,
+                                                                 const state_representation::Jacobian& jacobian) {
   return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
 }
 }// namespace controllers

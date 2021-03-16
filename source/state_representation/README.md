@@ -175,6 +175,7 @@ d = dist(cs1, cs2)
 ```
 
 By default, the distance is computed over all the state variables.
+It is worth noting that it has no physical units, but is still relevant to check how far two states are in all their features.
 One can specify the state variable to consider using the `CartesianStateVariable` enumeration:
 
 ```cpp
@@ -184,6 +185,7 @@ double d_pos = cs1.dist(cs2, CartesianStateVariable::POSITION);
 double d_wrench = cs1.dist(cs2, CartesianStateVariable::WRENCH);
 ```
 
+When doing so, the unit of the distance is the one of the corresponding state variable.
 The norm of a state is using a similar API and returns the norms of each state variable:
 
 ```cpp

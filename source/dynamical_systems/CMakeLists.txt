@@ -32,21 +32,14 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
-  add_executable(runTestLinear tests/testLinear.cpp)
-  target_link_libraries(runTestLinear
+  add_executable(test_dynamical_systems test_dynamical_systems.cpp)
+  file(GLOB_RECURSE MODULE_TEST_SOURCES tests test_*.cpp)
+  target_sources(test_dynamical_systems PRIVATE ${MODULE_TEST_SOURCES})
+  target_link_libraries(test_dynamical_systems
     ${PROJECT_NAME}
     state_representation
     ${GTEST_LIBRARIES}
     pthread
   )
-  add_test(NAME runTestLinear COMMAND runTestLinear)
-
-  add_executable(runTestCircular tests/testCircular.cpp)
-  target_link_libraries(runTestCircular
-    ${PROJECT_NAME}
-    state_representation
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestCircular COMMAND runTestCircular)
+  add_test(NAME test_dynamical_systems COMMAND test_dynamical_systems)
 endif ()

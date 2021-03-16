@@ -14,6 +14,7 @@ This description covers most of the functionalities starting from the spatial tr
   * [Evaluating the Linear DS](#evaluating-the-linear-ds)
   * [Reference frames](#reference-frames)
 * [Circular](#circular)
+  * [Configuring the Circular DS](#configuring-the-circular-ds)
 * [Ring](#ring)
   * [Configuring the Ring DS](#configuring-the-ring-ds)
 

@@ -41,7 +41,7 @@ joint velocity.
 
 ### Base frame
 
-The DynamicalSystem base class has a private `base_frame` property, which can be thought of as the DS origin. 
+The **DynamicalSystem** base class has a private `base_frame` property, which can be thought of as the DS origin. 
 The functions `get_base_frame()` and `set_base_frame(const S& state)` can be used to access or modify this base frame.
 
 The DynamicalSystem can be constructed with a `state` to set the base frame, or with string frame name. In 
@@ -57,7 +57,7 @@ See the section on [Linear DS reference frames](#reference-frames) for examples.
 
 ## Linear
 
-The Linear DS can be thought of as a point attractor, with a velocity that is linearly proportional
+The **Linear** DS can be thought of as a point attractor, with a velocity that is linearly proportional
 to the distance of the current state from the attractor.
 It is currently implemented for the `CartesianState` and `JointState` types.
 
@@ -71,6 +71,12 @@ DynamicalSystem::Linear<state_representation::JointState> linear(jointAttractor)
 ```
 
 ### Configuring the Linear DS
+
+The Linear DS has the following core parameters:
+- **attractor**; the CartesianState or JointState type object defining the attractor pose relative to the DS base frame
+- **gain**; the proportional gain acting towards the attractor
+
+Each parameter has corresponding `set_` and `get_` functions.
 
 To change the strength of the attractor, a gain can be passed as the second argument during construction or
 passed to the `set_gain()` member function. The gain defines the proportionality between
@@ -210,16 +216,93 @@ while (...) {
 
 ## Circular
 
-TODO
+The **Circular** DS is a limit cycle that rotates around a center point in an elliptical orbit,
+converging to a desired radius on a plane.
+ 
+This DS is defined only for the `CartesianState` type.
+
+The Circular DS can be constructed with a `CartesianState` state and radius as an argument;
+the state position defines the center of the limit cycle, while the state orientation defines the inclination
+of the limit cycle plane. The radius has a default value of 1.
+
+The internal representation of the limit cycle is a `state_representation::Ellipsoid` type. When a state is used
+in the constructor, the limit cycle has a constant radius.
+If an elliptical limit cycle is desired, the DS can be constructed directly from an `Ellipsoid` type.
+
+```c++
+// construct the circular DS limit cycle using a CartesianState center
+state_representation::CartesianState center("center");
+
+// default constructor (radius = 1)
+DynamicalSystems::Circular circularDS1(center);
+
+// constructor with radius
+double radius = 2.0;
+DynamicalSystems::Circular circularDS2(center, radius);
+
+// construct the circular DS limit cycle directly using an Ellipsoid type
+state_representation::Ellipsoid ellipse("limit_cycle");
+ellipse.set_center_state(center);
+ellipse.set_axis_lengths({radius, 2 * radius});
+DynamicalSystems::Circular ellipticalDS(ellipse);
+```
+
+### Configuring the Circular DS
+
+The Circular DS has the following core parameters:
+
+- **limit_cycle**; the Ellipsoid object defining the limit cycle center, shape and inclination 
+- **planar_gain**; the proportional gain acting in the local plane towards the limit cycle radius
+- **normal_gain**; the proportional gain acting towards the local plane
+- **circular_velocity**; the expected angular orbital velocity around the local origin
+
+Each parameter has corresponding `set_` and `get_` functions.
+
+The constructor takes additional optional arguments to define the gain and circular velocity.
+The scalar value for the gain sets both the planar and normal gain of the DS. 
+
+Note that the argument for the radius is only present when a CartesianState is provided,
+and not when an Ellipsoid is provided.
+```c++
+// construct the circular DS with optional parameters (default values are shown)
+double radius = 1.0;
+double gain = 1.0;
+double circular_velocity = M_PI / 2;
+
+// construction with a CartesianState center
+DynamicalSystems::Circular circularDS(center, radius, gain, circular_velocity);
+
+// construction with an Ellipsoid ellipse
+DynamicalSystems::Circular circularDS(ellipse, gain, circular_velocity);
+```
+
+In addition, the following helper are defined to configure the limit cycle behaviour.
+
+```c++
+.set_center(CartesianState("center"));  // sets the center position and orientation of the limit cycle
+.set_gain(1.0);                         // sets both planar and normal gain to the gain value
+.set_rotation_angle(0.0);               // sets a rotation offset around the local Z axis
+.set_radius(1.0);                       // sets both elliptical axes to the given radius (forces circle)
+.set_radiuses({1.0, 2.0});              // sets the length of each elliptical axis individually  
+```
 
 
 ## Ring
 
-The **Ring** DS is similar to the **Circular** DS but is more parameterizable. 
+The **Ring** DS is similar to the **Circular** DS but is more parameterizable.
+In brief, the strength of the limit cycle can be configured with a width around the ring radius.
+
+It only supports the `CartesianState` type, and always acts in a circular ring. 
+
+```c++
+state_representation::CartesianState center("center");
+DynamicalSystems::Ring ringDS(center);
+```
 
 ### Configuring the Ring DS
 
-The parameters are:
+The Ring DS has the following core parameters:
+
 - **center**; the ring center CartesianPose expressed in the DS base reference frame.
 This sets both the origin center and the inclination of the ring plane.
 - **rotation_offset**; the orientation offset of the orientational attractor in the ring frame. 
@@ -230,3 +313,17 @@ Beyond this width, the velocity is always perpendicular towards the radius. [m]
 - **field_strength**; the scale factor applied to the ring speed outside of the radius + width zone.
 - **normal_gain**; the scale factor for the speed normal to the ring plane.
 - **angular_gain**; the scale factor for angular velocity restitution.
+
+Each parameter has corresponding `set_` and `get_` functions.
+
+The constructor takes additional optional arguments to define the ring DS parameters.
+```c++
+// construct the ring DS with optional parameters (default values are shown)
+double radius = 1.0;
+double width = 0.5;
+double speed = 1.0;
+double field_strength = 1.0;
+double normal_gain = 1.0;
+double angular_gain = 1.0;
+DynamicalSystems::Ring ringDS(center, radius, width, speed, field_strength, normal_gain, angular_gain);
+```

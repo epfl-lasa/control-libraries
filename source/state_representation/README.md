@@ -165,7 +165,7 @@ As a `CartesianState` represents a spatial transformation, distance between stat
 implemented. The distance functions is represented as the sum of the distance over all the state variables:
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 CartesianState cs1 = CartesianState::Random("test");
 CartesianState cs2 = CartesianState::Random("test");
 
@@ -189,7 +189,7 @@ When doing so, the unit of the distance is the one of the corresponding state va
 The norm of a state is using a similar API and returns the norms of each state variable:
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 CartesianState cs = CartesianState::Random("test");
 // default is norm over all the state variables, hence vector is of size 8
 std::vector<double> norms = cs.norms();
@@ -200,7 +200,7 @@ std::vector<double> pose_norms = cs.norms(CartesianStateVariable::POSE);
 `normalize`, inplace normalization, and the copy normalization, `normalized`, are also implemented:
 
 ```cpp
-using namespace StateRepresentation;
+using namespace state_representation;
 CartesianState cs = CartesianState::Random("test");
 // inplace, default is normalization over all the state variables
 cs.normalize()

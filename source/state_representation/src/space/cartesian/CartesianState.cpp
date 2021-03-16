@@ -145,8 +145,12 @@ CartesianState CartesianState::operator*(const CartesianState& state) const {
 
 CartesianState& CartesianState::operator+=(const CartesianState& state) {
   // sanity check
-  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
-  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
   if (!(this->get_reference_frame() == state.get_reference_frame())) {
     throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
   }
@@ -173,8 +177,12 @@ CartesianState CartesianState::operator+(const CartesianState& state) const {
 
 CartesianState& CartesianState::operator-=(const CartesianState& state) {
   // sanity check
-  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
-  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
   if (!(this->get_reference_frame() == state.get_reference_frame())) {
     throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
   }
@@ -248,8 +256,12 @@ void CartesianState::clamp_state_variable(double max_value,
 
 double CartesianState::dist(const CartesianState& state, const CartesianStateVariable& state_variable_type) const {
   // sanity check
-  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
-  if (state.is_empty()) { throw EmptyStateException(state.get_name() + " state is empty"); }
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
   if (!(this->get_reference_frame() == state.get_reference_frame())) {
     throw IncompatibleReferenceFramesException("The two states do not have the same reference frame");
   }

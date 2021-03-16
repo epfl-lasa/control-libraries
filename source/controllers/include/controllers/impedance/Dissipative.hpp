@@ -135,7 +135,7 @@ public:
   S compute_command(const S& desired_state, const S& feedback_state) override;
 
   /**
-   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
+   * @brief Compute the command based on the desired state and a feedback state
    * To be redefined based on the actual controller implementation.
    * @param desired_state the desired state of the system.
    * @param feedback_state the real state of the system as read from feedback loop

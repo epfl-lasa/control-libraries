@@ -26,7 +26,7 @@ protected:
 };
 
 TEST_F(RingDSTest, PointsOnRadius) {
-  DynamicalSystems::Ring ring(center, radius, width, speed);
+  dynamical_systems::Ring ring(center, radius, width, speed);
   state_representation::CartesianTwist twist;
 
   // zero output at center
@@ -61,7 +61,7 @@ TEST_F(RingDSTest, PointsOnRadius) {
 
 
 TEST_F(RingDSTest, PointsNearRadius) {
-  DynamicalSystems::Ring ring(center, radius, width, speed, field_strength);
+  dynamical_systems::Ring ring(center, radius, width, speed, field_strength);
   state_representation::CartesianTwist twist;
 
   current_pose.set_position(radius + width, 0, 0);
@@ -91,7 +91,7 @@ TEST_F(RingDSTest, PointsNearRadius) {
 }
 
 TEST_F(RingDSTest, ConvergenceOnRadius) {
-  DynamicalSystems::Ring ring(center, radius);
+  dynamical_systems::Ring ring(center, radius);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
     state_representation::CartesianTwist twist = ring.evaluate(current_pose);
@@ -103,7 +103,7 @@ TEST_F(RingDSTest, ConvergenceOnRadius) {
 }
 
 TEST_F(RingDSTest, ZeroNormalGain) {
-  DynamicalSystems::Ring ring(center);
+  dynamical_systems::Ring ring(center);
   ring.set_normal_gain(0);
 
   double startingHeight = current_pose.get_position().z();
@@ -116,7 +116,7 @@ TEST_F(RingDSTest, ZeroNormalGain) {
 }
 
 TEST_F(RingDSTest, OrientationAroundCircle) {
-  DynamicalSystems::Ring ring(center, radius, width, 0);
+  dynamical_systems::Ring ring(center, radius, width, 0);
   state_representation::CartesianTwist twist;
 
   // at the position {radius, 0, 0}, the orientation attractor is by default null,
@@ -147,7 +147,7 @@ TEST_F(RingDSTest, OrientationAroundCircle) {
 
 
 TEST_F(RingDSTest, OrientationRestitutionAtZeroAngle) {
-  DynamicalSystems::Ring ring(center, radius, width, 0);
+  dynamical_systems::Ring ring(center, radius, width, 0);
   state_representation::CartesianTwist twist;
 
   // at the position {radius, 0, 0}, the orientation attractor is by default null (angle around circle is 0)
@@ -176,7 +176,7 @@ TEST_F(RingDSTest, OrientationRestitutionAtZeroAngle) {
 }
 
 TEST_F(RingDSTest, OrientationRotationOffset) {
-  DynamicalSystems::Ring ring(center, radius, width, 0);
+  dynamical_systems::Ring ring(center, radius, width, 0);
   state_representation::CartesianTwist twist;
 
   current_pose.set_position(radius, 0, 0);
@@ -201,7 +201,7 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
 
 TEST_F(RingDSTest, BaseFrameBehaviours) {
   auto AinB = state_representation::CartesianState::Random("A", "B");
-  DynamicalSystems::Ring ring(AinB);
+  dynamical_systems::Ring ring(AinB);
 
   // setting the center through the constructor should also set the base frame (as Identity frame)
   EXPECT_STREQ(ring.get_center().get_name().c_str(), "A");
@@ -239,7 +239,7 @@ TEST_F(RingDSTest, BaseFrameBehaviours) {
 }
 
 TEST_F(RingDSTest, SettersAndGetters) {
-  DynamicalSystems::Ring ring(center);
+  dynamical_systems::Ring ring(center);
 
   auto pose = state_representation::CartesianState::Random("C");
   ring.set_center(pose);

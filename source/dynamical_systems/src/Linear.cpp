@@ -2,7 +2,7 @@
 
 using namespace state_representation;
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 
 template<>
 inline void Linear<CartesianState>::set_gain(double iso_gain) {
@@ -18,7 +18,7 @@ inline void Linear<JointState>::set_gain(double iso_gain) {
 template<>
 inline void Linear<CartesianState>::set_gain(const std::vector<double>& diagonal_coefficients) {
   if (diagonal_coefficients.size() != 6) {
-    throw Exceptions::IncompatibleSizeException(
+    throw exceptions::IncompatibleSizeException(
         "The provided diagonal coefficients do not correspond to the expected size of 6 elements");
   }
   Eigen::VectorXd diagonal = Eigen::VectorXd::Map(diagonal_coefficients.data(), 6);
@@ -29,7 +29,7 @@ template<>
 inline void Linear<JointState>::set_gain(const std::vector<double>& diagonal_coefficients) {
   size_t nb_joints = this->get_attractor().get_size();
   if (diagonal_coefficients.size() != nb_joints) {
-    throw Exceptions::IncompatibleSizeException(
+    throw exceptions::IncompatibleSizeException(
         "The provided diagonal coefficients do not correspond to the expected size of "
             + std::to_string(nb_joints) + " elements");
   }
@@ -40,7 +40,7 @@ inline void Linear<JointState>::set_gain(const std::vector<double>& diagonal_coe
 template<>
 inline void Linear<CartesianState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
   if (gain_matrix.rows() != 6 && gain_matrix.cols() != 6) {
-    throw Exceptions::IncompatibleSizeException("The provided gain matrix do not have the expected size of 6x6 elements");
+    throw exceptions::IncompatibleSizeException("The provided gain matrix do not have the expected size of 6x6 elements");
   }
   this->gain_->set_value(gain_matrix);
 }
@@ -49,7 +49,7 @@ template<>
 inline void Linear<JointState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
   int nb_joints = this->get_attractor().get_size();
   if (gain_matrix.rows() != nb_joints && gain_matrix.cols() != nb_joints) {
-    throw Exceptions::IncompatibleSizeException(
+    throw exceptions::IncompatibleSizeException(
         "The provided gain matrix do not have the expected size of " + std::to_string(nb_joints) + "x"
             + std::to_string(nb_joints) + " elements");
   }
@@ -117,4 +117,4 @@ JointState Linear<JointState>::compute_dynamics(const JointState& state) const {
   velocities *= this->get_gain();
   return velocities;
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

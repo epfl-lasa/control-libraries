@@ -14,7 +14,7 @@
 #include <cmath>
 #include <vector>
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 /**
  * @class Circular
  * @brief Represent a Circular dynamical system to move around an center
@@ -236,4 +236,4 @@ inline const state_representation::Ellipsoid& Circular::get_limit_cycle() const 
 inline void Circular::set_limit_cycle(const state_representation::Ellipsoid& limit_cycle) {
   this->limit_cycle_->set_value(limit_cycle);
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

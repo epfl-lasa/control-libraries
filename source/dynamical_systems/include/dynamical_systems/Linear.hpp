@@ -7,7 +7,7 @@
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"
-#include "dynamical_systems/Exceptions/IncompatibleSizeException.hpp"
+#include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointPositions.hpp"
@@ -16,7 +16,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 /**
  * @class Linear
  * @brief Represent a Linear dynamical system to move toward an attractor
@@ -162,4 +162,4 @@ std::list<std::shared_ptr<state_representation::ParameterInterface>> Linear<S>::
   param_list.push_back(this->gain_);
   return param_list;
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

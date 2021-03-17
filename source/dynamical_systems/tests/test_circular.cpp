@@ -22,7 +22,7 @@ protected:
 };
 
 TEST_F(CircularDSTest, TestPositionOnRadius) {
-  DynamicalSystems::Circular circularDS(center);
+  dynamical_systems::Circular circularDS(center);
   circularDS.set_radius(radius);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
@@ -39,7 +39,7 @@ TEST_F(CircularDSTest, SetCenterAndBase) {
   auto CinA = state_representation::CartesianState::Identity("C", "A");
   auto CinB = state_representation::CartesianState::Identity("C", "B");
 
-  DynamicalSystems::Circular circularDS(BinA);
+  dynamical_systems::Circular circularDS(BinA);
   EXPECT_STREQ(circularDS.get_center().get_name().c_str(), BinA.get_name().c_str());
   EXPECT_STREQ(circularDS.get_center().get_reference_frame().c_str(), BinA.get_reference_frame().c_str());
 

@@ -5,7 +5,7 @@
 
 using namespace state_representation;
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 template<class S>
 DynamicalSystem<S>::DynamicalSystem() {}
 
@@ -43,4 +43,4 @@ CartesianState DynamicalSystem<CartesianState>::evaluate(const CartesianState& s
     return this->compute_dynamics(state);
   }
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

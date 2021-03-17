@@ -5,7 +5,7 @@
 
 using namespace state_representation;
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 
 Ring::Ring(const CartesianState& center,
            double radius,
@@ -228,4 +228,4 @@ std::list<std::shared_ptr<ParameterInterface>> Ring::get_parameters() const {
   param_list.push_back(this->angular_gain_);
   return param_list;
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

@@ -25,11 +25,11 @@ private:
   ptr_param_double_t normal_gain_; ///< scale factor for the speed normal to the circular plane
   ptr_param_double_t angular_gain_; ///< scale factor for angular velocity restitution
 
-  Eigen::Vector3d calculateLocalLinearVelocity(const state_representation::CartesianPose& pose,
-                                               double& localFieldStrength) const;
-  Eigen::Vector3d calculateLocalAngularVelocity(const state_representation::CartesianPose& pose,
-                                                const Eigen::Vector3d& linearVelocity,
-                                                double localFieldStrength) const;
+  Eigen::Vector3d calculate_local_linear_velocity(const state_representation::CartesianPose& pose,
+                                                  double& local_field_strength) const;
+  Eigen::Vector3d calculate_local_angular_velocity(const state_representation::CartesianPose& pose,
+                                                   const Eigen::Vector3d& linear_velocity,
+                                                   double local_field_strength) const;
 
 protected:
   /**

@@ -219,6 +219,9 @@ while (...) {
 
 The **Circular** DS is a limit cycle that rotates around a center point in an elliptical orbit,
 converging to a desired radius on a plane.
+
+The direction of the rotation is positive around the local Z axis;
+this appears as a counter-clockwise rotation when viewed from "above".
  
 This DS is defined only for the `CartesianState` type. In addition, it only acts in linear space,
 determining a linear velocity for a given position. It does not produce any angular velocity.
@@ -253,10 +256,11 @@ DynamicalSystems::Circular ellipticalDS(ellipse);
 
 The Circular DS has the following core parameters:
 
-- **limit_cycle**; the `Ellipsoid` object defining the limit cycle center, shape and inclination 
-- **planar_gain**; the proportional gain acting in the local plane towards the limit cycle radius
-- **normal_gain**; the proportional gain acting towards the local plane
-- **circular_velocity**; the expected angular orbital velocity around the local origin
+- **limit_cycle**; the `Ellipsoid` object defining the limit cycle center, shape and inclination. 
+- **planar_gain**; the proportional gain acting in the local plane towards the limit cycle radius.
+- **normal_gain**; the proportional gain acting towards the local plane.
+- **circular_velocity**; the expected angular orbital velocity around the local origin. 
+Setting this value negative reverses the direction of rotation. [rad/s]
 
 Each parameter has corresponding `set_` and `get_` functions.
 
@@ -294,6 +298,10 @@ In addition, the following helper are defined to configure the limit cycle behav
 The **Ring** DS is similar to the **Circular** DS but is more parameterizable.
 In brief, the strength of the limit cycle can be configured with a width around the ring radius.
 
+The direction of the ring orbit is a positive rotation around the local Z axis;
+this appears as a counter-clockwise rotation when viewed from "above".
+A clockwise rotation can be achieved by rotating the ring 180 degrees about its local X or Y axis.
+
 It only supports the `CartesianState` type, and always acts in a circular ring. 
 
 ```c++
@@ -311,7 +319,8 @@ This sets both the origin center and the inclination of the ring plane.
 - **radius**; the ring radius. [m]
 - **width**; the distance from the radius where the velocity has tangential components around the ring.
 Beyond this width, the velocity is always perpendicular towards the radius. [m]
-- **speed**; the desired linear speed when travelling along the circle radius. [m/s]
+- **speed**; the desired linear speed when travelling along the circle radius.
+The limit cycle is only stable when the speed is positive. [m/s]
 - **field_strength**; the scale factor applied to the ring speed outside of the radius + width zone.
 - **normal_gain**; the scale factor for the speed normal to the ring plane.
 - **angular_gain**; the scale factor for angular error restitution.

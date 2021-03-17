@@ -35,28 +35,24 @@ CartesianState Ring::compute_dynamics(const CartesianState& state) const {
   pose.set_orientation(this->get_rotation_offset().conjugate() * pose.get_orientation());
 
   CartesianTwist twist(pose.get_name(), pose.get_reference_frame());
-  double localFieldStrength;
-  twist.set_linear_velocity(this->calculateLocalLinearVelocity(pose, localFieldStrength));
-  twist.set_angular_velocity(this->calculateLocalAngularVelocity(pose, twist.get_linear_velocity(), localFieldStrength));
+  double local_field_strength;
+  twist.set_linear_velocity(this->calculate_local_linear_velocity(pose, local_field_strength));
+  twist.set_angular_velocity(this->calculate_local_angular_velocity(pose, twist.get_linear_velocity(), local_field_strength));
 
   // transform the twist back to the base reference frame
   return CartesianTwist(this->get_center()) * twist;
 }
 
-/**
- * Use the local position in the circle frame to calculate return the 3D linear velocity in the local frame.
- * @return Local linear velocity
- */
-Eigen::Vector3d Ring::calculateLocalLinearVelocity(const CartesianPose& pose,
-                                                   double& localFieldStrength) const {
-  Eigen::Vector3d localLinearVelocity = Eigen::Vector3d::Zero();
+Eigen::Vector3d Ring::calculate_local_linear_velocity(const CartesianPose& pose,
+                                                      double& local_field_strength) const {
+  Eigen::Vector3d local_linear_velocity = Eigen::Vector3d::Zero();
 
   // get the 2d components of position on the XY plane
   Eigen::Vector2d position2d(pose.get_position().x(), pose.get_position().y());
 
   double d = position2d.norm();
   if (d < 1e-7) {
-    return localLinearVelocity;
+    return local_linear_velocity;
   }
 
   double re = M_PI_2 * (d - this->get_radius()) / this->get_width();
@@ -78,24 +74,19 @@ Eigen::Vector3d Ring::calculateLocalLinearVelocity(const CartesianPose& pose,
   double vz = -this->get_normal_gain() * pose.get_position().z();
 
   // combine into 3D velocity
-  localLinearVelocity << velocity2d, vz;
+  local_linear_velocity << velocity2d, vz;
 
   // calculate the field strength and scale the velocity
-  localFieldStrength = this->get_field_strength() + (1 - this->get_field_strength()) * cos(re);
-  localLinearVelocity *= localFieldStrength;
+  local_field_strength = this->get_field_strength() + (1 - this->get_field_strength()) * cos(re);
+  local_linear_velocity *= local_field_strength;
 
-  return localLinearVelocity;
+  return local_linear_velocity;
 }
 
-/**
- * Use the local orientation and local linear velocity to calculate and return the local angular velocity
- * in the circle frame.
- * @return Local angular velocity
- */
-Eigen::Vector3d Ring::calculateLocalAngularVelocity(const CartesianPose& pose,
-                                                    const Eigen::Vector3d& linearVelocity,
-                                                    double localFieldStrength) const {
-  Eigen::Vector3d localAngularVelocity = Eigen::Vector3d::Zero();
+Eigen::Vector3d Ring::calculate_local_angular_velocity(const CartesianPose& pose,
+                                                       const Eigen::Vector3d& linearVelocity,
+                                                       double local_field_strength) const {
+  Eigen::Vector3d local_angular_velocity = Eigen::Vector3d::Zero();
 
   double theta = atan2(pose.get_position().y(), pose.get_position().x());
 
@@ -109,7 +100,7 @@ Eigen::Vector3d Ring::calculateLocalAngularVelocity(const CartesianPose& pose,
 
   Eigen::Quaterniond deltaQ = qd * pose.get_orientation().conjugate();
   if (deltaQ.vec().norm() < 1e-7) {
-    return localAngularVelocity;
+    return local_angular_velocity;
   }
 
   //dOmega = 2 * ln (deltaQ)
@@ -118,23 +109,23 @@ Eigen::Vector3d Ring::calculateLocalAngularVelocity(const CartesianPose& pose,
   double phi = atan2(deltaQ.vec().norm(), deltaQ.w());
   deltaOmega.vec() = 2 * deltaQ.vec() * phi / sin(phi);
 
-  localAngularVelocity = get_angular_gain() * deltaOmega.vec();
-  localAngularVelocity *= localFieldStrength;
+  local_angular_velocity = get_angular_gain() * deltaOmega.vec();
+  local_angular_velocity *= local_field_strength;
 
   Eigen::Vector2d position2d(pose.get_position().x(), pose.get_position().y());
-  Eigen::Vector2d linearVelocity2d(linearVelocity.x(), linearVelocity.y());
-  if (position2d.norm() < 1e-7 || linearVelocity2d.norm() < 1e-7) {
-    return localAngularVelocity;
+  Eigen::Vector2d linear_velocity2d(linearVelocity.x(), linearVelocity.y());
+  if (position2d.norm() < 1e-7 || linear_velocity2d.norm() < 1e-7) {
+    return local_angular_velocity;
   }
 
-  double projection = position2d.normalized().dot((position2d + linearVelocity2d).normalized());
-  double dThetaZ = 0;
+  double projection = position2d.normalized().dot((position2d + linear_velocity2d).normalized());
+  double dthetaZ = 0;
   if (1 - abs(projection) > 1e-7) {
-    dThetaZ = acos(projection);
+    dthetaZ = acos(projection);
   }
-  localAngularVelocity.z() += dThetaZ;
+  local_angular_velocity.z() += dthetaZ;
 
-  return localAngularVelocity;
+  return local_angular_velocity;
 }
 
 void Ring::set_base_frame(const state_representation::CartesianState& base_frame) {

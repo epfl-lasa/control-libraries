@@ -1,10 +1,14 @@
-<table border="1" width="100%" height="100">
+<table border="0" width="100%" height="120">
     <tr>
-        <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/main">Main branch</a></td>
+        <td width="25%">Branch</td>
+        <td width="75%">Status</td>
+    </tr>
+    <tr>
+        <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/main">Main</a></td>
         <td width="75%"><img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=main"></td>
     </tr>
     <tr>
-        <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/develop">Development branch</a></td>
+        <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/develop">Development</a></td>
         <td width="75%"><img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=develop"></td>
     </tr>
 </table>

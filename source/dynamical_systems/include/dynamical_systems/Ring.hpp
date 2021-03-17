@@ -7,7 +7,7 @@
 #include <cmath>
 #include <vector>
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 /**
  * @class Ring
  * @brief Represent a Ring dynamical system limit cycle to move around a radius within a fixed width
@@ -165,4 +165,4 @@ public:
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const override;
 };
 
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

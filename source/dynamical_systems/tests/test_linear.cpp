@@ -36,7 +36,7 @@ protected:
 TEST_F(LinearDSTest, PositionOnly) {
   current_pose.set_orientation(Eigen::Quaterniond::Identity());
   target_pose.set_orientation(Eigen::Quaterniond::Identity());
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
     state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
@@ -50,7 +50,7 @@ TEST_F(LinearDSTest, OrientationOnly) {
   current_pose.set_position(Eigen::Vector3d::Zero());
   target_pose.set_position(Eigen::Vector3d::Zero());
 
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
     state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
@@ -60,7 +60,7 @@ TEST_F(LinearDSTest, OrientationOnly) {
 }
 
 TEST_F(LinearDSTest, PositionAndOrientation) {
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
     state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
@@ -72,7 +72,7 @@ TEST_F(LinearDSTest, PositionAndOrientation) {
 
 TEST_F(LinearDSTest, NonUniformGainValues) {
   std::vector<double> gains(6, 0);
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(target_pose, gains);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose, gains);
 
   // expect no twist when DS gains are all zero
   state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
@@ -109,7 +109,7 @@ TEST(LinearDSTestFrames, FixedReferenceFrames) {
 
 
   // initialise the linearDS with attractor at B in reference frame A
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(BinA);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
 
   // evaluating a current pose B in reference frame A should give zero twist (coincident with attractor)
   state_representation::CartesianTwist twist = linearDS.evaluate(BinA);
@@ -134,7 +134,7 @@ TEST(LinearDSTestFrames, UpdateBaseReferenceFrames) {
   auto BinA = state_representation::CartesianState::Random("B", "A");
 
   // initialise the linearDS with attractor at B in reference frame A
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(BinA);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
 
   // the base frame of the default constructed DS should be an identity frame
   // with the same name as the attractor reference frame
@@ -180,7 +180,7 @@ TEST(LinearDSTestFrames, StackedMovingReferenceFrames) {
   CinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
   // initialise the linearDS with attractor at B in reference frame A
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(BinA);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
 
   // evaluate the twist for a fixed state C in reference frame A
   state_representation::CartesianTwist twist = linearDS.evaluate(CinA);
@@ -216,7 +216,7 @@ TEST(LinearDSTestFrames, UpdateAttractorFrame) {
   C = state_representation::CartesianState::Random("C", "robot");
   D = state_representation::CartesianState::Random("D", "robot");
 
-  DynamicalSystems::Linear<state_representation::CartesianState> linearDS(A);
+  dynamical_systems::Linear<state_representation::CartesianState> linearDS(A);
 
   // state being evaluated must match the DS base frame, which is by default the attractor reference frame
   EXPECT_NO_THROW(linearDS.evaluate(B));

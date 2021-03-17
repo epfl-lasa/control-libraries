@@ -10,7 +10,7 @@
 #include <list>
 #include <memory>
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 /**
  * @class DynamicalSystem
  * @brief Abstract class to define a DynamicalSystem either in joint or cartesian spaces
@@ -85,4 +85,4 @@ template<class S>
 inline void DynamicalSystem<S>::set_base_frame(const S& base_frame) {
   this->base_frame_ = base_frame;
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

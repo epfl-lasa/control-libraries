@@ -65,10 +65,10 @@ It is currently implemented for the `CartesianState` and `JointState` types.
 The Linear DS is constructed with a state as an argument; this becomes the attractor.
 ```c++
 state_representation::CartesianState cartesianAttractor("A");
-DynamicalSystem::Linear<state_representation::CartesianState> linear(cartesianAttractor);
+dynamical_system::Linear<state_representation::CartesianState> linear(cartesianAttractor);
 
 state_representation::JointState jointAttractor("B");
-DynamicalSystem::Linear<state_representation::JointState> linear(jointAttractor);
+dynamical_system::Linear<state_representation::JointState> linear(jointAttractor);
 ```
 
 ### Configuring the Linear DS
@@ -90,7 +90,7 @@ length, or as a scalar (which sets the value along the diagonal elements of the 
 // set a gain (scalar, vector or matrix during construction)
 double gain = 10;
 state_representation::CartesianState csA("A");
-DynamicalSystem::Linear<state_representation::CartesianState> linear(csA, gain);
+dynamical_system::Linear<state_representation::CartesianState> linear(csA, gain);
 
 // or set / update the gain for the created object
 std::vector<double> gains = {1, 2, 3, 4, 5, 6};
@@ -107,7 +107,7 @@ To get the velocity from a state, simply call the `evaluate()` function.
 
 ```c++
 state_representation::CartesianState csA("A"), csB("B");
-DynamicalSystem::Linear<state_representation::CartesianState> linear(csA);
+dynamical_system::Linear<state_representation::CartesianState> linear(csA);
 
 // note: the return type of evaluate() is a CartesianState, but
 // it can be directly assigned to a CartesianTwist because the =operator
@@ -132,7 +132,7 @@ The following snippet illustrates the difference in these two options.
 ```c++
 // create a linear DS with attractor B in frame A
 state_representation::CartesianState BinA("B", "A");
-DynamicalSystems::Linear<state_representation::CartesianState> linearDS(BinA);
+dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
 
 linearDS.get_attractor().get_name();             // "B"
 linearDS.get_attractor().get_reference_frame();  // "A"
@@ -191,7 +191,7 @@ state_representation::CartesianState EE("end_effector", "robot");
 state_representation::CartesianState attractor("attractor", "task");
 state_representation::CartesianState taskInRobot("task", "robot");
 
-DynamicalSystems::Linear<state_representation::CartesianState> linearDS(attractor);
+dynamical_systems::Linear<state_representation::CartesianState> linearDS(attractor);
 
 // control loop
 while (...) {
@@ -239,17 +239,17 @@ If an elliptical limit cycle is desired, the DS can be constructed directly from
 state_representation::CartesianState center("center");
 
 // default constructor (radius = 1)
-DynamicalSystems::Circular circularDS1(center);
+dynamical_systems::Circular circularDS1(center);
 
 // constructor with radius
 double radius = 2.0;
-DynamicalSystems::Circular circularDS2(center, radius);
+dynamical_systems::Circular circularDS2(center, radius);
 
 // construct the circular DS limit cycle directly using an Ellipsoid type
 state_representation::Ellipsoid ellipse("limit_cycle");
 ellipse.set_center_state(center);
 ellipse.set_axis_lengths({radius, 2 * radius});
-DynamicalSystems::Circular ellipticalDS(ellipse);
+dynamical_systems::Circular ellipticalDS(ellipse);
 ```
 
 ### Configuring the Circular DS
@@ -276,10 +276,10 @@ double gain = 1.0;
 double circular_velocity = M_PI / 2;
 
 // construction with a CartesianState center
-DynamicalSystems::Circular circularDS(center, radius, gain, circular_velocity);
+dynamical_systems::Circular circularDS(center, radius, gain, circular_velocity);
 
 // construction with an Ellipsoid ellipse
-DynamicalSystems::Circular circularDS(ellipse, gain, circular_velocity);
+dynamical_systems::Circular circularDS(ellipse, gain, circular_velocity);
 ```
 
 In addition, the following helper are defined to configure the limit cycle behaviour.
@@ -306,7 +306,7 @@ It only supports the `CartesianState` type, and always acts in a circular ring.
 
 ```c++
 state_representation::CartesianState center("center");
-DynamicalSystems::Ring ringDS(center);
+dynamical_systems::Ring ringDS(center);
 ```
 
 ### Configuring the Ring DS
@@ -336,5 +336,5 @@ double speed = 1.0;
 double field_strength = 1.0;
 double normal_gain = 1.0;
 double angular_gain = 1.0;
-DynamicalSystems::Ring ringDS(center, radius, width, speed, field_strength, normal_gain, angular_gain);
+dynamical_systems::Ring ringDS(center, radius, width, speed, field_strength, normal_gain, angular_gain);
 ```

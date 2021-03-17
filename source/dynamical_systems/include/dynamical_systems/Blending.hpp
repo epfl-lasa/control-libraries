@@ -1,13 +1,13 @@
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"
-#include "dynamical_systems/Exceptions/NotImplementedException.hpp"
+#include "dynamical_systems/exceptions/NotImplementedException.hpp"
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/space/Cartesian/CartesianPose.hpp"
 #include "state_representation/space/Cartesian/CartesianState.hpp"
 #include "state_representation/space/Cartesian/CartesianTwist.hpp"
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 /**
  * @class Blended
  * @brief Represent a blend of several dynamical systems where the output is the weighted sum of the output of each system
@@ -148,4 +148,4 @@ const S Blending<S>::compute_dynamics(const S& state) const {
   }
   return output;
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

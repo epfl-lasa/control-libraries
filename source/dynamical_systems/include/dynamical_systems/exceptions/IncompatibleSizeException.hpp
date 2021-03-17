@@ -3,9 +3,9 @@
 #include <iostream>
 #include <exception>
 
-namespace DynamicalSystems
+namespace dynamical_systems
 {
-	namespace Exceptions
+	namespace exceptions
 	{
 		class IncompatibleSizeException : public std::runtime_error
 		{

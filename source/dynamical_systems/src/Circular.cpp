@@ -2,7 +2,7 @@
 
 using namespace state_representation;
 
-namespace DynamicalSystems {
+namespace dynamical_systems {
 Circular::Circular(const CartesianState& center, double radius, double gain, double circular_velocity) :
     DynamicalSystem(center.get_reference_frame()),
     limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle",
@@ -65,4 +65,4 @@ void Circular::set_base_frame(const CartesianState& base_frame) {
   center_state.set_reference_frame(base_frame.get_name());
   this->limit_cycle_->get_value().set_center_state(center_state);
 }
-}// namespace DynamicalSystems
+}// namespace dynamical_systems

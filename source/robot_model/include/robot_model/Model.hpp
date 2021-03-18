@@ -36,6 +36,11 @@ private:
   std::shared_ptr<state_representation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
   // @format:on
   /**
+   * @brief Initialize the pinocchio model from the URDF
+   */
+  void init_model();
+
+  /**
    * @brief initialize the constraints for the QP solver
    */
   bool init_qp_solver();
@@ -247,12 +252,6 @@ public:
    * @return the list of parameters
    */
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
-
-private:
-  /**
-   * @brief Initialize the pinocchio model from the URDF
-   */
-  void init_model();
 };
 
 inline const std::string& Model::get_robot_name() const {

@@ -154,7 +154,9 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
     frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
   } else {
     // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) { throw (exceptions::FrameNotFoundException(frame_name)); }
+    if (!this->robot_model_.existFrame(frame_name)) {
+      throw (exceptions::FrameNotFoundException(frame_name));
+    }
     frame_id = this->robot_model_.getFrameId(frame_name);
   }
   return this->compute_jacobian(joint_state, frame_id);
@@ -164,8 +166,8 @@ Eigen::MatrixXd Model::compute_inertia_matrix(const state_representation::JointP
   // compute only the upper part of the triangular inertia matrix stored in robot_data_.M
   pinocchio::crba(this->robot_model_, this->robot_data_, joint_positions.data());
   // copy the symmetric lower part
-  this->robot_data_.M.triangularView<Eigen::StrictlyLower>()
-      = this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
+  this->robot_data_.M.triangularView<Eigen::StrictlyLower>() =
+      this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
   return this->robot_data_.M;
 }
 

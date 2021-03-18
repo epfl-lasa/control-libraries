@@ -72,18 +72,28 @@ TEST_F(RobotModelTest, TestJacobianJointNames) {
   }
 }
 
+TEST_F(RobotModelTest, TestJacobianFrameNames) {
+  state_representation::JointState dummy = state_representation::JointState(robot_name, 7);
+  state_representation::Jacobian jac = franka->compute_jacobian(dummy);
+  EXPECT_TRUE(jac.get_reference_frame() == "panda_link0");
+  EXPECT_TRUE(jac.get_frame() == "panda_link8");
+  state_representation::Jacobian jac2 = franka->compute_jacobian(dummy, "panda_link2");
+  EXPECT_TRUE(jac2.get_reference_frame() == "panda_link0");
+  EXPECT_TRUE(jac2.get_frame() == "panda_link2");
+}
+
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
   EXPECT_THROW(franka->compute_jacobian(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbRows) {
   state_representation::Jacobian jac = franka->compute_jacobian(joint_state, "panda_joint2");
-  EXPECT_EQ(jac.get_nb_rows(), 6);
+  EXPECT_EQ(jac.rows(), 6);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbCols) {
   state_representation::Jacobian jac = franka->compute_jacobian(joint_state, "panda_joint2");
-  EXPECT_EQ(jac.get_nb_cols(), joint_state.get_size());
+  EXPECT_EQ(jac.cols(), joint_state.get_size());
 }
 
 TEST_F(RobotModelTest, TestGravityGetterAndSetters) {

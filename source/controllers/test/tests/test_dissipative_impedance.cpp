@@ -216,10 +216,9 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeTaskToJointCommand) {
   CartesianTwist desired_twist("test", Eigen::Vector3d(1, 0, 0));
   CartesianTwist feedback_twist("test", Eigen::Vector3d(1, 1, 0));
   // set a Jacobian matrix
-  Jacobian jacobian("test_robot", 3);
-  jacobian.set_data(Eigen::MatrixXd::Random(6, 3));
+  Jacobian jac = Jacobian::Random("test_robot", 3, "test");
   // check command
-  JointTorques command = task_controller_.compute_command(desired_twist, feedback_twist, jacobian);
+  JointTorques command = task_controller_.compute_command(desired_twist, feedback_twist, jac);
   // expect some non null data
   EXPECT_TRUE(command.data().norm() > 0.);
 }

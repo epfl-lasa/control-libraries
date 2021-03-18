@@ -132,13 +132,14 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->get_number_of_joints());
   J.setZero();
-  pinocchio::computeFrameJacobian(this->robot_model_,
-                                  this->robot_data_,
-                                  joint_state.get_positions(),
-                                  frame_id,
-                                  pinocchio::LOCAL_WORLD_ALIGNED,
-                                  J);
-  return state_representation::Jacobian(this->get_robot_name(), this->get_joint_frames(), J);
+  pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
+                                  pinocchio::LOCAL_WORLD_ALIGNED, J);
+  // the model does not have any reference frame
+  return state_representation::Jacobian(this->get_robot_name(),
+                                        this->get_joint_frames(),
+                                        this->robot_model_.frames[frame_id].name,
+                                        J,
+                                        this->frame_names_.front());
 }
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointState& joint_state,
@@ -180,16 +181,16 @@ Eigen::MatrixXd Model::compute_coriolis_matrix(const state_representation::Joint
                                           joint_state.get_velocities());
 }
 
-state_representation::JointTorques Model::compute_coriolis_torques(
-    const state_representation::JointState& joint_state) {
+state_representation::JointTorques
+Model::compute_coriolis_torques(const state_representation::JointState& joint_state) {
   Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
   return state_representation::JointTorques(joint_state.get_name(),
                                             joint_state.get_names(),
                                             coriolis_matrix * joint_state.get_velocities());
 }
 
-state_representation::JointTorques Model::compute_gravity_torques(
-    const state_representation::JointPositions& joint_positions) {
+state_representation::JointTorques
+Model::compute_gravity_torques(const state_representation::JointPositions& joint_positions) {
   Eigen::VectorXd gravity_torque =
       pinocchio::computeGeneralizedGravity(this->robot_model_, this->robot_data_, joint_positions.data());
   return state_representation::JointTorques(joint_positions.get_name(), joint_positions.get_names(), gravity_torque);
@@ -200,8 +201,8 @@ state_representation::CartesianPose Model::forward_geometry(const state_represen
   return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
 }
 
-std::vector<state_representation::CartesianPose> Model::forward_geometry(
-    const state_representation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
+std::vector<state_representation::CartesianPose> Model::forward_geometry(const state_representation::JointState& joint_state,
+                                                                         const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_number_of_joints()) {
     throw (exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
@@ -231,8 +232,8 @@ state_representation::CartesianPose Model::forward_geometry(const state_represen
   return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
-std::vector<state_representation::CartesianPose> Model::forward_geometry(
-    const state_representation::JointState& joint_state, const std::vector<std::string>& frame_names) {
+std::vector<state_representation::CartesianPose> Model::forward_geometry(const state_representation::JointState& joint_state,
+                                                                         const std::vector<std::string>& frame_names) {
   std::vector<unsigned int> frame_ids(frame_names.size());
   for (unsigned int i = 0; i < frame_names.size(); ++i) {
     std::string name = frame_names[i];

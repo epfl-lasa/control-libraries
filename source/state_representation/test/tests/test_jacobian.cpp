@@ -1,14 +1,37 @@
 #include "state_representation/robot/Jacobian.hpp"
-#include <fstream>
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include <gtest/gtest.h>
-#include <unistd.h>
+
+using namespace state_representation;
+using namespace state_representation::exceptions;
 
 TEST(JacobianTest, TestCreate) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  Jacobian jac("robot", 7, "test");
+  EXPECT_TRUE(jac.rows() == 6);
+  EXPECT_TRUE(jac.cols() == 7);
+  EXPECT_TRUE(jac.is_empty());
+  EXPECT_TRUE(jac.get_frame() == "test");
+  EXPECT_TRUE(jac.get_reference_frame() == "world");
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_TRUE(jac.get_joint_names().at(i) == ("joint" + std::to_string(i)));
+    EXPECT_TRUE(jac.col(i).norm() == 0);
+  }
+}
 
-  EXPECT_TRUE(jac.get_nb_rows() == 6);
-  EXPECT_TRUE(jac.get_nb_cols() == 7);
+TEST(JacobianTest, TestCreateWithVectorOfJoints) {
+  Jacobian jac("robot", std::vector<std::string>{"j1", "j2"}, "test", "test_ref");
+  EXPECT_TRUE(jac.get_joint_names().at(0) == "j1");
+  EXPECT_TRUE(jac.get_joint_names().at(1) == "j2");
+  EXPECT_TRUE(jac.get_reference_frame() == "test_ref");
+}
 
+TEST(JacobianTest, TestSetData) {
+  Jacobian jac("robot", 3, "test");
+  jac.set_data(Eigen::MatrixXd::Random(6, 3));
+  EXPECT_FALSE(jac.is_empty());
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_TRUE(jac.col(i).norm() > 0);
+  }
   bool except_thrown = false;
   try {
     jac.set_data(Eigen::MatrixXd::Random(7, 6));
@@ -18,29 +41,33 @@ TEST(JacobianTest, TestCreate) {
   EXPECT_TRUE(except_thrown);
 }
 
-TEST(JacobianTest, TestTranspose) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  jac = jac.transpose();
-
-  EXPECT_TRUE(jac.get_nb_rows() == 7);
-  EXPECT_TRUE(jac.get_nb_cols() == 6);
-
-  bool except_thrown = false;
-  try {
-    jac.set_data(Eigen::MatrixXd::Random(7, 6));
-  } catch (const IncompatibleSizeException& e) {
-    except_thrown = true;
+TEST(JacobianTest, TestRandomCreate) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  EXPECT_FALSE(jac.is_empty());
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_TRUE(jac.col(i).norm() > 0);
   }
-  EXPECT_FALSE(except_thrown);
+}
+
+TEST(JacobianTest, TestTranspose) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  Jacobian jact = jac.transpose();
+
+  EXPECT_TRUE(jact.rows() == 7);
+  EXPECT_TRUE(jact.cols() == 6);
+
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_TRUE(jac.col(i).isApprox(jact.row(i)));
+  }
 }
 
 TEST(JacobianTest, TestMutltiplyWithEigen) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  Eigen::MatrixXd mat1 = Eigen::MatrixXd::Random(7, 2);
   Eigen::MatrixXd res1 = jac * mat1;
+  Eigen::MatrixXd res_truth = jac.data() * mat1;
 
-  EXPECT_TRUE(res1.rows() == 6);
-  EXPECT_TRUE(res1.cols() == 1);
+  EXPECT_TRUE(res1.isApprox(res_truth));
 
   Eigen::MatrixXd mat2 = Eigen::VectorXd::Random(6, 1);
   bool except_thrown = false;
@@ -50,14 +77,10 @@ TEST(JacobianTest, TestMutltiplyWithEigen) {
     except_thrown = true;
   }
   EXPECT_TRUE(except_thrown);
-
-  Eigen::MatrixXd res2 = jac.transpose() * mat2;
-  EXPECT_TRUE(res2.rows() == 7);
-  EXPECT_TRUE(res2.cols() == 1);
 }
 
 TEST(JacobianTest, TestSolve) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   bool except_thrown = false;
   try {
@@ -75,31 +98,30 @@ TEST(JacobianTest, TestSolve) {
 }
 
 TEST(JacobianTest, TestJointToCartesian) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  state_representation::JointVelocities jvel("robot", Eigen::VectorXd::Random(7));
+  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
+  JointVelocities jvel = JointVelocities::Random("robot",7);
+  CartesianTwist cvel = jac * jvel;
 
-  bool except_thrown = false;
-  try {
-    state_representation::CartesianTwist cvel = jac * jvel;
-  } catch (const IncompatibleSizeException& e) {
-    except_thrown = true;
-  }
-  EXPECT_FALSE(except_thrown);
+  EXPECT_TRUE(cvel.get_name() == jac.get_frame());
+  EXPECT_TRUE(cvel.get_reference_frame() == jac.get_reference_frame());
+  EXPECT_TRUE(cvel.data().isApprox(jac.data() * jvel.data()));
 }
 
 TEST(JacobianTest, TestCartesianToJoint) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
-  state_representation::CartesianTwist cvel("robot", vec);
+  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
+  CartesianTwist cvel = CartesianTwist::Random("test");
 
-  state_representation::JointVelocities jvel1;
   bool except_thrown1 = false;
   try {
-    jvel1 = jac.solve(cvel);
-  } catch (const IncompatibleSizeException& e) {
+    JointVelocities jvel = jac.solve(cvel);
+  } catch (const IncompatibleStatesException& e) {
     except_thrown1 = true;
   }
-  EXPECT_FALSE(except_thrown1);
+  EXPECT_TRUE(except_thrown1);
+
+  // this changing of reference frame should actually not be possible I think. As it should include a transformation
+  // from previous reference frame to the new desired one. This is how it is now implemented in the Jacobian
+  cvel.set_reference_frame("test_ref");
 
   state_representation::JointVelocities jvel2;
   bool except_thrown2 = false;
@@ -109,4 +131,14 @@ TEST(JacobianTest, TestCartesianToJoint) {
     except_thrown2 = true;
   }
   EXPECT_FALSE(except_thrown2);
+  EXPECT_TRUE(jvel2.data().norm() > 0);
+}
+
+TEST(JacobianTest, TestChangeReferenceFrame) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
+  CartesianPose cpose = CartesianTwist::Random("test_ref");
+  Jacobian jac_in_test_ref = cpose * jac;
+  EXPECT_TRUE(jac_in_test_ref.get_reference_frame() == cpose.get_reference_frame());
+  jac.set_reference_frame(cpose);
+  EXPECT_TRUE(jac_in_test_ref.data().isApprox(jac_in_test_ref.data()));
 }

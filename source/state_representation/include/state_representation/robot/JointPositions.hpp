@@ -95,7 +95,7 @@ public:
    * @brief Constructor for the random JointPositions
    * @param robot_name the name of the associated robot
    * @param joint_names list of joint names
-   * @return JointPositions with zero positions values
+   * @return JointPositions with random positions values
    */
   static JointPositions Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
 

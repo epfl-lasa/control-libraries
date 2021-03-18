@@ -83,10 +83,9 @@ TEST(ImpedanceControllerTest, TestCartesianToJointImpedance) {
   feedback_state.set_orientation(Eigen::Quaterniond(0, 0, 1, 1));
   feedback_state.set_linear_velocity(Eigen::Vector3d(0.5, 0, 0));
   // set a Jacobian matrix
-  Jacobian jacobian("test_robot", 3);
-  jacobian.set_data(Eigen::MatrixXd::Random(6, 3));
+  Jacobian jac = Jacobian::Random("test_robot", 3, "test");
   // check command
-  JointTorques command = impedance_controller.compute_command(desired_state, feedback_state, jacobian);
+  JointTorques command = impedance_controller.compute_command(desired_state, feedback_state, jac);
   // expect some non null data
   EXPECT_TRUE(command.data().norm() > 0.);
 }

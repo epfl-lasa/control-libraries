@@ -3,10 +3,10 @@
 #include <stdexcept>
 #include <gtest/gtest.h>
 
-#include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
-#include "robot_model/Exceptions/FrameNotFoundException.hpp"
+#include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
+#include "robot_model/exceptions/FrameNotFoundException.hpp"
 
-using namespace RobotModel;
+using namespace robot_model;
 
 class RobotModelTest : public testing::Test {
 protected:
@@ -103,7 +103,7 @@ TEST_F(RobotModelTest, TestNumberOfJoints) {
 
 TEST_F(RobotModelTest, TestForwardGeometryJointStateSize) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 6);
-  EXPECT_THROW(franka.forward_geometry(dummy), Exceptions::InvalidJointStateSizeException);
+  EXPECT_THROW(franka.forward_geometry(dummy), exceptions::InvalidJointStateSizeException);
 }
 
 TEST_F(RobotModelTest, TestForwardGeometry) {
@@ -112,7 +112,7 @@ TEST_F(RobotModelTest, TestForwardGeometry) {
 }
 
 TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameName) {
-  EXPECT_THROW(franka.forward_geometry(joint_state, "panda_link99"), Exceptions::FrameNotFoundException);
+  EXPECT_THROW(franka.forward_geometry(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
 }
 
 TEST_F(RobotModelTest, TestJacobianJointNames) {
@@ -125,7 +125,7 @@ TEST_F(RobotModelTest, TestJacobianJointNames) {
 }
 
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
-  EXPECT_THROW(franka.compute_jacobian(joint_state, "panda_link99"), Exceptions::FrameNotFoundException);
+  EXPECT_THROW(franka.compute_jacobian(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbRows) {

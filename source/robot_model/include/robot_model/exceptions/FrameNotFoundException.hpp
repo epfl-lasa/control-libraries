@@ -2,10 +2,10 @@
 
 #include <exception>
 
-namespace RobotModel::Exceptions {
+namespace robot_model::exceptions {
 class FrameNotFoundException : public std::invalid_argument {
 public:
   explicit FrameNotFoundException(const std::string& frame_name) :
       invalid_argument("Frame with name or ID " + frame_name + " is not in the robot model") {};
 };
-}// namespace RobotModel::exceptions
+}// namespace robot_model::exceptions

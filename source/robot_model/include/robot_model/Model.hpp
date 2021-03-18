@@ -14,7 +14,7 @@
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 
-namespace RobotModel {
+namespace robot_model {
 class Model {
 private:
   // @format:off
@@ -325,4 +325,4 @@ inline std::list<std::shared_ptr<state_representation::ParameterInterface>> Mode
   param_list.push_back(this->proportional_gain_);
   return param_list;
 }
-}// namespace RobotModel
+}// namespace robot_model

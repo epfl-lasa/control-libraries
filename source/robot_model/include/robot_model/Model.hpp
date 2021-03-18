@@ -199,7 +199,8 @@ public:
    * @param joint_positions containing the joint positions of the robot
    * @return the gravity torque as a JointTorques
    */
-  state_representation::JointTorques compute_gravity_torques(const state_representation::JointPositions& joint_positions);
+  state_representation::JointTorques compute_gravity_torques(
+      const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -224,7 +225,8 @@ public:
    * @param cartesian_state containing the pose of the end-effector
    * @return the joint state of the robot
    */
-  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& cartesian_state) const;
+  state_representation::JointPositions inverse_geometry(
+      const state_representation::CartesianState& cartesian_state) const;
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
@@ -285,8 +287,7 @@ inline unsigned int Model::get_number_of_joints() const {
 
 inline std::vector<std::string> Model::get_joint_frames() const {
   // model contains a first joint called universe that needs to be discarded
-  std::vector<std::string> joint_frames(this->robot_model_.names.begin() + 1,
-                                       this->robot_model_.names.end());
+  std::vector<std::string> joint_frames(this->robot_model_.names.begin() + 1, this->robot_model_.names.end());
   return joint_frames;
 }
 
@@ -303,12 +304,12 @@ inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
 }
 
 inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                  unsigned int frame_id) {
+                                                                   unsigned int frame_id) {
   return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
 }
 
 inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                  std::string frame_name) {
+                                                                   std::string frame_name) {
   if (frame_name.empty()) {
     // get last frame if none specified
     frame_name = this->robot_model_.frames.back().name;

@@ -4,15 +4,6 @@
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 
 namespace robot_model {
-Model::Model() :
-    robot_name_(std::make_shared<state_representation::Parameter<std::string>>("robot_name")),
-    urdf_path_(std::make_shared<state_representation::Parameter<std::string>>("urdf_path")),
-    alpha_(std::make_shared<state_representation::Parameter<double>>("alpha", 0.1)),
-    epsilon_(std::make_shared<state_representation::Parameter<double>>("epsilon", 1e-2)),
-    linear_velocity_limit_(std::make_shared<state_representation::Parameter<double>>("linear_velocity_limit", 2.0)),
-    angular_velocity_limit_(std::make_shared<state_representation::Parameter<double>>("angular_velocity_limit", 100.0)),
-    proportional_gain_(std::make_shared<state_representation::Parameter<double>>("proportional_gain", 1.0)) {}
-
 Model::Model(const std::string& robot_name, const std::string& urdf_path) :
     robot_name_(std::make_shared<state_representation::Parameter<std::string>>("robot_name", robot_name)),
     urdf_path_(std::make_shared<state_representation::Parameter<std::string>>("urdf_path", urdf_path)),
@@ -39,6 +30,17 @@ Model::Model(const Model& model) :
 
 Model::~Model() {}
 
+Model& Model::operator=(const Model& model) {
+  this->robot_name_ = model.robot_name_;
+  this->urdf_path_ = model.urdf_path_;
+  this->alpha_ = model.alpha_;
+  this->epsilon_ = model.epsilon_;
+  // initialize the model and the solver
+  this->init_model();
+  this->init_qp_solver();
+  return (*this);
+}
+
 void Model::init_model() {
   pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
   this->robot_data_ = pinocchio::Data(this->robot_model_);
@@ -49,17 +51,6 @@ void Model::init_model() {
   }
   // remove universe and root_joint frame added by Pinocchio
   this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
-}
-
-Model& Model::operator=(const Model& model) {
-  this->robot_name_ = model.robot_name_;
-  this->urdf_path_ = model.urdf_path_;
-  this->alpha_ = model.alpha_;
-  this->epsilon_ = model.epsilon_;
-  // initialize the model and the solver
-  this->init_model();
-  this->init_qp_solver();
-  return (*this);
 }
 
 bool Model::init_qp_solver() {

@@ -18,8 +18,8 @@ namespace robot_model {
 class Model {
 private:
   // @format:off
-  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;       ///< name of the robot
-  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
+  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;      ///< name of the robot
+  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;       ///< path to the urdf file
   std::vector<std::string> frame_names_;                                          ///< name of the frames
   pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
@@ -69,11 +69,6 @@ private:
 
 public:
   /**
-   * @brief Empty constructor
-   */
-  explicit Model();
-
-  /**
    * @brief Constructor with robot name and path to URDF file
    */
   explicit Model(const std::string& robot_name, const std::string& urdf_path);
@@ -115,12 +110,6 @@ public:
   const std::string& get_urdf_path() const;
 
   /**
-   * @brief Setter of the URDF path
-   * @param urdf_path the new value of the path
-   */
-  void set_urdf_path(const std::string& urdf_path);
-
-  /**
    * @brief Getter of the number of joints
    * @return the number of joints
    */
@@ -149,11 +138,6 @@ public:
    * @param gravity the gravity vector
    */
   void set_gravity_vector(const Eigen::Vector3d& gravity);
-
-  /**
-   * @brief Initialize the pinocchio model from the URDF
-   */
-  void init_model();
 
   /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
@@ -263,6 +247,12 @@ public:
    * @return the list of parameters
    */
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+
+private:
+  /**
+   * @brief Initialize the pinocchio model from the URDF
+   */
+  void init_model();
 };
 
 inline const std::string& Model::get_robot_name() const {
@@ -275,10 +265,6 @@ inline void Model::set_robot_name(const std::string& robot_name) {
 
 inline const std::string& Model::get_urdf_path() const {
   return this->urdf_path_->get_value();
-}
-
-inline void Model::set_urdf_path(const std::string& urdf_path) {
-  this->urdf_path_->set_value(urdf_path);
 }
 
 inline unsigned int Model::get_number_of_joints() const {

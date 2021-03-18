@@ -195,6 +195,11 @@ state_representation::JointTorques Model::compute_gravity_torques(
   return state_representation::JointTorques(joint_positions.get_name(), joint_positions.get_names(), gravity_torque);
 }
 
+state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
+                                                            unsigned int frame_id) {
+  return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
+}
+
 std::vector<state_representation::CartesianPose> Model::forward_geometry(
     const state_representation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_number_of_joints()) {
@@ -215,6 +220,15 @@ std::vector<state_representation::CartesianPose> Model::forward_geometry(
     pose_vector.push_back(frame_pose);
   }
   return pose_vector;
+}
+
+state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
+                                                            std::string frame_name) {
+  if (frame_name.empty()) {
+    // get last frame if none specified
+    frame_name = this->robot_model_.frames.back().name;
+  }
+  return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
 std::vector<state_representation::CartesianPose> Model::forward_geometry(

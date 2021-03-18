@@ -289,20 +289,6 @@ inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
   this->robot_model_.gravity.linear(gravity);
 }
 
-inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                   unsigned int frame_id) {
-  return this->forward_geometry(joint_state, std::vector<unsigned int>{frame_id}).front();
-}
-
-inline state_representation::CartesianPose Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                   std::string frame_name) {
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_name = this->robot_model_.frames.back().name;
-  }
-  return this->forward_geometry(joint_state, std::vector<std::string>{frame_name}).front();
-}
-
 inline std::list<std::shared_ptr<state_representation::ParameterInterface>> Model::get_parameters() const {
   std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->alpha_);

@@ -1,9 +1,9 @@
 #include "robot_model/Model.hpp"
 #include <pinocchio/algorithm/frames.hpp>
-#include "robot_model/Exceptions/FrameNotFoundException.hpp"
-#include "robot_model/Exceptions/InvalidJointStateSizeException.hpp"
+#include "robot_model/exceptions/FrameNotFoundException.hpp"
+#include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 
-namespace RobotModel {
+namespace robot_model {
 Model::Model() :
     robot_name_(std::make_shared<state_representation::Parameter<std::string>>("robot_name")),
     urdf_path_(std::make_shared<state_representation::Parameter<std::string>>("urdf_path")),
@@ -136,13 +136,17 @@ bool Model::init_qp_solver() {
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointState& joint_state,
                                                        unsigned int frame_id) {
   if (joint_state.get_size() != this->get_number_of_joints()) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
+    throw (exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->get_number_of_joints());
   J.setZero();
-  pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
-                                  pinocchio::LOCAL_WORLD_ALIGNED, J);
+  pinocchio::computeFrameJacobian(this->robot_model_,
+                                  this->robot_data_,
+                                  joint_state.get_positions(),
+                                  frame_id,
+                                  pinocchio::LOCAL_WORLD_ALIGNED,
+                                  J);
   return state_representation::Jacobian(this->get_robot_name(), this->get_joint_frames(), J);
 }
 
@@ -154,7 +158,9 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
     frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
   } else {
     // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) { throw (Exceptions::FrameNotFoundException(frame_name)); }
+    if (!this->robot_model_.existFrame(frame_name)) {
+      throw (exceptions::FrameNotFoundException(frame_name));
+    }
     frame_id = this->robot_model_.getFrameId(frame_name);
   }
   return this->compute_jacobian(joint_state, frame_id);
@@ -164,16 +170,16 @@ Eigen::MatrixXd Model::compute_inertia_matrix(const state_representation::JointP
   // compute only the upper part of the triangular inertia matrix stored in robot_data_.M
   pinocchio::crba(this->robot_model_, this->robot_data_, joint_positions.data());
   // copy the symmetric lower part
-  this->robot_data_.M.triangularView<Eigen::StrictlyLower>()
-      = this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
+  this->robot_data_.M.triangularView<Eigen::StrictlyLower>() =
+      this->robot_data_.M.transpose().triangularView<Eigen::StrictlyLower>();
   return this->robot_data_.M;
 }
 
 state_representation::JointTorques Model::compute_inertia_torques(const state_representation::JointState& joint_state) {
   Eigen::MatrixXd inertia = this->compute_inertia_matrix(joint_state);
   return state_representation::JointTorques(joint_state.get_name(),
-                                           joint_state.get_names(),
-                                           inertia * joint_state.get_accelerations());
+                                            joint_state.get_names(),
+                                            inertia * joint_state.get_accelerations());
 }
 
 Eigen::MatrixXd Model::compute_coriolis_matrix(const state_representation::JointState& joint_state) {
@@ -183,29 +189,31 @@ Eigen::MatrixXd Model::compute_coriolis_matrix(const state_representation::Joint
                                           joint_state.get_velocities());
 }
 
-state_representation::JointTorques Model::compute_coriolis_torques(const state_representation::JointState& joint_state) {
+state_representation::JointTorques Model::compute_coriolis_torques(
+    const state_representation::JointState& joint_state) {
   Eigen::MatrixXd coriolis_matrix = this->compute_coriolis_matrix(joint_state);
-  return state_representation::JointTorques(joint_state.get_name(), joint_state.get_names(),
-                                           coriolis_matrix * joint_state.get_velocities());
+  return state_representation::JointTorques(joint_state.get_name(),
+                                            joint_state.get_names(),
+                                            coriolis_matrix * joint_state.get_velocities());
 }
 
-state_representation::JointTorques Model::compute_gravity_torques(const state_representation::JointPositions& joint_positions) {
-  Eigen::VectorXd gravity_torque = pinocchio::computeGeneralizedGravity(this->robot_model_,
-                                                                        this->robot_data_,
-                                                                        joint_positions.data());
+state_representation::JointTorques Model::compute_gravity_torques(
+    const state_representation::JointPositions& joint_positions) {
+  Eigen::VectorXd gravity_torque =
+      pinocchio::computeGeneralizedGravity(this->robot_model_, this->robot_data_, joint_positions.data());
   return state_representation::JointTorques(joint_positions.get_name(), joint_positions.get_names(), gravity_torque);
 }
 
-std::vector<state_representation::CartesianPose> Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                         const std::vector<unsigned int>& frame_ids) {
+std::vector<state_representation::CartesianPose> Model::forward_geometry(
+    const state_representation::JointState& joint_state, const std::vector<unsigned int>& frame_ids) {
   if (joint_state.get_size() != this->get_number_of_joints()) {
-    throw (Exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
+    throw (exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
   std::vector<state_representation::CartesianPose> pose_vector;
   pinocchio::forwardKinematics(this->robot_model_, this->robot_data_, joint_state.get_positions());
   for (unsigned int id : frame_ids) {
     if (id >= static_cast<unsigned int>(this->robot_model_.nframes)) {
-      throw (Exceptions::FrameNotFoundException(std::to_string(id)));
+      throw (exceptions::FrameNotFoundException(std::to_string(id)));
     }
     pinocchio::updateFramePlacement(this->robot_model_, this->robot_data_, id);
     pinocchio::SE3 pose = this->robot_data_.oMf[id];
@@ -218,13 +226,13 @@ std::vector<state_representation::CartesianPose> Model::forward_geometry(const s
   return pose_vector;
 }
 
-std::vector<state_representation::CartesianPose> Model::forward_geometry(const state_representation::JointState& joint_state,
-                                                                        const std::vector<std::string>& frame_names) {
+std::vector<state_representation::CartesianPose> Model::forward_geometry(
+    const state_representation::JointState& joint_state, const std::vector<std::string>& frame_names) {
   std::vector<unsigned int> frame_ids(frame_names.size());
   for (unsigned int i = 0; i < frame_names.size(); ++i) {
     std::string name = frame_names[i];
     if (!this->robot_model_.existFrame(name)) {
-      throw (Exceptions::FrameNotFoundException(name));
+      throw (exceptions::FrameNotFoundException(name));
     }
     frame_ids[i] = this->robot_model_.getFrameId(name);
   }
@@ -317,4 +325,4 @@ void Model::print_qp_problem() {
     std::cout << this->upper_bound_constraints_(i) << std::endl;
   }
 }
-}// namespace RobotModel
+}// namespace robot_model

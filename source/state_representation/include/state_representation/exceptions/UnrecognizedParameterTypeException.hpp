@@ -3,7 +3,7 @@
 #include <exception>
 #include <iostream>
 
-namespace state_representation::Exceptions {
+namespace state_representation::exceptions {
 class UnrecognizedParameterTypeException : public std::logic_error {
 public:
   explicit UnrecognizedParameterTypeException(const std::string& msg) : logic_error(msg) {};

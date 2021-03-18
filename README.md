@@ -45,7 +45,7 @@ rigid-body algorithms for solving kinematic and dynamic problems.
 It is a wrapper for [Pinocchio](https://github.com/stack-of-tasks/pinocchio)
 that is compatible with the internal `state_representation` types.
 
-Dependencies: `state_representation`, [Pinocchio](https://github.com/stack-of-tasks/pinocchio)
+Dependencies: `state_representation`, [Pinocchio](https://stack-of-tasks.github.io/pinocchio/download.html)
 
 [**Documentation**](source/robot_model/README.md)
 

@@ -1,6 +1,6 @@
 # state_representation
 
-This library provides a set of classes to represent **states** in **cartesian** or **joint** spaces, **parameters**, 
+This library provides a set of classes to represent **states** in **Cartesian** or **joint** spaces, **parameters**, 
 or **geometrical shapes** that can be used as obstacles.
 Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and 
 the link between them and the robot state.

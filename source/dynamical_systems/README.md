@@ -65,10 +65,10 @@ It is currently implemented for the `CartesianState` and `JointState` types.
 The Linear DS is constructed with a state as an argument; this becomes the attractor.
 ```c++
 state_representation::CartesianState cartesianAttractor("A");
-dynamical_system::Linear<state_representation::CartesianState> linear(cartesianAttractor);
+dynamical_systems::Linear<state_representation::CartesianState> linear(cartesianAttractor);
 
 state_representation::JointState jointAttractor("B");
-dynamical_system::Linear<state_representation::JointState> linear(jointAttractor);
+dynamical_systems::Linear<state_representation::JointState> linear(jointAttractor);
 ```
 
 ### Configuring the Linear DS
@@ -90,7 +90,7 @@ length, or as a scalar (which sets the value along the diagonal elements of the 
 // set a gain (scalar, vector or matrix during construction)
 double gain = 10;
 state_representation::CartesianState csA("A");
-dynamical_system::Linear<state_representation::CartesianState> linear(csA, gain);
+dynamical_systems::Linear<state_representation::CartesianState> linear(csA, gain);
 
 // or set / update the gain for the created object
 std::vector<double> gains = {1, 2, 3, 4, 5, 6};
@@ -107,7 +107,7 @@ To get the velocity from a state, simply call the `evaluate()` function.
 
 ```c++
 state_representation::CartesianState csA("A"), csB("B");
-dynamical_system::Linear<state_representation::CartesianState> linear(csA);
+dynamical_systems::Linear<state_representation::CartesianState> linear(csA);
 
 // note: the return type of evaluate() is a CartesianState, but
 // it can be directly assigned to a CartesianTwist because the =operator

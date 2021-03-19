@@ -40,7 +40,7 @@ CartesianState Ring::compute_dynamics(const CartesianState& state) const {
   twist.set_angular_velocity(this->calculate_local_angular_velocity(pose, twist.get_linear_velocity(), local_field_strength));
 
   // transform the twist back to the base reference frame
-  return CartesianTwist(this->get_center()) * twist;
+  return CartesianState(this->get_center()) * twist;
 }
 
 Eigen::Vector3d Ring::calculate_local_linear_velocity(const CartesianPose& pose,

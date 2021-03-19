@@ -46,7 +46,7 @@ CartesianState Circular::compute_dynamics(const CartesianState& state) const {
 
   //compute back the linear velocity in the desired frame
   auto frame = this->get_center() * this->get_limit_cycle().get_rotation();
-  return CartesianTwist(frame) * velocity;
+  return CartesianState(frame) * velocity;
 }
 
 std::list<std::shared_ptr<ParameterInterface>> Circular::get_parameters() const {

@@ -34,6 +34,21 @@ TEST_F(CircularDSTest, TestPositionOnRadius) {
   EXPECT_NEAR((current_pose.get_position() - center.get_position()).norm(), radius, linear_tol);
 }
 
+TEST_F(CircularDSTest, TestPositionOnRadiusRandomCenter) {
+  center.set_position(Eigen::Vector3d::Random());
+  center.set_orientation(Eigen::Quaterniond::UnitRandom());
+  dynamical_systems::Circular circularDS(center);
+  circularDS.set_radius(radius);
+
+  for (unsigned int i = 0; i < nb_steps; ++i) {
+    state_representation::CartesianTwist twist = circularDS.evaluate(current_pose);
+    twist.clamp(10, 10, 0.001, 0.001);
+    current_pose += dt * twist;
+  }
+
+  EXPECT_NEAR((current_pose.get_position() - center.get_position()).norm(), radius, linear_tol);
+}
+
 TEST_F(CircularDSTest, SetCenterAndBase) {
   auto BinA = state_representation::CartesianState::Identity("B", "A");
   auto CinA = state_representation::CartesianState::Identity("C", "A");

@@ -102,6 +102,20 @@ TEST_F(RingDSTest, ConvergenceOnRadius) {
   EXPECT_NEAR((current_pose.get_position() - center.get_position()).norm(), radius, tol);
 }
 
+TEST_F(RingDSTest, ConvergenceOnRadiusRandomCenter) {
+  center.set_position(Eigen::Vector3d::Random());
+  center.set_orientation(Eigen::Quaterniond::UnitRandom());
+  dynamical_systems::Ring ring(center, radius);
+
+  for (unsigned int i = 0; i < nb_steps; ++i) {
+    state_representation::CartesianTwist twist = ring.evaluate(current_pose);
+    twist.clamp(vlim[0], vlim[1], vlim[2], vlim[3]);
+    current_pose += dt * twist;
+  }
+
+  EXPECT_NEAR((current_pose.get_position() - center.get_position()).norm(), radius, tol);
+}
+
 TEST_F(RingDSTest, ZeroNormalGain) {
   dynamical_systems::Ring ring(center);
   ring.set_normal_gain(0);

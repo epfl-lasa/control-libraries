@@ -52,8 +52,7 @@ TEST_F(DissipativeImpedanceControllerTest, TestOrthonormalize) {
   Eigen::Matrix3d basis = Eigen::Matrix3d::Random();
   Eigen::Vector3d eigenvector = Eigen::Vector3d::Random();
   // compute the orthonormal basis
-  Eigen::Matrix3d orthonormal_basis = Dissipative<CartesianState>::compute_orthonormal_basis(basis,
-                                                                                             eigenvector);
+  Eigen::Matrix3d orthonormal_basis = Dissipative<CartesianState>::orthonormalize_basis(basis, eigenvector);
   // first column should the normalized eigenvector
   Eigen::Vector3d err = orthonormal_basis.col(0) - eigenvector.normalized();
   for (int i = 0; i < 3; ++i) { EXPECT_NEAR(err(i), 0., tolerance_); }
@@ -69,193 +68,127 @@ TEST_F(DissipativeImpedanceControllerTest, TestOrthonormalize) {
 
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingLinear) {
   Eigen::MatrixXd damping;
-  Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector;
-  do {
-    eigenvector = Eigen::VectorXd::Random(6);
-  } while (eigenvector.norm() < 1e-4);
+  CartesianTwist vel = CartesianTwist::Random("test");
   Eigen::Matrix3d block;
-  // case LINEAR
   set_controller_space(ComputationalSpaceType::LINEAR);
-  task_controller_.compute_damping(eigenvector);
+  task_controller_.compute_damping(vel);
   damping = task_controller_.get_damping();
   // linear part is identity
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < 3; ++j) {
-      EXPECT_NEAR(damping(i, j), identity3(i, j), tolerance_);
-    }
-  }
+  block = damping.topLeftCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Identity()));
   // angular part is 0
-  block = damping.block<3, 3>(3, 3);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
+  block = damping.bottomRightCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
   // side blocks are 0
-  block = damping.block<3, 3>(3, 0);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
-  block = damping.block<3, 3>(0, 3);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
+  block = damping.topRightCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
+  block = damping.bottomLeftCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
 }
 
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingAngular) {
   Eigen::MatrixXd damping;
-  Eigen::Matrix3d identity3 = Eigen::Matrix3d::Identity();
-  Eigen::VectorXd eigenvector;
-  do {
-    eigenvector = Eigen::VectorXd::Random(6);
-  } while (eigenvector.norm() < 1e-4);
+  CartesianTwist vel = CartesianTwist::Random("test");
   Eigen::Matrix3d block;
   set_controller_space(ComputationalSpaceType::ANGULAR);
-  task_controller_.compute_damping(eigenvector);
+  task_controller_.compute_damping(vel);
   damping = task_controller_.get_damping();
   // linear part is 0
-  block = damping.block<3, 3>(0, 0);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
-  // angular part is non null
-  for (int i = 3; i < 6; ++i) {
-    for (int j = 3; j < 6; ++j) {
-      EXPECT_NEAR(damping(i, j), identity3(i - 3, j - 3), tolerance_);
-    }
-  }
+  block = damping.topLeftCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
+  // angular part is identity
+  block = damping.bottomRightCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Identity()));
   // side blocks are 0
-  block = damping.block<3, 3>(3, 0);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
-  block = damping.block<3, 3>(0, 3);
-  EXPECT_NEAR(std::accumulate(block.data(), block.data() + block.size(), 0.0), 0.0, tolerance_);
+  block = damping.topRightCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
+  block = damping.bottomLeftCorner<3, 3>();
+  EXPECT_TRUE(block.isApprox(Eigen::Matrix3d::Zero()));
 }
 
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingDecoupledTwist) {
   Eigen::MatrixXd damping;
-  Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector;
-  do {
-    eigenvector = Eigen::VectorXd::Random(6);
-  } while (eigenvector.norm() < 1e-4);
-  // case DECOUPLED_TWIST
+  CartesianTwist vel = CartesianTwist::Random("test");
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
-  task_controller_.compute_damping(eigenvector);
+  task_controller_.compute_damping(vel);
   damping = task_controller_.get_damping();
-  // identity 6
-  for (int i = 0; i < 6; ++i) {
-    for (int j = 0; j < 6; ++j) {
-      EXPECT_NEAR(damping(i, j), identity6(i, j), tolerance_);
-    }
-  }
+  EXPECT_TRUE(damping.isApprox(Eigen::MatrixXd::Identity(6, 6)));
 }
 
 TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingFull) {
   Eigen::MatrixXd damping;
-  Eigen::MatrixXd identity6 = Eigen::MatrixXd::Identity(6, 6);
-  Eigen::VectorXd eigenvector;
-  do {
-    eigenvector = Eigen::VectorXd::Random(6);
-  } while (eigenvector.norm() < 1e-4);
-  // case FULL
+  CartesianTwist vel = CartesianTwist::Random("test");
   set_controller_space(ComputationalSpaceType::FULL);
-  task_controller_.compute_damping(eigenvector);
+  task_controller_.compute_damping(vel);
   damping = task_controller_.get_damping();
-  // identity 6
-  for (int i = 0; i < 6; ++i) {
-    for (int j = 0; j < 6; ++j) {
-      EXPECT_NEAR(damping(i, j), identity6(i, j), tolerance_);
-    }
-  }
+  EXPECT_TRUE(damping.isApprox(Eigen::MatrixXd::Identity(6, 6)));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullVelocityLinear) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisZeroLinear) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
   set_controller_space(ComputationalSpaceType::LINEAR);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
   // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // damping matrix not changed
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  Eigen::Matrix3d linear_block = basis.topLeftCorner<3, 3>();
+  Eigen::Matrix3d angular_block = basis.bottomRightCorner<3, 3>();
+  EXPECT_TRUE(linear_block.isApprox(Eigen::Matrix3d::Identity()));
+  EXPECT_TRUE(angular_block.isApprox(Eigen::Matrix3d::Zero()));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullVelocityAngular) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisZeroAngular) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
   set_controller_space(ComputationalSpaceType::ANGULAR);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
   // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // damping matrix not changed
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  Eigen::Matrix3d linear_block = basis.topLeftCorner<3, 3>();
+  Eigen::Matrix3d angular_block = basis.bottomRightCorner<3, 3>();
+  EXPECT_TRUE(linear_block.isApprox(Eigen::Matrix3d::Zero()));
+  EXPECT_TRUE(angular_block.isApprox(Eigen::Matrix3d::Identity()));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullDecoupledTwist) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisZeroDecoupledTwist) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
   // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // damping matrix not changed
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  EXPECT_TRUE(basis.isApprox(Eigen::MatrixXd::Identity(6, 6)));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingPartialNonNullLinearDecoupledTwist) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd(6);
-  eigenvector << 1, 1, 1, 0, 0, 0;
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisNonZeroLinearDecoupledTwist) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
+  vel.set_linear_velocity(Eigen::Vector3d::Random());
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
   // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // the whole damping matrix is updated linear uses the eigenvector while angular part uses the random values
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_TRUE(damping.col(i).norm() != computed_damping.col(i).norm());
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  EXPECT_FALSE(basis.isApprox(Eigen::MatrixXd::Identity(6, 6)));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingPartialNonNullAngularDecoupledTwist) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd(6);
-  eigenvector << 0, 0, 0, 1, 1, 1;
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisNonZeroAngularDecoupledTwist) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
+  vel.set_angular_velocity(Eigen::Vector3d::Random());
   set_controller_space(ComputationalSpaceType::DECOUPLED_TWIST);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
   // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // the whole damping matrix is updated linear uses the eigenvector while angular part uses the random values
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_TRUE(damping.col(i).norm() != computed_damping.col(i).norm());
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  EXPECT_FALSE(basis.isApprox(Eigen::MatrixXd::Identity(6, 6)));
 }
 
-TEST_F(DissipativeImpedanceControllerTest, TestComputeDampingNullFull) {
-  Eigen::MatrixXd damping = Eigen::MatrixXd::Random(6, 6);
-  Eigen::VectorXd eigenvector = Eigen::VectorXd::Zero(6);
-  // case LINEAR
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisZeroFull) {
+  CartesianTwist vel = CartesianTwist::Zero("test");
   set_controller_space(ComputationalSpaceType::FULL);
-  // voluntarily set a random damping
-  task_controller_.set_damping(damping);
-  // then compute it
-  task_controller_.compute_damping(eigenvector);
-  Eigen::MatrixXd computed_damping = task_controller_.get_damping();
-  // damping matrix not changed
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(damping.col(i).norm(), computed_damping.col(i).norm(), tolerance_);
-  }
+  Eigen::MatrixXd basis = task_controller_.compute_orthonormal_basis(vel);
+  EXPECT_TRUE(basis.isApprox(Eigen::MatrixXd::Identity(6, 6)));
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisJointState) {
+  JointVelocities vel = JointVelocities::Random("test", 4);
+  Eigen::MatrixXd basis = joint_controller_.compute_orthonormal_basis(vel);
+  EXPECT_FALSE(basis.isApprox(Eigen::MatrixXd::Identity(4, 4)));
+}
+
+TEST_F(DissipativeImpedanceControllerTest, TestComputeBasisZeroJointState) {
+  JointVelocities vel = JointVelocities::Zero("test", 4);
+  Eigen::MatrixXd basis = joint_controller_.compute_orthonormal_basis(vel);
+  EXPECT_TRUE(basis.isApprox(Eigen::MatrixXd::Identity(4, 4)));
 }
 
 TEST_F(DissipativeImpedanceControllerTest, TestComputeCommandWithColinearVelocity) {

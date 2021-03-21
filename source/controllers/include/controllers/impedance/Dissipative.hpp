@@ -78,23 +78,6 @@ public:
   Dissipative<S>& operator=(const Dissipative<S>& other);
 
   /**
-   * @brief Compute the orthonormal basis based on the main eigenvector in parameter
-   * @param basis the basis matrix to orthonormalize
-   * @param main_eigenvector the main eigenvector used to compute the basis.
-   * Other eigenvectors are orthogonal and selected randomly
-   */
-  static Eigen::MatrixXd compute_orthonormal_basis(const Eigen::MatrixXd& basis,
-                                                   const Eigen::VectorXd& main_eigenvector);
-
-  /**
-   * @brief Compute the damping matrix as the orthonormal basis
-   * to the direction of the desired velocity
-   * @param desired_velocity the velocity from which the direction
-   * of motion is extracted to compute the basis
-   */
-  void compute_damping(const Eigen::VectorXd& desired_velocity);
-
-  /**
    * @brief Getter of the damping eigenvalues parameter
    * @return the eigenvalues as a Vetor6D
    */
@@ -124,6 +107,31 @@ public:
    * @brief Get the eigenvalues in a diagonal matrix form
    */
   Eigen::MatrixXd get_diagonal_eigenvalues() const;
+
+  /**
+   * @brief Orthornormalize the basis matrix given in input wrt the main engenvector
+   * @param basis the basis matrix to orthonormalize
+   * @param main_eigenvector the main eigenvector used to compute the basis.
+   * Other eigenvectors are orthogonal and selected randomly
+   * @return the orthonormalized basis
+   */
+  static Eigen::MatrixXd orthonormalize_basis(const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector);
+
+  /**
+   * @brief Compute the orthonormal basis based on the desired velocity input
+   * @param desired_velocity the desired velocity used as main eigenvector used to compute the basis.
+   * Other eigenvectors are orthogonal and selected randomly
+   * @return the orthonormalized basis
+   */
+  Eigen::MatrixXd compute_orthonormal_basis(const S& desired_velocity);
+
+  /**
+   * @brief Compute the damping matrix as the orthonormal basis
+   * to the direction of the desired velocity
+   * @param desired_velocity the velocity from which the direction
+   * of motion is extracted to compute the basis
+   */
+  void compute_damping(const S& desired_velocity);
 
   /**
    * @brief Compute the force (task space) or torque (joint space) command based on the input state
@@ -162,8 +170,7 @@ Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, u
     nb_dimensions_(nb_dimensions),
     basis_(Eigen::MatrixXd::Random(nb_dimensions, nb_dimensions)),
     damping_eigenvalues_(std::make_shared<state_representation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
-                                                                                            Eigen::ArrayXd::Ones(
-                                                                                               nb_dimensions))) {}
+                                                                                            Eigen::ArrayXd::Ones(nb_dimensions))) {}
 
 template<class S>
 Dissipative<S>::Dissipative(const Dissipative<S>& other):
@@ -227,8 +234,8 @@ Dissipative<S>::get_parameters() const {
 }
 
 template<class S>
-Eigen::MatrixXd Dissipative<S>::compute_orthonormal_basis(const Eigen::MatrixXd& basis,
-                                                          const Eigen::VectorXd& main_eigenvector) {
+Eigen::MatrixXd Dissipative<S>::orthonormalize_basis(const Eigen::MatrixXd& basis,
+                                                     const Eigen::VectorXd& main_eigenvector) {
   Eigen::MatrixXd orthonormal_basis = basis;
   uint dim = basis.rows();
   orthonormal_basis.col(0) = main_eigenvector.normalized();
@@ -242,71 +249,24 @@ Eigen::MatrixXd Dissipative<S>::compute_orthonormal_basis(const Eigen::MatrixXd&
 }
 
 template<class S>
-void Dissipative<S>::compute_damping(const Eigen::VectorXd& desired_velocity) {
-  double tolerance = 1e-4;
-  Eigen::MatrixXd updated_basis = Eigen::MatrixXd::Zero(this->nb_dimensions_, this->nb_dimensions_);
-  switch (this->computational_space_) {
-    case ComputationalSpaceType::LINEAR: {
-      Eigen::Vector3d linear_velocity = desired_velocity.segment(0, 3);
-      // only update the damping if the commanded linear velocity is non null
-      if (linear_velocity.norm() < tolerance) {
-        return;
-      }
-      //return only the linear block
-      updated_basis.block<3, 3>(0, 0) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0), linear_velocity);
-      break;
-    }
-    case ComputationalSpaceType::ANGULAR: {
-      Eigen::Vector3d angular_velocity = desired_velocity.segment(3, 3);
-      // only update the damping if the commanded angular velocity is non null
-      if (angular_velocity.norm() < tolerance) {
-        return;
-      }
-      // return only the angular block
-      updated_basis.block<3, 3>(3, 3) =
-          this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3), angular_velocity);
-      break;
-    }
-    case ComputationalSpaceType::DECOUPLED_TWIST: {
-      // compute per block
-      bool updated = false;
-      Eigen::Vector3d linear_velocity = desired_velocity.segment(0, 3);
-      Eigen::Vector3d angular_velocity = desired_velocity.segment(3, 3);
-      if (linear_velocity.norm() > tolerance) {
-        updated_basis.block<3, 3>(0, 0) =
-            this->compute_orthonormal_basis(this->basis_.block<3, 3>(0, 0), linear_velocity);
-        updated = true;
-      }
-      if (angular_velocity.norm() > tolerance) {
-        updated_basis.block<3, 3>(3, 3) =
-            this->compute_orthonormal_basis(this->basis_.block<3, 3>(3, 3), angular_velocity);
-        updated = true;
-      }
-      // at least the linear or angular parts have been updated
-      if (!updated) {
-        return;
-      }
-      break;
-    }
-    case ComputationalSpaceType::FULL: {
-      // only update the damping if the commanded velocity is non null
-      if (desired_velocity.norm() < tolerance) {
-        return;
-      }
-      // return the full damping matrix
-      updated_basis = this->compute_orthonormal_basis(this->basis_, desired_velocity);
-      break;
-    }
-  }
-  this->basis_ = updated_basis;
+S Dissipative<S>::compute_command(const S& desired_state,
+                                  const S& feedback_state) {
+  // compute the damping matrix out of the desired_state twist
+  this->compute_damping(desired_state);
+  // apply the impedance control law
+  return this->Impedance<S>::compute_command(desired_state, feedback_state);
+}
+
+template<class S>
+void Dissipative<S>::compute_damping(const S& desired_velocity) {
+  this->basis_ = this->compute_orthonormal_basis(desired_velocity);
   this->set_damping(this->basis_ * this->get_diagonal_eigenvalues() * this->basis_.transpose());
 }
 
 template<class S>
 state_representation::JointState Dissipative<S>::compute_command(const S& desired_state,
-                                                                const S& feedback_state,
-                                                                const state_representation::Jacobian& jacobian) {
+                                                                 const S& feedback_state,
+                                                                 const state_representation::Jacobian& jacobian) {
   return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
 }
 }// namespace controllers

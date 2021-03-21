@@ -2,19 +2,19 @@
 
 The `robot_model` library is a wrapper for the [Pinocchio](https://github.com/stack-of-tasks/pinocchio) library, used
 to compute dynamics model of a robot.
-It is specifically design to work seamlessly with the `state_representation` library, offering conversion functions
+It is specifically designed to work seamlessly with the `state_representation` library, offering conversion functions
 between the states and input/output needed for `pinocchio`.
 
-The library offers a single class `Model` that encapsulate most of the functionalities offered by `pinocchio`, as well
-as extra functions we defined.
-A `Model` is defined by a robot name and initialized from a `URDF` description file of the robot.
+The library offers a single class `Model` that encapsulate most of the functionalities from `pinocchio`, as well
+as extra functions.
+A `Model` is defined by a robot name, and initialized from a `URDF` description file of the robot.
 
 ```cpp
 robot_model::Model model("myrobot", "path/to/urdf/myrobot.urdf")
 ```
 
 At creation, it uses the parser from `pinocchio` to read the `URDF` file and fill the needed parameters for computation.
-Most common robotics functionalities are offered such `forward_geometry`, `inverse_geometry`, `forward_kinematic`,
+Most common robotics functionalities are implemented such `forward_geometry`, `inverse_geometry`, `forward_kinematic`,
 `inverse_kinematic`, ...
 
 ```cpp
@@ -59,7 +59,7 @@ state_representation::JointPositions jp = state_representation::JointPositions::
 state_representation::Jacobian = model.compute_jacobian(jp, "joint3");
 ```
 
-Dynamic modeling of the robot is also offered by `pinocchio` and allows the computation of the gravity, coriolis, and
+Dynamic modeling of the robot is also available with `pinocchio` and allows the computation of the gravity, coriolis, and
 inertia torques as well as their matrix counterpart.
 
 ```cpp

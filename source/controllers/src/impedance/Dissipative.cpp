@@ -19,7 +19,6 @@ template<class S>
 Eigen::MatrixXd Dissipative<S>::compute_orthonormal_basis(const S&) {
   throw exceptions::NotImplementedException(
       "compute_orthonormal_basis(desired_velocity) not implemented for this input class");
-  return Eigen::MatrixXd::Zero(this->nb_dimensions_, this->nb_dimensions_);
 }
 
 template<>

@@ -399,11 +399,11 @@ match the current `Jacobian` reference frame.
 
 ```cpp
 state_representation::Jacobian jac = state_representation::Jacobian::Random("myrobot", 3, "eef", "base_frame");
-state_representation::CartesianPose pose = state_representation::CartesianPose::Random("base_frame");
+state_representation::CartesianPose pose = state_representation::CartesianPose::Random("base_frame", "world");
 // the result is the Jacobian expressed in world
 state_representation::Jacobian jac_in_world = pose * jac;
 // alternatively, one case use the set_reference_frame function for inplace modifications
 jac.set_reference_frame(pose);
 // in case of non matching operation throw an IncompatibleStatesExceptions
-jac.set_reference_frame(state_representation::CartesianPose::Random("link0"));
+jac.set_reference_frame(state_representation::CartesianPose::Random("link0", "world"));
 ```

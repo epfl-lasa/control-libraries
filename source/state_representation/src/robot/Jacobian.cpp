@@ -81,7 +81,7 @@ Jacobian Jacobian::Random(const std::string& robot_name,
 }
 
 void Jacobian::set_reference_frame(const CartesianPose& reference_frame) {
-  *this = reference_frame * *this;
+  *this = reference_frame * (*this);
 }
 
 Jacobian Jacobian::transpose() const {

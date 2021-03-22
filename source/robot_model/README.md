@@ -5,7 +5,7 @@ to compute dynamics model of a robot.
 It is specifically designed to work seamlessly with the `state_representation` library, offering conversion functions
 between the states and input/output needed for `pinocchio`.
 
-The library offers a single class `Model` that encapsulate most of the functionalities from `pinocchio`, as well
+The library offers a single class `Model` that encapsulates most of the functionalities from `pinocchio`, as well
 as extra functions.
 A `Model` is defined by a robot name, and initialized from a `URDF` description file of the robot.
 

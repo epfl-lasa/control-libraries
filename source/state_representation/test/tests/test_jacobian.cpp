@@ -99,7 +99,7 @@ TEST(JacobianTest, TestSolve) {
 
 TEST(JacobianTest, TestJointToCartesian) {
   Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
-  JointVelocities jvel = JointVelocities::Random("robot",7);
+  JointVelocities jvel = JointVelocities::Random("robot", 7);
   CartesianTwist cvel = jac * jvel;
 
   EXPECT_TRUE(cvel.get_name() == jac.get_frame());

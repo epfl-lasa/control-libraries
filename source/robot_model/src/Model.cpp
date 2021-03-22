@@ -132,7 +132,10 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->get_number_of_joints());
   J.setZero();
-  pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, joint_state.get_positions(), frame_id,
+  pinocchio::computeFrameJacobian(this->robot_model_,
+                                  this->robot_data_,
+                                  joint_state.get_positions(),
+                                  frame_id,
                                   pinocchio::LOCAL_WORLD_ALIGNED, J);
   // the model does not have any reference frame
   return state_representation::Jacobian(this->get_robot_name(),

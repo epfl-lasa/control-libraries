@@ -260,9 +260,76 @@ std::vector<state_representation::CartesianPose> Model::forward_geometry(const s
   return this->forward_geometry(joint_state, frame_ids);
 }
 
-state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState&) const {
-  // TODO
-  return state_representation::JointPositions();
+state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                            const state_representation::JointState& current_joint_state,
+                                                            std::string frame_name, const double& tolerance, const int& max_number_of_iteration) {
+
+  if (frame_name.empty()) {
+    // get last frame if none specified
+    frame_name = this->robot_model_.frames.back().name;
+  }else {
+    // throw error if specified frame does not exist
+    if (!this->robot_model_.existFrame(frame_name)) { throw (exceptions::FrameNotFoundException(frame_name)); }
+  }
+
+  Eigen::VectorXd q = current_joint_state.get_positions();
+
+  const int frame_id = this->robot_model_.getFrameId(frame_name);
+  
+  const pinocchio::SE3 oMdes(desired_cartesian_state.get_orientation().toRotationMatrix(), desired_cartesian_state.get_position());
+
+  double dt;
+  // damping added to the diagonal of J*Jt in order to avoid the singularity
+  const double damp = 1e-6;
+  // if alpha = 1, the Netwton-Raphson method is applied
+  // if 0<alpha <1, the generalized state is iteratively incremented with a persentage of the incrementation provided by Netwton-Raphson 
+  const double alpha = 0.6;
+
+  pinocchio::Data::Matrix6x J(6,this->robot_model_.nq);
+  J.setZero();
+
+  typedef Eigen::Matrix<double, 6, 1> Vector6d;
+  Vector6d err = Vector6d::Ones(6)*100;
+  Eigen::VectorXd v(this->robot_model_.nq);
+
+  int i=0;
+  while((err.norm() > tolerance) && (i < max_number_of_iteration))
+  {
+    pinocchio::framesForwardKinematics(this->robot_model_,this->robot_data_,q);
+    const pinocchio::SE3 dMf = oMdes.actInv(this->robot_data_.oMf[frame_id]);
+    err = pinocchio::log6(dMf).toVector();
+
+    pinocchio::computeFrameJacobian(this->robot_model_,this->robot_data_,q,frame_id, J);
+    pinocchio::Data::Matrix6 JJt;
+    JJt.noalias() = J * J.transpose();
+    JJt.diagonal().array() += damp;
+    v.noalias() = - J.transpose() * JJt.ldlt().solve(err);
+
+    dt = alpha*err.norm()/(J*v).norm();
+
+    q = pinocchio::integrate(this->robot_model_,q,v*dt);
+
+    i++;
+  }
+
+  if(err.norm() <= tolerance){
+    //success = true;
+    std::cout << "Convergence achieved after " << i << " iterations" << std::endl;
+  }
+  else if(i >= max_number_of_iteration){
+    //success = false;
+    //throw (exceptions::IKDoesNotConverge(max_number_of_iteration, err.norm()));
+  }
+  
+  return state_representation::JointPositions(this->get_robot_name(),q);
+}
+
+state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                            std::string frame_name, const double& tolerance, const int& max_number_of_iteration) {
+  Eigen::VectorXd q( pinocchio::randomConfiguration(this->robot_model_));
+  state_representation::JointPositions pos(this->get_robot_name(),q);
+  
+  return this->inverse_geometry(desired_cartesian_state, pos, frame_name, tolerance, max_number_of_iteration);
 }
 
 state_representation::CartesianTwist Model::forward_kinematic(const state_representation::JointState& joint_state) {

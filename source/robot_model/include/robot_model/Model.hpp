@@ -8,6 +8,7 @@
 #include <pinocchio/multibody/data.hpp>
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
+#include <pinocchio/algorithm/joint-configuration.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/robot/Jacobian.hpp>
@@ -240,11 +241,29 @@ public:
                                                        std::string frame_name = "");
 
   /**
-   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
-   * @param cartesian_state containing the pose of the end-effector
+   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
+   * @param desired_cartesian_state containing the desired pose of the end-effector
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @param newton_raphson if it is true the inegration time is proportional to the error between the end-effector and its desired position
    * @return the joint state of the robot
    */
-  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& cartesian_state) const;
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                            std::string frame_name="", const double& tolerance=1e-4,
+                                                            const int& max_number_of_iteration=1000);
+
+
+  /**
+   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
+   * @param desired_cartesian_state containing the desired pose of the end-effector
+   * @param current_joint_state current state of the robot containing the generalized position
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @param newton_raphson if it is true the inegration time is proportional to the error between the end-effector and its desired position
+   * @return the joint state of the robot
+   */
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                            const state_representation::JointState& current_joint_state,
+                                                            std::string frame_name="", const double& tolerance=1e-4,
+                                                            const int& max_number_of_iteration=1000);
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

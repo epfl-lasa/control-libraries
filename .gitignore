@@ -35,3 +35,5 @@ cmake-build-*
 *.out
 *.app
 
+# vscode settings
+source/.vs*

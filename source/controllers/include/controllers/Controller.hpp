@@ -69,14 +69,12 @@ std::list<std::shared_ptr<state_representation::ParameterInterface>> Controller<
 template<class S>
 S Controller<S>::compute_command(const S&, ...) {
   throw exceptions::NotImplementedException("compute_command(state, ...) not implemented for the base controller class");
-  return S();
 }
 
 template<class S>
 S Controller<S>::compute_command(const S&, const S&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for the base controller class");
-  return S();
 }
 
 template<class S>
@@ -85,6 +83,5 @@ state_representation::JointState Controller<S>::compute_command(const S&,
                                                                 const state_representation::Jacobian&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for the base controller class");
-  return state_representation::JointState();
 }
 }// namespace controllers

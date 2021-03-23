@@ -70,7 +70,6 @@ JointState Impedance<S>::compute_command(const S&,
                                          const state_representation::Jacobian&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for this input class");
-  return JointState();
 }
 
 template<>

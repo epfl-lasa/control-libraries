@@ -108,10 +108,10 @@ TEST_F(RobotModelTest, TestInverseGeometry) {
     EXPECT_NEAR(reference.get_position()[0], X.get_position()[0], 1e-4);
     EXPECT_NEAR(reference.get_position()[1], X.get_position()[1], 1e-4);
     EXPECT_NEAR(reference.get_position()[2], X.get_position()[2], 1e-4);
-    EXPECT_NEAR(reference.get_orientation().x, X.get_orientation().x, 1e-4);
-    EXPECT_NEAR(reference.get_orientation().y, X.get_orientation().y, 1e-4);
-    EXPECT_NEAR(reference.get_orientation().z, X.get_orientation().z, 1e-4);
-    EXPECT_NEAR(reference.get_orientation().w, X.get_orientation().w, 1e-4);
+    EXPECT_NEAR(reference.get_orientation().x(), X.get_orientation().x(), 1e-4);
+    EXPECT_NEAR(reference.get_orientation().y(), X.get_orientation().y(), 1e-4);
+    EXPECT_NEAR(reference.get_orientation().z(), X.get_orientation().z(), 1e-4);
+    EXPECT_NEAR(reference.get_orientation().w(), X.get_orientation().w(), 1e-4);
   }
   
 }

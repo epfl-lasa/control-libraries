@@ -2,6 +2,9 @@
 SCRIPT=$(readlink -f "${BASH_SOURCE[0]}")
 SOURCE_PATH=$(dirname "$SCRIPT")
 
+# options
+# TODO: parse arguments and provide --help to set these options
+BUILD_TESTING="ON"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"

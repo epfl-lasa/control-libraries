@@ -10,7 +10,7 @@
 using namespace controllers::impedance;
 using namespace state_representation;
 
-TEST(TestCopyConstructor, PositiveNos) {
+TEST(ImpedanceControllerTest, TestCopyConstructor) {
   Impedance<CartesianState> impedance_controller(Eigen::MatrixXd::Random(6, 6),
                                                  Eigen::MatrixXd::Random(6, 6),
                                                  Eigen::MatrixXd::Random(6, 6));
@@ -23,7 +23,7 @@ TEST(TestCopyConstructor, PositiveNos) {
   }
 }
 
-TEST(TestAssignmentOperator, PositiveNos) {
+TEST(ImpedanceControllerTest, TestAssignmentOperator) {
   Impedance<CartesianState> impedance_controller(Eigen::MatrixXd::Random(6, 6),
                                                  Eigen::MatrixXd::Random(6, 6),
                                                  Eigen::MatrixXd::Random(6, 6));
@@ -36,7 +36,7 @@ TEST(TestAssignmentOperator, PositiveNos) {
   }
 }
 
-TEST(TestCartesianImpedance, PositiveNos) {
+TEST(ImpedanceControllerTest, TestCartesianImpedance) {
   Impedance<CartesianState> impedance_controller(Eigen::MatrixXd::Identity(6, 6),
                                                  Eigen::MatrixXd::Identity(6, 6),
                                                  Eigen::MatrixXd::Identity(6, 6));
@@ -53,7 +53,7 @@ TEST(TestCartesianImpedance, PositiveNos) {
   EXPECT_TRUE(command.data().norm() > 0.);
 }
 
-TEST(TestJointImpedance, PositiveNos) {
+TEST(ImpedanceControllerTest, TestJointImpedance) {
   int nb_joints = 3;
   Impedance<JointState> impedance_controller(Eigen::MatrixXd::Identity(nb_joints, nb_joints),
                                              Eigen::MatrixXd::Identity(nb_joints, nb_joints),
@@ -71,7 +71,7 @@ TEST(TestJointImpedance, PositiveNos) {
   EXPECT_TRUE(command.data().norm() > 0.);
 }
 
-TEST(TestCartesianToJointImpedance, PositiveNos) {
+TEST(ImpedanceControllerTest, TestCartesianToJointImpedance) {
   Impedance<CartesianState> impedance_controller(Eigen::MatrixXd::Identity(6, 6),
                                                  Eigen::MatrixXd::Identity(6, 6),
                                                  Eigen::MatrixXd::Identity(6, 6));
@@ -89,9 +89,4 @@ TEST(TestCartesianToJointImpedance, PositiveNos) {
   JointTorques command = impedance_controller.compute_command(desired_state, feedback_state, jacobian);
   // expect some non null data
   EXPECT_TRUE(command.data().norm() > 0.);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

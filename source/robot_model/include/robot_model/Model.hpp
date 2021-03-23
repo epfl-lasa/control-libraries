@@ -248,7 +248,7 @@ public:
    * @return the joint state of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            std::string frame_name="", const double& tolerance=1e-4,
+                                                            bool& success, std::string frame_name="", const double& tolerance=1e-4,
                                                             const int& max_number_of_iteration=1000);
 
 
@@ -262,7 +262,7 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
-                                                            std::string frame_name="", const double& tolerance=1e-4,
+                                                            bool& success, std::string frame_name="", const double& tolerance=1e-4,
                                                             const int& max_number_of_iteration=1000);
 
   /**

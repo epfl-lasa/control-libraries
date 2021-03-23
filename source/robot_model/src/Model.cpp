@@ -262,7 +262,8 @@ std::vector<state_representation::CartesianPose> Model::forward_geometry(const s
 
 state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
-                                                            std::string frame_name, const double& tolerance, const int& max_number_of_iteration) {
+                                                            bool& success, std::string frame_name, const double& tolerance,
+                                                            const int& max_number_of_iteration) {
 
   if (frame_name.empty()) {
     // get last frame if none specified
@@ -313,23 +314,23 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   }
 
   if(err.norm() <= tolerance){
-    //success = true;
+    success = true;
     std::cout << "Convergence achieved after " << i << " iterations" << std::endl;
   }
   else if(i >= max_number_of_iteration){
-    //success = false;
+    success = false;
     //throw (exceptions::IKDoesNotConverge(max_number_of_iteration, err.norm()));
   }
   
   return state_representation::JointPositions(this->get_robot_name(),q);
 }
 
-state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state, bool& success, 
                                                             std::string frame_name, const double& tolerance, const int& max_number_of_iteration) {
   Eigen::VectorXd q( pinocchio::randomConfiguration(this->robot_model_));
   state_representation::JointPositions pos(this->get_robot_name(),q);
   
-  return this->inverse_geometry(desired_cartesian_state, pos, frame_name, tolerance, max_number_of_iteration);
+  return this->inverse_geometry(desired_cartesian_state, pos, success, frame_name, tolerance, max_number_of_iteration);
 }
 
 state_representation::CartesianTwist Model::forward_kinematic(const state_representation::JointState& joint_state) {

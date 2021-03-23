@@ -41,68 +41,13 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
-  add_executable(runTestUnits tests/testUnits.cpp)
-  target_link_libraries(runTestUnits
+  add_executable(test_state_representation test/test_state_representation.cpp)
+  file(GLOB_RECURSE MODULE_TEST_SOURCES test/tests test_*.cpp)
+  target_sources(test_state_representation PRIVATE ${MODULE_TEST_SOURCES})
+  target_link_libraries(test_state_representation
     ${PROJECT_NAME}
     ${GTEST_LIBRARIES}
     pthread
   )
-  add_test(NAME runTestUnits COMMAND runTestUnits)
-
-  add_executable(runTestCartesianState tests/testCartesianState.cpp)
-  target_link_libraries(runTestCartesianState
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestCartesianState COMMAND runTestCartesianState)
-
-  add_executable(runTestJointState tests/testJointState.cpp)
-  target_link_libraries(runTestJointState
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestJointState COMMAND runTestJointState)
-
-  add_executable(runTestDualQuaternionState tests/testDualQuaternionState.cpp)
-  target_link_libraries(runTestDualQuaternionState
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestDualQuaternionState COMMAND runTestDualQuaternionState)
-
-  add_executable(runTestJacobian tests/testJacobian.cpp)
-  target_link_libraries(runTestJacobian
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestJacobian COMMAND runTestJacobian)
-
-  add_executable(runTestTrajectory tests/testTrajectory.cpp)
-  target_link_libraries(runTestTrajectory
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestTrajectory COMMAND runTestTrajectory)
-
-  # testParameter fails to build for accessing private member line 23 |  EXPECT_FALSE(e.previous_predicate_value_);
-  add_executable(runTestParameter tests/testParameter.cpp)
-  target_link_libraries(runTestParameter
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestParameter COMMAND runTestParameter)
-
-  add_executable(runTestEllipsoid tests/testEllipsoid.cpp)
-  target_link_libraries(runTestEllipsoid
-    ${PROJECT_NAME}
-    ${GTEST_LIBRARIES}
-    pthread
-  )
-  add_test(NAME runTestEllipsoid COMMAND runTestEllipsoid)
+  add_test(NAME test_state_representation COMMAND test_state_representation)
 endif ()

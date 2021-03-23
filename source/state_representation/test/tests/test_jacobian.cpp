@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include <unistd.h>
 
-TEST(TestCreate, PositiveNos) {
+TEST(JacobianTest, TestCreate) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
 
   EXPECT_TRUE(jac.get_nb_rows() == 6);
@@ -18,7 +18,7 @@ TEST(TestCreate, PositiveNos) {
   EXPECT_TRUE(except_thrown);
 }
 
-TEST(TestTranspose, PositiveNos) {
+TEST(JacobianTest, TestTranspose) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   jac = jac.transpose();
 
@@ -34,7 +34,7 @@ TEST(TestTranspose, PositiveNos) {
   EXPECT_FALSE(except_thrown);
 }
 
-TEST(TestMutltiplyWithEigen, PositiveNos) {
+TEST(JacobianTest, TestMutltiplyWithEigen) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   Eigen::MatrixXd res1 = jac * mat1;
@@ -56,7 +56,7 @@ TEST(TestMutltiplyWithEigen, PositiveNos) {
   EXPECT_TRUE(res2.cols() == 1);
 }
 
-TEST(TestSolve, PositiveNos) {
+TEST(JacobianTest, TestSolve) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   bool except_thrown = false;
@@ -74,7 +74,7 @@ TEST(TestSolve, PositiveNos) {
   EXPECT_TRUE(res2.cols() == 1);
 }
 
-TEST(TestJointToCartesian, PositiveNos) {
+TEST(JacobianTest, TestJointToCartesian) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   state_representation::JointVelocities jvel("robot", Eigen::VectorXd::Random(7));
 
@@ -87,7 +87,7 @@ TEST(TestJointToCartesian, PositiveNos) {
   EXPECT_FALSE(except_thrown);
 }
 
-TEST(TestCartesianToJoint, PositiveNos) {
+TEST(JacobianTest, TestCartesianToJoint) {
   state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
   Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
   state_representation::CartesianTwist cvel("robot", vec);
@@ -109,9 +109,4 @@ TEST(TestCartesianToJoint, PositiveNos) {
     except_thrown2 = true;
   }
   EXPECT_FALSE(except_thrown2);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

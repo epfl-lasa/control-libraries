@@ -3,7 +3,7 @@
 
 using namespace state_representation;
 
-TEST(Sampling, PositiveNos) {
+TEST(EllipsoidTest, Sampling) {
   Ellipsoid ellipse("test");
 
   // simplest case circle centered of radius 1
@@ -26,7 +26,7 @@ TEST(Sampling, PositiveNos) {
   }
 }
 
-TEST(EllipsoidFitting, PositiveNos) {
+TEST(EllipsoidTest, EllipsoidFitting) {
   Ellipsoid ellipse("test");
 
   // sample from the parameterization
@@ -77,9 +77,4 @@ TEST(EllipsoidFitting, PositiveNos) {
     EXPECT_TRUE(abs(ellipse.get_axis_length(0) - fitted_ellipse.get_axis_length(0)) < epsilon);
     EXPECT_TRUE(abs(ellipse.get_axis_length(1) - fitted_ellipse.get_axis_length(1)) < epsilon);
   }
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -50,6 +50,6 @@ if (BUILD_TESTING)
     ${GTEST_LIBRARIES}
     pthread
   )
-  target_compile_definitions(test_robot_model PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/test/tests/fixtures/")
+  target_compile_definitions(test_robot_model PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/")
   add_test(NAME test_robot_model COMMAND test_robot_model)
 endif ()

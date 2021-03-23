@@ -271,7 +271,9 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     frame_name = this->robot_model_.frames.back().name;
   }else {
     // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) { throw (exceptions::FrameNotFoundException(frame_name)); }
+    if (!this->robot_model_.existFrame(frame_name)) {
+      throw (exceptions::FrameNotFoundException(frame_name));
+    }
   }
 
   Eigen::VectorXd q = current_joint_state.get_positions();
@@ -286,9 +288,6 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   // if alpha = 1, the Netwton-Raphson method is applied
   // if 0<alpha <1, the generalized state is iteratively incremented with a persentage of the incrementation provided by Netwton-Raphson 
   const double alpha = 0.8;
-
-  std::cout << "Lower limits: " << this->robot_model_.lowerPositionLimit << std::endl;
-  std::cout << "Upper limits: " << this->robot_model_.upperPositionLimit << std::endl;
 
   pinocchio::Data::Matrix6x J(6,this->robot_model_.nq);
   J.setZero();
@@ -330,11 +329,9 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
 
   if(err.norm() <= tolerance){
     success = true;
-    std::cout << "Convergence achieved after " << i << " iterations" << std::endl;
   }
   else if(i >= max_number_of_iteration){
     success = false;
-    std::wcout << "Convergence failed, the error is: " << err.norm() << "." << std::endl;
     //throw (exceptions::IKDoesNotConverge(max_number_of_iteration, err.norm()));
   }
   

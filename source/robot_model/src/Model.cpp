@@ -3,6 +3,7 @@
 #include <pinocchio/algorithm/frames.hpp>
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
+#include <math.h>
 
 namespace robot_model {
 Model::Model(const std::string& robot_name, const std::string& urdf_path) :
@@ -284,7 +285,10 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   const double damp = 1e-6;
   // if alpha = 1, the Netwton-Raphson method is applied
   // if 0<alpha <1, the generalized state is iteratively incremented with a persentage of the incrementation provided by Netwton-Raphson 
-  const double alpha = 0.6;
+  const double alpha = 0.8;
+
+  std::cout << "Lower limits: " << this->robot_model_.lowerPositionLimit << std::endl;
+  std::cout << "Upper limits: " << this->robot_model_.upperPositionLimit << std::endl;
 
   pinocchio::Data::Matrix6x J(6,this->robot_model_.nq);
   J.setZero();
@@ -310,6 +314,17 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
 
     q = pinocchio::integrate(this->robot_model_,q,v*dt);
 
+    for(uint j = 0; j < this->get_number_of_joints(); j++){
+      // wrap the angle q[j]
+      q[j] = fmod(q[j] + M_PI,M_PI*2);
+      if (q[j] < 0){
+        q[j] += M_PI*2;
+      }
+      q[j] -= M_PI;
+      // clamp the angle according to the joint limits
+      q[j] = std::min(std::max(q[j], this->robot_model_.lowerPositionLimit[j]), this->robot_model_.upperPositionLimit[j]);
+    }
+
     i++;
   }
 
@@ -319,6 +334,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   }
   else if(i >= max_number_of_iteration){
     success = false;
+    std::wcout << "Convergence failed, the error is: " << err.norm() << "." << std::endl;
     //throw (exceptions::IKDoesNotConverge(max_number_of_iteration, err.norm()));
   }
   

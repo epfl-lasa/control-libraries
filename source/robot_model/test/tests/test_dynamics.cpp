@@ -101,11 +101,17 @@ TEST_F(RobotModelTest, TestInverseGeometry) {
   bool success;
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     success=false;
-    state_representation::JointPositions q = franka->inverse_geometry(franka->forward_geometry(test_configs[config],"panda_link8"), success, "panda_link8", 1e-4, 1000);
+    state_representation::CartesianPose reference = franka->forward_geometry(test_configs[config],"panda_link8");
+    state_representation::JointPositions q = franka->inverse_geometry(reference, success, "panda_link8", 1e-4, 1000);
+    state_representation::CartesianPose X = franka->forward_geometry(q,"panda_link8");
     EXPECT_TRUE(success);
-    for (int i = 0; i < 7; ++i) {
-      EXPECT_NEAR(test_configs[config].get_positions()[i], q.get_positions()[i], 1e-4);
-    }
+    EXPECT_NEAR(reference.get_position()[0], X.get_position()[0], 1e-4);
+    EXPECT_NEAR(reference.get_position()[1], X.get_position()[1], 1e-4);
+    EXPECT_NEAR(reference.get_position()[2], X.get_position()[2], 1e-4);
+    EXPECT_NEAR(reference.get_orientation().x, X.get_orientation().x, 1e-4);
+    EXPECT_NEAR(reference.get_orientation().y, X.get_orientation().y, 1e-4);
+    EXPECT_NEAR(reference.get_orientation().z, X.get_orientation().z, 1e-4);
+    EXPECT_NEAR(reference.get_orientation().w, X.get_orientation().w, 1e-4);
   }
   
 }

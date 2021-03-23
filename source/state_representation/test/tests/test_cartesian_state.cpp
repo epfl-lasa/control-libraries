@@ -344,12 +344,14 @@ TEST(CartesianStateTest, TestPoseDistance) {
 
   double d1 = dist(p1, p2);
   double d2 = p1.dist(p2);
+  EXPECT_TRUE(abs(d1 - d2) < 1e-4);
+  EXPECT_TRUE(abs(d1 - 1.0) < 1e-4);
 
-  //EXPECT_TRUE(abs(d1 - d2) < 1e-4);
-  //EXPECT_TRUE(d1 < 1e-4);
+  double d3 = dist(p1, p3, CartesianStateVariable::ORIENTATION);
+  EXPECT_TRUE(abs(d3 - 3.14159) < 1e10-3);
 
-  double d3 = dist(p1, p3);
-  //EXPECT_TRUE(abs(d3 - 3.14159) < 1e10-3);
+  double d4 = dist(p2, p3);
+  EXPECT_TRUE(abs(d3 - d4) < 1e10-3);
 }
 
 TEST(CartesianStateTest, TestFilter) {

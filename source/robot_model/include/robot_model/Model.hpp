@@ -252,6 +252,8 @@ public:
    * @return the list of parameters
    */
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+
+  static bool create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path);
 };
 
 inline const std::string& Model::get_robot_name() const {

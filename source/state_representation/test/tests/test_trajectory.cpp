@@ -5,7 +5,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/robot/JointState.hpp"
 
-TEST(CreateTrajectory, PositiveNos) {
+TEST(TrajectoryTest, CreateTrajectory) {
   state_representation::Trajectory<state_representation::JointState> trajectory;
   std::deque<state_representation::JointState> points = trajectory.get_points();
   std::deque<std::chrono::nanoseconds> times = trajectory.get_times();
@@ -13,7 +13,7 @@ TEST(CreateTrajectory, PositiveNos) {
   EXPECT_TRUE(times.empty());
 }
 
-TEST(AddPoint, PositiveNos) {
+TEST(TrajectoryTest, AddPoint) {
   state_representation::Trajectory<state_representation::JointState> trajectory;
   state_representation::JointState point("robot", 1);
 
@@ -39,7 +39,7 @@ TEST(AddPoint, PositiveNos) {
   EXPECT_TRUE(new_size_times == prev_size_times + 1);
 }
 
-TEST(ClearPoint, PositiveNos) {
+TEST(TrajectoryTest, ClearPoint) {
   state_representation::Trajectory<state_representation::JointState> trajectory;
   state_representation::JointState point("robot", 1);
 
@@ -66,7 +66,7 @@ TEST(ClearPoint, PositiveNos) {
   EXPECT_TRUE(times.empty());
 }
 
-TEST(OverloadIndex, PositiveNos) {
+TEST(TrajectoryTest, OverloadIndex) {
   state_representation::Trajectory<state_representation::JointState> trajectory;
   state_representation::JointState point("robot", 1);
 
@@ -88,7 +88,7 @@ TEST(OverloadIndex, PositiveNos) {
   EXPECT_TRUE(point1.second == 2 * period);
 }
 
-// TEST(InsertPoint, PositiveNos)
+// TEST(TrajectoryTest, InsertPoint)
 // {
 // 	state_representation::Trajectory<state_representation::JointState> trajectory;
 // 	state_representation::JointState point("robot", 1);
@@ -127,8 +127,3 @@ TEST(OverloadIndex, PositiveNos) {
 // 	EXPECT_TRUE(last_point.first.get_positions()[0] == 0.7);
 // 	EXPECT_TRUE(last_point.second == 3*period);
 // }
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

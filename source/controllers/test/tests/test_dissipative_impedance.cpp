@@ -233,8 +233,3 @@ TEST_F(DissipativeImpedanceControllerTest, TestComputeJointCommand) {
   // expect some non null data
   EXPECT_TRUE(command.data().norm() > 0.);
 }
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

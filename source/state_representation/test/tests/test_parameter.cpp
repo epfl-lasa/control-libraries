@@ -4,7 +4,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include <gtest/gtest.h>
 
-TEST(Conversion, PositiveNos) {
+TEST(ParameterTest, Conversion) {
   using namespace state_representation;
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);
@@ -14,7 +14,7 @@ TEST(Conversion, PositiveNos) {
   EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANPOSE);
 }
 
-TEST(Event, PositiveNos) {
+TEST(ParameterTest, Event) {
   using namespace state_representation;
   Event e("test");
   EXPECT_FALSE(e.get_value());
@@ -51,9 +51,4 @@ TEST(Event, PositiveNos) {
   ptr_e->set_value(false);
   ptr_e->set_value(true);
   EXPECT_TRUE(ptr_e->get_value());
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

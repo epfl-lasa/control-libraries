@@ -33,8 +33,8 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
-  add_executable(test_dynamical_systems test_dynamical_systems.cpp)
-  file(GLOB_RECURSE MODULE_TEST_SOURCES tests test_*.cpp)
+  add_executable(test_dynamical_systems test/test_dynamical_systems.cpp)
+  file(GLOB_RECURSE MODULE_TEST_SOURCES test/tests test_*.cpp)
   target_sources(test_dynamical_systems PRIVATE ${MODULE_TEST_SOURCES})
   target_link_libraries(test_dynamical_systems
     ${PROJECT_NAME}

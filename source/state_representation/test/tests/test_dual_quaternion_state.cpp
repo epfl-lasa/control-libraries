@@ -1,7 +1,7 @@
 #include "state_representation/space/dual_quaternion/DualQuaternionPose.hpp"
 #include <gtest/gtest.h>
 
-TEST(MultiplyTransformsBothOperators, PositiveNos) {
+TEST(DualQuaternionStateTest, MultiplyTransformsBothOperators) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1, 0, 0, 0);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -20,7 +20,7 @@ TEST(MultiplyTransformsBothOperators, PositiveNos) {
                 0.00001);
 }
 
-TEST(MultiplyTransformsSameOrientation, PositiveNos) {
+TEST(DualQuaternionStateTest, MultiplyTransformsSameOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1, 0, 0, 0);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -35,7 +35,7 @@ TEST(MultiplyTransformsSameOrientation, PositiveNos) {
   for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
 }
 
-TEST(MultiplyTransformsDifferentOrientation, PositiveNos) {
+TEST(DualQuaternionStateTest, MultiplyTransformsDifferentOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -58,7 +58,7 @@ TEST(MultiplyTransformsDifferentOrientation, PositiveNos) {
   for (int i = 0; i < 4; ++i) EXPECT_NEAR(tf1.get_orientation().coeffs()(i), rot_truth.coeffs()(i), 0.00001);
 }
 
-TEST(TestInverseNullOrientation, PositiveNos) {
+TEST(DualQuaternionStateTest, TestInverseNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1., 0., 0., 0.);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -79,7 +79,7 @@ TEST(TestInverseNullOrientation, PositiveNos) {
   for (int i = 0; i < 4; ++i) EXPECT_NEAR(tf1.get_orientation().coeffs()(i), rot_truth.coeffs()(i), 0.00001);
 }
 
-TEST(TestInverseNonNullOrientation, PositiveNos) {
+TEST(DualQuaternionStateTest, TestInverseNonNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -98,7 +98,7 @@ TEST(TestInverseNonNullOrientation, PositiveNos) {
   for (int i = 0; i < 4; ++i) EXPECT_NEAR(tf1.get_orientation().coeffs()(i), rot_truth.coeffs()(i), 0.00001);
 }
 
-TEST(TestMultiplyInverseNonNullOrientation, PositiveNos) {
+TEST(DualQuaternionStateTest, TestMultiplyInverseNonNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   state_representation::DualQuaternionPose tf1("t1", pos1, rot1);
@@ -115,9 +115,4 @@ TEST(TestMultiplyInverseNonNullOrientation, PositiveNos) {
 
   for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
   for (int i = 0; i < 4; ++i) EXPECT_NEAR(tf1.get_orientation().coeffs()(i), rot_truth.coeffs()(i), 0.00001);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

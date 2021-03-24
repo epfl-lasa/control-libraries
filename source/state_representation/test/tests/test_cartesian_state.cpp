@@ -7,7 +7,7 @@
 
 using namespace state_representation;
 
-TEST(IdentityInitialization, PositiveNos) {
+TEST(CartesianStateTest, IdentityInitialization) {
   CartesianState identity = CartesianState::Identity("test");
   // the joint state should not be considered empty (as it is properly initialized)
   EXPECT_FALSE(identity.is_empty());
@@ -20,7 +20,7 @@ TEST(IdentityInitialization, PositiveNos) {
   EXPECT_TRUE(identity.get_wrench().norm() == 0);
 }
 
-TEST(RandomStateInitialization, PositiveNos) {
+TEST(CartesianStateTest, RandomStateInitialization) {
   CartesianState random = CartesianState::Random("test");
   // all data should be random (non 0)
   EXPECT_TRUE(random.get_position().norm() > 0);
@@ -33,7 +33,7 @@ TEST(RandomStateInitialization, PositiveNos) {
   EXPECT_TRUE(random.get_wrench().norm() > 0);
 }
 
-TEST(RandomPoseInitialization, PositiveNos) {
+TEST(CartesianStateTest, RandomPoseInitialization) {
   CartesianPose random = CartesianPose::Random("test");
   // only position should be random
   EXPECT_TRUE(random.get_position().norm() > 0);
@@ -46,7 +46,7 @@ TEST(RandomPoseInitialization, PositiveNos) {
   EXPECT_TRUE(random.get_wrench().norm() == 0);
 }
 
-TEST(RandomTwistInitialization, PositiveNos) {
+TEST(CartesianStateTest, RandomTwistInitialization) {
   CartesianTwist random = CartesianTwist::Random("test");
   // only position should be random
   EXPECT_TRUE(random.get_position().norm() == 0);
@@ -57,7 +57,7 @@ TEST(RandomTwistInitialization, PositiveNos) {
   EXPECT_TRUE(random.get_wrench().norm() == 0);
 }
 
-TEST(RandomWrenchInitialization, PositiveNos) {
+TEST(CartesianStateTest, RandomWrenchInitialization) {
   CartesianWrench random = CartesianWrench::Random("test");
   // only position should be random
   EXPECT_TRUE(random.get_position().norm() == 0);
@@ -68,14 +68,14 @@ TEST(RandomWrenchInitialization, PositiveNos) {
   EXPECT_TRUE(random.get_wrench().norm() > 0);
 }
 
-TEST(GetData, PositiveNos) {
+TEST(CartesianStateTest, GetData) {
   CartesianState cs = CartesianState::Random("test");
   Eigen::VectorXd concatenated_state(25);
   concatenated_state << cs.get_pose(), cs.get_twist(), cs.get_accelerations(), cs.get_wrench();
   EXPECT_NEAR(concatenated_state.norm(), cs.data().norm(), 1e-4);
 }
 
-TEST(CartesianStateToStdVector, PositiveNos) {
+TEST(CartesianStateTest, CartesianStateToStdVector) {
   CartesianState cs = CartesianState::Random("test");
   std::vector<double> vec_data = cs.to_std_vector();
   for (size_t i = 0; i < vec_data.size(); ++i) {
@@ -83,7 +83,7 @@ TEST(CartesianStateToStdVector, PositiveNos) {
   }
 }
 
-TEST(CartesianPoseToStdVector, PositiveNos) {
+TEST(CartesianStateTest, CartesianPoseToStdVector) {
   CartesianPose cp = CartesianPose::Random("test");
   std::vector<double> vec_data = cp.to_std_vector();
   EXPECT_TRUE(vec_data.size() == 7);
@@ -92,7 +92,7 @@ TEST(CartesianPoseToStdVector, PositiveNos) {
   }
 }
 
-TEST(CartesianTwistToStdVector, PositiveNos) {
+TEST(CartesianStateTest, CartesianTwistToStdVector) {
   CartesianTwist ct = CartesianTwist::Random("test");
   std::vector<double> vec_data = ct.to_std_vector();
   EXPECT_TRUE(vec_data.size() == 6);
@@ -101,7 +101,7 @@ TEST(CartesianTwistToStdVector, PositiveNos) {
   }
 }
 
-TEST(CartesianWrenchToStdVector, PositiveNos) {
+TEST(CartesianStateTest, CartesianWrenchToStdVector) {
   CartesianWrench cw = CartesianWrench::Random("test");
   std::vector<double> vec_data = cw.to_std_vector();
   EXPECT_TRUE(vec_data.size() == 6);
@@ -110,7 +110,7 @@ TEST(CartesianWrenchToStdVector, PositiveNos) {
   }
 }
 
-TEST(NegateQuaternion, PositiveNos) {
+TEST(CartesianStateTest, NegateQuaternion) {
   Eigen::Quaterniond q = Eigen::Quaterniond::UnitRandom();
   Eigen::Quaterniond q2 = Eigen::Quaterniond(-q.coeffs());
 
@@ -118,7 +118,7 @@ TEST(NegateQuaternion, PositiveNos) {
   for (int i = 0; i < 3; ++i) EXPECT_TRUE(q.vec()(i) == -q2.vec()(i));
 }
 
-TEST(MultiplyTransformsBothOperators, PositiveNos) {
+TEST(CartesianStateTest, MultiplyTransformsBothOperators) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1, 0, 0, 0);
   CartesianPose tf1("t1", pos1, rot1);
@@ -137,7 +137,7 @@ TEST(MultiplyTransformsBothOperators, PositiveNos) {
                 0.00001);
 }
 
-TEST(MultiplyTransformsSameOrientation, PositiveNos) {
+TEST(CartesianStateTest, MultiplyTransformsSameOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1, 0, 0, 0);
   CartesianPose tf1("t1", pos1, rot1);
@@ -152,7 +152,7 @@ TEST(MultiplyTransformsSameOrientation, PositiveNos) {
   for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
 }
 
-TEST(MultiplyTransformsDifferentOrientation, PositiveNos) {
+TEST(CartesianStateTest, MultiplyTransformsDifferentOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   CartesianPose tf1("t1", pos1, rot1);
@@ -175,7 +175,7 @@ TEST(MultiplyTransformsDifferentOrientation, PositiveNos) {
   EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
 }
 
-TEST(TestInverseNullOrientation, PositiveNos) {
+TEST(CartesianStateTest, TestInverseNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(1., 0., 0., 0.);
   CartesianPose tf1("t1", pos1, rot1);
@@ -196,7 +196,7 @@ TEST(TestInverseNullOrientation, PositiveNos) {
   EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
 }
 
-TEST(TestInverseNonNullOrientation, PositiveNos) {
+TEST(CartesianStateTest, TestInverseNonNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   CartesianPose tf1("t1", pos1, rot1);
@@ -215,7 +215,7 @@ TEST(TestInverseNonNullOrientation, PositiveNos) {
   EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
 }
 
-TEST(TestMultiplyInverseNonNullOrientation, PositiveNos) {
+TEST(CartesianStateTest, TestMultiplyInverseNonNullOrientation) {
   Eigen::Vector3d pos1(1, 2, 3);
   Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
   CartesianPose tf1("t1", pos1, rot1);
@@ -234,7 +234,7 @@ TEST(TestMultiplyInverseNonNullOrientation, PositiveNos) {
   EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
 }
 
-TEST(MultiplyPoseAndState, PositiveNos) {
+TEST(CartesianStateTest, MultiplyPoseAndState) {
   CartesianPose p = CartesianPose::Random("test");
   CartesianState s = CartesianPose::Random("test2", "test");
 
@@ -248,7 +248,7 @@ TEST(MultiplyPoseAndState, PositiveNos) {
   EXPECT_TRUE(abs(res.get_orientation().dot(res2.get_orientation())) > 1 - 10E-4);
 }
 
-TEST(TestAddTwoPoses, PositiveNos) {
+TEST(CartesianStateTest, TestAddTwoPoses) {
   Eigen::Vector3d pos1 = Eigen::Vector3d::Zero();
   Eigen::Quaterniond rot1 = Eigen::Quaterniond::Identity();
   CartesianPose tf1("t1", pos1, rot1);
@@ -261,7 +261,7 @@ TEST(TestAddTwoPoses, PositiveNos) {
   std::cout << tf1 - tf2 << std::endl;
 }
 
-TEST(TestAddDisplacement, PositiveNos) {
+TEST(CartesianStateTest, TestAddDisplacement) {
   Eigen::Vector3d pos1 = Eigen::Vector3d::Zero();
   Eigen::Quaterniond rot1 = Eigen::Quaterniond::Identity();
   CartesianPose tf1("t1", pos1, rot1);
@@ -280,7 +280,7 @@ TEST(TestAddDisplacement, PositiveNos) {
   std::cout << tf1 + dt3 * vel << std::endl;
 }
 
-TEST(TestPoseToVelocity, PositiveNos) {
+TEST(CartesianStateTest, TestPoseToVelocity) {
   Eigen::Vector3d pos1 = Eigen::Vector3d::Zero();
   Eigen::Quaterniond rot1 = Eigen::Quaterniond::Identity();
   CartesianPose tf1("t1", pos1, rot1);
@@ -299,14 +299,14 @@ TEST(TestPoseToVelocity, PositiveNos) {
   std::cout << (tf1 - tf2) / dt3 << std::endl;
 }
 
-TEST(TestTwistStateMultiplication, PositiveNos) {
+TEST(CartesianStateTest, TestTwistStateMultiplication) {
   CartesianTwist twist = CartesianTwist::Random("test");
   CartesianState state = CartesianTwist::Random("test2", "test");
 
   std::cout << twist * state << std::endl;
 }
 
-TEST(TestImplicitConversion, PositiveNos) {
+TEST(CartesianStateTest, TestImplicitConversion) {
   Eigen::Vector3d pos1 = Eigen::Vector3d::Zero();
   Eigen::Quaterniond rot1 = Eigen::Quaterniond::Identity();
   CartesianPose tf1("t1", pos1, rot1);
@@ -320,7 +320,7 @@ TEST(TestImplicitConversion, PositiveNos) {
   std::cout << tf1 << std::endl;
 }
 
-TEST(TestVelocityClamping, PositiveNos) {
+TEST(CartesianStateTest, TestVelocityClamping) {
   CartesianTwist vel("test", Eigen::Vector3d(1, -2, 3), Eigen::Vector3d(1, 2, -3));
   vel.clamp(1, 0.5);
 
@@ -337,22 +337,24 @@ TEST(TestVelocityClamping, PositiveNos) {
   }
 }
 
-TEST(TestPoseDistance, PositiveNos) {
+TEST(CartesianStateTest, TestPoseDistance) {
   CartesianPose p1("test", Eigen::Vector3d::Zero());
   CartesianPose p2("test", Eigen::Vector3d(1, 0, 0));
   CartesianPose p3("test", Eigen::Vector3d(1, 0, 0), Eigen::Quaterniond(0, 1, 0, 0));
 
   double d1 = dist(p1, p2);
   double d2 = p1.dist(p2);
+  EXPECT_TRUE(abs(d1 - d2) < 1e-4);
+  EXPECT_TRUE(abs(d1 - 1.0) < 1e-4);
 
-  //EXPECT_TRUE(abs(d1 - d2) < 1e-4);
-  //EXPECT_TRUE(d1 < 1e-4);
+  double d3 = dist(p1, p3, CartesianStateVariable::ORIENTATION);
+  EXPECT_TRUE(abs(d3 - 3.14159) < 1e10-3);
 
-  double d3 = dist(p1, p3);
-  //EXPECT_TRUE(abs(d3 - 3.14159) < 1e10-3);
+  double d4 = dist(p2, p3);
+  EXPECT_TRUE(abs(d3 - d4) < 1e10-3);
 }
 
-TEST(TestFilter, PositiveNos) {
+TEST(CartesianStateTest, TestFilter) {
   CartesianPose tf1("t1", Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
   CartesianPose tf2("t1", Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
@@ -367,7 +369,7 @@ TEST(TestFilter, PositiveNos) {
   //EXPECT_TRUE(dist(tf1, tf2) < 1e-4);
 }
 
-TEST(TestToSTDVector, PositiveNos) {
+TEST(CartesianStateTest, TestToSTDVector) {
   CartesianPose p = CartesianPose::Random("t1");
   std::vector<double> v = p.to_std_vector();
   for (unsigned int i = 0; i < 3; ++i) EXPECT_NEAR(p.get_position()(i), v[i], 0.00001);
@@ -377,7 +379,7 @@ TEST(TestToSTDVector, PositiveNos) {
   EXPECT_NEAR(p.get_orientation().z(), v[6], 0.00001);
 }
 
-TEST(TestAllNorms, PositiveNos) {
+TEST(CartesianStateTest, TestAllNorms) {
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
   // first test all norms
@@ -394,7 +396,7 @@ TEST(TestAllNorms, PositiveNos) {
 
 }
 
-TEST(TestPoseNorms, PositiveNos) {
+TEST(CartesianStateTest, TestPoseNorms) {
   std::vector<double> norms;
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
@@ -418,7 +420,7 @@ TEST(TestPoseNorms, PositiveNos) {
   EXPECT_NEAR(pose_norms[1], cp.get_orientation().norm(), tolerance);
 }
 
-TEST(TestTwistNorms, PositiveNos) {
+TEST(CartesianStateTest, TestTwistNorms) {
   std::vector<double> norms;
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
@@ -442,7 +444,7 @@ TEST(TestTwistNorms, PositiveNos) {
   EXPECT_NEAR(twist_norms[1], ct.get_angular_velocity().norm(), tolerance);
 }
 
-TEST(TestAccelerationNorms, PositiveNos) {
+TEST(CartesianStateTest, TestAccelerationNorms) {
   std::vector<double> norms;
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
@@ -460,7 +462,7 @@ TEST(TestAccelerationNorms, PositiveNos) {
   EXPECT_NEAR(norms[1], cs.get_angular_acceleration().norm(), tolerance);
 }
 
-TEST(TestWrenchNorms, PositiveNos) {
+TEST(CartesianStateTest, TestWrenchNorms) {
   std::vector<double> norms;
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
@@ -484,7 +486,7 @@ TEST(TestWrenchNorms, PositiveNos) {
   EXPECT_NEAR(wrench_norms[1], cw.get_torque().norm(), tolerance);
 }
 
-TEST(TestNormalize, PositiveNos) {
+TEST(CartesianStateTest, TestNormalize) {
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
   cs.normalize();
@@ -494,7 +496,7 @@ TEST(TestNormalize, PositiveNos) {
   }
 }
 
-TEST(TestNormalized, PositiveNos) {
+TEST(CartesianStateTest, TestNormalized) {
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");
   CartesianState csn = cs.normalized();
@@ -502,9 +504,4 @@ TEST(TestNormalized, PositiveNos) {
   for (double n : norms) {
     EXPECT_NEAR(n, 1.0, tolerance);
   }
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

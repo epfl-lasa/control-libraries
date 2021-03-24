@@ -7,7 +7,7 @@
 using namespace state_representation::units;
 using namespace state_representation::units::literals;
 
-TEST(CreateDistances, PositiveNos) {
+TEST(UnitsTest, CreateDistances) {
   Distance d1 = 1.0_dm;
   Distance d2 = 0.1_m;
 
@@ -23,7 +23,7 @@ TEST(CreateDistances, PositiveNos) {
   EXPECT_TRUE(d3 <= d4);
 }
 
-TEST(DistanceOperations, PositiveNos) {
+TEST(UnitsTest, DistanceOperations) {
   Distance d1 = 1.0_dm;
   Distance d2 = 0.1_m;
 
@@ -39,12 +39,12 @@ TEST(DistanceOperations, PositiveNos) {
   EXPECT_TRUE(abs(d5 / d3 - 2.0) < 1e-4);
 }
 
-TEST(CreateLinearVelocity, PositiveNos) {
+TEST(UnitsTest, CreateLinearVelocity) {
   LinearVelocity v1 = 1.0_m_s;
   EXPECT_TRUE(abs(v1.get_value() - 1.0) < 1e-4);
 }
 
-TEST(CreateAngles, PositiveNos) {
+TEST(UnitsTest, CreateAngles) {
   Angle a1 = M_PI;
   Angle a2 = 180.0_deg;
   EXPECT_TRUE(a1 == a2);
@@ -52,9 +52,4 @@ TEST(CreateAngles, PositiveNos) {
   Angle a3 = -M_PI / 2;
   Angle a4 = -90.0_deg;
   EXPECT_TRUE(a3 == a4);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

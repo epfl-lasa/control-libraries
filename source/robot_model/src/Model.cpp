@@ -42,6 +42,16 @@ Model& Model::operator=(const Model& model) {
   return (*this);
 }
 
+bool Model::create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path) {
+  std::ofstream file(desired_path);
+  if (file.good() && file.is_open()) {
+    file << urdf_string;
+    file.close();
+    return true;
+  }
+  return false;
+}
+
 void Model::init_model() {
   pinocchio::urdf::buildModel(this->get_urdf_path(), this->robot_model_);
   this->robot_data_ = pinocchio::Data(this->robot_model_);
@@ -335,15 +345,5 @@ void Model::print_qp_problem() {
     std::cout << " < ";
     std::cout << this->upper_bound_constraints_(i) << std::endl;
   }
-}
-
-bool Model::create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path) {
-  std::ofstream file(desired_path);
-  if (file.good() && file.is_open()) {
-    file << urdf_string;
-    file.close();
-    return true;
-  }
-  return false;
 }
 }// namespace robot_model

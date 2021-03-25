@@ -24,14 +24,12 @@ set(CORE_SOURCES
 )
 
 if (EXPERIMENTAL_FEATURES)
-  message("experimental!")
   list(APPEND CORE_SOURCES
     src/space/dual_quaternion/DualQuaternionState.cpp
     src/space/dual_quaternion/DualQuaternionPose.cpp
     src/space/dual_quaternion/DualQuaternionTwist.cpp
   )
 endif ()
-message(${CORE_SOURCES})
 
 add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}

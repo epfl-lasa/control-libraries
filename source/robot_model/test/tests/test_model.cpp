@@ -126,7 +126,7 @@ TEST_F(RobotModelTest, TestCreateURDFFromStringSuccess) {
 }
 
 TEST_F(RobotModelTest, TestCreateURDFFromStringFail) {
-  EXPECT_FALSE(Model::create_urdf_from_string("dummy string", "/invalid path"));
+  EXPECT_FALSE(Model::create_urdf_from_string("dummy string", "/dev/null/invalid.urdf"));
   EXPECT_TRUE(Model::create_urdf_from_string("dummy string", create_urdf_test_path));
   EXPECT_ANY_THROW(Model("dummy", create_urdf_test_path));
 }

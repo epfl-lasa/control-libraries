@@ -97,6 +97,15 @@ public:
   Model& operator=(const Model& Model);
 
   /**
+   * @brief Creates a URDF file with desired path and name from a string (possibly the robot description
+   * string from the ROS parameter server)
+   * @param urdf_string string containing the URDF description of the robot
+   * @param desired_path desired path and name of the created URDF file as string
+   * @return bool if operation was successful
+   */
+  static bool create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path);
+
+  /**
    * @brief Getter of the robot name
    * @return the robot name
    */

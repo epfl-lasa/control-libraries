@@ -1,4 +1,5 @@
 #include "robot_model/Model.hpp"
+#include <fstream>
 #include <pinocchio/algorithm/frames.hpp>
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
@@ -39,6 +40,16 @@ Model& Model::operator=(const Model& model) {
   this->init_model();
   this->init_qp_solver();
   return (*this);
+}
+
+bool Model::create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path) {
+  std::ofstream file(desired_path);
+  if (file.good() && file.is_open()) {
+    file << urdf_string;
+    file.close();
+    return true;
+  }
+  return false;
 }
 
 void Model::init_model() {

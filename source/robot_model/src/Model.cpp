@@ -342,7 +342,8 @@ bool Model::create_urdf_from_string(const std::string& urdf_string, const std::s
   if (file.good() && file.is_open()) {
     file << urdf_string;
     file.close();
+    return true;
   }
-  return file.good();
+  return false;
 }
 }// namespace robot_model

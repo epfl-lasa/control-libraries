@@ -339,12 +339,10 @@ void Model::print_qp_problem() {
 
 bool Model::create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path) {
   std::ofstream file(desired_path);
-  if (!file.good() || !file.is_open()) {
-    return false;
-  } else {
+  if (file.good() && file.is_open()) {
     file << urdf_string;
     file.close();
-    return true;
   }
+  return file.good();
 }
 }// namespace robot_model

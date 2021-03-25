@@ -118,9 +118,6 @@ TEST(JacobianTest, TestCartesianToJoint) {
     except_thrown1 = true;
   }
   EXPECT_TRUE(except_thrown1);
-
-  // this changing of reference frame should actually not be possible I think. As it should include a transformation
-  // from previous reference frame to the new desired one. This is how it is now implemented in the Jacobian
   cvel.set_reference_frame("test_ref");
 
   state_representation::JointVelocities jvel2;

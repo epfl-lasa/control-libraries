@@ -135,10 +135,14 @@ TEST(JacobianTest, TestCartesianToJoint) {
 }
 
 TEST(JacobianTest, TestChangeReferenceFrame) {
-  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
-  CartesianPose cpose = CartesianTwist::Random("test_ref");
-  Jacobian jac_in_test_ref = cpose * jac;
-  EXPECT_TRUE(jac_in_test_ref.get_reference_frame() == cpose.get_reference_frame());
-  jac.set_reference_frame(cpose);
-  EXPECT_TRUE(jac_in_test_ref.data().isApprox(jac_in_test_ref.data()));
+  Jacobian jac_in_test_ref = Jacobian::Random("robot", 7, "test", "test_ref");
+  CartesianPose wTtest_ref = CartesianPose::Random("test_ref", "world");
+  Jacobian jac_in_world = wTtest_ref * jac_in_test_ref;
+  EXPECT_TRUE(jac_in_world.get_reference_frame() == wTtest_ref.get_reference_frame());
+  // use a proxy operation with a twist to check correctness
+  CartesianTwist vel_in_world = CartesianTwist::Random("test", "world");
+  CartesianTwist vel_in_test_ref = wTtest_ref.inverse() * vel_in_world;
+  JointVelocities jt1 = jac_in_world.solve(vel_in_world);
+  JointVelocities jt2 = jac_in_test_ref.solve(vel_in_test_ref);
+  EXPECT_TRUE(jt1.data().isApprox(jt2.data()));
 }

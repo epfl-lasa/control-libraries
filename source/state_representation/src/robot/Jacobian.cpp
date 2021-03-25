@@ -245,9 +245,9 @@ Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian) {
   // change the reference frame of all the columns
   for (unsigned int i = 0; i < jacobian.cols_; ++i) {
     // update position part
-    result.data_.col(i).head(3) = pose * jacobian.data_.col(i).head(3);
+    result.data_.col(i).head(3) = pose.get_orientation() * jacobian.data_.col(i).head(3);
     // update orientation part
-    result.data_.col(i).tail(3) = pose * jacobian.data_.col(i).tail(3);
+    result.data_.col(i).tail(3) = pose.get_orientation() * jacobian.data_.col(i).tail(3);
   }
   // change the reference frame
   result.reference_frame_ = pose.get_reference_frame();

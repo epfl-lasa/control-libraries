@@ -75,6 +75,13 @@ public:
   State(const State& state);
 
   /**
+   * @brief Swap the values of the two State
+   * @param state1 State to be swapped with 2
+   * @param state2 State to be swapped with 1
+   */
+  friend void swap(State& state1, State& state2);
+
+  /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
@@ -108,7 +115,7 @@ public:
   const std::chrono::time_point<std::chrono::steady_clock>& get_timestamp() const;
 
   /**
-   * @brief Reset the timestramp attribute to now
+   * @brief Reset the timestamp attribute to now
    */
   void reset_timestamp();
 
@@ -142,19 +149,24 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the State to
+   * @param os the ostream to append the string representing the State to
    * @param state the State to print
    * @return the appended ostream 
    */
   friend std::ostream& operator<<(std::ostream& os, const State& state);
 };
 
+inline void swap(State& state1, State& state2) {
+  std::swap(state1.type_, state2.type_);
+  std::swap(state1.name_, state2.name_);
+  std::swap(state1.empty_, state2.empty_);
+  std::swap(state1.timestamp_, state2.timestamp_);
+}
+
 inline State& State::operator=(const State& state) {
-  this->type_ = state.type_;
-  this->name_ = state.name_;
-  this->empty_ = state.empty_;
-  this->timestamp_ = std::chrono::steady_clock::now();
-  return (*this);
+  State tmp(state);
+  swap(*this, tmp);
+  return *this;
 }
 
 inline const StateType& State::get_type() const {

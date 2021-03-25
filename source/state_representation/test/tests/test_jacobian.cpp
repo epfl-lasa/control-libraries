@@ -1,14 +1,37 @@
 #include "state_representation/robot/Jacobian.hpp"
-#include <fstream>
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include <gtest/gtest.h>
-#include <unistd.h>
+
+using namespace state_representation;
+using namespace state_representation::exceptions;
 
 TEST(JacobianTest, TestCreate) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  Jacobian jac("robot", 7, "test");
+  EXPECT_EQ(jac.rows(), 6);
+  EXPECT_EQ(jac.cols(), 7);
+  EXPECT_TRUE(jac.is_empty());
+  EXPECT_EQ(jac.get_frame(), "test");
+  EXPECT_EQ(jac.get_reference_frame(), "world");
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_EQ(jac.get_joint_names().at(i), ("joint" + std::to_string(i)));
+    EXPECT_EQ(jac.col(i).norm(), 0);
+  }
+}
 
-  EXPECT_TRUE(jac.get_nb_rows() == 6);
-  EXPECT_TRUE(jac.get_nb_cols() == 7);
+TEST(JacobianTest, TestCreateWithVectorOfJoints) {
+  Jacobian jac("robot", std::vector<std::string>{"j1", "j2"}, "test", "test_ref");
+  EXPECT_EQ(jac.get_joint_names().at(0), "j1");
+  EXPECT_EQ(jac.get_joint_names().at(1), "j2");
+  EXPECT_EQ(jac.get_reference_frame(), "test_ref");
+}
 
+TEST(JacobianTest, TestSetData) {
+  Jacobian jac("robot", 3, "test");
+  jac.set_data(Eigen::MatrixXd::Random(6, 3));
+  EXPECT_FALSE(jac.is_empty());
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_GT(jac.col(i).norm(), 0);
+  }
   bool except_thrown = false;
   try {
     jac.set_data(Eigen::MatrixXd::Random(7, 6));
@@ -18,29 +41,33 @@ TEST(JacobianTest, TestCreate) {
   EXPECT_TRUE(except_thrown);
 }
 
-TEST(JacobianTest, TestTranspose) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  jac = jac.transpose();
-
-  EXPECT_TRUE(jac.get_nb_rows() == 7);
-  EXPECT_TRUE(jac.get_nb_cols() == 6);
-
-  bool except_thrown = false;
-  try {
-    jac.set_data(Eigen::MatrixXd::Random(7, 6));
-  } catch (const IncompatibleSizeException& e) {
-    except_thrown = true;
+TEST(JacobianTest, TestRandomCreate) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  EXPECT_FALSE(jac.is_empty());
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_GT(jac.col(i).norm(), 0);
   }
-  EXPECT_FALSE(except_thrown);
+}
+
+TEST(JacobianTest, TestTranspose) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  Jacobian jact = jac.transpose();
+
+  EXPECT_EQ(jact.rows(), 7);
+  EXPECT_EQ(jact.cols(), 6);
+
+  for (std::size_t i = 0; i < jac.cols(); ++i) {
+    EXPECT_TRUE(jac.col(i).isApprox(jact.row(i)));
+  }
 }
 
 TEST(JacobianTest, TestMutltiplyWithEigen) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  Eigen::MatrixXd mat1 = Eigen::MatrixXd::Random(7, 2);
   Eigen::MatrixXd res1 = jac * mat1;
+  Eigen::MatrixXd res_truth = jac.data() * mat1;
 
-  EXPECT_TRUE(res1.rows() == 6);
-  EXPECT_TRUE(res1.cols() == 1);
+  EXPECT_TRUE(res1.isApprox(res_truth));
 
   Eigen::MatrixXd mat2 = Eigen::VectorXd::Random(6, 1);
   bool except_thrown = false;
@@ -50,14 +77,10 @@ TEST(JacobianTest, TestMutltiplyWithEigen) {
     except_thrown = true;
   }
   EXPECT_TRUE(except_thrown);
-
-  Eigen::MatrixXd res2 = jac.transpose() * mat2;
-  EXPECT_TRUE(res2.rows() == 7);
-  EXPECT_TRUE(res2.cols() == 1);
 }
 
 TEST(JacobianTest, TestSolve) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);
   bool except_thrown = false;
   try {
@@ -70,36 +93,32 @@ TEST(JacobianTest, TestSolve) {
   Eigen::MatrixXd mat2 = Eigen::VectorXd::Random(6, 1);
   Eigen::MatrixXd res2 = jac.solve(mat2);
 
-  EXPECT_TRUE(res2.rows() == 7);
-  EXPECT_TRUE(res2.cols() == 1);
+  EXPECT_EQ(res2.rows(), 7);
+  EXPECT_EQ(res2.cols(), 1);
 }
 
 TEST(JacobianTest, TestJointToCartesian) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  state_representation::JointVelocities jvel("robot", Eigen::VectorXd::Random(7));
+  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
+  JointVelocities jvel = JointVelocities::Random("robot", 7);
+  CartesianTwist cvel = jac * jvel;
 
-  bool except_thrown = false;
-  try {
-    state_representation::CartesianTwist cvel = jac * jvel;
-  } catch (const IncompatibleSizeException& e) {
-    except_thrown = true;
-  }
-  EXPECT_FALSE(except_thrown);
+  EXPECT_EQ(cvel.get_name(), jac.get_frame());
+  EXPECT_EQ(cvel.get_reference_frame(), jac.get_reference_frame());
+  EXPECT_TRUE(cvel.data().isApprox(jac.data() * jvel.data()));
 }
 
 TEST(JacobianTest, TestCartesianToJoint) {
-  state_representation::Jacobian jac("robot", Eigen::MatrixXd::Random(6, 7));
-  Eigen::Matrix<double, 6, 1> vec = Eigen::Matrix<double, 6, 1>::Random();
-  state_representation::CartesianTwist cvel("robot", vec);
+  Jacobian jac = Jacobian::Random("robot", 7, "test", "test_ref");
+  CartesianTwist cvel = CartesianTwist::Random("test");
 
-  state_representation::JointVelocities jvel1;
   bool except_thrown1 = false;
   try {
-    jvel1 = jac.solve(cvel);
-  } catch (const IncompatibleSizeException& e) {
+    JointVelocities jvel = jac.solve(cvel);
+  } catch (const IncompatibleStatesException& e) {
     except_thrown1 = true;
   }
-  EXPECT_FALSE(except_thrown1);
+  EXPECT_TRUE(except_thrown1);
+  cvel.set_reference_frame("test_ref");
 
   state_representation::JointVelocities jvel2;
   bool except_thrown2 = false;
@@ -109,4 +128,18 @@ TEST(JacobianTest, TestCartesianToJoint) {
     except_thrown2 = true;
   }
   EXPECT_FALSE(except_thrown2);
+  EXPECT_GT(jvel2.data().norm(), 0);
+}
+
+TEST(JacobianTest, TestChangeReferenceFrame) {
+  Jacobian jac_in_test_ref = Jacobian::Random("robot", 7, "test", "test_ref");
+  CartesianPose wTtest_ref = CartesianPose::Random("test_ref", "world");
+  Jacobian jac_in_world = wTtest_ref * jac_in_test_ref;
+  EXPECT_EQ(jac_in_world.get_reference_frame(), wTtest_ref.get_reference_frame());
+  // use a proxy operation with a twist to check correctness
+  CartesianTwist vel_in_world = CartesianTwist::Random("test", "world");
+  CartesianTwist vel_in_test_ref = wTtest_ref.inverse() * vel_in_world;
+  JointVelocities jt1 = jac_in_world.solve(vel_in_world);
+  JointVelocities jt2 = jac_in_test_ref.solve(vel_in_test_ref);
+  EXPECT_TRUE(jt1.data().isApprox(jt2.data()));
 }

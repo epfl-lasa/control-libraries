@@ -19,6 +19,7 @@ This description covers most of the functionalities starting from the spatial tr
   * [Conversion between JointVelocities and CartesianTwist](#conversion-between-jointvelocities-and-cartesiantwist)
   * [Conversion between JointTorques and CartesianWrench](#conversion-between-jointtorques-and-cartesianwrench)
   * [Matrix multiplication](#matrix-multiplication)
+  * [Changing the Jacobian reference frame](#changing-the-jacobian-reference-frame)
 
 ## Cartesian state
 
@@ -294,18 +295,21 @@ state_representation::JointPositions jp = period * jv; // note that jv * period 
 
 The `Jacobian` matrix of a robot ensures the conversion between both `CartesianState` and `JointState`.
 Similarly to the `JointState`, a `Jacobian` is associated to a robot and defined by the robot and the number of joints.
+As it is a mapping between joint and task spaces, as for the `CartesianState`, it is also defined by an associated
+frame name and a reference frame.
 
 ```cpp
-// create a jacobian for myrobot with 3 joints
-state_representation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}));
+// create a jacobian for myrobot with 3 joints, associated to frame A and expressed in B
+state_representation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}), "A", "B");
 ```
 
 The API is the same as the `JointState`, hence the constructor can also accept the number of joints to initialize the
 joint names vector.
 
 ```cpp
-// create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}
-state_representation::Jacobian jac("myrobot", 3);
+// create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}, associated to frame A and
+// expressed in world (default value of the reference frame when not provided)
+state_representation::Jacobian jac("myrobot", 3, "A");
 ```
 
 The `Jacobian` is simply a `6 x N` matrix where `N` is the number of joints.
@@ -333,16 +337,22 @@ Those operations are very useful to convert `JointState` from `CartesianState` a
 The simplest conversion is to transform a `JointVelocities` into a `CartesiantTwist` by multiplication with the `Jacobian`
 
 ```cpp
+state_representation::Jacobian jac("myrobot", 3, "eef_frame", "base_frame");
 state_representation::JointVelocities jv("myrobot", 3);
-state_representation::CartesianTwist eef_twist = jac * js;
+// compute the twist of eef_frame in base_frame from the joint velocities
+state_representation::CartesianTwist eef_twist = jac * jv;
 ```
 
 The opposite transformation, from `CartesianTwist` to `JointVelocities` requires the multiplication with the `inverse`
 (or `pseudoinverse`).
 
 ```cpp
+state_representation::Jacobian jac("myrobot", 3, "eef");
 state_representation::CartesianTwist eef_twist("eef")
 state_representation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
+// in case of non matching frame or reference frame throw an IncompatibleStatesException
+state_representation::CartesianTwist link2_twist("link2", "link0")
+state_representation::JointVelocities jv = jac.pseudoinverse() * link2_twist;
 ```
 
 Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies
@@ -372,7 +382,28 @@ Direct multiplication of the `Jacobian` object with another `Eigen::MatrixXd` ha
 `Eigen::MatrixXd` product.
 
 ```cpp
-state_representation::Jacobian jac("myrobot", 3, Eigen::MatrixXd::Random(6, 3));
+state_representation::Jacobian jac("myrobot", 3, "eef", Eigen::MatrixXd::Random(6, 3));
+// alternatively can use the Random static constructor
+state_representation::Jacobian jac = state_representation::Jacobian::Random("myrobot", 3, "eef");
 Eigen::MatrixXd mat = jac.data();
 Eigen::MatrixXd res = jac * Eigen::MatrixXd(3, 4); // equivalent to  jac.data() * Eigen::MatrixXd(3, 4);
+```
+
+### Changing the Jacobian reference frame
+
+As stated earlier, the `Jacobian` is expressed in a reference frame and can, therefore, use the operations with
+`CartesianPose` to be modified. It relies on the usage of the overloaded `operator*` or the `set_reference_frame`
+function for inplace modifications. It is equivalent to multiply each columns of the `Jacobian` by the `CartesianPose`
+on both the linear and angular part of the matrix. For this operation to be valid, the `CartesianPose` name has to
+match the current `Jacobian` reference frame.
+
+```cpp
+state_representation::Jacobian jac = state_representation::Jacobian::Random("myrobot", 3, "eef", "base_frame");
+state_representation::CartesianPose pose = state_representation::CartesianPose::Random("base_frame", "world");
+// the result is the Jacobian expressed in world
+state_representation::Jacobian jac_in_world = pose * jac;
+// alternatively, one case use the set_reference_frame function for inplace modifications
+jac.set_reference_frame(pose);
+// in case of non matching operation throw an IncompatibleStatesExceptions
+jac.set_reference_frame(state_representation::CartesianPose::Random("link0", "world"));
 ```

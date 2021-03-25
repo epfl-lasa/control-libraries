@@ -351,8 +351,8 @@ state_representation::Jacobian jac("myrobot", 3, "eef");
 state_representation::CartesianTwist eef_twist("eef")
 state_representation::JointVelocities jv = jac.pseudoinverse() * eef_twist;
 // in case of non matching frame or reference frame throw an IncompatibleStatesException
-state_representation::CartesianTwist eef_link("link2", "link0")
-state_representation::JointVelocities jv = jac.pseudoinverse() * eef_link;
+state_representation::CartesianTwist link2_twist("link2", "link0")
+state_representation::JointVelocities jv = jac.pseudoinverse() * link2_twist;
 ```
 
 Note that the `inverse` or `pseudoinverse` functions are computationally expensive and the `solve` function that relies

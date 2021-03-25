@@ -5,18 +5,18 @@ using namespace state_representation;
 namespace dynamical_systems {
 
 template<>
-inline void Linear<CartesianState>::set_gain(double iso_gain) {
+void Linear<CartesianState>::set_gain(double iso_gain) {
   this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(6, 6));
 }
 
 template<>
-inline void Linear<JointState>::set_gain(double iso_gain) {
+void Linear<JointState>::set_gain(double iso_gain) {
   int nb_joints = this->get_attractor().get_size();
   this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(nb_joints, nb_joints));
 }
 
 template<>
-inline void Linear<CartesianState>::set_gain(const std::vector<double>& diagonal_coefficients) {
+void Linear<CartesianState>::set_gain(const std::vector<double>& diagonal_coefficients) {
   if (diagonal_coefficients.size() != 6) {
     throw exceptions::IncompatibleSizeException(
         "The provided diagonal coefficients do not correspond to the expected size of 6 elements");
@@ -26,7 +26,7 @@ inline void Linear<CartesianState>::set_gain(const std::vector<double>& diagonal
 }
 
 template<>
-inline void Linear<JointState>::set_gain(const std::vector<double>& diagonal_coefficients) {
+void Linear<JointState>::set_gain(const std::vector<double>& diagonal_coefficients) {
   size_t nb_joints = this->get_attractor().get_size();
   if (diagonal_coefficients.size() != nb_joints) {
     throw exceptions::IncompatibleSizeException(
@@ -38,7 +38,7 @@ inline void Linear<JointState>::set_gain(const std::vector<double>& diagonal_coe
 }
 
 template<>
-inline void Linear<CartesianState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
+void Linear<CartesianState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
   if (gain_matrix.rows() != 6 && gain_matrix.cols() != 6) {
     throw exceptions::IncompatibleSizeException("The provided gain matrix do not have the expected size of 6x6 elements");
   }
@@ -46,7 +46,7 @@ inline void Linear<CartesianState>::set_gain(const Eigen::MatrixXd& gain_matrix)
 }
 
 template<>
-inline void Linear<JointState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
+void Linear<JointState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
   int nb_joints = this->get_attractor().get_size();
   if (gain_matrix.rows() != nb_joints && gain_matrix.cols() != nb_joints) {
     throw exceptions::IncompatibleSizeException(

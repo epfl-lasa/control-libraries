@@ -13,14 +13,21 @@ class RobotModelTest : public testing::Test {
 protected:
   void SetUp() override {
     robot_name = "franka";
-    urdf = std::string(TEST_FIXTURES) + "panda_arm.urdf";
-    franka = std::make_unique<Model>(robot_name, urdf);
+    urdf_path = std::string(TEST_FIXTURES) + "panda_arm.urdf";
+    franka = std::make_unique<Model>(robot_name, urdf_path);
     joint_state = state_representation::JointState(robot_name, 7);
+
+    create_urdf_test_path = std::string(TEST_FIXTURES) + "urdf_test.urdf";
+  }
+
+  void TearDown() override {
+    std::remove(create_urdf_test_path.c_str());
   }
 
   std::unique_ptr<Model> franka;
   std::string robot_name;
-  std::string urdf;
+  std::string urdf_path;
+  std::string create_urdf_test_path;
 
   state_representation::JointState joint_state;
 
@@ -37,11 +44,11 @@ TEST_F(RobotModelTest, TestSetName) {
 }
 
 TEST_F(RobotModelTest, TestGetUrdfPath) {
-  EXPECT_EQ(franka->get_urdf_path(), urdf);
+  EXPECT_EQ(franka->get_urdf_path(), urdf_path);
 }
 
 TEST_F(RobotModelTest, TestCopyConstructor) {
-  Model tmp(robot_name, urdf);
+  Model tmp(robot_name, urdf_path);
   EXPECT_NO_THROW(*franka = tmp);
 }
 
@@ -102,4 +109,24 @@ TEST_F(RobotModelTest, TestGravityGetterAndSetters) {
   // set new gravity as dummy_vector and expect equality
   franka->set_gravity_vector(dummy_vector);
   EXPECT_TRUE((dummy_vector - franka->get_gravity_vector()).norm() < 1e-4);
+}
+
+TEST_F(RobotModelTest, TestCreateURDFFromStringSuccess) {
+  std::ifstream file(urdf_path);
+  std::stringstream strStream;
+  strStream << file.rdbuf();
+  std::string urdf_string = strStream.str();
+  EXPECT_TRUE(Model::create_urdf_from_string(urdf_string, create_urdf_test_path));
+  Model fromCreatedUrdf = Model("fromCreatedUrdf", create_urdf_test_path);
+  EXPECT_EQ(fromCreatedUrdf.get_number_of_joints(), franka->get_number_of_joints());
+  ASSERT_EQ(fromCreatedUrdf.get_frames().size(), franka->get_frames().size());
+  for (std::size_t frame = 0; frame < franka->get_frames().size(); ++frame) {
+    EXPECT_STREQ(fromCreatedUrdf.get_frames().at(frame).c_str(), franka->get_frames().at(frame).c_str());
+  }
+}
+
+TEST_F(RobotModelTest, TestCreateURDFFromStringFail) {
+  EXPECT_FALSE(Model::create_urdf_from_string("dummy string", "/dummy"));
+  EXPECT_TRUE(Model::create_urdf_from_string("dummy string", create_urdf_test_path));
+  EXPECT_ANY_THROW(Model("dummy", create_urdf_test_path));
 }

@@ -9,11 +9,11 @@ on:
   pull_request:
   workflow_dispatch:
 
-# Define the build test job
+# Define the build test jobs for each configuration
 jobs:
-  build-test:
+  build-test-debug:
     runs-on: ubuntu-latest
-    name: Build the source code and run all unit tests
+    name: Build the source code and run all unit tests in Debug configuration
     steps:
       # First check out the repository
       - name: Checkout
@@ -21,3 +21,18 @@ jobs:
       # Load the repository build-test action
       - name: Build and Test
         uses: ./.github/actions/build-test
+        with:
+          configuration: Debug
+
+  build-test-release:
+    runs-on: ubuntu-latest
+    name: Build the source code and run all unit tests in Release configuration
+    steps:
+      # First check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Load the repository build-test action
+      - name: Build and Test
+        uses: ./.github/actions/build-test
+        with:
+          configuration: Release

@@ -56,41 +56,33 @@ TEST_F(RobotModelTest, TestNumberOfJoints) {
   EXPECT_EQ(franka->get_number_of_joints(), 7);
 }
 
-TEST_F(RobotModelTest, TestForwardGeometryJointStateSize) {
-  state_representation::JointState dummy = state_representation::JointState(robot_name, 6);
-  EXPECT_THROW(franka->forward_geometry(dummy), exceptions::InvalidJointStateSizeException);
-}
-
-TEST_F(RobotModelTest, TestForwardGeometry) {
-  EXPECT_EQ(franka->forward_geometry(joint_state).get_position(),
-            franka->forward_geometry(joint_state, "panda_link8").get_position());
-}
-
-TEST_F(RobotModelTest, TestForwardGeometryInvalidFrameName) {
-  EXPECT_THROW(franka->forward_geometry(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
-}
 
 TEST_F(RobotModelTest, TestJacobianJointNames) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 7);
   state_representation::Jacobian jac = franka->compute_jacobian(dummy);
   for (int i = 0; i < 7; ++i) {
     std::string jname = "panda_joint" + std::to_string(i + 1);
-    EXPECT_TRUE(jname.compare(jac.get_joint_names()[i]) == 0);
+    EXPECT_STREQ(jname.c_str(), jac.get_joint_names()[i].c_str());
   }
 }
 
 TEST_F(RobotModelTest, TestJacobianFrameNames) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 7);
   state_representation::Jacobian jac = franka->compute_jacobian(dummy);
-  EXPECT_TRUE(jac.get_reference_frame() == "panda_link0");
-  EXPECT_TRUE(jac.get_frame() == "panda_link8");
+  EXPECT_STREQ(jac.get_reference_frame().c_str(), "panda_link0");
+  EXPECT_STREQ(jac.get_frame().c_str(), "panda_link8");
   state_representation::Jacobian jac2 = franka->compute_jacobian(dummy, "panda_link2");
-  EXPECT_TRUE(jac2.get_reference_frame() == "panda_link0");
-  EXPECT_TRUE(jac2.get_frame() == "panda_link2");
+  EXPECT_STREQ(jac2.get_reference_frame().c_str(), "panda_link0");
+  EXPECT_STREQ(jac2.get_frame().c_str(), "panda_link2");
 }
 
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
   EXPECT_THROW(franka->compute_jacobian(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
+}
+
+TEST_F(RobotModelTest, TestJacobianInvalidJointStateSize) {
+  state_representation::JointState dummy = state_representation::JointState(robot_name, 6);
+  EXPECT_THROW(franka->compute_jacobian(dummy, "panda_link8"), exceptions::InvalidJointStateSizeException);
 }
 
 TEST_F(RobotModelTest, TestJacobianNbRows) {

@@ -270,23 +270,23 @@ state_representation::CartesianTwist Model::forward_kinematic(const state_repres
 }
 
 state_representation::JointVelocities Model::inverse_kinematic(const state_representation::JointState& joint_state,
-                                                               const std::vector<state_representation::CartesianState>& cartesian_states) {
+                                                               const std::vector<state_representation::CartesianTwist>& cartesian_twist) {
   const unsigned int nb_joints = this->get_number_of_joints();
   using namespace state_representation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
-  Eigen::VectorXd delta_r(3 * cartesian_states.size() + 3);
-  Eigen::MatrixXd jacobian(3 * cartesian_states.size() + 3, nb_joints);
+  Eigen::VectorXd delta_r(3 * cartesian_twist.size() + 3);
+  Eigen::MatrixXd jacobian(3 * cartesian_twist.size() + 3, nb_joints);
 
-  for (unsigned int i = 0; i < cartesian_states.size() - 1; ++i) {
-    CartesianState state = cartesian_states[i];
+  for (unsigned int i = 0; i < cartesian_twist.size() - 1; ++i) {
+    CartesianTwist twist = cartesian_twist[i];
     // extract only the position for intermediate points
-    delta_r.segment<3>(3 * i) = state.get_linear_velocity();
+    delta_r.segment<3>(3 * i) = twist.get_linear_velocity();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
-        this->compute_jacobian(joint_state, state.get_name()).data().block(0, 0, 3, nb_joints);
+        this->compute_jacobian(joint_state, twist.get_name()).data().block(0, 0, 3, nb_joints);
   }
   // extract the orientation for the end-effector
-  CartesianState state = cartesian_states.back();
-  delta_r.segment<3>(3 * (cartesian_states.size() - 1)) = state.get_linear_velocity();
+  CartesianTwist state = cartesian_twist.back();
+  delta_r.segment<3>(3 * (cartesian_twist.size() - 1)) = state.get_linear_velocity();
   delta_r.tail(3) = state.get_angular_velocity();
   jacobian.bottomRows(6) = this->compute_jacobian(joint_state, state.get_name()).data();
   // compute the Jacobian
@@ -328,8 +328,8 @@ state_representation::JointVelocities Model::inverse_kinematic(const state_repre
 }
 
 state_representation::JointVelocities Model::inverse_kinematic(const state_representation::JointState& joint_state,
-                                                               const state_representation::CartesianState& cartesian_state) {
-  return this->inverse_kinematic(joint_state, std::vector<state_representation::CartesianState>({cartesian_state}));
+                                                               const state_representation::CartesianTwist& cartesian_state) {
+  return this->inverse_kinematic(joint_state, std::vector<state_representation::CartesianTwist>({cartesian_state}));
 }
 
 void Model::print_qp_problem() {

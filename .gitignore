@@ -1,3 +1,7 @@
+# IDE generated directories
+.idea
+cmake-build-*
+
 # Prerequisites
 *.d
 
@@ -32,11 +36,7 @@
 *.app
 
 # build folders
-source/dynamical_systems/build
-source/robot_model/build
-source/state_representation/build
+source/build
 
 # gtest lib
-source/dynamical_systems/lib/googletest
-source/robot_model/lib/googletest
-source/state_representation/lib/googletest
+source/lib/googletest

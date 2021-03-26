@@ -1,80 +1,46 @@
-cmake_minimum_required(VERSION 3.9)
-
-# Options. Turn on with 'cmake -Druntests=ON'.
-option(runtests "Build all tests." OFF) # Makes boolean 'test' available.
-
 project(dynamical_systems)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-  	set(CMAKE_C_STANDARD 99)
-endif()
-
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  	set(CMAKE_CXX_STANDARD 14)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  	add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-find_package(Eigen3 REQUIRED)
-
+get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
 include_directories(
-  	include
-    state_representation/include
-  	${Eigen3_INCLUDE_DIRS}
+  include
+  ${STATE_REPRESENTATION_INCLUDE_DIR}
 )
 
 set(CORE_SOURCES
   src/DynamicalSystem.cpp
   src/Circular.cpp
   src/Linear.cpp
+  src/Ring.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}
 )
 
+target_link_libraries(${PROJECT_NAME}
+  Eigen3::Eigen
+  state_representation
+)
+
 install(DIRECTORY include/
-  	DESTINATION include)
+  DESTINATION include
+)
 
 install(TARGETS ${PROJECT_NAME}
-  	ARCHIVE DESTINATION lib
-  	LIBRARY DESTINATION lib
-  	RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
-if (runtests)
-	  if (APPLE)
-      add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-      add_definitions(-D__GLIBCXX__)
-    endif (APPLE)
-
-    add_subdirectory(lib/googletest)
-
-    enable_testing()
-
-  	# Include the gtest library. gtest_SOURCE_DIR is available due to
-  	# 'project(gtest)' above.
-  	include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-  	add_executable(runTestLinear tests/testLinear.cpp)
-  	target_link_libraries(runTestLinear
-  		gtest 
-  		gtest_main
-  		${PROJECT_NAME}
-      state_representation
-  	)
-	  add_test(NAME runTestLinear COMMAND runTestLinear)
-
-    add_executable(runTestCircular tests/testCircular.cpp)
-    target_link_libraries(runTestCircular
-      gtest 
-      gtest_main
-      ${PROJECT_NAME}
-      state_representation
-    )
-    add_test(NAME runTestCircular COMMAND runTestCircular)
-
-endif()
+if (BUILD_TESTING)
+  add_executable(test_dynamical_systems test/test_dynamical_systems.cpp)
+  file(GLOB_RECURSE MODULE_TEST_SOURCES test/tests test_*.cpp)
+  target_sources(test_dynamical_systems PRIVATE ${MODULE_TEST_SOURCES})
+  target_link_libraries(test_dynamical_systems
+    ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
+  )
+  add_test(NAME test_dynamical_systems COMMAND test_dynamical_systems)
+endif ()

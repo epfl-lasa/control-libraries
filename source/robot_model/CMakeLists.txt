@@ -1,42 +1,24 @@
-cmake_minimum_required(VERSION 3.9)
-
-# Options. Turn on with 'cmake -Druntests=ON'.
-option(runtests "Build all tests." OFF) # Makes boolean 'test' available.
-
 project(robot_model)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 99)
-endif()
-
-# Default to C++17
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-find_package(Eigen3 REQUIRED)
+list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 find_package(pinocchio REQUIRED)
 find_package(OsqpEigen REQUIRED)
 find_package(osqp REQUIRED)
 
+get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
 include_directories(
   include
-  ${Eigen3_INCLUDE_DIRS}
+  ${STATE_REPRESENTATION_INCLUDE_DIR}
   ${PINOCCHIO_INCLUDE_DIR}
-  /home/ros2/openrobots/include
   ${OsqpEigen_INCLUDE_DIR}
+  /opt/openrobots/include
 )
 
 set(CORE_SOURCES
   src/Model.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED 
+add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}
 )
 
@@ -58,25 +40,16 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION bin
 )
 
-if (runtests)
-  if (APPLE)
-    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-    add_definitions(-D__GLIBCXX__)
-  endif (APPLE)
-
-  add_subdirectory(lib/googletest)
-
-  enable_testing()
-
-  # Include the gtest library. gtest_SOURCE_DIR is available due to
-  # 'project(gtest)' above.
-  include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-  add_executable(runTestRobotModel tests/testRobotModel.cpp)
-  target_link_libraries(runTestRobotModel
-    gtest 
-    gtest_main
+if (BUILD_TESTING)
+  add_executable(test_robot_model test/test_robot_model.cpp)
+  file(GLOB_RECURSE MODULE_TEST_SOURCES test/tests test_*.cpp)
+  target_sources(test_robot_model PRIVATE ${MODULE_TEST_SOURCES})
+  target_link_libraries(test_robot_model
     ${PROJECT_NAME}
+    state_representation
+    ${GTEST_LIBRARIES}
+    pthread
   )
-  add_test(NAME runTestRobotModel COMMAND runTestRobotModel)
-endif()
+  target_compile_definitions(test_robot_model PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/")
+  add_test(NAME test_robot_model COMMAND test_robot_model)
+endif ()

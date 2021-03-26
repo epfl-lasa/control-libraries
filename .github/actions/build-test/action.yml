@@ -1,0 +1,5 @@
+name: 'Build and Test'
+description: 'Build the project sources and run all unit tests'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

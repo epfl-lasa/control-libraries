@@ -1,9 +1,16 @@
 #!/bin/sh -l
 
+CONFIGURATION=""
+if [ -n "$1" ]; then
+  echo ">>> Configuration: $1"
+  CONFIGURATION="-DCMAKE_BUILD_TYPE=$1"
+fi
+
 cd /github/workspace/source && mkdir build && cd build || exit 1
 
 echo ">>> Configuring cmake..."
-cmake -DBUILD_CONTROLLERS=ON -DBUILD_DYNAMICAL_SYSTEMS=ON -DBUILD_ROBOT_MODEL=ON -DBUILD_TESTING=ON .. || \
+cmake "${CONFIGURATION}" -DBUILD_TESTING=ON \
+  -DBUILD_CONTROLLERS=ON -DBUILD_DYNAMICAL_SYSTEMS=ON -DBUILD_ROBOT_MODEL=ON .. || \
   (echo ">>> [ERROR] Configuration stage failed!" && exit 2) || exit $?
 
 echo ">>> Building project..."

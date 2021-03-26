@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(control_libraries)
+project(control_libraries VERSION 1.0.0)
 
+# Build options
 option(BUILD_TESTING "Build all tests." OFF)
 option(BUILD_CONTROLLERS "Build and install controllers library" ON)
 option(BUILD_DYNAMICAL_SYSTEMS "Build and install dynamical systems library" ON)
 option(BUILD_ROBOT_MODEL "Build and install robot model library" ON)
+option(EXPERIMENTAL_FEATURES "Include experimental features" OFF)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

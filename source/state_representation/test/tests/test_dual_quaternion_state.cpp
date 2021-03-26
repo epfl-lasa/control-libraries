@@ -1,3 +1,4 @@
+#ifdef EXPERIMENTAL_FEATURES
 #include "state_representation/space/dual_quaternion/DualQuaternionPose.hpp"
 #include <gtest/gtest.h>
 
@@ -116,3 +117,4 @@ TEST(DualQuaternionStateTest, TestMultiplyInverseNonNullOrientation) {
   for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
   for (int i = 0; i < 4; ++i) EXPECT_NEAR(tf1.get_orientation().coeffs()(i), rot_truth.coeffs()(i), 0.00001);
 }
+#endif

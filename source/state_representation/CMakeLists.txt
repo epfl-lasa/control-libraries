@@ -5,26 +5,31 @@ include_directories(include)
 set(CORE_SOURCES
   src/MathTools.cpp
   src/State.cpp
-        src/space/SpatialState.cpp
-        src/space/cartesian/CartesianState.cpp
-        src/space/cartesian/CartesianPose.cpp
-        src/space/cartesian/CartesianTwist.cpp
-        src/space/cartesian/CartesianWrench.cpp
-        src/robot/JointState.cpp
-        src/robot/JointPositions.cpp
-        src/robot/JointVelocities.cpp
-        src/robot/JointTorques.cpp
-        src/robot/Jacobian.cpp
-        src/space/dual_quaternion/DualQuaternionState.cpp
-        src/space/dual_quaternion/DualQuaternionPose.cpp
-        src/space/dual_quaternion/DualQuaternionTwist.cpp
-        src/parameters/ParameterInterface.cpp
-        src/parameters/Parameter.cpp
-        src/parameters/Predicate.cpp
-        src/parameters/Event.cpp
-        src/geometry/Shape.cpp
-        src/geometry/Ellipsoid.cpp
+  src/space/SpatialState.cpp
+  src/space/cartesian/CartesianState.cpp
+  src/space/cartesian/CartesianPose.cpp
+  src/space/cartesian/CartesianTwist.cpp
+  src/space/cartesian/CartesianWrench.cpp
+  src/robot/JointState.cpp
+  src/robot/JointPositions.cpp
+  src/robot/JointVelocities.cpp
+  src/robot/JointTorques.cpp
+  src/robot/Jacobian.cpp
+  src/parameters/ParameterInterface.cpp
+  src/parameters/Parameter.cpp
+  src/parameters/Predicate.cpp
+  src/parameters/Event.cpp
+  src/geometry/Shape.cpp
+  src/geometry/Ellipsoid.cpp
 )
+
+if (EXPERIMENTAL_FEATURES)
+  list(APPEND CORE_SOURCES
+    src/space/dual_quaternion/DualQuaternionState.cpp
+    src/space/dual_quaternion/DualQuaternionPose.cpp
+    src/space/dual_quaternion/DualQuaternionTwist.cpp
+  )
+endif ()
 
 add_library(${PROJECT_NAME} SHARED
   ${CORE_SOURCES}

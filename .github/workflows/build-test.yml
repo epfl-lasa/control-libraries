@@ -13,7 +13,7 @@ on:
 jobs:
   build-test-debug:
     runs-on: ubuntu-latest
-    name: Build the source code and run all unit tests in Debug configuration
+    name: Debug configuration test
     steps:
       # First check out the repository
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
 
   build-test-release:
     runs-on: ubuntu-latest
-    name: Build the source code and run all unit tests in Release configuration
+    name: Release configuration test
     steps:
       # First check out the repository
       - name: Checkout

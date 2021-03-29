@@ -145,8 +145,6 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianTwist ee_twist = franka->forward_kinematic(test_configs[config]);
     state_representation::JointVelocities joint_twist = franka->inverse_kinematic(test_configs[config], ee_twist);
-    for (std::size_t joint = 0; joint < franka->get_number_of_joints(); ++joint) {
-      EXPECT_NEAR(joint_twist.get_velocities()[joint], test_configs[config].get_velocities()[joint], tol);
-    }
+    EXPECT_TRUE(joint_twist.get_velocities().isApprox(test_configs[config].get_velocities()));
   }
 }

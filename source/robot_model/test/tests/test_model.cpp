@@ -62,18 +62,18 @@ TEST_F(RobotModelTest, TestJacobianJointNames) {
   state_representation::Jacobian jac = franka->compute_jacobian(dummy);
   for (int i = 0; i < 7; ++i) {
     std::string jname = "panda_joint" + std::to_string(i + 1);
-    EXPECT_STREQ(jname.c_str(), jac.get_joint_names()[i].c_str());
+    EXPECT_EQ(jname, jac.get_joint_names()[i]);
   }
 }
 
 TEST_F(RobotModelTest, TestJacobianFrameNames) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 7);
   state_representation::Jacobian jac = franka->compute_jacobian(dummy);
-  EXPECT_STREQ(jac.get_reference_frame().c_str(), "panda_link0");
-  EXPECT_STREQ(jac.get_frame().c_str(), "panda_link8");
+  EXPECT_EQ(jac.get_reference_frame(), "panda_link0");
+  EXPECT_EQ(jac.get_frame(), "panda_link8");
   state_representation::Jacobian jac2 = franka->compute_jacobian(dummy, "panda_link2");
-  EXPECT_STREQ(jac2.get_reference_frame().c_str(), "panda_link0");
-  EXPECT_STREQ(jac2.get_frame().c_str(), "panda_link2");
+  EXPECT_EQ(jac2.get_reference_frame(), "panda_link0");
+  EXPECT_EQ(jac2.get_frame(), "panda_link2");
 }
 
 TEST_F(RobotModelTest, TestJacobianInvalidFrameName) {
@@ -113,7 +113,7 @@ TEST_F(RobotModelTest, TestCreateURDFFromStringSuccess) {
   EXPECT_EQ(fromCreatedUrdf.get_number_of_joints(), franka->get_number_of_joints());
   ASSERT_EQ(fromCreatedUrdf.get_frames().size(), franka->get_frames().size());
   for (std::size_t frame = 0; frame < franka->get_frames().size(); ++frame) {
-    EXPECT_STREQ(fromCreatedUrdf.get_frames().at(frame).c_str(), franka->get_frames().at(frame).c_str());
+    EXPECT_EQ(fromCreatedUrdf.get_frames().at(frame), franka->get_frames().at(frame));
   }
 }
 

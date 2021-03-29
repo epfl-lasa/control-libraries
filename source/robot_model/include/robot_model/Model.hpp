@@ -236,20 +236,20 @@ public:
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
-   * @param cartesian_states vector of twist
+   * @param cartesian_twist vector of twist
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
-                                                          const std::vector<state_representation::CartesianState>& cartesian_states);
+                                                          const std::vector<state_representation::CartesianTwist>& cartesian_states);
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
-   * @param cartesian_state containing the twist of the end-effector
+   * @param cartesian_twist containing the twist of the end-effector
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
-                                                          const state_representation::CartesianState& cartesian_state);
+                                                          const state_representation::CartesianTwist& cartesian_state);
 
   /**
    * @brief Helper function to print the qp_problem (for debugging)

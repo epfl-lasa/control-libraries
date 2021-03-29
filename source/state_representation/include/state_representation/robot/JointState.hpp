@@ -403,7 +403,7 @@ public:
   JointState operator/(double lambda) const;
 
   /**
-   * @brief Compute the distance between two states as the sum of distances between each features
+   * @brief Compute the distance to another state as the sum of distances between each features
    * @param state the second state
    * @param state_variable_type name of the variable from the JointStateVariable structure to apply
    * the distance on. Default ALL for full distance across all dimensions

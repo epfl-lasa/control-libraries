@@ -31,9 +31,10 @@ num2stdvec = @(A) (['{', strjoin(compose('%f', A), ', ') '}']);
 
 % code generation (declarations)
 fprintf('std::vector<state_representation::JointState> test_configs;\n');
-fprintf('std::vector<std::vector<double>> test_fk_ee_expects;\n');
-fprintf('std::vector<std::vector<double>> test_fk_link_expects;\n');
-fprintf('std::vector<std::vector<double>> test_velocity_fk_expects;\n');
+fprintf('std::vector<state_representation::CartesianPose> test_fk_ee_expects;\n');
+fprintf('std::vector<state_representation::CartesianPose> test_fk_link4_expects;\n');
+fprintf('std::vector<state_representation::CartesianTwist> test_velocity_fk_expects;\n');
+fprintf('Eigen::Matrix<double, 6, 1> twist;\n');
 
 % generate the configurations
 for conf = 1:nConfigurations
@@ -41,16 +42,17 @@ for conf = 1:nConfigurations
     q = robot.randomConfiguration;
     v = rand(size(q))*2 - 1;
     
-    % jacobians
+    % transforms
+    ee_T = robot.getTransform(q, 'panda_link8');
+    link4_T = robot.getTransform(q, 'panda_link4');
+    
+    % jacobian
     ee_jac = robot.geometricJacobian(q, 'panda_link8');
-    link4_jac = robot.geometricJacobian(q, 'panda_link4');
     
     % expected results
-    ee_pose = ee_jac * q';
-    ee_pose = [ee_pose(1:3); eul2quat(ee_pose(4:end)')'];
-    link4_pose = link4_jac * q';
-    link4_pose = [link4_pose(1:3); eul2quat(link4_pose(4:end)')'];
-    ee_twist = ee_jac * v';
+    ee_pose = [tform2trvec(ee_T), tform2quat(ee_T)]; % (1x7)
+    link4_pose = [tform2trvec(link4_T), tform2quat(link4_T)]; % (1x7)
+    ee_twist = ee_jac * v'; % (1x6)
     
     % code generation (definitions)
     fprintf('\n// Random test configuration %i:\n', conf);
@@ -61,7 +63,12 @@ for conf = 1:nConfigurations
     fprintf('test_configs.push_back(config%i);\n', conf);
     
     fprintf('\n// Expected results for configuration %i:\n', conf);
-    fprintf('test_fk_ee_expects.push_back(%s);\n', num2stdvec(ee_pose));
-    fprintf('test_fk_link4_expects.push_back(%s);\n', num2stdvec(link4_pose));
-    fprintf('test_velocity_fk_expects.push_back(%s);\n', num2stdvec(ee_twist));
+    fprintf(['test_fk_ee_expects.emplace_back(state_representation::CartesianPose' ...
+        '("ee", Eigen::Vector3d(%f, %f, %f), Eigen::Quaterniond(%f, %f, %f, %f)));\n'], ...
+        ee_pose(1:3), ee_pose(4:7));
+    fprintf(['test_fk_link4_expects.emplace_back(state_representation::CartesianPose' ...
+        '("link4", Eigen::Vector3d(%f, %f, %f), Eigen::Quaterniond(%f, %f, %f, %f)));\n'], ...
+        link4_pose(1:3), link4_pose(4:7));
+    fprintf('twist << %f, %f, %f, %f, %f, %f;\n', ee_twist);
+    fprintf('test_velocity_fk_expects.emplace_back(state_representation::CartesianTwist("ee", twist));\n');
 end

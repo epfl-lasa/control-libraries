@@ -232,14 +232,38 @@ public:
                                                                     const std::vector<std::string>& frame_names);
 
   /**
- * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
- * @param joint_state the joint state of the robot
- * @param frame_name name of the frame at which we want to extract the pose
- * @return the pose of the desired frame
- */
+   * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
+   * @param joint_state the joint state of the robot
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @return the pose of the desired frame
+   */
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        std::string frame_name = "");
 
+  /**
+   * @brief it performes the discrete integral taking account the joint limits
+   * @param q the joint positions of the robot
+   * @param dq the joint velocities for the robot
+   * @param dt the incremental time
+   * @return the q + dq*dt wraped and clamped according to the joint limits
+   */
+  state_representation::JointPositions integrate_joint_angles(const state_representation::JointPositions& q,
+                                                            const state_representation::JointVelocities& dq,
+                                                            const double& dt);
+  
+  Eigen::MatrixXd clamping_weighted_least_norm(const state_representation::JointPositions& joint_positions, const double& margin);
+  Eigen::VectorXd cwln_psi(const state_representation::JointPositions& joint_positions, const double& margin);
+  void clamp_joint_positions(state_representation::JointPositions& joint_positions);
+
+  struct inverse_geometry_parameters
+  {
+      double damp;
+      double alpha;
+      double margin;
+      double tolerance;
+      int max_number_of_iteration;
+  };
+ 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
    * @param desired_cartesian_state containing the desired pose of the end-effector
@@ -248,8 +272,8 @@ public:
    * @return the joint state of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            bool& success, std::string frame_name="", const double& tolerance=1e-4,
-                                                            const int& max_number_of_iteration=1000);
+                                                            bool& success, std::string frame_name="",
+                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.3, 1e-3, 1000});
 
 
   /**
@@ -262,8 +286,8 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
-                                                            bool& success, std::string frame_name="", const double& tolerance=1e-4,
-                                                            const int& max_number_of_iteration=1000);
+                                                            bool& success, std::string frame_name="",
+                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.3, 1e-3, 1000});
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

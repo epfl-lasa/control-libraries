@@ -102,7 +102,7 @@ TEST_F(RobotModelTest, TestInverseGeometry) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     success=false;
     state_representation::CartesianPose reference = franka->forward_geometry(test_configs[config],"panda_link8");
-    state_representation::JointPositions q = franka->inverse_geometry(reference, success, "panda_link8", 1e-4, 1000);
+    state_representation::JointPositions q = franka->inverse_geometry(reference, success, "panda_link8");
     state_representation::CartesianPose X = franka->forward_geometry(q,"panda_link8");
     EXPECT_TRUE(success);
     EXPECT_NEAR(reference.get_position()[0], X.get_position()[0], 1e-4);

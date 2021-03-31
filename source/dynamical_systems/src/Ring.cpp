@@ -118,6 +118,11 @@ Eigen::Vector3d Ring::calculate_local_angular_velocity(const CartesianPose& pose
     return local_angular_velocity;
   }
 
+  // clamp linear velocity magnitude to half the position, so that the angular displacement
+  // around the local Z axis caused by the linear velocity stays within one quadrant
+  if (linear_velocity2d.norm() > (0.5 * position2d.norm())) {
+    linear_velocity2d = linear_velocity2d.normalized() * (0.5 * position2d).norm();
+  }
   double projection = position2d.normalized().dot((position2d + linear_velocity2d).normalized());
   double dthetaZ = 0;
   if (1 - abs(projection) > 1e-7) {

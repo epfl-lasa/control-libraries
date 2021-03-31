@@ -90,6 +90,25 @@ TEST_F(RingDSTest, PointsNearRadius) {
   EXPECT_NEAR(twist.get_linear_velocity().y(), 0, tol);
 }
 
+TEST_F(RingDSTest, BehaviourNearBoundaryAtHighSpeeds) {
+  radius = 1;
+  width = 0.1;
+  speed = 10;
+  field_strength = 2;
+  dynamical_systems::Ring ring(center, radius, width, speed, field_strength);
+  state_representation::CartesianTwist twist;
+
+  current_pose.set_position(0, radius + 1.001 * width, 0);
+  twist = ring.evaluate(current_pose);
+  double angular_speed = twist.get_angular_velocity().norm();
+  current_pose.set_position(0, radius + 1.000 * width, 0);
+  twist = ring.evaluate(current_pose);
+  EXPECT_NEAR(twist.get_angular_velocity().norm(), angular_speed, 0.1);
+  current_pose.set_position(0, radius + 0.999 * width, 0);
+  twist = ring.evaluate(current_pose);
+  EXPECT_NEAR(twist.get_angular_velocity().norm(), angular_speed, 0.1);
+}
+
 TEST_F(RingDSTest, ConvergenceOnRadius) {
   dynamical_systems::Ring ring(center, radius);
 

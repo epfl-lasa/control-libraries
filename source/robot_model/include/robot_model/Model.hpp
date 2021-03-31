@@ -95,6 +95,28 @@ private:
                                         const Eigen::VectorXd& lower_limits,
                                         const Eigen::VectorXd& upper_limits);
 
+  /**
+   * @brief Compute the weighted matrix of the algorithm "Clamping Weighted Least-Norm"
+   * @param joint_positions the joint position at the current iteration in the inverse geometry problem
+   * @param margin the distance from the joint limit on which we want to penalize the joint position
+   * @return the weighted matrix
+   */
+  Eigen::MatrixXd cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, const double& margin);
+
+  /**
+   * @brief Compute the repulsive potential field of the algorithm "Clamping Weighted Least-Norm"
+   * @param joint_positions the joint position at the current iteration in the inverse geometry problem
+   * @param margin the distance from the joint limit on which we want to penalize the joint position
+   * @return the repulsive potential field
+   */
+  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, const double& margin);
+
+  /**
+   * @brief Clamp the joint positions according to the joint limits
+   * @param joint_positions the joint position we want to clamp
+   */
+  void clamp_joint_positions(state_representation::JointPositions& joint_positions);
+
 public:
   /**
    * @brief Constructor with robot name and path to URDF file
@@ -240,25 +262,21 @@ public:
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        std::string frame_name = "");
 
-  /**
-   * @brief it performes the discrete integral taking account the joint limits
-   * @param q the joint positions of the robot
-   * @param dq the joint velocities for the robot
-   * @param dt the incremental time
-   * @return the q + dq*dt wraped and clamped according to the joint limits
-   */
-  state_representation::JointPositions integrate_joint_angles(const state_representation::JointPositions& q,
-                                                            const state_representation::JointVelocities& dq,
-                                                            const double& dt);
-  
-  Eigen::MatrixXd clamping_weighted_least_norm(const state_representation::JointPositions& joint_positions, const double& margin);
-  Eigen::VectorXd cwln_psi(const state_representation::JointPositions& joint_positions, const double& margin);
-  void clamp_joint_positions(state_representation::JointPositions& joint_positions);
 
+  /**
+   * @brief parameters for the inverse geometry
+   * @param damp damping added to the diagonal of J*Jt in order to avoid the singularity
+   * @param alpha alpha €]0,1], it is used to make Newthon-Raphson method less aggressive
+   * @param gamma gamma €]0,1], represents the strength of the repulsive potential field in the Clamping Weighted Least-Norm method
+   * @param margin the distance from the joint limit on which we want to penalize the joint position
+   * @param tolerance the maximum error tolerated
+   * @param max_number_of_iteration the maximum number of iteration that the algorithm do for solving the inverse geometry
+   */
   struct inverse_geometry_parameters
   {
       double damp;
       double alpha;
+      double gamma;
       double margin;
       double tolerance;
       int max_number_of_iteration;
@@ -272,8 +290,8 @@ public:
    * @return the joint state of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            bool& success, std::string frame_name="",
-                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.3, 1e-3, 1000});
+                                                            std::string frame_name="",
+                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
 
 
   /**
@@ -286,8 +304,8 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
-                                                            bool& success, std::string frame_name="",
-                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.3, 1e-3, 1000});
+                                                            std::string frame_name="",
+                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
@@ -313,6 +331,14 @@ public:
    */
   state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
                                                           const state_representation::CartesianTwist& cartesian_state);
+
+  
+  /**
+   * @brief It checks if the joint positions are inside at their limits
+   * @param joint_positions the joint positions we want to analyze
+   * @return true if the joint are inside their limits, false otherwise.
+   */
+  bool are_the_joint_positions_in_their_limits(const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief Helper function to print the qp_problem (for debugging)

@@ -2,12 +2,53 @@
 SCRIPT=$(readlink -f "${BASH_SOURCE[0]}")
 SOURCE_PATH=$(dirname "$SCRIPT")
 
-# options
-# TODO: parse arguments and provide --help to set these options
 BUILD_TESTING="OFF"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
+
+FAIL_MESSAGE="The provided input arguments are not valid.
+Run the script with the '-h' or '--help' argument."
+
+HELP_MESSAGE="Usage: ./install.sh [OPTIONS]
+
+An install script for the control libraries.
+
+Options:
+  -c, --controllers        Build the controllers library ('ON'|'OFF')
+  -d, --dynamical_systems  Build the dynamical systems library ('ON'|'OFF')
+  -r, --robot_model        Build the robot model library ('ON'|'OFF')
+  -t, --testing            Build and run the unit tests ('ON'|'OFF')
+  -h, --help               Show this help message"
+
+while [ "$#" -gt 0 ]; do
+  if [[ "$1" != "-h" && "$1" != "--help" ]]; then
+    if [[ "$1" =~ "=" ]]; then # if '=' in argument
+      if [[ "${1#*=}" != "ON" && "${1#*=}" != "OFF" ]]; then
+        echo "$FAIL_MESSAGE"; exit 1
+      fi
+    else
+      if [[ "$2" != "ON" ]] && [[ "$2" != "OFF" ]]; then # if no '=' in argument
+        echo "$FAIL_MESSAGE"; exit 1
+      fi
+    fi
+  fi
+  case "$1" in
+    -t) BUILD_TESTING="$2"; shift 2;;
+    -c) BUILD_CONTROLLERS="$2"; shift 2;;
+    -d) BUILD_DYNAMICAL_SYSTEMS="$2"; shift 2;;
+    -r) BUILD_ROBOT_MODEL="$2"; shift 2;;
+    -h) echo "$HELP_MESSAGE"; exit 1;;
+
+    --testing=*) BUILD_TESTING="${1#*=}"; shift 1;;
+    --controllers=*) BUILD_CONTROLLERS="${1#*=}"; shift 1;;
+    --dynamical_systems=*) BUILD_DYNAMICAL_SYSTEMS="${1#*=}"; shift 1;;
+    --robot_model=*) BUILD_ROBOT_MODEL="${1#*=}"; shift 1;;
+    --help) echo "$HELP_MESSAGE"; exit 1;;
+
+    -*) echo "Unknown option: $1" >&2; echo "$FAIL_MESSAGE"; exit 1;;
+  esac
+done
 
 # install base dependencies
 apt-get update && apt-get install -y libeigen3-dev

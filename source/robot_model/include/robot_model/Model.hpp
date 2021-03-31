@@ -331,15 +331,7 @@ public:
    */
   state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
                                                           const state_representation::CartesianTwist& cartesian_state);
-
   
-  /**
-   * @brief It checks if the joint positions are inside at their limits
-   * @param joint_positions the joint positions we want to analyze
-   * @return true if the joint are inside their limits, false otherwise.
-   */
-  bool are_the_joint_positions_in_their_limits(const state_representation::JointPositions& joint_positions);
-
   /**
    * @brief Helper function to print the qp_problem (for debugging)
    */

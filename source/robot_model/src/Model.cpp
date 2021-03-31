@@ -3,6 +3,7 @@
 #include <pinocchio/algorithm/frames.hpp>
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
+#include "robot_model/exceptions/IKDoesNotConverge.hpp"
 #include <math.h>
 
 namespace robot_model {
@@ -301,20 +302,6 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
   return Psi;
 }
 
-bool Model::are_the_joint_positions_in_their_limits(const state_representation::JointPositions& joint_positions){
-  for(int i=0; i < this->robot_model_.nq; i++){
-    if(joint_positions.get_positions()[i] < this->robot_model_.lowerPositionLimit[i] ||
-                                            joint_positions.get_positions()[i] > this->robot_model_.upperPositionLimit[i]){
-      return false;
-    }    
-  }
-  return true;
-}
-
-// bool is_in_reachable_space(){
-//   return true;
-// }
-
 void Model::clamp_joint_positions(state_representation::JointPositions& joint_positions) {
   Eigen::VectorXd q_clamped = joint_positions.get_positions();
   for(int i=0; i < this->robot_model_.nq; i++){
@@ -337,9 +324,6 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     if (!this->robot_model_.existFrame(frame_name)) {
       throw (exceptions::FrameNotFoundException(frame_name));
     }
-  }
-  if(!this->are_the_joint_positions_in_their_limits(current_joint_state)){
-    std::cout << "!!! Be careful, the provided joint position is out of the boundaries !!! " << std::endl;
   }
 
   state_representation::JointPositions q(current_joint_state);
@@ -398,7 +382,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   }
   
   if(i >= params.max_number_of_iteration){
-    throw (exceptions::IKDoesNotConverge(max_number_of_iteration, err.norm()));
+    throw (exceptions::IKDoesNotConverge(params.max_number_of_iteration, err.array().abs().maxCoeff()));
   }
   
   return q;

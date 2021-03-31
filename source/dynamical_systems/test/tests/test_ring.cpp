@@ -195,7 +195,7 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
 
   current_pose.set_position(radius, 0, 0);
 
-  Eigen::Quaterniond rotation = Eigen::Quaterniond::UnitRandom();
+  Eigen::Quaterniond rotation = Eigen::Quaterniond(1, 0, 1, 0).normalized(); // Eigen::Quaterniond::UnitRandom();
 
   // if the rotation offset is the same as the current orientation, the angular velocity at
   // position {radius, 0, 0} is always zero
@@ -206,8 +206,45 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
 
   // now if the current pose has some orientation relative to the rotation offset,
   // it will yield the expected angular velocity of only that difference
-  current_pose.set_orientation(ring.get_rotation_offset() * Eigen::Quaterniond(1, 1, 0, 0).normalized());
+  current_pose.set_orientation(Eigen::Quaterniond(1, 1, 0, 0).normalized() * ring.get_rotation_offset());
   twist = ring.evaluate(current_pose);
+  EXPECT_NEAR(twist.get_angular_velocity().x(), -M_PI_2 * ring.get_angular_gain(), tol);
+  EXPECT_NEAR(twist.get_angular_velocity().y(), 0, tol);
+  EXPECT_NEAR(twist.get_angular_velocity().z(), 0, tol);
+
+  // rotate the center plane in the base frame, and set the current position to have the same relative
+  // offset that gives a zero command (no rotation offset)
+  center.set_orientation(Eigen::Quaterniond::UnitRandom());
+  ring.set_center(center);
+  current_pose = state_representation::CartesianPose("B", Eigen::Vector3d(radius, 0, 0), "A");
+  current_pose = center * current_pose;
+  ring.set_rotation_offset(Eigen::Quaterniond::Identity());
+  twist = ring.evaluate(current_pose);
+  EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, tol);
+
+  // for any rotation offset in a rotated center plane, the output will
+  // still be zero if the current position and orientation matches the rotation offset
+  rotation = Eigen::Quaterniond::UnitRandom();
+  ring.set_rotation_offset(rotation);
+  current_pose = state_representation::CartesianPose("B",
+                                                     Eigen::Vector3d(radius, 0, 0),
+                                                     ring.get_rotation_offset(),
+                                                     "A");
+  current_pose = center * current_pose;
+  twist = ring.evaluate(current_pose);
+  EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, tol);
+
+  // any additional orientation in the ring frame on top of the rotation offset
+  // should give the same local command, regardless of the center frame
+  current_pose = state_representation::CartesianPose("B",
+                                                     Eigen::Vector3d(radius, 0, 0),
+                                                     Eigen::Quaterniond(1, 1, 0, 0).normalized()  * ring.get_rotation_offset(),
+                                                     "A");
+  current_pose = center * current_pose;
+  twist = ring.evaluate(current_pose);
+
+  // check the twist in the local frame
+  twist = state_representation::CartesianState(center).inverse() * twist;
   EXPECT_NEAR(twist.get_angular_velocity().x(), -M_PI_2 * ring.get_angular_gain(), tol);
   EXPECT_NEAR(twist.get_angular_velocity().y(), 0, tol);
   EXPECT_NEAR(twist.get_angular_velocity().z(), 0, tol);

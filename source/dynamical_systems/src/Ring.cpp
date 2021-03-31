@@ -32,7 +32,7 @@ CartesianState Ring::compute_dynamics(const CartesianState& state) const {
   CartesianPose pose(state);
   pose = this->get_center().inverse() * pose;
   // apply the rotation offset
-  pose.set_orientation(this->get_rotation_offset().conjugate() * pose.get_orientation());
+  pose.set_orientation(pose.get_orientation() * this->get_rotation_offset().conjugate());
 
   CartesianTwist twist(pose.get_name(), pose.get_reference_frame());
   double local_field_strength;
@@ -134,8 +134,6 @@ void Ring::set_base_frame(const state_representation::CartesianState& base_frame
   auto center = this->get_center();
   center.set_reference_frame(base_frame.get_name());
   this->set_center(center);
-  // update reference frame of rotation offset
-  this->set_rotation_offset(this->get_rotation_offset());
 }
 
 void Ring::set_center(const CartesianPose& center) {
@@ -155,7 +153,7 @@ void Ring::set_center(const CartesianPose& center) {
 }
 
 void Ring::set_rotation_offset(const Eigen::Quaterniond& rotation) {
-  auto pose = CartesianPose::Identity("rotation", this->get_base_frame().get_name());
+  auto pose = CartesianPose::Identity("rotation", this->get_center().get_name());
   pose.set_orientation(rotation);
   this->rotation_offset_->set_value(pose);
 }

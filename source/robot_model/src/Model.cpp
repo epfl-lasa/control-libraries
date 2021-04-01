@@ -1,6 +1,7 @@
 #include "robot_model/Model.hpp"
 #include <fstream>
 #include <pinocchio/algorithm/frames.hpp>
+#include <pinocchio/algorithm/joint-configuration.hpp>
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 #include "robot_model/exceptions/IKDoesNotConverge.hpp"
@@ -262,39 +263,38 @@ std::vector<state_representation::CartesianPose> Model::forward_geometry(const s
   return this->forward_geometry(joint_state, frame_ids);
 }
 
-Eigen::MatrixXd Model::cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, const double& margin) {
+Eigen::MatrixXd Model::cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, const double margin) {
   Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
-  for(int n=0; n < this->robot_model_.nq; n++){
-    double d=1;
-    if(joint_positions.get_positions()[n] < this->robot_model_.lowerPositionLimit[n]+margin){
-      d = (this->robot_model_.lowerPositionLimit[n]+margin - joint_positions.get_positions()[n])/margin;
+  for (int n = 0; n < this->robot_model_.nq; n++) {
+    double d = 1;
+    W_b(n, n) = 1;
+    if (joint_positions.get_positions()[n] < this->robot_model_.lowerPositionLimit[n] + margin) {
+      if (joint_positions.get_positions()[n] < this->robot_model_.lowerPositionLimit[n]) {
+        W_b(n, n) = 0;
+      } else {
+        d = (this->robot_model_.lowerPositionLimit[n] + margin - joint_positions.get_positions()[n]) / margin;
+        W_b(n, n) = -2 * d * d * d + 3 * d * d;
+      }
+    } else if (this->robot_model_.upperPositionLimit[n] - margin < joint_positions.get_positions()[n]) {
+      if (this->robot_model_.upperPositionLimit[n] < joint_positions.get_positions()[n]) {
+        W_b(n, n) = 0;
+      } else {
+        d = (joint_positions.get_positions()[n] - (this->robot_model_.upperPositionLimit[n] - margin)) / margin;
+        W_b(n, n) = -2 * d * d * d + 3 * d * d;
+      }
     }
-    else if(this->robot_model_.upperPositionLimit[n] - margin < joint_positions.get_positions()[n]){
-      d = (joint_positions.get_positions()[n] - (this->robot_model_.upperPositionLimit[n]-margin))/margin;
-    }
-    if((joint_positions.get_positions()[n] < this->robot_model_.lowerPositionLimit[n]) || (this->robot_model_.upperPositionLimit[n] < joint_positions.get_positions()[n])){
-      W_b(n,n) = 0;
-    }
-    else if((joint_positions.get_positions()[n] < this->robot_model_.lowerPositionLimit[n]+margin) || (this->robot_model_.upperPositionLimit[n] - margin < joint_positions.get_positions()[n])){
-      W_b(n,n) = -2*d*d*d + 3*d*d;
-    }
-    else{
-      W_b(n,n) = 1;
-    }      
   }
-  
   return W_b;
 }
 
-Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, const double& margin) {
+Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, double margin) {
   Eigen::VectorXd Psi(this->robot_model_.nq);
   Eigen::VectorXd q = joint_positions.get_positions();
-  for(int i = 0; i < this->robot_model_.nq; i++) {
+  for (int i = 0; i < this->robot_model_.nq; i++) {
     Psi[i] = 0;
     if(q[i] < this->robot_model_.lowerPositionLimit[i] + margin) {
       Psi[i] = this->robot_model_.upperPositionLimit[i] - margin - std::max(q[i], this->robot_model_.lowerPositionLimit[i]);
-    }
-    else if(this->robot_model_.upperPositionLimit[i] - margin < q[i]) {
+    } else if(this->robot_model_.upperPositionLimit[i] - margin < q[i]) {
       Psi[i] = this->robot_model_.lowerPositionLimit[i] + margin - std::min(q[i], this->robot_model_.upperPositionLimit[i]);
     }     
   }
@@ -304,22 +304,22 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 
 void Model::clamp_joint_positions(state_representation::JointPositions& joint_positions) {
   Eigen::VectorXd q_clamped = joint_positions.get_positions();
-  for(int i = 0; i < this->robot_model_.nq; i++) {
-    q_clamped[i] = std::min(std::max(q_clamped[i], this->robot_model_.lowerPositionLimit[i]), this->robot_model_.upperPositionLimit[i]);
+  for (int i = 0; i < this->robot_model_.nq; i++) {
+    q_clamped[i] = std::min(std::max(q_clamped[i], this->robot_model_.lowerPositionLimit[i]),
+                            this->robot_model_.upperPositionLimit[i]);
   }
   joint_positions.set_positions(q_clamped);
 }
 
 state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            const state_representation::JointState& current_joint_state,
-                                                            std::string frame_name,
-                                                            Model::inverse_geometry_parameters params) {
+                                                              const state_representation::JointState& current_joint_state,
+                                                              std::string frame_name,
+                                                              const Model::InverseGeometryParameters& params) {
 
   if (frame_name.empty()) {
     // get last frame if none specified
     frame_name = this->robot_model_.frames.back().name;
-  }
-  else {
+  } else {
     // throw error if specified frame does not exist
     if (!this->robot_model_.existFrame(frame_name)) {
       throw (exceptions::FrameNotFoundException(frame_name));
@@ -345,51 +345,48 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
   Eigen::MatrixXd W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
   Eigen::VectorXd psi(this->robot_model_.nq);
-
-  this->forward_geometry(q, frame_id);
     
-  // error in SE(3)
-  const pinocchio::SE3 dMf = oMdes.actInv(this->robot_data_.oMf[frame_id]);
+  // error declaration
+  pinocchio::SE3 dMf;
   typedef Eigen::Matrix<double, 6, 1> Vector6d;
-  Vector6d err = pinocchio::log6(dMf).toVector();
+  Vector6d err;
   
   int i=0;
-  while((err.array().abs().maxCoeff() > params.tolerance) && (i < params.max_number_of_iterations))
-  {
-    pinocchio::computeFrameJacobian(this->robot_model_,this->robot_data_,q.get_positions(),frame_id, J);
+  while (i < params.max_number_of_iterations) {
+    this->forward_geometry(q, frame_id);
+    
+    // compute error in SE(3)
+    dMf = oMdes.actInv(this->robot_data_.oMf[frame_id]);
+    err = pinocchio::log6(dMf).toVector();
+
+    if(err.array().abs().maxCoeff() <= params.tolerance) {
+      return q;
+    }
+
+    pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, q.get_positions(), frame_id, J);
     
     // Clamping Weighted Least-Norm method
     W_b = this->cwln_weighted_matrix(q, params.margin);
-    W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
+    W_c = params.gamma * (Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b);
     psi = this->cwln_repulsive_potential_field(q, params.margin);
     J_b = J * W_b;
     pinocchio::Data::Matrix6 JJt;
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    v.noalias() = params.gamma * W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(-err - params.gamma * J * W_c * psi));
+    v.noalias() = W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(-err - J * W_c * psi));
     dq.set_velocities(v);
     
     q = q + dq * dt;
     this->clamp_joint_positions(q);
 
-    this->forward_geometry(q, frame_id);
-    
-    // error in SE(3)
-    const pinocchio::SE3 dMf = oMdes.actInv(this->robot_data_.oMf[frame_id]);
-    err = pinocchio::log6(dMf).toVector();
-
     i++;
   }
   
-  if(i >= params.max_number_of_iterations){
-    throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
-  }
-  
-  return q;
+  throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
 }
 
 state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            std::string frame_name, Model::inverse_geometry_parameters params) {
+                                                            std::string frame_name, const Model::InverseGeometryParameters& params) {
   Eigen::VectorXd q( pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions pos(this->get_robot_name(),q);
   

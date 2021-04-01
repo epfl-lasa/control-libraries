@@ -8,7 +8,6 @@
 #include <pinocchio/multibody/data.hpp>
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
-#include <pinocchio/algorithm/joint-configuration.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/robot/Jacobian.hpp>
@@ -101,7 +100,7 @@ private:
    * @param margin the distance from the joint limit on which we want to penalize the joint position
    * @return the weighted matrix
    */
-  Eigen::MatrixXd cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, const double& margin);
+  Eigen::MatrixXd cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, double margin);
 
   /**
    * @brief Compute the repulsive potential field of the algorithm "Clamping Weighted Least-Norm"
@@ -109,7 +108,7 @@ private:
    * @param margin the distance from the joint limit on which we want to penalize the joint position
    * @return the repulsive potential field
    */
-  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, const double& margin);
+  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, double margin);
 
   /**
    * @brief Clamp the joint positions according to the joint limits
@@ -272,7 +271,7 @@ public:
    * @param tolerance the maximum error tolerated between the desired cartesian state and the one obtained by the returned joint positions
    * @param max_number_of_iterations the maximum number of iterations that the algorithm do for solving the inverse geometry
    */
-  struct inverse_geometry_parameters
+  struct InverseGeometryParameters
   {
       double damp;
       double alpha;
@@ -290,8 +289,8 @@ public:
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            std::string frame_name="",
-                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
+                                                            std::string frame_name = "",
+                                                            const InverseGeometryParameters& params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
 
 
   /**
@@ -304,8 +303,8 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
-                                                            std::string frame_name="",
-                                                            inverse_geometry_parameters params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
+                                                            std::string frame_name = "",
+                                                            const InverseGeometryParameters& params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

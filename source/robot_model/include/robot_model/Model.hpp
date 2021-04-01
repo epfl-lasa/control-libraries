@@ -269,8 +269,8 @@ public:
    * @param alpha alpha €]0,1], it is used to make Newthon-Raphson method less aggressive
    * @param gamma gamma €]0,1], represents the strength of the repulsive potential field in the Clamping Weighted Least-Norm method
    * @param margin the distance from the joint limit on which we want to penalize the joint position
-   * @param tolerance the maximum error tolerated
-   * @param max_number_of_iteration the maximum number of iteration that the algorithm do for solving the inverse geometry
+   * @param tolerance the maximum error tolerated between the desired cartesian state and the one obtained by the returned joint positions
+   * @param max_number_of_iterations the maximum number of iterations that the algorithm do for solving the inverse geometry
    */
   struct inverse_geometry_parameters
   {
@@ -279,15 +279,15 @@ public:
       double gamma;
       double margin;
       double tolerance;
-      int max_number_of_iteration;
+      int max_number_of_iterations;
   };
  
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param newton_raphson if it is true the inegration time is proportional to the error between the end-effector and its desired position
-   * @return the joint state of the robot
+   * @param inverse_geometry_parameters set of parameters for tunning the algorithm
+   * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             std::string frame_name="",
@@ -299,8 +299,8 @@ public:
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param current_joint_state current state of the robot containing the generalized position
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param newton_raphson if it is true the inegration time is proportional to the error between the end-effector and its desired position
-   * @return the joint state of the robot
+   * @param inverse_geometry_parameters set of parameters for tunning the algorithm
+   * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,

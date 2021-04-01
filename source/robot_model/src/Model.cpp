@@ -289,12 +289,12 @@ Eigen::MatrixXd Model::cwln_weighted_matrix(const state_representation::JointPos
 Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, const double& margin) {
   Eigen::VectorXd Psi(this->robot_model_.nq);
   Eigen::VectorXd q = joint_positions.get_positions();
-  for(int i=0; i < this->robot_model_.nq; i++){
-    Psi[i]=0;
-    if(q[i] < this->robot_model_.lowerPositionLimit[i] + margin){
+  for(int i = 0; i < this->robot_model_.nq; i++) {
+    Psi[i] = 0;
+    if(q[i] < this->robot_model_.lowerPositionLimit[i] + margin) {
       Psi[i] = this->robot_model_.upperPositionLimit[i] - margin - std::max(q[i], this->robot_model_.lowerPositionLimit[i]);
     }
-    else if(this->robot_model_.upperPositionLimit[i] - margin < q[i]){
+    else if(this->robot_model_.upperPositionLimit[i] - margin < q[i]) {
       Psi[i] = this->robot_model_.lowerPositionLimit[i] + margin - std::min(q[i], this->robot_model_.upperPositionLimit[i]);
     }     
   }
@@ -304,7 +304,7 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 
 void Model::clamp_joint_positions(state_representation::JointPositions& joint_positions) {
   Eigen::VectorXd q_clamped = joint_positions.get_positions();
-  for(int i=0; i < this->robot_model_.nq; i++){
+  for(int i = 0; i < this->robot_model_.nq; i++) {
     q_clamped[i] = std::min(std::max(q_clamped[i], this->robot_model_.lowerPositionLimit[i]), this->robot_model_.upperPositionLimit[i]);
   }
   joint_positions.set_positions(q_clamped);
@@ -333,7 +333,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   
   const pinocchio::SE3 oMdes(desired_cartesian_state.get_orientation().toRotationMatrix(), desired_cartesian_state.get_position());
   
-  // 1 second pour le Newton-Raphson algorithm
+  // 1 second for the Newton-Raphson method
   std::chrono::nanoseconds dt((int)(1e9));
 
   pinocchio::Data::Matrix6x J(6,this->robot_model_.nq);
@@ -354,7 +354,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   Vector6d err = pinocchio::log6(dMf).toVector();
   
   int i=0;
-  while((err.array().abs().maxCoeff() > params.tolerance) && (i < params.max_number_of_iteration))
+  while((err.array().abs().maxCoeff() > params.tolerance) && (i < params.max_number_of_iterations))
   {
     pinocchio::computeFrameJacobian(this->robot_model_,this->robot_data_,q.get_positions(),frame_id, J);
     
@@ -362,14 +362,14 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     W_b = this->cwln_weighted_matrix(q, params.margin);
     W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
     psi = this->cwln_repulsive_potential_field(q, params.margin);
-    J_b = J*W_b;
+    J_b = J * W_b;
     pinocchio::Data::Matrix6 JJt;
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
     v.noalias() = params.gamma * W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(-err - params.gamma * J * W_c * psi));
     dq.set_velocities(v);
     
-    q = q + dq*dt;
+    q = q + dq * dt;
     this->clamp_joint_positions(q);
 
     this->forward_geometry(q, frame_id);
@@ -381,8 +381,8 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     i++;
   }
   
-  if(i >= params.max_number_of_iteration){
-    throw (exceptions::IKDoesNotConverge(params.max_number_of_iteration, err.array().abs().maxCoeff()));
+  if(i >= params.max_number_of_iterations){
+    throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
   }
   
   return q;

@@ -346,4 +346,43 @@ void Model::print_qp_problem() {
     std::cout << this->upper_bound_constraints_(i) << std::endl;
   }
 }
+
+bool Model::in_range(const state_representation::JointPositions& joint_positions) {
+  return this->in_range(joint_positions.get_positions(), this->robot_model_.lowerPositionLimit,
+                                                         this->robot_model_.upperPositionLimit);
+}
+
+bool Model::in_range(const state_representation::JointVelocities& joint_velocities) {
+  return this->in_range(joint_velocities.get_velocities(), -this->robot_model_.velocityLimit,
+                                                            this->robot_model_.velocityLimit);
+}
+
+bool Model::in_range(const state_representation::JointTorques& joint_torques) {
+  return this->in_range(joint_torques.get_torques(), -this->robot_model_.effortLimit,
+                                                      this->robot_model_.effortLimit);
+}
+
+bool Model::in_range(const state_representation::JointState& joint_states) {
+  bool p = this->in_range(joint_states.get_positions(), this->robot_model_.lowerPositionLimit,
+                                                        this->robot_model_.upperPositionLimit);
+
+  bool v = this->in_range(joint_states.get_velocities(), -this->robot_model_.velocityLimit,
+                                                          this->robot_model_.velocityLimit);
+
+  bool t = this->in_range(joint_states.get_torques(), -this->robot_model_.effortLimit,
+                                                       this->robot_model_.effortLimit);
+  
+  return p && v && t;
+}
+
+bool Model::in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
+                                                    const Eigen::VectorXd& upper_limits) {
+  for (int i = 0; i < vector.size(); i++) {
+    if (vector[i] < lower_limits[i] || vector[i] > upper_limits[i]) {
+      return false;
+    }    
+  }
+  return true;
+}
+
 }// namespace robot_model

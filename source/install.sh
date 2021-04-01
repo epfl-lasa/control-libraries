@@ -2,48 +2,31 @@
 SCRIPT=$(readlink -f "${BASH_SOURCE[0]}")
 SOURCE_PATH=$(dirname "$SCRIPT")
 
-BUILD_TESTING="OFF"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
+BUILD_TESTING="OFF"
 
 FAIL_MESSAGE="The provided input arguments are not valid.
-Run the script with the '-h' or '--help' argument."
+Run the script with the '--help' argument."
 
 HELP_MESSAGE="Usage: ./install.sh [OPTIONS]
 
 An install script for the control libraries.
 
 Options:
-  -c, --controllers        Build the controllers library ('ON'|'OFF')
-  -d, --dynamical_systems  Build the dynamical systems library ('ON'|'OFF')
-  -r, --robot_model        Build the robot model library ('ON'|'OFF')
-  -t, --testing            Build and run the unit tests ('ON'|'OFF')
-  -h, --help               Show this help message"
+  --no-controllers         Exclude the controllers library
+  --no-dynamical-systems   Exclude the dynamical systems library
+  --no-robot-model         Exclude the robot model library
+  --build-tests            Build the unittest targets
+  --help                   Show this help message"
 
 while [ "$#" -gt 0 ]; do
-  if [[ "$1" != "-h" && "$1" != "--help" ]]; then
-    if [[ "$1" =~ "=" ]]; then # if '=' in argument
-      if [[ "${1#*=}" != "ON" && "${1#*=}" != "OFF" ]]; then
-        echo "$FAIL_MESSAGE"; exit 1
-      fi
-    else
-      if [[ "$2" != "ON" ]] && [[ "$2" != "OFF" ]]; then # if no '=' in argument
-        echo "$FAIL_MESSAGE"; exit 1
-      fi
-    fi
-  fi
   case "$1" in
-    -t) BUILD_TESTING="$2"; shift 2;;
-    -c) BUILD_CONTROLLERS="$2"; shift 2;;
-    -d) BUILD_DYNAMICAL_SYSTEMS="$2"; shift 2;;
-    -r) BUILD_ROBOT_MODEL="$2"; shift 2;;
-    -h) echo "$HELP_MESSAGE"; exit 1;;
-
-    --testing=*) BUILD_TESTING="${1#*=}"; shift 1;;
-    --controllers=*) BUILD_CONTROLLERS="${1#*=}"; shift 1;;
-    --dynamical_systems=*) BUILD_DYNAMICAL_SYSTEMS="${1#*=}"; shift 1;;
-    --robot_model=*) BUILD_ROBOT_MODEL="${1#*=}"; shift 1;;
+    --no-controllers=*) BUILD_CONTROLLERS="OFF"; shift 1;;
+    --no-dynamical-systems=*) BUILD_DYNAMICAL_SYSTEMS="OFF"; shift 1;;
+    --no-robot-model=*) BUILD_ROBOT_MODEL="OFF"; shift 1;;
+    --build-tests) BUILD_TESTING="ON"; shift 1;;
     --help) echo "$HELP_MESSAGE"; exit 1;;
 
     -*) echo "Unknown option: $1" >&2; echo "$FAIL_MESSAGE"; exit 1;;
@@ -61,7 +44,7 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | tee /etc/apt/sources.list.d/robotpkg.list
   curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
 
-  apt-get update && apt-get install -y robotpkg-py38-pinocchio
+  apt-get update && apt-get install -y robotpkg-pinocchio
 
   export PATH=/opt/openrobots/bin:$PATH
   export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH

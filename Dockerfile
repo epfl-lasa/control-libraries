@@ -27,7 +27,7 @@ RUN echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(
 # install dependencies for building the libraries
 RUN apt-get update && apt-get install -y \
     libeigen3-dev \
-    robotpkg-py38-pinocchio \
+    robotpkg-pinocchio \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

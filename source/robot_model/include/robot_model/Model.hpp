@@ -74,7 +74,7 @@ private:
   
   /**
    * @brief It checks if the vector's elements are inside at their limits
-   * @param vector the vector we want to analyze
+   * @param vector the vector to check
    * @return true if all the elements are inside at their limits, false otherwise.
    */
   bool in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
@@ -271,28 +271,28 @@ public:
 
   /**
    * @brief It checks if the joint positions are inside at their limits
-   * @param joint_positions the joint positions we want to analyze
+   * @param joint_positions the joint positions to check
    * @return true if the positions are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief It checks if the joint velocities are inside at their limits
-   * @param joint_velocities the joint velocities we want to analyze
+   * @param joint_velocities the joint velocities to check
    * @return true if the velocities are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointVelocities& joint_velocities);
 
   /**
    * @brief It checks if the joint torques are inside at their limits
-   * @param joint_torques the joint torques we want to analyze
+   * @param joint_torques the joint torques to check
    * @return true if the torques are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointTorques& joint_torques);
 
   /**
    * @brief It checks if the joint state is inside at its limits
-   * @param joint_states the joint state we want to analyze
+   * @param joint_states the joint state to check
    * @return true if the state is inside its limits, false otherwise.
    */
   bool in_range(const state_representation::JointState& joint_states);

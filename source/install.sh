@@ -23,9 +23,9 @@ Options:
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --no-controllers=*) BUILD_CONTROLLERS="OFF"; shift 1;;
-    --no-dynamical-systems=*) BUILD_DYNAMICAL_SYSTEMS="OFF"; shift 1;;
-    --no-robot-model=*) BUILD_ROBOT_MODEL="OFF"; shift 1;;
+    --no-controllers) BUILD_CONTROLLERS="OFF"; shift 1;;
+    --no-dynamical-systems) BUILD_DYNAMICAL_SYSTEMS="OFF"; shift 1;;
+    --no-robot-model) BUILD_ROBOT_MODEL="OFF"; shift 1;;
     --build-tests) BUILD_TESTING="ON"; shift 1;;
     --help) echo "$HELP_MESSAGE"; exit 1;;
 

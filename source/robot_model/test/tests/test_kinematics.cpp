@@ -181,3 +181,29 @@ TEST_F(RobotModelKinematicsTest, TestInRange) {
   EXPECT_FALSE(franka->in_range(joint_velocities));
   EXPECT_FALSE(franka->in_range(joint_torques));
 }
+
+TEST_F(RobotModelKinematicsTest, TestClamp) {
+  
+  state_representation::JointPositions joint_positions("robot", 7);
+  state_representation::JointVelocities joint_velocities("robot", 7);
+  state_representation::JointTorques joint_torques("robot", 7);
+  state_representation::JointState joint_state("robot", 7);
+
+  joint_positions.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
+  joint_velocities.set_velocities({-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_torques.set_torques({-0.329909, -0.235174, -1.881858, -922.491807, 0.674615, 0.996670, 0.345810});
+
+  joint_state.set_positions({-0.059943, 1.667088, 1.439900, -1000, -1.164922, 0.948034, 1.292717});
+  joint_state.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_state.set_torques({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+
+  EXPECT_FALSE(franka->in_range(joint_positions));
+  EXPECT_FALSE(franka->in_range(joint_velocities));
+  EXPECT_FALSE(franka->in_range(joint_torques));
+  EXPECT_FALSE(franka->in_range(joint_state));
+  
+  EXPECT_TRUE(franka->in_range(franka->clamp(joint_positions)));
+  EXPECT_TRUE(franka->in_range(franka->clamp(joint_velocities)));
+  EXPECT_TRUE(franka->in_range(franka->clamp(joint_torques)));
+  EXPECT_TRUE(franka->in_range(franka->clamp(joint_state)));
+}

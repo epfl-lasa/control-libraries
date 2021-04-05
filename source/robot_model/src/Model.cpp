@@ -378,7 +378,29 @@ bool Model::in_range(const state_representation::JointState& joint_states) {
 bool Model::in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
                                                     const Eigen::VectorXd& upper_limits) {
 
-  return ((vector.array() > lower_limits.array()).all() && (vector.array() < upper_limits.array()).all());
+  return ((vector.array() >= lower_limits.array()).all() && (vector.array() <= upper_limits.array()).all());
+}
+
+state_representation::JointState Model::clamp(const state_representation::JointState& joint_states) {
+
+  state_representation::JointState joint_state_clamped(joint_states);
+
+  joint_state_clamped.set_positions(this->clamp(joint_states.get_positions(),
+                                    this->robot_model_.lowerPositionLimit, this->robot_model_.upperPositionLimit));
+
+  joint_state_clamped.set_velocities(this->clamp(joint_states.get_velocities(),
+                                    -this->robot_model_.velocityLimit, this->robot_model_.velocityLimit));
+
+  joint_state_clamped.set_torques(this->clamp(joint_states.get_torques(),
+                                 -this->robot_model_.effortLimit, this->robot_model_.effortLimit));  
+
+  return joint_state_clamped;
+}
+
+Eigen::VectorXd Model::clamp(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
+                                                            const Eigen::VectorXd& upper_limits) {
+  
+  return lower_limits.cwiseMin(upper_limits.cwiseMax(vector));
 }
 
 }// namespace robot_model

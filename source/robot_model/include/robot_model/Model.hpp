@@ -79,6 +79,14 @@ private:
    */
   bool in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
 
+  /**
+   * @brief It clamps the vector's elements according to their limits
+   * @param vector the vector to clamp
+   * @return the clamped vector
+   */
+  Eigen::VectorXd clamp(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
+                                                            const Eigen::VectorXd& upper_limits);
+
 public:
   /**
    * @brief Constructor with robot name and path to URDF file
@@ -296,6 +304,13 @@ public:
    * @return true if the state is inside its limits, false otherwise.
    */
   bool in_range(const state_representation::JointState& joint_states);
+
+  /**
+   * @brief It clamps the joint positions, velocities and torques according to their limits
+   * @param joint_states the joint state to be clamped
+   * @return the clamped joint states
+   */
+  state_representation::JointState clamp(const state_representation::JointState& joint_states);
 
 };
 

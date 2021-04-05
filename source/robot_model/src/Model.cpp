@@ -377,12 +377,8 @@ bool Model::in_range(const state_representation::JointState& joint_states) {
 
 bool Model::in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
                                                     const Eigen::VectorXd& upper_limits) {
-  for (int i = 0; i < vector.size(); i++) {
-    if (vector[i] < lower_limits[i] || vector[i] > upper_limits[i]) {
-      return false;
-    }    
-  }
-  return true;
+
+  return ((vector.array() > lower_limits.array()).all() && (vector.array() < upper_limits.array()).all());
 }
 
 }// namespace robot_model

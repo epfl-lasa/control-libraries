@@ -80,6 +80,43 @@ Jacobian Jacobian::Random(const std::string& robot_name,
   return random;
 }
 
+bool Jacobian::is_compatible(const State& state) const {
+  bool compatible = false;
+  switch (state.get_type()) {
+    case StateType::JACOBIANMATRIX:
+      // compatibility is assured through the vector of joint names
+      compatible = (this->get_name() == state.get_name())
+          && (this->cols_ == dynamic_cast<const Jacobian&>(state).get_joint_names().size());
+      if (compatible) {
+        for (unsigned int i = 0; i < this->cols_; ++i) {
+          compatible = (compatible && this->joint_names_[i] == dynamic_cast<const Jacobian&>(state).get_joint_names()[i]);
+        }
+        // compatibility is assured through the reference frame and the name of the frame
+        compatible = (compatible && ((this->reference_frame_ == dynamic_cast<const Jacobian&>(state).get_reference_frame())
+            && (this->frame_ == dynamic_cast<const Jacobian&>(state).get_frame())));
+      }
+      break;
+    case StateType::JOINTSTATE:
+      // compatibility is assured through the vector of joint names
+      compatible = (this->get_name() == state.get_name())
+          && (this->cols_ == dynamic_cast<const JointState&>(state).get_size());
+      if (compatible) {
+        for (unsigned int i = 0; i < this->cols_; ++i) {
+          compatible = (compatible && this->joint_names_[i] == dynamic_cast<const JointState&>(state).get_names()[i]);
+        }
+      }
+      break;
+    case StateType::CARTESIANSTATE:
+      // compatibility is assured through the reference frame and the name of the frame
+      compatible = (this->reference_frame_ == dynamic_cast<const CartesianState&>(state).get_reference_frame())
+          && (this->frame_ == dynamic_cast<const CartesianState&>(state).get_name());
+      break;
+    default:
+      break;
+  }
+  return compatible;
+}
+
 void Jacobian::set_reference_frame(const CartesianPose& reference_frame) {
   *this = reference_frame * (*this);
 }

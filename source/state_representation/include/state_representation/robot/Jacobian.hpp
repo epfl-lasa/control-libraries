@@ -410,25 +410,6 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
   this->data_ = data;
 }
 
-inline bool Jacobian::is_compatible(const State& state) const {
-  bool compatible = false;
-  if (state.get_type() == StateType::JOINTSTATE) {
-    // compatibility is assured through the vector of joint names
-    compatible = (this->get_name() == state.get_name())
-        && (this->cols_ == dynamic_cast<const JointState&>(state).get_size());
-    if (compatible) {
-      for (unsigned int i = 0; i < this->cols_; ++i) {
-        compatible = (compatible && this->joint_names_[i] == dynamic_cast<const JointState&>(state).get_names()[i]);
-      }
-    }
-  } else if (state.get_type() == StateType::CARTESIANSTATE) {
-    // compatibility is assured through the reference frame and the name of the frame
-    compatible = (this->reference_frame_ == dynamic_cast<const CartesianState&>(state).get_reference_frame())
-        && (this->frame_ == dynamic_cast<const CartesianState&>(state).get_name());
-  }
-  return compatible;
-}
-
 inline double& Jacobian::operator()(unsigned int row, unsigned int col) {
   if (row > this->rows_) {
     throw std::out_of_range("Given row is out of range: number of rows = " + std::to_string(this->rows_));

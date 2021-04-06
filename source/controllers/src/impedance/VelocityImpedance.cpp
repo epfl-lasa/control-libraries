@@ -1,14 +1,12 @@
 #include "controllers/impedance/VelocityImpedance.hpp"
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Robot/JointPositions.hpp"
-#include "state_representation/Robot/JointVelocities.hpp"
-#include "state_representation/Robot/JointTorques.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/robot/JointVelocities.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 
-using namespace StateRepresentation;
+using namespace state_representation;
 
 namespace controllers::impedance {
 template<class S>

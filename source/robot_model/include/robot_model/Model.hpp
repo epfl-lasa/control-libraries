@@ -71,6 +71,21 @@ private:
    */
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        unsigned int frame_id);
+  
+  /**
+   * @brief It checks if the vector's elements are inside at their limits
+   * @param vector the vector to check
+   * @return true if all the elements are inside at their limits, false otherwise.
+   */
+  bool in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
+
+  /**
+   * @brief It clamps the vector's elements according to their limits
+   * @param vector the vector to clamp
+   * @return the clamped vector
+   */
+  Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
+                                                                const Eigen::VectorXd& upper_limits);
 
 public:
   /**
@@ -261,6 +276,42 @@ public:
    * @return the list of parameters
    */
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+
+  /**
+   * @brief It checks if the joint positions are inside at their limits
+   * @param joint_positions the joint positions to check
+   * @return true if the positions are inside their limits, false otherwise.
+   */
+  bool in_range(const state_representation::JointPositions& joint_positions);
+
+  /**
+   * @brief It checks if the joint velocities are inside at their limits
+   * @param joint_velocities the joint velocities to check
+   * @return true if the velocities are inside their limits, false otherwise.
+   */
+  bool in_range(const state_representation::JointVelocities& joint_velocities);
+
+  /**
+   * @brief It checks if the joint torques are inside at their limits
+   * @param joint_torques the joint torques to check
+   * @return true if the torques are inside their limits, false otherwise.
+   */
+  bool in_range(const state_representation::JointTorques& joint_torques);
+
+  /**
+   * @brief It checks if the joint state is inside at its limits
+   * @param joint_states the joint state to check
+   * @return true if the state is inside its limits, false otherwise.
+   */
+  bool in_range(const state_representation::JointState& joint_states);
+
+  /**
+   * @brief It clamps the joint positions, velocities and torques according to their limits
+   * @param joint_states the joint state to be clamped
+   * @return the clamped joint states
+   */
+  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_states);
+
 };
 
 inline const std::string& Model::get_robot_name() const {

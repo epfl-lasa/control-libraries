@@ -372,10 +372,9 @@ bool Model::in_range(const state_representation::JointTorques& joint_torques) {
 }
 
 bool Model::in_range(const state_representation::JointState& joint_state) {
-  using namespace state_representation;
-  return (this->in_range(static_cast<JointPositions>(joint_state))
-      && this->in_range(static_cast<JointVelocities>(joint_state))
-      && this->in_range(static_cast<JointTorques>(joint_state)));
+  return (this->in_range(static_cast<state_representation::JointPositions>(joint_state))
+      && this->in_range(static_cast<state_representation::JointVelocities>(joint_state))
+      && this->in_range(static_cast<state_representation::JointTorques>(joint_state)));
 }
 
 Eigen::VectorXd Model::clamp_in_range(const Eigen::VectorXd& vector,

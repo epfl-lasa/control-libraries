@@ -29,11 +29,11 @@ template<>
 CartesianState VelocityImpedance<CartesianState>::compute_command(const CartesianState& desired_state,
                                                                   const CartesianState& feedback_state) {
   using namespace std::chrono_literals;
-  // compute the displacement by multiplying the desired twist by the unit time period
-  CartesianPose desired_displacement = 1s * static_cast<CartesianTwist>(desired_state);
-  // set this displacement as the pose of the desired_state
+  // compute the displacement by multiplying the desired twist by the unit time period and add it to the current pose
+  CartesianPose desired_pose= static_cast<CartesianPose>(feedback_state) + 1s * static_cast<CartesianTwist>(desired_state);
+  // set this as the new desired_state keeping the rest of the state values
   CartesianState integrated_desired_state = desired_state;
-  integrated_desired_state.set_pose(desired_displacement.data());
+  integrated_desired_state.set_pose(desired_pose.data());
   // compute the impedance control law normally
   return this->Impedance<CartesianState>::compute_command(integrated_desired_state, feedback_state);
 }
@@ -43,11 +43,11 @@ JointState VelocityImpedance<JointState>::compute_command(const JointState& desi
                                                           const JointState& feedback_state) {
   
   using namespace std::chrono_literals;
-  // compute the displacement by multiplying the desired velocities by the unit time period
-  JointPositions desired_displacement = 1s * static_cast<JointVelocities>(desired_state);
+  // compute the displacement by multiplying the desired velocities by the unit time period and add it to the current positions
+  JointPositions desired_positions = static_cast<JointPositions>(feedback_state) + 1s * static_cast<JointVelocities>(desired_state);
   // set this displacement as the positions of the desired_state
   JointState integrated_desired_state = desired_state;
-  integrated_desired_state.set_positions(desired_displacement.data());
+  integrated_desired_state.set_positions(desired_positions.data());
   // compute the impedance control law normally
   return this->Impedance<JointState>::compute_command(integrated_desired_state, feedback_state);
 }

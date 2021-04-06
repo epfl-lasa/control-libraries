@@ -241,8 +241,8 @@ public:
 
   /**
    * @brief Overload the * operator with an arbitrary matrix
-   * @param matrix the vector to multiply with
-   * @return the matrix multiply by the jacobian matrix
+   * @param matrix the matrix to multiply with
+   * @return the jacobian matrix multiplied by the matrix in parameter
    */
   Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
 

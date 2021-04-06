@@ -166,8 +166,7 @@ Eigen::MatrixXd Jacobian::operator*(const Jacobian& jacobian) const {
     throw IncompatibleStatesException("The two Jacobian matrices are not compatible");
   }
   // multiply with the data of the second jacobian
-  Eigen::MatrixXd data = (*this) * jacobian.data();
-  return data;
+  return (*this) * jacobian.data();
 }
 
 CartesianTwist Jacobian::operator*(const JointVelocities& dq) const {

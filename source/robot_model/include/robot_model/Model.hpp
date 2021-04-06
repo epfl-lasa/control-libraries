@@ -290,7 +290,7 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             std::string frame_name = "",
-                                                            const InverseGeometryParameters& params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
+                                                            const InverseGeometryParameters& params = {1e-6, 0.5, 0.8, 0.07, 1e-3, 1000});
 
 
   /**
@@ -304,7 +304,7 @@ public:
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             const state_representation::JointState& current_joint_state,
                                                             std::string frame_name = "",
-                                                            const InverseGeometryParameters& params = {1e-6, 0.8, 0.75, 0.07, 1e-3, 1000});
+                                                            const InverseGeometryParameters& params = {1e-6, 0.5, 0.8, 0.07, 1e-3, 1000});
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

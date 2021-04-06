@@ -326,55 +326,43 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     }
   }
 
-  state_representation::JointPositions q(current_joint_state);
-  state_representation::JointVelocities dq(this->get_robot_name(), this->get_number_of_joints());
-
   const int frame_id = this->robot_model_.getFrameId(frame_name);
   
-  const pinocchio::SE3 oMdes(desired_cartesian_state.get_orientation().toRotationMatrix(), desired_cartesian_state.get_position());
-  
   // 1 second for the Newton-Raphson method
-  std::chrono::nanoseconds dt((int)(1e9));
+  const std::chrono::nanoseconds dt((int)(1e9));
 
-  pinocchio::Data::Matrix6x J(6,this->robot_model_.nq);
-  pinocchio::Data::Matrix6x J_b(6,this->robot_model_.nq);
-  J.setZero();
-  J_b.setZero();
-  Eigen::VectorXd v(this->robot_model_.nq);
-  Eigen::VectorXd delta_q(this->robot_model_.nq);
+  state_representation::JointPositions q(current_joint_state);
+  state_representation::JointVelocities dq(this->get_robot_name(), this->get_number_of_joints());
+  state_representation::Jacobian J(this->get_robot_name(), this->robot_model_.nq, frame_name);
+  Eigen::MatrixXd J_b = J.data();
+  Eigen::MatrixXd JJt(6,6);
   Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
   Eigen::MatrixXd W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
   Eigen::VectorXd psi(this->robot_model_.nq);
-    
-  // error declaration
-  pinocchio::SE3 dMf;
-  typedef Eigen::Matrix<double, 6, 1> Vector6d;
-  Vector6d err;
+  Eigen::VectorXd err(6);
+  state_representation::CartesianPose X(this->get_robot_name());
+  const state_representation::CartesianPose X_d(desired_cartesian_state);
   
   int i=0;
   while (i < params.max_number_of_iterations) {
-    this->forward_geometry(q, frame_id);
+    X = this->forward_geometry(q, frame_id);
     
-    // compute error in SE(3)
-    dMf = oMdes.actInv(this->robot_data_.oMf[frame_id]);
-    err = pinocchio::log6(dMf).toVector();
+    err = ((X_d - X)/dt).data();
 
-    if(err.array().abs().maxCoeff() <= params.tolerance) {
+    if(err.array().abs().maxCoeff() < params.tolerance) {
       return q;
     }
 
-    pinocchio::computeFrameJacobian(this->robot_model_, this->robot_data_, q.get_positions(), frame_id, J);
+    J = this->compute_jacobian(q);
     
-    // Clamping Weighted Least-Norm method
     W_b = this->cwln_weighted_matrix(q, params.margin);
-    W_c = params.gamma * (Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b);
-    psi = this->cwln_repulsive_potential_field(q, params.margin);
-    J_b = J * W_b;
-    pinocchio::Data::Matrix6 JJt;
+    W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
+    psi = params.gamma * this->cwln_repulsive_potential_field(q, params.margin);
+    J_b = J.data() * W_b;
+    
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    v.noalias() = W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(-err - J * W_c * psi));
-    dq.set_velocities(v);
+    dq.set_velocities(W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
     
     q = q + dq * dt;
     this->clamp_joint_positions(q);
@@ -384,6 +372,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   
   throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
 }
+
 
 state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                             std::string frame_name, const Model::InverseGeometryParameters& params) {

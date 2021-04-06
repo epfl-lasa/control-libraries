@@ -362,12 +362,12 @@ bool Model::in_range(const state_representation::JointTorques& joint_torques) {
                                                       this->robot_model_.effortLimit);
 }
 
-bool Model::in_range(const state_representation::JointState& joint_states) {
-  return (this->in_range(joint_states.get_positions(), this->robot_model_.lowerPositionLimit,
+bool Model::in_range(const state_representation::JointState& joint_state) {
+  return (this->in_range(joint_state.get_positions(), this->robot_model_.lowerPositionLimit,
                                                        this->robot_model_.upperPositionLimit)
-       && this->in_range(joint_states.get_velocities(), -this->robot_model_.velocityLimit,
+       && this->in_range(joint_state.get_velocities(), -this->robot_model_.velocityLimit,
                                                          this->robot_model_.velocityLimit)
-       && this->in_range(joint_states.get_torques(), -this->robot_model_.effortLimit,
+       && this->in_range(joint_state.get_torques(), -this->robot_model_.effortLimit,
                                                        this->robot_model_.effortLimit));
 }
 
@@ -377,17 +377,17 @@ bool Model::in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower
   return ((vector.array() >= lower_limits.array()).all() && (vector.array() <= upper_limits.array()).all());
 }
 
-state_representation::JointState Model::clamp_in_range(const state_representation::JointState& joint_states) {
+state_representation::JointState Model::clamp_in_range(const state_representation::JointState& joint_state) {
 
-  state_representation::JointState joint_state_clamped(joint_states);
+  state_representation::JointState joint_state_clamped(joint_state);
 
-  joint_state_clamped.set_positions(this->clamp_in_range(joint_states.get_positions(),
+  joint_state_clamped.set_positions(this->clamp_in_range(joint_state.get_positions(),
                                     this->robot_model_.lowerPositionLimit, this->robot_model_.upperPositionLimit));
 
-  joint_state_clamped.set_velocities(this->clamp_in_range(joint_states.get_velocities(),
+  joint_state_clamped.set_velocities(this->clamp_in_range(joint_state.get_velocities(),
                                     -this->robot_model_.velocityLimit, this->robot_model_.velocityLimit));
 
-  joint_state_clamped.set_torques(this->clamp_in_range(joint_states.get_torques(),
+  joint_state_clamped.set_torques(this->clamp_in_range(joint_state.get_torques(),
                                  -this->robot_model_.effortLimit, this->robot_model_.effortLimit));  
 
   return joint_state_clamped;

@@ -84,8 +84,8 @@ private:
    * @param vector the vector to clamp
    * @return the clamped vector
    */
-  Eigen::VectorXd clamp(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
-                                                            const Eigen::VectorXd& upper_limits);
+  Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
+                                                                const Eigen::VectorXd& upper_limits);
 
 public:
   /**
@@ -310,7 +310,7 @@ public:
    * @param joint_states the joint state to be clamped
    * @return the clamped joint states
    */
-  state_representation::JointState clamp(const state_representation::JointState& joint_states);
+  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_states);
 
 };
 

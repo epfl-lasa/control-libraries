@@ -202,8 +202,8 @@ TEST_F(RobotModelKinematicsTest, TestClamp) {
   EXPECT_FALSE(franka->in_range(joint_torques));
   EXPECT_FALSE(franka->in_range(joint_state));
   
-  EXPECT_TRUE(franka->in_range(franka->clamp(joint_positions)));
-  EXPECT_TRUE(franka->in_range(franka->clamp(joint_velocities)));
-  EXPECT_TRUE(franka->in_range(franka->clamp(joint_torques)));
-  EXPECT_TRUE(franka->in_range(franka->clamp(joint_state)));
+  EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_positions)));
+  EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_velocities)));
+  EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_torques)));
+  EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_state)));
 }

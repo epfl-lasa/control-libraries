@@ -240,11 +240,18 @@ public:
   Jacobian pseudoinverse() const;
 
   /**
-   * @brief Overload the * operator with an non specific matrix
+   * @brief Overload the * operator with an arbitrary matrix
    * @param matrix the vector to multiply with
    * @return the matrix multiply by the jacobian matrix
    */
   Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
+
+  /**
+   * @brief Overload the * operator with another Jacobian
+   * @param jacobian the Jacobian to multiply with
+   * @return the current Jacobian multiplied by the one in parameter
+   */
+  Eigen::MatrixXd operator*(const Jacobian& jacobian) const;
 
   /**
    * @brief Overload the * operator with a JointVelocities

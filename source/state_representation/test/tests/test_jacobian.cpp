@@ -79,6 +79,45 @@ TEST(JacobianTest, TestMutltiplyWithEigen) {
   EXPECT_TRUE(except_thrown);
 }
 
+TEST(JacobianTest, TestMutltiplyJacobian) {
+  Jacobian jac = Jacobian::Random("robot", 7, "test");
+  Jacobian jac2 = Jacobian::Random("robot", 7, "test");
+  Eigen::MatrixXd res = jac * jac2.transpose();
+  EXPECT_TRUE(res.isApprox(jac.data() * jac2.data().transpose()));
+
+  // check with incorrect dimensions
+  std::cout << "here!!!" << std::endl;
+  std::cout << jac.is_compatible(jac2) << std::endl;
+
+  bool except_thrown = false;
+  try {
+    Eigen::MatrixXd res2 = jac * jac2;
+  } catch (const IncompatibleSizeException& e) {
+    except_thrown = true;
+  }
+  EXPECT_TRUE(except_thrown);
+
+  // check with incorrect number of joints
+  Jacobian jac3 = Jacobian::Random("robot", 6, "test");
+  except_thrown = false;
+  try {
+    Eigen::MatrixXd res2 = jac * jac3.transpose();
+  } catch (const IncompatibleStatesException& e) {
+    except_thrown = true;
+  }
+  EXPECT_TRUE(except_thrown);
+
+  // check with incorrect reference frames
+  Jacobian jac4 = Jacobian::Random("robot", 7, "test", "frameA");
+  except_thrown = false;
+  try {
+    Eigen::MatrixXd res2 = jac * jac4.transpose();
+  } catch (const IncompatibleStatesException& e) {
+    except_thrown = true;
+  }
+  EXPECT_TRUE(except_thrown);
+}
+
 TEST(JacobianTest, TestSolve) {
   Jacobian jac = Jacobian::Random("robot", 7, "test");
   Eigen::MatrixXd mat1 = Eigen::VectorXd::Random(7, 1);

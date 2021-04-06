@@ -1,44 +1,33 @@
 #include "controllers/impedance/VelocityImpedance.hpp"
-#include "state_representation/Robot/JointState.hpp"
-#include "state_representation/Robot/JointPositions.hpp"
-#include "state_representation/Robot/JointVelocities.hpp"
-#include "state_representation/Robot/JointTorques.hpp"
-#include "state_representation/Space/Cartesian/CartesianState.hpp"
-#include "state_representation/Space/Cartesian/CartesianPose.hpp"
-#include "state_representation/Space/Cartesian/CartesianTwist.hpp"
-#include "state_representation/Space/Cartesian/CartesianWrench.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
 #include <gtest/gtest.h>
 
 using namespace controllers::impedance;
-using namespace StateRepresentation;
+using namespace state_representation;
 
-TEST(TestCopyConstructor, PositiveNos) {
+TEST(VelocityImpedanceControllerTest, TestCopyConstructor) {
   VelocityImpedance<CartesianState> impedance_controller(Eigen::MatrixXd::Random(6, 6),
                                                          Eigen::MatrixXd::Random(6, 6));
   VelocityImpedance<CartesianState> copy(impedance_controller);
-  double tolerance = 1e-4;
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(impedance_controller.get_damping().col(i).norm(), copy.get_damping().col(i).norm(), tolerance);
-    EXPECT_NEAR(impedance_controller.get_stiffness().col(i).norm(), copy.get_stiffness().col(i).norm(), tolerance);
-    EXPECT_NEAR(impedance_controller.get_inertia().col(i).norm(), copy.get_inertia().col(i).norm(), tolerance);
-  }
+  EXPECT_TRUE(impedance_controller.get_damping().isApprox(copy.get_damping()));
+  EXPECT_TRUE(impedance_controller.get_stiffness().isApprox(copy.get_stiffness()));
+  EXPECT_TRUE(impedance_controller.get_inertia().isApprox(copy.get_inertia()));
 }
 
-TEST(TestAssignmentOperator, PositiveNos) {
+TEST(VelocityImpedanceControllerTest, TestAssignmentOperator) {
   VelocityImpedance<CartesianState> impedance_controller(Eigen::MatrixXd::Random(6, 6),
                                                          Eigen::MatrixXd::Random(6, 6));
   VelocityImpedance<CartesianState> copy = impedance_controller;
-  double tolerance = 1e-4;
-  for (int i = 0; i < 6; ++i) {
-    EXPECT_NEAR(impedance_controller.get_damping().col(i).norm(), copy.get_damping().col(i).norm(), tolerance);
-    EXPECT_NEAR(impedance_controller.get_stiffness().col(i).norm(), copy.get_stiffness().col(i).norm(), tolerance);
-    EXPECT_NEAR(impedance_controller.get_inertia().col(i).norm(), copy.get_inertia().col(i).norm(), tolerance);
-  }
+  EXPECT_TRUE(impedance_controller.get_damping().isApprox(copy.get_damping()));
+  EXPECT_TRUE(impedance_controller.get_stiffness().isApprox(copy.get_stiffness()));
+  EXPECT_TRUE(impedance_controller.get_inertia().isApprox(copy.get_inertia()));
 }
 
-TEST(TestCartesianImpedance, PositiveNos) {
+TEST(VelocityImpedanceControllerTest, TestCartesianImpedance) {
   VelocityImpedance<CartesianState> impedance_controller(Eigen::MatrixXd::Identity(6, 6),
                                                          Eigen::MatrixXd::Identity(6, 6));
   // set up a desired state6d
@@ -50,15 +39,15 @@ TEST(TestCartesianImpedance, PositiveNos) {
   // check command
   CartesianWrench command = impedance_controller.compute_command(desired_state, feedback_state);
   // expect some non null data
-  EXPECT_TRUE(command.data().norm() > 0.);
+  EXPECT_GT(command.data().norm(), 0.);
   // as opposed to the normal impedance controller, even if the two velocities are the same
-  // we still expect a command as the desired velocity is non null
+  // we still expect a command as the desired pose is non null
   feedback_state.set_linear_velocity(desired_state.get_linear_velocity());
   command = impedance_controller.compute_command(desired_state, feedback_state);
-  EXPECT_TRUE(command.data().norm() > 0.);
+  EXPECT_GT(command.data().norm(),0.);
 }
 
-TEST(TestJointImpedance, PositiveNos) {
+TEST(VelocityImpedanceControllerTest, TestJointImpedance) {
   int nb_joints = 3;
   VelocityImpedance<JointState> impedance_controller(Eigen::MatrixXd::Identity(nb_joints, nb_joints),
                                                      Eigen::MatrixXd::Identity(nb_joints, nb_joints));
@@ -71,15 +60,15 @@ TEST(TestJointImpedance, PositiveNos) {
   // check command
   JointTorques command = impedance_controller.compute_command(desired_state, feedback_state);
   // expect some non null data
-  EXPECT_TRUE(command.data().norm() > 0.);
+  EXPECT_GT(command.data().norm(), 0.);
   // as opposed to the normal impedance controller, even if the two velocities are the same
-  // we still expect a command as the desired velocity is non null
+  // we still expect a command as the desired positions are non null
   feedback_state.set_velocities(desired_state.get_velocities());
   command = impedance_controller.compute_command(desired_state, feedback_state);
-  EXPECT_TRUE(command.data().norm() > 0.);
+  EXPECT_GT(command.data().norm(), 0.);
 }
 
-TEST(TestCartesianToJointImpedance, PositiveNos) {
+TEST(VelocityImpedanceControllerTest, TestCartesianToJointImpedance) {
   VelocityImpedance<CartesianState> impedance_controller(Eigen::MatrixXd::Identity(6, 6),
                                                          Eigen::MatrixXd::Identity(6, 6));
   // set up a desired state6d
@@ -89,20 +78,14 @@ TEST(TestCartesianToJointImpedance, PositiveNos) {
   CartesianState feedback_state("test");
   feedback_state.set_linear_velocity(Eigen::Vector3d(0.5, 0, 0));
   // set a Jacobian matrix
-  Jacobian jacobian("test_robot", 3);
-  jacobian.set_data(Eigen::MatrixXd::Random(6, 3));
+  Jacobian jacobian = Jacobian::Random("test_robot", 3, "test");
   // check command
   JointTorques command = impedance_controller.compute_command(desired_state, feedback_state, jacobian);
   // expect some non null data
-  EXPECT_TRUE(command.data().norm() > 0.);
+  EXPECT_GT(command.data().norm(), 0.);
   // as opposed to the normal impedance controller, even if the two velocities are the same
-  // we still expect a command as the desired velocity is non null
+  // we still expect a command as the desired pose is non null
   feedback_state.set_linear_velocity(desired_state.get_linear_velocity());
   command = impedance_controller.compute_command(desired_state, feedback_state, jacobian);
-  EXPECT_TRUE(command.data().norm() > 0.);
-}
-
-int main(int argc, char** argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  EXPECT_GT(command.data().norm(), 0.);
 }

@@ -373,12 +373,10 @@ bool Model::in_range(const state_representation::JointTorques& joint_torques) {
 }
 
 bool Model::in_range(const state_representation::JointState& joint_state) {
-  return (this->in_range(joint_state.get_positions(), this->robot_model_.lowerPositionLimit,
-                                                       this->robot_model_.upperPositionLimit)
-       && this->in_range(joint_state.get_velocities(), -this->robot_model_.velocityLimit,
-                                                         this->robot_model_.velocityLimit)
-       && this->in_range(joint_state.get_torques(), -this->robot_model_.effortLimit,
-                                                       this->robot_model_.effortLimit));
+  using namespace state_representation;
+  return (this->in_range(static_cast<JointPositions>(joint_state))
+      && this->in_range(static_cast<JointVelocities>(joint_state))
+      && this->in_range(static_cast<JointTorques>(joint_state)));
 }
 
 Eigen::VectorXd Model::clamp_in_range(const Eigen::VectorXd& vector,

@@ -8,7 +8,7 @@ namespace controllers::impedance {
 /**
  * @class VelocityImpedance
  * @brief A velocity impedance is a normal impedance controller
- * that only take a vlocity input and integrate it for position error
+ * that only take a velocity input and integrate it for position error
  * @tparam S the space of the controller either CartesianState or JointState
  */
 template<class S>
@@ -60,9 +60,9 @@ public:
    * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
    * @return the output command at the input state
    */
-  StateRepresentation::JointState compute_command(const S& desired_state,
-                                                  const S& feedback_state,
-                                                  const StateRepresentation::Jacobian& jacobian) override;
+  state_representation::JointState compute_command(const S& desired_state,
+                                                   const S& feedback_state,
+                                                   const state_representation::Jacobian& jacobian) override;
 };
 
 template<class S>
@@ -82,9 +82,9 @@ inline VelocityImpedance<S>& VelocityImpedance<S>::operator=(const VelocityImped
 }
 
 template<class S>
-StateRepresentation::JointState VelocityImpedance<S>::compute_command(const S& desired_state,
-                                                                      const S& feedback_state,
-                                                                      const StateRepresentation::Jacobian& jacobian) {
+state_representation::JointState VelocityImpedance<S>::compute_command(const S& desired_state,
+                                                                       const S& feedback_state,
+                                                                       const state_representation::Jacobian& jacobian) {
   return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
 }
 }// namespace controllers

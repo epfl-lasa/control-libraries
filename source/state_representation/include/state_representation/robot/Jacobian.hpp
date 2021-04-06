@@ -328,6 +328,14 @@ public:
    * @return the Jacobian expressed in the new reference frame
    */
   friend Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian);
+
+  /**
+   * @brief Overload the * operator with an arbitrary matrix on the left side
+   * @param matrix the matrix to multiply with
+   * @param jacobian the jacobian matrix
+   * @return the matrix multiplied by the jacobian matrix
+   */
+  friend Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix, const Jacobian& jacobian);
 };
 
 inline void swap(Jacobian& jacobian1, Jacobian& jacobian2) {

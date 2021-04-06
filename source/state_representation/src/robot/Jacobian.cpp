@@ -299,4 +299,8 @@ Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian) {
   result.reference_frame_ = pose.get_reference_frame();
   return result;
 }
+
+Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix, const Jacobian& jacobian) {
+  return matrix * jacobian.data();
+}
 }// namespace state_representation

@@ -86,9 +86,6 @@ TEST(JacobianTest, TestMutltiplyJacobian) {
   EXPECT_TRUE(res.isApprox(jac.data() * jac2.data().transpose()));
 
   // check with incorrect dimensions
-  std::cout << "here!!!" << std::endl;
-  std::cout << jac.is_compatible(jac2) << std::endl;
-
   bool except_thrown = false;
   try {
     Eigen::MatrixXd res2 = jac * jac2;

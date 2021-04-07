@@ -302,15 +302,6 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
   return Psi;
 }
 
-void Model::clamp_joint_positions(state_representation::JointPositions& joint_positions) {
-  Eigen::VectorXd q_clamped = joint_positions.get_positions();
-  for (int i = 0; i < this->robot_model_.nq; i++) {
-    q_clamped[i] = std::min(std::max(q_clamped[i], this->robot_model_.lowerPositionLimit[i]),
-                            this->robot_model_.upperPositionLimit[i]);
-  }
-  joint_positions.set_positions(q_clamped);
-}
-
 state_representation::JointPositions Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                               const state_representation::JointState& current_joint_state,
                                                               std::string frame_name,
@@ -343,7 +334,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
   state_representation::CartesianPose X(this->get_robot_name());
   const state_representation::CartesianPose X_d(desired_cartesian_state);
   
-  int i=0;
+  int i = 0;
   while (i < params.max_number_of_iterations) {
     X = this->forward_geometry(q, frame_id);
     
@@ -365,7 +356,7 @@ state_representation::JointPositions Model::inverse_geometry(const state_represe
     dq.set_velocities(W_c * psi + params.alpha * W_b * ( J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
     
     q = q + dq * dt;
-    this->clamp_joint_positions(q);
+    q = this->clamp_in_range(q);
 
     i++;
   }

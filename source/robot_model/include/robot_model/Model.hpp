@@ -110,12 +110,6 @@ private:
    */
   Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, double margin);
 
-  /**
-   * @brief Clamp the joint positions according to the joint limits
-   * @param joint_positions the joint position we want to clamp
-   */
-  void clamp_joint_positions(state_representation::JointPositions& joint_positions);
-
 public:
   /**
    * @brief Constructor with robot name and path to URDF file

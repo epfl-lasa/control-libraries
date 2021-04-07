@@ -240,11 +240,18 @@ public:
   Jacobian pseudoinverse() const;
 
   /**
-   * @brief Overload the * operator with an non specific matrix
-   * @param matrix the vector to multiply with
-   * @return the matrix multiply by the jacobian matrix
+   * @brief Overload the * operator with an arbitrary matrix
+   * @param matrix the matrix to multiply with
+   * @return the jacobian matrix multiplied by the matrix in parameter
    */
   Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
+
+  /**
+   * @brief Overload the * operator with another Jacobian
+   * @param jacobian the Jacobian to multiply with
+   * @return the current Jacobian multiplied by the one in parameter
+   */
+  Eigen::MatrixXd operator*(const Jacobian& jacobian) const;
 
   /**
    * @brief Overload the * operator with a JointVelocities
@@ -321,6 +328,14 @@ public:
    * @return the Jacobian expressed in the new reference frame
    */
   friend Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian);
+
+  /**
+   * @brief Overload the * operator with an arbitrary matrix on the left side
+   * @param matrix the matrix to multiply with
+   * @param jacobian the jacobian matrix
+   * @return the matrix multiplied by the jacobian matrix
+   */
+  friend Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix, const Jacobian& jacobian);
 };
 
 inline void swap(Jacobian& jacobian1, Jacobian& jacobian2) {
@@ -408,25 +423,6 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
   }
   this->set_filled();
   this->data_ = data;
-}
-
-inline bool Jacobian::is_compatible(const State& state) const {
-  bool compatible = false;
-  if (state.get_type() == StateType::JOINTSTATE) {
-    // compatibility is assured through the vector of joint names
-    compatible = (this->get_name() == state.get_name())
-        && (this->cols_ == dynamic_cast<const JointState&>(state).get_size());
-    if (compatible) {
-      for (unsigned int i = 0; i < this->cols_; ++i) {
-        compatible = (compatible && this->joint_names_[i] == dynamic_cast<const JointState&>(state).get_names()[i]);
-      }
-    }
-  } else if (state.get_type() == StateType::CARTESIANSTATE) {
-    // compatibility is assured through the reference frame and the name of the frame
-    compatible = (this->reference_frame_ == dynamic_cast<const CartesianState&>(state).get_reference_frame())
-        && (this->frame_ == dynamic_cast<const CartesianState&>(state).get_name());
-  }
-  return compatible;
 }
 
 inline double& Jacobian::operator()(unsigned int row, unsigned int col) {

@@ -76,14 +76,14 @@ public:
   static CartesianPose Random(const std::string& name, const std::string& reference = "world");
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values
    */
   CartesianPose& operator=(const CartesianPose& pose);
 
   /**
-   * @brief Copy assignement operator from a state
+   * @brief Copy assignment operator from a state
    * @param state the state with value to assign
    * @return reference to the current pose with new values
    */
@@ -147,28 +147,28 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param pose CartesianPose to substract
+   * @param pose CartesianPose to subtract
    * @return the current CartesianPose minus the CartesianPose given in argument
    */
   CartesianPose& operator-=(const CartesianPose& pose);
 
   /**
    * @brief Overload the - operator with a pose
-   * @param pose CartesianPose to substract
+   * @param pose CartesianPose to subtract
    * @return the current CartesianPose minus the CartesianPose given in argument
    */
   CartesianPose operator-(const CartesianPose& pose) const;
 
   /**
    * @brief Overload the - operator with a state
-   * @param state CartesianState to substract
+   * @param state CartesianState to subtract
    * @return the current CartesianPose minus the CartesianState given in argument
    */
   CartesianState operator-(const CartesianState& state) const;
 
   /**
    * @brief Overload the / operator with a time period
-   * @param dt the time period to divise by
+   * @param dt the time period to divide by
    * @return the corresponding CartesianTwist
    */
   CartesianTwist operator/(const std::chrono::nanoseconds& dt) const;
@@ -201,7 +201,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the CartesianPose to
+   * @param os the ostream to append the string representing the CartesianPose to
    * @param CartesianPose the CartesianPose to print
    * @return the appended ostream
    */

@@ -380,7 +380,7 @@ bool Model::in_range(const state_representation::JointState& joint_state) {
 Eigen::VectorXd Model::clamp_in_range(const Eigen::VectorXd& vector,
                                       const Eigen::VectorXd& lower_limits,
                                       const Eigen::VectorXd& upper_limits) {
-  return lower_limits.cwiseMin(upper_limits.cwiseMax(vector));
+  return lower_limits.cwiseMax(upper_limits.cwiseMin(vector));
 }
 
 state_representation::JointState Model::clamp_in_range(const state_representation::JointState& joint_state) {

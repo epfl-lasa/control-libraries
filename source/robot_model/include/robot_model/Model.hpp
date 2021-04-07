@@ -73,19 +73,24 @@ private:
                                                        unsigned int frame_id);
   
   /**
-   * @brief It checks if the vector's elements are inside at their limits
+   * @brief Check if the vector's elements are inside the parameter limits
    * @param vector the vector to check
+   * @param lower_limits the lower bounds of the limits
+   * @param upper_limits the upper bounds of the limits
    * @return true if all the elements are inside at their limits, false otherwise.
    */
   bool in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
 
   /**
-   * @brief It clamps the vector's elements according to their limits
+   * @brief Clamp the vector's elements according to the parameter limits
    * @param vector the vector to clamp
+   * @param lower_limits the lower bounds of the limits
+   * @param upper_limits the upper bounds of the limits
    * @return the clamped vector
    */
-  Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits,
-                                                                const Eigen::VectorXd& upper_limits);
+  Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector,
+                                 const Eigen::VectorXd& lower_limits,
+                                 const Eigen::VectorXd& upper_limits);
 
 public:
   /**
@@ -212,8 +217,7 @@ public:
    * @param joint_positions containing the joint positions of the robot
    * @return the gravity torque as a JointTorques
    */
-  state_representation::JointTorques compute_gravity_torques(
-      const state_representation::JointPositions& joint_positions);
+  state_representation::JointTorques compute_gravity_torques(const state_representation::JointPositions& joint_positions);
 
   /**
    * @brief Compute the forward geometry, i.e. the pose of certain frames from the joint values
@@ -238,8 +242,7 @@ public:
    * @param cartesian_state containing the pose of the end-effector
    * @return the joint state of the robot
    */
-  state_representation::JointPositions inverse_geometry(
-      const state_representation::CartesianState& cartesian_state) const;
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& cartesian_state) const;
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
@@ -278,40 +281,41 @@ public:
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
-   * @brief It checks if the joint positions are inside at their limits
+   * @brief Check if the joint positions are inside the limits provided by the model
    * @param joint_positions the joint positions to check
    * @return true if the positions are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointPositions& joint_positions);
 
   /**
-   * @brief It checks if the joint velocities are inside at their limits
+   * @brief Check if the joint velocities are inside the limits provided by the model
    * @param joint_velocities the joint velocities to check
    * @return true if the velocities are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointVelocities& joint_velocities);
 
   /**
-   * @brief It checks if the joint torques are inside at their limits
+   * @brief Check if the joint torques are inside the limits provided by the model
    * @param joint_torques the joint torques to check
    * @return true if the torques are inside their limits, false otherwise.
    */
   bool in_range(const state_representation::JointTorques& joint_torques);
 
   /**
-   * @brief It checks if the joint state is inside at its limits
-   * @param joint_states the joint state to check
-   * @return true if the state is inside its limits, false otherwise.
+   * @brief Check if the joint state variables (positions, velocities & torques) are inside the limits provided by
+   * the model
+   * @param joint_state the joint state to check
+   * @return true if the state variables are inside the limits, false otherwise.
    */
-  bool in_range(const state_representation::JointState& joint_states);
+  bool in_range(const state_representation::JointState& joint_state);
 
   /**
-   * @brief It clamps the joint positions, velocities and torques according to their limits
-   * @param joint_states the joint state to be clamped
+   * @brief Clamp the joint state variables (positions, velocities & torques) according to the limits provided by
+   * the model
+   * @param joint_state the joint state to be clamped
    * @return the clamped joint states
    */
-  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_states);
-
+  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_state);
 };
 
 inline const std::string& Model::get_robot_name() const {

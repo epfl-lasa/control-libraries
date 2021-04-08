@@ -221,12 +221,12 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
   std::vector<state_representation::JointState> test_configs = {config1, config2, config3};
   double tol = 1e-3;
   std::chrono::nanoseconds dt(static_cast<int>(1e9));
-  Model::InverseGeometryParameters param = Model::InverseGeometryParameters();
-  param.tolerance = tol;
 
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianPose reference = franka->forward_geometry(test_configs[config], "panda_link8");
-    state_representation::JointPositions q = franka->inverse_geometry(reference, "panda_link8", param);
+    state_representation::JointPositions q = franka->inverse_geometry(reference, "panda_link8", {
+        1e-6, 0.5, 0.8, 0.07, tol, 1000
+    });
     state_representation::CartesianPose X = franka->forward_geometry(q, "panda_link8");
     EXPECT_TRUE(((reference - X)/dt).data().cwiseAbs().maxCoeff() < tol);
   }

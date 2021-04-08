@@ -1,18 +1,18 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
 #include <OsqpEigen/OsqpEigen.h>
-#include <pinocchio/parsers/urdf.hpp>
-#include <pinocchio/multibody/data.hpp>
+#include <iostream>
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
+#include <pinocchio/multibody/data.hpp>
+#include <pinocchio/parsers/urdf.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/robot/Jacobian.hpp>
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
+#include <string>
+#include <vector>
 
 namespace robot_model {
 class Model {
@@ -108,7 +108,8 @@ private:
    * @param margin the distance from the joint limit on which we want to penalize the joint position
    * @return the repulsive potential field
    */
-  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions, double margin);
+  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions,
+                                                 double margin);
 
 public:
   /**

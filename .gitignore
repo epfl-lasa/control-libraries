@@ -37,3 +37,6 @@ cmake-build-*
 
 # vscode settings
 source/.vs*
+
+# clang-format
+.clang-format

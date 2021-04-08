@@ -308,9 +308,9 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 
 state_representation::JointPositions
 Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                        const state_representation::JointState& current_joint_state, std::string frame_name,
+                        const state_representation::JointState& current_joint_state,
+                        std::string frame_name,
                         const Model::InverseGeometryParameters& params) {
-
   if (frame_name.empty()) {
     // get last frame if none specified
     frame_name = this->robot_model_.frames.back().name;
@@ -340,35 +340,31 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
   int i = 0;
   while (i < params.max_number_of_iterations) {
     err = ((X_d - this->forward_geometry(q, frame_id)) / dt).data();
-
     if (err.cwiseAbs().maxCoeff() < params.tolerance) {
       return q;
     }
 
     J = this->compute_jacobian(q);
-
     W_b = this->cwln_weighted_matrix(q, params.margin);
     W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
     psi = params.gamma * this->cwln_repulsive_potential_field(q, params.margin);
     J_b = J * W_b;
-
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    dq.set_velocities(W_c * psi
-                      + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
-
+    dq.set_velocities(
+        W_c * psi + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
     q = q + dq * dt;
     q = this->clamp_in_range(q);
 
     ++i;
   }
-  
   throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
 }
 
 state_representation::JointPositions
 Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                        const std::string& frame_name, const Model::InverseGeometryParameters& params) {
+                        const std::string& frame_name,
+                        const Model::InverseGeometryParameters& params) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions pos(this->get_robot_name(), q);
 
@@ -481,8 +477,8 @@ bool Model::in_range(const state_representation::JointTorques& joint_torques) co
 
 bool Model::in_range(const state_representation::JointState& joint_state) const {
   return (this->in_range(static_cast<state_representation::JointPositions>(joint_state))
-          && this->in_range(static_cast<state_representation::JointVelocities>(joint_state))
-          && this->in_range(static_cast<state_representation::JointTorques>(joint_state)));
+      && this->in_range(static_cast<state_representation::JointVelocities>(joint_state))
+      && this->in_range(static_cast<state_representation::JointTorques>(joint_state)));
 }
 
 Eigen::VectorXd Model::clamp_in_range(const Eigen::VectorXd& vector,

@@ -256,7 +256,6 @@ public:
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        std::string frame_name = "");
 
-
   /**
    * @brief parameters for the inverse geometry
    * @param damp damping added to the diagonal of J*Jt in order to avoid the singularity
@@ -266,40 +265,42 @@ public:
    * @param tolerance the maximum error tolerated between the desired cartesian state and the one obtained by the returned joint positions
    * @param max_number_of_iterations the maximum number of iterations that the algorithm do for solving the inverse geometry
    */
-  struct InverseGeometryParameters
-  {
-      double damp;
-      double alpha;
-      double gamma;
-      double margin;
-      double tolerance;
-      int max_number_of_iterations;
+  struct InverseGeometryParameters {
+    double damp;
+    double alpha;
+    double gamma;
+    double margin;
+    double tolerance;
+    int max_number_of_iterations;
   };
- 
+
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param inverse_geometry_parameters set of parameters for tunning the algorithm
+   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            std::string frame_name = "",
-                                                            const InverseGeometryParameters& params = {1e-6, 0.5, 0.8, 0.07, 1e-3, 1000});
-
+                                                        const std::string& frame_name = "",
+                                                        const InverseGeometryParameters& params = {
+                                                            1e-6, 0.5, 0.8, 0.07, 1e-3, 1000
+                                                        });
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param current_joint_state current state of the robot containing the generalized position
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param inverse_geometry_parameters set of parameters for tunning the algorithm
+   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
-                                                            const state_representation::JointState& current_joint_state,
-                                                            std::string frame_name = "",
-                                                            const InverseGeometryParameters& params = {1e-6, 0.5, 0.8, 0.07, 1e-3, 1000});
+                                                        const state_representation::JointState& current_joint_state,
+                                                        std::string frame_name = "",
+                                                        const InverseGeometryParameters& params = {
+                                                            1e-6, 0.5, 0.8, 0.07, 1e-3, 1000
+                                                        });
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
@@ -325,7 +326,7 @@ public:
    */
   state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
                                                           const state_representation::CartesianTwist& cartesian_state);
-  
+
   /**
    * @brief Helper function to print the qp_problem (for debugging)
    */

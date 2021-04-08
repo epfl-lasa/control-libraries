@@ -71,7 +71,7 @@ private:
    */
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        unsigned int frame_id);
-  
+
   /**
    * @brief Check if the vector's elements are inside the parameter limits
    * @param vector the vector to check
@@ -79,7 +79,9 @@ private:
    * @param upper_limits the upper bounds of the limits
    * @return true if all the elements are inside at their limits, false otherwise.
    */
-  bool in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
+  static bool in_range(const Eigen::VectorXd& vector,
+                       const Eigen::VectorXd& lower_limits,
+                       const Eigen::VectorXd& upper_limits);
 
   /**
    * @brief Clamp the vector's elements according to the parameter limits
@@ -88,9 +90,9 @@ private:
    * @param upper_limits the upper bounds of the limits
    * @return the clamped vector
    */
-  Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector,
-                                 const Eigen::VectorXd& lower_limits,
-                                 const Eigen::VectorXd& upper_limits);
+  static Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector,
+                                        const Eigen::VectorXd& lower_limits,
+                                        const Eigen::VectorXd& upper_limits);
 
 public:
   /**
@@ -285,21 +287,21 @@ public:
    * @param joint_positions the joint positions to check
    * @return true if the positions are inside their limits, false otherwise.
    */
-  bool in_range(const state_representation::JointPositions& joint_positions);
+  bool in_range(const state_representation::JointPositions& joint_positions) const;
 
   /**
    * @brief Check if the joint velocities are inside the limits provided by the model
    * @param joint_velocities the joint velocities to check
    * @return true if the velocities are inside their limits, false otherwise.
    */
-  bool in_range(const state_representation::JointVelocities& joint_velocities);
+  bool in_range(const state_representation::JointVelocities& joint_velocities) const;
 
   /**
    * @brief Check if the joint torques are inside the limits provided by the model
    * @param joint_torques the joint torques to check
    * @return true if the torques are inside their limits, false otherwise.
    */
-  bool in_range(const state_representation::JointTorques& joint_torques);
+  bool in_range(const state_representation::JointTorques& joint_torques) const;
 
   /**
    * @brief Check if the joint state variables (positions, velocities & torques) are inside the limits provided by
@@ -307,7 +309,7 @@ public:
    * @param joint_state the joint state to check
    * @return true if the state variables are inside the limits, false otherwise.
    */
-  bool in_range(const state_representation::JointState& joint_state);
+  bool in_range(const state_representation::JointState& joint_state) const;
 
   /**
    * @brief Clamp the joint state variables (positions, velocities & torques) according to the limits provided by
@@ -315,7 +317,7 @@ public:
    * @param joint_state the joint state to be clamped
    * @return the clamped joint states
    */
-  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_state);
+  state_representation::JointState clamp_in_range(const state_representation::JointState& joint_state) const;
 };
 
 inline const std::string& Model::get_robot_name() const {

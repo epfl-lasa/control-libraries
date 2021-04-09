@@ -266,6 +266,8 @@ public:
    * @param max_number_of_iterations the maximum number of iterations that the algorithm do for solving the inverse geometry
    */
   struct InverseGeometryParameters {
+    InverseGeometryParameters() :
+        damp(1e-6), alpha(0.5), gamma(0.8), margin(0.07), tolerance(1e-3), max_number_of_iterations(1000) {}
     double damp;
     double alpha;
     double gamma;
@@ -283,9 +285,7 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                         const std::string& frame_name = "",
-                                                        const InverseGeometryParameters& params = {
-                                                            1e-6, 0.5, 0.8, 0.07, 1e-3, 1000
-                                                        });
+                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
@@ -297,10 +297,8 @@ public:
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                         const state_representation::JointState& current_joint_state,
-                                                        std::string frame_name = "",
-                                                        const InverseGeometryParameters& params = {
-                                                            1e-6, 0.5, 0.8, 0.07, 1e-3, 1000
-                                                        });
+                                                        const std::string& frame_name = "",
+                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

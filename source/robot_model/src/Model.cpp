@@ -295,11 +295,11 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
   for (int i = 0; i < this->robot_model_.nq; ++i) {
     Psi[i] = 0;
     if (q[i] < this->robot_model_.lowerPositionLimit[i] + margin) {
-      Psi[i] =
-          this->robot_model_.upperPositionLimit[i] - margin - std::max(q[i], this->robot_model_.lowerPositionLimit[i]);
+      Psi[i] = this->robot_model_.upperPositionLimit[i] - margin - std::max(q[i],
+                                                                   this->robot_model_.lowerPositionLimit[i]);
     } else if (this->robot_model_.upperPositionLimit[i] - margin < q[i]) {
-      Psi[i] =
-          this->robot_model_.lowerPositionLimit[i] + margin - std::min(q[i], this->robot_model_.upperPositionLimit[i]);
+      Psi[i] = this->robot_model_.lowerPositionLimit[i] + margin - std::min(q[i],
+                                                                   this->robot_model_.upperPositionLimit[i]);
     }
   }
 
@@ -309,19 +309,19 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 state_representation::JointPositions
 Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                         const state_representation::JointState& current_joint_state,
-                        std::string frame_name,
+                        const std::string& frame_name,
                         const Model::InverseGeometryParameters& params) {
+  int frame_id;
   if (frame_name.empty()) {
     // get last frame if none specified
-    frame_name = this->robot_model_.frames.back().name;
+    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
   } else {
     // throw error if specified frame does not exist
     if (!this->robot_model_.existFrame(frame_name)) {
       throw (exceptions::FrameNotFoundException(frame_name));
     }
+    frame_id = this->robot_model_.getFrameId(frame_name);
   }
-
-  const int frame_id = this->robot_model_.getFrameId(frame_name);
 
   // 1 second for the Newton-Raphson method
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
@@ -351,11 +351,10 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
     J_b = J * W_b;
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    dq.set_velocities(
-        W_c * psi + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
+    dq.set_velocities(W_c * psi + params.alpha * W_b * (J_b.transpose() * 
+                                                        JJt.ldlt().solve(err - J.data() * W_c * psi)));
     q = q + dq * dt;
     q = this->clamp_in_range(q);
-
     ++i;
   }
   throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));

@@ -1,8 +1,0 @@
-./source/dynamical_systems/build
-./source/robot_model/build
-./source/state_representation/build
-./source/controllers/build
-./source/dynamical_systems/lib
-./source/robot_model/lib
-./source/state_representation/lib
-./source/controllers/lib

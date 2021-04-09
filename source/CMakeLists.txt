@@ -8,6 +8,7 @@ option(BUILD_CONTROLLERS "Build and install controllers library" ON)
 option(BUILD_DYNAMICAL_SYSTEMS "Build and install dynamical systems library" ON)
 option(BUILD_ROBOT_MODEL "Build and install robot model library" ON)
 option(EXPERIMENTAL_FEATURES "Include experimental features" OFF)
+option(BUILD_DEMOS "Include demonstration scripts" ON)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -49,4 +50,8 @@ endif()
 
 if(BUILD_ROBOT_MODEL)
   add_subdirectory(robot_model)
+endif()
+
+if(BUILD_DEMOS)
+  add_subdirectory(demos)
 endif()

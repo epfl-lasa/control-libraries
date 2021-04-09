@@ -116,8 +116,14 @@ RUN cmake -DBUILD_CONTROLLERS="ON" \
   && make -j all \
   && make install
 
+RUN rm -rf /tmp/control_lib/
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/opt/openrobots/lib/
+
 WORKDIR /tmp/
 COPY ./demos ./demos
 
 WORKDIR /tmp/demos/build
-RUN cmake .. && make -j all
+RUN cmake .. && make -j all && make install
+
+WORKDIR /usr/local/bin
+RUN rm -rf /tmp/demos/build

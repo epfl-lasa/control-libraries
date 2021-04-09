@@ -104,10 +104,6 @@ RUN CTEST_OUTPUT_ON_FAILURE=1 make test
 
 
 FROM development-dependencies as runtime-demonstrations
-ARG BUILD_TESTING=ON
-ARG BUILD_CONTROLLERS=ON
-ARG BUILD_DYNAMICAL_SYSTEMS=ON
-ARG BUILD_ROBOT_MODEL=ON
 
 WORKDIR /tmp/control_lib
 COPY ./source ./
@@ -117,7 +113,11 @@ RUN cmake -DBUILD_CONTROLLERS="ON" \
     -DBUILD_DYNAMICAL_SYSTEMS="ON" \
     -DBUILD_ROBOT_MODEL="ON" \
     -DBUILD_TESTING="OFF" .. \
-    -DBUILD_DEMOS="ON" .. \
-  && make -j all
+  && make -j all \
+  && make install
 
-WORKDIR /tmp/control_lib/build/demos
+WORKDIR /tmp/
+COPY ./demos ./demos
+
+WORKDIR /tmp/demos/build
+RUN cmake .. && make -j all

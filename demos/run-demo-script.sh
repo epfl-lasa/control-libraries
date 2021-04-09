@@ -23,7 +23,7 @@ if [ "$REBUILD" -eq 1 ]; then
     BUILD_FLAGS+=(--no-cache)
 fi
 
-DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}"  .
+DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}"  ..
 
 if [ -z "${1}" ]; then
   docker run -it --rm "${NAME}:${TAG}"

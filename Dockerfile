@@ -101,3 +101,29 @@ RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
   && make -j all
 
 RUN CTEST_OUTPUT_ON_FAILURE=1 make test
+
+
+FROM development-dependencies as runtime-demonstrations
+
+WORKDIR /tmp/control_lib
+COPY ./source ./
+
+WORKDIR /tmp/control_lib/build
+RUN cmake -DBUILD_CONTROLLERS="ON" \
+    -DBUILD_DYNAMICAL_SYSTEMS="ON" \
+    -DBUILD_ROBOT_MODEL="ON" \
+    -DBUILD_TESTING="OFF" .. \
+  && make -j all \
+  && make install
+
+RUN rm -rf /tmp/control_lib/
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/opt/openrobots/lib/
+
+WORKDIR /tmp/
+COPY ./demos ./demos
+
+WORKDIR /tmp/demos/build
+RUN cmake .. && make -j all && make install
+
+WORKDIR /usr/local/bin
+RUN rm -rf /tmp/demos/build

@@ -35,8 +35,3 @@ cmake-build-*
 *.out
 *.app
 
-# build folders
-source/build
-
-# gtest lib
-source/lib/googletest

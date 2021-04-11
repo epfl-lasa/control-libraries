@@ -39,6 +39,7 @@ include_directories(
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
+    kinematics_control_loop
 )
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})
@@ -52,6 +53,7 @@ foreach(SCRIPT ${DEMOS_SCRIPTS})
         robot_model
         controllers
     )
+    target_compile_definitions(${SCRIPT} PRIVATE SCRIPT_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/")
     install(TARGETS ${SCRIPT}
       RUNTIME DESTINATION bin
     )

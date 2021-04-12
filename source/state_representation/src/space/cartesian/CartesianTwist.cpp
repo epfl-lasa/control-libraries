@@ -32,11 +32,16 @@ CartesianTwist::CartesianTwist(const std::string& name,
   this->set_twist(twist);
 }
 
-CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianState(twist) {}
+CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {
+  // set all the state variables to 0 except linear and angular velocities
+  this->set_zero();
+  this->set_linear_velocity(state.get_linear_velocity());
+  this->set_angular_velocity(state.get_angular_velocity());
+}
 
-CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {}
+CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianTwist(static_cast<const CartesianState&>(twist)) {}
 
-CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianState(pose / std::chrono::seconds(1)) {}
+CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianTwist(pose / std::chrono::seconds(1)) {}
 
 CartesianTwist CartesianTwist::Zero(const std::string& name, const std::string& reference) {
   return CartesianState::Identity(name, reference);

@@ -112,6 +112,48 @@ TEST(CartesianStateTest, CopyPose) {
   EXPECT_TRUE(pose5.get_wrench().norm() == 0);
 }
 
+TEST(CartesianStateTest, CopyTwist) {
+  CartesianTwist twist1 = CartesianTwist::Random("test");
+  CartesianTwist twist2(twist1);
+  EXPECT_EQ(twist1.get_name(), twist2.get_name());
+  EXPECT_EQ(twist1.get_reference_frame(), twist2.get_reference_frame());
+  EXPECT_TRUE(twist1.data().isApprox(twist2.data()));
+  EXPECT_TRUE(twist2.get_position().norm() == 0);
+  EXPECT_TRUE(twist2.get_orientation().norm() == 1);
+  EXPECT_TRUE(twist2.get_orientation().w() == 1);
+  EXPECT_TRUE(twist2.get_accelerations().norm() == 0);
+  EXPECT_TRUE(twist2.get_wrench().norm() == 0);
+  CartesianTwist twist3 = twist1;
+  EXPECT_EQ(twist1.get_name(), twist3.get_name());
+  EXPECT_EQ(twist1.get_reference_frame(), twist3.get_reference_frame());
+  EXPECT_TRUE(twist1.data().isApprox(twist3.data()));
+  EXPECT_TRUE(twist1.data().isApprox(twist2.data()));
+  EXPECT_TRUE(twist3.get_position().norm() == 0);
+  EXPECT_TRUE(twist3.get_orientation().norm() == 1);
+  EXPECT_TRUE(twist3.get_orientation().w() == 1);
+  EXPECT_TRUE(twist3.get_accelerations().norm() == 0);
+  EXPECT_TRUE(twist3.get_wrench().norm() == 0);
+  // try to change non pose variables prior to the copy, those should be discarded
+  twist1.set_position(Eigen::Vector3d::Random());
+  twist1.set_orientation(Eigen::Quaterniond::UnitRandom());
+  twist1.set_linear_acceleration(Eigen::Vector3d::Random());
+  twist1.set_force(Eigen::Vector3d::Random());
+  CartesianTwist twist4 = twist1;
+  EXPECT_TRUE(twist1.data().isApprox(twist4.data()));
+  EXPECT_TRUE(twist4.get_position().norm() == 0);
+  EXPECT_TRUE(twist4.get_orientation().norm() == 1);
+  EXPECT_TRUE(twist4.get_orientation().w() == 1);
+  EXPECT_TRUE(twist4.get_accelerations().norm() == 0);
+  EXPECT_TRUE(twist4.get_wrench().norm() == 0);
+  // copy a state, only the pose variables should be non 0
+  CartesianTwist twist5 = CartesianState::Random("test");
+  EXPECT_TRUE(twist5.get_position().norm() == 0);
+  EXPECT_TRUE(twist5.get_orientation().norm() == 1);
+  EXPECT_TRUE(twist5.get_orientation().w() == 1);
+  EXPECT_TRUE(twist5.get_accelerations().norm() == 0);
+  EXPECT_TRUE(twist5.get_wrench().norm() == 0);
+}
+
 TEST(CartesianStateTest, GetData) {
   CartesianState cs = CartesianState::Random("test");
   Eigen::VectorXd concatenated_state(25);

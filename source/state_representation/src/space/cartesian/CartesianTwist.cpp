@@ -35,8 +35,7 @@ CartesianTwist::CartesianTwist(const std::string& name,
 CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {
   // set all the state variables to 0 except linear and angular velocities
   this->set_zero();
-  this->set_linear_velocity(state.get_linear_velocity());
-  this->set_angular_velocity(state.get_angular_velocity());
+  this->set_twist(state.get_twist());
 }
 
 CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianTwist(static_cast<const CartesianState&>(twist)) {}

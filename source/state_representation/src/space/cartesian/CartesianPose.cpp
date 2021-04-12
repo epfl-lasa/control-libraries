@@ -33,8 +33,7 @@ CartesianPose::CartesianPose(const std::string& name,
 CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state) {
   // set all the state variables to 0 except position and orientation
   this->set_zero();
-  this->set_position(state.get_position());
-  this->set_orientation(state.get_orientation());
+  this->set_pose(state.get_pose());
 }
 
 CartesianPose::CartesianPose(const CartesianPose& pose) : CartesianPose(static_cast<const CartesianState&>(pose)) {}

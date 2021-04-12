@@ -20,6 +20,7 @@ find_package(Eigen3 REQUIRED)
 find_package(pinocchio REQUIRED)
 find_package(OsqpEigen REQUIRED)
 find_package(osqp REQUIRED)
+find_package(cppzmq REQUIRED)
 
 find_library(state_representation REQUIRED)
 find_library(dynamical_systems REQUIRED)
@@ -35,11 +36,13 @@ include_directories(
     ${PINOCCHIO_INCLUDE_DIR}
     ${OsqpEigen_INCLUDE_DIR}
     /opt/openrobots/include
+    include
 )
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
     robot_kinematics_control_loop
+    zmq_interface
 )
 
 set(FIXTURE_INSTALL_PATH /etc/fixtures/)
@@ -55,6 +58,7 @@ foreach(SCRIPT ${DEMOS_SCRIPTS})
         dynamical_systems
         robot_model
         controllers
+        cppzmq
     )
     target_compile_definitions(${SCRIPT} PRIVATE SCRIPT_FIXTURES="${FIXTURE_INSTALL_PATH}")
     install(TARGETS ${SCRIPT}

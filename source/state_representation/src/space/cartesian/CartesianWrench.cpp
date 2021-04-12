@@ -28,9 +28,13 @@ CartesianWrench::CartesianWrench(const std::string& name,
   this->set_wrench(wrench);
 }
 
-CartesianWrench::CartesianWrench(const CartesianWrench& wrench) : CartesianState(wrench) {}
+CartesianWrench::CartesianWrench(const CartesianState& state) : CartesianState(state) {
+  // set all the state variables to 0 except force and torque
+  this->set_zero();
+  this->set_wrench(state.get_wrench());
+}
 
-CartesianWrench::CartesianWrench(const CartesianState& state) : CartesianState(state) {}
+CartesianWrench::CartesianWrench(const CartesianWrench& wrench) : CartesianWrench(static_cast<const CartesianState&>(wrench)) {}
 
 CartesianWrench CartesianWrench::Zero(const std::string& name, const std::string& reference) {
   return CartesianState::Identity(name, reference);

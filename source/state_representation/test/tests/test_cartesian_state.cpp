@@ -127,7 +127,6 @@ TEST(CartesianStateTest, CopyTwist) {
   EXPECT_EQ(twist1.get_name(), twist3.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist3.get_reference_frame());
   EXPECT_TRUE(twist1.data().isApprox(twist3.data()));
-  EXPECT_TRUE(twist1.data().isApprox(twist2.data()));
   EXPECT_TRUE(twist3.get_position().norm() == 0);
   EXPECT_TRUE(twist3.get_orientation().norm() == 1);
   EXPECT_TRUE(twist3.get_orientation().w() == 1);
@@ -152,6 +151,47 @@ TEST(CartesianStateTest, CopyTwist) {
   EXPECT_TRUE(twist5.get_orientation().w() == 1);
   EXPECT_TRUE(twist5.get_accelerations().norm() == 0);
   EXPECT_TRUE(twist5.get_wrench().norm() == 0);
+}
+
+TEST(CartesianStateTest, CopyWrench) {
+  CartesianWrench wrench1 = CartesianWrench::Random("test");
+  CartesianWrench wrench2(wrench1);
+  EXPECT_EQ(wrench1.get_name(), wrench2.get_name());
+  EXPECT_EQ(wrench1.get_reference_frame(), wrench2.get_reference_frame());
+  EXPECT_TRUE(wrench1.data().isApprox(wrench2.data()));
+  EXPECT_TRUE(wrench2.get_position().norm() == 0);
+  EXPECT_TRUE(wrench2.get_orientation().norm() == 1);
+  EXPECT_TRUE(wrench2.get_orientation().w() == 1);
+  EXPECT_TRUE(wrench2.get_twist().norm() == 0);
+  EXPECT_TRUE(wrench2.get_accelerations().norm() == 0);
+  CartesianWrench wrench3 = wrench1;
+  EXPECT_EQ(wrench1.get_name(), wrench3.get_name());
+  EXPECT_EQ(wrench1.get_reference_frame(), wrench3.get_reference_frame());
+  EXPECT_TRUE(wrench1.data().isApprox(wrench3.data()));
+  EXPECT_TRUE(wrench3.get_position().norm() == 0);
+  EXPECT_TRUE(wrench3.get_orientation().norm() == 1);
+  EXPECT_TRUE(wrench3.get_orientation().w() == 1);
+  EXPECT_TRUE(wrench3.get_twist().norm() == 0);
+  EXPECT_TRUE(wrench3.get_accelerations().norm() == 0);
+  // try to change non pose variables prior to the copy, those should be discarded
+  wrench1.set_position(Eigen::Vector3d::Random());
+  wrench1.set_orientation(Eigen::Quaterniond::UnitRandom());
+  wrench1.set_linear_velocity(Eigen::Vector3d::Random());
+  wrench1.set_linear_acceleration(Eigen::Vector3d::Random());
+  CartesianWrench wrench4 = wrench1;
+  EXPECT_TRUE(wrench1.data().isApprox(wrench4.data()));
+  EXPECT_TRUE(wrench4.get_position().norm() == 0);
+  EXPECT_TRUE(wrench4.get_orientation().norm() == 1);
+  EXPECT_TRUE(wrench4.get_orientation().w() == 1);
+  EXPECT_TRUE(wrench4.get_twist().norm() == 0);
+  EXPECT_TRUE(wrench4.get_accelerations().norm() == 0);
+  // copy a state, only the pose variables should be non 0
+  CartesianWrench wrench5 = CartesianState::Random("test");
+  EXPECT_TRUE(wrench5.get_position().norm() == 0);
+  EXPECT_TRUE(wrench5.get_orientation().norm() == 1);
+  EXPECT_TRUE(wrench5.get_orientation().w() == 1);
+  EXPECT_TRUE(wrench5.get_twist().norm() == 0);
+  EXPECT_TRUE(wrench5.get_accelerations().norm() == 0);
 }
 
 TEST(CartesianStateTest, GetData) {

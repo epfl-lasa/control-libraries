@@ -5,7 +5,7 @@
 namespace state_representation {
 class SpatialState : public State {
 private:
-  std::string reference_frame; ///< name of the reference frame
+  std::string reference_frame_; ///< name of the reference frame
 
 public:
   /**
@@ -31,6 +31,13 @@ public:
   SpatialState(const SpatialState& state);
 
   /**
+   * @brief Swap the values of the two SpatialState
+   * @param state1 State to be swapped with 2
+   * @param state2 State to be swapped with 1
+   */
+  friend void swap(SpatialState& state1, SpatialState& state2);
+
+  /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
@@ -40,12 +47,12 @@ public:
   /**
     * @brief Getter of the reference frame as const reference
      */
-  const std::string get_reference_frame() const;
+  const std::string& get_reference_frame() const;
 
   /**
-    * @brief Setter of the reference frame
-     */
-  virtual void set_reference_frame(const std::string& reference);
+   * @brief Setter of the reference frame
+   */
+  virtual void set_reference_frame(const std::string& reference_frame);
 
   /**
     * @brief Check if the state is compatible for operations with the state given as argument
@@ -54,23 +61,28 @@ public:
   virtual bool is_compatible(const State& state) const;
 };
 
+inline void swap(SpatialState& state1, SpatialState& state2) {
+  swap(static_cast<State&>(state1), static_cast<State&>(state2));
+  std::swap(state1.reference_frame_, state2.reference_frame_);
+}
+
 inline SpatialState& SpatialState::operator=(const SpatialState& state) {
-  State::operator=(state);
-  this->set_reference_frame(state.get_reference_frame());
-  return (*this);
+  SpatialState tmp(state);
+  swap(*this, tmp);
+  return *this;
 }
 
-inline const std::string SpatialState::get_reference_frame() const {
-  return this->reference_frame;
+inline const std::string& SpatialState::get_reference_frame() const {
+  return this->reference_frame_;
 }
 
-inline void SpatialState::set_reference_frame(const std::string& reference) {
-  this->reference_frame = reference;
+inline void SpatialState::set_reference_frame(const std::string& reference_frame) {
+  this->reference_frame_ = reference_frame;
 }
 
 inline bool SpatialState::is_compatible(const State& state) const {
   bool compatible = (this->get_name() == state.get_name())
-      && (this->reference_frame == static_cast<const SpatialState&>(state).reference_frame);
+      && (this->reference_frame_ == dynamic_cast<const SpatialState&>(state).reference_frame_);
   return compatible;
 }
 }

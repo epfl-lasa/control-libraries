@@ -15,15 +15,7 @@ CartesianState::CartesianState(const std::string& robot_name, const std::string&
   this->initialize();
 }
 
-CartesianState::CartesianState(const CartesianState& state) : SpatialState(state),
-                                                              position_(state.position_),
-                                                              orientation_(state.orientation_),
-                                                              linear_velocity_(state.linear_velocity_),
-                                                              angular_velocity_(state.angular_velocity_),
-                                                              linear_acceleration_(state.linear_acceleration_),
-                                                              angular_acceleration_(state.angular_acceleration_),
-                                                              force_(state.force_),
-                                                              torque_(state.torque_) {}
+CartesianState::CartesianState(const CartesianState& state) = default;
 
 void CartesianState::initialize() {
   this->State::initialize();

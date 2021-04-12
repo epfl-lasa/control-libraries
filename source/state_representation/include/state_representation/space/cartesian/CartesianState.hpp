@@ -147,6 +147,13 @@ public:
   static CartesianState Random(const std::string& name, const std::string& reference = "world");
 
   /**
+   * @brief Swap the values of the two CartesianState
+   * @param state1 CartesianState to be swapped with 2
+   * @param state2 CartesianState to be swapped with 1
+   */
+  friend void swap(CartesianState& state1, CartesianState& state2);
+
+  /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param state the state with value to assign
    * @return reference to the current state with new values
@@ -499,13 +506,22 @@ public:
   virtual void from_std_vector(const std::vector<double>& value);
 };
 
+inline void swap(CartesianState& state1, CartesianState& state2) {
+  swap(static_cast<SpatialState&>(state1), static_cast<SpatialState&>(state2));
+  std::swap(state1.position_, state2.position_);
+  std::swap(state1.orientation_, state2.orientation_);
+  std::swap(state1.linear_velocity_, state2.linear_velocity_);
+  std::swap(state1.angular_velocity_, state2.angular_velocity_);
+  std::swap(state1.linear_acceleration_, state2.linear_acceleration_);
+  std::swap(state1.angular_acceleration_, state2.angular_acceleration_);
+  std::swap(state1.force_, state2.force_);
+  std::swap(state1.torque_, state2.torque_);
+}
+
 inline CartesianState& CartesianState::operator=(const CartesianState& state) {
-  SpatialState::operator=(state);
-  this->set_pose(state.get_pose());
-  this->set_twist(state.get_twist());
-  this->set_accelerations(state.get_accelerations());
-  this->set_wrench(state.get_wrench());
-  return (*this);
+  CartesianState tmp(state);
+  swap(*this, tmp);
+  return *this;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_position() const {

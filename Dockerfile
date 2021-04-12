@@ -126,4 +126,4 @@ WORKDIR /tmp/demos/build
 RUN cmake .. && make -j all && make install
 
 WORKDIR /usr/local/bin
-RUN rm -rf /tmp/demos/build
+RUN rm -rf /tmp/demos/

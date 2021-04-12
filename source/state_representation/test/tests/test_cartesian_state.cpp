@@ -68,6 +68,50 @@ TEST(CartesianStateTest, RandomWrenchInitialization) {
   EXPECT_TRUE(random.get_wrench().norm() > 0);
 }
 
+TEST(CartesianStateTest, CopyState) {
+  CartesianState state1 = CartesianState::Random("test");
+  CartesianState state2(state1);
+  EXPECT_EQ(state1.get_name(), state2.get_name());
+  EXPECT_EQ(state1.get_reference_frame(), state2.get_reference_frame());
+  EXPECT_TRUE(state1.data().isApprox(state2.data()));
+  CartesianState state3 = state1;
+  EXPECT_EQ(state1.get_name(), state3.get_name());
+  EXPECT_EQ(state1.get_reference_frame(), state3.get_reference_frame());
+  EXPECT_TRUE(state1.data().isApprox(state3.data()));
+}
+
+TEST(CartesianStateTest, CopyPose) {
+  CartesianPose pose1 = CartesianPose::Random("test");
+  CartesianPose pose2(pose1);
+  EXPECT_EQ(pose1.get_name(), pose2.get_name());
+  EXPECT_EQ(pose1.get_reference_frame(), pose2.get_reference_frame());
+  EXPECT_TRUE(pose1.data().isApprox(pose2.data()));
+  EXPECT_TRUE(pose2.get_twist().norm() == 0);
+  EXPECT_TRUE(pose2.get_accelerations().norm() == 0);
+  EXPECT_TRUE(pose2.get_wrench().norm() == 0);
+  CartesianPose pose3 = pose1;
+  EXPECT_EQ(pose1.get_name(), pose3.get_name());
+  EXPECT_EQ(pose1.get_reference_frame(), pose3.get_reference_frame());
+  EXPECT_TRUE(pose1.data().isApprox(pose3.data()));
+  EXPECT_TRUE(pose3.get_twist().norm() == 0);
+  EXPECT_TRUE(pose3.get_accelerations().norm() == 0);
+  EXPECT_TRUE(pose3.get_wrench().norm() == 0);
+  // try to change non pose variables prior to the copy, those should be discarded
+  pose1.set_linear_velocity(Eigen::Vector3d::Random());
+  pose1.set_linear_acceleration(Eigen::Vector3d::Random());
+  pose1.set_force(Eigen::Vector3d::Random());
+  CartesianPose pose4 = pose1;
+  EXPECT_TRUE(pose1.data().isApprox(pose4.data()));
+  EXPECT_TRUE(pose4.get_twist().norm() == 0);
+  EXPECT_TRUE(pose4.get_accelerations().norm() == 0);
+  EXPECT_TRUE(pose4.get_wrench().norm() == 0);
+  // copy a state, only the pose variables should be non 0
+  CartesianPose pose5 = CartesianState::Random("test");
+  EXPECT_TRUE(pose5.get_twist().norm() == 0);
+  EXPECT_TRUE(pose5.get_accelerations().norm() == 0);
+  EXPECT_TRUE(pose5.get_wrench().norm() == 0);
+}
+
 TEST(CartesianStateTest, GetData) {
   CartesianState cs = CartesianState::Random("test");
   Eigen::VectorXd concatenated_state(25);

@@ -16,14 +16,14 @@ CartesianState::CartesianState(const std::string& robot_name, const std::string&
 }
 
 CartesianState::CartesianState(const CartesianState& state) : SpatialState(state),
-                                                              position(state.position),
-                                                              orientation(state.orientation),
-                                                              linear_velocity(state.linear_velocity),
-                                                              angular_velocity(state.angular_velocity),
-                                                              linear_acceleration(state.linear_acceleration),
-                                                              angular_acceleration(state.angular_acceleration),
-                                                              force(state.force),
-                                                              torque(state.torque) {}
+                                                              position_(state.position_),
+                                                              orientation_(state.orientation_),
+                                                              linear_velocity_(state.linear_velocity_),
+                                                              angular_velocity_(state.angular_velocity_),
+                                                              linear_acceleration_(state.linear_acceleration_),
+                                                              angular_acceleration_(state.angular_acceleration_),
+                                                              force_(state.force_),
+                                                              torque_(state.torque_) {}
 
 void CartesianState::initialize() {
   this->State::initialize();
@@ -31,14 +31,14 @@ void CartesianState::initialize() {
 }
 
 void CartesianState::set_zero() {
-  this->position.setZero();
-  this->orientation.setIdentity();
-  this->linear_velocity.setZero();
-  this->angular_velocity.setZero();
-  this->linear_acceleration.setZero();
-  this->angular_acceleration.setZero();
-  this->force.setZero();
-  this->torque.setZero();
+  this->position_.setZero();
+  this->orientation_.setIdentity();
+  this->linear_velocity_.setZero();
+  this->angular_velocity_.setZero();
+  this->linear_acceleration_.setZero();
+  this->angular_acceleration_.setZero();
+  this->force_.setZero();
+  this->torque_.setZero();
 }
 
 CartesianState CartesianState::Identity(const std::string& name, const std::string& reference) {
@@ -349,38 +349,38 @@ std::vector<double> CartesianState::norms(const CartesianStateVariable& state_va
 void CartesianState::normalize(const CartesianStateVariable& state_variable_type) {
   if (state_variable_type == CartesianStateVariable::POSITION || state_variable_type == CartesianStateVariable::POSE
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->position.normalize();
+    this->position_.normalize();
   }
   // there shouldn't be a need to renormalize orientation as it is already normalized
   if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->orientation.normalize();
+    this->orientation_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY
       || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
-    this->linear_velocity.normalize();
+    this->linear_velocity_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::ANGULAR_VELOCITY
       || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {
-    this->angular_velocity.normalize();
+    this->angular_velocity_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
       || state_variable_type == CartesianStateVariable::ACCELERATIONS
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->linear_acceleration.normalize();
+    this->linear_acceleration_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
       || state_variable_type == CartesianStateVariable::ACCELERATIONS
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->angular_acceleration.normalize();
+    this->angular_acceleration_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::FORCE || state_variable_type == CartesianStateVariable::WRENCH
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->force.normalize();
+    this->force_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::TORQUE || state_variable_type == CartesianStateVariable::WRENCH
       || state_variable_type == CartesianStateVariable::ALL) {
-    this->torque.normalize();
+    this->torque_.normalize();
   }
 }
 
@@ -395,36 +395,36 @@ std::ostream& operator<<(std::ostream& os, const CartesianState& state) {
     os << "Empty CartesianState";
   } else {
     os << state.get_name() << " CartesianState expressed in " << state.get_reference_frame() << " frame" << std::endl;
-    os << "position: (" << state.position(0) << ", ";
-    os << state.position(1) << ", ";
-    os << state.position(2) << ")" << std::endl;
-    os << "orientation: (" << state.orientation.w() << ", ";
-    os << state.orientation.x() << ", ";
-    os << state.orientation.y() << ", ";
-    os << state.orientation.z() << ")";
-    Eigen::AngleAxisd axis_angle(state.orientation);
+    os << "position: (" << state.position_(0) << ", ";
+    os << state.position_(1) << ", ";
+    os << state.position_(2) << ")" << std::endl;
+    os << "orientation: (" << state.orientation_.w() << ", ";
+    os << state.orientation_.x() << ", ";
+    os << state.orientation_.y() << ", ";
+    os << state.orientation_.z() << ")";
+    Eigen::AngleAxisd axis_angle(state.orientation_);
     os << " <=> theta: " << axis_angle.angle() << ", ";
     os << "axis: (" << axis_angle.axis()(0) << ", ";
     os << axis_angle.axis()(1) << ", ";
     os << axis_angle.axis()(2) << ")" << std::endl;
-    os << "linear velocity: (" << state.linear_velocity(0) << ", ";
-    os << state.linear_velocity(1) << ", ";
-    os << state.linear_velocity(2) << ")" << std::endl;
-    os << "angular velocity: (" << state.angular_velocity(0) << ", ";
-    os << state.angular_velocity(1) << ", ";
-    os << state.angular_velocity(2) << ")" << std::endl;
-    os << "linear acceleration: (" << state.linear_acceleration(0) << ", ";
-    os << state.linear_acceleration(1) << ", ";
-    os << state.linear_acceleration(2) << ")" << std::endl;
-    os << "angular acceleration: (" << state.angular_acceleration(0) << ", ";
-    os << state.angular_acceleration(1) << ", ";
-    os << state.angular_acceleration(2) << ")" << std::endl;
-    os << "force: (" << state.force(0) << ", ";
-    os << state.force(1) << ", ";
-    os << state.force(2) << ")" << std::endl;
-    os << "torque: (" << state.torque(0) << ", ";
-    os << state.torque(1) << ", ";
-    os << state.torque(2) << ")";
+    os << "linear velocity: (" << state.linear_velocity_(0) << ", ";
+    os << state.linear_velocity_(1) << ", ";
+    os << state.linear_velocity_(2) << ")" << std::endl;
+    os << "angular velocity: (" << state.angular_velocity_(0) << ", ";
+    os << state.angular_velocity_(1) << ", ";
+    os << state.angular_velocity_(2) << ")" << std::endl;
+    os << "linear acceleration: (" << state.linear_acceleration_(0) << ", ";
+    os << state.linear_acceleration_(1) << ", ";
+    os << state.linear_acceleration_(2) << ")" << std::endl;
+    os << "angular acceleration: (" << state.angular_acceleration_(0) << ", ";
+    os << state.angular_acceleration_(1) << ", ";
+    os << state.angular_acceleration_(2) << ")" << std::endl;
+    os << "force: (" << state.force_(0) << ", ";
+    os << state.force_(1) << ", ";
+    os << state.force_(2) << ")" << std::endl;
+    os << "torque: (" << state.torque_(0) << ", ";
+    os << state.torque_(1) << ", ";
+    os << state.torque_(2) << ")";
   }
   return os;
 }

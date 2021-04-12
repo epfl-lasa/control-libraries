@@ -39,7 +39,7 @@ include_directories(
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
-    kinematics_control_loop
+    robot_kinematics_control_loop
 )
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})

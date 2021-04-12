@@ -32,8 +32,8 @@ public:
 
   /**
    * @brief Swap the values of the two SpatialState
-   * @param state1 State to be swapped with 2
-   * @param state2 State to be swapped with 1
+   * @param state1 SpatialState to be swapped with 2
+   * @param state2 SpatialState to be swapped with 1
    */
   friend void swap(SpatialState& state1, SpatialState& state2);
 

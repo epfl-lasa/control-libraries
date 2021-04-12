@@ -12,60 +12,60 @@ TEST(CartesianStateTest, IdentityInitialization) {
   // the joint state should not be considered empty (as it is properly initialized)
   EXPECT_FALSE(identity.is_empty());
   // all data should be zero except for orientation that should be identity
-  EXPECT_TRUE(identity.get_position().norm() == 0);
-  EXPECT_TRUE(identity.get_orientation().norm() == 1);
-  EXPECT_TRUE(identity.get_orientation().w() == 1);
-  EXPECT_TRUE(identity.get_twist().norm() == 0);
-  EXPECT_TRUE(identity.get_accelerations().norm() == 0);
-  EXPECT_TRUE(identity.get_wrench().norm() == 0);
+  EXPECT_EQ(identity.get_position().norm(), 0);
+  EXPECT_EQ(identity.get_orientation().norm(), 1);
+  EXPECT_EQ(identity.get_orientation().w(), 1);
+  EXPECT_EQ(identity.get_twist().norm(), 0);
+  EXPECT_EQ(identity.get_accelerations().norm(), 0);
+  EXPECT_EQ(identity.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, RandomStateInitialization) {
   CartesianState random = CartesianState::Random("test");
   // all data should be random (non 0)
-  EXPECT_TRUE(random.get_position().norm() > 0);
-  EXPECT_TRUE(abs(random.get_orientation().w()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().x()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().y()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().z()) > 0);
-  EXPECT_TRUE(random.get_twist().norm() > 0);
-  EXPECT_TRUE(random.get_accelerations().norm() > 0);
-  EXPECT_TRUE(random.get_wrench().norm() > 0);
+  EXPECT_GT(random.get_position().norm(), 0);
+  EXPECT_GT(abs(random.get_orientation().w()), 0);
+  EXPECT_GT(abs(random.get_orientation().x()), 0);
+  EXPECT_GT(abs(random.get_orientation().y()), 0);
+  EXPECT_GT(abs(random.get_orientation().z()), 0);
+  EXPECT_GT(random.get_twist().norm(), 0);
+  EXPECT_GT(random.get_accelerations().norm(), 0);
+  EXPECT_GT(random.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, RandomPoseInitialization) {
   CartesianPose random = CartesianPose::Random("test");
   // only position should be random
-  EXPECT_TRUE(random.get_position().norm() > 0);
-  EXPECT_TRUE(abs(random.get_orientation().w()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().x()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().y()) > 0);
-  EXPECT_TRUE(abs(random.get_orientation().z()) > 0);
-  EXPECT_TRUE(random.get_twist().norm() == 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_wrench().norm() == 0);
+  EXPECT_GT(random.get_position().norm(), 0);
+  EXPECT_GT(abs(random.get_orientation().w()), 0);
+  EXPECT_GT(abs(random.get_orientation().x()), 0);
+  EXPECT_GT(abs(random.get_orientation().y()), 0);
+  EXPECT_GT(abs(random.get_orientation().z()), 0);
+  EXPECT_EQ(random.get_twist().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_EQ(random.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, RandomTwistInitialization) {
   CartesianTwist random = CartesianTwist::Random("test");
   // only position should be random
-  EXPECT_TRUE(random.get_position().norm() == 0);
-  EXPECT_TRUE(random.get_orientation().norm() == 1);
-  EXPECT_TRUE(random.get_orientation().w() == 1);
-  EXPECT_TRUE(random.get_twist().norm() > 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_wrench().norm() == 0);
+  EXPECT_EQ(random.get_position().norm(), 0);
+  EXPECT_EQ(random.get_orientation().norm(), 1);
+  EXPECT_EQ(random.get_orientation().w(), 1);
+  EXPECT_GT(random.get_twist().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_EQ(random.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, RandomWrenchInitialization) {
   CartesianWrench random = CartesianWrench::Random("test");
   // only position should be random
-  EXPECT_TRUE(random.get_position().norm() == 0);
-  EXPECT_TRUE(random.get_orientation().norm() == 1);
-  EXPECT_TRUE(random.get_orientation().w() == 1);
-  EXPECT_TRUE(random.get_twist().norm() == 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_wrench().norm() > 0);
+  EXPECT_EQ(random.get_position().norm(), 0);
+  EXPECT_EQ(random.get_orientation().norm(), 1);
+  EXPECT_EQ(random.get_orientation().w(), 1);
+  EXPECT_EQ(random.get_twist().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_GT(random.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, CopyState) {
@@ -86,30 +86,30 @@ TEST(CartesianStateTest, CopyPose) {
   EXPECT_EQ(pose1.get_name(), pose2.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose2.get_reference_frame());
   EXPECT_TRUE(pose1.data().isApprox(pose2.data()));
-  EXPECT_TRUE(pose2.get_twist().norm() == 0);
-  EXPECT_TRUE(pose2.get_accelerations().norm() == 0);
-  EXPECT_TRUE(pose2.get_wrench().norm() == 0);
+  EXPECT_EQ(pose2.get_twist().norm(), 0);
+  EXPECT_EQ(pose2.get_accelerations().norm(), 0);
+  EXPECT_EQ(pose2.get_wrench().norm(), 0);
   CartesianPose pose3 = pose1;
   EXPECT_EQ(pose1.get_name(), pose3.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose3.get_reference_frame());
   EXPECT_TRUE(pose1.data().isApprox(pose3.data()));
-  EXPECT_TRUE(pose3.get_twist().norm() == 0);
-  EXPECT_TRUE(pose3.get_accelerations().norm() == 0);
-  EXPECT_TRUE(pose3.get_wrench().norm() == 0);
+  EXPECT_EQ(pose3.get_twist().norm(), 0);
+  EXPECT_EQ(pose3.get_accelerations().norm(), 0);
+  EXPECT_EQ(pose3.get_wrench().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
   pose1.set_linear_velocity(Eigen::Vector3d::Random());
   pose1.set_linear_acceleration(Eigen::Vector3d::Random());
   pose1.set_force(Eigen::Vector3d::Random());
   CartesianPose pose4 = pose1;
   EXPECT_TRUE(pose1.data().isApprox(pose4.data()));
-  EXPECT_TRUE(pose4.get_twist().norm() == 0);
-  EXPECT_TRUE(pose4.get_accelerations().norm() == 0);
-  EXPECT_TRUE(pose4.get_wrench().norm() == 0);
+  EXPECT_EQ(pose4.get_twist().norm(), 0);
+  EXPECT_EQ(pose4.get_accelerations().norm(), 0);
+  EXPECT_EQ(pose4.get_wrench().norm(), 0);
   // copy a state, only the pose variables should be non 0
   CartesianPose pose5 = CartesianState::Random("test");
-  EXPECT_TRUE(pose5.get_twist().norm() == 0);
-  EXPECT_TRUE(pose5.get_accelerations().norm() == 0);
-  EXPECT_TRUE(pose5.get_wrench().norm() == 0);
+  EXPECT_EQ(pose5.get_twist().norm(), 0);
+  EXPECT_EQ(pose5.get_accelerations().norm(), 0);
+  EXPECT_EQ(pose5.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, CopyTwist) {
@@ -118,20 +118,20 @@ TEST(CartesianStateTest, CopyTwist) {
   EXPECT_EQ(twist1.get_name(), twist2.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist2.get_reference_frame());
   EXPECT_TRUE(twist1.data().isApprox(twist2.data()));
-  EXPECT_TRUE(twist2.get_position().norm() == 0);
-  EXPECT_TRUE(twist2.get_orientation().norm() == 1);
-  EXPECT_TRUE(twist2.get_orientation().w() == 1);
-  EXPECT_TRUE(twist2.get_accelerations().norm() == 0);
-  EXPECT_TRUE(twist2.get_wrench().norm() == 0);
+  EXPECT_EQ(twist2.get_position().norm(), 0);
+  EXPECT_EQ(twist2.get_orientation().norm(), 1);
+  EXPECT_EQ(twist2.get_orientation().w(), 1);
+  EXPECT_EQ(twist2.get_accelerations().norm(), 0);
+  EXPECT_EQ(twist2.get_wrench().norm(), 0);
   CartesianTwist twist3 = twist1;
   EXPECT_EQ(twist1.get_name(), twist3.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist3.get_reference_frame());
   EXPECT_TRUE(twist1.data().isApprox(twist3.data()));
-  EXPECT_TRUE(twist3.get_position().norm() == 0);
-  EXPECT_TRUE(twist3.get_orientation().norm() == 1);
-  EXPECT_TRUE(twist3.get_orientation().w() == 1);
-  EXPECT_TRUE(twist3.get_accelerations().norm() == 0);
-  EXPECT_TRUE(twist3.get_wrench().norm() == 0);
+  EXPECT_EQ(twist3.get_position().norm(), 0);
+  EXPECT_EQ(twist3.get_orientation().norm(), 1);
+  EXPECT_EQ(twist3.get_orientation().w(), 1);
+  EXPECT_EQ(twist3.get_accelerations().norm(), 0);
+  EXPECT_EQ(twist3.get_wrench().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
   twist1.set_position(Eigen::Vector3d::Random());
   twist1.set_orientation(Eigen::Quaterniond::UnitRandom());
@@ -139,18 +139,18 @@ TEST(CartesianStateTest, CopyTwist) {
   twist1.set_force(Eigen::Vector3d::Random());
   CartesianTwist twist4 = twist1;
   EXPECT_TRUE(twist1.data().isApprox(twist4.data()));
-  EXPECT_TRUE(twist4.get_position().norm() == 0);
-  EXPECT_TRUE(twist4.get_orientation().norm() == 1);
-  EXPECT_TRUE(twist4.get_orientation().w() == 1);
-  EXPECT_TRUE(twist4.get_accelerations().norm() == 0);
-  EXPECT_TRUE(twist4.get_wrench().norm() == 0);
+  EXPECT_EQ(twist4.get_position().norm(), 0);
+  EXPECT_EQ(twist4.get_orientation().norm(), 1);
+  EXPECT_EQ(twist4.get_orientation().w(), 1);
+  EXPECT_EQ(twist4.get_accelerations().norm(), 0);
+  EXPECT_EQ(twist4.get_wrench().norm(), 0);
   // copy a state, only the pose variables should be non 0
   CartesianTwist twist5 = CartesianState::Random("test");
-  EXPECT_TRUE(twist5.get_position().norm() == 0);
-  EXPECT_TRUE(twist5.get_orientation().norm() == 1);
-  EXPECT_TRUE(twist5.get_orientation().w() == 1);
-  EXPECT_TRUE(twist5.get_accelerations().norm() == 0);
-  EXPECT_TRUE(twist5.get_wrench().norm() == 0);
+  EXPECT_EQ(twist5.get_position().norm(), 0);
+  EXPECT_EQ(twist5.get_orientation().norm(), 1);
+  EXPECT_EQ(twist5.get_orientation().w(), 1);
+  EXPECT_EQ(twist5.get_accelerations().norm(), 0);
+  EXPECT_EQ(twist5.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, CopyWrench) {
@@ -159,20 +159,20 @@ TEST(CartesianStateTest, CopyWrench) {
   EXPECT_EQ(wrench1.get_name(), wrench2.get_name());
   EXPECT_EQ(wrench1.get_reference_frame(), wrench2.get_reference_frame());
   EXPECT_TRUE(wrench1.data().isApprox(wrench2.data()));
-  EXPECT_TRUE(wrench2.get_position().norm() == 0);
-  EXPECT_TRUE(wrench2.get_orientation().norm() == 1);
-  EXPECT_TRUE(wrench2.get_orientation().w() == 1);
-  EXPECT_TRUE(wrench2.get_twist().norm() == 0);
-  EXPECT_TRUE(wrench2.get_accelerations().norm() == 0);
+  EXPECT_EQ(wrench2.get_position().norm(), 0);
+  EXPECT_EQ(wrench2.get_orientation().norm(), 1);
+  EXPECT_EQ(wrench2.get_orientation().w(), 1);
+  EXPECT_EQ(wrench2.get_twist().norm(), 0);
+  EXPECT_EQ(wrench2.get_accelerations().norm(), 0);
   CartesianWrench wrench3 = wrench1;
   EXPECT_EQ(wrench1.get_name(), wrench3.get_name());
   EXPECT_EQ(wrench1.get_reference_frame(), wrench3.get_reference_frame());
   EXPECT_TRUE(wrench1.data().isApprox(wrench3.data()));
-  EXPECT_TRUE(wrench3.get_position().norm() == 0);
-  EXPECT_TRUE(wrench3.get_orientation().norm() == 1);
-  EXPECT_TRUE(wrench3.get_orientation().w() == 1);
-  EXPECT_TRUE(wrench3.get_twist().norm() == 0);
-  EXPECT_TRUE(wrench3.get_accelerations().norm() == 0);
+  EXPECT_EQ(wrench3.get_position().norm(), 0);
+  EXPECT_EQ(wrench3.get_orientation().norm(), 1);
+  EXPECT_EQ(wrench3.get_orientation().w(), 1);
+  EXPECT_EQ(wrench3.get_twist().norm(), 0);
+  EXPECT_EQ(wrench3.get_accelerations().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
   wrench1.set_position(Eigen::Vector3d::Random());
   wrench1.set_orientation(Eigen::Quaterniond::UnitRandom());
@@ -180,18 +180,18 @@ TEST(CartesianStateTest, CopyWrench) {
   wrench1.set_linear_acceleration(Eigen::Vector3d::Random());
   CartesianWrench wrench4 = wrench1;
   EXPECT_TRUE(wrench1.data().isApprox(wrench4.data()));
-  EXPECT_TRUE(wrench4.get_position().norm() == 0);
-  EXPECT_TRUE(wrench4.get_orientation().norm() == 1);
-  EXPECT_TRUE(wrench4.get_orientation().w() == 1);
-  EXPECT_TRUE(wrench4.get_twist().norm() == 0);
-  EXPECT_TRUE(wrench4.get_accelerations().norm() == 0);
+  EXPECT_EQ(wrench4.get_position().norm(), 0);
+  EXPECT_EQ(wrench4.get_orientation().norm(), 1);
+  EXPECT_EQ(wrench4.get_orientation().w(), 1);
+  EXPECT_EQ(wrench4.get_twist().norm(), 0);
+  EXPECT_EQ(wrench4.get_accelerations().norm(), 0);
   // copy a state, only the pose variables should be non 0
   CartesianWrench wrench5 = CartesianState::Random("test");
-  EXPECT_TRUE(wrench5.get_position().norm() == 0);
-  EXPECT_TRUE(wrench5.get_orientation().norm() == 1);
-  EXPECT_TRUE(wrench5.get_orientation().w() == 1);
-  EXPECT_TRUE(wrench5.get_twist().norm() == 0);
-  EXPECT_TRUE(wrench5.get_accelerations().norm() == 0);
+  EXPECT_EQ(wrench5.get_position().norm(), 0);
+  EXPECT_EQ(wrench5.get_orientation().norm(), 1);
+  EXPECT_EQ(wrench5.get_orientation().w(), 1);
+  EXPECT_EQ(wrench5.get_twist().norm(), 0);
+  EXPECT_EQ(wrench5.get_accelerations().norm(), 0);
 }
 
 TEST(CartesianStateTest, GetData) {
@@ -205,42 +205,44 @@ TEST(CartesianStateTest, CartesianStateToStdVector) {
   CartesianState cs = CartesianState::Random("test");
   std::vector<double> vec_data = cs.to_std_vector();
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(cs.data()(i) == vec_data[i]);
+    EXPECT_EQ(cs.data()(i), vec_data[i]);
   }
 }
 
 TEST(CartesianStateTest, CartesianPoseToStdVector) {
   CartesianPose cp = CartesianPose::Random("test");
   std::vector<double> vec_data = cp.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == 7);
+  EXPECT_EQ(vec_data.size(), 7);
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(cp.data()(i) == vec_data[i]);
+    EXPECT_EQ(cp.data()(i), vec_data[i]);
   }
 }
 
 TEST(CartesianStateTest, CartesianTwistToStdVector) {
   CartesianTwist ct = CartesianTwist::Random("test");
   std::vector<double> vec_data = ct.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == 6);
+  EXPECT_EQ(vec_data.size(), 6);
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(ct.data()(i) == vec_data[i]);
+    EXPECT_EQ(ct.data()(i), vec_data[i]);
   }
 }
 
 TEST(CartesianStateTest, CartesianWrenchToStdVector) {
   CartesianWrench cw = CartesianWrench::Random("test");
   std::vector<double> vec_data = cw.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == 6);
+  EXPECT_EQ(vec_data.size(), 6);
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(cw.data()(i) == vec_data[i]);
+    EXPECT_EQ(cw.data()(i), vec_data[i]);
   }
 }
 
 TEST(CartesianStateTest, NegateQuaternion) {
   Eigen::Quaterniond q = Eigen::Quaterniond::UnitRandom();
   Eigen::Quaterniond q2 = Eigen::Quaterniond(-q.coeffs());
-  EXPECT_TRUE(q.w() == -q2.w());
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(q.vec()(i) == -q2.vec()(i));
+  EXPECT_EQ(q.w(), -q2.w());
+  for (int i = 0; i < 3; ++i) {
+    EXPECT_EQ(q.vec()(i), -q2.vec()(i));
+  }
 }
 
 TEST(CartesianStateTest, MultiplyTransformsBothOperators) {
@@ -268,7 +270,9 @@ TEST(CartesianStateTest, MultiplyTransformsSameOrientation) {
   CartesianPose tf2("t2", pos2, rot2, "t1");
   tf1 *= tf2;
   Eigen::Vector3d pos_truth(5, 7, 9);
-  for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  for (int i = 0; i < pos_truth.size(); ++i) {
+    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  }
 }
 
 TEST(CartesianStateTest, MultiplyTransformsDifferentOrientation) {
@@ -281,8 +285,10 @@ TEST(CartesianStateTest, MultiplyTransformsDifferentOrientation) {
   tf1 *= tf2;
   Eigen::Vector3d pos_truth(5, -4, 8);
   Eigen::Quaterniond rot_truth(0., 0., 0., 1.);
-  for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
+  for (int i = 0; i < pos_truth.size(); ++i) {
+    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  }
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
 }
 
 TEST(CartesianStateTest, TestInverseNullOrientation) {
@@ -294,8 +300,10 @@ TEST(CartesianStateTest, TestInverseNullOrientation) {
   Eigen::Quaterniond rot_truth(1., 0., 0., 0.);
   EXPECT_EQ(tf1.get_name(), "world");
   EXPECT_EQ(tf1.get_reference_frame(), "t1");
-  for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
+  for (int i = 0; i < pos_truth.size(); ++i) {
+    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  }
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
 }
 
 TEST(CartesianStateTest, TestInverseNonNullOrientation) {
@@ -305,8 +313,10 @@ TEST(CartesianStateTest, TestInverseNonNullOrientation) {
   tf1 = tf1.inverse();
   Eigen::Vector3d pos_truth(-1, -3, 2);
   Eigen::Quaterniond rot_truth(0.70710678, -0.70710678, 0., 0.);
-  for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
+  for (int i = 0; i < pos_truth.size(); ++i) {
+    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  }
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
 }
 
 TEST(CartesianStateTest, TestMultiplyInverseNonNullOrientation) {
@@ -316,8 +326,10 @@ TEST(CartesianStateTest, TestMultiplyInverseNonNullOrientation) {
   tf1 *= tf1.inverse();
   Eigen::Vector3d pos_truth(0, 0, 0);
   Eigen::Quaterniond rot_truth(1., 0., 0., 0.);
-  for (int i = 0; i < pos_truth.size(); ++i) EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  EXPECT_TRUE(abs(tf1.get_orientation().dot(rot_truth)) > 1 - 10E-4);
+  for (int i = 0; i < pos_truth.size(); ++i) {
+    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
+  }
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
 }
 
 TEST(CartesianStateTest, MultiplyPoseAndState) {
@@ -325,11 +337,12 @@ TEST(CartesianStateTest, MultiplyPoseAndState) {
   CartesianState s = CartesianPose::Random("test2", "test");
   CartesianState res = p * s;
   CartesianPose res2 = p * static_cast<CartesianPose>(s);
-  for (int i = 0; i < res.get_position().size(); ++i)
+  for (int i = 0; i < res.get_position().size(); ++i) {
     EXPECT_NEAR(res.get_position()(i),
                 res2.get_position()(i),
                 0.00001);
-  EXPECT_TRUE(abs(res.get_orientation().dot(res2.get_orientation())) > 1 - 10E-4);
+  }
+  EXPECT_GT(abs(res.get_orientation().dot(res2.get_orientation())), 1 - 10E-4);
 }
 
 TEST(CartesianStateTest, TestAddTwoPoses) {
@@ -339,7 +352,6 @@ TEST(CartesianStateTest, TestAddTwoPoses) {
   Eigen::Vector3d pos2(1, 0, 0);
   Eigen::Quaterniond rot2(0, 1, 0, 0);
   CartesianPose tf2("t1", pos2, rot2);
-
 }
 
 TEST(CartesianStateTest, TestAddDisplacement) {
@@ -384,12 +396,12 @@ TEST(CartesianStateTest, TestImplicitConversion) {
 TEST(CartesianStateTest, TestVelocityClamping) {
   CartesianTwist vel("test", Eigen::Vector3d(1, -2, 3), Eigen::Vector3d(1, 2, -3));
   vel.clamp(1, 0.5);
-  EXPECT_TRUE(vel.get_linear_velocity().norm() <= 1);
-  EXPECT_TRUE(vel.get_angular_velocity().norm() <= 0.5);
+  EXPECT_LE(vel.get_linear_velocity().norm(), 1);
+  EXPECT_LE(vel.get_angular_velocity().norm(), 0.5);
   vel *= 0.01;
   for (int i = 0; i < 3; ++i) {
-    EXPECT_TRUE(vel.clamped(1, 0.5, 0.1, 0.1).get_linear_velocity()(i) == 0);
-    EXPECT_TRUE(vel.clamped(1, 0.5, 0.1, 0.1).get_angular_velocity()(i) == 0);
+    EXPECT_EQ(vel.clamped(1, 0.5, 0.1, 0.1).get_linear_velocity()(i), 0);
+    EXPECT_EQ(vel.clamped(1, 0.5, 0.1, 0.1).get_angular_velocity()(i), 0);
   }
 }
 
@@ -399,12 +411,12 @@ TEST(CartesianStateTest, TestPoseDistance) {
   CartesianPose p3("test", Eigen::Vector3d(1, 0, 0), Eigen::Quaterniond(0, 1, 0, 0));
   double d1 = dist(p1, p2);
   double d2 = p1.dist(p2);
-  EXPECT_TRUE(abs(d1 - d2) < 1e-4);
-  EXPECT_TRUE(abs(d1 - 1.0) < 1e-4);
+  EXPECT_LT(abs(d1 - d2), 1e-4);
+  EXPECT_LT(abs(d1 - 1.0), 1e-4);
   double d3 = dist(p1, p3, CartesianStateVariable::ORIENTATION);
-  EXPECT_TRUE(abs(d3 - 3.14159) < 1e10-3);
+  EXPECT_LT(abs(d3 - 3.14159), 1e10 - 3);
   double d4 = dist(p2, p3);
-  EXPECT_TRUE(abs(d3 - d4) < 1e10-3);
+  EXPECT_LT(abs(d3 - d4), 1e10 - 3);
 }
 
 TEST(CartesianStateTest, TestFilter) {
@@ -414,14 +426,16 @@ TEST(CartesianStateTest, TestFilter) {
     CartesianPose temp = tf1;
     double alpha = 0.1;
     tf1 = (1 - alpha) * tf1 + alpha * tf2;
-    EXPECT_TRUE((tf1.get_position() - ((1 - alpha) * temp.get_position() + alpha * tf2.get_position())).norm() < 1e-4);
+    EXPECT_LT((tf1.get_position() - ((1 - alpha) * temp.get_position() + alpha * tf2.get_position())).norm(), 1e-4);
   }
 }
 
 TEST(CartesianStateTest, TestToSTDVector) {
   CartesianPose p = CartesianPose::Random("t1");
   std::vector<double> v = p.to_std_vector();
-  for (unsigned int i = 0; i < 3; ++i) EXPECT_NEAR(p.get_position()(i), v[i], 0.00001);
+  for (unsigned int i = 0; i < 3; ++i) {
+    EXPECT_NEAR(p.get_position()(i), v[i], 0.00001);
+  }
   EXPECT_NEAR(p.get_orientation().w(), v[3], 0.00001);
   EXPECT_NEAR(p.get_orientation().x(), v[4], 0.00001);
   EXPECT_NEAR(p.get_orientation().y(), v[5], 0.00001);
@@ -498,14 +512,14 @@ TEST(CartesianStateTest, TestAccelerationNorms) {
   CartesianState cs = CartesianState::Random("cs");
   // independent variables first
   norms = cs.norms(CartesianStateVariable::LINEAR_ACCELERATION);
-  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_EQ(norms.size(), 1);
   EXPECT_NEAR(norms[0], cs.get_linear_acceleration().norm(), tolerance);
   norms = cs.norms(CartesianStateVariable::ANGULAR_ACCELERATION);
-  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_EQ(norms.size(), 1);
   EXPECT_NEAR(norms[0], cs.get_angular_acceleration().norm(), tolerance);
   // then grouped by two
   norms = cs.norms(CartesianStateVariable::ACCELERATIONS);
-  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_EQ(norms.size(), 2);
   EXPECT_NEAR(norms[0], cs.get_linear_acceleration().norm(), tolerance);
   EXPECT_NEAR(norms[1], cs.get_angular_acceleration().norm(), tolerance);
 }
@@ -516,20 +530,20 @@ TEST(CartesianStateTest, TestWrenchNorms) {
   CartesianState cs = CartesianState::Random("cs");
   // independent variables first
   norms = cs.norms(CartesianStateVariable::FORCE);
-  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_EQ(norms.size(), 1);
   EXPECT_NEAR(norms[0], cs.get_force().norm(), tolerance);
   norms = cs.norms(CartesianStateVariable::TORQUE);
-  EXPECT_TRUE(norms.size() == 1);
+  EXPECT_EQ(norms.size(), 1);
   EXPECT_NEAR(norms[0], cs.get_torque().norm(), tolerance);
   // then grouped by two
   norms = cs.norms(CartesianStateVariable::WRENCH);
-  EXPECT_TRUE(norms.size() == 2);
+  EXPECT_EQ(norms.size(), 2);
   EXPECT_NEAR(norms[0], cs.get_force().norm(), tolerance);
   EXPECT_NEAR(norms[1], cs.get_torque().norm(), tolerance);
   // test with CartesianTwist default variable
   CartesianWrench cw = CartesianWrench::Random("cw");
   std::vector<double> wrench_norms = cw.norms();
-  EXPECT_TRUE(wrench_norms.size() == 2);
+  EXPECT_EQ(wrench_norms.size(), 2);
   EXPECT_NEAR(wrench_norms[0], cw.get_force().norm(), tolerance);
   EXPECT_NEAR(wrench_norms[1], cw.get_torque().norm(), tolerance);
 }

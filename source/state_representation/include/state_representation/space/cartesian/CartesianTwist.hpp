@@ -74,7 +74,7 @@ public:
   static CartesianTwist Random(const std::string& name, const std::string& reference = "world");
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param twist the twist with value to assign
    * @return reference to the current twist with new values
    */
@@ -116,14 +116,14 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param twist CartesianTwist to substract
+   * @param twist CartesianTwist to subtract
    * @return the current CartesianTwist minus the CartesianTwist given in argument
    */
   CartesianTwist& operator-=(const CartesianTwist& twist);
 
   /**
    * @brief Overload the - operator with a twist
-   * @param twist CartesianTwist to substract
+   * @param twist CartesianTwist to subtract
    * @return the current CartesianTwist minus the CartesianTwist given in argument
    */
   CartesianTwist operator-(const CartesianTwist& twist) const;
@@ -207,7 +207,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the CartesianTwist to
+   * @param os the ostream to append the string representing the CartesianTwist to
    * @param CartesianTwist the CartesianTwist to print
    * @return the appended ostream
    */

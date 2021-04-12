@@ -1,12 +1,12 @@
-#include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/space/cartesian/CartesianTwist.hpp"
-#include "state_representation/robot/JointPositions.hpp"
-#include "state_representation/robot/JointVelocities.hpp"
-#include "dynamical_systems/Linear.hpp"
-#include "robot_model/Model.hpp"
 #include <chrono>
 #include <thread>
 #include <utility>
+#include <state_representation/space/cartesian/CartesianPose.hpp>
+#include <state_representation/space/cartesian/CartesianTwist.hpp>
+#include <state_representation/robot/JointPositions.hpp>
+#include <state_representation/robot/JointVelocities.hpp>
+#include <dynamical_systems/Linear.hpp>
+#include <robot_model/Model.hpp>
 
 using namespace state_representation;
 using namespace dynamical_systems;

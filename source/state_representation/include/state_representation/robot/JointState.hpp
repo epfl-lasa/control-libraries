@@ -479,10 +479,10 @@ inline JointState& JointState::operator=(const JointState& state) {
 
 inline bool JointState::is_compatible(const State& state) const {
   bool compatible = this->State::is_compatible(state);
-  compatible = compatible && (this->names_.size() == static_cast<const JointState&>(state).names_.size());
+  compatible = compatible && (this->names_.size() == dynamic_cast<const JointState&>(state).names_.size());
   if (compatible) {
     for (unsigned int i = 0; i < this->names_.size(); ++i) {
-      compatible = (compatible && this->names_[i] == static_cast<const JointState&>(state).names_[i]);
+      compatible = (compatible && this->names_[i] == dynamic_cast<const JointState&>(state).names_[i]);
     }
   }
   return compatible;

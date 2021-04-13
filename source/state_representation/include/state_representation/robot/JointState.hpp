@@ -452,6 +452,7 @@ public:
 
 inline void swap(JointState& state1, JointState& state2) {
   swap(static_cast<State&>(state1), static_cast<State&>(state2));
+  std::swap(state1.names_, state2.names_);
   std::swap(state1.positions_, state2.positions_);
   std::swap(state1.velocities_, state2.velocities_);
   std::swap(state1.accelerations_, state2.accelerations_);

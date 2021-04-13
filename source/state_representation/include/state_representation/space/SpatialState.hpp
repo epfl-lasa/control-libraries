@@ -9,26 +9,26 @@ private:
 
 public:
   /**
-    * @brief Empty constructor only specifying the type
-     */
+   * @brief Empty constructor only specifying the type
+   */
   explicit SpatialState(const StateType& type);
 
   /**
-    * @brief Constructor with name and reference frame specification
-    * @param type the type of SpatialState (Cartesian or DualQuaternion)
-    * @param name the name of the State
-    * @param reference_frame the reference frame in which the state is expressed, by default world
-    * @param empty specify if the state is initialized as empty, default true
-     */
+   * @brief Constructor with name and reference frame specification
+   * @param type the type of SpatialState (Cartesian or DualQuaternion)
+   * @param name the name of the State
+   * @param reference_frame the reference frame in which the state is expressed, by default world
+   * @param empty specify if the state is initialized as empty, default true
+   */
   explicit SpatialState(const StateType& type,
                         const std::string& name,
                         const std::string& reference_frame = "world",
                         const bool& empty = true);
 
   /**
-    * @brief Copy constructor from another SpatialState
-     */
-  SpatialState(const SpatialState& state);
+   * @brief Copy constructor from another SpatialState
+   */
+  SpatialState(const SpatialState& state) = default;
 
   /**
    * @brief Swap the values of the two SpatialState
@@ -45,8 +45,8 @@ public:
   SpatialState& operator=(const SpatialState& state);
 
   /**
-    * @brief Getter of the reference frame as const reference
-     */
+   * @brief Getter of the reference frame as const reference
+   */
   const std::string& get_reference_frame() const;
 
   /**
@@ -55,9 +55,9 @@ public:
   virtual void set_reference_frame(const std::string& reference_frame);
 
   /**
-    * @brief Check if the state is compatible for operations with the state given as argument
-    * @param state the state to check compatibility with
-     */
+   * @brief Check if the state is compatible for operations with the state given as argument
+   * @param state the state to check compatibility with
+   */
   virtual bool is_compatible(const State& state) const;
 };
 

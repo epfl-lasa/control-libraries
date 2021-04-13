@@ -20,7 +20,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit CartesianPose();
+  explicit CartesianPose() = default;
 
   /**
    * @brief Constructor with name and reference frame provided

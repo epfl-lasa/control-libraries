@@ -5,8 +5,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-CartesianPose::CartesianPose() = default;
-
 CartesianPose::CartesianPose(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
 
 CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference) :

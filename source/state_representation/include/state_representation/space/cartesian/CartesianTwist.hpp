@@ -20,7 +20,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit CartesianTwist();
+  explicit CartesianTwist() = default;
 
   /**
    * @brief Empty constructor for a CartesianTwist

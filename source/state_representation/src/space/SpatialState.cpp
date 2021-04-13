@@ -10,8 +10,6 @@ SpatialState::SpatialState(const StateType& type,
                            const bool& empty) :
     State(type, name, empty), reference_frame_(reference_frame) {}
 
-SpatialState::SpatialState(const SpatialState& state) = default;
-
 std::ostream& operator<<(std::ostream& os, const SpatialState& state) {
   if (state.is_empty()) {
     os << "Empty ";

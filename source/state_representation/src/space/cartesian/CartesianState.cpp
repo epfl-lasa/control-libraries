@@ -15,8 +15,6 @@ CartesianState::CartesianState(const std::string& robot_name, const std::string&
   this->initialize();
 }
 
-CartesianState::CartesianState(const CartesianState& state) = default;
-
 void CartesianState::initialize() {
   this->State::initialize();
   this->set_zero();

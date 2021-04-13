@@ -128,7 +128,7 @@ public:
   /**
    * @brief Copy constructor of a CartesianState
    */
-  CartesianState(const CartesianState& state);
+  CartesianState(const CartesianState& state) = default;
 
   /**
    * @brief Constructor for the identity CartesianState (identity pose and 0 for the rest)

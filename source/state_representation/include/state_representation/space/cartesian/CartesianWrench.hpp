@@ -17,7 +17,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit CartesianWrench();
+  explicit CartesianWrench() = default;
 
   /**
    * @brief Empty constructor for a CartesianWrench

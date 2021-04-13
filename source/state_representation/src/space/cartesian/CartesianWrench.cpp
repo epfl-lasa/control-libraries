@@ -4,8 +4,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-CartesianWrench::CartesianWrench() {}
-
 CartesianWrench::CartesianWrench(const std::string& name, const std::string& reference) :
     CartesianState(name, reference) {}
 

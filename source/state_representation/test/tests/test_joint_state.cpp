@@ -10,86 +10,86 @@ TEST(JointStateTest, ZeroInitialization) {
   // the joint state should not be considered empty (as it is properly initialized)
   EXPECT_FALSE(zero.is_empty());
   // all data should be zero
-  EXPECT_TRUE(zero.data().norm() == 0);
+  EXPECT_EQ(zero.data().norm(), 0);
   // same for the second initializer
   state_representation::JointState zero2 = state_representation::JointState::Zero("test",
                                                                                   std::vector<std::string>{"j0", "j1"});
   // the joint state should not be considered empty (as it is properly initialized)
   EXPECT_FALSE(zero2.is_empty());
   // all data should be zero
-  EXPECT_TRUE(zero2.data().norm() == 0);
+  EXPECT_EQ(zero2.data().norm(), 0);
 }
 
 TEST(JointStateTest, RandomStateInitialization) {
   state_representation::JointState random = state_representation::JointState::Random("test", 3);
   // all data should be random (non 0)
-  EXPECT_TRUE(random.get_positions().norm() > 0);
-  EXPECT_TRUE(random.get_velocities().norm() > 0);
-  EXPECT_TRUE(random.get_accelerations().norm() > 0);
-  EXPECT_TRUE(random.get_torques().norm() > 0);
+  EXPECT_GT(random.get_positions().norm(), 0);
+  EXPECT_GT(random.get_velocities().norm(), 0);
+  EXPECT_GT(random.get_accelerations().norm(), 0);
+  EXPECT_GT(random.get_torques().norm(), 0);
   // same for the second initializer
   state_representation::JointState random2 =
       state_representation::JointState::Random("test",
                                                std::vector<std::string>{"j0", "j1"});
   // all data should be random (non 0)
-  EXPECT_TRUE(random2.get_positions().norm() > 0);
-  EXPECT_TRUE(random2.get_velocities().norm() > 0);
-  EXPECT_TRUE(random2.get_accelerations().norm() > 0);
-  EXPECT_TRUE(random2.get_torques().norm() > 0);
+  EXPECT_GT(random2.get_positions().norm(), 0);
+  EXPECT_GT(random2.get_velocities().norm(), 0);
+  EXPECT_GT(random2.get_accelerations().norm(), 0);
+  EXPECT_GT(random2.get_torques().norm(), 0);
 }
 
 TEST(JointStateTest, RandomPositionsInitialization) {
   state_representation::JointPositions random = state_representation::JointPositions::Random("test", 3);
   // only position should be random
-  EXPECT_TRUE(random.get_positions().norm() > 0);
-  EXPECT_TRUE(random.get_velocities().norm() == 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_torques().norm() == 0);
+  EXPECT_GT(random.get_positions().norm(), 0);
+  EXPECT_EQ(random.get_velocities().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_EQ(random.get_torques().norm(), 0);
   // same for the second initializer
   state_representation::JointPositions random2 =
       state_representation::JointPositions::Random("test",
                                                    std::vector<std::string>{"j0", "j1"});
   // only position should be random
-  EXPECT_TRUE(random2.get_positions().norm() > 0);
-  EXPECT_TRUE(random2.get_velocities().norm() == 0);
-  EXPECT_TRUE(random2.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random2.get_torques().norm() == 0);
+  EXPECT_GT(random2.get_positions().norm(), 0);
+  EXPECT_EQ(random2.get_velocities().norm(), 0);
+  EXPECT_EQ(random2.get_accelerations().norm(), 0);
+  EXPECT_EQ(random2.get_torques().norm(), 0);
 }
 
 TEST(JointStateTest, RandomVelocitiesInitialization) {
   state_representation::JointVelocities random = state_representation::JointVelocities::Random("test", 3);
   // only velocities should be random
-  EXPECT_TRUE(random.get_positions().norm() == 0);
-  EXPECT_TRUE(random.get_velocities().norm() > 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_torques().norm() == 0);
+  EXPECT_EQ(random.get_positions().norm(), 0);
+  EXPECT_GT(random.get_velocities().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_EQ(random.get_torques().norm(), 0);
   // same for the second initializer
   state_representation::JointVelocities random2 =
       state_representation::JointVelocities::Random("test",
                                                     std::vector<std::string>{"j0", "j1"});
   // only velocities should be random
-  EXPECT_TRUE(random2.get_positions().norm() == 0);
-  EXPECT_TRUE(random2.get_velocities().norm() > 0);
-  EXPECT_TRUE(random2.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random2.get_torques().norm() == 0);
+  EXPECT_EQ(random2.get_positions().norm(), 0);
+  EXPECT_GT(random2.get_velocities().norm(), 0);
+  EXPECT_EQ(random2.get_accelerations().norm(), 0);
+  EXPECT_EQ(random2.get_torques().norm(), 0);
 }
 
 TEST(JointStateTest, RandomTorquesInitialization) {
   state_representation::JointTorques random = state_representation::JointTorques::Random("test", 3);
   // only torques should be random
-  EXPECT_TRUE(random.get_positions().norm() == 0);
-  EXPECT_TRUE(random.get_velocities().norm() == 0);
-  EXPECT_TRUE(random.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random.get_torques().norm() > 0);
+  EXPECT_EQ(random.get_positions().norm(), 0);
+  EXPECT_EQ(random.get_velocities().norm(), 0);
+  EXPECT_EQ(random.get_accelerations().norm(), 0);
+  EXPECT_GT(random.get_torques().norm(), 0);
   // same for the second initializer
   state_representation::JointTorques random2 =
       state_representation::JointTorques::Random("test",
                                                  std::vector<std::string>{"j0", "j1"});
   // only torques should be random
-  EXPECT_TRUE(random2.get_positions().norm() == 0);
-  EXPECT_TRUE(random2.get_velocities().norm() == 0);
-  EXPECT_TRUE(random2.get_accelerations().norm() == 0);
-  EXPECT_TRUE(random2.get_torques().norm() > 0);
+  EXPECT_EQ(random2.get_positions().norm(), 0);
+  EXPECT_EQ(random2.get_velocities().norm(), 0);
+  EXPECT_EQ(random2.get_accelerations().norm(), 0);
+  EXPECT_GT(random2.get_torques().norm(), 0);
 }
 
 TEST(JointStateTest, GetData) {
@@ -103,34 +103,34 @@ TEST(JointStateTest, JointStateToStdVector) {
   state_representation::JointState js = state_representation::JointState::Random("test_robot", 4);
   std::vector<double> vec_data = js.to_std_vector();
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(js.data()(i) == vec_data[i]);
+    EXPECT_EQ(js.data()(i), vec_data[i]);
   }
 }
 
 TEST(JointStateTest, JointPositionsToStdVector) {
   state_representation::JointPositions jp = state_representation::JointPositions::Random("test_robot", 4);
   std::vector<double> vec_data = jp.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == jp.get_size());
+  EXPECT_EQ(vec_data.size(), jp.get_size());
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(jp.get_positions()(i) == vec_data[i]);
+    EXPECT_EQ(jp.get_positions()(i), vec_data[i]);
   }
 }
 
 TEST(JointStateTest, JointVelocitiesToStdVector) {
   state_representation::JointVelocities jv = state_representation::JointVelocities::Random("test_robot", 4);
   std::vector<double> vec_data = jv.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == jv.get_size());
+  EXPECT_EQ(vec_data.size(), jv.get_size());
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(jv.get_velocities()(i) == vec_data[i]);
+    EXPECT_EQ(jv.get_velocities()(i), vec_data[i]);
   }
 }
 
 TEST(JointStateTest, JointTorquesToStdVector) {
   state_representation::JointTorques jt = state_representation::JointTorques::Random("test_robot", 4);
   std::vector<double> vec_data = jt.to_std_vector();
-  EXPECT_TRUE(vec_data.size() == jt.get_size());
+  EXPECT_EQ(vec_data.size(), jt.get_size());
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_TRUE(jt.get_torques()(i) == vec_data[i]);
+    EXPECT_EQ(jt.get_torques()(i), vec_data[i]);
   }
 }
 

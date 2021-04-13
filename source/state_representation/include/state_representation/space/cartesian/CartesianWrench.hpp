@@ -17,7 +17,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit CartesianWrench();
+  explicit CartesianWrench() = default;
 
   /**
    * @brief Empty constructor for a CartesianWrench
@@ -66,7 +66,7 @@ public:
   static CartesianWrench Random(const std::string& name, const std::string& reference = "world");
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values
    */
@@ -108,14 +108,14 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param wrench CartesianWrench to substract
+   * @param wrench CartesianWrench to subtract
    * @return the current CartesianWrench minus the CartesianWrench given in argument
    */
   CartesianWrench& operator-=(const CartesianWrench& wrench);
 
   /**
    * @brief Overload the - operator
-   * @param wrench CartesianWrench to substract
+   * @param wrench CartesianWrench to subtract
    * @return the current CartesianWrench minus the CartesianWrench given in argument
    */
   CartesianWrench operator-(const CartesianWrench& wrench) const;
@@ -185,7 +185,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the CartesianWrench to
+   * @param os the ostream to append the string representing the CartesianWrench to
    * @param CartesianWrench the CartesianWrench to print
    * @return the appended ostream
    */

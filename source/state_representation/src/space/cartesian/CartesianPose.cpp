@@ -5,8 +5,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-CartesianPose::CartesianPose() {}
-
 CartesianPose::CartesianPose(const std::string& name, const std::string& reference) : CartesianState(name, reference) {}
 
 CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference) :
@@ -30,11 +28,15 @@ CartesianPose::CartesianPose(const std::string& name,
   this->set_orientation(orientation);
 }
 
-CartesianPose::CartesianPose(const CartesianPose& pose) : CartesianState(pose) {}
+CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state) {
+  // set all the state variables to 0 except position and orientation
+  this->set_zero();
+  this->set_pose(state.get_pose());
+}
 
-CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state) {}
+CartesianPose::CartesianPose(const CartesianPose& pose) : CartesianPose(static_cast<const CartesianState&>(pose)) {}
 
-CartesianPose::CartesianPose(const CartesianTwist& twist) : CartesianState(std::chrono::seconds(1) * twist) {}
+CartesianPose::CartesianPose(const CartesianTwist& twist) : CartesianPose(std::chrono::seconds(1) * twist) {}
 
 CartesianPose CartesianPose::Identity(const std::string& name, const std::string& reference) {
   return CartesianState::Identity(name, reference);

@@ -117,7 +117,7 @@ public:
   /**
    * @brief Copy constructor of a JointState
    */
-  JointState(const JointState& state);
+  JointState(const JointState& state) = default;
 
   /**
    * @brief Constructor for the zero JointState
@@ -150,6 +150,13 @@ public:
    * @return JointState with random values in all attributes
    */
   static JointState Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
+
+  /**
+   * @brief Swap the values of the two JointState
+   * @param state1 JointState to be swapped with 2
+   * @param state2 JointState to be swapped with 1
+   */
+  friend void swap(JointState& state1, JointState& state2);
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
@@ -443,6 +450,20 @@ public:
   virtual void from_std_vector(const std::vector<double>& value);
 };
 
+inline void swap(JointState& state1, JointState& state2) {
+  swap(static_cast<State&>(state1), static_cast<State&>(state2));
+  std::swap(state1.positions_, state2.positions_);
+  std::swap(state1.velocities_, state2.velocities_);
+  std::swap(state1.accelerations_, state2.accelerations_);
+  std::swap(state1.torques_, state2.torques_);
+}
+
+inline JointState& JointState::operator=(const JointState& state) {
+  JointState tmp(state);
+  swap(*this, tmp);
+  return *this;
+}
+
 inline Eigen::VectorXd JointState::get_all_state_variables() const {
   Eigen::VectorXd all_fields(this->get_size() * 4);
   all_fields << this->get_positions(), this->get_velocities(), this->get_accelerations(), this->get_torques();
@@ -468,13 +489,6 @@ inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_value
   this->set_velocities(new_values.segment(this->get_size(), this->get_size()));
   this->set_accelerations(new_values.segment(2 * this->get_size(), this->get_size()));
   this->set_torques(new_values.segment(3 * this->get_size(), this->get_size()));
-}
-
-inline JointState& JointState::operator=(const JointState& state) {
-  State::operator=(state);
-  this->set_names(state.get_names());
-  this->set_all_state_variables(state.get_all_state_variables());
-  return (*this);
 }
 
 inline bool JointState::is_compatible(const State& state) const {

@@ -18,14 +18,6 @@ JointState::JointState(const std::string& robot_name, const std::vector<std::str
   this->set_names(joint_names);
 }
 
-JointState::JointState(const JointState& state) :
-    State(state),
-    names_(state.names_),
-    positions_(state.positions_),
-    velocities_(state.velocities_),
-    accelerations_(state.accelerations_),
-    torques_(state.torques_) {}
-
 void JointState::initialize() {
   this->State::initialize();
   // resize

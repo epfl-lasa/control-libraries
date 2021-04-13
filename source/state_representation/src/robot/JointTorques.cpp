@@ -5,8 +5,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-JointTorques::JointTorques() {}
-
 JointTorques::JointTorques(const std::string& robot_name, unsigned int nb_joints) : JointState(robot_name, nb_joints) {}
 
 JointTorques::JointTorques(const std::string& robot_name, const Eigen::VectorXd& torques) :

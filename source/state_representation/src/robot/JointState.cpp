@@ -9,7 +9,7 @@ JointState::JointState() : State(StateType::JOINTSTATE) {
 }
 
 JointState::JointState(const std::string& robot_name, unsigned int nb_joints) :
-    State(StateType::JOINTSTATE, robot_name), names(nb_joints) {
+    State(StateType::JOINTSTATE, robot_name), names_(nb_joints) {
   this->set_names(nb_joints);
 }
 
@@ -20,29 +20,29 @@ JointState::JointState(const std::string& robot_name, const std::vector<std::str
 
 JointState::JointState(const JointState& state) :
     State(state),
-    names(state.names),
-    positions(state.positions),
-    velocities(state.velocities),
-    accelerations(state.accelerations),
-    torques(state.torques) {}
+    names_(state.names_),
+    positions_(state.positions_),
+    velocities_(state.velocities_),
+    accelerations_(state.accelerations_),
+    torques_(state.torques_) {}
 
 void JointState::initialize() {
   this->State::initialize();
   // resize
-  unsigned int size = this->names.size();
-  this->positions.resize(size);
-  this->velocities.resize(size);
-  this->accelerations.resize(size);
-  this->torques.resize(size);
+  unsigned int size = this->names_.size();
+  this->positions_.resize(size);
+  this->velocities_.resize(size);
+  this->accelerations_.resize(size);
+  this->torques_.resize(size);
   // set to zeros
   this->set_zero();
 }
 
 void JointState::set_zero() {
-  this->positions.setZero();
-  this->velocities.setZero();
-  this->accelerations.setZero();
-  this->torques.setZero();
+  this->positions_.setZero();
+  this->velocities_.setZero();
+  this->accelerations_.setZero();
+  this->torques_.setZero();
 }
 
 JointState JointState::Zero(const std::string& robot_name, unsigned int nb_joints) {
@@ -255,19 +255,19 @@ std::ostream& operator<<(std::ostream& os, const JointState& state) {
   } else {
     os << state.get_name() << " JointState" << std::endl;
     os << "names: [";
-    for (auto& n : state.names) { os << n << ", "; }
+    for (auto& n : state.names_) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
-    for (unsigned int i = 0; i < state.positions.size(); ++i) { os << state.positions(i) << ", "; }
+    for (unsigned int i = 0; i < state.positions_.size(); ++i) { os << state.positions_(i) << ", "; }
     os << "]" << std::endl;
     os << "velocities: [";
-    for (unsigned int i = 0; i < state.velocities.size(); ++i) { os << state.velocities(i) << ", "; }
+    for (unsigned int i = 0; i < state.velocities_.size(); ++i) { os << state.velocities_(i) << ", "; }
     os << "]" << std::endl;
     os << "accelerations: [";
-    for (unsigned int i = 0; i < state.accelerations.size(); ++i) { os << state.accelerations(i) << ", "; }
+    for (unsigned int i = 0; i < state.accelerations_.size(); ++i) { os << state.accelerations_(i) << ", "; }
     os << "]" << std::endl;
     os << "torques: [";
-    for (unsigned int i = 0; i < state.torques.size(); ++i) { os << state.torques(i) << ", "; }
+    for (unsigned int i = 0; i < state.torques_.size(); ++i) { os << state.torques_(i) << ", "; }
     os << "]";
   }
   return os;

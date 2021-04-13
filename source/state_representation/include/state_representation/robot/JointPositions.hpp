@@ -20,7 +20,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit JointPositions();
+  explicit JointPositions() = default;
 
   /**
    * @brief Constructor with name and number of joints provided

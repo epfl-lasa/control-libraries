@@ -6,7 +6,7 @@
 
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
-#include "robot_model/exceptions/InverseGeometryNotConvergingException.hpp"
+#include "robot_model/exceptions/InverseKinematicsNotConvergingException.hpp"
 
 using namespace robot_model;
 
@@ -111,24 +111,24 @@ protected:
 
 TEST_F(RobotModelKinematicsTest, TestForwardGeometryJointStateSize) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 6);
-  EXPECT_THROW(franka->forward_geometry(dummy), exceptions::InvalidJointStateSizeException);
+  EXPECT_THROW(franka->forward_kinematics(dummy), exceptions::InvalidJointStateSizeException);
 }
 
 TEST_F(RobotModelKinematicsTest, TestForwardGeometryEE) {
-  EXPECT_EQ(franka->forward_geometry(joint_state).get_position(),
-            franka->forward_geometry(joint_state, "panda_link8").get_position());
+  EXPECT_EQ(franka->forward_kinematics(joint_state).get_position(),
+            franka->forward_kinematics(joint_state, "panda_link8").get_position());
 }
 
 TEST_F(RobotModelKinematicsTest, TestForwardGeometryInvalidFrameName) {
-  EXPECT_THROW(franka->forward_geometry(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
+  EXPECT_THROW(franka->forward_kinematics(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
 }
 
 TEST_F(RobotModelKinematicsTest, TestForwardGeometry) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::CartesianPose ee_pose = franka->forward_geometry(test_configs[config]);
+    state_representation::CartesianPose ee_pose = franka->forward_kinematics(test_configs[config]);
     EXPECT_TRUE(ee_pose.get_position().isApprox(test_fk_ee_expects.at(config).get_position()));
     EXPECT_TRUE(ee_pose.get_orientation().isApprox(test_fk_ee_expects.at(config).get_orientation()));
-    state_representation::CartesianPose link4_pose = franka->forward_geometry(test_configs[config], "panda_link4");
+    state_representation::CartesianPose link4_pose = franka->forward_kinematics(test_configs[config], "panda_link4");
     EXPECT_TRUE(link4_pose.get_position().isApprox(test_fk_link4_expects.at(config).get_position()));
     EXPECT_TRUE(link4_pose.get_orientation().isApprox(test_fk_link4_expects.at(config).get_orientation()));
   }
@@ -145,7 +145,7 @@ TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
 TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianTwist ee_twist = franka->forward_kinematics(test_configs[config]);
-    state_representation::JointVelocities joint_twist = franka->inverse_kinematics(test_configs[config], ee_twist);
+    state_representation::JointVelocities joint_twist = franka->inverse_velocity(ee_twist, test_configs[config]);
     EXPECT_TRUE(joint_twist.get_velocities().isApprox(test_configs[config].get_velocities()));
   }
 }
@@ -221,13 +221,13 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
   std::vector<state_representation::JointState> test_configs = {config1, config2, config3};
   double tol = 1e-3;
   std::chrono::nanoseconds dt(static_cast<int>(1e9));
-  InverseGeometryParameters param = InverseGeometryParameters();
+  InverseKinematicsParameters param = InverseKinematicsParameters();
   param.tolerance = tol;
 
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::CartesianPose reference = franka->forward_geometry(test_configs[config], "panda_link8");
-    state_representation::JointPositions q = franka->inverse_geometry(reference, "panda_link8", param);
-    state_representation::CartesianPose X = franka->forward_geometry(q, "panda_link8");
+    state_representation::CartesianPose reference = franka->forward_kinematics(test_configs[config], "panda_link8");
+    state_representation::JointPositions q = franka->inverse_kinematics(reference, "panda_link8", param);
+    state_representation::CartesianPose X = franka->forward_kinematics(q, "panda_link8");
     EXPECT_TRUE(((reference - X)/dt).data().cwiseAbs().maxCoeff() < tol);
   }
 }
@@ -236,9 +236,9 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometryIKDoesNotConverge) {
   state_representation::JointState config("robot", 7);
   // Random test configuration
   config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  InverseGeometryParameters param = InverseGeometryParameters();
+  InverseKinematicsParameters param = InverseKinematicsParameters();
   param.max_number_of_iterations = 1;
   
-  state_representation::CartesianPose reference = franka->forward_geometry(config, "panda_link8");
-  EXPECT_THROW(franka->inverse_geometry(reference, "panda_link8", param), exceptions::InverseGeometryNotConvergingException);
+  state_representation::CartesianPose reference = franka->forward_kinematics(config, "panda_link8");
+  EXPECT_THROW(franka->inverse_kinematics(reference, "panda_link8", param), exceptions::InverseKinematicsNotConvergingException);
 }

@@ -39,7 +39,8 @@ enum class JointStateVariable {
  * the distance on. Default ALL for full distance across all dimensions
  * @return the distance between the two states
  */
-double dist(const JointState& s1, const JointState& s2,
+double dist(const JointState& s1,
+            const JointState& s2,
             const JointStateVariable& state_variable_type = JointStateVariable::ALL);
 
 /**
@@ -93,6 +94,20 @@ protected:
    * @param state_variable_type the state variable on which to apply the multiplication
    */
   void multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type);
+
+  /**
+   * @brief Getter of the variable value corresponding to the input
+   * @param state_variable_type the type of variable to get
+   * @return the value of the variable as a vector
+   */
+  Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
+
+  /**
+   * @brief Setter of the variable value corresponding to the input
+   * @param new_value the new value of the variable
+   * @param state_variable_type the type of variable to get
+   */
+  void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
 
 public:
   /**
@@ -246,20 +261,6 @@ public:
   void set_torques(const std::vector<double>& torques);
 
   /**
-   * @brief Getter of the variable value corresponding to the input
-   * @param state_variable_type the type of variable to get
-   * @return the value of the variable as a vector
-   */
-  Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
-
-  /**
-   * @brief Setter of the variable value corresponding to the input
-   * @param new_value the new value of the variable
-   * @param state_variable_type the type of variable to get
-   */
-  void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
-
-  /**
    * @brief Check if the state is compatible for operations with the state given as argument
    * @param state the state to check compatibility with
    */
@@ -282,7 +283,8 @@ public:
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which
    * the velocity will be set to 0
    */
-  void clamp_state_variable(double max_absolute_value, const JointStateVariable& state_variable_type,
+  void clamp_state_variable(double max_absolute_value,
+                            const JointStateVariable& state_variable_type,
                             double noise_ratio = 0);
 
   /**
@@ -294,7 +296,8 @@ public:
    * the velocity will be set to 0
    */
   void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
-                            const JointStateVariable& state_variable_type, const Eigen::ArrayXd& noise_ratio_array);
+                            const JointStateVariable& state_variable_type,
+                            const Eigen::ArrayXd& noise_ratio_array);
 
   /**
    * @brief Return a copy of the JointState
@@ -475,7 +478,7 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
   if (new_value.size() != this->get_size()) {
     throw IncompatibleSizeException(
         "Input vector is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
-        + std::to_string(new_value.size()));
+            + std::to_string(new_value.size()));
   }
   this->set_filled();
   state_variable = new_value;

@@ -13,9 +13,22 @@ namespace state_representation {
  * @brief Class to define torques of the joints
  */
 class JointTorques : public JointState {
+private:
+  using JointState::clamp_state_variable;
+
 public:
+  const Eigen::VectorXd& get_positions() const = delete;
+  void set_positions(const Eigen::VectorXd& positions) = delete;
+  void set_positions(const std::vector<double>& positions) = delete;
+  const Eigen::VectorXd& get_velocities() const = delete;
+  void set_velocities(const Eigen::VectorXd& velocities) = delete;
+  void set_velocities(const std::vector<double>& velocities) = delete;
+  const Eigen::VectorXd& get_accelerations() const = delete;
+  void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
+  void set_accelerations(const std::vector<double>& accelerations) = delete;
+
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointTorques() = default;
 
@@ -93,10 +106,10 @@ public:
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param state the state with value to assign
+   * @param torques the state with value to assign
    * @return reference to the current state with new values
    */
-  JointTorques& operator=(const JointTorques& state);
+  JointTorques& operator=(const JointTorques& torques) = default;
 
   /**
    * @brief Overload the += operator
@@ -263,9 +276,4 @@ public:
    */
   friend JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torques);
 };
-
-inline JointTorques& JointTorques::operator=(const JointTorques& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

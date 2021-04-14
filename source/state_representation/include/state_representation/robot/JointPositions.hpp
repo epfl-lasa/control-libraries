@@ -16,9 +16,22 @@ class JointVelocities;
  * @brief Class to define a positions of the joints
  */
 class JointPositions : public JointState {
+private:
+  using JointState::clamp_state_variable;
+
 public:
+  const Eigen::VectorXd& get_velocities() const = delete;
+  void set_velocities(const Eigen::VectorXd& velocities) = delete;
+  void set_velocities(const std::vector<double>& velocities) = delete;
+  const Eigen::VectorXd& get_accelerations() const = delete;
+  void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
+  void set_accelerations(const std::vector<double>& accelerations) = delete;
+  const Eigen::VectorXd& get_torques() const = delete;
+  void set_torques(const Eigen::VectorXd& torques) = delete;
+  void set_torques(const std::vector<double>& torques) = delete;
+
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointPositions() = default;
 
@@ -104,7 +117,7 @@ public:
    * @param positions the state with value to assign
    * @return reference to the current state with new values
    */
-  JointPositions& operator=(const JointPositions& positions);
+  JointPositions& operator=(const JointPositions& positions) = default;
 
   /**
    * @brief Overload the += operator
@@ -244,9 +257,4 @@ public:
    */
   void from_std_vector(const std::vector<double>& value);
 };
-
-inline JointPositions& JointPositions::operator=(const JointPositions& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

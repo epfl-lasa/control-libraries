@@ -16,9 +16,22 @@ class JointPositions;
  * @brief Class to define velocities of the joints
  */
 class JointVelocities : public JointState {
+private:
+  using JointState::clamp_state_variable;
+
 public:
+  const Eigen::VectorXd& get_positions() const = delete;
+  void set_positions(const Eigen::VectorXd& positions) = delete;
+  void set_positions(const std::vector<double>& positions) = delete;
+  const Eigen::VectorXd& get_accelerations() const = delete;
+  void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
+  void set_accelerations(const std::vector<double>& accelerations) = delete;
+  const Eigen::VectorXd& get_torques() const = delete;
+  void set_torques(const Eigen::VectorXd& torques) = delete;
+  void set_torques(const std::vector<double>& torques) = delete;
+
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointVelocities() = default;
 
@@ -101,10 +114,10 @@ public:
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param state the state with value to assign
+   * @param velocities the state with value to assign
    * @return reference to the current state with new values
    */
-  JointVelocities& operator=(const JointVelocities& state);
+  JointVelocities& operator=(const JointVelocities& velocities) = default;
 
   /**
    * @brief Overload the += operator
@@ -280,9 +293,4 @@ public:
    */
   friend JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities);
 };
-
-inline JointVelocities& JointVelocities::operator=(const JointVelocities& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

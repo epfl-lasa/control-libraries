@@ -20,6 +20,16 @@ private:
   using JointState::clamp_state_variable;
 
 public:
+  const Eigen::VectorXd& get_positions() const = delete;
+  void set_positions(const Eigen::VectorXd& positions) = delete;
+  void set_positions(const std::vector<double>& positions) = delete;
+  const Eigen::VectorXd& get_accelerations() const = delete;
+  void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
+  void set_accelerations(const std::vector<double>& accelerations) = delete;
+  const Eigen::VectorXd& get_torques() const = delete;
+  void set_torques(const Eigen::VectorXd& torques) = delete;
+  void set_torques(const std::vector<double>& torques) = delete;
+
   /**
    * @brief Empty constructor
    */

@@ -16,9 +16,32 @@ class CartesianTwist;
  * @brief Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation
  */
 class CartesianPose : public CartesianState {
+private:
+  using CartesianState::clamp_state_variable;
+
 public:
+  // delete inaccessible getter and setters
+  const Eigen::Vector3d& get_linear_velocity() const = delete;
+  const Eigen::Vector3d& get_angular_velocity() const = delete;
+  Eigen::Matrix<double, 6, 1> get_twist() const = delete;
+  const Eigen::Vector3d& get_linear_acceleration() const = delete;
+  const Eigen::Vector3d& get_angular_acceleration() const = delete;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  const Eigen::Vector3d& get_force() const = delete;
+  const Eigen::Vector3d& get_torque() const = delete;
+  Eigen::Matrix<double, 6, 1> get_wrench() const = delete;
+  void set_linear_velocity(const Eigen::Vector3d& linear_velocity) = delete;
+  void set_angular_velocity(const Eigen::Vector3d& angular_velocity) = delete;
+  void set_twist(const Eigen::Matrix<double, 6, 1>& twist) = delete;
+  void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
+  void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
+  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  void set_force(const Eigen::Vector3d& force) = delete;
+  void set_torque(const Eigen::Vector3d& torque) = delete;
+  void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
+
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit CartesianPose() = default;
 
@@ -47,17 +70,26 @@ public:
   /**
    * @brief Construct a CartesianPose from a position given as a vector of coordinates.
    */
-  explicit CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const Eigen::Vector3d& position,
+                         const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianPose from a position given as three scalar coordinates.
    */
-  explicit CartesianPose(const std::string& name, const double& x, const double& y, const double& z, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const double& x,
+                         const double& y,
+                         const double& z,
+                         const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianPose from a position given as a vector of coordinates and a quaternion.
    */
-  explicit CartesianPose(const std::string& name, const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const Eigen::Vector3d& position,
+                         const Eigen::Quaterniond& orientation,
+                         const std::string& reference = "world");
 
   /**
    * @brief Constructor for the identity pose
@@ -80,14 +112,7 @@ public:
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values
    */
-  CartesianPose& operator=(const CartesianPose& pose);
-
-  /**
-   * @brief Copy assignment operator from a state
-   * @param state the state with value to assign
-   * @return reference to the current pose with new values
-   */
-  CartesianPose& operator=(const CartesianState& state);
+  CartesianPose& operator=(const CartesianPose& pose) = default;
 
   /**
    * @brief Overload the * operator for a vector input
@@ -221,12 +246,7 @@ public:
   void from_std_vector(const std::vector<double>& value);
 };
 
-inline CartesianPose& CartesianPose::operator=(const CartesianPose& pose) {
-  CartesianState::operator=(pose);
-  return (*this);
-}
-
-inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const{
+inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const {
   return CartesianState::norms(state_variable_type);
 }
 

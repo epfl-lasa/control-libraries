@@ -44,11 +44,6 @@ CartesianWrench CartesianWrench::Random(const std::string& name, const std::stri
   return CartesianWrench(name, random, reference);
 }
 
-CartesianWrench& CartesianWrench::operator=(const CartesianState& state) {
-  this->CartesianState::operator=(state);
-  return (*this);
-}
-
 CartesianWrench& CartesianWrench::operator*=(const CartesianWrench& wrench) {
   this->CartesianState::operator*=(wrench);
   return (*this);

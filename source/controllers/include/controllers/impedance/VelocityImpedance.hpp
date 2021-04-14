@@ -1,8 +1,8 @@
 #pragma once
 
-#include "controllers/impedance/Impedance.hpp"
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include "controllers/impedance/Impedance.hpp"
 
 namespace controllers::impedance {
 /**

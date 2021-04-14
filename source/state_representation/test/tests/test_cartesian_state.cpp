@@ -1,9 +1,9 @@
+#include <gtest/gtest.h>
+#include <cmath>
+
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include <fstream>
-#include <gtest/gtest.h>
-#include <unistd.h>
 
 using namespace state_representation;
 
@@ -407,6 +407,7 @@ TEST(CartesianStateTest, TestPoseDistance) {
   CartesianPose p1("test", Eigen::Vector3d::Zero());
   CartesianPose p2("test", Eigen::Vector3d(1, 0, 0));
   CartesianPose p3("test", Eigen::Vector3d(1, 0, 0), Eigen::Quaterniond(0, 1, 0, 0));
+  CartesianPose p4("test", Eigen::Vector3d(1, 0, 0), Eigen::Quaterniond::UnitRandom());
   double d1 = dist(p1, p2);
   double d2 = p1.dist(p2);
   EXPECT_LT(abs(d1 - d2), 1e-4);
@@ -415,6 +416,7 @@ TEST(CartesianStateTest, TestPoseDistance) {
   EXPECT_LT(abs(d3 - 3.14159), 1e10 - 3);
   double d4 = dist(p2, p3);
   EXPECT_LT(abs(d3 - d4), 1e10 - 3);
+  EXPECT_FALSE(std::isnan(p4.dist(p4, CartesianStateVariable::ORIENTATION)));
 }
 
 TEST(CartesianStateTest, TestFilter) {

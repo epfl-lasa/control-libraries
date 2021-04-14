@@ -31,12 +31,12 @@ public:
   void read_robot_state() {
     // this is a dummy robot, we assume the joint state is executed but add a bit of noise
     this->joint_state += 0.001 * JointState::Random(this->joint_state.get_name(), this->robot_.get_joint_frames());
-    this->eef_state = this->robot_.forward_geometry(this->joint_state);
+    this->eef_state = this->robot_.forward_kinematics(this->joint_state);
   }
 
   void send_control_command(const CartesianTwist& desired_eef_twist, const std::chrono::nanoseconds& dt) {
     // apply the inverse kinematics
-    JointVelocities desired_joint_velocities = this->robot_.inverse_kinematic(this->joint_state, desired_eef_twist);
+    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist, this->joint_state);
     // integrate the new position
     this->joint_state = dt * desired_joint_velocities + this->joint_state;
   }

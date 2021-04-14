@@ -16,7 +16,30 @@ class CartesianTwist;
  * @brief Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation
  */
 class CartesianPose : public CartesianState {
+private:
+  using CartesianState::clamp_state_variable;
+
 public:
+  // delete inaccessible getter and setters
+  const Eigen::Vector3d& get_linear_velocity() const = delete;
+  const Eigen::Vector3d& get_angular_velocity() const = delete;
+  Eigen::Matrix<double, 6, 1> get_twist() const = delete;
+  const Eigen::Vector3d& get_linear_acceleration() const = delete;
+  const Eigen::Vector3d& get_angular_acceleration() const = delete;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  const Eigen::Vector3d& get_force() const = delete;
+  const Eigen::Vector3d& get_torque() const = delete;
+  Eigen::Matrix<double, 6, 1> get_wrench() const = delete;
+  void set_linear_velocity(const Eigen::Vector3d& linear_velocity) = delete;
+  void set_angular_velocity(const Eigen::Vector3d& angular_velocity) = delete;
+  void set_twist(const Eigen::Matrix<double, 6, 1>& twist) = delete;
+  void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
+  void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
+  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  void set_force(const Eigen::Vector3d& force) = delete;
+  void set_torque(const Eigen::Vector3d& torque) = delete;
+  void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
+
   /**
    * Empty constructor
    */

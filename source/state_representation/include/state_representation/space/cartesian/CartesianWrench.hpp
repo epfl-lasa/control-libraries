@@ -13,7 +13,38 @@ namespace state_representation {
  * @brief Class to define wrench in cartesian space as 3D force and torque vectors
  */
 class CartesianWrench : public CartesianState {
+private:
+  using CartesianState::clamp_state_variable;
+
 public:
+  // delete inaccessible getter and setters
+  const Eigen::Vector3d& get_linear_velocity() const = delete;
+  const Eigen::Vector3d& get_angular_velocity() const = delete;
+  Eigen::Matrix<double, 6, 1> get_twist() const = delete;
+  const Eigen::Vector3d& get_position() const = delete;
+  const Eigen::Quaterniond& get_orientation() const = delete;
+  Eigen::Vector4d get_orientation_coefficients() const = delete;
+  Eigen::Matrix<double, 7, 1> get_pose() const = delete;
+  Eigen::Matrix4d get_transformation_matrix() const = delete;
+  const Eigen::Vector3d& get_linear_acceleration() const = delete;
+  const Eigen::Vector3d& get_angular_acceleration() const = delete;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  void set_position(const Eigen::Vector3d& position) = delete;
+  void set_position(const std::vector<double>& position) = delete;
+  void set_position(const double& x, const double& y, const double& z) = delete;
+  void set_orientation(const Eigen::Quaterniond& orientation) = delete;
+  void set_orientation(const Eigen::Vector4d& orientation) = delete;
+  void set_orientation(const std::vector<double>& orientation) = delete;
+  void set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) = delete;
+  void set_pose(const Eigen::Matrix<double, 7, 1>& pose) = delete;
+  void set_pose(const std::vector<double>& pose) = delete;
+  void set_linear_velocity(const Eigen::Vector3d& linear_velocity) = delete;
+  void set_angular_velocity(const Eigen::Vector3d& angular_velocity) = delete;
+  void set_twist(const Eigen::Matrix<double, 6, 1>& twist) = delete;
+  void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
+  void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
+  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+
   /**
    * Empty constructor
    */

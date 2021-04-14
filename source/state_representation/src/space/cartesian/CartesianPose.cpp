@@ -46,11 +46,6 @@ CartesianPose CartesianPose::Random(const std::string& name, const std::string& 
   return CartesianPose(name, Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom(), reference);
 }
 
-CartesianPose& CartesianPose::operator=(const CartesianState& state) {
-  this->CartesianState::operator=(state);
-  return (*this);
-}
-
 Eigen::Vector3d CartesianPose::operator*(const Eigen::Vector3d& vector) const {
   return this->get_orientation() * vector + this->get_position();
 }

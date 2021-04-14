@@ -41,7 +41,7 @@ public:
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
 
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit CartesianPose() = default;
 
@@ -70,17 +70,26 @@ public:
   /**
    * @brief Construct a CartesianPose from a position given as a vector of coordinates.
    */
-  explicit CartesianPose(const std::string& name, const Eigen::Vector3d& position, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const Eigen::Vector3d& position,
+                         const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianPose from a position given as three scalar coordinates.
    */
-  explicit CartesianPose(const std::string& name, const double& x, const double& y, const double& z, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const double& x,
+                         const double& y,
+                         const double& z,
+                         const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianPose from a position given as a vector of coordinates and a quaternion.
    */
-  explicit CartesianPose(const std::string& name, const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation, const std::string& reference = "world");
+  explicit CartesianPose(const std::string& name,
+                         const Eigen::Vector3d& position,
+                         const Eigen::Quaterniond& orientation,
+                         const std::string& reference = "world");
 
   /**
    * @brief Constructor for the identity pose
@@ -103,14 +112,7 @@ public:
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values
    */
-  CartesianPose& operator=(const CartesianPose& pose);
-
-  /**
-   * @brief Copy assignment operator from a state
-   * @param state the state with value to assign
-   * @return reference to the current pose with new values
-   */
-  CartesianPose& operator=(const CartesianState& state);
+  CartesianPose& operator=(const CartesianPose& pose) = default;
 
   /**
    * @brief Overload the * operator for a vector input
@@ -244,12 +246,7 @@ public:
   void from_std_vector(const std::vector<double>& value);
 };
 
-inline CartesianPose& CartesianPose::operator=(const CartesianPose& pose) {
-  CartesianState::operator=(pose);
-  return (*this);
-}
-
-inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const{
+inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const {
   return CartesianState::norms(state_variable_type);
 }
 

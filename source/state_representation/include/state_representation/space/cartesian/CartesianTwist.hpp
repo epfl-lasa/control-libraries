@@ -49,12 +49,14 @@ public:
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
 
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit CartesianTwist() = default;
 
   /**
-   * @brief Empty constructor for a CartesianTwist
+   * @brief Constructor with name and reference frame provided
+   * @param name the name of the state
+   * @param reference the name of the reference frame
    */
   explicit CartesianTwist(const std::string& name, const std::string& reference = "world");
 
@@ -76,17 +78,24 @@ public:
   /**
    * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates for the linear velocity.
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Vector3d& linear_velocity,
+                          const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates and a quaternion.
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Vector3d& linear_velocity,
+                          const Eigen::Vector3d& angular_velocity,
+                          const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianTwist from a single 6d twist vector
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Matrix<double, 6, 1>& twist,
+                          const std::string& reference = "world");
 
   /**
    * @brief Constructor for the zero twist
@@ -109,13 +118,7 @@ public:
    * @param twist the twist with value to assign
    * @return reference to the current twist with new values
    */
-  CartesianTwist& operator=(const CartesianTwist& twist);
-
-  /**
-   * @brief Overload the = operator from a CartesianState
-   * @param state CartesianState to get velocity from
-   */
-  CartesianTwist& operator=(const CartesianState& state);
+  CartesianTwist& operator=(const CartesianTwist& twist) = default;
 
   /**
    * @brief Overload the *= operator
@@ -208,7 +211,10 @@ public:
    * the angular velocity will be set to 0
    * @return the clamped twist
    */
-  CartesianTwist clamped(double max_linear, double max_angular, double noise_ratio = 0, double angular_noise_ratio = 0) const;
+  CartesianTwist clamped(double max_linear,
+                         double max_angular,
+                         double noise_ratio = 0,
+                         double angular_noise_ratio = 0) const;
 
   /**
    * @brief Return a copy of the CartesianTwist
@@ -266,12 +272,7 @@ public:
   friend CartesianPose operator*(const std::chrono::nanoseconds& dt, const CartesianTwist& twist);
 };
 
-inline CartesianTwist& CartesianTwist::operator=(const CartesianTwist& twist) {
-  CartesianState::operator=(twist);
-  return (*this);
-}
-
-inline std::vector<double> CartesianTwist::norms(const CartesianStateVariable& state_variable_type) const{
+inline std::vector<double> CartesianTwist::norms(const CartesianStateVariable& state_variable_type) const {
   return CartesianState::norms(state_variable_type);
 }
 

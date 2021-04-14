@@ -221,7 +221,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
   std::vector<state_representation::JointState> test_configs = {config1, config2, config3};
   double tol = 1e-3;
   std::chrono::nanoseconds dt(static_cast<int>(1e9));
-  Model::InverseGeometryParameters param = Model::InverseGeometryParameters();
+  InverseGeometryParameters param = InverseGeometryParameters();
   param.tolerance = tol;
 
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
@@ -236,7 +236,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometryIKDoesNotConverge) {
   state_representation::JointState config("robot", 7);
   // Random test configuration
   config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  Model::InverseGeometryParameters param = Model::InverseGeometryParameters();
+  InverseGeometryParameters param = InverseGeometryParameters();
   param.max_number_of_iterations = 1;
   
   state_representation::CartesianPose reference = franka->forward_geometry(config, "panda_link8");

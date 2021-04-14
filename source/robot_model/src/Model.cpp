@@ -1,11 +1,10 @@
+#include <iostream>
+#include <pinocchio/algorithm/frames.hpp>
+#include <pinocchio/algorithm/joint-configuration.hpp>
 #include "robot_model/Model.hpp"
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
 #include "robot_model/exceptions/IKDoesNotConverge.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
-#include <fstream>
-#include <math.h>
-#include <pinocchio/algorithm/frames.hpp>
-#include <pinocchio/algorithm/joint-configuration.hpp>
 
 namespace robot_model {
 Model::Model(const std::string& robot_name, const std::string& urdf_path) :
@@ -295,11 +294,11 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
   for (int i = 0; i < this->robot_model_.nq; ++i) {
     Psi[i] = 0;
     if (q[i] < this->robot_model_.lowerPositionLimit[i] + margin) {
-      Psi[i] = this->robot_model_.upperPositionLimit[i] - margin - std::max(q[i],
-                                                                   this->robot_model_.lowerPositionLimit[i]);
+      Psi[i] = this->robot_model_.upperPositionLimit[i] - margin
+          - std::max(q[i], this->robot_model_.lowerPositionLimit[i]);
     } else if (this->robot_model_.upperPositionLimit[i] - margin < q[i]) {
-      Psi[i] = this->robot_model_.lowerPositionLimit[i] + margin - std::min(q[i],
-                                                                   this->robot_model_.upperPositionLimit[i]);
+      Psi[i] = this->robot_model_.lowerPositionLimit[i] + margin
+          - std::min(q[i], this->robot_model_.upperPositionLimit[i]);
     }
   }
 
@@ -310,8 +309,8 @@ state_representation::JointPositions
 Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                         const state_representation::JointState& current_joint_state,
                         const std::string& frame_name,
-                        const Model::InverseGeometryParameters& params) {
-  int frame_id;
+                        const InverseGeometryParameters& params) {
+  unsigned int frame_id;
   if (frame_name.empty()) {
     // get last frame if none specified
     frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
@@ -351,8 +350,8 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
     J_b = J * W_b;
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    dq.set_velocities(W_c * psi + params.alpha * W_b * (J_b.transpose() * 
-                                                        JJt.ldlt().solve(err - J.data() * W_c * psi)));
+    dq.set_velocities(W_c * psi
+                          + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
     q = q + dq * dt;
     q = this->clamp_in_range(q);
     ++i;
@@ -363,7 +362,7 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
 state_representation::JointPositions
 Model::inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                         const std::string& frame_name,
-                        const Model::InverseGeometryParameters& params) {
+                        const InverseGeometryParameters& params) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions pos(this->get_robot_name(), q);
 

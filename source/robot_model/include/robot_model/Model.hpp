@@ -1,13 +1,12 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <OsqpEigen/OsqpEigen.h>
-#include <pinocchio/parsers/urdf.hpp>
-#include <pinocchio/multibody/data.hpp>
 #include <pinocchio/algorithm/crba.hpp>
 #include <pinocchio/algorithm/rnea.hpp>
+#include <pinocchio/multibody/data.hpp>
+#include <pinocchio/parsers/urdf.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/robot/Jacobian.hpp>
@@ -15,20 +14,43 @@
 #include <state_representation/space/cartesian/CartesianState.hpp>
 
 namespace robot_model {
+/**
+ * @brief parameters for the inverse geometry function
+ * @param damp damping added to the diagonal of J*Jt in order to avoid the singularity
+ * @param alpha alpha €]0,1], it is used to make Newthon-Raphson method less aggressive
+ * @param gamma gamma €]0,1], represents the strength of the repulsive potential field in the Clamping Weighted Least-Norm method
+ * @param margin the distance from the joint limit on which we want to penalize the joint position
+ * @param tolerance the maximum error tolerated between the desired cartesian state and the one obtained by the returned joint positions
+ * @param max_number_of_iterations the maximum number of iterations that the algorithm do for solving the inverse geometry
+ */
+struct InverseGeometryParameters {
+  double damp = 1e-6;
+  double alpha = 0.5;
+  double gamma = 0.8;
+  double margin = 0.07;
+  double tolerance = 1e-3;
+  int max_number_of_iterations = 1000;
+};
+
+/**
+ * @class Model
+ * @brief The Model class is a wrapper around pinocchio dynamic computation library with state_representation
+ * encapsulations.
+ */
 class Model {
 private:
   // @format:off
-  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;      ///< name of the robot
-  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;       ///< path to the urdf file
-  std::vector<std::string> frame_names_;                                          ///< name of the frames
-  pinocchio::Model robot_model_;                                                  ///< the robot model with pinocchio
-  pinocchio::Data robot_data_;                                                    ///< the robot data with pinocchio
-  OsqpEigen::Solver solver_;                                                      ///< osqp solver for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> hessian_;                                           ///< hessian matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd gradient_;                                                      ///< gradient vector for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> constraint_matrix_;                                 ///< constraint matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd lower_bound_constraints_;                                       ///< lower bound matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd upper_bound_constraints_;                                       ///< upper bound matrix for the quadratic programming based inverse kinematics
+  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;       ///< name of the robot
+  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
+  std::vector<std::string> frame_names_;                                           ///< name of the frames
+  pinocchio::Model robot_model_;                                                   ///< the robot model with pinocchio
+  pinocchio::Data robot_data_;                                                     ///< the robot data with pinocchio
+  OsqpEigen::Solver solver_;                                                       ///< osqp solver for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> hessian_;                                            ///< hessian matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd gradient_;                                                       ///< gradient vector for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> constraint_matrix_;                                  ///< constraint matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd lower_bound_constraints_;                                        ///< lower bound matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd upper_bound_constraints_;                                        ///< upper bound matrix for the quadratic programming based inverse kinematics
   std::shared_ptr<state_representation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
   std::shared_ptr<state_representation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
   std::shared_ptr<state_representation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
@@ -93,6 +115,23 @@ private:
   static Eigen::VectorXd clamp_in_range(const Eigen::VectorXd& vector,
                                         const Eigen::VectorXd& lower_limits,
                                         const Eigen::VectorXd& upper_limits);
+
+  /**
+   * @brief Compute the weighted matrix of the algorithm "Clamping Weighted Least-Norm"
+   * @param joint_positions the joint position at the current iteration in the inverse geometry problem
+   * @param margin the distance from the joint limit on which we want to penalize the joint position
+   * @return the weighted matrix
+   */
+  Eigen::MatrixXd cwln_weighted_matrix(const state_representation::JointPositions& joint_positions, double margin);
+
+  /**
+   * @brief Compute the repulsive potential field of the algorithm "Clamping Weighted Least-Norm"
+   * @param joint_positions the joint position at the current iteration in the inverse geometry problem
+   * @param margin the distance from the joint limit on which we want to penalize the joint position
+   * @return the repulsive potential field
+   */
+  Eigen::VectorXd cwln_repulsive_potential_field(const state_representation::JointPositions& joint_positions,
+                                                 double margin);
 
 public:
   /**
@@ -231,20 +270,37 @@ public:
                                                                     const std::vector<std::string>& frame_names);
 
   /**
- * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
- * @param joint_state the joint state of the robot
- * @param frame_name name of the frame at which we want to extract the pose
- * @return the pose of the desired frame
- */
+   * @brief Compute the forward geometry, i.e. the pose of the frame from the joint values
+   * @param joint_state the joint state of the robot
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @return the pose of the desired frame
+   */
   state_representation::CartesianPose forward_geometry(const state_representation::JointState& joint_state,
                                                        std::string frame_name = "");
 
   /**
-   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
-   * @param cartesian_state containing the pose of the end-effector
-   * @return the joint state of the robot
+   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
+   * @param desired_cartesian_state containing the desired pose of the end-effector
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
+   * @return the joint positions of the robot
    */
-  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& cartesian_state) const;
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                        const std::string& frame_name = "",
+                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
+
+  /**
+   * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
+   * @param desired_cartesian_state containing the desired pose of the end-effector
+   * @param current_joint_state current state of the robot containing the generalized position
+   * @param frame_name name of the frame at which we want to extract the pose
+   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
+   * @return the joint positions of the robot
+   */
+  state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
+                                                        const state_representation::JointState& current_joint_state,
+                                                        const std::string& frame_name = "",
+                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
 
   /**
    * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities

@@ -6,6 +6,7 @@
 
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
+#include "robot_model/exceptions/IKDoesNotConverge.hpp"
 
 using namespace robot_model;
 
@@ -206,4 +207,38 @@ TEST_F(RobotModelKinematicsTest, TestClamp) {
   EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_velocities)));
   EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_torques)));
   EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_state)));
+}
+
+TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
+  state_representation::JointState config1("robot", 7);
+  state_representation::JointState config2("robot", 7);
+  state_representation::JointState config3("robot", 7);
+  // Random test configurations
+  config1.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  config2.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
+  config3.set_positions({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+
+  std::vector<state_representation::JointState> test_configs = {config1, config2, config3};
+  double tol = 1e-3;
+  std::chrono::nanoseconds dt(static_cast<int>(1e9));
+  InverseGeometryParameters param = InverseGeometryParameters();
+  param.tolerance = tol;
+
+  for (std::size_t config = 0; config < test_configs.size(); ++config) {
+    state_representation::CartesianPose reference = franka->forward_geometry(test_configs[config], "panda_link8");
+    state_representation::JointPositions q = franka->inverse_geometry(reference, "panda_link8", param);
+    state_representation::CartesianPose X = franka->forward_geometry(q, "panda_link8");
+    EXPECT_TRUE(((reference - X)/dt).data().cwiseAbs().maxCoeff() < tol);
+  }
+}
+
+TEST_F(RobotModelKinematicsTest, TestInverseGeometryIKDoesNotConverge) {
+  state_representation::JointState config("robot", 7);
+  // Random test configuration
+  config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  InverseGeometryParameters param = InverseGeometryParameters();
+  param.max_number_of_iterations = 1;
+  
+  state_representation::CartesianPose reference = franka->forward_geometry(config, "panda_link8");
+  EXPECT_THROW(franka->inverse_geometry(reference, "panda_link8", param), exceptions::IKDoesNotConverge);
 }

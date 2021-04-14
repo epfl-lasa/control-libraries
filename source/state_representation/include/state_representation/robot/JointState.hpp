@@ -48,11 +48,11 @@ double dist(const JointState& s1, const JointState& s2,
  */
 class JointState : public State {
 private:
-  std::vector<std::string> names;///< names of the joints
-  Eigen::VectorXd positions;     ///< joints positions
-  Eigen::VectorXd velocities;    ///< joints velocities
-  Eigen::VectorXd accelerations; ///< joints accelerations
-  Eigen::VectorXd torques;       ///< joints torques
+  std::vector<std::string> names_;///< names of the joints
+  Eigen::VectorXd positions_;     ///< joints positions
+  Eigen::VectorXd velocities_;    ///< joints velocities
+  Eigen::VectorXd accelerations_; ///< joints accelerations
+  Eigen::VectorXd torques_;       ///< joints torques
 
   /**
    * @brief Getter of all the state variables (positions, velocities, accelerations and torques)
@@ -117,7 +117,7 @@ public:
   /**
    * @brief Copy constructor of a JointState
    */
-  JointState(const JointState& state);
+  JointState(const JointState& state) = default;
 
   /**
    * @brief Constructor for the zero JointState
@@ -150,6 +150,13 @@ public:
    * @return JointState with random values in all attributes
    */
   static JointState Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
+
+  /**
+   * @brief Swap the values of the two JointState
+   * @param state1 JointState to be swapped with 2
+   * @param state2 JointState to be swapped with 1
+   */
+  friend void swap(JointState& state1, JointState& state2);
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
@@ -443,6 +450,21 @@ public:
   virtual void from_std_vector(const std::vector<double>& value);
 };
 
+inline void swap(JointState& state1, JointState& state2) {
+  swap(static_cast<State&>(state1), static_cast<State&>(state2));
+  std::swap(state1.names_, state2.names_);
+  std::swap(state1.positions_, state2.positions_);
+  std::swap(state1.velocities_, state2.velocities_);
+  std::swap(state1.accelerations_, state2.accelerations_);
+  std::swap(state1.torques_, state2.torques_);
+}
+
+inline JointState& JointState::operator=(const JointState& state) {
+  JointState tmp(state);
+  swap(*this, tmp);
+  return *this;
+}
+
 inline Eigen::VectorXd JointState::get_all_state_variables() const {
   Eigen::VectorXd all_fields(this->get_size() * 4);
   all_fields << this->get_positions(), this->get_velocities(), this->get_accelerations(), this->get_torques();
@@ -470,91 +492,84 @@ inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_value
   this->set_torques(new_values.segment(3 * this->get_size(), this->get_size()));
 }
 
-inline JointState& JointState::operator=(const JointState& state) {
-  State::operator=(state);
-  this->set_names(state.get_names());
-  this->set_all_state_variables(state.get_all_state_variables());
-  return (*this);
-}
-
 inline bool JointState::is_compatible(const State& state) const {
   bool compatible = this->State::is_compatible(state);
-  compatible = compatible && (this->names.size() == static_cast<const JointState&>(state).names.size());
+  compatible = compatible && (this->names_.size() == dynamic_cast<const JointState&>(state).names_.size());
   if (compatible) {
-    for (unsigned int i = 0; i < this->names.size(); ++i) {
-      compatible = (compatible && this->names[i] == static_cast<const JointState&>(state).names[i]);
+    for (unsigned int i = 0; i < this->names_.size(); ++i) {
+      compatible = (compatible && this->names_[i] == dynamic_cast<const JointState&>(state).names_[i]);
     }
   }
   return compatible;
 }
 
 inline unsigned int JointState::get_size() const {
-  return this->names.size();
+  return this->names_.size();
 }
 
 inline const std::vector<std::string>& JointState::get_names() const {
-  return this->names;
+  return this->names_;
 }
 
 inline void JointState::set_names(unsigned int nb_joints) {
-  this->names.resize(nb_joints);
+  this->names_.resize(nb_joints);
   for (unsigned int i = 0; i < nb_joints; ++i) {
-    this->names[i] = "joint" + std::to_string(i);
+    this->names_[i] = "joint" + std::to_string(i);
   }
   this->initialize();
 }
 
 inline void JointState::set_names(const std::vector<std::string>& names) {
-  this->names = names;
+  this->names_ = names;
   this->initialize();
 }
 
 inline const Eigen::VectorXd& JointState::get_positions() const {
-  return this->positions;
+  return this->positions_;
 }
 
 inline void JointState::set_positions(const Eigen::VectorXd& positions) {
-  this->set_state_variable(this->positions, positions);
+  this->set_state_variable(this->positions_, positions);
 }
 
 inline void JointState::set_positions(const std::vector<double>& positions) {
-  this->set_state_variable(this->positions, positions);
+  this->set_state_variable(this->positions_, positions);
 }
 
 inline const Eigen::VectorXd& JointState::get_velocities() const {
-  return this->velocities;
+  return this->velocities_;
 }
 
 inline void JointState::set_velocities(const Eigen::VectorXd& velocities) {
-  this->set_state_variable(this->velocities, velocities);
+  this->set_state_variable(this->velocities_, velocities);
 }
 
 inline void JointState::set_velocities(const std::vector<double>& velocities) {
-  this->set_state_variable(this->velocities, velocities);
+  this->set_state_variable(this->velocities_, velocities);
 }
 
 inline const Eigen::VectorXd& JointState::get_accelerations() const {
-  return this->accelerations;
+  return this->accelerations_;
 }
 
 inline void JointState::set_accelerations(const Eigen::VectorXd& accelerations) {
-  this->set_state_variable(this->accelerations, accelerations);
+  this->set_state_variable(this->accelerations_, accelerations);
 }
 
 inline void JointState::set_accelerations(const std::vector<double>& accelerations) {
-  this->set_state_variable(this->accelerations, accelerations);
+  this->set_state_variable(this->accelerations_, accelerations);
 }
 
 inline const Eigen::VectorXd& JointState::get_torques() const {
-  return this->torques;
+  return this->torques_;
 }
 
 inline void JointState::set_torques(const Eigen::VectorXd& torques) {
-  this->set_state_variable(this->torques, torques);
+  this->set_state_variable(this->torques_, torques);
 }
 
 inline void JointState::set_torques(const std::vector<double>& torques) {
-  this->set_state_variable(this->torques, torques);
+  this->set_state_variable(this->torques_, torques);
 }
 
 inline Eigen::VectorXd JointState::get_state_variable(const JointStateVariable& state_variable_type) const {

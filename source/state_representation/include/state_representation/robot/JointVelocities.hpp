@@ -20,7 +20,7 @@ public:
   /**
    * Empty constructor
    */
-  explicit JointVelocities();
+  explicit JointVelocities() = default;
 
   /**
    * @brief Constructor with name and number of joints provided

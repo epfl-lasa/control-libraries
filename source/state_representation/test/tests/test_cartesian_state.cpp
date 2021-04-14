@@ -97,9 +97,9 @@ TEST(CartesianStateTest, CopyPose) {
   EXPECT_EQ(pose3.get_accelerations().norm(), 0);
   EXPECT_EQ(pose3.get_wrench().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
-  pose1.set_linear_velocity(Eigen::Vector3d::Random());
-  pose1.set_linear_acceleration(Eigen::Vector3d::Random());
-  pose1.set_force(Eigen::Vector3d::Random());
+  pose1.set_twist(Eigen::VectorXd::Random(6));
+  pose1.set_accelerations(Eigen::VectorXd::Random(6));
+  pose1.set_wrench(Eigen::VectorXd::Random(6));
   CartesianPose pose4 = pose1;
   EXPECT_TRUE(pose1.data().isApprox(pose4.data()));
   EXPECT_EQ(pose4.get_twist().norm(), 0);
@@ -133,10 +133,9 @@ TEST(CartesianStateTest, CopyTwist) {
   EXPECT_EQ(twist3.get_accelerations().norm(), 0);
   EXPECT_EQ(twist3.get_wrench().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
-  twist1.set_position(Eigen::Vector3d::Random());
-  twist1.set_orientation(Eigen::Quaterniond::UnitRandom());
-  twist1.set_linear_acceleration(Eigen::Vector3d::Random());
-  twist1.set_force(Eigen::Vector3d::Random());
+  twist1.set_pose(Eigen::VectorXd::Random(7));
+  twist1.set_accelerations(Eigen::VectorXd::Random(6));
+  twist1.set_wrench(Eigen::VectorXd::Random(6));
   CartesianTwist twist4 = twist1;
   EXPECT_TRUE(twist1.data().isApprox(twist4.data()));
   EXPECT_EQ(twist4.get_position().norm(), 0);
@@ -174,10 +173,9 @@ TEST(CartesianStateTest, CopyWrench) {
   EXPECT_EQ(wrench3.get_twist().norm(), 0);
   EXPECT_EQ(wrench3.get_accelerations().norm(), 0);
   // try to change non pose variables prior to the copy, those should be discarded
-  wrench1.set_position(Eigen::Vector3d::Random());
-  wrench1.set_orientation(Eigen::Quaterniond::UnitRandom());
-  wrench1.set_linear_velocity(Eigen::Vector3d::Random());
-  wrench1.set_linear_acceleration(Eigen::Vector3d::Random());
+  wrench1.set_pose(Eigen::VectorXd::Random(7));
+  wrench1.set_twist(Eigen::VectorXd::Random(6));
+  wrench1.set_accelerations(Eigen::VectorXd::Random(6));
   CartesianWrench wrench4 = wrench1;
   EXPECT_TRUE(wrench1.data().isApprox(wrench4.data()));
   EXPECT_EQ(wrench4.get_position().norm(), 0);

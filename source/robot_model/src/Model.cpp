@@ -309,7 +309,7 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
   Eigen::VectorXd err(6);
   for (unsigned int i = 0; i < parameters.max_number_of_iterations; ++i) {
     err = ((cartesian_pose - this->forward_kinematics(q, frame_id)) / dt).data();
-    // in case of convergence directly get out
+    // break in case of convergence
     if (err.cwiseAbs().maxCoeff() < parameters.tolerance) {
       return q;
     }

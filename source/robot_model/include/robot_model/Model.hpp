@@ -326,7 +326,7 @@ public:
   state_representation::CartesianTwist forward_kinematics(const state_representation::JointState& joint_state);
 
   /**
-   * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
+   * @brief Compute the inverse kinematics, i.e. joint velocities from the velocities of the frames in parameter
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_twist vector of twist
    * @param parameters parameters of the inverse kinematics algorithm (default is default values of the
@@ -338,7 +338,7 @@ public:
                                                            const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
 
   /**
-   * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector
+   * @brief Compute the inverse kinematics, i.e. joint velocities from the twist of the end-effector
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_twist containing the twist of the end-effector
    * @param parameters parameters of the inverse kinematics algorithm (default is default values of the

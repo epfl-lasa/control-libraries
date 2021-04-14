@@ -13,6 +13,9 @@ namespace state_representation {
  * @brief Class to define torques of the joints
  */
 class JointTorques : public JointState {
+private:
+  using JointState::clamp_state_variable;
+
 public:
   /**
    * @brief Empty constructor

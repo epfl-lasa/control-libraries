@@ -16,6 +16,9 @@ class JointPositions;
  * @brief Class to define velocities of the joints
  */
 class JointVelocities : public JointState {
+private:
+  using JointState::clamp_state_variable;
+
 public:
   /**
    * @brief Empty constructor

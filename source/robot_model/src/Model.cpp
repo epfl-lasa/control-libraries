@@ -3,45 +3,20 @@
 #include <pinocchio/algorithm/joint-configuration.hpp>
 #include "robot_model/Model.hpp"
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
-#include "robot_model/exceptions/IKDoesNotConverge.hpp"
+#include "robot_model/exceptions/InverseGeometryNotConvergingException.hpp"
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 
 namespace robot_model {
 Model::Model(const std::string& robot_name, const std::string& urdf_path) :
     robot_name_(std::make_shared<state_representation::Parameter<std::string>>("robot_name", robot_name)),
-    urdf_path_(std::make_shared<state_representation::Parameter<std::string>>("urdf_path", urdf_path)),
-    alpha_(std::make_shared<state_representation::Parameter<double>>("alpha", 0.1)),
-    epsilon_(std::make_shared<state_representation::Parameter<double>>("epsilon", 1e-2)),
-    linear_velocity_limit_(std::make_shared<state_representation::Parameter<double>>("linear_velocity_limit", 2.0)),
-    angular_velocity_limit_(std::make_shared<state_representation::Parameter<double>>("angular_velocity_limit", 100.0)),
-    proportional_gain_(std::make_shared<state_representation::Parameter<double>>("proportional_gain", 1.0)) {
+    urdf_path_(std::make_shared<state_representation::Parameter<std::string>>("urdf_path", urdf_path)) {
   this->init_model();
-  this->init_qp_solver();
 }
 
 Model::Model(const Model& model) :
     robot_name_(model.robot_name_),
-    urdf_path_(model.urdf_path_),
-    alpha_(model.alpha_),
-    epsilon_(model.epsilon_),
-    linear_velocity_limit_(model.linear_velocity_limit_),
-    angular_velocity_limit_(model.angular_velocity_limit_),
-    proportional_gain_(model.proportional_gain_) {
+    urdf_path_(model.urdf_path_) {
   this->init_model();
-  this->init_qp_solver();
-}
-
-Model::~Model() {}
-
-Model& Model::operator=(const Model& model) {
-  this->robot_name_ = model.robot_name_;
-  this->urdf_path_ = model.urdf_path_;
-  this->alpha_ = model.alpha_;
-  this->epsilon_ = model.epsilon_;
-  // initialize the model and the solver
-  this->init_model();
-  this->init_qp_solver();
-  return (*this);
 }
 
 bool Model::create_urdf_from_string(const std::string& urdf_string, const std::string& desired_path) {
@@ -66,7 +41,7 @@ void Model::init_model() {
   this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
 }
 
-bool Model::init_qp_solver() {
+bool Model::init_qp_solver(const InverseKinematicsParameters& parameters) {
   // clear the solver
   this->solver_.data()->clearHessianMatrix();
   this->solver_.data()->clearLinearConstraintsMatrix();
@@ -111,17 +86,17 @@ bool Model::init_qp_solver() {
   }
 
   // time constraint
-  this->hessian_.coeffRef(nb_joints, nb_joints) = this->alpha_->get_value();
+  this->hessian_.coeffRef(nb_joints, nb_joints) = parameters.alpha;
   this->constraint_matrix_.coeffRef(4 * nb_joints, nb_joints) = 1.0;
-  this->lower_bound_constraints_(4 * nb_joints) = this->epsilon_->get_value();
+  this->lower_bound_constraints_(4 * nb_joints) = parameters.epsilon;
   this->upper_bound_constraints_(4 * nb_joints) = std::numeric_limits<double>::infinity();
   // cartesian velocity constraints
   for (unsigned int i = 0; i < 3; ++i) {
     // linear velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = this->linear_velocity_limit_->get_value();
+    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
     this->upper_bound_constraints_(4 * nb_joints + i + 1) = std::numeric_limits<double>::infinity();
     // angular velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = this->angular_velocity_limit_->get_value();
+    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
     this->upper_bound_constraints_(4 * nb_joints + i + 4) = std::numeric_limits<double>::infinity();
   }
 
@@ -301,7 +276,6 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
           - std::min(q[i], this->robot_model_.upperPositionLimit[i]);
     }
   }
-
   return Psi;
 }
 
@@ -336,13 +310,12 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
   Eigen::VectorXd err(6);
   const state_representation::CartesianPose X_d(desired_cartesian_state);
 
-  int i = 0;
-  while (i < params.max_number_of_iterations) {
+  for (unsigned int i = 0; i < params.max_number_of_iterations; ++i) {
     err = ((X_d - this->forward_geometry(q, frame_id)) / dt).data();
+    // in case of convergence directly get out
     if (err.cwiseAbs().maxCoeff() < params.tolerance) {
       return q;
     }
-
     J = this->compute_jacobian(q);
     W_b = this->cwln_weighted_matrix(q, params.margin);
     W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
@@ -350,13 +323,11 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
     J_b = J * W_b;
     JJt.noalias() = J_b * J_b.transpose();
     JJt.diagonal().array() += params.damp;
-    dq.set_velocities(W_c * psi
-                          + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J.data() * W_c * psi)));
-    q = q + dq * dt;
+    dq.set_velocities(W_c * psi + params.alpha * W_b * (J_b.transpose() * JJt.ldlt().solve(err - J * W_c * psi)));
+    q += dq * dt;
     q = this->clamp_in_range(q);
-    ++i;
   }
-  throw (exceptions::IKDoesNotConverge(params.max_number_of_iterations, err.array().abs().maxCoeff()));
+  throw (exceptions::InverseGeometryNotConvergingException(params.max_number_of_iterations, err.array().abs().maxCoeff()));
 }
 
 state_representation::JointPositions
@@ -369,12 +340,14 @@ Model::inverse_geometry(const state_representation::CartesianState& desired_cart
   return this->inverse_geometry(desired_cartesian_state, pos, frame_name, params);
 }
 
-state_representation::CartesianTwist Model::forward_kinematic(const state_representation::JointState& joint_state) {
+state_representation::CartesianTwist Model::forward_kinematics(const state_representation::JointState& joint_state) {
   return this->compute_jacobian(joint_state) * static_cast<state_representation::JointVelocities>(joint_state);
 }
 
-state_representation::JointVelocities Model::inverse_kinematic(const state_representation::JointState& joint_state,
-                                                               const std::vector<state_representation::CartesianTwist>& cartesian_twist) {
+state_representation::JointVelocities Model::inverse_kinematics(const state_representation::JointState& joint_state,
+                                                                const std::vector<state_representation::CartesianTwist>& cartesian_twist,
+                                                                const InverseKinematicsParameters& parameters) {
+  this->init_qp_solver(parameters);
   const unsigned int nb_joints = this->get_number_of_joints();
   using namespace state_representation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
@@ -403,17 +376,17 @@ state_representation::JointVelocities Model::inverse_kinematic(const state_repre
       coefficients.emplace_back(Eigen::Triplet<double>(i, j, hessian_matrix(i, j)));
     }
   }
-  coefficients.emplace_back(Eigen::Triplet<double>(nb_joints, nb_joints, this->alpha_->get_value()));
+  coefficients.emplace_back(Eigen::Triplet<double>(nb_joints, nb_joints, parameters.alpha));
   this->hessian_.setFromTriplets(coefficients.begin(), coefficients.end());
 
   //set the gradient
-  this->gradient_.head(nb_joints) = -this->proportional_gain_->get_value() * delta_r.transpose() * jacobian;
+  this->gradient_.head(nb_joints) = -parameters.proportional_gain * delta_r.transpose() * jacobian;
 
   // update qp_constraints
-  this->lower_bound_constraints_(4 * nb_joints) = this->epsilon_->get_value();
+  this->lower_bound_constraints_(4 * nb_joints) = parameters.epsilon;
   for (unsigned int i = 0; i < 3; ++i) {
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = this->linear_velocity_limit_->get_value();
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = this->angular_velocity_limit_->get_value();
+    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
+    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
   }
   // update the constraints
   this->solver_.updateHessianMatrix(this->hessian_);
@@ -431,9 +404,10 @@ state_representation::JointVelocities Model::inverse_kinematic(const state_repre
   return result;
 }
 
-state_representation::JointVelocities Model::inverse_kinematic(const state_representation::JointState& joint_state,
-                                                               const state_representation::CartesianTwist& cartesian_state) {
-  return this->inverse_kinematic(joint_state, std::vector<state_representation::CartesianTwist>({cartesian_state}));
+state_representation::JointVelocities Model::inverse_kinematics(const state_representation::JointState& joint_state,
+                                                                const state_representation::CartesianTwist& cartesian_state,
+                                                                const InverseKinematicsParameters& parameters) {
+  return this->inverse_kinematics(joint_state, std::vector<state_representation::CartesianTwist>({cartesian_state}), parameters);
 }
 
 void Model::print_qp_problem() {

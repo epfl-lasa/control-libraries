@@ -29,7 +29,23 @@ struct InverseGeometryParameters {
   double gamma = 0.8;
   double margin = 0.07;
   double tolerance = 1e-3;
-  int max_number_of_iterations = 1000;
+  unsigned int max_number_of_iterations = 1000;
+};
+
+/**
+ * @brief parameters for the inverse kinematics function
+ * @param alpha for the time optimization
+ * @param epsilon minimal time for the time optimization
+ * @param proportional_gain gain to weight the cartesian coordinates in the gradient
+ * @param linear_velocity_limit maximum linear velocity allowed in Cartesian space (m/s)
+ * @param angular_velocity_limit maximum angular velocity allowed in Cartesian space (rad/s)
+ */
+struct InverseKinematicsParameters {
+  double alpha = 0.1;
+  double epsilon = 1e-2;
+  double proportional_gain = 1.0;
+  double linear_velocity_limit = 2.0;
+  double angular_velocity_limit = 2.0;
 };
 
 /**
@@ -40,22 +56,17 @@ struct InverseGeometryParameters {
 class Model {
 private:
   // @format:off
-  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;       ///< name of the robot
-  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_;        ///< path to the urdf file
-  std::vector<std::string> frame_names_;                                           ///< name of the frames
-  pinocchio::Model robot_model_;                                                   ///< the robot model with pinocchio
-  pinocchio::Data robot_data_;                                                     ///< the robot data with pinocchio
-  OsqpEigen::Solver solver_;                                                       ///< osqp solver for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> hessian_;                                            ///< hessian matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd gradient_;                                                       ///< gradient vector for the quadratic programming based inverse kinematics
-  Eigen::SparseMatrix<double> constraint_matrix_;                                  ///< constraint matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd lower_bound_constraints_;                                        ///< lower bound matrix for the quadratic programming based inverse kinematics
-  Eigen::VectorXd upper_bound_constraints_;                                        ///< upper bound matrix for the quadratic programming based inverse kinematics
-  std::shared_ptr<state_representation::Parameter<double>> alpha_;                 ///< gain for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<state_representation::Parameter<double>> epsilon_;               ///< minimal time for the time optimization in the quadratic programming based inverse kinematics
-  std::shared_ptr<state_representation::Parameter<double>> linear_velocity_limit_; ///< maximum linear velocity allowed in the inverse kinematics
-  std::shared_ptr<state_representation::Parameter<double>> angular_velocity_limit_;///< maximum angular velocity allowed in the inverse kinematics
-  std::shared_ptr<state_representation::Parameter<double>> proportional_gain_;     ///< gain to weight the cartesian coordinates in the gradient
+  std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;///< name of the robot
+  std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_; ///< path to the urdf file
+  std::vector<std::string> frame_names_;                                    ///< name of the frames
+  pinocchio::Model robot_model_;                                            ///< the robot model with pinocchio
+  pinocchio::Data robot_data_;                                              ///< the robot data with pinocchio
+  OsqpEigen::Solver solver_;                                                ///< osqp solver for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> hessian_;                                     ///< hessian matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd gradient_;                                                ///< gradient vector for the quadratic programming based inverse kinematics
+  Eigen::SparseMatrix<double> constraint_matrix_;                           ///< constraint matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd lower_bound_constraints_;                                 ///< lower bound matrix for the quadratic programming based inverse kinematics
+  Eigen::VectorXd upper_bound_constraints_;                                 ///< upper bound matrix for the quadratic programming based inverse kinematics
   // @format:on
   /**
    * @brief Initialize the pinocchio model from the URDF
@@ -64,8 +75,9 @@ private:
 
   /**
    * @brief initialize the constraints for the QP solver
+   * @param parameters the parameters of the inverse kinematics algorithm
    */
-  bool init_qp_solver();
+  bool init_qp_solver(const InverseKinematicsParameters& parameters);
 
   /**
    * @brief Compute the jacobian from a given joint state at the frame in parameter
@@ -146,9 +158,11 @@ public:
   Model(const Model& model);
 
   /**
-   * @brief Destructor
+   * @brief Swap the values of the two Model
+   * @param model1 Model to be swapped with 2
+   * @param model2 Model to be swapped with 1
    */
-  ~Model();
+  friend void swap(Model& model1, Model& model2);
 
   /**
    * @brief Copy assignment operator that have to be defined due to the custom assignment operator
@@ -282,61 +296,63 @@ public:
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
+   * @param parameters parameters of the inverse geometry algorithm (default is default values of the
+   * InverseGeometryParameters structure)
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                         const std::string& frame_name = "",
-                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
+                                                        const InverseGeometryParameters& parameters = InverseGeometryParameters());
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector
    * @param desired_cartesian_state containing the desired pose of the end-effector
    * @param current_joint_state current state of the robot containing the generalized position
    * @param frame_name name of the frame at which we want to extract the pose
-   * @param inverse_geometry_parameters set of parameters for tuning the algorithm
+   * @param parameters parameters of the inverse geometry algorithm (default is default values of the
+   * InverseGeometryParameters structure)
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_geometry(const state_representation::CartesianState& desired_cartesian_state,
                                                         const state_representation::JointState& current_joint_state,
                                                         const std::string& frame_name = "",
-                                                        const InverseGeometryParameters& params = InverseGeometryParameters());
+                                                        const InverseGeometryParameters& parameters = InverseGeometryParameters());
 
   /**
-   * @brief Compute the forward kinematic, i.e. the twist of the end-effector from the joint velocities
+   * @brief Compute the forward kinematics, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot
    * @return the twist of the end-effector
    */
-  state_representation::CartesianTwist forward_kinematic(const state_representation::JointState& joint_state);
+  state_representation::CartesianTwist forward_kinematics(const state_representation::JointState& joint_state);
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the velocities of the frames in parameter
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_twist vector of twist
+   * @param parameters parameters of the inverse kinematics algorithm (default is default values of the
+   * InverseKinematicsParameters structure)
    * @return the joint velocities of the robot
    */
-  state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
-                                                          const std::vector<state_representation::CartesianTwist>& cartesian_states);
+  state_representation::JointVelocities inverse_kinematics(const state_representation::JointState& joint_state,
+                                                           const std::vector<state_representation::CartesianTwist>& cartesian_states,
+                                                           const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
 
   /**
    * @brief Compute the inverse kinematic, i.e. joint velocities from the twist of the end-effector
    * @param joint_state usually the current joint state, used to compute the jacobian matrix
    * @param cartesian_twist containing the twist of the end-effector
+   * @param parameters parameters of the inverse kinematics algorithm (default is default values of the
+   * InverseKinematicsParameters structure)
    * @return the joint velocities of the robot
    */
-  state_representation::JointVelocities inverse_kinematic(const state_representation::JointState& joint_state,
-                                                          const state_representation::CartesianTwist& cartesian_state);
+  state_representation::JointVelocities inverse_kinematics(const state_representation::JointState& joint_state,
+                                                           const state_representation::CartesianTwist& cartesian_state,
+                                                           const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
 
   /**
    * @brief Helper function to print the qp_problem (for debugging)
    */
   void print_qp_problem();
-
-  /**
-   * @brief Return a list of all the parameters of the model
-   * @return the list of parameters
-   */
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
    * @brief Check if the joint positions are inside the limits provided by the model
@@ -376,6 +392,21 @@ public:
   state_representation::JointState clamp_in_range(const state_representation::JointState& joint_state) const;
 };
 
+inline void swap(Model& model1, Model& model2) {
+  std::swap(model1.robot_name_, model2.robot_name_);
+  std::swap(model1.urdf_path_, model2.urdf_path_);
+  // initialize both models
+  model1.init_model();
+  model2.init_model();
+}
+
+inline Model& Model::operator=(const Model& model) {
+  Model tmp(model);
+  swap(*this, tmp);
+  return *this;
+}
+
+
 inline const std::string& Model::get_robot_name() const {
   return this->robot_name_->get_value();
 }
@@ -408,15 +439,5 @@ inline Eigen::Vector3d Model::get_gravity_vector() const {
 
 inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
   this->robot_model_.gravity.linear(gravity);
-}
-
-inline std::list<std::shared_ptr<state_representation::ParameterInterface>> Model::get_parameters() const {
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
-  param_list.push_back(this->alpha_);
-  param_list.push_back(this->epsilon_);
-  param_list.push_back(this->linear_velocity_limit_);
-  param_list.push_back(this->angular_velocity_limit_);
-  param_list.push_back(this->proportional_gain_);
-  return param_list;
 }
 }// namespace robot_model

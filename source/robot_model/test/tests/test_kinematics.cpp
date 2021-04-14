@@ -6,7 +6,7 @@
 
 #include "robot_model/exceptions/InvalidJointStateSizeException.hpp"
 #include "robot_model/exceptions/FrameNotFoundException.hpp"
-#include "robot_model/exceptions/IKDoesNotConverge.hpp"
+#include "robot_model/exceptions/InverseGeometryNotConvergingException.hpp"
 
 using namespace robot_model;
 
@@ -136,7 +136,7 @@ TEST_F(RobotModelKinematicsTest, TestForwardGeometry) {
 
 TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::CartesianTwist ee_twist = franka->forward_kinematic(test_configs[config]);
+    state_representation::CartesianTwist ee_twist = franka->forward_kinematics(test_configs[config]);
     EXPECT_TRUE(ee_twist.get_linear_velocity().isApprox(test_velocity_fk_expects.at(config).get_linear_velocity()));
     EXPECT_TRUE(ee_twist.get_angular_velocity().isApprox(test_velocity_fk_expects.at(config).get_angular_velocity()));
   }
@@ -144,8 +144,8 @@ TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
 
 TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::CartesianTwist ee_twist = franka->forward_kinematic(test_configs[config]);
-    state_representation::JointVelocities joint_twist = franka->inverse_kinematic(test_configs[config], ee_twist);
+    state_representation::CartesianTwist ee_twist = franka->forward_kinematics(test_configs[config]);
+    state_representation::JointVelocities joint_twist = franka->inverse_kinematics(test_configs[config], ee_twist);
     EXPECT_TRUE(joint_twist.get_velocities().isApprox(test_configs[config].get_velocities()));
   }
 }
@@ -240,5 +240,5 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometryIKDoesNotConverge) {
   param.max_number_of_iterations = 1;
   
   state_representation::CartesianPose reference = franka->forward_geometry(config, "panda_link8");
-  EXPECT_THROW(franka->inverse_geometry(reference, "panda_link8", param), exceptions::IKDoesNotConverge);
+  EXPECT_THROW(franka->inverse_geometry(reference, "panda_link8", param), exceptions::InverseGeometryNotConvergingException);
 }

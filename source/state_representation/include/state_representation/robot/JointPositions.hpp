@@ -18,7 +18,7 @@ class JointVelocities;
 class JointPositions : public JointState {
 public:
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointPositions() = default;
 
@@ -104,7 +104,7 @@ public:
    * @param positions the state with value to assign
    * @return reference to the current state with new values
    */
-  JointPositions& operator=(const JointPositions& positions);
+  JointPositions& operator=(const JointPositions& positions) = default;
 
   /**
    * @brief Overload the += operator
@@ -244,9 +244,4 @@ public:
    */
   void from_std_vector(const std::vector<double>& value);
 };
-
-inline JointPositions& JointPositions::operator=(const JointPositions& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

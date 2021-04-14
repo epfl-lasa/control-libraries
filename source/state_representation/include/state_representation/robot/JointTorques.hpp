@@ -15,7 +15,7 @@ namespace state_representation {
 class JointTorques : public JointState {
 public:
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointTorques() = default;
 
@@ -93,10 +93,10 @@ public:
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param state the state with value to assign
+   * @param torques the state with value to assign
    * @return reference to the current state with new values
    */
-  JointTorques& operator=(const JointTorques& state);
+  JointTorques& operator=(const JointTorques& torques) = default;
 
   /**
    * @brief Overload the += operator
@@ -263,9 +263,4 @@ public:
    */
   friend JointTorques operator*(const Eigen::MatrixXd& lambda, const JointTorques& torques);
 };
-
-inline JointTorques& JointTorques::operator=(const JointTorques& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

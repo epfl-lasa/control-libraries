@@ -18,7 +18,7 @@ class JointPositions;
 class JointVelocities : public JointState {
 public:
   /**
-   * Empty constructor
+   * @brief Empty constructor
    */
   explicit JointVelocities() = default;
 
@@ -101,10 +101,10 @@ public:
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param state the state with value to assign
+   * @param velocities the state with value to assign
    * @return reference to the current state with new values
    */
-  JointVelocities& operator=(const JointVelocities& state);
+  JointVelocities& operator=(const JointVelocities& velocities) = default;
 
   /**
    * @brief Overload the += operator
@@ -280,9 +280,4 @@ public:
    */
   friend JointPositions operator*(const std::chrono::nanoseconds& dt, const JointVelocities& velocities);
 };
-
-inline JointVelocities& JointVelocities::operator=(const JointVelocities& state) {
-  JointState::operator=(state);
-  return (*this);
-}
 }// namespace state_representation

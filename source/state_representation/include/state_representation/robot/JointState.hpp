@@ -95,6 +95,20 @@ protected:
    */
   void multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type);
 
+  /**
+   * @brief Getter of the variable value corresponding to the input
+   * @param state_variable_type the type of variable to get
+   * @return the value of the variable as a vector
+   */
+  Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
+
+  /**
+   * @brief Setter of the variable value corresponding to the input
+   * @param new_value the new value of the variable
+   * @param state_variable_type the type of variable to get
+   */
+  void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
+
 public:
   /**
    * @brief Empty constructor for a JointState
@@ -245,20 +259,6 @@ public:
    * @brief Setter of the torques from std vector
    */
   void set_torques(const std::vector<double>& torques);
-
-  /**
-   * @brief Getter of the variable value corresponding to the input
-   * @param state_variable_type the type of variable to get
-   * @return the value of the variable as a vector
-   */
-  Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
-
-  /**
-   * @brief Setter of the variable value corresponding to the input
-   * @param new_value the new value of the variable
-   * @param state_variable_type the type of variable to get
-   */
-  void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
 
   /**
    * @brief Check if the state is compatible for operations with the state given as argument

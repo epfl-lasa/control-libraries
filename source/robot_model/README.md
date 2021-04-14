@@ -24,23 +24,23 @@ At creation, it uses the parser from `pinocchio` to read the `URDF` file and fil
 
 ## Robot kinematics
 
-Most common robotics functionalities are implemented such `forward_geometry`, `inverse_geometry` (in development),
-`forward_kinematic`, `inverse_kinematic`, ...
+Most common robotics functionalities are implemented such `forward_kinematics`, `inverse_kinematics`,
+`forward_velocity, `inverse_velocity`, ...
 
 ```cpp
-// forward geometry: pose of a robot frame from the robot joint positions
+// forward kinematics: pose of a robot frame from the robot joint positions
 state_representation::JointPositions jp = state_representation::JointPositions::Random("myrobot", 7);
-state_representation::CartesianPose pose = model.forward_geometry(jp);
-// inverse geometry: joint positions from a pose
+state_representation::CartesianPose pose = model.forward_kinematics(jp);
+// inverse kinematics: joint positions from a pose
 state_representation::CartesianPose cp = state_representation::CartesianPose::Random("eef");
-state_representation::JointPositions jp = model.forward_geometry(cp);
-// forward kinematic: twist of a robot frame from the robot joint velocities and positions
+state_representation::JointPositions jp = model.inverse_kinematics(cp);
+// forward velocity kinematic: twist of a robot frame from the robot joint velocities and positions
 state_representation::JointState js = state_representation::JointState::Random("myrobot", 7);
-state_representation::CartesianTwist twist = model.forward_kinematic(js);
-// inverse kinematic: joint velocities from a twist and current state of the robot
+state_representation::CartesianTwist twist = model.forward_velocity(js);
+// inverse velocity kinematic: joint velocities from a twist and current state of the robot
 state_representation::CartesianTwist ct = state_representation::CartesianTwist::Random("eef");
 state_representation::JointPositions jp = state_representation::JointPositions::Random("myrobot", 7);
-state_representation::JointVelocities jv = model.inverse_kinematic(jp, ct);
+state_representation::JointVelocities jv = model.inverse_velocity(ct, jp);
 ```
 
 All of those functions check for inconsistencies between the model and the inputs (incompatibility of joints, frame
@@ -51,7 +51,7 @@ for bulk operations.
 ```cpp
 // pose of multiple robot frames from the robot joint positions
 state_representation::JointPositions jp = state_representation::JointPositions::Random("myrobot", 7);
-auto poses = model.forward_geometry(jp, std::vector<std::string>{"joint2", "eef_link"});
+auto poses = model.forward_kinematics(jp, std::vector<std::string>{"joint2", "eef_link"});
 ```
 
 The Jacobian of the robot can also be computed and stored in the `state_representation::Jacobian` wrapper:

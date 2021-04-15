@@ -19,26 +19,26 @@ private:
   Model robot_; ///< robot model to compute the kinematics
 
 public:
-  JointState joint_state; ///< current joint state of the robot
-  CartesianState eef_state; ///< current eef state of the robot
+  JointPositions joint_positions; ///< current joint positions of the robot
+  CartesianPose eef_pose; ///< current eef pose of the robot
 
   explicit DummyRobotInterface(const std::string& robot_name, const std::string& urdf_path) :
       robot_(robot_name, urdf_path) {
-    this->joint_state = JointState::Zero(robot_name, this->robot_.get_joint_frames());
+    this->joint_positions = JointPositions::Zero(robot_name, this->robot_.get_joint_frames());
     this->read_robot_state();
   }
 
   void read_robot_state() {
     // this is a dummy robot, we assume the joint state is executed but add a bit of noise
-    this->joint_state += 0.001 * JointState::Random(this->joint_state.get_name(), this->robot_.get_joint_frames());
-    this->eef_state = this->robot_.forward_kinematics(this->joint_state);
+    this->joint_positions += 0.001 * JointPositions::Random(this->joint_positions.get_name(), this->robot_.get_joint_frames());
+    this->eef_pose = this->robot_.forward_kinematics(this->joint_positions);
   }
 
   void send_control_command(const CartesianTwist& desired_eef_twist, const std::chrono::nanoseconds& dt) {
     // apply the inverse kinematics
-    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist, this->joint_state);
+    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist, this->joint_positions);
     // integrate the new position
-    this->joint_state = dt * desired_joint_velocities + this->joint_state;
+    this->joint_positions = dt * desired_joint_velocities + this->joint_positions;
   }
 };
 
@@ -48,24 +48,24 @@ void control_loop_step(DummyRobotInterface& robot,
   // read the robot state
   robot.read_robot_state();
   // print the state and eef pose
-  std::cout << robot.joint_state << std::endl;
-  std::cout << robot.eef_state << std::endl;
+  std::cout << robot.joint_positions << std::endl;
+  std::cout << robot.eef_pose << std::endl;
   // get the twist evaluated at current pose
-  CartesianTwist desired_twist = ds.evaluate(robot.eef_state);
+  CartesianTwist desired_twist = ds.evaluate(robot.eef_pose);
   // send the desired twist to the robot
   robot.send_control_command(desired_twist, dt);
 }
 
 void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt, double tolerance) {
   // set a desired target for the robot eef and a linear ds toward the target
-  CartesianPose target(robot.eef_state.get_name(), robot.eef_state.get_reference_frame());
+  CartesianPose target(robot.eef_pose.get_name(), robot.eef_pose.get_reference_frame());
   target.set_position(.5, .0, .5);
   Linear<CartesianState> linear_ds(target);
 
   double distance;
   do {
     control_loop_step(robot, linear_ds, dt);
-    distance = dist(robot.eef_state, target, CartesianStateVariable::POSE);
+    distance = dist(robot.eef_pose, target, CartesianStateVariable::POSE);
     std::cout << "distance to attractor: " << std::to_string(distance) << std::endl;
     std::cout << "-----------" << std::endl;
     std::this_thread::sleep_for(dt);
@@ -74,8 +74,8 @@ void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt
   std::cout << "##### TARGET #####" << std::endl;
   std::cout << target << std::endl;
   std::cout << "##### CURRENT STATES #####" << std::endl;
-  std::cout << robot.joint_state << std::endl;
-  std::cout << robot.eef_state << std::endl;
+  std::cout << robot.joint_positions << std::endl;
+  std::cout << robot.eef_pose << std::endl;
 }
 }
 

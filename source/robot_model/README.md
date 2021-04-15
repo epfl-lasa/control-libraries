@@ -28,16 +28,16 @@ Most common robotics functionalities are implemented such `forward_kinematics`, 
 `forward_velocity, `inverse_velocity`, ...
 
 ```cpp
-// forward kinematics: pose of a robot frame from the robot joint positions
+// forward kinematics: pose of end-effector frame from the robot joint positions
 state_representation::JointPositions jp = state_representation::JointPositions::Random("myrobot", 7);
 state_representation::CartesianPose pose = model.forward_kinematics(jp);
-// inverse kinematics: joint positions from a pose
+// inverse kinematics: joint positions from end-effector pose
 state_representation::CartesianPose cp = state_representation::CartesianPose::Random("eef");
 state_representation::JointPositions jp = model.inverse_kinematics(cp);
-// forward velocity kinematic: twist of a robot frame from the robot joint velocities and positions
+// forward velocity kinematics: twist of end-effector frame from the robot joint velocities and positions
 state_representation::JointState js = state_representation::JointState::Random("myrobot", 7);
 state_representation::CartesianTwist twist = model.forward_velocity(js);
-// inverse velocity kinematic: joint velocities from a twist and current state of the robot
+// inverse velocity kinematics: joint velocities from end-effector twist and current state of the robot
 state_representation::CartesianTwist ct = state_representation::CartesianTwist::Random("eef");
 state_representation::JointPositions jp = state_representation::JointPositions::Random("myrobot", 7);
 state_representation::JointVelocities jv = model.inverse_velocity(ct, jp);

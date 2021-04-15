@@ -109,21 +109,21 @@ protected:
   }
 };
 
-TEST_F(RobotModelKinematicsTest, TestForwardGeometryJointStateSize) {
+TEST_F(RobotModelKinematicsTest, TestForwardKinematicsJointStateSize) {
   state_representation::JointState dummy = state_representation::JointState(robot_name, 6);
   EXPECT_THROW(franka->forward_kinematics(dummy), exceptions::InvalidJointStateSizeException);
 }
 
-TEST_F(RobotModelKinematicsTest, TestForwardGeometryEE) {
+TEST_F(RobotModelKinematicsTest, TestForwardKinematicsEE) {
   EXPECT_EQ(franka->forward_kinematics(joint_state).get_position(),
             franka->forward_kinematics(joint_state, "panda_link8").get_position());
 }
 
-TEST_F(RobotModelKinematicsTest, TestForwardGeometryInvalidFrameName) {
+TEST_F(RobotModelKinematicsTest, TestForwardKinematicsInvalidFrameName) {
   EXPECT_THROW(franka->forward_kinematics(joint_state, "panda_link99"), exceptions::FrameNotFoundException);
 }
 
-TEST_F(RobotModelKinematicsTest, TestForwardGeometry) {
+TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianPose ee_pose = franka->forward_kinematics(test_configs[config]);
     EXPECT_TRUE(ee_pose.get_position().isApprox(test_fk_ee_expects.at(config).get_position()));
@@ -134,7 +134,7 @@ TEST_F(RobotModelKinematicsTest, TestForwardGeometry) {
   }
 }
 
-TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
+TEST_F(RobotModelKinematicsTest, TestForwardVelocity) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianTwist ee_twist = franka->forward_kinematics(test_configs[config]);
     EXPECT_TRUE(ee_twist.get_linear_velocity().isApprox(test_velocity_fk_expects.at(config).get_linear_velocity()));
@@ -142,7 +142,7 @@ TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
   }
 }
 
-TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
+TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
     state_representation::CartesianTwist ee_twist = franka->forward_velocity(test_configs[config]);
     state_representation::JointVelocities joint_twist = franka->inverse_velocity(ee_twist, test_configs[config]);
@@ -209,7 +209,7 @@ TEST_F(RobotModelKinematicsTest, TestClamp) {
   EXPECT_TRUE(franka->in_range(franka->clamp_in_range(joint_state)));
 }
 
-TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
+TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
   state_representation::JointState config1("robot", 7);
   state_representation::JointState config2("robot", 7);
   state_representation::JointState config3("robot", 7);
@@ -232,7 +232,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseGeometry) {
   }
 }
 
-TEST_F(RobotModelKinematicsTest, TestInverseGeometryIKDoesNotConverge) {
+TEST_F(RobotModelKinematicsTest, TestInverseKinematicsIKDoesNotConverge) {
   state_representation::JointState config("robot", 7);
   // Random test configuration
   config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});

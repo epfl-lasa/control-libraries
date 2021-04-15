@@ -136,7 +136,7 @@ TEST_F(RobotModelKinematicsTest, TestForwardKinematics) {
 
 TEST_F(RobotModelKinematicsTest, TestForwardVelocity) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::CartesianTwist ee_twist = franka->forward_kinematics(test_configs[config]);
+    state_representation::CartesianTwist ee_twist = franka->forward_velocity(test_configs[config]);
     EXPECT_TRUE(ee_twist.get_linear_velocity().isApprox(test_velocity_fk_expects.at(config).get_linear_velocity()));
     EXPECT_TRUE(ee_twist.get_angular_velocity().isApprox(test_velocity_fk_expects.at(config).get_angular_velocity()));
   }

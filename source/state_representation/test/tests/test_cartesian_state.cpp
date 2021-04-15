@@ -1,9 +1,9 @@
+#include <gtest/gtest.h>
+#include <cmath>
+
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include <fstream>
-#include <gtest/gtest.h>
-#include <unistd.h>
 
 using namespace state_representation;
 
@@ -254,9 +254,7 @@ TEST(CartesianStateTest, MultiplyTransformsBothOperators) {
   tf1 *= tf2;
   EXPECT_EQ(tf3.get_name(), "t2");
   for (int i = 0; i < tf1.get_position().size(); ++i)
-    EXPECT_NEAR(tf1.get_position()(i),
-                tf3.get_position()(i),
-                0.00001);
+    EXPECT_NEAR(tf1.get_position()(i), tf3.get_position()(i), 0.00001);
 }
 
 TEST(CartesianStateTest, MultiplyTransformsSameOrientation) {
@@ -336,9 +334,7 @@ TEST(CartesianStateTest, MultiplyPoseAndState) {
   CartesianState res = p * s;
   CartesianPose res2 = p * static_cast<CartesianPose>(s);
   for (int i = 0; i < res.get_position().size(); ++i) {
-    EXPECT_NEAR(res.get_position()(i),
-                res2.get_position()(i),
-                0.00001);
+    EXPECT_NEAR(res.get_position()(i), res2.get_position()(i), 0.00001);
   }
   EXPECT_GT(abs(res.get_orientation().dot(res2.get_orientation())), 1 - 10E-4);
 }
@@ -404,17 +400,17 @@ TEST(CartesianStateTest, TestVelocityClamping) {
 }
 
 TEST(CartesianStateTest, TestPoseDistance) {
-  CartesianPose p1("test", Eigen::Vector3d::Zero());
-  CartesianPose p2("test", Eigen::Vector3d(1, 0, 0));
-  CartesianPose p3("test", Eigen::Vector3d(1, 0, 0), Eigen::Quaterniond(0, 1, 0, 0));
-  double d1 = dist(p1, p2);
-  double d2 = p1.dist(p2);
-  EXPECT_LT(abs(d1 - d2), 1e-4);
-  EXPECT_LT(abs(d1 - 1.0), 1e-4);
-  double d3 = dist(p1, p3, CartesianStateVariable::ORIENTATION);
-  EXPECT_LT(abs(d3 - 3.14159), 1e10 - 3);
-  double d4 = dist(p2, p3);
-  EXPECT_LT(abs(d3 - d4), 1e10 - 3);
+  CartesianPose p1("test",
+                   Eigen::Vector3d(-0.353849997774433, -0.823586525156853, -1.57705702279920),
+                   Eigen::Quaterniond(-0.20495, -0.53709, -0.26785, -0.77316));
+  CartesianPose p2("test",
+                   Eigen::Vector3d(0.507974650905946, 0.281984063670556, 0.0334798822444514),
+                   Eigen::Quaterniond(-0.34616, 0.78063, 0.51161, 0.095041));
+  EXPECT_FLOAT_EQ(p1.dist(p1), 0);
+  EXPECT_FLOAT_EQ(dist(p1, p2), p1.dist(p2));
+  EXPECT_NEAR(p1.dist(p2, CartesianStateVariable::POSITION), 2.13514804509215, 1e-3);
+  EXPECT_NEAR(p1.dist(p2, CartesianStateVariable::ORIENTATION), 1.955608640373294, 1e-3);
+  EXPECT_NEAR(p1.dist(p2), 4.090756685465443, 1e-3);
 }
 
 TEST(CartesianStateTest, TestFilter) {

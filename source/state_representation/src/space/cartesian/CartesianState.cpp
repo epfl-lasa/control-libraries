@@ -265,7 +265,8 @@ double CartesianState::dist(const CartesianState& state, const CartesianStateVar
       || state_variable_type == CartesianStateVariable::ALL) {
     // https://math.stackexchange.com/questions/90081/quaternion-distance for orientation
     double inner_product = this->get_orientation().dot(state.get_orientation());
-    result += acos(2 * inner_product * inner_product - 1);
+    double argument = 2 * inner_product * inner_product - 1;
+    result += acos(std::min(1.0, std::max(-1.0, argument)));
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_VELOCITY
       || state_variable_type == CartesianStateVariable::TWIST || state_variable_type == CartesianStateVariable::ALL) {

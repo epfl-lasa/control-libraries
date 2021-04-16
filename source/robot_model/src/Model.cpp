@@ -299,13 +299,13 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
   // initialization of the loop variables
   state_representation::JointPositions q(joint_positions);
-  state_representation::JointVelocities dq(this->get_robot_name(), this->get_number_of_joints());
-  state_representation::Jacobian J(this->get_robot_name(), this->robot_model_.nq, frame_name);
-  Eigen::MatrixXd J_b = J.data();
+  state_representation::JointVelocities dq(this->get_robot_name(), joint_positions.get_names());
+  state_representation::Jacobian J = this->compute_jacobian(joint_positions, frame_name);
+  Eigen::MatrixXd J_b =  Eigen::MatrixXd::Zero(6, this->get_number_of_joints());
   Eigen::MatrixXd JJt(6, 6);
-  Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
-  Eigen::MatrixXd W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq);
-  Eigen::VectorXd psi(this->robot_model_.nq);
+  Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints());
+  Eigen::MatrixXd W_c = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints());
+  Eigen::VectorXd psi(this->get_number_of_joints());
   Eigen::VectorXd err(6);
   for (unsigned int i = 0; i < parameters.max_number_of_iterations; ++i) {
     err = ((cartesian_pose - this->forward_kinematics(q, frame_id)) / dt).data();
@@ -313,9 +313,9 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
     if (err.cwiseAbs().maxCoeff() < parameters.tolerance) {
       return q;
     }
-    J = this->compute_jacobian(q);
+    J = this->compute_jacobian(q, frame_name);
     W_b = this->cwln_weighted_matrix(q, parameters.margin);
-    W_c = Eigen::MatrixXd::Identity(this->robot_model_.nq, this->robot_model_.nq) - W_b;
+    W_c = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints()) - W_b;
     psi = parameters.gamma * this->cwln_repulsive_potential_field(q, parameters.margin);
     J_b = J * W_b;
     JJt.noalias() = J_b * J_b.transpose();
@@ -333,7 +333,7 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
                           const std::string& frame_name,
                           const InverseKinematicsParameters& parameters) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
-  state_representation::JointPositions positions(this->get_robot_name(), q);
+  state_representation::JointPositions positions(this->get_robot_name(), this->get_joint_frames(), q);
   return this->inverse_kinematics(cartesian_pose, positions, frame_name, parameters);
 }
 

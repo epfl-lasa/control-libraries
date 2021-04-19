@@ -131,7 +131,7 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
                                         this->get_joint_frames(),
                                         this->robot_model_.frames[frame_id].name,
                                         J,
-                                        this->frame_names_.front());
+                                        this->get_base_frame());
 }
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
@@ -295,13 +295,17 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
     }
     frame_id = this->robot_model_.getFrameId(frame_name);
   }
+  std::string actual_frame_name = this->robot_model_.frames[frame_id].name;
   // 1 second for the Newton-Raphson method
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
   // initialization of the loop variables
   state_representation::JointPositions q(joint_positions);
   state_representation::JointVelocities dq(this->get_robot_name(), joint_positions.get_names());
-  state_representation::Jacobian J = this->compute_jacobian(joint_positions, frame_name);
-  Eigen::MatrixXd J_b =  Eigen::MatrixXd::Zero(6, this->get_number_of_joints());
+  state_representation::Jacobian J(this->get_robot_name(),
+                                   this->get_joint_frames(),
+                                   actual_frame_name,
+                                   this->get_base_frame());
+  Eigen::MatrixXd J_b = Eigen::MatrixXd::Zero(6, this->get_number_of_joints());
   Eigen::MatrixXd JJt(6, 6);
   Eigen::MatrixXd W_b = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints());
   Eigen::MatrixXd W_c = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints());
@@ -313,7 +317,7 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
     if (err.cwiseAbs().maxCoeff() < parameters.tolerance) {
       return q;
     }
-    J = this->compute_jacobian(q, frame_name);
+    J = this->compute_jacobian(q, actual_frame_name);
     W_b = this->cwln_weighted_matrix(q, parameters.margin);
     W_c = Eigen::MatrixXd::Identity(this->get_number_of_joints(), this->get_number_of_joints()) - W_b;
     psi = parameters.gamma * this->cwln_repulsive_potential_field(q, parameters.margin);

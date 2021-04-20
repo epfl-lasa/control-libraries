@@ -16,7 +16,7 @@ protected:
     robot_name = "franka";
     urdf_path = std::string(TEST_FIXTURES) + "panda_arm.urdf";
     franka = std::make_unique<Model>(robot_name, urdf_path);
-    joint_state = state_representation::JointState(robot_name, 7);
+    joint_state = state_representation::JointState(robot_name, franka->get_joint_frames());
   }
 
   std::unique_ptr<Model> franka;
@@ -36,7 +36,7 @@ protected:
 
   void setTestConfigurations() {
     // Random test configuration 1:
-    state_representation::JointState config1("robot", 7);
+    state_representation::JointState config1("robot", franka->get_joint_frames());
     config1.set_positions({2.747925, 0.249748, 2.879048, -1.410068, 0.089576, 1.229171, -0.405612});
     config1.set_velocities({-0.016387, -0.857926, 0.775478, -0.870733, -0.127630, 0.653259, -0.210931});
     test_configs.push_back(config1);
@@ -60,7 +60,7 @@ protected:
     test_velocity_fk_expects.emplace_back(state_representation::CartesianTwist("ee", twist));
 
     // Random test configuration 2:
-    state_representation::JointState config2("robot", 7);
+    state_representation::JointState config2("robot", franka->get_joint_frames());
     config2.set_positions({0.657542, 1.123400, 2.238078, -0.276603, -1.791779, 0.957355, 2.305472});
     config2.set_velocities({0.186724, 0.007680, 0.225619, 0.638844, 0.063778, -0.595850, -0.092213});
     test_configs.push_back(config2);
@@ -84,7 +84,7 @@ protected:
     test_velocity_fk_expects.emplace_back(state_representation::CartesianTwist("ee", twist));
 
     // Random test configuration 3:
-    state_representation::JointState config3("robot", 7);
+    state_representation::JointState config3("robot", franka->get_joint_frames());
     config3.set_positions({-0.417727, 1.643116, 0.695671, -0.984239, 1.275766, 1.290295, 0.098453});
     config3.set_velocities({0.113389, -0.687010, 0.124112, 0.389607, -0.147089, 0.672541, 0.462774});
     test_configs.push_back(config3);
@@ -152,10 +152,10 @@ TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
 
 TEST_F(RobotModelKinematicsTest, TestInRange) {
   
-  state_representation::JointPositions joint_positions("robot", 7);
-  state_representation::JointVelocities joint_velocities("robot", 7);
-  state_representation::JointTorques joint_torques("robot", 7);
-  state_representation::JointState joint_state("robot", 7);
+  state_representation::JointPositions joint_positions("robot", franka->get_joint_frames());
+  state_representation::JointVelocities joint_velocities("robot", franka->get_joint_frames());
+  state_representation::JointTorques joint_torques("robot", franka->get_joint_frames());
+  state_representation::JointState joint_state("robot", franka->get_joint_frames());
   
   joint_positions.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
   joint_velocities.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
@@ -184,11 +184,10 @@ TEST_F(RobotModelKinematicsTest, TestInRange) {
 }
 
 TEST_F(RobotModelKinematicsTest, TestClamp) {
-  
-  state_representation::JointPositions joint_positions("robot", 7);
-  state_representation::JointVelocities joint_velocities("robot", 7);
-  state_representation::JointTorques joint_torques("robot", 7);
-  state_representation::JointState joint_state("robot", 7);
+  state_representation::JointPositions joint_positions("robot", franka->get_joint_frames());
+  state_representation::JointVelocities joint_velocities("robot", franka->get_joint_frames());
+  state_representation::JointTorques joint_torques("robot", franka->get_joint_frames());
+  state_representation::JointState joint_state("robot", franka->get_joint_frames());
 
   joint_positions.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
   joint_velocities.set_velocities({-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
@@ -210,9 +209,9 @@ TEST_F(RobotModelKinematicsTest, TestClamp) {
 }
 
 TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
-  state_representation::JointState config1("robot", 7);
-  state_representation::JointState config2("robot", 7);
-  state_representation::JointState config3("robot", 7);
+  state_representation::JointState config1("robot", franka->get_joint_frames());
+  state_representation::JointState config2("robot", franka->get_joint_frames());
+  state_representation::JointState config3("robot", franka->get_joint_frames());
   // Random test configurations
   config1.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
   config2.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
@@ -233,7 +232,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
 }
 
 TEST_F(RobotModelKinematicsTest, TestInverseKinematicsIKDoesNotConverge) {
-  state_representation::JointState config("robot", 7);
+  state_representation::JointState config("robot", franka->get_joint_frames());
   // Random test configuration
   config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
   InverseKinematicsParameters param = InverseKinematicsParameters();

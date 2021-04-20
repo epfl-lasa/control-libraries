@@ -205,16 +205,22 @@ public:
   unsigned int get_number_of_joints() const;
 
   /**
-   * Getter of the joint frames from the model
+   * @brief Getter of the joint frames from the model
    * @return the joint frames
    */
   std::vector<std::string> get_joint_frames() const;
 
   /**
-   * Getter of the frames from the model
+   * @brief Getter of the frames from the model
    * @return the frame names
    */
   std::vector<std::string> get_frames() const;
+
+  /**
+   * @brief Getter of the base frame of the robot
+   * @return the base frame
+   */
+  const std::string& get_base_frame() const;
 
   /**
    * @brief Getter of the gravity vector
@@ -427,6 +433,10 @@ inline std::vector<std::string> Model::get_joint_frames() const {
   // model contains a first joint called universe that needs to be discarded
   std::vector<std::string> joint_frames(this->robot_model_.names.begin() + 1, this->robot_model_.names.end());
   return joint_frames;
+}
+
+inline const std::string& Model::get_base_frame() const {
+  return this->frame_names_.front();
 }
 
 inline std::vector<std::string> Model::get_frames() const {

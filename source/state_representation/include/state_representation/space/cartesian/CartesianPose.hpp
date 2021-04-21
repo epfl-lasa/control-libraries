@@ -164,13 +164,6 @@ public:
   CartesianPose operator+(const CartesianPose& pose) const;
 
   /**
-   * @brief Overload the + operator with a state
-   * @param state CartesianState to add
-   * @return the current CartesianPose added the CartesianState given in argument
-   */
-  CartesianState operator+(const CartesianState& state) const;
-
-  /**
    * @brief Overload the -= operator
    * @param pose CartesianPose to subtract
    * @return the current CartesianPose minus the CartesianPose given in argument
@@ -183,13 +176,6 @@ public:
    * @return the current CartesianPose minus the CartesianPose given in argument
    */
   CartesianPose operator-(const CartesianPose& pose) const;
-
-  /**
-   * @brief Overload the - operator with a state
-   * @param state CartesianState to subtract
-   * @return the current CartesianPose minus the CartesianState given in argument
-   */
-  CartesianState operator-(const CartesianState& state) const;
 
   /**
    * @brief Overload the / operator with a time period

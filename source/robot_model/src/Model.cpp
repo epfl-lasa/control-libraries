@@ -454,7 +454,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   JointVelocities result(joint_positions.get_name(), joint_positions.get_names());
   Eigen::VectorXd delta_q = solution.head(nb_joints);
   //double T = solution(nb_joints);
-  //result.set_velocities(delta_q / T);
+  result.set_velocities(delta_q);
   return result;
 }
 

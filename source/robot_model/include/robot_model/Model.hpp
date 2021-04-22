@@ -235,6 +235,12 @@ public:
   void set_gravity_vector(const Eigen::Vector3d& gravity);
 
   /**
+   * @brief Getter of the pinocchio model
+   * @return the pinocchio model
+   */
+  pinocchio::Model get_pinocchio_model() const;
+
+  /**
    * @brief Compute the jacobian from a given joint state at the frame given in parameter
    * @param joint_positions containing the joint values of the robot
    * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
@@ -449,5 +455,9 @@ inline Eigen::Vector3d Model::get_gravity_vector() const {
 
 inline void Model::set_gravity_vector(const Eigen::Vector3d& gravity) {
   this->robot_model_.gravity.linear(gravity);
+}
+
+inline pinocchio::Model Model::get_pinocchio_model() const {
+  return this->robot_model_;
 }
 }// namespace robot_model

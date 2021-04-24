@@ -17,6 +17,7 @@ protected:
     urdf_path = std::string(TEST_FIXTURES) + "panda_arm.urdf";
     franka = std::make_unique<Model>(robot_name, urdf_path);
     joint_state = state_representation::JointState(robot_name, franka->get_joint_frames());
+    this->setTestConfigurations();
   }
 
   std::unique_ptr<Model> franka;

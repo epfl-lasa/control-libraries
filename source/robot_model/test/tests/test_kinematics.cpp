@@ -146,20 +146,20 @@ TEST_F(RobotModelKinematicsTest, TestForwardVelocity) {
   }
 }
 
-/*TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
+TEST_F(RobotModelKinematicsTest, DISABLED_TestInverseVelocity) {
   for (auto& config : test_configs) {
     state_representation::CartesianTwist ee_twist = franka->forward_velocity(config);
     state_representation::JointVelocities joint_twist = franka->inverse_velocity(ee_twist, config);
     EXPECT_TRUE(joint_twist.get_velocities().isApprox(config.get_velocities()));
   }
-}*/
+}
 
 TEST_F(RobotModelKinematicsTest, TestInRange) {
   state_representation::JointPositions joint_positions("robot", franka->get_joint_frames());
   state_representation::JointVelocities joint_velocities("robot", franka->get_joint_frames());
   state_representation::JointTorques joint_torques("robot", franka->get_joint_frames());
   state_representation::JointState joint_state("robot", franka->get_joint_frames());
-  
+
   joint_positions.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
   joint_velocities.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
   joint_torques.set_torques({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});

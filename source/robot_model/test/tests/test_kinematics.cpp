@@ -17,7 +17,7 @@ protected:
     urdf_path = std::string(TEST_FIXTURES) + "panda_arm.urdf";
     franka = std::make_unique<Model>(robot_name, urdf_path);
     joint_state = state_representation::JointState(robot_name, franka->get_joint_frames());
-    this->setTestConfigurations();
+    set_test_configurations();
   }
 
   std::unique_ptr<Model> franka;
@@ -35,7 +35,7 @@ protected:
   std::vector<state_representation::CartesianTwist> test_velocity_fk_expects;
   Eigen::Matrix<double, 6, 1> twist;
 
-  void setTestConfigurations() {
+  void set_test_configurations() {
     // Random test configuration 1:
     state_representation::JointState config1(franka->get_robot_name(), franka->get_joint_frames());
     config1.set_positions({2.747925, 0.249748, 2.879048, -1.410068, 0.089576, 1.229171, -0.405612});

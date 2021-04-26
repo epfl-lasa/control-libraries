@@ -209,7 +209,10 @@ std::vector<state_representation::CartesianPose> Model::forward_kinematics(const
     Eigen::Vector3d translation = pose.translation();
     Eigen::Quaterniond quaternion;
     pinocchio::quaternion::assignQuaternion(quaternion, pose.rotation());
-    state_representation::CartesianPose frame_pose(this->robot_model_.frames[id].name, translation, quaternion);
+    state_representation::CartesianPose frame_pose(this->robot_model_.frames[id].name,
+                                                   translation,
+                                                   quaternion,
+                                                   this->get_base_frame());
     pose_vector.push_back(frame_pose);
   }
   return pose_vector;

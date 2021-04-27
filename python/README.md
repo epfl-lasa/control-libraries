@@ -19,16 +19,17 @@ Python bindings for the classes and functions in control libraries.
 A docker container configures a pipenv environment with the necessary PyBind and numpy installations.
 This is then used to compile a CMake project using PyBind macros.
 
-The project sources are in the source directory and define the bindings between the Python module and 
+The project sources are in the `source` directory and define the
+bindings between each Python module and the respective C++ library.
 
 THe output of the CMake project is a shared library file specifically formatted for use in Python.
 When this library is on the path, it can be imported and used in Python projects.
 
-The tests directory contains some Python scripts that import and check the bindings.
+The `tests` directory contains some Python scripts that import and check the bindings.
 
 ## Generating the Python module 
 
-By executing the [run.sh](./run.sh) script, the docker image will be built, and the container
-will be launched to automatically install the pipenv environment, build and install the python library
+The [run.sh](./run.sh) script will build the docker image and launch the container.
+On startup, this will enter the pipenv environment, build and install the python library
 to a `lib` directory, run the scripts in the `tests` directory, and finally place the user
 in an interactive pipenv shell for further testing.

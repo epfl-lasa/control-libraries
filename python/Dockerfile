@@ -5,7 +5,7 @@ WORKDIR /tmp
 RUN git clone https://github.com/epfl-lasa/control_libraries.git \
   && mkdir -p control_libraries/source/build \
   && cd control_libraries/source/build \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ROBOT_MODEL="OFF" -DBUILD_CONTROLLERS="OFF" .. \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ROBOT_MODEL="ON" -DBUILD_ROBOT_MODEL="OFF" -DBUILD_CONTROLLERS="OFF" .. \
   && make -j \
   && make install
 
@@ -18,10 +18,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip3 install pipenv
 
+RUN rm -r /tmp
+
 RUN useradd -m dev
 USER dev
 WORKDIR /home/dev
 RUN export PATH=$PATH:/home/dev/.local/bin/
 RUN pipenv install
+
 
 ENTRYPOINT ["/bin/bash", "/home/dev/entrypoint.sh"]

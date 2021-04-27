@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from py_state_representation import CartesianState, dist
+import numpy as np
 
 methods = [m for m in dir(CartesianState) if callable(getattr(CartesianState, m))]
 expected = [
@@ -21,6 +22,7 @@ expected = [
     'get_transformation_matrix',
     'get_twist',
     'get_wrench',
+    'inverse',
     'normalize',
     'normalized',
     'norms',
@@ -43,13 +45,33 @@ for method in expected:
     if method not in methods:
         raise AttributeError(f'Method {method} not defined!')
 
-A = CartesianState()
-B = CartesianState("B")
-C = CartesianState("C", "D")
-D = CartesianState(C)
 
-E = CartesianState.Identity("E")
-F = CartesianState.Random("F")
+try:
+    CartesianState()
+    A = CartesianState("A")
+    CartesianState(A)
+    CartesianState("B", "C")
 
-print(F)
-print(dist(E, F))
+    A = CartesianState.Identity("A")
+    B = CartesianState.Random("B")
+
+    A.set_position(1, 2, 3)
+    A.set_position([1, 2, 3])
+    A.set_position(np.array([1, 2, 3]))
+
+    A.set_orientation([1, 2, 3, 4])
+
+    A.set_twist([1, 2, 3, 4, 5, 6])
+    A.set_accelerations([1, 2, 3, 4, 5, 6])
+    A.set_wrench([1, 2, 3, 4, 5, 6])
+
+    print(A)
+
+    A + B
+    A - B
+    A * 2
+    2 * A
+    A.inverse() * B
+except Exception as e:
+    print(f'Test failed: {e}')
+    raise e

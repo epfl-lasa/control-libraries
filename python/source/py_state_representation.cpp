@@ -101,6 +101,7 @@ PYBIND11_MODULE(py_state_representation, m) {
   cartesian_state.def(py::self -= py::self);
   cartesian_state.def(py::self - py::self);
 
+  cartesian_state.def("inverse", &CartesianState::inverse, "Compute the inverse of the current CartesianState");
   cartesian_state.def("dist", &CartesianState::dist, "Compute the distance to another state as the sum of distances between each features", "state"_a, "state_variable_type"_a=CartesianStateVariable::ALL);
   cartesian_state.def("norms", &CartesianState::norms, "Compute the norms of the state variable specified by the input type (default is full state)", "state_variable_type"_a=CartesianStateVariable::ALL);
   cartesian_state.def("normalize", &CartesianState::normalize, "Normalize inplace the state at the state variable given in argument (default is full state)", "state_variable_type"_a=CartesianStateVariable::ALL);

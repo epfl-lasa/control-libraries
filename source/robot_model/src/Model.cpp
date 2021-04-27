@@ -39,9 +39,10 @@ void Model::init_model() {
   }
   // remove universe and root_joint frame added by Pinocchio
   this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
+  this->init_qp_solver();
 }
 
-bool Model::init_qp_solver(const InverseVelocityParameters& parameters) {
+bool Model::init_qp_solver() {
   // clear the solver
   this->solver_.data()->clearHessianMatrix();
   this->solver_.data()->clearLinearConstraintsMatrix();
@@ -86,17 +87,13 @@ bool Model::init_qp_solver(const InverseVelocityParameters& parameters) {
   }
 
   // time constraint
-  this->hessian_.coeffRef(nb_joints, nb_joints) = parameters.alpha;
   this->constraint_matrix_.coeffRef(4 * nb_joints, nb_joints) = 1.0;
-  this->lower_bound_constraints_(4 * nb_joints) = parameters.epsilon;
   this->upper_bound_constraints_(4 * nb_joints) = std::numeric_limits<double>::infinity();
   // cartesian velocity constraints
   for (unsigned int i = 0; i < 3; ++i) {
     // linear velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
     this->upper_bound_constraints_(4 * nb_joints + i + 1) = std::numeric_limits<double>::infinity();
     // angular velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
     this->upper_bound_constraints_(4 * nb_joints + i + 4) = std::numeric_limits<double>::infinity();
   }
 
@@ -405,7 +402,6 @@ state_representation::JointVelocities
 Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                         const state_representation::JointPositions& joint_positions,
                         const InverseVelocityParameters& parameters) {
-  this->init_qp_solver(parameters);
   const unsigned int nb_joints = this->get_number_of_joints();
   using namespace state_representation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector

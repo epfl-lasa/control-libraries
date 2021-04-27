@@ -34,15 +34,15 @@ struct InverseKinematicsParameters {
 
 /**
  * @brief parameters for the inverse velocity kinematics function
- * @param alpha for the time optimization
- * @param epsilon minimal time for the time optimization
+ * @param alpha gain associated to the time slack variable
+ * @param epsilon minimal value of the time slack variable (dt of the control loop)
  * @param proportional_gain gain to weight the cartesian coordinates in the gradient
  * @param linear_velocity_limit maximum linear velocity allowed in Cartesian space (m/s)
  * @param angular_velocity_limit maximum angular velocity allowed in Cartesian space (rad/s)
  */
 struct InverseVelocityParameters {
   double alpha = 0.1;
-  double epsilon = 1e-2;
+  double epsilon = 1e-9;
   double proportional_gain = 1.0;
   double linear_velocity_limit = 2.0;
   double angular_velocity_limit = 2.0;

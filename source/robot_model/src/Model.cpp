@@ -414,7 +414,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
         this->compute_jacobian(joint_positions, twist.get_name()).data().block(0, 0, 3, nb_joints);
   }
-  // extract the orientation for the end-effector
+  // extract pose for the end-effector
   CartesianTwist state = cartesian_twists.back();
   delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = state.get_linear_velocity();
   delta_r.tail(3) = state.get_angular_velocity();
@@ -445,12 +445,10 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   this->solver_.updateLinearConstraintsMatrix(this->constraint_matrix_);
   // solve the QP problem
   this->solver_.solve();
-  Eigen::VectorXd solution = this->solver_.getSolution();
   // extract the solution
-  JointVelocities result(joint_positions.get_name(), joint_positions.get_names());
-  Eigen::VectorXd delta_q = solution.head(nb_joints);
-  //double T = solution(nb_joints);
-  result.set_velocities(delta_q);
+  JointVelocities result(joint_positions.get_name(),
+                         joint_positions.get_names(),
+                         this->solver_.getSolution().head(nb_joints));
   return result;
 }
 

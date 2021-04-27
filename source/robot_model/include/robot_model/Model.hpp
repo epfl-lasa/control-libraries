@@ -77,7 +77,7 @@ private:
    * @brief initialize the constraints for the QP solver
    * @param parameters the parameters of the inverse kinematics algorithm
    */
-  bool init_qp_solver(const InverseVelocityParameters& parameters);
+  bool init_qp_solver();
 
   /**
    * @brief Compute the Jacobian from given joint positions at the frame in parameter

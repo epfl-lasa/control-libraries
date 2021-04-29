@@ -59,7 +59,8 @@ void control_loop_step(DummyRobotInterface& robot,
 void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt, double tolerance) {
   // set a desired target for the robot eef and a linear ds toward the target
   CartesianPose target(robot.eef_pose.get_name(), robot.eef_pose.get_reference_frame());
-  target.set_position(.5, .0, .5);
+  target.set_position(.75, .0, .5);
+  target.set_orientation(Eigen::Quaterniond(0.0, 0.75, 0.75, 0.0));
   Linear<CartesianState> linear_ds(target);
 
   double distance;
@@ -83,6 +84,6 @@ int main(int, char**) {
   std::string robot_name = "franka";
   std::string urdf_path = std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
   DummyRobotInterface robot("franka", urdf_path);
-  auto dt = 10ms;
+  auto dt = 100ms;
   control_loop(robot, dt, 1e-3);
 }

@@ -72,17 +72,25 @@ bool Model::init_qp_solver() {
   for (unsigned int n = 0; n < nb_joints; ++n) {
     // joint limits
     this->constraint_matrix_.coeffRef(n, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n, nb_joints) = -upper_position_limit(n);// joint_limit max
-    this->lower_bound_constraints_(n) = -std::numeric_limits<double>::infinity();
+    this->constraint_matrix_.coeffRef(n, nb_joints) = lower_position_limit(n);
+    if (lower_position_limit(n) < 0.) {
+      this->lower_bound_constraints_(n) = -std::numeric_limits<double>::infinity();
+    } else {
+      this->upper_bound_constraints_(n) = std::numeric_limits<double>::infinity();
+    }
     this->constraint_matrix_.coeffRef(n + nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + nb_joints, nb_joints) = -lower_position_limit(n);// joint limit min
-    this->upper_bound_constraints_(n + nb_joints) = std::numeric_limits<double>::infinity();
+    this->constraint_matrix_.coeffRef(n + nb_joints, nb_joints) = upper_position_limit(n);
+    if (upper_position_limit(n) < 0.) {
+      this->lower_bound_constraints_(n + nb_joints) = -std::numeric_limits<double>::infinity();
+    } else {
+      this->upper_bound_constraints_(n + nb_joints) = std::numeric_limits<double>::infinity();
+    }
     // joint velocity limits
     this->constraint_matrix_.coeffRef(n + 2 * nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + 2 * nb_joints, nb_joints) = -velocity_limit(n);// joint_limit max
+    this->constraint_matrix_.coeffRef(n + 2 * nb_joints, nb_joints) = -velocity_limit(n);
     this->lower_bound_constraints_(n + 2 * nb_joints) = -std::numeric_limits<double>::infinity();
     this->constraint_matrix_.coeffRef(n + 3 * nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + 3 * nb_joints, nb_joints) = velocity_limit(n);// joint limit min
+    this->constraint_matrix_.coeffRef(n + 3 * nb_joints, nb_joints) = velocity_limit(n);
     this->upper_bound_constraints_(n + 3 * nb_joints) = std::numeric_limits<double>::infinity();
   }
 
@@ -415,10 +423,10 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
         this->compute_jacobian(joint_positions, twist.get_name()).data().block(0, 0, 3, nb_joints);
   }
   // extract pose for the end-effector
-  CartesianTwist state = cartesian_twists.back();
-  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = state.get_linear_velocity();
-  delta_r.tail(3) = state.get_angular_velocity();
-  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, state.get_name()).data();
+  CartesianTwist eef_twist = cartesian_twists.back();
+  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = eef_twist.get_linear_velocity();
+  delta_r.tail(3) = eef_twist.get_angular_velocity();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, eef_twist.get_name()).data();
   // compute the Jacobian
   Eigen::MatrixXd hessian_matrix = jacobian.transpose() * jacobian;
   // set the hessian sparse matrix
@@ -437,6 +445,8 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   for (unsigned int i = 0; i < 3; ++i) {
     this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
     this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
+    this->lower_bound_constraints_(4 * nb_joints + i + 1) = abs(eef_twist.get_linear_velocity()(i));
+    this->lower_bound_constraints_(4 * nb_joints + i + 4) = abs(eef_twist.get_angular_velocity()(i));
   }
   // update the constraints
   this->solver_.updateHessianMatrix(this->hessian_);

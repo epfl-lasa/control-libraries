@@ -122,3 +122,8 @@ TEST_F(RobotModelTest, TestCreateURDFFromStringFail) {
   EXPECT_TRUE(Model::create_urdf_from_string("dummy string", create_urdf_test_path));
   EXPECT_ANY_THROW(Model("dummy", create_urdf_test_path));
 }
+
+TEST_F(RobotModelTest, TestModelGetter) {
+  const pinocchio::Model& robot_model = franka->get_pinocchio_model();
+  EXPECT_TRUE(robot_model.existBodyName("panda_link0"));
+}

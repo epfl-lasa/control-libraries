@@ -23,7 +23,9 @@ if [ "$REBUILD" -eq 1 ]; then
     BUILD_FLAGS+=(--no-cache)
 fi
 
-DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" .. || exit
+MULTISTAGE_SOURCE_TARGET="source-dependencies"
+DOCKER_BUILDKIT=1 docker build --target "${MULTISTAGE_SOURCE_TARGET}" -t "control-libraries/${MULTISTAGE_SOURCE_TARGET}" ../.. || exit
+DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . || exit
 
 if [ -z "${1}" ]; then
   docker run -it --rm "${NAME}:${TAG}"

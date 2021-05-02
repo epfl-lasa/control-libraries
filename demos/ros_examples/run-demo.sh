@@ -14,7 +14,6 @@ shift "$(( OPTIND - 1 ))"
 
 NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
 TAG="latest"
-TARGET_SCRIPT=${1}
 
 BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
 BUILD_FLAGS+=(-t "${NAME}:${TAG}")
@@ -27,8 +26,5 @@ MULTISTAGE_SOURCE_TARGET="source-dependencies"
 DOCKER_BUILDKIT=1 docker build --target "${MULTISTAGE_SOURCE_TARGET}" -t "control-libraries/${MULTISTAGE_SOURCE_TARGET}" ../.. || exit
 DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . || exit
 
-if [ -z "${1}" ]; then
-  docker run -it --rm "${NAME}:${TAG}"
-else
-  docker run --rm "${NAME}:${TAG}" "./${1}"
-fi
+docker run -it --rm --net="host" "${NAME}:${TAG}"
+

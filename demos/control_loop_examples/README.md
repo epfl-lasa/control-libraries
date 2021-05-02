@@ -1,4 +1,4 @@
-# `control_libraries` demonstration scripts
+# `control_loop_examples` demonstration scripts
 
 ## Table of contents:
 * [Running a demo script](#running-demonstration-scripts)

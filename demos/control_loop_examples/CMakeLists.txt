@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(control_libraries_demos)
+project(control_loop_examples)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

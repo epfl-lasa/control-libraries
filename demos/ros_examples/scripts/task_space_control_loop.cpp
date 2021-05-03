@@ -22,7 +22,7 @@ void send_transform(const CartesianPose& pose, const std::string& pose_name_pref
   br.sendTransform(tf::StampedTransform(transform,
                                         ros::Time::now(),
                                         pose.get_reference_frame(),
-                                        pose_name_prefix + pose.get_name()));
+                                        prefix + pose.get_name()));
 }
 
 CartesianPose control_loop_step(const CartesianPose& pose,

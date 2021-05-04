@@ -60,7 +60,7 @@ COPY . ${ROS_WORKSPACE}/src/ros2_examples
 
 # build and install the package
 WORKDIR ${ROS_WORKSPACE}
-RUN /bin/bash -c "source ${ROS_WORKSPACE}/install/setup.bash; colcon build"
+RUN /bin/bash -c "source ${ROS_WORKSPACE}/install/setup.bash; colcon build --symlink-install"
 
 # Clean image
 RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*

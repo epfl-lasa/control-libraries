@@ -63,5 +63,6 @@ endforeach()
 
 ament_auto_package()
 
-install(DIRECTORY launch DESTINATION ${CMAKE_INSTALL_PREFIX}/launch)
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
 

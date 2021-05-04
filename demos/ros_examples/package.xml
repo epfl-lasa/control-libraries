@@ -3,7 +3,7 @@
   <name>ros_examples</name>
   <version>0.0.0</version>
   <description>Control libraries demos included in a ROS package</description>
-  <maintainer email="baptiste.busch@epfl.ch">root</maintainer>
+  <maintainer email="baptiste.busch@epfl.ch">"Baptiste Busch"</maintainer>
   <license>GPLv3</license>
 
   <buildtool_depend>catkin</buildtool_depend>
@@ -12,5 +12,5 @@
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>tf</build_export_depend>
   <exec_depend>roscpp</exec_depend>
-  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf</exec_depend>
 </package>

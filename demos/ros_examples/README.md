@@ -20,7 +20,7 @@ Running the scripts uses ROS commands, e.g. to run the `task_space_control_loop`
 rosrun ros_examples task_space_control_loop
 ```
 
-You can also directly use the launchfile that start every requirement for the demo to run correctly:
+You can also directly use the launchfile that starts any requirement for the demo to run correctly:
 
 ```console
 rolaunch ros_examples task_space_control_loop.launch

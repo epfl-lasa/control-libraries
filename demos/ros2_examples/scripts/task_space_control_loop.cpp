@@ -87,6 +87,7 @@ public:
       }
       RCLCPP_INFO(this->get_logger(), "Distance to attractor: %f", distance);
     } while (distance > this->distance_tolerance_ && rclcpp::ok());
+    rclcpp::shutdown();
   }
 };
 }
@@ -98,6 +99,5 @@ int main(int argc, char** argv) {
   auto node = std::make_shared<TaskSpaceControlLoop>("task_space_control_loop", dt, 1e-3);
   exe.add_node(node->get_node_base_interface());
   exe.spin();
-  rclcpp::shutdown();
   return 0;
 }

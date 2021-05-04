@@ -15,12 +15,12 @@ using namespace std::chrono_literals;
 namespace {
 class TaskSpaceControlLoop : public rclcpp::Node {
 private:
-  std::chrono::nanoseconds dt_;
-  double distance_tolerance_;
+  std::chrono::nanoseconds dt_; ///< period for the control loop
+  double distance_tolerance_; ///< tolerance to the attractor to stop the control loop
   std::thread run_thread_; ///< thread object to start the main loop, i.e. the run function, in parallel of the rest
-  CartesianPose current_pose_;
-  CartesianPose target_;
-  std::shared_ptr<Linear < CartesianState>> dynamical_system_ = nullptr;
+  CartesianPose current_pose_; ///< current pose
+  CartesianPose target_; ///< attractor pose
+  std::shared_ptr<Linear < CartesianState>> dynamical_system_ = nullptr; ///< dynamical system to the attractor
 
   void send_transform(const CartesianPose& pose, const std::string& pose_name_prefix = "") {
     auto node_handle = this->shared_from_this();

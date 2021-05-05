@@ -156,6 +156,9 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
   if (joint_positions.get_size() != this->get_number_of_joints()) {
     throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
   }
+  if (joint_velocities.get_size() != this->get_number_of_joints()) {
+    throw (exceptions::InvalidJointStateSizeException(joint_velocities.get_size(), this->get_number_of_joints()));
+  }
   // compute the jacobian from the joint state
   pinocchio::Data::Matrix6x dJ(6, this->get_number_of_joints());
   dJ.setZero();

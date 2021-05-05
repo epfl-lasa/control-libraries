@@ -150,9 +150,9 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
   return this->compute_jacobian(joint_positions, frame_id);
 }
 
-state_representation::Jacobian Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                                       const state_representation::JointVelocities& joint_velocities,
-                                                                       unsigned int frame_id) {
+Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
+                                                        const state_representation::JointVelocities& joint_velocities,
+                                                        unsigned int frame_id) {
   if (joint_positions.get_size() != this->get_number_of_joints()) {
     throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
   }
@@ -169,16 +169,12 @@ state_representation::Jacobian Model::compute_jacobian_time_derivative(const sta
                                            pinocchio::LOCAL_WORLD_ALIGNED,
                                            dJ);
   // the model does not have any reference frame
-  return state_representation::Jacobian(this->get_robot_name(),
-                                        this->get_joint_frames(),
-                                        this->robot_model_.frames[frame_id].name,
-                                        dJ,
-                                        this->get_base_frame());
+  return dJ;
 }
 
-state_representation::Jacobian Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                                       const state_representation::JointVelocities& joint_velocities,
-                                                                       const std::string& frame_name) {
+Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
+                                                        const state_representation::JointVelocities& joint_velocities,
+                                                        const std::string& frame_name) {
   unsigned int frame_id;
   if (frame_name.empty()) {
     // get last frame if none specified

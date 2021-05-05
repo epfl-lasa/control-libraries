@@ -89,6 +89,17 @@ private:
                                                   unsigned int frame_id);
 
   /**
+   * @brief Compute the time derivative of the jacobian from given joint positions and velocities at the frame in parameter
+   * @param joint_positions containing the joint positions of the robot
+   * @param joint_velocities containing the joint positions of the robot
+   * @param joint_id id of the frame at which to compute the jacobian
+   * @return the time derivative of jacobian matrix
+   */
+  state_representation::Jacobian compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
+                                                                  const state_representation::JointVelocities& joint_velocities,
+                                                                  unsigned int frame_id);
+
+  /**
    * @brief Compute the forward kinematics, i.e. the pose of certain frames from the joint values
    * @param joint_positions the joint state of the robot
    * @param frame_ids ids of the frames at which we want to extract the pose
@@ -248,6 +259,17 @@ public:
    */
   state_representation::Jacobian compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                   const std::string& frame_name = "");
+
+  /**
+   * @brief Compute the time derivative of the jacobian from given joint positions and velocities at the frame in parameter
+   * @param joint_positions containing the joint positions of the robot
+   * @param joint_velocities containing the joint positions of the robot
+   * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
+   * @return the time derivative of jacobian matrix
+   */
+  state_representation::Jacobian compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
+                                                                  const state_representation::JointVelocities& joint_velocities,
+                                                                  const std::string& frame_name = "");
 
   /**
    * @brief Compute the Inertia matrix from a given joint positions

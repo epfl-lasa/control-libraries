@@ -5,7 +5,7 @@
 * [Task Space control loop example](#task_space_control_loop)
 
 ## Running demonstration scripts
-This package contains the same control loop examples as in [`control_loop_examples`](../control_loop_examples) demos
+This package contains the same control loop examples as in the [`control_loop_examples`](../control_loop_examples) demos
 folder, but adapted for usage in a ROS2 environment.
 The whole folder is a fully functional ROS2 package that can be directly copied in a ROS2 workspace.
 There is also a provided `Dockerfile` that encapsulates the whole in a containerized ROS2 environment.

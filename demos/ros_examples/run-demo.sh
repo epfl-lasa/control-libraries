@@ -16,11 +16,14 @@ PACKAGE_NAME=$(echo "${PWD##*/}" | tr _ -)
 IMAGE_NAME="${PACKAGE_NAME}/$MULTISTAGE_TARGET"
 TAG="latest"
 
-UID="$(id -u "${USER}")"
-GID="$(id -g "${USER}")"
 BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
-BUILD_FLAGS+=(--build-arg UID="${UID}")
-BUILD_FLAGS+=(--build-arg GID="${GID}")
+
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  UID="$(id -u "${USER}")"
+  GID="$(id -g "${USER}")"
+  BUILD_FLAGS+=(--build-arg UID="${UID}")
+  BUILD_FLAGS+=(--build-arg GID="${GID}")
+fi
 BUILD_FLAGS+=(-t "${IMAGE_NAME}:${TAG}")
 
 if [ "$REBUILD" -eq 1 ]; then
@@ -56,4 +59,3 @@ docker run \
   --env XAUTHORITY="$XAUTH" \
   --env DISPLAY="${DISPLAY}" \
   "${IMAGE_NAME}:${TAG}"
-

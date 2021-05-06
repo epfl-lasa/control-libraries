@@ -16,8 +16,6 @@ RUN apt update && apt install -y ros-${ROS_DISTRO}-ros-base \
     sudo \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN echo "Set disable_coredump false" >> /etc/sudo.conf
-
 # create a user with same permissions as the host itself
 ENV USER ros
 ARG UID=1000

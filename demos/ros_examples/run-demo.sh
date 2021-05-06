@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# change to false if not using nvidia graphic cards
+USE_NVIDIA_TOOLKIT=true
+
 # Build a docker image to compile the library and run tests
 MULTISTAGE_TARGET="runtime-demonstrations"
 
@@ -42,8 +45,6 @@ docker volume create --driver local \
     --opt o="bind" \
     "${PACKAGE_NAME}_rviz_vol"
 
-# change to false if not using nvidia graphic cards
-USE_NVIDIA_TOOLKIT=true
 [[ ${USE_NVIDIA_TOOLKIT} = true ]] && GPU_FLAG="--gpus all" || GPU_FLAG=""
 
 xhost +

@@ -34,8 +34,8 @@ USER ${USER}
 ENV HOME /home/${USER}
 
 # add and build a ros workspace
-RUN mkdir -p ${HOME}/ros_ws/src
 ENV ROS_WORKSPACE ${HOME}/ros_ws
+RUN mkdir -p ${ROS_WORKSPACE}/src
 WORKDIR ${ROS_WORKSPACE}/src
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; catkin_init_workspace"
 WORKDIR ${ROS_WORKSPACE}

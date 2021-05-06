@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
+# change to false if not using nvidia graphic cards
+USE_NVIDIA_TOOLKIT=true
+# change to  false to use host network
+ISISOLATED=true
+
 # Build a docker image to compile the library and run tests
 MULTISTAGE_TARGET="runtime-demonstrations"
 
-ISISOLATED=true # change to  false to use host network
 NETWORK=host
 if [ "${ISISOLATED}" = true ]; then
     docker network inspect isolated >/dev/null 2>&1 || docker network create --driver bridge isolated
@@ -23,11 +27,15 @@ PACKAGE_NAME=$(echo "${PWD##*/}" | tr _ -)
 IMAGE_NAME="${PACKAGE_NAME}/$MULTISTAGE_TARGET"
 TAG="latest"
 
-UID="$(id -u "${USER}")"
-GID="$(id -g "${USER}")"
 BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
-BUILD_FLAGS+=(--build-arg UID="${UID}")
-BUILD_FLAGS+=(--build-arg GID="${GID}")
+
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  UID="$(id -u "${USER}")"
+  GID="$(id -g "${USER}")"
+  BUILD_FLAGS+=(--build-arg UID="${UID}")
+  BUILD_FLAGS+=(--build-arg GID="${GID}")
+fi
+
 BUILD_FLAGS+=(-t "${IMAGE_NAME}:${TAG}")
 
 if [ "$REBUILD" -eq 1 ]; then
@@ -46,8 +54,6 @@ docker volume create --driver local \
     --opt o="bind" \
     "${PACKAGE_NAME}_rviz_vol"
 
-# change to false if not using nvidia graphic cards
-USE_NVIDIA_TOOLKIT=true
 [[ ${USE_NVIDIA_TOOLKIT} = true ]] && GPU_FLAG="--gpus all" || GPU_FLAG=""
 
 xhost +

@@ -17,17 +17,17 @@ An install script for the control libraries.
 
 Options:
   --dir [path]             Configure the installation directory
-                           (default: /usr/local)
-  --no-controllers         Exclude the controllers library
-  --no-dynamical-systems   Exclude the dynamical systems library
-  --no-robot-model         Exclude the robot model library
-  --build-tests            Build the unittest targets
-  --help                   Show this help message
-  --clean                  Delete any previously installed
-                           header files from /usr/local/include and any
-                           shared library files from /usr/local/lib
-  --cleandir [path]        Delete any previously installed
-                           header and library files from the specified path"
+                           (default: /usr/local).
+  --no-controllers         Exclude the controllers library.
+  --no-dynamical-systems   Exclude the dynamical systems library.
+  --no-robot-model         Exclude the robot model library.
+  --build-tests            Build the unittest targets.
+  --help                   Show this help message.
+  --clean                  Delete any previously installed header
+                           files from /usr/local/include and any
+                           shared library files from /usr/local/lib.
+  --cleandir [path]        Delete any previously installed header
+                           and library files from the specified path."
 
 function uninstall {
   function delete_components {
@@ -62,10 +62,12 @@ while [ "$#" -gt 0 ]; do
 done
 
 # install base dependencies
+echo ">>> INSTALLING BASE DEPENDENCIES"
 apt-get update && apt-get install libeigen3-dev
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
+  echo ">>> INSTALLING ROBOT MODEL DEPENDENCIES"
   apt-get install lsb-release gnupg2 curl
 
   # install pinocchio
@@ -95,14 +97,16 @@ fi
 
 # install testing dependencies
 if [ "${BUILD_TESTING}" == "ON" ]; then
+  echo ">>> INSTALLING TEST DEPENDENCIES"
   apt-get update && apt-get install libgtest-dev
 
-  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
+  mkdir -p "${SOURCE_PATH}"/tmp/lib/gtest && cd "${SOURCE_PATH}"/tmp/lib/gtest || exit 1
   cmake /usr/src/gtest && make
   cp lib/* /usr/local/lib || cp ./*.a /usr/local/lib
 fi
 
 # build and install the specified modules
+echo ">>> BUILDING CONTROL LIBRARIES"
 cd "${SOURCE_PATH}" && mkdir -p build && cd build || exit 1
 
 cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DESTINATION}" \

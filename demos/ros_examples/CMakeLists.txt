@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(control_loop_examples)
+project(ros_examples)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -26,7 +26,17 @@ find_library(dynamical_systems REQUIRED)
 find_library(controllers REQUIRED)
 find_library(robot_model REQUIRED)
 
+find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    tf
+)
+
+catkin_package(
+    CATKIN_DEPENDS roscpp tf
+)
+
 include_directories(
+    ${catkin_INCLUDE_DIRS}
     ${Eigen3_INCLUDE_DIRS}
     ${STATE_REPRESENTATION_INCLUDE_DIR}
     ${DYNAMICAL_SYSTEMS_INCLUDE_DIR}
@@ -39,15 +49,15 @@ include_directories(
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
-    robot_kinematics_control_loop
 )
 
-set(FIXTURE_INSTALL_PATH /etc/fixtures/)
+set(FIXTURE_INSTALL_PATH ${CATKIN_PACKAGE_SHARE_DESTINATION}/fixtures/)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})
     add_executable(${SCRIPT} scripts/${SCRIPT}.cpp)
     target_link_libraries(${SCRIPT}
+        ${catkin_LIBRARIES}
         ${PINOCCHIO_LIBRARIES}
         OsqpEigen::OsqpEigen
         osqp::osqp
@@ -58,6 +68,8 @@ foreach(SCRIPT ${DEMOS_SCRIPTS})
     )
     target_compile_definitions(${SCRIPT} PRIVATE SCRIPT_FIXTURES="${FIXTURE_INSTALL_PATH}")
     install(TARGETS ${SCRIPT}
-      RUNTIME DESTINATION bin
+      RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
     )
 endforeach()
+
+install(DIRECTORY launch/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)

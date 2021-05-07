@@ -160,8 +160,7 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
     throw (exceptions::InvalidJointStateSizeException(joint_velocities.get_size(), this->get_number_of_joints()));
   }
   // compute the Jacobian from the joint state
-  pinocchio::Data::Matrix6x dJ(6, this->get_number_of_joints());
-  dJ.setZero();
+  pinocchio::Data::Matrix6x dJ = Eigen::MatrixXd::Zero(6, this->get_number_of_joints());
   pinocchio::computeJointJacobiansTimeVariation(this->robot_model_,
                                                 this->robot_data_,
                                                 joint_positions.data(),

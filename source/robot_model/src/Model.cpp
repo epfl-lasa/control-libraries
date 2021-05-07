@@ -117,7 +117,7 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
   if (joint_positions.get_size() != this->get_number_of_joints()) {
     throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
   }
-  // compute the jacobian from the joint state
+  // compute the Jacobian from the joint state
   pinocchio::Data::Matrix6x J(6, this->get_number_of_joints());
   J.setZero();
   pinocchio::computeFrameJacobian(this->robot_model_,
@@ -159,7 +159,7 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
   if (joint_velocities.get_size() != this->get_number_of_joints()) {
     throw (exceptions::InvalidJointStateSizeException(joint_velocities.get_size(), this->get_number_of_joints()));
   }
-  // compute the jacobian from the joint state
+  // compute the Jacobian from the joint state
   pinocchio::Data::Matrix6x dJ(6, this->get_number_of_joints());
   dJ.setZero();
   pinocchio::computeJointJacobiansTimeVariation(this->robot_model_,

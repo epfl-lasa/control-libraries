@@ -165,7 +165,7 @@ Eigen::MatrixXd Jacobian::operator*(const Jacobian& jacobian) const {
   if (!this->is_compatible(jacobian)) {
     throw IncompatibleStatesException("The two Jacobian matrices are not compatible");
   }
-  // multiply with the data of the second jacobian
+  // multiply with the data of the second Jacobian
   return (*this) * jacobian.data();
 }
 
@@ -235,7 +235,7 @@ JointVelocities Jacobian::solve(const CartesianTwist& twist) const {
   if (!this->is_compatible(twist)) {
     throw IncompatibleStatesException("The Jacobian and the input CartesianTwist are incompatible");
   }
-  // this uses the solve operation instead of using the inverse or pseudo-inverse of the jacobian
+  // this uses the solve operation instead of using the inverse or pseudo-inverse of the Jacobian
   Eigen::VectorXd joint_velocities = this->solve(twist.data());
   // return a JointVelocities state
   JointVelocities result(this->get_name(), this->get_joint_names(), joint_velocities);

@@ -24,40 +24,40 @@ protected:
 
   void set_test_configurations() {
     // Random test configuration 1:
-    state_representation::JointState config1("robot", 7);
-    config1.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-    config1.set_velocities({-0.106398, 0.631975, -0.803325, 0.719187, -0.944742, 0.798313, 0.799871});
-    config1.set_accelerations({0.048212, -0.759601, -0.644412, 0.412215, 0.662720, -0.930332, 0.515677});
+    state_representation::JointState config1(franka->get_robot_name(), 7);
+    config1.set_positions({-1.957518, 1.037530, -1.093933, -1.485144, -1.937432, 2.251972, -1.373487});
+    config1.set_velocities({0.308158, 0.378429, 0.496303, -0.098917, -0.832357, -0.542046, 0.826675});
+    config1.set_accelerations({-0.695244, 0.651634, 0.076685, 0.992269, -0.843649, -0.114643, -0.786694});
     test_configs.push_back(config1);
 
     // Expected results for configuration 1:
-    test_gravity_expects.push_back({-0.000000, -37.179122, 22.968841, -0.658312, 1.120245, 0.576686, 0.060074});
-    test_coriolis_expects.push_back({0.337476, 0.366005, -0.389938, -0.858310, 0.017088, -0.173611, 0.001417});
-    test_inertia_expects.push_back({-0.554977, -0.609051, 0.115905, 0.355741, -0.022378, -0.035718, 0.008713});
+    test_gravity_expects.push_back({-0.000000, -36.985759, -18.785455, 11.384067, -0.532842, -1.346848, -0.071370});
+    test_coriolis_expects.push_back({-0.049325, -0.064489, -0.060717, -0.295963, -0.009998, 0.026109, 0.003887});
+    test_inertia_expects.push_back({-0.733398, 0.568876, -0.066627, -0.156614, -0.030068, -0.025849, -0.006774});
 
     // Random test configuration 2:
-    state_representation::JointState config2("robot", 7);
-    config2.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
-    config2.set_velocities({-0.442322, 0.164863, -0.157988, -0.815863, -0.951945, -0.017708, -0.443466});
-    config2.set_accelerations({-0.320486, -0.425301, -0.658194, -0.201473, 0.395299, -0.592647, 0.332653});
+    state_representation::JointState config2(franka->get_robot_name(), 7);
+    config2.set_positions({2.676515, -1.746462, 1.592996, -0.618256, 2.136438, 0.300823, -0.580719});
+    config2.set_velocities({-0.480259, 0.600137, -0.137172, 0.821295, -0.636306, -0.472394, -0.708922});
+    config2.set_accelerations({-0.727863, 0.738584, 0.159409, 0.099720, -0.710090, 0.706062, 0.244110});
     test_configs.push_back(config2);
 
     // Expected results for configuration 2:
-    test_gravity_expects.push_back({0.000000, 0.342126, -9.938223, 16.752369, 1.208900, -0.346888, 0.073840});
-    test_coriolis_expects.push_back({0.536237, -0.632604, 0.070196, -0.034678, -0.018236, 0.143008, 0.001937});
-    test_inertia_expects.push_back({-0.554062, 0.089175, -0.760300, -0.002785, -0.007597, -0.082136, 0.009440});
+    test_gravity_expects.push_back({0.000000, 46.737623, -11.062411, -0.418143, 1.394652, -0.410398, -0.080678});
+    test_coriolis_expects.push_back({-0.681592, 0.045743, -0.095830, -0.334480, -0.048538, -0.035243, 0.004909});
+    test_inertia_expects.push_back({-1.852231, 1.722144, -0.507043, -0.848135, 0.017090, 0.061230, -0.000671});
 
     // Random test configuration 3:
-    state_representation::JointState config3("robot", 7);
-    config3.set_positions({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
-    config3.set_velocities({0.889568, 0.428943, 0.358439, 0.918761, 0.550669, 0.215454, 0.896005});
-    config3.set_accelerations({-0.880717, -0.462575, 0.973360, 0.544413, -0.049291, 0.361799, -0.166130});
+    state_representation::JointState config3(franka->get_robot_name(), 7);
+    config3.set_positions({-0.863671, 0.046713, -0.568983, -2.843748, -1.507082, 0.447412, -1.831628});
+    config3.set_velocities({-0.520095, -0.165466, -0.900691, 0.805432, 0.889574, -0.018272, -0.021495});
+    config3.set_accelerations({-0.324561, 0.800108, -0.261506, -0.777594, 0.560504, -0.220522, -0.516617});
     test_configs.push_back(config3);
 
     // Expected results for configuration 3:
-    test_gravity_expects.push_back({-0.000000, 9.074281, 4.750870, 12.948832, 0.865387, -0.924859, -0.043955});
-    test_coriolis_expects.push_back({1.306320, 0.394845, 1.544151, -0.895624, 0.013075, -0.217746, -0.010039});
-    test_inertia_expects.push_back({-0.204865, -0.173593, -0.076119, 0.453052, 0.045487, 0.026416, -0.007190});
+    test_gravity_expects.push_back({-0.000000, -13.069054, -0.438318, 8.176336, -0.407568, -1.650201, -0.039456});
+    test_coriolis_expects.push_back({-0.740733, -0.448481, -0.753723, -0.730530, 0.025492, -0.069786, 0.003485});
+    test_inertia_expects.push_back({-0.280448, 0.700827, -0.252397, -0.716163, 0.087168, 0.006495, -0.009142});
   }
 };
 

@@ -80,20 +80,20 @@ private:
   bool init_qp_solver(const InverseVelocityParameters& parameters);
 
   /**
-   * @brief Compute the jacobian from given joint positions at the frame in parameter
+   * @brief Compute the Jacobian from given joint positions at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
-   * @param joint_id id of the frame at which to compute the jacobian
-   * @return the jacobian matrix
+   * @param joint_id id of the frame at which to compute the Jacobian
+   * @return the Jacobian matrix
    */
   state_representation::Jacobian compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                   unsigned int frame_id);
 
   /**
-   * @brief Compute the time derivative of the jacobian from given joint positions and velocities at the frame in parameter
+   * @brief Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
    * @param joint_velocities containing the joint positions of the robot
-   * @param joint_id id of the frame at which to compute the jacobian
-   * @return the time derivative of jacobian matrix
+   * @param joint_id id of the frame at which to compute the Jacobian
+   * @return the time derivative of Jacobian matrix
    */
   Eigen::MatrixXd compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                    const state_representation::JointVelocities& joint_velocities,
@@ -252,20 +252,20 @@ public:
   const pinocchio::Model& get_pinocchio_model() const;
 
   /**
-   * @brief Compute the jacobian from a given joint state at the frame given in parameter
+   * @brief Compute the Jacobian from a given joint state at the frame given in parameter
    * @param joint_positions containing the joint values of the robot
-   * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
-   * @return the jacobian matrix
+   * @param frame_name name of the frame at which to compute the Jacobian, if empty computed for the last frame
+   * @return the Jacobian matrix
    */
   state_representation::Jacobian compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                   const std::string& frame_name = "");
 
   /**
-   * @brief Compute the time derivative of the jacobian from given joint positions and velocities at the frame in parameter
+   * @brief Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
    * @param joint_velocities containing the joint positions of the robot
-   * @param frame_name name of the frame at which to compute the jacobian, if empty computed for the last frame
-   * @return the time derivative of jacobian matrix
+   * @param frame_name name of the frame at which to compute the Jacobian, if empty computed for the last frame
+   * @return the time derivative of Jacobian matrix
    */
   Eigen::MatrixXd compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                    const state_representation::JointVelocities& joint_velocities,
@@ -362,7 +362,7 @@ public:
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter
    * @param cartesian_twists vector of twist
-   * @param joint_positions current joint positions, used to compute the jacobian matrix
+   * @param joint_positions current joint positions, used to compute the Jacobian matrix
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
    * InverseKinematicsParameters structure)
    * @return the joint velocities of the robot
@@ -374,7 +374,7 @@ public:
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector
    * @param cartesian_twist containing the twist of the end-effector
-   * @param joint_positions current joint positions, used to compute the jacobian matrix
+   * @param joint_positions current joint positions, used to compute the Jacobian matrix
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
    * InverseKinematicsParameters structure)
    * @return the joint velocities of the robot

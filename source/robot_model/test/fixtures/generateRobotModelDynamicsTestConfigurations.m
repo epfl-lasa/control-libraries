@@ -1,24 +1,33 @@
-function generateRobotModelTestConfigurations(urdf, nConfigurations)
+function generateRobotModelDynamicsTestConfigurations(urdf, nConfigurations, seed)
 % Generate configurations and expected results for a robot model
 %
-%   generateRobotModelTestConfigurations expects a file `panda_arm.urdf`
-%   in the same folder and generates 3 random configurations of joint
-%   position, velocity and acceleration. It calculates the joint-space
-%   gravity, coriolis and inertia torques for each configuration and
-%   prints out a C++ formatted result to be used in test fixtures.
+%   generateRobotModelDynamicsTestConfigurations expects a file 
+%   `panda_arm.urdf` in the same folder and generates 3 random
+%   configurations of joint position, velocity and acceleration. It
+%   calculates the joint-space gravity, coriolis and inertia torques for
+%   each configuration and prints out a C++ formatted result to be used
+%   in test fixtures.
 %
-%   generateRobotModelTestConfigurations(urdf) takes a filepath to
+%   generateRobotModelDynamicsTestConfigurations(urdf) takes a filepath to
 %   a urdf robot model to load.
 %
-%   generateRobotModelTestConfigurations(urdf, nConfigurations) generates
-%   a specified number of random configurations (default 3).
+%   generateRobotModelDynamicsTestConfigurations(urdf, nConfigurations)
+%   generates number of random configurations (default 3).
+%
+%   generateRobotModelDynamicsTestConfigurations(..., seed) allows
+%   setting the seed for the random number generator. The input is either
+%   'default' for repeatable behaviour or 'shuffle' for a time-based seed.
 %
 %   Requires Robotics System Toolbox
 
 arguments
     urdf string = 'panda_arm.urdf';
     nConfigurations (1,1) double = 3;
+    seed (1,:) char {mustBeMember(seed,{'default','shuffle'})} = 'default'
 end
+
+% initialise the random number generator
+rng(seed)
 
 % load the robot model
 robot = importrobot(urdf);
@@ -48,8 +57,8 @@ for conf = 1:nConfigurations
     
     % code generation (definitions)
     fprintf('\n// Random test configuration %i:\n', conf);
-    fprintf('state_representation::JointState config%i("robot", %i);\n', ...
-        conf, numel(q));
+    fprintf(['state_representation::JointState config%i', ...
+        '(franka->get_robot_name(), %i);\n'], conf, numel(q));
     fprintf('config%i.set_positions(%s);\n', conf, num2stdvec(q));
     fprintf('config%i.set_velocities(%s);\n', conf, num2stdvec(v));
     fprintf('config%i.set_accelerations(%s);\n', conf, num2stdvec(a));

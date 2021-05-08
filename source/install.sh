@@ -70,19 +70,19 @@ done
 
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-apt-get update && apt-get install "${AUTO_INSTALL}" libeigen3-dev
+apt-get update && apt-get install "${AUTO_INSTALL}" libeigen3-dev || exit 1
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   echo ">>> INSTALLING ROBOT MODEL DEPENDENCIES"
-  apt-get install "${AUTO_INSTALL}" lsb-release gnupg2 curl
+  apt-get install "${AUTO_INSTALL}" lsb-release gnupg2 curl || exit 1
 
   # install pinocchio
   echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
     | tee /etc/apt/sources.list.d/robotpkg.list
   curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
 
-  apt-get update && apt-get install "${AUTO_INSTALL}" robotpkg-pinocchio
+  apt-get update && apt-get install "${AUTO_INSTALL}" robotpkg-pinocchio || exit 1
 
   export PATH=/opt/openrobots/bin:$PATH
   export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
@@ -105,7 +105,7 @@ fi
 # install testing dependencies
 if [ "${BUILD_TESTING}" == "ON" ]; then
   echo ">>> INSTALLING TEST DEPENDENCIES"
-  apt-get update && apt-get install "${AUTO_INSTALL}" libgtest-dev
+  apt-get update && apt-get install "${AUTO_INSTALL}" libgtest-dev || exit 1
 
   mkdir -p "${SOURCE_PATH}"/tmp/lib/gtest && cd "${SOURCE_PATH}"/tmp/lib/gtest || exit 1
   cmake /usr/src/gtest && make

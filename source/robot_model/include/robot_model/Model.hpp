@@ -13,6 +13,8 @@
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 
+using namespace std::chrono_literals;
+
 namespace robot_model {
 /**
  * @brief parameters for the inverse geometry function
@@ -35,17 +37,17 @@ struct InverseKinematicsParameters {
 /**
  * @brief parameters for the inverse velocity kinematics function
  * @param alpha gain associated to the time slack variable
- * @param epsilon minimal value of the time slack variable (dt of the control loop)
  * @param proportional_gain gain to weight the cartesian coordinates in the gradient
  * @param linear_velocity_limit maximum linear velocity allowed in Cartesian space (m/s)
  * @param angular_velocity_limit maximum angular velocity allowed in Cartesian space (rad/s)
+ * @param period of the control loop (ns)
  */
 struct InverseVelocityParameters {
   double alpha = 0.1;
-  double epsilon = 1e-9;
   double proportional_gain = 1.0;
   double linear_velocity_limit = 2.0;
   double angular_velocity_limit = 2.0;
+  std::chrono::nanoseconds dt = 1ms;
 };
 
 /**

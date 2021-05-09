@@ -400,7 +400,7 @@ public:
    * @param joint_positions current joint positions, used to compute the jacobian matrix
    * @param frame_name name of the frame at which we want to compute the twist
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
-   * InverseVelocityParameters structure)
+   * QPInverseVelocityParameters structure)
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,

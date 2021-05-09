@@ -353,6 +353,15 @@ public:
                                                           const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
 
   /**
+   * @brief Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint values
+   * @param joint_state the joint state of the robot with positions to compute the Jacobian and velocities for the twist
+   * @param frame_names name of the frames at which we want to compute the twist
+   * @return the twists of the frames in parameter
+   */
+  std::vector<state_representation::CartesianTwist> forward_velocity(const state_representation::JointState& joint_state,
+                                                                    const std::vector<std::string>& frame_names);
+
+  /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot with positions to compute the Jacobian and velocities for the twist
    * @param frame_name name of the frame at which we want to compute the twist

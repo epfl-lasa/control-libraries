@@ -171,11 +171,27 @@ TEST_F(RobotModelKinematicsTest, TestForwardVelocity) {
   }
 }
 
-TEST_F(RobotModelKinematicsTest, DISABLED_TestInverseVelocity) {
+TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
+  std::string eef_frame = franka->get_frames().back();
   for (auto& config : test_configs) {
-    state_representation::CartesianTwist ee_twist = franka->forward_velocity(config);
-    state_representation::JointVelocities joint_twist = franka->inverse_velocity(ee_twist, config);
-    EXPECT_TRUE(joint_twist.get_velocities().isApprox(config.get_velocities()));
+    state_representation::CartesianTwist des_ee_twist = state_representation::CartesianTwist::Random(eef_frame,
+                                                                                                     franka->get_base_frame());
+    state_representation::JointVelocities joint_velocities = franka->inverse_velocity(des_ee_twist, config);
+
+    state_representation::JointState state(config);
+    state.set_velocities(joint_velocities.data());
+    state_representation::CartesianTwist act_ee_twist = franka->forward_velocity(state);
+
+    EXPECT_LT(des_ee_twist.dist(act_ee_twist), 1e-3);
+
+    // second method call the QP based inverse velocity
+    state_representation::JointVelocities joint_velocities2 = franka->inverse_velocity(des_ee_twist,
+                                                                                       config,
+                                                                                       QPInverseVelocityParameters());
+
+    state_representation::JointState state2(config);
+    state.set_velocities(joint_velocities2.data());
+    state_representation::CartesianTwist act_ee_twist2 = franka->forward_velocity(state);
   }
 }
 

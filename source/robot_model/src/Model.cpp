@@ -393,10 +393,68 @@ state_representation::CartesianTwist Model::forward_velocity(const state_represe
   return this->forward_velocity(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
+void Model::check_inverse_velocity_arguments(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
+                                             const state_representation::JointPositions& joint_positions,
+                                             const std::vector<std::string>& frame_names) {
+  if (cartesian_twists.size() != frame_names.size()) {
+    throw (std::invalid_argument("The number of provided twists and frame names does not match"));
+  }
+  if (joint_positions.get_size() != this->get_number_of_joints()) {
+    throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
+  }
+  for (auto& frame_name : frame_names) {
+    if (!this->robot_model_.existFrame(frame_name)) {
+      throw (exceptions::FrameNotFoundException(frame_name));
+    }
+  }
+}
+
 state_representation::JointVelocities
 Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                         const state_representation::JointPositions& joint_positions,
-                        const InverseVelocityParameters& parameters) {
+                        const std::vector<std::string>& frame_names) {
+  // sanity check
+  this->check_inverse_velocity_arguments(cartesian_twists, joint_positions, frame_names);
+
+  const unsigned int nb_joints = this->get_number_of_joints();
+  // the velocity vector contains position of the intermediate frame and full pose of the end-effector
+  Eigen::VectorXd dX(3 * cartesian_twists.size() + 3);
+  Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
+  for (unsigned int i = 0; i < cartesian_twists.size() - 1; ++i) {
+    state_representation::CartesianTwist twist = cartesian_twists[i];
+    // extract only the linear velocity for intermediate points
+    dX.segment<3>(3 * i) = twist.get_linear_velocity();
+    jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
+        this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
+  }
+  // full twist for the end-effector
+  state_representation::CartesianTwist eef_twist = cartesian_twists.back();
+  dX.tail(6) = eef_twist.data();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
+
+  // solve a linear system
+  return state_representation::JointVelocities(joint_positions.get_name(),
+                                               joint_positions.get_names(),
+                                               jacobian.colPivHouseholderQr().solve(dX));
+}
+
+state_representation::JointVelocities Model::inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
+                                                              const state_representation::JointPositions& joint_positions,
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  return this->inverse_velocity(std::vector<state_representation::CartesianTwist>({cartesian_twist}),
+                                joint_positions,
+                                std::vector<std::string>({actual_frame_name}));
+}
+
+state_representation::JointVelocities
+Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
+                        const state_representation::JointPositions& joint_positions,
+                        const QPInverseVelocityParameters& parameters,
+                        const std::vector<std::string>& frame_names) {
+  // sanity check
+  this->check_inverse_velocity_arguments(cartesian_twists, joint_positions, frame_names);
+
   const unsigned int nb_joints = this->get_number_of_joints();
   using namespace state_representation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
@@ -409,14 +467,14 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     // extract only the position for intermediate points
     delta_r.segment<3>(3 * i) = displacement.get_position();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
-        this->compute_jacobian(joint_positions, twist.get_name()).data().block(0, 0, 3, nb_joints);
+        this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
   // extract pose for the end-effector
   CartesianTwist eef_twist = cartesian_twists.back();
   CartesianPose eef_displacement = eef_twist;
   delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = eef_displacement.get_position();
   delta_r.tail(3) = eef_displacement.get_orientation().vec();
-  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, eef_twist.get_name()).data();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
   // compute the Jacobian
   Eigen::MatrixXd hessian_matrix = jacobian.transpose() * jacobian;
   // set the hessian sparse matrix
@@ -463,10 +521,13 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
 
 state_representation::JointVelocities Model::inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
                                                               const state_representation::JointPositions& joint_positions,
-                                                              const InverseVelocityParameters& parameters) {
+                                                              const QPInverseVelocityParameters& parameters,
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
   return this->inverse_velocity(std::vector<state_representation::CartesianTwist>({cartesian_twist}),
                                 joint_positions,
-                                parameters);
+                                parameters,
+                                std::vector<std::string>({actual_frame_name}));
 }
 
 void Model::print_qp_problem() {

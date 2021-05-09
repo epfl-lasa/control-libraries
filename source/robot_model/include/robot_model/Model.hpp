@@ -359,7 +359,7 @@ public:
    * @return the twists of the frames in parameter
    */
   std::vector<state_representation::CartesianTwist> forward_velocity(const state_representation::JointState& joint_state,
-                                                                    const std::vector<std::string>& frame_names);
+                                                                     const std::vector<std::string>& frame_names);
 
   /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities

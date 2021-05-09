@@ -385,8 +385,9 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
   return this->inverse_kinematics(cartesian_pose, positions, frame_name, parameters);
 }
 
-state_representation::CartesianTwist Model::forward_velocity(const state_representation::JointState& joint_state) {
-  return this->compute_jacobian(joint_state) * static_cast<state_representation::JointVelocities>(joint_state);
+state_representation::CartesianTwist Model::forward_velocity(const state_representation::JointState& joint_state,
+                                                             const std::string& frame_name) {
+  return this->compute_jacobian(joint_state, frame_name) * static_cast<state_representation::JointVelocities>(joint_state);
 }
 
 state_representation::JointVelocities

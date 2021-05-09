@@ -355,9 +355,11 @@ public:
   /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot with positions to compute the Jacobian and velocities for the twist
-   * @return the twist of the end-effector
+   * @param frame_name name of the frame at which we want to compute the twist
+   * @return the twist of the frame in parameter
    */
-  state_representation::CartesianTwist forward_velocity(const state_representation::JointState& joint_state);
+  state_representation::CartesianTwist forward_velocity(const state_representation::JointState& joint_state,
+                                                        const std::string& frame_name = "");
 
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter

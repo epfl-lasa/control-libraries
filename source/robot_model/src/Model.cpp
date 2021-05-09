@@ -427,7 +427,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
         this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
-  // full twist for the end-effector
+  // full twist for the last provided frame
   state_representation::CartesianTwist eef_twist = cartesian_twists.back();
   dX.tail(6) = eef_twist.data();
   jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
@@ -470,7 +470,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
         this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
-  // extract pose for the end-effector
+  // extract pose for the last provided frame
   CartesianTwist eef_twist = cartesian_twists.back();
   CartesianPose eef_displacement = eef_twist;
   delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = eef_displacement.get_position();

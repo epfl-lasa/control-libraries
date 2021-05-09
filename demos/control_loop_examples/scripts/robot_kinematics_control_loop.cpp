@@ -35,7 +35,7 @@ public:
 
   void send_control_command(const CartesianTwist& desired_eef_twist, const std::chrono::nanoseconds& dt) {
     // create the inverse velocity parameters and set the period of the control loop
-    InverseVelocityParameters parameters;
+    QPInverseVelocityParameters parameters;
     parameters.dt = dt;
     // apply the inverse velocity
     JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist,

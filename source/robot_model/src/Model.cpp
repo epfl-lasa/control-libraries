@@ -326,19 +326,12 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                           const state_representation::JointPositions& joint_positions,
-                          const std::string& frame_name,
                           const InverseKinematicsParameters& parameters) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
+  // throw error if specified frame does not exist
+  if (!this->robot_model_.existFrame(cartesian_pose.get_name())) {
+    throw (exceptions::FrameNotFoundException(cartesian_pose.get_name()));
   }
+  unsigned int frame_id = this->robot_model_.getFrameId(cartesian_pose.get_name());
   std::string actual_frame_name = this->robot_model_.frames[frame_id].name;
   // 1 second for the Newton-Raphson method
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
@@ -378,11 +371,10 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
 
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
-                          const std::string& frame_name,
                           const InverseKinematicsParameters& parameters) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions positions(this->get_robot_name(), this->get_joint_frames(), q);
-  return this->inverse_kinematics(cartesian_pose, positions, frame_name, parameters);
+  return this->inverse_kinematics(cartesian_pose, positions, parameters);
 }
 
 state_representation::CartesianTwist Model::forward_velocity(const state_representation::JointState& joint_state) {

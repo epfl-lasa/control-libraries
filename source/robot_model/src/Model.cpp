@@ -452,11 +452,12 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
                         const state_representation::JointPositions& joint_positions,
                         const QPInverseVelocityParameters& parameters,
                         const std::vector<std::string>& frame_names) {
+  using namespace state_representation;
+  using namespace std::chrono;
   // sanity check
   this->check_inverse_velocity_arguments(cartesian_twists, joint_positions, frame_names);
 
   const unsigned int nb_joints = this->get_number_of_joints();
-  using namespace state_representation;
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
   Eigen::VectorXd delta_r(3 * cartesian_twists.size() + 3);
   Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
@@ -489,7 +490,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   //set the gradient
   this->gradient_.head(nb_joints) = -parameters.proportional_gain * delta_r.transpose() * jacobian;
   // update minimal time as dt expressed in seconds
-  this->lower_bound_constraints_(3 * nb_joints) = parameters.dt.count() / 1e9;
+  this->lower_bound_constraints_(3 * nb_joints) = duration_cast<duration<float>>(parameters.dt).count();
   // update joint position constraints
   Eigen::VectorXd lower_position_limit = this->robot_model_.lowerPositionLimit;
   Eigen::VectorXd upper_position_limit = this->robot_model_.upperPositionLimit;
@@ -497,7 +498,7 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     this->lower_bound_constraints_(n) = lower_position_limit(n) - joint_positions.data()(n);
     this->upper_bound_constraints_(n) = upper_position_limit(n) - joint_positions.data()(n);
   }
-  // update cartesian velocity
+  // update Cartesian velocity
   for (unsigned int i = 0; i < 3; ++i) {
     this->constraint_matrix_.coeffRef(3 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
     this->constraint_matrix_.coeffRef(3 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;

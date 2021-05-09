@@ -318,8 +318,8 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                           const state_representation::JointPositions& joint_positions,
-                          const std::string& frame_name,
-                          const InverseKinematicsParameters& parameters) {
+                          const InverseKinematicsParameters& parameters,
+                          const std::string& frame_name) {
   unsigned int frame_id;
   if (frame_name.empty()) {
     // get last frame if none specified
@@ -370,11 +370,11 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
 
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
-                          const std::string& frame_name,
-                          const InverseKinematicsParameters& parameters) {
+                          const InverseKinematicsParameters& parameters,
+                          const std::string& frame_name) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions positions(this->get_robot_name(), this->get_joint_frames(), q);
-  return this->inverse_kinematics(cartesian_pose, positions, frame_name, parameters);
+  return this->inverse_kinematics(cartesian_pose, positions, parameters, frame_name);
 }
 
 std::vector<state_representation::CartesianTwist>

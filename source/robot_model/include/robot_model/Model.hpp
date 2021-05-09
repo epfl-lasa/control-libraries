@@ -340,28 +340,28 @@ public:
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner
    * @param cartesian_pose containing the desired pose of the end-effector
-   * @param frame_name name of the frame at which we want to extract the pose
    * @param parameters parameters of the inverse geometry algorithm (default is default values of the
-   * InverseGeometryParameters structure)
+   * InverseKinematicsParameters structure)
+   * @param frame_name name of the frame at which we want to extract the pose
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
-                                                          const std::string& frame_name = "",
-                                                          const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
+                                                          const InverseKinematicsParameters& parameters = InverseKinematicsParameters(),
+                                                          const std::string& frame_name = "");
 
   /**
    * @brief Compute the inverse kinematics, i.e. joint values from the pose of the end-effector
    * @param cartesian_pose containing the desired pose of the end-effector
    * @param joint_positions current state of the robot containing the generalized position
-   * @param frame_name name of the frame at which we want to extract the pose
    * @param parameters parameters of the inverse geometry algorithm (default is default values of the
-   * InverseGeometryParameters structure)
+   * InverseKinematicsParameters structure)
+   * @param frame_name name of the frame at which we want to extract the pose
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                                                           const state_representation::JointPositions& joint_positions,
-                                                          const std::string& frame_name = "",
-                                                          const InverseKinematicsParameters& parameters = InverseKinematicsParameters());
+                                                          const InverseKinematicsParameters& parameters = InverseKinematicsParameters(),
+                                                          const std::string& frame_name = "");
 
   /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint values

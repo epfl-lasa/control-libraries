@@ -269,7 +269,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
 
   for (auto& config : test_configs) {
     state_representation::CartesianPose reference = franka->forward_kinematics(config, "panda_link8");
-    state_representation::JointPositions q = franka->inverse_kinematics(reference, "panda_link8", param);
+    state_representation::JointPositions q = franka->inverse_kinematics(reference, param, "panda_link8");
     state_representation::CartesianPose X = franka->forward_kinematics(q, "panda_link8");
     EXPECT_TRUE(((reference - X) / dt).data().cwiseAbs().maxCoeff() < tol);
   }
@@ -283,7 +283,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematicsIKDoesNotConverge) {
   param.max_number_of_iterations = 1;
 
   state_representation::CartesianPose reference = franka->forward_kinematics(config, "panda_link8");
-  EXPECT_THROW(franka->inverse_kinematics(reference, "panda_link8", param),
+  EXPECT_THROW(franka->inverse_kinematics(reference, param, "panda_link8"),
                exceptions::InverseKinematicsNotConvergingException);
 }
 

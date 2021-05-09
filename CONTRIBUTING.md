@@ -69,11 +69,32 @@ take several minutes.
 ## Pull Request Process
 
 1. Ensure your code follows the style guide and is portable; remove any references to local paths or files.
-2. Document the header files and public functions with doxygen comments, and update any relevant README.md
-   or documentation files with details of changes to the interface.
-3. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
+2. Check that the new changes are appropriately covered by unit tests.
+3. Update the [changelog](CHANGELOG.md) with your feature / fix / improvement in the "Upcoming changes" section.
+   Ensure any other relevant documentation is also updated (including READMEs or doxygen headers).
+4. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
    clear what changes you have made, why you have made them, and how you have tested the changes.
-4. You may merge the pull request into `develop` once you have the sign-off of two other developers and all CI tests pass.
+5. You may merge the pull request into `develop` once you have the sign-off of one other developers and all CI tests pass.
    Always use the "Squash and Merge" option to ensure your changes are contained within a single commit, maintaining
-   a linear git history. If unsure, you may request the second reviewer to merge it for you.
+   a linear git history. If unsure, you may request another reviewer to merge it for you.
    
+
+## Release strategy
+
+The `main` branch is updated from `develop` at regular release intervals using traditional semantic versioning (major.minor.patch).
+
+The major release number should be incremented whenever there is a breaking change to the public API
+(for example, when a previously existing function is deleted or renamed). Minor version numbers contain
+general new features and improvements, while patch numbers represent simple and small fixes.
+
+The `develop` branch is always considered to be a "release candidate" that contains only release-ready
+code. If, at release time, there are features on `develop` that are considered unfinished or broken,
+they can be marked as `EXPERIMENTAL` to exclude them from compilation.
+
+At the time of release, a release branch should be made from development which updates the project version number
+in the [top-level CMakeLists](source/CMakeLists.txt) and finalises the [changelog](CHANGELOG.md).
+A linear GitFlow strategy is used to merge this release branch into `main`, and then additionally squash and rebase
+the release branch back into `develop`.
+
+View and join the full discussion surrounding release workflow and strategy here: \
+https://github.com/epfl-lasa/control_libraries/discussions/77

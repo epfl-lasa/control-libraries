@@ -70,11 +70,12 @@ take several minutes.
 
 1. Ensure your code follows the style guide and is portable; remove any references to local paths or files.
 2. Check that the new changes are appropriately covered by unit tests.
-3. Update the [changelog](CHANGELOG.md) with your feature / fix / improvement in the "Upcoming changes" section.
-   Ensure any other relevant documentation is also updated (including READMEs or doxygen headers).
-4. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
+3. Document the header files and public functions with doxygen comments, and update any relevant README.md
+   or documentation files with details of changes to the interface.
+4. Update the [changelog](CHANGELOG.md) with your feature / fix / improvement in the "Upcoming changes" section.
+5. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
    clear what changes you have made, why you have made them, and how you have tested the changes.
-5. You may merge the pull request into `develop` once you have the sign-off of one other developers and all CI tests pass.
+6. You may merge the pull request into `develop` once you have the sign-off of one other developers and all CI tests pass.
    Always use the "Squash and Merge" option to ensure your changes are contained within a single commit, maintaining
    a linear git history. If unsure, you may request another reviewer to merge it for you.
    

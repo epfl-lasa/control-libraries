@@ -429,7 +429,7 @@ public:
    * @param joint_positions current joint positions, used to compute the Jacobian matrix
    * @param joint_positions current joint positions, used to compute the jacobian matrix
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
-   * InverseVelocityParameters structure)
+   * QPInverseVelocityParameters structure)
    * @param frame_name name of the frame at which we want to compute the twist
    * @return the joint velocities of the robot
    */

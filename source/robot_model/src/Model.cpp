@@ -107,7 +107,7 @@ std::vector<unsigned int> Model::get_frame_ids(const std::vector<std::string>& f
   for (auto& frame_name : frame_names) {
     if (frame_name.empty()) {
       // get last frame if none specified
-      frame_ids.push_back(this->robot_model_.getFrameId(this->robot_model_.frames.back().name));
+      frame_ids.push_back(this->robot_model_.frames.size() - 1);
     } else {
       // throw error if specified frame does not exist
       if (!this->robot_model_.existFrame(frame_name)) {

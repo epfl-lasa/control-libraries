@@ -85,7 +85,7 @@ private:
    * @param frame_names containing the frame names to check
    * @return the ids of the frames
    */
-  std::vector<unsigned int> check_frame_existence(const std::vector<std::string>& frame_names);
+  std::vector<unsigned int> get_frame_ids(const std::vector<std::string>& frame_names);
 
   /**
    * @brief Compute the Jacobian from given joint positions at the frame in parameter

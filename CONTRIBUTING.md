@@ -75,10 +75,10 @@ take several minutes.
 4. Update the [changelog](CHANGELOG.md) with your feature / fix / improvement in the "Upcoming changes" section.
 5. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
    clear what changes you have made, why you have made them, and how you have tested the changes.
-6. You may merge the pull request into `develop` once you have the sign-off of one other developers and all CI tests pass.
+6. You may merge the pull request into `develop` once you have the sign-off of one other developer and all CI tests pass.
    Always use the "Squash and Merge" option to ensure your changes are contained within a single commit, maintaining
    a linear git history. If unsure, you may request another reviewer to merge it for you.
-   
+
 
 ## Release strategy
 

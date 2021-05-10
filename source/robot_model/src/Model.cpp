@@ -101,21 +101,26 @@ bool Model::init_qp_solver() {
 }
 
 std::vector<unsigned int> Model::get_frame_ids(const std::vector<std::string>& frame_names) {
-  std::vector<unsigned int> frame_ids(frame_names.size());
-  for (unsigned int i = 0; i < frame_names.size(); ++i) {
-    std::string frame_name = frame_names[i];
+  std::vector<unsigned int> frame_ids;
+  frame_ids.reserve(frame_names.size());
+
+  for (auto& frame_name : frame_names) {
     if (frame_name.empty()) {
       // get last frame if none specified
-      frame_name = this->robot_model_.frames.back().name;
+      frame_ids.push_back(this->robot_model_.getFrameId(this->robot_model_.frames.back().name));
     } else {
       // throw error if specified frame does not exist
       if (!this->robot_model_.existFrame(frame_name)) {
         throw (exceptions::FrameNotFoundException(frame_name));
       }
+      frame_ids.push_back(this->robot_model_.getFrameId(frame_name));
     }
-    frame_ids[i] = this->robot_model_.getFrameId(frame_name);
   }
   return frame_ids;
+}
+
+unsigned int Model::get_frame_id(const std::string& frame_name) {
+  return get_frame_ids(std::vector<std::string>{frame_name}).back();
 }
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
@@ -142,7 +147,7 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                        const std::string& frame_name) {
-  unsigned int frame_id = get_frame_ids(std::vector<std::string>{frame_name}).back();
+  unsigned int frame_id = get_frame_id(frame_name);
   return this->compute_jacobian(joint_positions, frame_id);
 }
 
@@ -173,7 +178,7 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
 Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                         const state_representation::JointVelocities& joint_velocities,
                                                         const std::string& frame_name) {
-  unsigned int frame_id = get_frame_ids(std::vector<std::string>{frame_name}).back();
+  unsigned int frame_id = get_frame_id(frame_name);
   return this->compute_jacobian_time_derivative(joint_positions, joint_velocities, frame_id);
 }
 

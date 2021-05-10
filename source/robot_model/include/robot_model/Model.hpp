@@ -88,6 +88,13 @@ private:
   std::vector<unsigned int> get_frame_ids(const std::vector<std::string>& frame_names);
 
   /**
+   * @brief Check if a frame exist in robot model and return its id
+   * @param frame_name containing the frame name to check
+   * @return the id of the frame if it exists
+   */
+  unsigned int get_frame_id(const std::string& frame_name);
+
+  /**
    * @brief Compute the Jacobian from given joint positions at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
    * @param joint_id id of the frame at which to compute the Jacobian

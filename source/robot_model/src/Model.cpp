@@ -421,15 +421,13 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   Eigen::VectorXd dX(3 * cartesian_twists.size() + 3);
   Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
   for (unsigned int i = 0; i < cartesian_twists.size() - 1; ++i) {
-    state_representation::CartesianTwist twist = cartesian_twists[i];
     // extract only the linear velocity for intermediate points
-    dX.segment<3>(3 * i) = twist.get_linear_velocity();
+    dX.segment<3>(3 * i) = cartesian_twists[i].get_linear_velocity();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
         this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
   // full twist for the last provided frame
-  state_representation::CartesianTwist eef_twist = cartesian_twists.back();
-  dX.tail(6) = eef_twist.data();
+  dX.tail(6) = cartesian_twists.back().data();
   jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
 
   // solve a linear system
@@ -462,19 +460,17 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   Eigen::VectorXd delta_r(3 * cartesian_twists.size() + 3);
   Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
   for (unsigned int i = 0; i < cartesian_twists.size() - 1; ++i) {
-    CartesianTwist twist = cartesian_twists[i];
     // first convert the twist to a displacement
-    CartesianPose displacement = twist;
+    CartesianPose displacement = cartesian_twists[i];
     // extract only the position for intermediate points
     delta_r.segment<3>(3 * i) = displacement.get_position();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
         this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
   // extract pose for the last provided frame
-  CartesianTwist eef_twist = cartesian_twists.back();
-  CartesianPose eef_displacement = eef_twist;
-  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = eef_displacement.get_position();
-  delta_r.tail(3) = eef_displacement.get_orientation().vec();
+  CartesianPose full_displacement = cartesian_twists.back();;
+  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = full_displacement.get_position();
+  delta_r.tail(3) = full_displacement.get_orientation().vec();
   jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
   // compute the Jacobian
   Eigen::MatrixXd hessian_matrix = jacobian.transpose() * jacobian;
@@ -502,8 +498,8 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   for (unsigned int i = 0; i < 3; ++i) {
     this->constraint_matrix_.coeffRef(3 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
     this->constraint_matrix_.coeffRef(3 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
-    this->lower_bound_constraints_(3 * nb_joints + i + 1) = abs(eef_displacement.get_position()(i));
-    this->lower_bound_constraints_(3 * nb_joints + i + 4) = abs(eef_displacement.get_orientation().vec()(i));
+    this->lower_bound_constraints_(3 * nb_joints + i + 1) = abs(full_displacement.get_position()(i));
+    this->lower_bound_constraints_(3 * nb_joints + i + 4) = abs(full_displacement.get_orientation().vec()(i));
   }
   // update the constraints
   this->solver_.updateHessianMatrix(this->hessian_);

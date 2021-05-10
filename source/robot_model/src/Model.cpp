@@ -52,13 +52,13 @@ bool Model::init_qp_solver() {
   // initialize the matrices
   this->hessian_ = Eigen::SparseMatrix<double>(nb_joints + 1, nb_joints + 1);
   this->gradient_ = Eigen::VectorXd::Zero(nb_joints + 1);
-  this->constraint_matrix_ = Eigen::SparseMatrix<double>(3 * nb_joints + 1 + 6, nb_joints + 1);
-  this->lower_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 6);
-  this->upper_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 6);
+  this->constraint_matrix_ = Eigen::SparseMatrix<double>(3 * nb_joints + 1 + 2, nb_joints + 1);
+  this->lower_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 2);
+  this->upper_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 2);
 
   // reserve the size of the matrices
   this->hessian_.reserve(nb_joints * nb_joints + 1);
-  this->constraint_matrix_.reserve(5 * nb_joints + 2 * (nb_joints * nb_joints + nb_joints) + 4 * nb_joints + 7);
+  this->constraint_matrix_.reserve(5 * nb_joints + 2 * (nb_joints * nb_joints + nb_joints) + 4 * nb_joints + 3);
 
   Eigen::VectorXd lower_position_limit = this->robot_model_.lowerPositionLimit;
   Eigen::VectorXd upper_position_limit = this->robot_model_.upperPositionLimit;
@@ -85,12 +85,8 @@ bool Model::init_qp_solver() {
   this->constraint_matrix_.coeffRef(3 * nb_joints, nb_joints) = 1.0;
   this->upper_bound_constraints_(3 * nb_joints) = std::numeric_limits<double>::infinity();
   // cartesian velocity constraints
-  for (unsigned int i = 0; i < 3; ++i) {
-    // linear velocity
-    this->upper_bound_constraints_(3 * nb_joints + i + 1) = std::numeric_limits<double>::infinity();
-    // angular velocity
-    this->upper_bound_constraints_(3 * nb_joints + i + 4) = std::numeric_limits<double>::infinity();
-  }
+  this->upper_bound_constraints_(3 * nb_joints + 1) = std::numeric_limits<double>::infinity();
+  this->upper_bound_constraints_(3 * nb_joints + 2) = std::numeric_limits<double>::infinity();
 
   // set the initial data of the QP solver_
   this->solver_.data()->setNumberOfVariables(static_cast<int>(nb_joints) + 1);
@@ -495,12 +491,11 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
     this->upper_bound_constraints_(n) = upper_position_limit(n) - joint_positions.data()(n);
   }
   // update Cartesian velocity
-  for (unsigned int i = 0; i < 3; ++i) {
-    this->constraint_matrix_.coeffRef(3 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
-    this->constraint_matrix_.coeffRef(3 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
-    this->lower_bound_constraints_(3 * nb_joints + i + 1) = abs(full_displacement.get_position()(i));
-    this->lower_bound_constraints_(3 * nb_joints + i + 4) = abs(full_displacement.get_orientation().vec()(i));
-  }
+  this->constraint_matrix_.coeffRef(3 * nb_joints + 1, nb_joints) = parameters.linear_velocity_limit;
+  this->constraint_matrix_.coeffRef(3 * nb_joints + 2, nb_joints) = parameters.angular_velocity_limit;
+  this->lower_bound_constraints_(3 * nb_joints + 1) = full_displacement.get_position().norm();
+  this->lower_bound_constraints_(3 * nb_joints + 2) = full_displacement.get_orientation().vec().norm();
+
   // update the constraints
   this->solver_.updateHessianMatrix(this->hessian_);
   this->solver_.updateGradient(this->gradient_);

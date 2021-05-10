@@ -4,8 +4,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-CartesianTwist::CartesianTwist() {}
-
 CartesianTwist::CartesianTwist(const std::string& name, const std::string& reference) :
     CartesianState(name, reference) {}
 
@@ -32,11 +30,15 @@ CartesianTwist::CartesianTwist(const std::string& name,
   this->set_twist(twist);
 }
 
-CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianState(twist) {}
+CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {
+  // set all the state variables to 0 except linear and angular velocities
+  this->set_zero();
+  this->set_twist(state.get_twist());
+}
 
-CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {}
+CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianTwist(static_cast<const CartesianState&>(twist)) {}
 
-CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianState(pose / std::chrono::seconds(1)) {}
+CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianTwist(pose / std::chrono::seconds(1)) {}
 
 CartesianTwist CartesianTwist::Zero(const std::string& name, const std::string& reference) {
   return CartesianState::Identity(name, reference);
@@ -46,11 +48,6 @@ CartesianTwist CartesianTwist::Random(const std::string& name, const std::string
   // separating in the two lines in needed to avoid compilation error due to ambiguous constructor call
   Eigen::Matrix<double, 6, 1> random = Eigen::Matrix<double, 6, 1>::Random();
   return CartesianTwist(name, random, reference);
-}
-
-CartesianTwist& CartesianTwist::operator=(const CartesianState& state) {
-  this->CartesianState::operator=(state);
-  return (*this);
 }
 
 CartesianTwist& CartesianTwist::operator*=(const CartesianTwist& twist) {

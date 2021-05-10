@@ -35,8 +35,11 @@ cmake-build-*
 *.out
 *.app
 
-# build folders
+# vscode settings
+source/.vs*
+
+# build
 source/build
 
-# gtest lib
-source/lib/googletest
+# clang-format
+.clang-format

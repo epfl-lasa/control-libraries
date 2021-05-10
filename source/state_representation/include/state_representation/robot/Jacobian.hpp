@@ -26,19 +26,19 @@ class JointTorques;
 class Jacobian : public State {
 private:
   std::vector<std::string> joint_names_;///< names of the joints
-  std::string frame_;                   ///< name of the frame at which the jacobian is computed
-  std::string reference_frame_;         /// name of the reference frame in which the jacobian is expressed
+  std::string frame_;                   ///< name of the frame at which the Jacobian is computed
+  std::string reference_frame_;         /// name of the reference frame in which the Jacobian is expressed
   unsigned int rows_;                   ///< number of rows
   unsigned int cols_;                   ///< number of columns
-  Eigen::MatrixXd data_;                ///< internal storage of the jacobian matrix
+  Eigen::MatrixXd data_;                ///< internal storage of the Jacobian matrix
 
 public:
   /**
    * @brief Constructor with names and number of joints provided
    * @param robot_name the name of the robot associated to
    * @param nb_joints the number of joints
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
   explicit Jacobian(const std::string& robot_name,
                     unsigned int nb_joints,
@@ -49,8 +49,8 @@ public:
    * @brief Constructor with names and list of joint names provided
    * @param joint_names the vector of joint names
    * @param robot_name the name of the robot associated to
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
   explicit Jacobian(const std::string& robot_name,
                     const std::vector<std::string>& joint_names,
@@ -58,10 +58,10 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief Constructor with names and jacobian matrix as eigen matrix
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param data the values of the jacobian matrix
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @brief Constructor with names and Jacobian matrix as eigen matrix
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param data the values of the Jacobian matrix
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
   explicit Jacobian(const std::string& robot_name,
                     const std::string& frame,
@@ -69,11 +69,11 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief Constructor with names, vector of joint names, and jacobian matrix as eigen matrix
+   * @brief Constructor with names, vector of joint names, and Jacobian matrix as eigen matrix
    * @param joint_names the vector of joint names
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param data the values of the jacobian matrix
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param data the values of the Jacobian matrix
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
   explicit Jacobian(const std::string& robot_name,
                     const std::vector<std::string>& joint_names,
@@ -90,8 +90,8 @@ public:
    * @brief Constructor for a random Jacobian
    * @param robot_name the name of the associated robot
    * @param nb_joints the number of joints for initialization
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    * @return Jacobian with random data values
    */
   static Jacobian Random(const std::string& robot_name,
@@ -103,8 +103,8 @@ public:
    * @brief Constructor for a random Jacobian
    * @param robot_name the name of the associated robot
    * @param joint_names list of joint names
-   * @param frame the name of the frame at which the jacobian is computed
-   * @param reference_frame the name of the reference frame in which the jacobian is expressed (default "world")
+   * @param frame the name of the frame at which the Jacobian is computed
+   * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    * @return Jacobian with random data values
    */
   static Jacobian Random(const std::string& robot_name,
@@ -209,7 +209,7 @@ public:
   void set_data(const Eigen::MatrixXd& data);
 
   /**
-   * @brief Check if the jacobian matrix is compatible for operations with the state given as argument
+   * @brief Check if the Jacobian matrix is compatible for operations with the state given as argument
    * @param state the state to check compatibility with
    */
   bool is_compatible(const State& state) const override;
@@ -220,7 +220,7 @@ public:
   void initialize() override;
 
   /**
-    * @brief Return the transpose of the jacobian matrix
+    * @brief Return the transpose of the Jacobian matrix
     * @return the Jacobian transposed
     */
   Jacobian transpose() const;
@@ -240,11 +240,18 @@ public:
   Jacobian pseudoinverse() const;
 
   /**
-   * @brief Overload the * operator with an non specific matrix
-   * @param matrix the vector to multiply with
-   * @return the matrix multiply by the jacobian matrix
+   * @brief Overload the * operator with an arbitrary matrix
+   * @param matrix the matrix to multiply with
+   * @return the Jacobian matrix multiplied by the matrix in parameter
    */
   Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix) const;
+
+  /**
+   * @brief Overload the * operator with another Jacobian
+   * @param jacobian the Jacobian to multiply with
+   * @return the current Jacobian multiplied by the one in parameter
+   */
+  Eigen::MatrixXd operator*(const Jacobian& jacobian) const;
 
   /**
    * @brief Overload the * operator with a JointVelocities
@@ -321,6 +328,14 @@ public:
    * @return the Jacobian expressed in the new reference frame
    */
   friend Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian);
+
+  /**
+   * @brief Overload the * operator with an arbitrary matrix on the left side
+   * @param matrix the matrix to multiply with
+   * @param jacobian the jacobian matrix
+   * @return the matrix multiplied by the jacobian matrix
+   */
+  friend Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix, const Jacobian& jacobian);
 };
 
 inline void swap(Jacobian& jacobian1, Jacobian& jacobian2) {
@@ -408,25 +423,6 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
   }
   this->set_filled();
   this->data_ = data;
-}
-
-inline bool Jacobian::is_compatible(const State& state) const {
-  bool compatible = false;
-  if (state.get_type() == StateType::JOINTSTATE) {
-    // compatibility is assured through the vector of joint names
-    compatible = (this->get_name() == state.get_name())
-        && (this->cols_ == dynamic_cast<const JointState&>(state).get_size());
-    if (compatible) {
-      for (unsigned int i = 0; i < this->cols_; ++i) {
-        compatible = (compatible && this->joint_names_[i] == dynamic_cast<const JointState&>(state).get_names()[i]);
-      }
-    }
-  } else if (state.get_type() == StateType::CARTESIANSTATE) {
-    // compatibility is assured through the reference frame and the name of the frame
-    compatible = (this->reference_frame_ == dynamic_cast<const CartesianState&>(state).get_reference_frame())
-        && (this->frame_ == dynamic_cast<const CartesianState&>(state).get_name());
-  }
-  return compatible;
 }
 
 inline double& Jacobian::operator()(unsigned int row, unsigned int col) {

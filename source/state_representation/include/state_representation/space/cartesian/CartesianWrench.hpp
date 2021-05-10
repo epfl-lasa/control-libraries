@@ -13,15 +13,48 @@ namespace state_representation {
  * @brief Class to define wrench in cartesian space as 3D force and torque vectors
  */
 class CartesianWrench : public CartesianState {
+private:
+  using CartesianState::clamp_state_variable;
+
 public:
-  /**
-   * Empty constructor
-   */
-  explicit CartesianWrench();
+  // delete inaccessible getter and setters
+  const Eigen::Vector3d& get_linear_velocity() const = delete;
+  const Eigen::Vector3d& get_angular_velocity() const = delete;
+  Eigen::Matrix<double, 6, 1> get_twist() const = delete;
+  const Eigen::Vector3d& get_position() const = delete;
+  const Eigen::Quaterniond& get_orientation() const = delete;
+  Eigen::Vector4d get_orientation_coefficients() const = delete;
+  Eigen::Matrix<double, 7, 1> get_pose() const = delete;
+  Eigen::Matrix4d get_transformation_matrix() const = delete;
+  const Eigen::Vector3d& get_linear_acceleration() const = delete;
+  const Eigen::Vector3d& get_angular_acceleration() const = delete;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  void set_position(const Eigen::Vector3d& position) = delete;
+  void set_position(const std::vector<double>& position) = delete;
+  void set_position(const double& x, const double& y, const double& z) = delete;
+  void set_orientation(const Eigen::Quaterniond& orientation) = delete;
+  void set_orientation(const Eigen::Vector4d& orientation) = delete;
+  void set_orientation(const std::vector<double>& orientation) = delete;
+  void set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) = delete;
+  void set_pose(const Eigen::Matrix<double, 7, 1>& pose) = delete;
+  void set_pose(const std::vector<double>& pose) = delete;
+  void set_linear_velocity(const Eigen::Vector3d& linear_velocity) = delete;
+  void set_angular_velocity(const Eigen::Vector3d& angular_velocity) = delete;
+  void set_twist(const Eigen::Matrix<double, 6, 1>& twist) = delete;
+  void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
+  void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
+  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
 
   /**
-   * @brief Empty constructor for a CartesianWrench
+   * @brief Empty constructor
    */
+  explicit CartesianWrench() = default;
+
+  /**
+    * @brief Constructor with name and reference frame provided
+    * @param name the name of the state
+    * @param reference the name of the reference frame
+    */
   explicit CartesianWrench(const std::string& name, const std::string& reference = "world");
 
   /**
@@ -37,17 +70,24 @@ public:
   /**
    * @brief Construct a CartesianWrench from a force given as a vector of coordinates.
    */
-  explicit CartesianWrench(const std::string& name, const Eigen::Vector3d& force, const std::string& reference = "world");
+  explicit CartesianWrench(const std::string& name,
+                           const Eigen::Vector3d& force,
+                           const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianWrench from a force given as a vector of coordinates and a quaternion.
    */
-  explicit CartesianWrench(const std::string& name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque, const std::string& reference = "world");
+  explicit CartesianWrench(const std::string& name,
+                           const Eigen::Vector3d& force,
+                           const Eigen::Vector3d& torque,
+                           const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianWrench from a single 6d wrench vector
    */
-  explicit CartesianWrench(const std::string& name, const Eigen::Matrix<double, 6, 1>& wrench, const std::string& reference = "world");
+  explicit CartesianWrench(const std::string& name,
+                           const Eigen::Matrix<double, 6, 1>& wrench,
+                           const std::string& reference = "world");
 
   /**
    * @brief Constructor for the zero wrench
@@ -66,17 +106,11 @@ public:
   static CartesianWrench Random(const std::string& name, const std::string& reference = "world");
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param pose the pose with value to assign
    * @return reference to the current pose with new values
    */
-  CartesianWrench& operator=(const CartesianWrench& pose);
-
-  /**
-   * @brief Overload the = operator from a CartesianState
-   * @param state CartesianState to get the wrench from
-   */
-  CartesianWrench& operator=(const CartesianState& state);
+  CartesianWrench& operator=(const CartesianWrench& pose) = default;
 
   /**
    * @brief Overload the *= operator
@@ -108,14 +142,14 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param wrench CartesianWrench to substract
+   * @param wrench CartesianWrench to subtract
    * @return the current CartesianWrench minus the CartesianWrench given in argument
    */
   CartesianWrench& operator-=(const CartesianWrench& wrench);
 
   /**
    * @brief Overload the - operator
-   * @param wrench CartesianWrench to substract
+   * @param wrench CartesianWrench to subtract
    * @return the current CartesianWrench minus the CartesianWrench given in argument
    */
   CartesianWrench operator-(const CartesianWrench& wrench) const;
@@ -155,7 +189,10 @@ public:
    * the torque will be set to 0
    * @return the clamped wrench
    */
-  CartesianWrench clamped(double max_force, double max_torque, double force_noise_ratio = 0, double torque_noise_ratio = 0) const;
+  CartesianWrench clamped(double max_force,
+                          double max_torque,
+                          double force_noise_ratio = 0,
+                          double torque_noise_ratio = 0) const;
 
   /**
    * @brief Return a copy of the CartesianWrench
@@ -185,7 +222,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the CartesianWrench to
+   * @param os the ostream to append the string representing the CartesianWrench to
    * @param CartesianWrench the CartesianWrench to print
    * @return the appended ostream
    */
@@ -199,12 +236,7 @@ public:
   friend CartesianWrench operator*(double lambda, const CartesianWrench& wrench);
 };
 
-inline CartesianWrench& CartesianWrench::operator=(const CartesianWrench& wrench) {
-  CartesianState::operator=(wrench);
-  return (*this);
-}
-
-inline std::vector<double> CartesianWrench::norms(const CartesianStateVariable& state_variable_type) const{
+inline std::vector<double> CartesianWrench::norms(const CartesianStateVariable& state_variable_type) const {
   return CartesianState::norms(state_variable_type);
 }
 

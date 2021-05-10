@@ -5,8 +5,6 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-JointPositions::JointPositions() {}
-
 JointPositions::JointPositions(const std::string& robot_name, unsigned int nb_joints) :
     JointState(robot_name, nb_joints) {}
 
@@ -23,11 +21,15 @@ JointPositions::JointPositions(const std::string& robot_name, const std::vector<
   this->set_positions(positions);
 }
 
-JointPositions::JointPositions(const JointPositions& positions) : JointState(positions) {}
+JointPositions::JointPositions(const JointState& state) : JointState(state) {
+  // set all the state variables to 0 except positions
+  this->set_zero();
+  this->set_positions(state.get_positions());
+}
 
-JointPositions::JointPositions(const JointState& state) : JointState(state) {}
+JointPositions::JointPositions(const JointPositions& positions) : JointPositions(static_cast<const JointState&>(positions)) {}
 
-JointPositions::JointPositions(const JointVelocities& velocities) : JointState(std::chrono::seconds(1) * velocities) {}
+JointPositions::JointPositions(const JointVelocities& velocities) : JointPositions(std::chrono::seconds(1) * velocities) {}
 
 JointPositions JointPositions::Zero(const std::string& robot_name, unsigned int nb_joints) {
   return JointState::Zero(robot_name, nb_joints);

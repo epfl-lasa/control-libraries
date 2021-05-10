@@ -299,7 +299,7 @@ As it is a mapping between joint and task spaces, as for the `CartesianState`, i
 frame name and a reference frame.
 
 ```cpp
-// create a jacobian for myrobot with 3 joints, associated to frame A and expressed in B
+// create a Jacobian for myrobot with 3 joints, associated to frame A and expressed in B
 state_representation::Jacobian jac("myrobot", std::vector<string>({"joint0", "joint1", "joint2"}), "A", "B");
 ```
 
@@ -307,7 +307,7 @@ The API is the same as the `JointState`, hence the constructor can also accept t
 joint names vector.
 
 ```cpp
-// create a jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}, associated to frame A and
+// create a Jacobian for myrobot with 3 joints named {"joint0", "joint1", "joint3"}, associated to frame A and
 // expressed in world (default value of the reference frame when not provided)
 state_representation::Jacobian jac("myrobot", 3, "A");
 ```

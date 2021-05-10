@@ -16,14 +16,47 @@ class CartesianPose;
  * @brief Class to define twist in cartesian space as 3D linear and angular velocity vectors
  */
 class CartesianTwist : public CartesianState {
+private:
+  using CartesianState::clamp_state_variable;
+
 public:
-  /**
-   * Empty constructor
-   */
-  explicit CartesianTwist();
+  // delete inaccessible getter and setters
+  const Eigen::Vector3d& get_position() const = delete;
+  const Eigen::Quaterniond& get_orientation() const = delete;
+  Eigen::Vector4d get_orientation_coefficients() const = delete;
+  Eigen::Matrix<double, 7, 1> get_pose() const = delete;
+  Eigen::Matrix4d get_transformation_matrix() const = delete;
+  const Eigen::Vector3d& get_linear_acceleration() const = delete;
+  const Eigen::Vector3d& get_angular_acceleration() const = delete;
+  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  const Eigen::Vector3d& get_force() const = delete;
+  const Eigen::Vector3d& get_torque() const = delete;
+  Eigen::Matrix<double, 6, 1> get_wrench() const = delete;
+  void set_position(const Eigen::Vector3d& position) = delete;
+  void set_position(const std::vector<double>& position) = delete;
+  void set_position(const double& x, const double& y, const double& z) = delete;
+  void set_orientation(const Eigen::Quaterniond& orientation) = delete;
+  void set_orientation(const Eigen::Vector4d& orientation) = delete;
+  void set_orientation(const std::vector<double>& orientation) = delete;
+  void set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) = delete;
+  void set_pose(const Eigen::Matrix<double, 7, 1>& pose) = delete;
+  void set_pose(const std::vector<double>& pose) = delete;
+  void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
+  void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
+  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  void set_force(const Eigen::Vector3d& force) = delete;
+  void set_torque(const Eigen::Vector3d& torque) = delete;
+  void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
 
   /**
-   * @brief Empty constructor for a CartesianTwist
+   * @brief Empty constructor
+   */
+  explicit CartesianTwist() = default;
+
+  /**
+   * @brief Constructor with name and reference frame provided
+   * @param name the name of the state
+   * @param reference the name of the reference frame
    */
   explicit CartesianTwist(const std::string& name, const std::string& reference = "world");
 
@@ -45,17 +78,24 @@ public:
   /**
    * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates for the linear velocity.
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Vector3d& linear_velocity,
+                          const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates and a quaternion.
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Vector3d& linear_velocity,
+                          const Eigen::Vector3d& angular_velocity,
+                          const std::string& reference = "world");
 
   /**
    * @brief Construct a CartesianTwist from a single 6d twist vector
    */
-  explicit CartesianTwist(const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference = "world");
+  explicit CartesianTwist(const std::string& name,
+                          const Eigen::Matrix<double, 6, 1>& twist,
+                          const std::string& reference = "world");
 
   /**
    * @brief Constructor for the zero twist
@@ -74,17 +114,11 @@ public:
   static CartesianTwist Random(const std::string& name, const std::string& reference = "world");
 
   /**
-   * @brief Copy assignement operator that have to be defined to the custom assignement operator
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator
    * @param twist the twist with value to assign
    * @return reference to the current twist with new values
    */
-  CartesianTwist& operator=(const CartesianTwist& twist);
-
-  /**
-   * @brief Overload the = operator from a CartesianState
-   * @param state CartesianState to get velocity from
-   */
-  CartesianTwist& operator=(const CartesianState& state);
+  CartesianTwist& operator=(const CartesianTwist& twist) = default;
 
   /**
    * @brief Overload the *= operator
@@ -116,14 +150,14 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param twist CartesianTwist to substract
+   * @param twist CartesianTwist to subtract
    * @return the current CartesianTwist minus the CartesianTwist given in argument
    */
   CartesianTwist& operator-=(const CartesianTwist& twist);
 
   /**
    * @brief Overload the - operator with a twist
-   * @param twist CartesianTwist to substract
+   * @param twist CartesianTwist to subtract
    * @return the current CartesianTwist minus the CartesianTwist given in argument
    */
   CartesianTwist operator-(const CartesianTwist& twist) const;
@@ -177,7 +211,10 @@ public:
    * the angular velocity will be set to 0
    * @return the clamped twist
    */
-  CartesianTwist clamped(double max_linear, double max_angular, double noise_ratio = 0, double angular_noise_ratio = 0) const;
+  CartesianTwist clamped(double max_linear,
+                         double max_angular,
+                         double noise_ratio = 0,
+                         double angular_noise_ratio = 0) const;
 
   /**
    * @brief Return a copy of the CartesianTwist
@@ -207,7 +244,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the CartesianTwist to
+   * @param os the ostream to append the string representing the CartesianTwist to
    * @param CartesianTwist the CartesianTwist to print
    * @return the appended ostream
    */
@@ -235,12 +272,7 @@ public:
   friend CartesianPose operator*(const std::chrono::nanoseconds& dt, const CartesianTwist& twist);
 };
 
-inline CartesianTwist& CartesianTwist::operator=(const CartesianTwist& twist) {
-  CartesianState::operator=(twist);
-  return (*this);
-}
-
-inline std::vector<double> CartesianTwist::norms(const CartesianStateVariable& state_variable_type) const{
+inline std::vector<double> CartesianTwist::norms(const CartesianStateVariable& state_variable_type) const {
   return CartesianState::norms(state_variable_type);
 }
 

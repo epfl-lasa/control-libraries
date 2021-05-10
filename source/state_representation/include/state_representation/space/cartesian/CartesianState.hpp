@@ -42,7 +42,7 @@ enum class CartesianStateVariable {
  * @param s2 the second CartesianState
  * @param state_variable_type name of the state variable from the CartesianStateVariable structure to apply
  * the distance on. Default ALL for full distance across all dimensions
- * @return the distance beteen the two states
+ * @return the distance between the two states
  */
 double dist(const CartesianState& s1,
             const CartesianState& s2,
@@ -54,14 +54,14 @@ double dist(const CartesianState& s1,
  */
 class CartesianState : public SpatialState {
 private:
-  Eigen::Vector3d position;            ///< position of the point
-  Eigen::Quaterniond orientation;      ///< orientation of the point
-  Eigen::Vector3d linear_velocity;     ///< linear_velocity of the point
-  Eigen::Vector3d angular_velocity;    ///< angular_velocity of the point
-  Eigen::Vector3d linear_acceleration; ///< linear_acceleration of the point
-  Eigen::Vector3d angular_acceleration;///< angular_acceleration of the point
-  Eigen::Vector3d force;               ///< force applied at the point
-  Eigen::Vector3d torque;              ///< torque applied at the point
+  Eigen::Vector3d position_;            ///< position of the point
+  Eigen::Quaterniond orientation_;      ///< orientation of the point
+  Eigen::Vector3d linear_velocity_;     ///< linear velocity of the point
+  Eigen::Vector3d angular_velocity_;    ///< angular velocity of the point
+  Eigen::Vector3d linear_acceleration_; ///< linear acceleration of the point
+  Eigen::Vector3d angular_acceleration_;///< angular acceleration of the point
+  Eigen::Vector3d force_;               ///< force applied at the point
+  Eigen::Vector3d torque_;              ///< torque applied at the point
 
   /**
    * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
@@ -128,7 +128,7 @@ public:
   /**
    * @brief Copy constructor of a CartesianState
    */
-  CartesianState(const CartesianState& state);
+  CartesianState(const CartesianState& state) = default;
 
   /**
    * @brief Constructor for the identity CartesianState (identity pose and 0 for the rest)
@@ -145,6 +145,13 @@ public:
    * @return CartesianState random state
    */
   static CartesianState Random(const std::string& name, const std::string& reference = "world");
+
+  /**
+   * @brief Swap the values of the two CartesianState
+   * @param state1 CartesianState to be swapped with 2
+   * @param state2 CartesianState to be swapped with 1
+   */
+  friend void swap(CartesianState& state1, CartesianState& state2);
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
@@ -277,7 +284,7 @@ public:
 
   /**
    * @brief Setter of the pose from both position and orientation as std vector
-   * @param pose the pose as a 7d vectorz. Beware, quaternion coefficients 
+   * @param pose the pose as a 7d vector. Beware, quaternion coefficients
    * uses the (w, x, y, z) convention
    */
   void set_pose(const std::vector<double>& pose);
@@ -298,7 +305,7 @@ public:
   void set_twist(const Eigen::Matrix<double, 6, 1>& twist);
 
   /**
-   * @brief Setter of the linear accelration attribute
+   * @brief Setter of the linear acceleration attribute
    */
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration);
 
@@ -330,7 +337,7 @@ public:
   /**
    * @brief Initialize the CartesianState to a zero value
    */
-  void initialize();
+  void initialize() override;
 
   /**
    * @brief Set the State to a zero value
@@ -411,14 +418,14 @@ public:
 
   /**
    * @brief Overload the -= operator
-   * @param state CartesianState to substract
+   * @param state CartesianState to subtract
    * @return the current CartesianState minus the CartesianState given in argument
    */
   CartesianState& operator-=(const CartesianState& state);
 
   /**
    * @brief Overload the - operator
-   * @param state CartesianState to substract
+   * @param state CartesianState to subtract
    * @return the current CartesianState minus the CartesianState given in argument
    */
   CartesianState operator-(const CartesianState& state) const;
@@ -461,7 +468,7 @@ public:
 
   /**
    * @brief Overload the ostream operator for printing
-   * @param os the ostream to happend the string representing the state to
+   * @param os the ostream to append the string representing the state to
    * @param state the state to print
    * @return the appended ostream
    */
@@ -499,21 +506,30 @@ public:
   virtual void from_std_vector(const std::vector<double>& value);
 };
 
+inline void swap(CartesianState& state1, CartesianState& state2) {
+  swap(static_cast<SpatialState&>(state1), static_cast<SpatialState&>(state2));
+  std::swap(state1.position_, state2.position_);
+  std::swap(state1.orientation_, state2.orientation_);
+  std::swap(state1.linear_velocity_, state2.linear_velocity_);
+  std::swap(state1.angular_velocity_, state2.angular_velocity_);
+  std::swap(state1.linear_acceleration_, state2.linear_acceleration_);
+  std::swap(state1.angular_acceleration_, state2.angular_acceleration_);
+  std::swap(state1.force_, state2.force_);
+  std::swap(state1.torque_, state2.torque_);
+}
+
 inline CartesianState& CartesianState::operator=(const CartesianState& state) {
-  SpatialState::operator=(state);
-  this->set_pose(state.get_pose());
-  this->set_twist(state.get_twist());
-  this->set_accelerations(state.get_accelerations());
-  this->set_wrench(state.get_wrench());
-  return (*this);
+  CartesianState tmp(state);
+  swap(*this, tmp);
+  return *this;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_position() const {
-  return this->position;
+  return this->position_;
 }
 
 inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
-  return this->orientation;
+  return this->orientation_;
 }
 
 inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
@@ -531,16 +547,16 @@ inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
 
 inline Eigen::Matrix4d CartesianState::get_transformation_matrix() const {
   Eigen::Matrix4d pose;
-  pose << this->orientation.toRotationMatrix(), this->position, 0., 0., 0., 1;
+  pose << this->orientation_.toRotationMatrix(), this->position_, 0., 0., 0., 1;
   return pose;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_linear_velocity() const {
-  return this->linear_velocity;
+  return this->linear_velocity_;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_angular_velocity() const {
-  return this->angular_velocity;
+  return this->angular_velocity_;
 }
 
 inline Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
@@ -550,11 +566,11 @@ inline Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
 }
 
 inline const Eigen::Vector3d& CartesianState::get_linear_acceleration() const {
-  return this->linear_acceleration;
+  return this->linear_acceleration_;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_angular_acceleration() const {
-  return this->angular_acceleration;
+  return this->angular_acceleration_;
 }
 
 inline Eigen::Matrix<double, 6, 1> CartesianState::get_accelerations() const {
@@ -564,11 +580,11 @@ inline Eigen::Matrix<double, 6, 1> CartesianState::get_accelerations() const {
 }
 
 inline const Eigen::Vector3d& CartesianState::get_force() const {
-  return this->force;
+  return this->force_;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_torque() const {
-  return this->torque;
+  return this->torque_;
 }
 
 inline Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
@@ -648,11 +664,11 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_var
 }
 
 inline void CartesianState::set_position(const Eigen::Vector3d& position) {
-  this->set_state_variable(this->position, position);
+  this->set_state_variable(this->position_, position);
 }
 
 inline void CartesianState::set_position(const std::vector<double>& position) {
-  this->set_state_variable(this->position, position);
+  this->set_state_variable(this->position_, position);
 }
 
 inline void CartesianState::set_position(const double& x, const double& y, const double& z) {
@@ -661,7 +677,7 @@ inline void CartesianState::set_position(const double& x, const double& y, const
 
 inline void CartesianState::set_orientation(const Eigen::Quaterniond& orientation) {
   this->set_filled();
-  this->orientation = orientation.normalized();
+  this->orientation_ = orientation.normalized();
 }
 
 inline void CartesianState::set_orientation(const Eigen::Vector4d& orientation) {
@@ -694,39 +710,39 @@ inline void CartesianState::set_pose(const std::vector<double>& pose) {
 }
 
 inline void CartesianState::set_linear_velocity(const Eigen::Vector3d& linear_velocity) {
-  this->set_state_variable(this->linear_velocity, linear_velocity);
+  this->set_state_variable(this->linear_velocity_, linear_velocity);
 }
 
 inline void CartesianState::set_angular_velocity(const Eigen::Vector3d& angular_velocity) {
-  this->set_state_variable(this->angular_velocity, angular_velocity);
+  this->set_state_variable(this->angular_velocity_, angular_velocity);
 }
 
 inline void CartesianState::set_twist(const Eigen::Matrix<double, 6, 1>& twist) {
-  this->set_state_variable(this->linear_velocity, this->angular_velocity, twist);
+  this->set_state_variable(this->linear_velocity_, this->angular_velocity_, twist);
 }
 
 inline void CartesianState::set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) {
-  this->set_state_variable(this->linear_acceleration, linear_acceleration);
+  this->set_state_variable(this->linear_acceleration_, linear_acceleration);
 }
 
 inline void CartesianState::set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) {
-  this->set_state_variable(this->angular_acceleration, angular_acceleration);
+  this->set_state_variable(this->angular_acceleration_, angular_acceleration);
 }
 
 inline void CartesianState::set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) {
-  this->set_state_variable(this->linear_acceleration, this->angular_acceleration, accelerations);
+  this->set_state_variable(this->linear_acceleration_, this->angular_acceleration_, accelerations);
 }
 
 inline void CartesianState::set_force(const Eigen::Vector3d& force) {
-  this->set_state_variable(this->force, force);
+  this->set_state_variable(this->force_, force);
 }
 
 inline void CartesianState::set_torque(const Eigen::Vector3d& torque) {
-  this->set_state_variable(this->torque, torque);
+  this->set_state_variable(this->torque_, torque);
 }
 
 inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) {
-  this->set_state_variable(this->force, this->torque, wrench);
+  this->set_state_variable(this->force_, this->torque_, wrench);
 }
 
 inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value,

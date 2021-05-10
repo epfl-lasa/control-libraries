@@ -27,7 +27,7 @@ RUN echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(
 # install dependencies for building the libraries
 RUN apt-get update && apt-get install -y \
     libeigen3-dev \
-    robotpkg-py38-pinocchio \
+    robotpkg-pinocchio \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -101,3 +101,20 @@ RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
   && make -j all
 
 RUN CTEST_OUTPUT_ON_FAILURE=1 make test
+
+
+FROM development-dependencies as source-dependencies
+
+WORKDIR /tmp/control_lib
+COPY ./source ./
+
+WORKDIR /tmp/control_lib/build
+RUN cmake -DBUILD_CONTROLLERS="ON" \
+    -DBUILD_DYNAMICAL_SYSTEMS="ON" \
+    -DBUILD_ROBOT_MODEL="ON" \
+    -DBUILD_TESTING="OFF" .. \
+  && make -j all \
+  && make install
+
+RUN rm -rf /tmp/control_lib/
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/opt/openrobots/lib/

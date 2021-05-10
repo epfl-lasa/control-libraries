@@ -29,14 +29,18 @@ public:
   }
 
   void read_robot_state() {
-    // this is a dummy robot, we assume the joint state is executed but add a bit of noise
-    this->joint_positions += 0.001 * JointPositions::Random(this->joint_positions.get_name(), this->robot_.get_joint_frames());
+    // this is a dummy robot, we assume the joint state is executed
     this->eef_pose = this->robot_.forward_kinematics(this->joint_positions);
   }
 
   void send_control_command(const CartesianTwist& desired_eef_twist, const std::chrono::nanoseconds& dt) {
-    // apply the inverse kinematics
-    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist, this->joint_positions);
+    // create the inverse velocity parameters and set the period of the control loop
+    QPInverseVelocityParameters parameters;
+    parameters.dt = dt;
+    // apply the inverse velocity
+    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist,
+                                                                             this->joint_positions,
+                                                                             parameters);
     // integrate the new position
     this->joint_positions = dt * desired_joint_velocities + this->joint_positions;
   }
@@ -59,7 +63,9 @@ void control_loop_step(DummyRobotInterface& robot,
 void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt, double tolerance) {
   // set a desired target for the robot eef and a linear ds toward the target
   CartesianPose target(robot.eef_pose.get_name(), robot.eef_pose.get_reference_frame());
-  target.set_position(.5, .0, .5);
+  target.set_position(.5, .0, .75);
+  Eigen::Quaterniond orientation(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitY()));
+  target.set_orientation(orientation);
   Linear<CartesianState> linear_ds(target);
 
   double distance;
@@ -83,6 +89,6 @@ int main(int, char**) {
   std::string robot_name = "franka";
   std::string urdf_path = std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
   DummyRobotInterface robot("franka", urdf_path);
-  auto dt = 10ms;
+  auto dt = 100ms;
   control_loop(robot, dt, 1e-3);
 }

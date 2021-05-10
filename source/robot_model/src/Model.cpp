@@ -39,9 +39,10 @@ void Model::init_model() {
   }
   // remove universe and root_joint frame added by Pinocchio
   this->frame_names_ = std::vector<std::string>(frames.begin() + 2, frames.end());
+  this->init_qp_solver();
 }
 
-bool Model::init_qp_solver(const InverseVelocityParameters& parameters) {
+bool Model::init_qp_solver() {
   // clear the solver
   this->solver_.data()->clearHessianMatrix();
   this->solver_.data()->clearLinearConstraintsMatrix();
@@ -51,13 +52,13 @@ bool Model::init_qp_solver(const InverseVelocityParameters& parameters) {
   // initialize the matrices
   this->hessian_ = Eigen::SparseMatrix<double>(nb_joints + 1, nb_joints + 1);
   this->gradient_ = Eigen::VectorXd::Zero(nb_joints + 1);
-  this->constraint_matrix_ = Eigen::SparseMatrix<double>(4 * nb_joints + 1 + 6, nb_joints + 1);
-  this->lower_bound_constraints_ = Eigen::VectorXd::Zero(4 * nb_joints + 1 + 6);
-  this->upper_bound_constraints_ = Eigen::VectorXd::Zero(4 * nb_joints + 1 + 6);
+  this->constraint_matrix_ = Eigen::SparseMatrix<double>(3 * nb_joints + 1 + 2, nb_joints + 1);
+  this->lower_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 2);
+  this->upper_bound_constraints_ = Eigen::VectorXd::Zero(3 * nb_joints + 1 + 2);
 
   // reserve the size of the matrices
   this->hessian_.reserve(nb_joints * nb_joints + 1);
-  this->constraint_matrix_.reserve(6 * nb_joints + 2 * (nb_joints * nb_joints + nb_joints) + 4 * nb_joints + 7);
+  this->constraint_matrix_.reserve(5 * nb_joints + 2 * (nb_joints * nb_joints + nb_joints) + 4 * nb_joints + 3);
 
   Eigen::VectorXd lower_position_limit = this->robot_model_.lowerPositionLimit;
   Eigen::VectorXd upper_position_limit = this->robot_model_.upperPositionLimit;
@@ -71,34 +72,21 @@ bool Model::init_qp_solver(const InverseVelocityParameters& parameters) {
   for (unsigned int n = 0; n < nb_joints; ++n) {
     // joint limits
     this->constraint_matrix_.coeffRef(n, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n, nb_joints) = -upper_position_limit(n);// joint_limit max
-    this->lower_bound_constraints_(n) = -std::numeric_limits<double>::infinity();
-    this->constraint_matrix_.coeffRef(n + nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + nb_joints, nb_joints) = -lower_position_limit(n);// joint limit min
-    this->upper_bound_constraints_(n + nb_joints) = std::numeric_limits<double>::infinity();
     // joint velocity limits
+    this->constraint_matrix_.coeffRef(n + nb_joints, n) = 1.0;
+    this->constraint_matrix_.coeffRef(n + nb_joints, nb_joints) = velocity_limit(n);
+    this->upper_bound_constraints_(n + nb_joints) = std::numeric_limits<double>::infinity();
     this->constraint_matrix_.coeffRef(n + 2 * nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + 2 * nb_joints, nb_joints) = -velocity_limit(n);// joint_limit max
+    this->constraint_matrix_.coeffRef(n + 2 * nb_joints, nb_joints) = -velocity_limit(n);
     this->lower_bound_constraints_(n + 2 * nb_joints) = -std::numeric_limits<double>::infinity();
-    this->constraint_matrix_.coeffRef(n + 3 * nb_joints, n) = 1.0;
-    this->constraint_matrix_.coeffRef(n + 3 * nb_joints, nb_joints) = velocity_limit(n);// joint limit min
-    this->upper_bound_constraints_(n + 3 * nb_joints) = std::numeric_limits<double>::infinity();
   }
 
   // time constraint
-  this->hessian_.coeffRef(nb_joints, nb_joints) = parameters.alpha;
-  this->constraint_matrix_.coeffRef(4 * nb_joints, nb_joints) = 1.0;
-  this->lower_bound_constraints_(4 * nb_joints) = parameters.epsilon;
-  this->upper_bound_constraints_(4 * nb_joints) = std::numeric_limits<double>::infinity();
+  this->constraint_matrix_.coeffRef(3 * nb_joints, nb_joints) = 1.0;
+  this->upper_bound_constraints_(3 * nb_joints) = std::numeric_limits<double>::infinity();
   // cartesian velocity constraints
-  for (unsigned int i = 0; i < 3; ++i) {
-    // linear velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
-    this->upper_bound_constraints_(4 * nb_joints + i + 1) = std::numeric_limits<double>::infinity();
-    // angular velocity
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
-    this->upper_bound_constraints_(4 * nb_joints + i + 4) = std::numeric_limits<double>::infinity();
-  }
+  this->upper_bound_constraints_(3 * nb_joints + 1) = std::numeric_limits<double>::infinity();
+  this->upper_bound_constraints_(3 * nb_joints + 2) = std::numeric_limits<double>::infinity();
 
   // set the initial data of the QP solver_
   this->solver_.data()->setNumberOfVariables(static_cast<int>(nb_joints) + 1);
@@ -326,8 +314,8 @@ Eigen::VectorXd Model::cwln_repulsive_potential_field(const state_representation
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                           const state_representation::JointPositions& joint_positions,
-                          const std::string& frame_name,
-                          const InverseKinematicsParameters& parameters) {
+                          const InverseKinematicsParameters& parameters,
+                          const std::string& frame_name) {
   unsigned int frame_id;
   if (frame_name.empty()) {
     // get last frame if none specified
@@ -378,11 +366,11 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
 
 state_representation::JointPositions
 Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
-                          const std::string& frame_name,
-                          const InverseKinematicsParameters& parameters) {
+                          const InverseKinematicsParameters& parameters,
+                          const std::string& frame_name) {
   Eigen::VectorXd q(pinocchio::neutral(this->robot_model_));
   state_representation::JointPositions positions(this->get_robot_name(), this->get_joint_frames(), q);
-  return this->inverse_kinematics(cartesian_pose, positions, frame_name, parameters);
+  return this->inverse_kinematics(cartesian_pose, positions, parameters, frame_name);
 }
 
 std::vector<state_representation::CartesianTwist>
@@ -401,28 +389,85 @@ state_representation::CartesianTwist Model::forward_velocity(const state_represe
   return this->forward_velocity(joint_state, std::vector<std::string>{frame_name}).front();
 }
 
+void Model::check_inverse_velocity_arguments(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
+                                             const state_representation::JointPositions& joint_positions,
+                                             const std::vector<std::string>& frame_names) {
+  if (cartesian_twists.size() != frame_names.size()) {
+    throw (std::invalid_argument("The number of provided twists and frame names does not match"));
+  }
+  if (joint_positions.get_size() != this->get_number_of_joints()) {
+    throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
+  }
+  for (auto& frame_name : frame_names) {
+    if (!this->robot_model_.existFrame(frame_name)) {
+      throw (exceptions::FrameNotFoundException(frame_name));
+    }
+  }
+}
+
 state_representation::JointVelocities
 Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                         const state_representation::JointPositions& joint_positions,
-                        const InverseVelocityParameters& parameters) {
-  this->init_qp_solver(parameters);
+                        const std::vector<std::string>& frame_names) {
+  // sanity check
+  this->check_inverse_velocity_arguments(cartesian_twists, joint_positions, frame_names);
+
   const unsigned int nb_joints = this->get_number_of_joints();
+  // the velocity vector contains position of the intermediate frame and full pose of the end-effector
+  Eigen::VectorXd dX(3 * cartesian_twists.size() + 3);
+  Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
+  for (unsigned int i = 0; i < cartesian_twists.size() - 1; ++i) {
+    // extract only the linear velocity for intermediate points
+    dX.segment<3>(3 * i) = cartesian_twists[i].get_linear_velocity();
+    jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
+        this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
+  }
+  // full twist for the last provided frame
+  dX.tail(6) = cartesian_twists.back().data();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
+
+  // solve a linear system
+  return state_representation::JointVelocities(joint_positions.get_name(),
+                                               joint_positions.get_names(),
+                                               jacobian.colPivHouseholderQr().solve(dX));
+}
+
+state_representation::JointVelocities Model::inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
+                                                              const state_representation::JointPositions& joint_positions,
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  return this->inverse_velocity(std::vector<state_representation::CartesianTwist>({cartesian_twist}),
+                                joint_positions,
+                                std::vector<std::string>({actual_frame_name}));
+}
+
+state_representation::JointVelocities
+Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
+                        const state_representation::JointPositions& joint_positions,
+                        const QPInverseVelocityParameters& parameters,
+                        const std::vector<std::string>& frame_names) {
   using namespace state_representation;
+  using namespace std::chrono;
+  // sanity check
+  this->check_inverse_velocity_arguments(cartesian_twists, joint_positions, frame_names);
+
+  const unsigned int nb_joints = this->get_number_of_joints();
   // the velocity vector contains position of the intermediate frame and full pose of the end-effector
   Eigen::VectorXd delta_r(3 * cartesian_twists.size() + 3);
   Eigen::MatrixXd jacobian(3 * cartesian_twists.size() + 3, nb_joints);
   for (unsigned int i = 0; i < cartesian_twists.size() - 1; ++i) {
-    CartesianTwist twist = cartesian_twists[i];
+    // first convert the twist to a displacement
+    CartesianPose displacement = cartesian_twists[i];
     // extract only the position for intermediate points
-    delta_r.segment<3>(3 * i) = twist.get_linear_velocity();
+    delta_r.segment<3>(3 * i) = displacement.get_position();
     jacobian.block(3 * i, 0, 3 * i + 3, nb_joints) =
-        this->compute_jacobian(joint_positions, twist.get_name()).data().block(0, 0, 3, nb_joints);
+        this->compute_jacobian(joint_positions, frame_names.at(i)).data().block(0, 0, 3, nb_joints);
   }
-  // extract the orientation for the end-effector
-  CartesianTwist state = cartesian_twists.back();
-  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = state.get_linear_velocity();
-  delta_r.tail(3) = state.get_angular_velocity();
-  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, state.get_name()).data();
+  // extract pose for the last provided frame
+  CartesianPose full_displacement = cartesian_twists.back();;
+  delta_r.segment<3>(3 * (cartesian_twists.size() - 1)) = full_displacement.get_position();
+  delta_r.tail(3) = full_displacement.get_orientation().vec();
+  jacobian.bottomRows(6) = this->compute_jacobian(joint_positions, frame_names.back()).data();
   // compute the Jacobian
   Eigen::MatrixXd hessian_matrix = jacobian.transpose() * jacobian;
   // set the hessian sparse matrix
@@ -436,12 +481,21 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   this->hessian_.setFromTriplets(coefficients.begin(), coefficients.end());
   //set the gradient
   this->gradient_.head(nb_joints) = -parameters.proportional_gain * delta_r.transpose() * jacobian;
-  // update qp_constraints
-  this->lower_bound_constraints_(4 * nb_joints) = parameters.epsilon;
-  for (unsigned int i = 0; i < 3; ++i) {
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 1, nb_joints) = parameters.linear_velocity_limit;
-    this->constraint_matrix_.coeffRef(4 * nb_joints + i + 4, nb_joints) = parameters.angular_velocity_limit;
+  // update minimal time as dt expressed in seconds
+  this->lower_bound_constraints_(3 * nb_joints) = duration_cast<duration<float>>(parameters.dt).count();
+  // update joint position constraints
+  Eigen::VectorXd lower_position_limit = this->robot_model_.lowerPositionLimit;
+  Eigen::VectorXd upper_position_limit = this->robot_model_.upperPositionLimit;
+  for (unsigned int n = 0; n < nb_joints; ++n) {
+    this->lower_bound_constraints_(n) = lower_position_limit(n) - joint_positions.data()(n);
+    this->upper_bound_constraints_(n) = upper_position_limit(n) - joint_positions.data()(n);
   }
+  // update Cartesian velocity
+  this->constraint_matrix_.coeffRef(3 * nb_joints + 1, nb_joints) = parameters.linear_velocity_limit;
+  this->constraint_matrix_.coeffRef(3 * nb_joints + 2, nb_joints) = parameters.angular_velocity_limit;
+  this->lower_bound_constraints_(3 * nb_joints + 1) = full_displacement.get_position().norm();
+  this->lower_bound_constraints_(3 * nb_joints + 2) = full_displacement.get_orientation().vec().norm();
+
   // update the constraints
   this->solver_.updateHessianMatrix(this->hessian_);
   this->solver_.updateGradient(this->gradient_);
@@ -449,26 +503,31 @@ Model::inverse_velocity(const std::vector<state_representation::CartesianTwist>&
   this->solver_.updateLinearConstraintsMatrix(this->constraint_matrix_);
   // solve the QP problem
   this->solver_.solve();
-  Eigen::VectorXd solution = this->solver_.getSolution();
   // extract the solution
-  JointVelocities result(joint_positions.get_name(), joint_positions.get_names());
-  Eigen::VectorXd delta_q = solution.head(nb_joints);
-  double T = solution(nb_joints);
-  result.set_velocities(delta_q / T);
-  return result;
+  JointPositions joint_displacement(joint_positions.get_name(),
+                                    joint_positions.get_names(),
+                                    this->solver_.getSolution().head(nb_joints));
+  double dt = this->solver_.getSolution().tail(1)(0);
+  return JointPositions(joint_displacement) / dt;
 }
 
 state_representation::JointVelocities Model::inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
                                                               const state_representation::JointPositions& joint_positions,
-                                                              const InverseVelocityParameters& parameters) {
+                                                              const QPInverseVelocityParameters& parameters,
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
   return this->inverse_velocity(std::vector<state_representation::CartesianTwist>({cartesian_twist}),
                                 joint_positions,
-                                parameters);
+                                parameters,
+                                std::vector<std::string>({actual_frame_name}));
 }
 
 void Model::print_qp_problem() {
   std::cout << "hessian:" << std::endl;
   std::cout << this->hessian_ << std::endl;
+
+  std::cout << "gradient:" << std::endl;
+  std::cout << this->gradient_ << std::endl;
 
   for (unsigned int i = 0; i < this->constraint_matrix_.rows(); ++i) {
     std::cout << this->lower_bound_constraints_(i);

@@ -171,11 +171,49 @@ TEST_F(RobotModelKinematicsTest, TestForwardVelocity) {
   }
 }
 
-TEST_F(RobotModelKinematicsTest, DISABLED_TestInverseVelocity) {
+TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
+  std::string eef_frame = franka->get_frames().back();
   for (auto& config : test_configs) {
-    state_representation::CartesianTwist ee_twist = franka->forward_velocity(config);
-    state_representation::JointVelocities joint_twist = franka->inverse_velocity(ee_twist, config);
-    EXPECT_TRUE(joint_twist.get_velocities().isApprox(config.get_velocities()));
+    state_representation::CartesianTwist des_ee_twist = state_representation::CartesianTwist::Random(eef_frame,
+                                                                                                     franka->get_base_frame());
+    state_representation::JointVelocities joint_velocities = franka->inverse_velocity(des_ee_twist, config);
+
+    state_representation::JointState state(config);
+    state.set_velocities(joint_velocities.data());
+    state_representation::CartesianTwist act_ee_twist = franka->forward_velocity(state);
+
+    EXPECT_LT(des_ee_twist.dist(act_ee_twist), 1e-3);
+
+    // second method call the QP based inverse velocity
+    state_representation::JointVelocities joint_velocities2 = franka->inverse_velocity(des_ee_twist,
+                                                                                       config,
+                                                                                       QPInverseVelocityParameters());
+
+    state_representation::JointState state2(config);
+    state.set_velocities(joint_velocities2.data());
+    state_representation::CartesianTwist act_ee_twist2 = franka->forward_velocity(state);
+  }
+}
+
+TEST_F(RobotModelKinematicsTest, TestInverseVelocityConstraints) {
+  std::string eef_frame = franka->get_frames().back();
+  QPInverseVelocityParameters parameters;
+  parameters.linear_velocity_limit = 0.1;
+  parameters.angular_velocity_limit = 0.2;
+  for (auto& config : test_configs) {
+    state_representation::CartesianTwist des_ee_twist(eef_frame,
+                                                      Eigen::Vector3d::Identity(),
+                                                      Eigen::Vector3d::Identity(),
+                                                      franka->get_base_frame());
+
+    state_representation::JointVelocities joint_velocities = franka->inverse_velocity(des_ee_twist, config, parameters);
+
+    state_representation::JointState state(config);
+    state.set_velocities(joint_velocities.data());
+    state_representation::CartesianTwist act_ee_twist = franka->forward_velocity(state);
+
+    EXPECT_LE(act_ee_twist.get_linear_velocity().norm(), 0.1);
+    EXPECT_LE(act_ee_twist.get_angular_velocity().norm(), 0.2);
   }
 }
 
@@ -253,7 +291,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
 
   for (auto& config : test_configs) {
     state_representation::CartesianPose reference = franka->forward_kinematics(config, "panda_link8");
-    state_representation::JointPositions q = franka->inverse_kinematics(reference, "panda_link8", param);
+    state_representation::JointPositions q = franka->inverse_kinematics(reference, param, "panda_link8");
     state_representation::CartesianPose X = franka->forward_kinematics(q, "panda_link8");
     EXPECT_TRUE(((reference - X) / dt).data().cwiseAbs().maxCoeff() < tol);
   }
@@ -267,7 +305,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematicsIKDoesNotConverge) {
   param.max_number_of_iterations = 1;
 
   state_representation::CartesianPose reference = franka->forward_kinematics(config, "panda_link8");
-  EXPECT_THROW(franka->inverse_kinematics(reference, "panda_link8", param),
+  EXPECT_THROW(franka->inverse_kinematics(reference, param, "panda_link8"),
                exceptions::InverseKinematicsNotConvergingException);
 }
 

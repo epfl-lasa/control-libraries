@@ -68,6 +68,7 @@ and demonstrations for the control libraries.
 - Mark functions as static and const where possible (#95)
 - Refactor kinematics and geometry (#104)
 - Fix Model kinematics tests (#112)
+- Add function to test robot frame existence and return its id (#128)
 
 ## 1.0.0
 A set of libraries to facilitate the creation of full control loop algorithms,

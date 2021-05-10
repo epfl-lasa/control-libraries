@@ -100,6 +100,29 @@ bool Model::init_qp_solver() {
   return this->solver_.initSolver();
 }
 
+std::vector<unsigned int> Model::get_frame_ids(const std::vector<std::string>& frame_names) {
+  std::vector<unsigned int> frame_ids;
+  frame_ids.reserve(frame_names.size());
+
+  for (auto& frame_name : frame_names) {
+    if (frame_name.empty()) {
+      // get last frame if none specified
+      frame_ids.push_back(this->robot_model_.frames.size() - 1);
+    } else {
+      // throw error if specified frame does not exist
+      if (!this->robot_model_.existFrame(frame_name)) {
+        throw (exceptions::FrameNotFoundException(frame_name));
+      }
+      frame_ids.push_back(this->robot_model_.getFrameId(frame_name));
+    }
+  }
+  return frame_ids;
+}
+
+unsigned int Model::get_frame_id(const std::string& frame_name) {
+  return get_frame_ids(std::vector<std::string>{frame_name}).back();
+}
+
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                        unsigned int frame_id) {
   if (joint_positions.get_size() != this->get_number_of_joints()) {
@@ -124,17 +147,7 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                        const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
-  }
+  auto frame_id = get_frame_id(frame_name);
   return this->compute_jacobian(joint_positions, frame_id);
 }
 
@@ -165,17 +178,7 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
 Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                         const state_representation::JointVelocities& joint_velocities,
                                                         const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
-  }
+  auto frame_id = get_frame_id(frame_name);
   return this->compute_jacobian_time_derivative(joint_positions, joint_velocities, frame_id);
 }
 
@@ -248,24 +251,14 @@ std::vector<state_representation::CartesianPose> Model::forward_kinematics(const
 }
 
 state_representation::CartesianPose Model::forward_kinematics(const state_representation::JointPositions& joint_positions,
-                                                              std::string frame_name) {
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_name = this->robot_model_.frames.back().name;
-  }
-  return this->forward_kinematics(joint_positions, std::vector<std::string>{frame_name}).front();
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  return this->forward_kinematics(joint_positions, std::vector<std::string>{actual_frame_name}).front();
 }
 
 std::vector<state_representation::CartesianPose> Model::forward_kinematics(const state_representation::JointPositions& joint_positions,
                                                                            const std::vector<std::string>& frame_names) {
-  std::vector<unsigned int> frame_ids(frame_names.size());
-  for (unsigned int i = 0; i < frame_names.size(); ++i) {
-    std::string name = frame_names[i];
-    if (!this->robot_model_.existFrame(name)) {
-      throw (exceptions::FrameNotFoundException(name));
-    }
-    frame_ids[i] = this->robot_model_.getFrameId(name);
-  }
+  auto frame_ids = get_frame_ids(frame_names);
   return this->forward_kinematics(joint_positions, frame_ids);
 }
 
@@ -316,18 +309,10 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
                           const state_representation::JointPositions& joint_positions,
                           const InverseKinematicsParameters& parameters,
                           const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  if (!this->robot_model_.existFrame(actual_frame_name)) {
+    throw (exceptions::FrameNotFoundException(actual_frame_name));
   }
-  std::string actual_frame_name = this->robot_model_.frames[frame_id].name;
   // 1 second for the Newton-Raphson method
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
   // initialization of the loop variables
@@ -344,7 +329,7 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
   Eigen::VectorXd psi(this->get_number_of_joints());
   Eigen::VectorXd err(6);
   for (unsigned int i = 0; i < parameters.max_number_of_iterations; ++i) {
-    err = ((cartesian_pose - this->forward_kinematics(q, frame_id)) / dt).data();
+    err = ((cartesian_pose - this->forward_kinematics(q, actual_frame_name)) / dt).data();
     // break in case of convergence
     if (err.cwiseAbs().maxCoeff() < parameters.tolerance) {
       return q;

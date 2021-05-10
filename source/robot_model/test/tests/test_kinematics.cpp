@@ -195,6 +195,28 @@ TEST_F(RobotModelKinematicsTest, TestInverseVelocity) {
   }
 }
 
+TEST_F(RobotModelKinematicsTest, TestInverseVelocityConstraints) {
+  std::string eef_frame = franka->get_frames().back();
+  QPInverseVelocityParameters parameters;
+  parameters.linear_velocity_limit = 0.1;
+  parameters.angular_velocity_limit = 0.2;
+  for (auto& config : test_configs) {
+    state_representation::CartesianTwist des_ee_twist(eef_frame,
+                                                      Eigen::Vector3d::Identity(),
+                                                      Eigen::Vector3d::Identity(),
+                                                      franka->get_base_frame());
+
+    state_representation::JointVelocities joint_velocities = franka->inverse_velocity(des_ee_twist, config, parameters);
+
+    state_representation::JointState state(config);
+    state.set_velocities(joint_velocities.data());
+    state_representation::CartesianTwist act_ee_twist = franka->forward_velocity(state);
+
+    EXPECT_LE(act_ee_twist.get_linear_velocity().norm(), 0.1);
+    EXPECT_LE(act_ee_twist.get_angular_velocity().norm(), 0.2);
+  }
+}
+
 TEST_F(RobotModelKinematicsTest, TestInRange) {
   state_representation::JointPositions joint_positions("robot", franka->get_joint_frames());
   state_representation::JointVelocities joint_velocities("robot", franka->get_joint_frames());

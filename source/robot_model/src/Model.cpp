@@ -304,18 +304,10 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
                           const state_representation::JointPositions& joint_positions,
                           const InverseKinematicsParameters& parameters,
                           const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  if (!this->robot_model_.existFrame(actual_frame_name)) {
+    throw (exceptions::FrameNotFoundException(actual_frame_name));
   }
-  std::string actual_frame_name = this->robot_model_.frames[frame_id].name;
   // 1 second for the Newton-Raphson method
   const std::chrono::nanoseconds dt(static_cast<int>(1e9));
   // initialization of the loop variables
@@ -332,7 +324,7 @@ Model::inverse_kinematics(const state_representation::CartesianPose& cartesian_p
   Eigen::VectorXd psi(this->get_number_of_joints());
   Eigen::VectorXd err(6);
   for (unsigned int i = 0; i < parameters.max_number_of_iterations; ++i) {
-    err = ((cartesian_pose - this->forward_kinematics(q, frame_id)) / dt).data();
+    err = ((cartesian_pose - this->forward_kinematics(q, actual_frame_name)) / dt).data();
     // break in case of convergence
     if (err.cwiseAbs().maxCoeff() < parameters.tolerance) {
       return q;

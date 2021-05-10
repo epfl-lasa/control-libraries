@@ -81,6 +81,13 @@ private:
   bool init_qp_solver();
 
   /**
+   * @brief Check if frames exist in robot model and return its ids
+   * @param frame_names containing the frame names to check
+   * @return the ids of the frames
+   */
+  std::vector<unsigned int> check_frame_existence(const std::vector<std::string>& frame_names);
+
+  /**
    * @brief Compute the Jacobian from given joint positions at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
    * @param joint_id id of the frame at which to compute the Jacobian
@@ -335,7 +342,7 @@ public:
    * @return the pose of the desired frame
    */
   state_representation::CartesianPose forward_kinematics(const state_representation::JointPositions& joint_positions,
-                                                         std::string frame_name = "");
+                                                         const std::string& frame_name = "");
 
   /**
    * @brief Compute the inverse geometry, i.e. joint values from the pose of the end-effector in a iteratively manner

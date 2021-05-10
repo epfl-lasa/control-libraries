@@ -100,6 +100,24 @@ bool Model::init_qp_solver() {
   return this->solver_.initSolver();
 }
 
+std::vector<unsigned int> Model::check_frame_existence(const std::vector<std::string>& frame_names) {
+  std::vector<unsigned int> frame_ids(frame_names.size());
+  for (unsigned int i = 0; i < frame_names.size(); ++i) {
+    std::string frame_name = frame_names[i];
+    if (frame_name.empty()) {
+      // get last frame if none specified
+      frame_name = this->robot_model_.frames.back().name;
+    } else {
+      // throw error if specified frame does not exist
+      if (!this->robot_model_.existFrame(frame_name)) {
+        throw (exceptions::FrameNotFoundException(frame_name));
+      }
+    }
+    frame_ids[i] = this->robot_model_.getFrameId(frame_name);
+  }
+  return frame_ids;
+}
+
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                        unsigned int frame_id) {
   if (joint_positions.get_size() != this->get_number_of_joints()) {
@@ -124,17 +142,7 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
 
 state_representation::Jacobian Model::compute_jacobian(const state_representation::JointPositions& joint_positions,
                                                        const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
-  }
+  unsigned int frame_id = check_frame_existence(std::vector<std::string>{frame_name}).back();
   return this->compute_jacobian(joint_positions, frame_id);
 }
 
@@ -165,17 +173,7 @@ Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representati
 Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                         const state_representation::JointVelocities& joint_velocities,
                                                         const std::string& frame_name) {
-  unsigned int frame_id;
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_id = this->robot_model_.getFrameId(this->robot_model_.frames.back().name);
-  } else {
-    // throw error if specified frame does not exist
-    if (!this->robot_model_.existFrame(frame_name)) {
-      throw (exceptions::FrameNotFoundException(frame_name));
-    }
-    frame_id = this->robot_model_.getFrameId(frame_name);
-  }
+  unsigned int frame_id = check_frame_existence(std::vector<std::string>{frame_name}).back();
   return this->compute_jacobian_time_derivative(joint_positions, joint_velocities, frame_id);
 }
 
@@ -248,24 +246,14 @@ std::vector<state_representation::CartesianPose> Model::forward_kinematics(const
 }
 
 state_representation::CartesianPose Model::forward_kinematics(const state_representation::JointPositions& joint_positions,
-                                                              std::string frame_name) {
-  if (frame_name.empty()) {
-    // get last frame if none specified
-    frame_name = this->robot_model_.frames.back().name;
-  }
-  return this->forward_kinematics(joint_positions, std::vector<std::string>{frame_name}).front();
+                                                              const std::string& frame_name) {
+  std::string actual_frame_name = frame_name.empty() ? this->robot_model_.frames.back().name : frame_name;
+  return this->forward_kinematics(joint_positions, std::vector<std::string>{actual_frame_name}).front();
 }
 
 std::vector<state_representation::CartesianPose> Model::forward_kinematics(const state_representation::JointPositions& joint_positions,
                                                                            const std::vector<std::string>& frame_names) {
-  std::vector<unsigned int> frame_ids(frame_names.size());
-  for (unsigned int i = 0; i < frame_names.size(); ++i) {
-    std::string name = frame_names[i];
-    if (!this->robot_model_.existFrame(name)) {
-      throw (exceptions::FrameNotFoundException(name));
-    }
-    frame_ids[i] = this->robot_model_.getFrameId(name);
-  }
+  std::vector<unsigned int> frame_ids = check_frame_existence(frame_names);
   return this->forward_kinematics(joint_positions, frame_ids);
 }
 

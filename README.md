@@ -90,8 +90,6 @@ It can be run with several optional arguments:
 
 ### Manual installation steps
 
-This project uses CMake to generate static library objects for each of the modules.
-
 Eigen3 is required for building `state_representation` and all other libraries.
 You can install it with:
 ```shell script

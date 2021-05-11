@@ -17,8 +17,8 @@ HELP_MESSAGE="Usage: [sudo] ./install.sh [OPTIONS]
 An install script for the control libraries.
 
 Options:
-  -y, --auto               Suppresses any input prompts and
-                           automatically approves install steps.
+  -y, --auto               Suppress any input prompts and
+                           automatically approve install steps.
   -d, --dir [path]         Configure the installation directory
                            (default: /usr/local).
 

@@ -1,12 +1,12 @@
 # CHANGELOG
 
 Release Versions:
+- [2.0.0](#200)
 - [1.0.0](#100)
 
+## 2.0.0
 
-## Upcoming changes (in development)
-
-Version X.X.X introduces usage demos for CMake and ROS/ROS2 projects,
+Version 2.0.0 introduces usage demos for CMake and ROS/ROS2 projects,
 a number of new helpful methods for the `robot_model::Model` class, and 
 a new type of `VelocityImpedance` controller.
 
@@ -46,6 +46,7 @@ and demonstrations for the control libraries.
 - Add a function to check if a joint state is in range for a given robot model (#91)
 - Add a getter function to retrieve the pinocchio model of a given robot model (#111)
 - Add a function to calculate the Jacobian time derivative (#118)
+- Add basic and QP variant functions for inverse velocity (#123)
 
 **controllers**
 - Add a velocity impedance controller (#94)
@@ -60,6 +61,7 @@ and demonstrations for the control libraries.
 - Do not run the demos container if building fails (#107)
 - Remove the undefined operators that were cause linking issues (#108)
 - Revise install script (#89, #121)
+- Fix the inverse velocity (#123)
 
 ### Behind the scenes
 - Improve kinematics test coverage (#86)

@@ -68,9 +68,27 @@ They should also work on macOS and Windows, though the installation
 steps may differ. At this time no guarantees are made for library support on
 non-Linux systems.
 
-### Installation steps
+### Installation with the install script
+This project uses CMake to generate static library objects for each of the modules. 
 
-This project uses CMake to generate static library objects for each of the modules.
+To facilitate the installation process, an [install script](source/install.sh) is provided. Users who are interested in 
+the manual installation steps and/or have already installed Pinocchio refer to the 
+[manual installation steps](#manual-installation-steps) in the next section.
+
+The install script takes care of all the installation steps, including the installation and configuration of Pinocchio. 
+It can be run with several optional arguments:
+- `-y`, `--auto`: Any input prompts will be suppressed and install steps automatically approved.
+- `-d [path]`, `--dir [path]`: If provided, the installation directory will be changed to `[path]`.
+- `--no-controllers`: The controllers library will be excluded from the installation.
+- `--no-dynamical-systems`: The dynamical systems library will be excluded from the installation.
+- `--no-robot-model`: The robot model library, and therefore Pinocchio, will be excluded from the installation.
+- `--build-tests`: The unittest targets will be included in the installation.
+- `--clean`: Any previously installed header files from `/usr/local/include` and any shared library files from
+`/usr/local/lib` will be deleted before the installation.
+- `--cleandir [path]`: Any previously installed header files shared library files from `[path]` will be deleted before 
+  the installation.
+
+### Manual installation steps
 
 Eigen3 is required for building `state_representation` and all other libraries.
 You can install it with:
@@ -79,7 +97,7 @@ apt-get install libeigen3-dev
 ```
 
 Pinocchio is required for building the `robot_model` library. Installing this requires
-some additional steps; see the [example install script](source/install.sh) for reference.
+some additional steps; see the [install script](source/install.sh) for reference.
 If the `robot_model` library is not needed, you can skip the installation of Pinocchio.
 
 Once the dependencies are installed, build and install the libraries by navigating

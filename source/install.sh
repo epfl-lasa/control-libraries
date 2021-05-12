@@ -100,6 +100,9 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   git clone https://github.com/robotology/osqp-eigen.git
   cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && mkdir -p build && cd build || exit 1
   cmake .. && make -j && make install
+
+  ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/
+  ldconfig
 fi
 
 # install testing dependencies

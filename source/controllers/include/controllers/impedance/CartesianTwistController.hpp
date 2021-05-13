@@ -46,6 +46,26 @@ public:
   explicit CartesianTwistController(const Eigen::Vector4d& gains);
 
   /**
+   * @brief Copy constructor
+   * @param other the controller to copy
+   */
+  CartesianTwistController(const CartesianTwistController& other);
+
+  /**
+   * @brief Swap the values of the two controllers
+   * @param controller1 controller to be swapped with 2
+   * @param controller2 controller to be swapped with 1
+   */
+  friend void swap(CartesianTwistController& controller1, CartesianTwistController& controller2);
+
+  /**
+   * @param Assignment operator
+   * @param other the controller to copy
+   * @return reference to the controller with values from other
+   */
+  CartesianTwistController& operator=(const CartesianTwistController& other);
+
+  /**
  * @brief Setter of the linear principle damping
  * @param the new principle damping value
  */
@@ -82,6 +102,18 @@ public:
    * @param angular_damping the new angular damping value
    */
   void set_angular_gains(double angular_stiffness, double angular_damping);
+
+  /**
+   * @brief Setter of the controller gains
+   * @param linear_principle_damping damping along principle eigenvector of linear velocity error
+   * @param linear_orthogonal_damping damping along secondary eigenvectors of linear velocity error
+   * @param angular_stiffness stiffness of angular displacement
+   * @param angular_damping damping of angular velocity error
+   */
+  void set_gains(double linear_principle_damping,
+                 double linear_orthogonal_damping,
+                 double angular_stiffness,
+                 double angular_damping);
 
   /**
    * @brief Setter of the controller gains
@@ -125,5 +157,14 @@ public:
                                                    const state_representation::CartesianState& feedback_state,
                                                    const state_representation::Jacobian& jacobian) override;
 };
+
+inline void swap(CartesianTwistController& controller1, CartesianTwistController& controller2) {
+  std::swap(controller1.linear_principle_damping_, controller2.linear_principle_damping_);
+  std::swap(controller1.linear_orthogonal_damping_, controller2.linear_orthogonal_damping_);
+  std::swap(controller1.angular_stiffness_, controller2.angular_stiffness_);
+  std::swap(controller1.angular_damping_, controller2.angular_damping_);
+  swap(controller1.dissipative_ctrl_, controller2.dissipative_ctrl_);
+  swap(controller1.velocity_impedance_ctrl_, controller2.velocity_impedance_ctrl_);
+}
 
 }// namespace controllers

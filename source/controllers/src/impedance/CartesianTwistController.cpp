@@ -22,10 +22,34 @@ CartesianTwistController::CartesianTwistController(const Eigen::Vector4d& gains)
 
 }
 
+CartesianTwistController::CartesianTwistController(const CartesianTwistController& other) :
+    linear_principle_damping_(std::make_shared<Parameter<double>>("linear_principle_damping", other.get_gains()(0))),
+    linear_orthogonal_damping_(std::make_shared<Parameter<double>>("linear_orthogonal_damping", other.get_gains()(1))),
+    angular_stiffness_(std::make_shared<Parameter<double>>("angular_stiffness", other.get_gains()(2))),
+    angular_damping_(std::make_shared<Parameter<double>>("angular_damping", other.get_gains()(3))),
+    dissipative_ctrl_(other.dissipative_ctrl_),
+    velocity_impedance_ctrl_(other.velocity_impedance_ctrl_) {
+}
+
+CartesianTwistController& CartesianTwistController::operator=(const CartesianTwistController& other) {
+  CartesianTwistController tmp(other);
+  swap(*this, tmp);
+  return *this;
+}
+
+void CartesianTwistController::set_gains(double linear_principle_damping,
+                                         double linear_orthogonal_damping,
+                                         double angular_stiffness,
+                                         double angular_damping) {
+  set_linear_gains(linear_principle_damping, linear_orthogonal_damping);
+  set_angular_gains(angular_stiffness, angular_damping);
+}
+
 void CartesianTwistController::set_gains(const Eigen::Vector4d& gains) {
   set_linear_gains(gains(0), gains(1));
   set_angular_gains(gains(2), gains(3));
 }
+
 
 Eigen::Vector4d CartesianTwistController::get_gains() const {
   return Eigen::Vector4d(linear_principle_damping_->get_value(),

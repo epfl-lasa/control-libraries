@@ -8,6 +8,28 @@
 using namespace controllers::impedance;
 using namespace state_representation;
 
+TEST(CartesianTwistControllerTest, Constructors) {
+  CartesianTwistController a(1, 2, 3, 4);
+  CartesianTwistController b(Eigen::Vector4d(11, 22, 33, 44));
+
+  EXPECT_NE(a.get_gains().norm(), b.get_gains().norm());
+
+  // copy constructor
+  CartesianTwistController c(a);
+  EXPECT_DOUBLE_EQ(a.get_gains().norm(), c.get_gains().norm());
+
+  // check that the copy was performed deeply and correctly (no shared references)
+  c.set_gains(Eigen::Vector4d(111, 222, 333, 444));
+  EXPECT_NE(a.get_gains().norm(), c.get_gains().norm());
+
+  // check copy by assignment
+  c = b;
+  EXPECT_DOUBLE_EQ(b.get_gains().norm(), c.get_gains().norm());
+
+  // check that the copy was performed deeply and correctly (no shared references)
+  c.set_gains(Eigen::Vector4d(111, 222, 333, 444));
+  EXPECT_NE(b.get_gains().norm(), c.get_gains().norm());
+}
 
 TEST(CartesianTwistControllerTest, CartesianWrench) {
   CartesianTwistController controller(100, 100, 5, 5);

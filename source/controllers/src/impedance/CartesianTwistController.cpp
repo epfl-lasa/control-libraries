@@ -8,8 +8,10 @@ CartesianTwistController::CartesianTwistController(double linear_principle_dampi
                                                    double linear_orthogonal_damping,
                                                    double angular_stiffness,
                                                    double angular_damping) :
-    linear_principle_damping_(std::make_shared<Parameter<double>>("linear_principle_damping", linear_principle_damping)),
-    linear_orthogonal_damping_(std::make_shared<Parameter<double>>("linear_orthogonal_damping", linear_orthogonal_damping)),
+    linear_principle_damping_(std::make_shared<Parameter<double>>("linear_principle_damping",
+                                                                  linear_principle_damping)),
+    linear_orthogonal_damping_(std::make_shared<Parameter<double>>("linear_orthogonal_damping",
+                                                                   linear_orthogonal_damping)),
     angular_stiffness_(std::make_shared<Parameter<double>>("angular_stiffness", angular_stiffness)),
     angular_damping_(std::make_shared<Parameter<double>>("angular_damping", angular_damping)),
     dissipative_ctrl_(ComputationalSpaceType::LINEAR),
@@ -18,7 +20,7 @@ CartesianTwistController::CartesianTwistController(double linear_principle_dampi
 }
 
 CartesianTwistController::CartesianTwistController(const Eigen::Vector4d& gains) :
-  CartesianTwistController(gains(0), gains(1), gains(2), gains(3)) {
+    CartesianTwistController(gains(0), gains(1), gains(2), gains(3)) {
 
 }
 
@@ -49,7 +51,6 @@ void CartesianTwistController::set_gains(const Eigen::Vector4d& gains) {
   set_linear_gains(gains(0), gains(1));
   set_angular_gains(gains(2), gains(3));
 }
-
 
 Eigen::Vector4d CartesianTwistController::get_gains() const {
   return Eigen::Vector4d(linear_principle_damping_->get_value(),
@@ -93,8 +94,8 @@ void CartesianTwistController::set_angular_gains(double angular_stiffness, doubl
   velocity_impedance_ctrl_ = VelocityImpedance<CartesianState>(k, d);
 }
 
-std::list<std::shared_ptr<state_representation::ParameterInterface>> CartesianTwistController::get_parameters() const {
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<ParameterInterface>> CartesianTwistController::get_parameters() const {
+  std::list<std::shared_ptr<ParameterInterface>> param_list;
   param_list.push_back(linear_principle_damping_);
   param_list.push_back(linear_orthogonal_damping_);
   param_list.push_back(angular_stiffness_);
@@ -102,16 +103,16 @@ std::list<std::shared_ptr<state_representation::ParameterInterface>> CartesianTw
   return param_list;
 }
 
-state_representation::CartesianState CartesianTwistController::compute_command(const state_representation::CartesianState& desired_state,
-                                                                               const state_representation::CartesianState& feedback_state) {
+CartesianState
+CartesianTwistController::compute_command(const CartesianState& desired_state, const CartesianState& feedback_state) {
   CartesianWrench command = dissipative_ctrl_.compute_command(CartesianTwist(desired_state), CartesianTwist(feedback_state));
   command += velocity_impedance_ctrl_.compute_command(desired_state, feedback_state);
   return command;
 }
 
-state_representation::JointState CartesianTwistController::compute_command(const state_representation::CartesianState& desired_state,
-                                                                           const state_representation::CartesianState& feedback_state,
-                                                                           const state_representation::Jacobian& jacobian) {
+JointState CartesianTwistController::compute_command(const CartesianState& desired_state,
+                                                     const CartesianState& feedback_state,
+                                                     const Jacobian& jacobian) {
   CartesianWrench wrench = compute_command(desired_state, feedback_state);
   return jacobian.transpose() * wrench;
 }

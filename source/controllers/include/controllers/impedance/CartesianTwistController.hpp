@@ -66,15 +66,15 @@ public:
   CartesianTwistController& operator=(const CartesianTwistController& other);
 
   /**
- * @brief Setter of the linear principle damping
- * @param the new principle damping value
- */
+   * @brief Setter of the linear principle damping
+   * @param the new principle damping value
+   */
   void set_linear_principle_damping(double linear_principle_damping);
 
   /**
- * @brief Setter of the linear orthogonal damping
- * @param the new orthogonal damping value
- */
+   * @brief Setter of the linear orthogonal damping
+   * @param the new orthogonal damping value
+   */
   void set_linear_orthogonal_damping(double linear_orthogonal_damping);
 
   /**

@@ -4,6 +4,15 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+
+## Upcoming changes (in development)
+
+### Features
+
+- Add a concrete CartesianTwistController to easily control
+linear and angular velocity with a set of 4 gains (#135)
+
+
 ## 2.0.0
 
 Version 2.0.0 introduces usage demos for CMake and ROS/ROS2 projects,

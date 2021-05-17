@@ -2,34 +2,91 @@
 
 This directory defines Python bindings for the control libraries.
 
+## Installation
+
+You must first install `control_libraries` before you can install the Python bindings.
+Refer to the installation instructions in the top-level [README](../README.md) for more information.
+
+Additionally, the installation of the bindings requires the following prerequisites:
+- `python3` >= 3.0
+- `pip3` >= 10.0.0
+
+The installation itself is then quite straightforward:
+```shell script
+git clone https://github.com/epfl-lasa/control_libraries
+
+## install control_libraries (skip this stage if already done)
+bash control_libraries/source/install.sh
+
+## install the bindings using the pip installer
+pip3 install control_libraries/python
+```
+
+The example above installs the module to the default dist-packages location.
+You can see more information about the installed module using `pip3 show control-libraries`.
+
+The process also works with Python virtual environments. For example, with `pipenv`:
+```shell script
+## pip3 install pipenv
+
+pipenv install control_libraries/python
+```
+
+Once installed, you can simply import the module with an optional short alias:
+```python
+#!/usr/bin/env python
+import state_representation as sr
+
+print(sr.__version__)
+
+A = sr.CartesianState.Random("A")
+print(A)
+```
+
+Or, directly import specific classes from the module.
+```python
+#!/usr/bin/env python
+from state_representation import JointState
+
+B = JointState.Random("B", 3)
+```
+
 ## Current status
 
 The Python binding project is currently under development.
 Bindings exist for the following libraries and components:
 
-- `py_state_representation`: state_representation
-  - CartesianState
-  - JointState
+- `state_representation`:
+  - `CartesianState`
+  - `JointState`
 
 ## About
 
 [PyBind11](https://PyBind11.readthedocs.io/en/stable/index.html) is used to generate
 Python bindings for the classes and functions in control libraries.
 
-A docker container configures a pipenv environment with the necessary PyBind and numpy installations.
-This is then used to compile a CMake project using PyBind macros.
+The source files in the [`source`](./source) directory define the bindings between
+each Python module and the respective C++ library.
 
-The project sources are in the `source` directory and define the
-bindings between each Python module and the respective C++ library.
+The `setup.py` and `pyproject.toml` files are used to configure the build and installation
+of the Python bindings. The `.toml` file allows `pip` to automatically fetch the 
+installation dependencies (namely `setuptools` and `pybind11`) in a temporary cache,
+allowing the subsequent `setup.py` to be evaluated without needing a local installation of `pybind11`.
+This feature requires a [`pip`](https://pypi.org/project/pip/) version 10.0 or newer.
 
-THe output of the CMake project is a shared library file specifically formatted for use in Python.
-When this library is on the path, it can be imported and used in Python projects.
+The package is named `control-libraries`, but contains specific modules for importing. 
+These are named the same as the standard modules of control libraries (e.g. `state_representation`).
 
-The `tests` directory contains some Python scripts that import and check the bindings.
+The [`tests`](./tests) directory contains some Python scripts that import and check the bindings.
+They are not currently comprehensive unit tests and are more for illustrative purposes.
 
-## Generating the Python module 
+## Dockerfile
 
-The [run.sh](./run.sh) script will build the docker image and launch the container.
-On startup, this will enter the pipenv environment, build and install the python library
-to a `lib` directory, run the scripts in the `tests` directory, and finally place the user
-in an interactive pipenv shell for further testing.
+A Dockerfile and run script are provided to test the installation of the bindings.
+
+The docker image installs the core control libraries and subsequently installs the python bindings.
+
+The [`run.sh`](./run.sh) script will build the docker image and launch an interactive container
+with the test files in the [`tests`](./tests) directory copied to the local path.
+
+You can run these tests with `python3 <test_name.py>`, or just enter a python shell with `python3`.

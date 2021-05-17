@@ -1,14 +1,5 @@
 FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
 
-# install control libraries
-WORKDIR /tmp
-RUN git clone https://github.com/epfl-lasa/control_libraries.git \
-  && mkdir -p control_libraries/source/build \
-  && cd control_libraries/source/build \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ROBOT_MODEL="ON" -DBUILD_ROBOT_MODEL="OFF" -DBUILD_CONTROLLERS="OFF" .. \
-  && make -j \
-  && make install
-
 # install python dependencies
 RUN apt-get update && apt-get install -y \
     python3-dev \
@@ -16,15 +7,16 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install pipenv
+WORKDIR /source
+RUN git clone https://github.com/epfl-lasa/control_libraries
+RUN bash control_libraries/source/install.sh --auto --no-controllers --no-dynamical-systems --no-robot-model
+RUN ldconfig
 
-RUN rm -r /tmp
+COPY source control_libraries/python/source
+COPY pyproject.toml setup.py control_libraries/python/
+RUN pip3 install control_libraries/python
 
-RUN useradd -m dev
-USER dev
-WORKDIR /home/dev
-RUN export PATH=$PATH:/home/dev/.local/bin/
-RUN pipenv install
+WORKDIR /tests
+COPY tests .
 
-
-ENTRYPOINT ["/bin/bash", "/home/dev/entrypoint.sh"]
+CMD ["/bin/bash"]

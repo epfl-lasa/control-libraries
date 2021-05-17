@@ -14,12 +14,21 @@
 #include <state_representation/space/cartesian/CartesianState.hpp>
 #include <state_representation/robot/JointState.hpp>
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 namespace py = pybind11;
 using namespace pybind11::literals;
 using namespace state_representation;
 
-PYBIND11_MODULE(py_state_representation, m) {
+PYBIND11_MODULE(state_representation, m) {
   m.doc() = "Python bindings for control_libraries state_representation";
+
+  #ifdef MODULE_VERSION_INFO
+  m.attr("__version__") = MACRO_STRINGIFY(MODULE_VERSION_INFO);
+  #else
+  m.attr("__version__") = "dev";
+  #endif
 
   // CartesianState
   py::enum_<CartesianStateVariable>(m, "CartesianStateVariable")

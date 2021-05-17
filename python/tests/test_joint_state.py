@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from py_state_representation import JointState
+from state_representation import JointState
 
 methods = [m for m in dir(JointState) if callable(getattr(JointState, m))]
 expected = [

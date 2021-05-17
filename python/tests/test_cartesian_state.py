@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from py_state_representation import CartesianState, dist
+from state_representation import CartesianState, dist
 import numpy as np
 
 methods = [m for m in dir(CartesianState) if callable(getattr(CartesianState, m))]

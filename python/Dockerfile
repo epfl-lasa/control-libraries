@@ -16,7 +16,15 @@ COPY source control_libraries/python/source
 COPY pyproject.toml setup.py control_libraries/python/
 RUN pip3 install control_libraries/python
 
-WORKDIR /tests
+RUN useradd --create-home --shell /bin/bash dev
+USER dev
+WORKDIR /home/dev
+
+RUN (\
+    echo "alias pip=pip3"; \
+    echo 'alias python=python3'; \
+    ) >> ./.bashrc
+
 COPY tests .
 
 CMD ["/bin/bash"]

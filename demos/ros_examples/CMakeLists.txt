@@ -29,6 +29,8 @@ find_library(robot_model REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     tf
+    std_msgs
+    sensor_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS system)

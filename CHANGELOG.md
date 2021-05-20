@@ -4,14 +4,13 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-
 ## Upcoming changes (in development)
 
 ### Features
 
+- Add initial Python bindings for state_representation classes (#113)
 - Add a concrete CartesianTwistController to easily control
 linear and angular velocity with a set of 4 gains (#135)
-
 
 ## 2.0.0
 

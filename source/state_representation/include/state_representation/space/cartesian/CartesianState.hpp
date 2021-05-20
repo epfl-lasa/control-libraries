@@ -171,7 +171,7 @@ public:
   const Eigen::Quaterniond& get_orientation() const;
 
   /**
-   * @brief Getter of the orientation attribute as Vector4d of coefficients.
+   * @brief Getter of the orientation attribute as Vector4d of coefficients
    * Beware, quaternion coefficients are returned using the (w, x, y, z) convention
    */
   Eigen::Vector4d get_orientation_coefficients() const;
@@ -200,7 +200,7 @@ public:
   const Eigen::Vector3d& get_angular_velocity() const;
 
   /**
-   * @brief Getter of a twist from linear and angular velocities attribute
+   * @brief Getter of the 6d twist from linear and angular velocity attributes
    */
   Eigen::Matrix<double, 6, 1> get_twist() const;
 
@@ -215,7 +215,7 @@ public:
   const Eigen::Vector3d& get_angular_acceleration() const;
 
   /**
-   * @brief Getter of accelerations from linear and angular accelerations attribute
+   * @brief Getter of the 6d acceleration from linear and angular acceleration attributes
    */
   Eigen::Matrix<double, 6, 1> get_accelerations() const;
 
@@ -230,7 +230,7 @@ public:
   const Eigen::Vector3d& get_torque() const;
 
   /**
-   * @brief Getter of a wrench from force and torque attributes
+   * @brief Getter of the 6d wrench from force and torque attributes
    */
   Eigen::Matrix<double, 6, 1> get_wrench() const;
 
@@ -276,7 +276,7 @@ public:
   void set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation);
 
   /**
-   * @brief Setter of the pose from both position and orientation as Eigen 7D vector
+   * @brief Setter of the pose from both position and orientation as Eigen 7d vector
    * @param pose the pose as a 7d vector. Beware, quaternion coefficients 
    * uses the (w, x, y, z) convention
    */
@@ -300,7 +300,7 @@ public:
   void set_angular_velocity(const Eigen::Vector3d& angular_velocity);
 
   /**
-   * @brief Setter of the linear and angular velocities from a single twist vector
+   * @brief Setter of the linear and angular velocities from a 6d twist vector
    */
   void set_twist(const Eigen::Matrix<double, 6, 1>& twist);
 
@@ -315,7 +315,7 @@ public:
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration);
 
   /**
-   * @brief Setter of the linear and angular accelerations from a single acceleration vector
+   * @brief Setter of the linear and angular accelerations from a 6d acceleration vector
    */
   void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations);
 
@@ -330,7 +330,7 @@ public:
   void set_torque(const Eigen::Vector3d& torque);
 
   /**
-   * @brief Setter of the force and torque from a single wrench vector
+   * @brief Setter of the force and torque from a 6d wrench vector
    */
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench);
 
@@ -362,14 +362,14 @@ public:
   CartesianState copy() const;
 
   /**
-   * @brief Returns the data as the concatenation of
+   * @brief Return the data as the concatenation of
    * all the state variables in a single vector
    * @return the concatenated data vector
    */
   virtual Eigen::VectorXd data() const;
 
   /**
-   * @brief Returns the data vector as an Eigen Array
+   * @brief Return the data vector as an Eigen Array
    * @return the concatenated data array
    */
   Eigen::ArrayXd array() const;
@@ -431,13 +431,13 @@ public:
   CartesianState operator-(const CartesianState& state) const;
 
   /**
-   * @brief compute the inverse of the current CartesianState
+   * @brief Compute the inverse of the current CartesianState
    * @return the inverse corresponding to b_S_f (assuming this is f_S_b) 
    */
   CartesianState inverse() const;
 
   /**
-   * @brief Compute the distance between two states as the sum of distances between each features
+   * @brief Compute the distance to another state as the sum of distances between each features
    * @param state the second state
    * @param state_variable_type name of the variable from the CartesianStateVariable structure to apply
    * the distance on. Default ALL for full distance across all dimensions
@@ -494,8 +494,8 @@ public:
                      const CartesianStateVariable& state_variable_type);
 
   /**
-   * @brief Return the state as a std vector of floats
-   * @return std::vector<float> the state vector as a std vector
+   * @brief Return the state as a std vector
+   * @return std::vector<double> the state vector as a std vector
    */
   std::vector<double> to_std_vector() const;
 

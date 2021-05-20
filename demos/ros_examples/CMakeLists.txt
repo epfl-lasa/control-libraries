@@ -57,8 +57,7 @@ set(DEMOS_SCRIPTS
     task_space_control_loop
     joint_space_velocity_control
 )
-
-set(FIXTURE_INSTALL_PATH ${CATKIN_PACKAGE_SHARE_DESTINATION}/fixtures/)
+set(FIXTURE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/fixtures/)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})

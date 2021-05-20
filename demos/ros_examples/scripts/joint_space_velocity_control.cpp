@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle node_handle;
 
   std::string robot_name = "franka";
-  std::string urdf_path = "/home/ros/ros_ws/install/" + std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
+  std::string urdf_path = std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
   RobotInterface robot(&node_handle, robot_name, urdf_path);
 
   int freq = 500;

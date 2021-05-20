@@ -19,16 +19,16 @@ private:
   Model robot_;
   ros::Subscriber subscriber_;
   ros::Publisher publisher_;
+  JointState joint_state_;
 
 public:
-  JointState joint_state;
   bool state_received = false;
 
   explicit RobotInterface(ros::NodeHandle* node_handle, const std::string& robot_name, const std::string& urdf_path) :
       robot_(robot_name, urdf_path) {
-    this->subscriber_ = node_handle->subscribe("/joint_states", 1, &RobotInterface::robot_state_callback, this);
-    this->publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("/velocity_controller/command", 10, false);
-    joint_state = JointState(robot_name, robot_.get_joint_frames());
+    subscriber_ = node_handle->subscribe("/joint_states", 10, &RobotInterface::robot_state_callback, this);
+    publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("/velocity_controller/command", 10, false);
+    joint_state_ = JointState(robot_name, robot_.get_joint_frames());
   }
 
 private:
@@ -36,28 +36,28 @@ private:
     if (!state_received) {
       state_received = true;
     }
-    joint_state.set_positions(msg->position);
-    joint_state.set_velocities(msg->velocity);
-    joint_state.set_torques(msg->effort);
+    joint_state_.set_positions(msg->position);
+    joint_state_.set_velocities(msg->velocity);
+    joint_state_.set_torques(msg->effort);
   }
 
 public:
   void publish(const JointVelocities& command) {
     std_msgs::Float64MultiArray msg;
     msg.data = command.to_std_vector();
-    this->publisher_.publish(msg);
+    publisher_.publish(msg);
   }
 
   CartesianPose get_eef_pose() {
-    return robot_.forward_kinematics(joint_state);
+    return robot_.forward_kinematics(joint_state_);
   }
 
   CartesianTwist get_eef_twist() {
-    return robot_.forward_velocity(joint_state);
+    return robot_.forward_velocity(joint_state_);
   }
 
-  Jacobian get_jacobian() {
-    return robot_.compute_jacobian(joint_state);
+  JointVelocities inverse_velocity(const CartesianTwist& twist) {
+    return robot_.inverse_velocity(twist, joint_state_);
   }
 
   const std::string& get_robot_name() {
@@ -79,7 +79,7 @@ void control_loop(RobotInterface& robot, const int& freq) {
     if (robot.state_received) {
       CartesianTwist twist = linear_ds.evaluate(robot.get_eef_pose());
       twist.clamp(0.25, 0.5);
-      JointVelocities command = robot.get_jacobian().solve(twist);
+      JointVelocities command = robot.inverse_velocity(twist);
       robot.publish(command);
       rate.sleep();
     }

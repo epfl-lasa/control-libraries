@@ -1,0 +1,3 @@
+<launch>
+    <node type="joint_space_velocity_control" name="joint_space_velocity_control" pkg="ros_examples"/>
+</launch>

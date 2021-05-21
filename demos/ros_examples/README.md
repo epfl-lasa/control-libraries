@@ -43,11 +43,20 @@ The robot moves a pose towards a random attractor in a `500Hz` control loop.
 At each control step, the scripts publishes the desired joint velocity to the `/velocity_controller/command`.
 
 To run this script and visualize the robot, follow the steps below to launch a `PyBullet` simulation with a ROS interface:
-```bash
-# in a directory of your choice (preferably not in the control_libraries directory)
-git clone https://github.com/domire8/pybullet_ros.git
-cd pybullet_ros/docker
-bash build-run.sh # this will build a docker image and spin up a container
-# inside the container
-roslaunch pybullet_ros franka.launch
-```
+
+- in a terminal, run:
+    ```bash
+    cd control_libraries/demos/ros_examples
+    bash run-demo.sh # this will build a docker image and spin up a container
+    # inside the container
+    roslaunch ros_examples joint_space_velocity_control.launch
+    ```
+- in a second terminal, run:
+    ```bash
+    # in a directory of your choice (preferably not in the control_libraries directory)
+    git clone https://github.com/domire8/pybullet_ros.git
+    cd pybullet_ros/docker
+    bash build-run.sh # this will build a docker image and spin up a container
+    # inside the container
+    roslaunch pybullet_ros franka.launch
+    ```

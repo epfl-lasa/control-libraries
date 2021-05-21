@@ -54,7 +54,7 @@ To run this script and visualize the robot, follow the steps below to launch a `
 - in a second terminal, run:
     ```bash
     # in a directory of your choice (preferably not in the control_libraries directory)
-    git clone https://github.com/domire8/pybullet_ros.git
+    git clone https://github.com/domire8/pybullet_ros.git --branch control-libraries-demo --single-branch
     cd pybullet_ros/docker
     bash build-run.sh # this will build a docker image and spin up a container
     # inside the container

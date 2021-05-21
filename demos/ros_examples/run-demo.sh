@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # change to false if not using nvidia graphic cards
-USE_NVIDIA_TOOLKIT=true
+USE_NVIDIA_TOOLKIT=false
 
 # Build a docker image to compile the library and run tests
 MULTISTAGE_TARGET="runtime-demonstrations"

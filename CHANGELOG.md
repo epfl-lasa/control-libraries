@@ -11,6 +11,8 @@ Release Versions:
 - Add initial Python bindings for state_representation classes (#113)
 - Add a concrete CartesianTwistController to easily control
 linear and angular velocity with a set of 4 gains (#135)
+- Add a joint velocity control demo in the ROS demo package that 
+showcases the `robot_model` module (#136)
 
 ## 2.0.0
 

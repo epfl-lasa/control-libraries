@@ -131,3 +131,47 @@ This requires GTest to be installed on your system. You can then use `make test`
 Alternatively, you can include the source code for each library as submodules in your own CMake project,
 using the CMake directive `add_subdirectory(...)` to link it with your project.
 
+# Troubleshooting
+
+This section lists common problems that might come up when using the `control_libraries` modules.
+
+## Boost container limit compile error in ROS
+When using the `robot_model` module in ROS and trying to `catkin_make` the workspace, it might produce the following error:
+```bash
+/opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error "BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE"
+#23 2.389    29 |     # error "BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE"
+```
+In order to avoid this error and successfully `catkin_make` the workspace, make sure that the `CMakeList.txt` of the ROS 
+package contains all the necessary directives, i.e. on top of
+```bash
+
+list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
+find_package(Eigen3 REQUIRED)
+find_package(pinocchio REQUIRED)
+find_package(OsqpEigen REQUIRED)
+find_package(osqp REQUIRED)
+
+find_library(state_representation REQUIRED)
+find_library(dynamical_systems REQUIRED)
+find_library(controllers REQUIRED)
+find_library(robot_model REQUIRED)
+...
+include_directories(
+    ${catkin_INCLUDE_DIRS}
+    ${Eigen3_INCLUDE_DIRS}
+    ${STATE_REPRESENTATION_INCLUDE_DIR}
+    ${DYNAMICAL_SYSTEMS_INCLUDE_DIR}
+    ${ROBOT_MODEL_INCLUDE_DIR}
+    ${CONTROLLERS_INCLUDE_DIR}
+    ${PINOCCHIO_INCLUDE_DIR}
+    ${OsqpEigen_INCLUDE_DIR}
+    /opt/openrobots/include
+)
+```
+it should also have
+```bash
+find_package(Boost REQUIRED COMPONENTS system)
+add_compile_definitions(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)
+add_compile_definitions(BOOST_MPL_LIMIT_LIST_SIZE=30)
+```
+For a comprehensive example, please check the [`CMakeLists.txt` of the ROS demos](/demos/ros_examples/CMakeLists.txt).

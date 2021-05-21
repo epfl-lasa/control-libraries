@@ -32,3 +32,31 @@ rolaunch ros_examples task_space_control_loop.launch
 This simple demonstration shows how to create a control loop with a `Linear` dynamical system in task space (`CartesianState`).
 It moves a pose towards a random attractor in a `100Hz` control loop.
 At each control step, the scripts publishes the current and attractor poses using ROS `tf` for a visualization in `rviz`.
+
+## `joint_space_velocity_control`
+* **Showcased libraries:** `state_representation`, `dynamical_systems`, `robot_model`
+
+This demonstration shows how to create a control loop with a `Linear` dynamical system in task space (`CartesianState`) 
+and compute forward kinematics and inverse velocity with a robot `Model`. A ROS subscriber is set up to receive the joint 
+state from the `/joint_states` topic.
+The robot moves a pose towards a random attractor in a `500Hz` control loop.
+At each control step, the scripts publishes the desired joint velocity to the `/velocity_controller/command`.
+
+To run this script and visualize the robot, follow the steps below to launch a `PyBullet` simulation with a ROS interface:
+
+- in a terminal, run:
+    ```bash
+    cd control_libraries/demos/ros_examples
+    bash run-demo.sh # this will build a docker image and spin up a container
+    # inside the container
+    roslaunch ros_examples joint_space_velocity_control.launch
+    ```
+- in a second terminal, run:
+    ```bash
+    # in a directory of your choice (preferably not in the control_libraries directory)
+    git clone https://github.com/domire8/pybullet_ros.git --branch control-libraries-demo --single-branch
+    cd pybullet_ros/docker
+    bash build-run.sh # this will build a docker image and spin up a container
+    # inside the container
+    roslaunch pybullet_ros franka.launch
+    ```

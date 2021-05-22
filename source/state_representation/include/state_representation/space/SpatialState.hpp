@@ -58,7 +58,7 @@ public:
    * @brief Check if the state is compatible for operations with the state given as argument
    * @param state the state to check compatibility with
    */
-  virtual bool is_compatible(const State& state) const;
+  virtual bool is_compatible(const State& state) const override;
 };
 
 inline void swap(SpatialState& state1, SpatialState& state2) {

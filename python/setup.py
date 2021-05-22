@@ -27,7 +27,7 @@ ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
 
 ext_modules = [
     Pybind11Extension("state_representation",
-                      sorted(glob("source/state_representation_bindings.cpp")),
+                      sorted(glob("source/state_representation/*.cpp")),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=__libraries__,

@@ -62,7 +62,7 @@ public:
   explicit State(const StateType& type);
 
   /**
-   * @brief Constructor with name and reference frame specification
+   * @brief Constructor with name specification
    * @param type the type of State
    * @param name the name of the State
    * @param empty specify if the state is initialized as empty, default true
@@ -75,7 +75,7 @@ public:
   State(const State& state);
 
   /**
-   * @brief Swap the values of the two State
+   * @brief Swap the values of the two States
    * @param state1 State to be swapped with 2
    * @param state2 State to be swapped with 1
    */

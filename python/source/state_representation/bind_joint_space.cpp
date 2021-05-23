@@ -101,6 +101,17 @@ void joint_positions(py::module_& m) {
   c.def_static("Random", py::overload_cast<const std::string&, unsigned int>(&JointPositions::Random), "Constructor for the random JointPositions", "robot_name"_a, "nb_joints"_a);
   c.def_static("Random", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointPositions::Random), "Constructor for the random JointPositions", "robot_name"_a, "joint_names"_a);
 
+  std::vector<std::string> deleted_attributes = {
+      "velocities",
+      "accelerations",
+      "torques",
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const JointPositions&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const JointPositions& positions) -> JointPositions { return positions; }, "Deleted method from parent class.");
+  }
+
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -149,6 +160,17 @@ void joint_velocities(py::module_& m) {
   c.def_static("Random", py::overload_cast<const std::string&, unsigned int>(&JointVelocities::Random), "Constructor for the random JointVelocities", "robot_name"_a, "nb_joints"_a);
   c.def_static("Random", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointVelocities::Random), "Constructor for the random JointVelocities", "robot_name"_a, "joint_names"_a);
 
+  std::vector<std::string> deleted_attributes = {
+      "positions",
+      "accelerations",
+      "torques",
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const JointVelocities&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const JointVelocities& velocities) -> JointVelocities { return velocities; }, "Deleted method from parent class.");
+  }
+
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -196,6 +218,17 @@ void joint_torques(py::module_& m) {
   c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointTorques::Zero), "Constructor for the zero JointTorques", "robot_name"_a, "joint_names"_a);
   c.def_static("Random", py::overload_cast<const std::string&, unsigned int>(&JointTorques::Random), "Constructor for the random JointTorques", "robot_name"_a, "nb_joints"_a);
   c.def_static("Random", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointTorques::Random), "Constructor for the random JointTorques", "robot_name"_a, "joint_names"_a);
+
+  std::vector<std::string> deleted_attributes = {
+      "positions",
+      "velocities",
+      "accelerations",
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const JointTorques&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const JointTorques& torques) -> JointTorques { return torques; }, "Deleted method from parent class.");
+  }
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);

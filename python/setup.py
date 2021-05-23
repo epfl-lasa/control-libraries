@@ -44,6 +44,7 @@ setup(
     description="Python bindings for the C++ control libraries",
     long_description="",
     ext_modules=ext_modules,
+    test_suite="tests",
     python_requires='>=3',
     license='GNU GPL v3',
     zip_safe=False,

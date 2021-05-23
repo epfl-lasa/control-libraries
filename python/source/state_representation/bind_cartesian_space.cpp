@@ -61,7 +61,7 @@ void cartesian_state(py::module_& m) {
   c.def("get_twist", &CartesianState::get_twist, "Getter of the 6d twist from linear and angular velocity attributes");
 
   c.def("get_linear_acceleration", &CartesianState::get_linear_acceleration, "Getter of the linear acceleration attribute");
-  c.def("get_angular_velocity", &CartesianState::get_angular_acceleration, "Getter of the linear acceleration attribute");
+  c.def("get_angular_acceleration", &CartesianState::get_angular_acceleration, "Getter of the linear acceleration attribute");
   c.def("get_accelerations", &CartesianState::get_accelerations, "Getter of the 6d accelerations from linear and angular acceleration attributes");
 
   c.def("get_force", &CartesianState::get_force, "Getter of the force attribute");
@@ -81,7 +81,7 @@ void cartesian_state(py::module_& m) {
   c.def("set_twist", &CartesianState::set_twist, "Setter of the linear and angular velocities from a 6d twist vector");
 
   c.def("set_linear_acceleration", &CartesianState::set_linear_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_angular_velocity", &CartesianState::set_angular_acceleration, "Setter of the linear acceleration attribute");
+  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the linear acceleration attribute");
   c.def("set_accelerations", &CartesianState::set_accelerations, "Setter of the linear and angular accelerations from a 6d acceleration vector");
 
   c.def("set_force", &CartesianState::set_force, "Setter of the force attribute");
@@ -136,6 +136,23 @@ void cartesian_pose(py::module_& m) {
   c.def_static("Identity", &CartesianPose::Identity, "Constructor for the identity pose", "name"_a, "reference"_a=std::string("world"));
   c.def_static("Random", &CartesianPose::Random, "Constructor for a random pose", "name"_a, "reference"_a=std::string("world"));
 
+  std::vector<std::string> deleted_attributes = {
+      "linear_velocity",
+      "angular_velocity",
+      "twist",
+      "linear_acceleration",
+      "angular_acceleration",
+      "accelerations",
+      "force",
+      "torque",
+      "wrench"
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const CartesianPose&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianPose& pose) -> CartesianPose { return pose; }, "Deleted method from parent class.");
+  }
+
   c.def(py::self *= py::self);
   c.def(py::self * py::self);
   c.def(py::self * Eigen::Vector3d());
@@ -178,6 +195,23 @@ void cartesian_twist(py::module_& m) {
 
   c.def_static("Zero", &CartesianTwist::Zero, "Constructor for the zero twist", "name"_a, "reference"_a=std::string("world"));
   c.def_static("Random", &CartesianTwist::Random, "Constructor for a random twist", "name"_a, "reference"_a=std::string("world"));
+
+  std::vector<std::string> deleted_attributes = {
+      "position",
+      "orientation",
+      "pose",
+      "linear_acceleration",
+      "angular_acceleration",
+      "accelerations",
+      "force",
+      "torque",
+      "wrench"
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const CartesianTwist&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianTwist& twist) -> CartesianTwist { return twist; }, "Deleted method from parent class.");
+  }
 
   c.def(py::self *= py::self);
   c.def(py::self * py::self);
@@ -225,6 +259,23 @@ void cartesian_wrench(py::module_& m) {
 
   c.def_static("Zero", &CartesianWrench::Zero, "Constructor for the zero wrench", "name"_a, "reference"_a=std::string("world"));
   c.def_static("Random", &CartesianWrench::Random, "Constructor for a random wrench", "name"_a, "reference"_a=std::string("world"));
+
+  std::vector<std::string> deleted_attributes = {
+      "position",
+      "orientation",
+      "pose",
+      "linear_velocity",
+      "angular_velocity",
+      "twist",
+      "linear_acceleration",
+      "angular_acceleration",
+      "accelerations",
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const CartesianWrench&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianPose { return wrench; }, "Deleted method from parent class.");
+  }
 
   c.def(py::self *= py::self);
   c.def(py::self * py::self);

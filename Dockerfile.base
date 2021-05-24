@@ -43,8 +43,12 @@ RUN rm -rf /tmp/*
 
 
 FROM project-dependencies as development-dependencies
+ENV PROTOBUF_VERSION 3.17.0
 
 RUN apt-get update && apt-get install -y \
+    autoconf \
+    automake \
+    libtool \
     libgtest-dev \
     build-essential \
     ssh \
@@ -53,6 +57,7 @@ RUN apt-get update && apt-get install -y \
     clang \
     rsync \
     tar \
+    unzip \
     python \
     sudo \
     iputils-ping
@@ -60,8 +65,22 @@ RUN apt-get update && apt-get install -y \
 # install gtest
 WORKDIR /tmp/gtest_build
 RUN cmake /usr/src/gtest \
-  && make \
-  && cp lib/* /usr/local/lib || cp *.a /usr/local/lib
+    && make \
+    && cp lib/* /usr/local/lib || cp *.a /usr/local/lib
+
+# install protobuf
+WORKDIR /tmp
+RUN wget -O protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    https://github.com/protocolbuffers/protobuf/releases/download/v"${PROTOBUF_VERSION}"/protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    && tar -xzf protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    && rm protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz
+
+WORKDIR /tmp/protobuf-"${PROTOBUF_VERSION}"
+RUN ./autogen.sh \
+    &&./configure \
+    && make \
+    && make install \
+    && ldconfig
 
 # install python requirements
 RUN apt-get install -y \

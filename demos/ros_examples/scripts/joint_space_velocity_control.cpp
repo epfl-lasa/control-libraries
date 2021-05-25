@@ -63,12 +63,16 @@ public:
   const std::string& get_robot_name() {
     return robot_.get_robot_name();
   }
+
+  const std::vector<std::string> get_robot_frames() {
+    return robot_.get_frames();
+  }
 };
 }
 
 void control_loop(RobotInterface& robot, const int& freq) {
   // set a desired target and a linear ds toward the target
-  CartesianPose target("panda_link8", "panda_link0");
+  CartesianPose target(robot.get_robot_frames().back(), robot.get_robot_frames().front());
   target.set_position(.5, .0, .5);
   target.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
   std::vector<double> gains = {50.0, 50.0, 50.0, 10.0, 10.0, 10.0};
@@ -88,11 +92,18 @@ void control_loop(RobotInterface& robot, const int& freq) {
 }
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "task_space_control_loop");
+  ros::init(argc, argv, "joint_space_velocity_control_loop");
   ros::NodeHandle node_handle;
 
-  std::string robot_name = "franka";
-  std::string urdf_path = std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
+  std::string robot_description;
+  if (!node_handle.getParam("/robot_description", robot_description)) {
+    ROS_ERROR("Could load parameter 'robot_description' from parameter server.");
+    return -1;
+  }
+
+  std::string robot_name = "robot";
+  std::string urdf_path = std::string(SCRIPT_FIXTURES) + "robot.urdf";
+  Model::create_urdf_from_string(robot_description, urdf_path);
   RobotInterface robot(&node_handle, robot_name, urdf_path);
 
   int freq = 500;

@@ -50,14 +50,14 @@ public:
   explicit JointVelocities(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Constructor with name and velocities values provided
+   * @brief Constructor with name and velocity values provided
    * @brief name the name of the state
    * @brief velocities the vector of velocities
    */
   explicit JointVelocities(const std::string& robot_name, const Eigen::VectorXd& velocities);
 
   /**
-   * @brief Constructor with name, a list of joint names  and velocities values provided
+   * @brief Constructor with name, a list of joint names and velocity values provided
    * @brief name the name of the state
    * @brief joint_names list of joint names
    * @brief velocities the vector of velocities
@@ -220,7 +220,7 @@ public:
    * @brief Returns the velocities data as an Eigen vector
    * @return the velocities data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
@@ -231,7 +231,7 @@ public:
   void clamp(double max_absolute_value, double noise_ratio = 0.);
 
   /**
-   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @brief Return the velocity clamped to the values in argument
    * @param max_absolute_value the maximum magnitude of torque for all the joints
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0
@@ -248,7 +248,7 @@ public:
   void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
 
   /**
-   * @brief Clamp inplace the magnitude of the velocity to the values in argument
+   * @brief Return the velocity clamped to the values in argument
    * @param max_absolute_value_array the maximum magnitude of torque for each joint
    * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
    * the torque will be set to 0

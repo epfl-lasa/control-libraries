@@ -78,9 +78,9 @@ public:
    * @brief Construct a CartesianPose from a position given as three scalar coordinates.
    */
   explicit CartesianPose(const std::string& name,
-                         const double& x,
-                         const double& y,
-                         const double& z,
+                         double x,
+                         double y,
+                         double z,
                          const std::string& reference = "world");
 
   /**

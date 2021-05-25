@@ -27,7 +27,7 @@ ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
 
 ext_modules = [
     Pybind11Extension("state_representation",
-                      sorted(glob("source/state_representation_bindings.cpp")),
+                      sorted(glob("source/state_representation/*.cpp")),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=__libraries__,
@@ -44,6 +44,7 @@ setup(
     description="Python bindings for the C++ control libraries",
     long_description="",
     ext_modules=ext_modules,
+    test_suite="tests",
     python_requires='>=3',
     license='GNU GPL v3',
     zip_safe=False,

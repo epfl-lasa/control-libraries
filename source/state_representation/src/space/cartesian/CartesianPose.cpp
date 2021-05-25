@@ -13,9 +13,9 @@ CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& pos
 }
 
 CartesianPose::CartesianPose(const std::string& name,
-                             const double& x,
-                             const double& y,
-                             const double& z,
+                             double x,
+                             double y,
+                             double z,
                              const std::string& reference) : CartesianState(name, reference) {
   this->set_position(x, y, z);
 }

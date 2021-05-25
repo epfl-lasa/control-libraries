@@ -54,19 +54,31 @@ B = JointState.Random("B", 3)
 ## Current status
 
 The Python binding project is currently under development.
-Bindings exist for the following libraries and components:
+Bindings exist for the following libraries and classes:
 
 - `state_representation`:
+  - `State`
+  - `SpatialState`
   - `CartesianState`
+  - `CartesianPose`
+  - `CartesianTwist`
+  - `CartesianWrench`
   - `JointState`
+  - `JointPositions`
+  - `JointVelocities`
+  - `JointTorques`
 
 ## About
 
 [PyBind11](https://PyBind11.readthedocs.io/en/stable/index.html) is used to generate
 Python bindings for the classes and functions in control libraries.
 
-The source files in the [`source`](./source) directory define the bindings between
-each Python module and the respective C++ library.
+The generated package is named `control-libraries`, but contains specific modules for importing. 
+These are named the same as the standard modules of control libraries (e.g. `state_representation`).
+
+The contents of the [`source`](./source) directory define the bindings between
+each Python module and the respective C++ library. The source files to bind each module are
+contained within a subdirectory of the same name.
 
 The `setup.py` and `pyproject.toml` files are used to configure the build and installation
 of the Python bindings. The `.toml` file allows `pip` to automatically fetch the 
@@ -74,11 +86,8 @@ installation dependencies (namely `setuptools` and `pybind11`) in a temporary ca
 allowing the subsequent `setup.py` to be evaluated without needing a local installation of `pybind11`.
 This feature requires a [`pip`](https://pypi.org/project/pip/) version 10.0 or newer.
 
-The package is named `control-libraries`, but contains specific modules for importing. 
-These are named the same as the standard modules of control libraries (e.g. `state_representation`).
-
-The [`tests`](./tests) directory contains some Python scripts that import and check the bindings.
-They are not currently comprehensive unit tests and are more for illustrative purposes.
+The [`tests`](./tests) directory contains some Python scripts that import and check the bindings
+using the Python `unittest` framework. They are not currently comprehensive.
 
 ## Dockerfile
 
@@ -89,4 +98,4 @@ The docker image installs the core control libraries and subsequently installs t
 The [`run.sh`](./run.sh) script will build the docker image and launch an interactive container
 with the test files in the [`tests`](./tests) directory copied to the local path.
 
-You can run these tests with `python3 <test_name.py>`, or just enter a python shell with `python3`.
+You can run these tests with `python <test_name.py>`, or just enter a python shell with `python`.

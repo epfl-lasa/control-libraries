@@ -131,11 +131,11 @@ This requires GTest to be installed on your system. You can then use `make test`
 Alternatively, you can include the source code for each library as submodules in your own CMake project,
 using the CMake directive `add_subdirectory(...)` to link it with your project.
 
-# Troubleshooting
+## Troubleshooting
 
 This section lists common problems that might come up when using the `control_libraries` modules.
 
-## Boost container limit compile error in ROS
+### Boost container limit compile error in ROS
 When using the `robot_model` module in ROS and trying to `catkin_make` the workspace, it might produce the following error:
 ```bash
 /opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error "BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE"

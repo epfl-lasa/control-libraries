@@ -75,6 +75,8 @@ class TestJacobian(unittest.TestCase):
 
     def test_operators(self):
         jac = Jacobian.Random("test", 3, "ee", "robot")
+        elem = jac[1, 2]
+        jac[1, 2] = 0.1
 
         matrix = np.random.rand(3, 6)
         result = jac * matrix

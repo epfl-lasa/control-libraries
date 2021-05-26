@@ -1,5 +1,6 @@
 #include "state_representation_bindings.h"
 
+#include <tuple>
 #include <state_representation/State.hpp>
 #include <state_representation/robot/Jacobian.hpp>
 
@@ -53,7 +54,14 @@ void bind_jacobian(py::module_& m) {
     return jacobian.solve(twist);
   }, "Solve the system dX = J*dq to obtain dq which is more efficient than multiplying with the pseudo-inverse");
 
-  // TODO access operators
+  c.def("__getitem__", [](const Jacobian& jacobian, std::tuple<int, int> coefficients) {
+    return jacobian(std::get<0>(coefficients), std::get<1>(coefficients));
+  }, "Overload the [] operator to modify the value at given (row, col)");
+  c.def("__setitem__", [](Jacobian& jacobian, std::tuple<int, int> coefficients, double value) {
+    jacobian(std::get<0>(coefficients), std::get<1>(coefficients)) = value;
+    return jacobian;
+  }, "Overload the [] operator to access the value at given (row, col)");
+
   c.def(py::self * Eigen::MatrixXd());
   c.def(py::self * py::self);
   c.def(py::self * JointVelocities());

@@ -259,8 +259,6 @@ public:
    * @brief Overload the * operator with a JointVelocities
    * @param dq the joint velocity to multiply with
    * @return this result into the CartesianTwist of the end effector
-   * the name of the output CartesianTwist will be "robot"_end_effector and
-   * the reference frame will be "robot"_base 
    */
   CartesianTwist operator*(const JointVelocities& dq) const;
 

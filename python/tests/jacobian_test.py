@@ -1,5 +1,5 @@
 import unittest
-from state_representation import Jacobian, CartesianTwist, CartesianWrench, JointVelocities
+from state_representation import Jacobian, CartesianPose, CartesianTwist, CartesianWrench, JointVelocities
 import numpy as np
 
 JACOBIAN_METHOD_EXPECTS = [
@@ -30,6 +30,12 @@ class TestJacobian(unittest.TestCase):
     def assert_np_array_equal(self, a, b):
         self.assertListEqual(list(a), list(b))
 
+    def assert_np_array_almost_equal(self, a, b):
+        a = list(a)
+        b = list(b)
+        for i in range(len(a)):
+            self.assertAlmostEqual(a[i], b[i])
+
     def test_callable_methods(self):
         methods = [m for m in dir(Jacobian) if callable(getattr(Jacobian, m))]
         for expected in JACOBIAN_METHOD_EXPECTS:
@@ -41,7 +47,7 @@ class TestJacobian(unittest.TestCase):
         Jacobian("robot", ["joint_0", "joint_1"], "ee", "robot")
         Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
         B = Jacobian.Random("robot", 7, "ee")
-        B.copy() # TODO does this actually give a copy?
+        B.copy()
 
     def test_getters(self):
         jac = Jacobian("jacobian", 3, "ee", "robot")
@@ -64,21 +70,25 @@ class TestJacobian(unittest.TestCase):
         twist = CartesianTwist.Random("ee", "robot")
         jac.solve(twist)
 
-        data = np.random.rand(6,7)
+        data = np.random.rand(6, 7)
         jac.solve(data)
 
     def test_operators(self):
-        matrix = np.random.rand(3, 6)
         jac = Jacobian.Random("test", 3, "ee", "robot")
-        wrench = CartesianWrench.Random("ee", "robot")
+
+        matrix = np.random.rand(3, 6)
+        result = jac * matrix
+        # result = matrix * jac TODO
+
         joint_velocities = JointVelocities.Random("test", 3)
+        twist = jac * joint_velocities
+        self.assert_np_array_almost_equal(joint_velocities.get_velocities(), (jac.pseudoinverse() * twist).get_velocities())
 
-        matrix = jac * matrix
-        # matrix = jac.transpose() * jac # TODO
-        # twist = jac.transpose() * joint_velocities
+        wrench = CartesianWrench.Random("ee", "robot")
+        torques = jac.transpose() * wrench
 
-        # joint_velocities = jac * twist
-        # joint_torques = jac * wrench
+        pose = CartesianPose.Random("robot", "world")
+        jac_in_world = pose * jac
 
 
 if __name__ == '__main__':

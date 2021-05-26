@@ -2,9 +2,6 @@
 
 #include <state_representation/State.hpp>
 #include <state_representation/robot/Jacobian.hpp>
-// TODO import necessary?
-//#include <state_representation/space/cartesian/CartesianPose.hpp>
-//#include <state_representation/space/cartesian/CartesianTwist.hpp>
 
 void bind_jacobian(py::module_& m) {
   py::class_<Jacobian, State> c(m, "Jacobian");
@@ -45,9 +42,6 @@ void bind_jacobian(py::module_& m) {
   c.def("set_reference_frame", py::overload_cast<const CartesianPose&>(&Jacobian::set_reference_frame), "Setter of the reference_frame attribute from a CartesianPose", "reference_frame"_a);
   c.def("set_data", py::overload_cast<const Eigen::MatrixXd&>(&Jacobian::set_data), "Setter of the data attribute", "data"_a);
 
-  // TODO what if its override, apparently its ok
-//  c.def("is_compatible", &Jacobian::is_compatible, "Check if the Jacobian matrix is compatible for operations with the state given as argument", "state"_a);
-//  c.def("initialize", &Jacobian::initialize), "Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)", "value"_a, "state_variable_type"_a, "noise_ratio"_a=double(0));
   c.def("transpose", &Jacobian::transpose, "Return the transpose of the Jacobian matrix");
   c.def("inverse", &Jacobian::inverse, "Return the inverse of the Jacobian matrix");
   c.def("pseudoinverse", &Jacobian::pseudoinverse, "Return the pseudoinverse of the Jacobian matrix");
@@ -60,13 +54,13 @@ void bind_jacobian(py::module_& m) {
   }, "Solve the system dX = J*dq to obtain dq which is more efficient than multiplying with the pseudo-inverse");
 
   // TODO access operators
-  // TODO how does it now what output type is
   c.def(py::self * Eigen::MatrixXd());
   c.def(py::self * py::self);
   c.def(py::self * JointVelocities());
   c.def(py::self * CartesianTwist());
   c.def(py::self * CartesianWrench());
-  // TODO friend operators
+  c.def(CartesianPose() * py::self);
+  c.def(Eigen::MatrixXd() * py::self);
 
   c.def("__repr__", [](const Jacobian& jacobian) {
     std::stringstream buffer;

@@ -1,114 +1,85 @@
 import unittest
-from state_representation import Jacobian
+from state_representation import Jacobian, CartesianTwist, CartesianWrench, JointVelocities
 import numpy as np
 
-CARTESIAN_STATE_METHOD_EXPECTS = [
-    'Identity',
+JACOBIAN_METHOD_EXPECTS = [
     'Random',
-    'array',
-    'clamp_state_variable',
-    'copy',
+    'rows',
+    'row',
+    'cols',
+    'col',
     'data',
-    'dist',
-    'from_list',
-    'get_accelerations',
-    'get_angular_acceleration',
-    'get_angular_velocity',
-    'get_force',
-    'get_linear_acceleration',
-    'get_linear_velocity',
-    'get_name',
-    'get_orientation',
-    'get_pose',
-    'get_position',
+    'get_joint_names',
+    'get_frame',
     'get_reference_frame',
-    'get_timestamp',
-    'get_torque',
-    'get_transformation_matrix',
-    'get_twist',
-    'get_type',
-    'get_wrench',
-    'initialize',
-    'inverse',
-    'is_compatible',
-    'is_deprecated',
-    'is_empty',
-    'normalize',
-    'normalized',
-    'norms',
-    'reset_timestamp',
-    'set_accelerations',
-    'set_angular_acceleration',
-    'set_angular_velocity',
-    'set_empty',
-    'set_filled',
-    'set_force',
-    'set_linear_acceleration',
-    'set_linear_velocity',
-    'set_name',
-    'set_orientation',
-    'set_pose',
-    'set_position',
+    'set_rows',
+    'set_cols',
+    'set_joint_names',
     'set_reference_frame',
-    'set_torque',
-    'set_twist',
-    'set_wrench',
-    'set_zero',
-    'to_list'
+    'set_data',
+    'is_compatible',
+    'initialize',
+    'transpose',
+    'inverse',
+    'pseudoinverse',
+    'solve',
+    'copy',
 ]
 
 class TestJacobian(unittest.TestCase):
-    # def assert_np_array_equal(self, a, b):
-    #     self.assertListEqual(list(a), list(b));
+    def assert_np_array_equal(self, a, b):
+        self.assertListEqual(list(a), list(b))
 
-    # def test_callable_methods(self):
-    #     methods = [m for m in dir(CartesianState) if callable(getattr(CartesianState, m))]
-    #     for expected in CARTESIAN_STATE_METHOD_EXPECTS:
-    #         self.assertIn(expected, methods)
+    def test_callable_methods(self):
+        methods = [m for m in dir(Jacobian) if callable(getattr(Jacobian, m))]
+        for expected in JACOBIAN_METHOD_EXPECTS:
+            self.assertIn(expected, methods)
 
     def test_constructors(self):
-        Jacobian("robot", 7, "ee")
         A = Jacobian("robot", 7, "ee")
         Jacobian(A)
         Jacobian("robot", ["joint_0", "joint_1"], "ee", "robot")
-        A = Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
+        Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
         B = Jacobian.Random("robot", 7, "ee")
+        B.copy() # TODO does this actually give a copy?
 
-    # def test_setters(self):
-    #     A = CartesianState.Identity("A")
-    #
-    #     A.set_position(1, 2, 3)
-    #     self.assert_np_array_equal(A.get_position(), [1, 2, 3])
-    #     A.set_position([1, 2, 3])
-    #     self.assert_np_array_equal(A.get_position(), [1, 2, 3])
-    #     A.set_position(np.array([1, 2, 3]))
-    #     self.assert_np_array_equal(A.get_position(), [1, 2, 3])
-    #
-    #     A.set_orientation([1, 2, 3, 4])
-    #     self.assert_np_array_equal(A.get_orientation(), [1, 2, 3, 4] / np.linalg.norm([1, 2, 3, 4]))
-    #
-    #     A.set_twist([1, 2, 3, 4, 5, 6])
-    #     self.assert_np_array_equal(A.get_twist(), [1, 2, 3, 4, 5, 6])
-    #     A.set_accelerations([1, 2, 3, 4, 5, 6])
-    #     self.assert_np_array_equal(A.get_accelerations(), [1, 2, 3, 4, 5, 6])
-    #     A.set_wrench([1, 2, 3, 4, 5, 6])
-    #     self.assert_np_array_equal(A.get_wrench(), [1, 2, 3, 4, 5, 6])
-    #
-    # def test_operators(self):
-    #     A = CartesianState.Random("A")
-    #     B = CartesianState.Random("B")
-    #     CinA = CartesianState.Random("C", "A")
-    #
-    #     C = A * CinA
-    #     A = A * 2
-    #     A = 2 * A
-    #     A *= 2
-    #
-    #     A = A + B
-    #     A += B
-    #
-    #     A = A - B
-    #     A -= B
+    def test_getters(self):
+        jac = Jacobian("jacobian", 3, "ee", "robot")
+        self.assertEqual(jac.cols(), 3)
+        jac.set_joint_names(["joint__0", "joint__1", "joint__2"])
+        self.assertListEqual(jac.get_joint_names(), ["joint__0", "joint__1", "joint__2"])
+        self.assertEqual(jac.get_frame(), "ee")
+        self.assertEqual(jac.get_reference_frame(), "robot")
+
+        data = np.random.rand(6, 3)
+        jac.set_data(data)
+        self.assert_np_array_equal(jac.col(1), data[:, 1])
+        self.assert_np_array_equal(jac.row(1), data[1, :])
+
+        jac = jac.transpose()
+        self.assertEqual(jac.rows(), 3)
+
+    def test_solve(self):
+        jac = Jacobian.Random("jac", 7, "ee", "robot")
+        twist = CartesianTwist.Random("ee", "robot")
+        jac.solve(twist)
+
+        data = np.random.rand(6,7)
+        jac.solve(data)
+
+    def test_operators(self):
+        matrix = np.random.rand(3, 6)
+        jac = Jacobian.Random("test", 3, "ee", "robot")
+        wrench = CartesianWrench.Random("ee", "robot")
+        joint_velocities = JointVelocities.Random("test", 3)
+
+        matrix = jac * matrix
+        # matrix = jac.transpose() * jac # TODO
+        # twist = jac.transpose() * joint_velocities
+
+        # joint_velocities = jac * twist
+        # joint_torques = jac * wrench
+
 
 if __name__ == '__main__':
     unittest.main()

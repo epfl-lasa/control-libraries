@@ -59,7 +59,7 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
 
 class TestCartesianState(unittest.TestCase):
     def assert_np_array_equal(self, a, b):
-        self.assertListEqual(list(a), list(b));
+        self.assertListEqual(list(a), list(b))
 
     def test_callable_methods(self):
         methods = [m for m in dir(CartesianState) if callable(getattr(CartesianState, m))]

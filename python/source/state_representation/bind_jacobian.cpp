@@ -6,6 +6,9 @@
 
 void bind_jacobian(py::module_& m) {
   py::class_<Jacobian, State> c(m, "Jacobian");
+
+  c.def_property_readonly_static("__array_priority__", [](py::object) { return 10000; });
+
   c.def(py::init<const std::string&, unsigned int, const std::string&, const std::string&>(),
         "Constructor with name, number of joints, frame name and reference frame provided",
         "robot_name"_a, "nb_joints"_a, "frame"_a, "reference_frame"_a = "world");
@@ -56,11 +59,11 @@ void bind_jacobian(py::module_& m) {
 
   c.def("__getitem__", [](const Jacobian& jacobian, std::tuple<int, int> coefficients) {
     return jacobian(std::get<0>(coefficients), std::get<1>(coefficients));
-  }, "Overload the [] operator to modify the value at given (row, col)");
+  }, "Overload the [] operator to access the value at given (row, col)");
   c.def("__setitem__", [](Jacobian& jacobian, std::tuple<int, int> coefficients, double value) {
     jacobian(std::get<0>(coefficients), std::get<1>(coefficients)) = value;
     return jacobian;
-  }, "Overload the [] operator to access the value at given (row, col)");
+  }, "Overload the [] operator to modify the value at given (row, col)");
 
   c.def(py::self * Eigen::MatrixXd());
   c.def(py::self * py::self);

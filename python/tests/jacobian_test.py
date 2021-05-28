@@ -80,7 +80,7 @@ class TestJacobian(unittest.TestCase):
 
         matrix = np.random.rand(3, 6)
         result = jac * matrix
-        # result = matrix * jac TODO
+        result = matrix * jac
 
         joint_velocities = JointVelocities.Random("test", 3)
         twist = jac * joint_velocities

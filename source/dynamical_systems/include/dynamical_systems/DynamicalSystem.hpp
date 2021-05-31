@@ -18,7 +18,7 @@ namespace dynamical_systems {
 template<class S>
 class DynamicalSystem {
 private:
-  S base_frame_;
+  S base_frame_; ///< frame in which the dynamical system is expressed
 
 protected:
   /**
@@ -62,8 +62,16 @@ public:
    */
   virtual std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
+  /**
+   * @brief Return the base frame of the dynamical system
+   * @return the base frame
+   */
   const S& get_base_frame() const;
 
+  /**
+   * @brief Set the base frame of the dynamical system
+   * @param base_frame the new base frame
+   */
   virtual void set_base_frame(const S& base_frame);
 };
 

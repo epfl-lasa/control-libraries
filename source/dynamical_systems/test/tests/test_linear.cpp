@@ -33,6 +33,25 @@ protected:
   double angular_tol = 1e-3;
 };
 
+TEST_F(LinearDSTest, IsCompatible) {
+  state_representation::CartesianState state1("C", "A");
+  state_representation::CartesianState state2("C", "B");
+  state_representation::CartesianState state3("C", "D");
+
+  state_representation::CartesianState attractor_frame("CAttractor", "A");
+  dynamical_systems::Linear<state_representation::CartesianState> ds(attractor_frame);
+  EXPECT_TRUE(ds.is_compatible(state1));
+  EXPECT_FALSE(ds.is_compatible(state2));
+  EXPECT_FALSE(ds.is_compatible(state3));
+
+  // change the base frame
+  state_representation::CartesianState base_frame("A", "B");
+  ds.set_base_frame(base_frame);
+  EXPECT_TRUE(ds.is_compatible(state1));
+  EXPECT_TRUE(ds.is_compatible(state2));
+  EXPECT_FALSE(ds.is_compatible(state3));
+}
+
 TEST_F(LinearDSTest, PositionOnly) {
   current_pose.set_orientation(Eigen::Quaterniond::Identity());
   target_pose.set_orientation(Eigen::Quaterniond::Identity());

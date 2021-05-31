@@ -73,6 +73,13 @@ public:
    * @param base_frame the new base frame
    */
   virtual void set_base_frame(const S& base_frame);
+
+  /**
+   * @brief Check compatibility between a state and the dynamical system
+   * @param state the state to check for compatibility
+   * @return true if the state is compatible with the dynamical system
+   */
+  virtual bool is_compatible(const S& state);
 };
 
 template<class S>

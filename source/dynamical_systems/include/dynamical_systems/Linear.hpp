@@ -119,6 +119,7 @@ template<class S>
 inline void Linear<S>::set_attractor(const S& attractor) {
   this->attractor_->set_value(attractor);
 }
+
 template<>
 inline void Linear<state_representation::CartesianState>::set_attractor(const state_representation::CartesianState& attractor) {
   // validate that the reference frame of the attractor is always compatible with the DS reference frame
@@ -135,7 +136,6 @@ inline void Linear<state_representation::CartesianState>::set_attractor(const st
     this->attractor_->set_value(attractor);
   }
 }
-
 
 template<class S>
 inline void Linear<S>::set_base_frame(const S& base_frame) {

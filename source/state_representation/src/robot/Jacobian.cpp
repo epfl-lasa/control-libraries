@@ -1,16 +1,17 @@
 #include "state_representation/robot/Jacobian.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 namespace state_representation {
 Jacobian::Jacobian(const std::string& robot_name,
                    unsigned int nb_joints,
-                   const std::string& frame,
-                   const std::string& reference_frame) :
+                   std::string frame,
+                   std::string reference_frame) :
     State(StateType::JACOBIANMATRIX, robot_name),
     joint_names_(nb_joints),
-    frame_(frame),
-    reference_frame_(reference_frame),
+    frame_(std::move(frame)),
+    reference_frame_(std::move(reference_frame)),
     rows_(6),
     cols_(nb_joints) {
   this->set_joint_names(nb_joints);
@@ -19,12 +20,12 @@ Jacobian::Jacobian(const std::string& robot_name,
 
 Jacobian::Jacobian(const std::string& robot_name,
                    const std::vector<std::string>& joint_names,
-                   const std::string& frame,
-                   const std::string& reference_frame) :
+                   std::string frame,
+                   std::string reference_frame) :
     State(StateType::JACOBIANMATRIX, robot_name),
     joint_names_(joint_names),
-    frame_(frame),
-    reference_frame_(reference_frame),
+    frame_(std::move(frame)),
+    reference_frame_(std::move(reference_frame)),
     rows_(6),
     cols_(joint_names.size()) {
   this->initialize();

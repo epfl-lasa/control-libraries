@@ -129,9 +129,10 @@ void cartesian_pose(py::module_& m) {
   c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
   c.def(py::init<const CartesianTwist&>(), "Copy constructor from a CartesianTwist by considering that it is a displacement over 1 second", "twist"_a);
 
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianPose from a position given as a vector of coordinates.", "name"_a, "position"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, double, double, double, const std::string&>(), "Construct a CartesianPose from a position given as three scalar coordinates.", "name"_a, "x"_a, "y"_a, "z"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Quaterniond&, const std::string&>(), "Construct a CartesianPose from a position given as a vector of coordinates and a quaternion.", "name"_a, "position"_a, "orientation"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Constructor of a CartesianPose from a position given as a vector of coordinates", "name"_a, "position"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, double, double, double, const std::string&>(), "Constructor of a CartesianPose from a position given as three scalar coordinates", "name"_a, "x"_a, "y"_a, "z"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Quaterniond&, const std::string&>(), "Constructor of a CartesianPose from a quaternion", "name"_a, "orientation"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Quaterniond&, const std::string&>(), "Constructor of a CartesianPose from a position given as a vector of coordinates and a quaternion", "name"_a, "position"_a, "orientation"_a, "reference"_a=std::string("world"));
 
   c.def_static("Identity", &CartesianPose::Identity, "Constructor for the identity pose", "name"_a, "reference"_a=std::string("world"));
   c.def_static("Random", &CartesianPose::Random, "Constructor for a random pose", "name"_a, "reference"_a=std::string("world"));

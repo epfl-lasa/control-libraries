@@ -1,6 +1,7 @@
 #include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 #include <unistd.h>
@@ -20,6 +21,9 @@ TEST(JointStateTest, ZeroInitialization) {
   EXPECT_FALSE(zero2.is_empty());
   // all data should be zero
   EXPECT_EQ(zero2.data().norm(), 0);
+  // should not be able to change the names attribute with a wrong size
+  EXPECT_THROW(zero.set_names(5), exceptions::IncompatibleSizeException);
+  EXPECT_THROW(zero2.set_names(std::vector<std::string>{"j0", "j1", "j2"}), exceptions::IncompatibleSizeException);
 }
 
 TEST(JointStateTest, RandomStateInitialization) {

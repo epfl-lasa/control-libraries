@@ -6,12 +6,12 @@
 namespace state_representation {
 Jacobian::Jacobian(const std::string& robot_name,
                    unsigned int nb_joints,
-                   std::string frame,
-                   std::string reference_frame) :
+                   const std::string& frame,
+                   const std::string& reference_frame) :
     State(StateType::JACOBIANMATRIX, robot_name),
     joint_names_(nb_joints),
-    frame_(std::move(frame)),
-    reference_frame_(std::move(reference_frame)),
+    frame_(frame),
+    reference_frame_(reference_frame),
     rows_(6),
     cols_(nb_joints) {
   this->set_joint_names(nb_joints);
@@ -20,12 +20,12 @@ Jacobian::Jacobian(const std::string& robot_name,
 
 Jacobian::Jacobian(const std::string& robot_name,
                    const std::vector<std::string>& joint_names,
-                   std::string frame,
-                   std::string reference_frame) :
+                   const std::string& frame,
+                   const std::string& reference_frame) :
     State(StateType::JACOBIANMATRIX, robot_name),
     joint_names_(joint_names),
-    frame_(std::move(frame)),
-    reference_frame_(std::move(reference_frame)),
+    frame_(frame),
+    reference_frame_(reference_frame),
     rows_(6),
     cols_(joint_names.size()) {
   this->initialize();

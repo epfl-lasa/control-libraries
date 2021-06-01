@@ -42,8 +42,8 @@ public:
    */
   explicit Jacobian(const std::string& robot_name,
                     unsigned int nb_joints,
-                    std::string frame,
-                    std::string reference_frame = "world");
+                    const std::string& frame,
+                    const std::string& reference_frame = "world");
 
   /**
    * @brief Constructor with name, joint names, frame name and reference frame provided
@@ -54,8 +54,8 @@ public:
    */
   explicit Jacobian(const std::string& robot_name,
                     const std::vector<std::string>& joint_names,
-                    std::string frame,
-                    std::string reference_frame = "world");
+                    const std::string& frame,
+                    const std::string& reference_frame = "world");
 
   /**
    * @brief Constructor with name, frame, Jacobian matrix and reference frame provided

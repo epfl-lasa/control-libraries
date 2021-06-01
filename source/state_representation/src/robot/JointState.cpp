@@ -15,8 +15,8 @@ JointState::JointState(const std::string& robot_name, unsigned int nb_joints) :
   this->initialize();
 }
 
-JointState::JointState(const std::string& robot_name, std::vector<std::string>  joint_names) :
-    State(StateType::JOINTSTATE, robot_name), names_(std::move(joint_names)) {
+JointState::JointState(const std::string& robot_name, const std::vector<std::string>& joint_names) :
+    State(StateType::JOINTSTATE, robot_name), names_(joint_names) {
   this->initialize();
 }
 

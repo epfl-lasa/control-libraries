@@ -12,8 +12,6 @@ JACOBIAN_METHOD_EXPECTS = [
     'get_joint_names',
     'get_frame',
     'get_reference_frame',
-    'set_rows',
-    'set_cols',
     'set_joint_names',
     'set_reference_frame',
     'set_data',

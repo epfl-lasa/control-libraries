@@ -15,4 +15,5 @@ PYBIND11_MODULE(state_representation, m) {
   bind_state(m);
   bind_cartesian_space(m);
   bind_joint_space(m);
+  bind_jacobian(m);
 }

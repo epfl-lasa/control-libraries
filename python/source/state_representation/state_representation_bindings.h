@@ -22,3 +22,4 @@ using namespace state_representation;
 void bind_state(py::module_& m);
 void bind_cartesian_space(py::module_& m);
 void bind_joint_space(py::module_& m);
+void bind_jacobian(py::module_& m);

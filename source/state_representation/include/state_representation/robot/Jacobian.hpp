@@ -34,7 +34,7 @@ private:
 
 public:
   /**
-   * @brief Constructor with names and number of joints provided
+   * @brief Constructor with name, number of joints, frame name and reference frame provided
    * @param robot_name the name of the robot associated to
    * @param nb_joints the number of joints
    * @param frame the name of the frame at which the Jacobian is computed
@@ -46,9 +46,9 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief Constructor with names and list of joint names provided
-   * @param joint_names the vector of joint names
+   * @brief Constructor with name, joint names, frame name and reference frame provided
    * @param robot_name the name of the robot associated to
+   * @param joint_names the vector of joint names
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
@@ -58,7 +58,8 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief Constructor with names and Jacobian matrix as eigen matrix
+   * @brief "Constructor with name, frame, Jacobian matrix and reference frame provided"
+   * @param robot_name the name of the robot associated to
    * @param frame the name of the frame at which the Jacobian is computed
    * @param data the values of the Jacobian matrix
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
@@ -69,7 +70,8 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief Constructor with names, vector of joint names, and Jacobian matrix as eigen matrix
+   * @brief Constructor with name, joint names, frame name, Jacobian matrix and reference frame provided
+   * @param robot_name the name of the robot associated to
    * @param joint_names the vector of joint names
    * @param frame the name of the frame at which the Jacobian is computed
    * @param data the values of the Jacobian matrix
@@ -180,12 +182,12 @@ public:
   void set_joint_names(const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Getter of the frame_name attribute
+   * @brief Getter of the frame attribute
    */
   const std::string& get_frame() const;
 
   /**
-   * @brief Getter of the frame_name attribute
+   * @brief Getter of the reference_frame attribute
    */
   const std::string& get_reference_frame() const;
 
@@ -257,8 +259,6 @@ public:
    * @brief Overload the * operator with a JointVelocities
    * @param dq the joint velocity to multiply with
    * @return this result into the CartesianTwist of the end effector
-   * the name of the output CartesianTwist will be "robot"_end_effector and
-   * the reference frame will be "robot"_base 
    */
   CartesianTwist operator*(const JointVelocities& dq) const;
 

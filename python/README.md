@@ -67,6 +67,7 @@ Bindings exist for the following libraries and classes:
   - `JointPositions`
   - `JointVelocities`
   - `JointTorques`
+  - `Jacobian`
 
 ## About
 

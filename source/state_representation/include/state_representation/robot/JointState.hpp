@@ -32,11 +32,11 @@ enum class JointStateVariable {
 };
 
 /**
- * @brief compute the distance between two JointState
+ * @brief Compute the distance between two JointState
  * @param s1 the first JointState
  * @param s2 the second JointState
  * @param state_variable_type name of the field from the JointStateVariable structure to apply
- * the distance on. Default ALL for full distance across all dimensions
+ * the distance on (default ALL for full distance across all dimensions)
  * @return the distance between the two states
  */
 double dist(const JointState& s1,
@@ -127,7 +127,7 @@ public:
    * @param robot_name the name of the associated robot
    * @param joint_names list of joint names
    */
-  explicit JointState(const std::string& robot_name, const std::vector<std::string>& joint_names);
+  explicit JointState(const std::string& robot_name, std::vector<std::string> joint_names);
 
   /**
    * @brief Copy constructor of a JointState
@@ -406,7 +406,7 @@ public:
    * @brief Compute the distance to another state as the sum of distances between each features
    * @param state the second state
    * @param state_variable_type name of the variable from the JointStateVariable structure to apply
-   * the distance on. Default ALL for full distance across all dimensions
+   * the distance on (default ALL for full distance across all dimensions)
    * @return dist the distance value as a double
    */
   double dist(const JointState& state, const JointStateVariable& state_variable_type = JointStateVariable::ALL) const;
@@ -515,16 +515,24 @@ inline const std::vector<std::string>& JointState::get_names() const {
 }
 
 inline void JointState::set_names(unsigned int nb_joints) {
+  if (this->get_size() != nb_joints) {
+    throw exceptions::IncompatibleSizeException(
+        "Input number of joints is of incorrect size, expected " + std::to_string(this->get_size()) + " got "
+            + std::to_string(nb_joints));
+  }
   this->names_.resize(nb_joints);
   for (unsigned int i = 0; i < nb_joints; ++i) {
     this->names_[i] = "joint" + std::to_string(i);
   }
-  this->initialize();
 }
 
 inline void JointState::set_names(const std::vector<std::string>& names) {
+  if (this->get_size() != names.size()) {
+    throw exceptions::IncompatibleSizeException(
+        "Input number of joints is of incorrect size, expected " + std::to_string(this->get_size()) + " got "
+            + std::to_string(names.size()));
+  }
   this->names_ = names;
-  this->initialize();
 }
 
 inline const Eigen::VectorXd& JointState::get_positions() const {

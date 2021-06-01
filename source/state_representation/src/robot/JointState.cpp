@@ -1,4 +1,5 @@
 #include "state_representation/robot/JointState.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/NotImplementedException.hpp"
@@ -11,11 +12,12 @@ JointState::JointState() : State(StateType::JOINTSTATE) {
 JointState::JointState(const std::string& robot_name, unsigned int nb_joints) :
     State(StateType::JOINTSTATE, robot_name), names_(nb_joints) {
   this->set_names(nb_joints);
+  this->initialize();
 }
 
-JointState::JointState(const std::string& robot_name, const std::vector<std::string>& joint_names) :
-    State(StateType::JOINTSTATE, robot_name) {
-  this->set_names(joint_names);
+JointState::JointState(const std::string& robot_name, std::vector<std::string>  joint_names) :
+    State(StateType::JOINTSTATE, robot_name), names_(std::move(joint_names)) {
+  this->initialize();
 }
 
 void JointState::initialize() {

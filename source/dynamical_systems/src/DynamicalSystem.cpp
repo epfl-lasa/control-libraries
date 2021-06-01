@@ -2,6 +2,7 @@
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 using namespace state_representation;
 
@@ -18,6 +19,17 @@ DynamicalSystem<CartesianState>::DynamicalSystem() : base_frame_(CartesianState:
 template<>
 DynamicalSystem<CartesianState>::DynamicalSystem(const std::string& base_frame) :
     base_frame_(CartesianState::Identity(base_frame, base_frame)) {}
+
+template<class S>
+bool DynamicalSystem<S>::is_compatible(const S&) {
+  throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state");
+}
+
+template<>
+bool DynamicalSystem<state_representation::CartesianState>::is_compatible(const state_representation::CartesianState& state) {
+  return !(state.get_reference_frame() != this->get_base_frame().get_name()
+      && state.get_reference_frame() != this->get_base_frame().get_reference_frame());
+}
 
 template<class S>
 S DynamicalSystem<S>::evaluate(const S& state) const {

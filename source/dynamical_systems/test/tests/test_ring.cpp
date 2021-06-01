@@ -59,7 +59,6 @@ TEST_F(RingDSTest, PointsOnRadius) {
   EXPECT_NEAR(twist.get_linear_velocity().z(), -1, tol);
 }
 
-
 TEST_F(RingDSTest, PointsNearRadius) {
   dynamical_systems::Ring ring(center, radius, width, speed, field_strength);
   state_representation::CartesianTwist twist;
@@ -178,7 +177,6 @@ TEST_F(RingDSTest, OrientationAroundCircle) {
   EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, tol);
 }
 
-
 TEST_F(RingDSTest, OrientationRestitutionAtZeroAngle) {
   dynamical_systems::Ring ring(center, radius, width, 0);
   state_representation::CartesianTwist twist;
@@ -257,7 +255,8 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
   // should give the same local command, regardless of the center frame
   current_pose = state_representation::CartesianPose("B",
                                                      Eigen::Vector3d(radius, 0, 0),
-                                                     Eigen::Quaterniond(1, 1, 0, 0).normalized()  * ring.get_rotation_offset(),
+                                                     Eigen::Quaterniond(1, 1, 0, 0).normalized()
+                                                         * ring.get_rotation_offset(),
                                                      "A");
   current_pose = center * current_pose;
   twist = ring.evaluate(current_pose);

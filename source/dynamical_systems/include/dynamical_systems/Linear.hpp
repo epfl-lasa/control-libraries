@@ -37,9 +37,10 @@ protected:
    * @param state the input state
    * @return the output state
    */
-  S compute_dynamics(const S& state) const;
+  S compute_dynamics(const S& state) const override;
 
 public:
+  explicit Linear();
   /**
    * @brief Constructor with specified attractor and iso gain
    * @param attractor the attractor of the linear system

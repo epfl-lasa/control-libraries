@@ -1,5 +1,7 @@
 #include "dynamical_systems/Linear.hpp"
 
+#include "dynamical_systems/exceptions/AttractorEmptyException.hpp"
+
 using namespace state_representation;
 
 namespace dynamical_systems {
@@ -57,6 +59,24 @@ void Linear<JointState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
 }
 
 template<>
+Linear<CartesianState>::Linear() :
+    DynamicalSystem<CartesianState>(),
+    attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  this->attractor_->get_value().set_empty();
+  this->set_gain(0);
+}
+
+template<>
+Linear<JointState>::Linear() :
+    DynamicalSystem<JointState>(),
+    attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", JointPositions()))),
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  this->attractor_->get_value().set_empty();
+  this->set_gain(0);
+}
+
+template<>
 Linear<CartesianState>::Linear(const CartesianState& attractor, double iso_gain) :
     DynamicalSystem<CartesianState>(attractor.get_reference_frame()),
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", attractor))),
@@ -106,6 +126,9 @@ Linear<JointState>::Linear(const JointState& attractor, const Eigen::MatrixXd& g
 
 template<>
 CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& state) const {
+  if (this->get_attractor().is_empty()) {
+    throw exceptions::AttractorEmptyException("The attractor of the dynamical system is empty.");
+  }
   CartesianTwist twist = CartesianPose(this->get_attractor()) - CartesianPose(state);
   twist *= this->get_gain();
   return twist;
@@ -113,6 +136,9 @@ CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& st
 
 template<>
 JointState Linear<JointState>::compute_dynamics(const JointState& state) const {
+  if (this->get_attractor().is_empty()) {
+    throw exceptions::AttractorEmptyException("The attractor of the dynamical system is empty.");
+  }
   JointVelocities velocities = JointPositions(this->get_attractor()) - JointPositions(state);
   velocities *= this->get_gain();
   return velocities;

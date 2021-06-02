@@ -34,6 +34,11 @@ private:
 
 public:
   /**
+   * @brief Empty constructor for a Jacobian
+   */
+  explicit Jacobian();
+
+  /**
    * @brief Constructor with name, number of joints, frame name and reference frame provided
    * @param robot_name the name of the associated robot
    * @param nb_joints the number of joints of the robot

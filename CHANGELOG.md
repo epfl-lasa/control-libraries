@@ -15,6 +15,7 @@ linear and angular velocity with a set of 4 gains (#135)
 showcases the `robot_model` module (#136, #139)
 - Add a function to check compatibility between a state and a dynamical system (#142)
 - Remove `set_rows` and `set_cols` from Jacobian class due to inexpedience (#144)
+- Add constructor for the CartesianPose with only a quaternion provided (#145)
 
 ## 2.0.0
 

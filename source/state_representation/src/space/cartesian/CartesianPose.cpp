@@ -21,6 +21,12 @@ CartesianPose::CartesianPose(const std::string& name,
 }
 
 CartesianPose::CartesianPose(const std::string& name,
+                             const Eigen::Quaterniond& orientation,
+                             const std::string& reference) : CartesianState(name, reference) {
+  this->set_orientation(orientation);
+}
+
+CartesianPose::CartesianPose(const std::string& name,
                              const Eigen::Vector3d& position,
                              const Eigen::Quaterniond& orientation,
                              const std::string& reference) : CartesianState(name, reference) {

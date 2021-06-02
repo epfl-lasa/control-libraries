@@ -18,6 +18,7 @@ showcases the `robot_model` module (#136, #139)
 - Add constructor for the CartesianPose with only a quaternion provided (#145)
 - Add empty constructor for the Jacobian (#146)
 
+
 ## 2.0.0
 
 Version 2.0.0 introduces usage demos for CMake and ROS/ROS2 projects,

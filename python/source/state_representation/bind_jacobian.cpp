@@ -39,8 +39,6 @@ void bind_jacobian(py::module_& m) {
   c.def("get_reference_frame", &Jacobian::get_reference_frame, "Getter of the reference_frame attribute");
   c.def("data", &Jacobian::data, "Getter of the data attribute");
 
-  c.def("set_rows", py::overload_cast<unsigned int>(&Jacobian::set_rows), "Setter of the number of rows", "rows"_a);
-  c.def("set_cols", py::overload_cast<unsigned int>(&Jacobian::set_cols), "Setter of the number of columns", "cols"_a);
   c.def("set_joint_names", py::overload_cast<unsigned int>(&Jacobian::set_joint_names), "Setter of the joint_names attribute from the number of joints", "nb_joints"_a);
   c.def("set_joint_names", py::overload_cast<const std::vector<std::string>&>(&Jacobian::set_joint_names), "Setter of the joint_names attribute from a vector of joint names", "joint_names"_a);
   c.def("set_reference_frame", py::overload_cast<const CartesianPose&>(&Jacobian::set_reference_frame), "Setter of the reference_frame attribute from a CartesianPose", "reference_frame"_a);

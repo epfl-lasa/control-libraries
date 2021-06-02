@@ -27,7 +27,7 @@ class Jacobian : public State {
 private:
   std::vector<std::string> joint_names_;///< names of the joints
   std::string frame_;                   ///< name of the frame at which the Jacobian is computed
-  std::string reference_frame_;         /// name of the reference frame in which the Jacobian is expressed
+  std::string reference_frame_;         ///< name of the reference frame in which the Jacobian is expressed
   unsigned int rows_;                   ///< number of rows
   unsigned int cols_;                   ///< number of columns
   Eigen::MatrixXd data_;                ///< internal storage of the Jacobian matrix
@@ -35,8 +35,8 @@ private:
 public:
   /**
    * @brief Constructor with name, number of joints, frame name and reference frame provided
-   * @param robot_name the name of the robot associated to
-   * @param nb_joints the number of joints
+   * @param robot_name the name of the associated robot
+   * @param nb_joints the number of joints of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
@@ -47,8 +47,8 @@ public:
 
   /**
    * @brief Constructor with name, joint names, frame name and reference frame provided
-   * @param robot_name the name of the robot associated to
-   * @param joint_names the vector of joint names
+   * @param robot_name the name of the associated robot
+   * @param joint_names the vector of joint names of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
@@ -58,8 +58,8 @@ public:
                     const std::string& reference_frame = "world");
 
   /**
-   * @brief "Constructor with name, frame, Jacobian matrix and reference frame provided"
-   * @param robot_name the name of the robot associated to
+   * @brief Constructor with name, frame, Jacobian matrix and reference frame provided
+   * @param robot_name the name of the associated robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param data the values of the Jacobian matrix
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
@@ -71,8 +71,8 @@ public:
 
   /**
    * @brief Constructor with name, joint names, frame name, Jacobian matrix and reference frame provided
-   * @param robot_name the name of the robot associated to
-   * @param joint_names the vector of joint names
+   * @param robot_name the name of the associated robot
+   * @param joint_names the vector of joint names of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param data the values of the Jacobian matrix
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
@@ -91,7 +91,7 @@ public:
   /**
    * @brief Constructor for a random Jacobian
    * @param robot_name the name of the associated robot
-   * @param nb_joints the number of joints for initialization
+   * @param nb_joints the number of joints of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    * @return Jacobian with random data values
@@ -104,7 +104,7 @@ public:
   /**
    * @brief Constructor for a random Jacobian
    * @param robot_name the name of the associated robot
-   * @param joint_names list of joint names
+   * @param joint_names the vector of joint names of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    * @return Jacobian with random data values
@@ -135,14 +135,8 @@ public:
   unsigned int rows() const;
 
   /**
-   * @brief Setter of the number of rows
-   * @param rows the number of rows
-   */
-  void set_rows(unsigned int rows);
-
-  /**
    * @brief Accessor of the row data at given index
-   * @param index the desired index of the row
+   * @param index the index of the desired row
    * @return the row vector at index
    */
   Eigen::VectorXd row(unsigned int index) const;
@@ -154,14 +148,8 @@ public:
   unsigned int cols() const;
 
   /**
-   * @brief Setter of the number of columns
-   * @param cols the number of columns
-   */
-  void set_cols(unsigned int cols);
-
-  /**
    * @brief Accessor of the column data at given index
-   * @param index the desired index of the column
+   * @param index the index of the desired column
    * @return the column vector at index
    */
   Eigen::VectorXd col(unsigned int index) const;
@@ -362,14 +350,6 @@ inline unsigned int Jacobian::cols() const {
   return this->cols_;
 }
 
-inline void Jacobian::set_rows(unsigned int rows) {
-  this->rows_ = rows;
-}
-
-inline void Jacobian::set_cols(unsigned int cols) {
-  this->cols_ = cols;
-}
-
 inline Eigen::VectorXd Jacobian::row(unsigned int index) const {
   return this->data_.row(index);
 }
@@ -427,20 +407,20 @@ inline void Jacobian::set_data(const Eigen::MatrixXd& data) {
 
 inline double& Jacobian::operator()(unsigned int row, unsigned int col) {
   if (row > this->rows_) {
-    throw std::out_of_range("Given row is out of range: number of rows = " + std::to_string(this->rows_));
+    throw std::out_of_range("Given row is out of range: number of rows is " + std::to_string(this->rows_));
   }
   if (col > this->cols_) {
-    throw std::out_of_range("Given column is out of range: number of columns = " + std::to_string(this->cols_));
+    throw std::out_of_range("Given column is out of range: number of columns is " + std::to_string(this->cols_));
   }
   return this->data_(row, col);
 }
 
 inline const double& Jacobian::operator()(unsigned int row, unsigned int col) const {
   if (row > this->rows_) {
-    throw std::out_of_range("Given row is out of range: number of rows = " + std::to_string(this->rows_));
+    throw std::out_of_range("Given row is out of range: number of rows is " + std::to_string(this->rows_));
   }
   if (col > this->cols_) {
-    throw std::out_of_range("Given column is out of range: number of columns = " + std::to_string(this->cols_));
+    throw std::out_of_range("Given column is out of range: number of columns is " + std::to_string(this->cols_));
   }
   return this->data_(row, col);
 }

@@ -16,6 +16,8 @@ TEST(JacobianTest, TestCreate) {
     EXPECT_EQ(jac.get_joint_names().at(i), ("joint" + std::to_string(i)));
     EXPECT_EQ(jac.col(i).norm(), 0);
   }
+  EXPECT_THROW(jac.set_joint_names(5), exceptions::IncompatibleSizeException);
+  EXPECT_THROW(jac.set_joint_names(std::vector<std::string>{"j0"}), exceptions::IncompatibleSizeException);
 }
 
 TEST(JacobianTest, TestCreateWithVectorOfJoints) {

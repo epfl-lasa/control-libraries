@@ -16,6 +16,8 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 
+using namespace state_representation;
+
 namespace dynamical_systems {
 /**
  * @class Linear
@@ -25,8 +27,8 @@ namespace dynamical_systems {
 template<class S>
 class Linear : public DynamicalSystem<S> {
 private:
-  std::shared_ptr<state_representation::Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
-  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
+  std::shared_ptr<Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
+  std::shared_ptr<Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
 
 protected:
   /**
@@ -108,7 +110,7 @@ public:
    * @brief Return a list of all the parameters of the dynamical system
    * @return the list of parameters
    */
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+  std::list<std::shared_ptr<ParameterInterface>> get_parameters() const override;
 };
 
 template<class S>
@@ -122,7 +124,11 @@ inline void Linear<S>::set_attractor(const S& attractor) {
 }
 
 template<>
-inline void Linear<state_representation::CartesianState>::set_attractor(const state_representation::CartesianState& attractor) {
+void Linear<CartesianState>::set_attractor(const CartesianState& attractor) {
+  if (this->get_base_frame().is_empty()) {
+    DynamicalSystem<CartesianState>::set_base_frame(CartesianState::Identity(attractor.get_reference_frame(),
+                                                                             attractor.get_reference_frame()));
+  }
   // validate that the reference frame of the attractor is always compatible with the DS reference frame
   if (attractor.get_reference_frame() != this->get_base_frame().get_name()) {
     if (attractor.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
@@ -143,8 +149,8 @@ inline void Linear<S>::set_base_frame(const S& base_frame) {
   DynamicalSystem<S>::set_base_frame(base_frame);
 }
 template<>
-inline void Linear<state_representation::CartesianState>::set_base_frame(const state_representation::CartesianState& base_frame) {
-  DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
+inline void Linear<CartesianState>::set_base_frame(const CartesianState& base_frame) {
+  DynamicalSystem<CartesianState>::set_base_frame(base_frame);
   // update reference frame of attractor
   auto attractor = this->get_attractor();
   attractor.set_reference_frame(base_frame.get_name());
@@ -157,8 +163,8 @@ inline const Eigen::MatrixXd& Linear<S>::get_gain() const {
 }
 
 template<class S>
-std::list<std::shared_ptr<state_representation::ParameterInterface>> Linear<S>::get_parameters() const {
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
+std::list<std::shared_ptr<ParameterInterface>> Linear<S>::get_parameters() const {
+  std::list<std::shared_ptr<ParameterInterface>> param_list;
   param_list.push_back(this->attractor_);
   param_list.push_back(this->gain_);
   return param_list;

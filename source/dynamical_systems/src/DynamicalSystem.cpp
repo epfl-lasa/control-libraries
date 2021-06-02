@@ -3,6 +3,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
+#include "dynamical_systems/exceptions/EmptyBaseFrameException.hpp"
 
 using namespace state_representation;
 
@@ -14,7 +15,7 @@ template<>
 DynamicalSystem<JointState>::DynamicalSystem() : base_frame_(JointState()) {}
 
 template<>
-DynamicalSystem<CartesianState>::DynamicalSystem() : base_frame_(CartesianState::Identity("world")) {}
+DynamicalSystem<CartesianState>::DynamicalSystem() : base_frame_(CartesianState()) {}
 
 template<>
 DynamicalSystem<CartesianState>::DynamicalSystem(const std::string& base_frame) :
@@ -40,6 +41,9 @@ template JointState DynamicalSystem<JointState>::evaluate(const JointState& stat
 
 template<>
 CartesianState DynamicalSystem<CartesianState>::evaluate(const CartesianState& state) const {
+  if (this->get_base_frame().is_empty()) {
+    throw exceptions::EmptyBaseFrameException("The base frame of the dynamical system is empty.");
+  }
   if (state.get_reference_frame() != this->get_base_frame().get_name()) {
     if (state.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(

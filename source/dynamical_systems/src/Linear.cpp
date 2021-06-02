@@ -1,6 +1,6 @@
 #include "dynamical_systems/Linear.hpp"
 
-#include "dynamical_systems/exceptions/AttractorEmptyException.hpp"
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
 using namespace state_representation;
 
@@ -127,7 +127,7 @@ Linear<JointState>::Linear(const JointState& attractor, const Eigen::MatrixXd& g
 template<>
 CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& state) const {
   if (this->get_attractor().is_empty()) {
-    throw exceptions::AttractorEmptyException("The attractor of the dynamical system is empty.");
+    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
   }
   CartesianTwist twist = CartesianPose(this->get_attractor()) - CartesianPose(state);
   twist *= this->get_gain();
@@ -137,7 +137,7 @@ CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& st
 template<>
 JointState Linear<JointState>::compute_dynamics(const JointState& state) const {
   if (this->get_attractor().is_empty()) {
-    throw exceptions::AttractorEmptyException("The attractor of the dynamical system is empty.");
+    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
   }
   JointVelocities velocities = JointPositions(this->get_attractor()) - JointPositions(state);
   velocities *= this->get_gain();

@@ -1,17 +1,21 @@
 #include <vector>
 #include <gtest/gtest.h>
 #include "dynamical_systems/Linear.hpp"
+#include "dynamical_systems/exceptions/EmptyBaseFrameException.hpp"
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 
+using namespace dynamical_systems;
+using namespace state_representation;
 using namespace std::literals::chrono_literals;
 
 class LinearDSTest : public testing::Test {
 protected:
   void SetUp() override {
-    current_pose = state_representation::CartesianPose("A", 10 * Eigen::Vector3d::Random());
-    target_pose = state_representation::CartesianPose("B", 10 * Eigen::Vector3d::Random(),
-                                                     Eigen::Quaterniond::UnitRandom());
+    current_pose = CartesianPose("A", 10 * Eigen::Vector3d::Random());
+    target_pose = CartesianPose("B", 10 * Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
   }
   void print_current_and_target_pose() {
     std::cout << current_pose << std::endl;
@@ -25,27 +29,63 @@ protected:
     EXPECT_NEAR(current_pose.get_orientation().angularDistance(target_pose.get_orientation()), 0.0f, angular_tol);
   }
 
-  state_representation::CartesianPose current_pose;
-  state_representation::CartesianPose target_pose;
+  CartesianPose current_pose;
+  CartesianPose target_pose;
   unsigned int nb_steps = 100;
   std::chrono::milliseconds dt = 100ms;
   double linear_tol = 1e-3;
   double angular_tol = 1e-3;
 };
 
-TEST_F(LinearDSTest, IsCompatible) {
-  state_representation::CartesianState state1("C", "A");
-  state_representation::CartesianState state2("C", "B");
-  state_representation::CartesianState state3("C", "D");
+TEST_F(LinearDSTest, EmptyConstructors) {
+  // construct empty cartesian state DS
+  Linear<CartesianState> cartesianDS;
+  CartesianState cartesian_state1 = CartesianState::Identity("B", "A");
+  CartesianState cartesian_state2("D", "C");
+  CartesianState cartesian_state3("C", "A");
+  CartesianState cartesian_state4("C", "B");
+  // if no base frame is set, an exception is thrown
+  EXPECT_THROW(cartesianDS.evaluate(cartesian_state1), dynamical_systems::exceptions::EmptyBaseFrameException);
+  cartesianDS.set_base_frame(cartesian_state1);
+  // if no cartesian state is incompatible, an exception is thrown
+  EXPECT_THROW(cartesianDS.evaluate(cartesian_state2),
+               state_representation::exceptions::IncompatibleReferenceFramesException);
+  // if cartesian state needs to be transformed to other frame first and is empty, an exception is thrown
+  EXPECT_THROW(cartesianDS.evaluate(cartesian_state3), state_representation::exceptions::EmptyStateException);
+  // if no attractor is set, an exception is thrown
+  EXPECT_THROW(cartesianDS.evaluate(cartesian_state4), dynamical_systems::exceptions::EmptyAttractorException);
 
-  state_representation::CartesianState attractor_frame("CAttractor", "A");
-  dynamical_systems::Linear<state_representation::CartesianState> ds(attractor_frame);
+  CartesianPose attractor = CartesianPose::Identity("CAttractor", "A");
+  cartesianDS.set_attractor(attractor);
+  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state1));
+  EXPECT_FALSE(cartesianDS.is_compatible(cartesian_state2));
+  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state3));
+  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state4));
+
+  cartesianDS = Linear<CartesianState>();
+  EXPECT_TRUE(cartesianDS.get_base_frame().is_empty());
+  EXPECT_TRUE(cartesianDS.get_attractor().is_empty());
+  cartesianDS.set_attractor(attractor);
+  EXPECT_FALSE(cartesianDS.get_attractor().is_empty());
+  // when attractor was set without a base frame, expect base frame to be identity with name / reference_frame of attractor
+  EXPECT_EQ(cartesianDS.get_base_frame().get_name(), attractor.get_reference_frame());
+  EXPECT_EQ(cartesianDS.get_base_frame().get_reference_frame(), attractor.get_reference_frame());
+  EXPECT_EQ(cartesianDS.get_base_frame().get_transformation_matrix(), Eigen::Matrix4d::Identity());
+}
+
+TEST_F(LinearDSTest, IsCompatible) {
+  CartesianState state1("C", "A");
+  CartesianState state2("C", "B");
+  CartesianState state3("C", "D");
+
+  CartesianState attractor_frame = CartesianState::Identity("CAttractor", "A");
+  Linear<CartesianState> ds(attractor_frame);
   EXPECT_TRUE(ds.is_compatible(state1));
   EXPECT_FALSE(ds.is_compatible(state2));
   EXPECT_FALSE(ds.is_compatible(state3));
 
   // change the base frame
-  state_representation::CartesianState base_frame("A", "B");
+  CartesianState base_frame = CartesianState::Identity("A", "B");
   ds.set_base_frame(base_frame);
   EXPECT_TRUE(ds.is_compatible(state1));
   EXPECT_TRUE(ds.is_compatible(state2));
@@ -55,10 +95,10 @@ TEST_F(LinearDSTest, IsCompatible) {
 TEST_F(LinearDSTest, PositionOnly) {
   current_pose.set_orientation(Eigen::Quaterniond::Identity());
   target_pose.set_orientation(Eigen::Quaterniond::Identity());
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  Linear<CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
 
@@ -69,20 +109,20 @@ TEST_F(LinearDSTest, OrientationOnly) {
   current_pose.set_position(Eigen::Vector3d::Zero());
   target_pose.set_position(Eigen::Vector3d::Zero());
 
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  Linear<CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
   test_closeness();
 }
 
 TEST_F(LinearDSTest, PositionAndOrientation) {
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose);
+  Linear<CartesianState> linearDS(target_pose);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
+    CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
 
@@ -91,10 +131,10 @@ TEST_F(LinearDSTest, PositionAndOrientation) {
 
 TEST_F(LinearDSTest, NonUniformGainValues) {
   std::vector<double> gains(6, 0);
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(target_pose, gains);
+  Linear<CartesianState> linearDS(target_pose, gains);
 
   // expect no twist when DS gains are all zero
-  state_representation::CartesianTwist twist = linearDS.evaluate(current_pose);
+  CartesianTwist twist = linearDS.evaluate(current_pose);
   EXPECT_NEAR(twist.get_linear_velocity().norm(), 0, linear_tol);
   EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, angular_tol);
 
@@ -119,19 +159,19 @@ TEST_F(LinearDSTest, NonUniformGainValues) {
 }
 
 TEST(LinearDSTestFrames, FixedReferenceFrames) {
-  auto BinA = state_representation::CartesianState::Identity("B", "A");
-  auto CinA = state_representation::CartesianState::Identity("C", "A");
-  auto CinB = state_representation::CartesianState::Identity("C", "B");
+  auto BinA = CartesianState::Identity("B", "A");
+  auto CinA = CartesianState::Identity("C", "A");
+  auto CinB = CartesianState::Identity("C", "B");
   BinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
   CinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
   CinB.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
 
   // initialise the linearDS with attractor at B in reference frame A
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
+  Linear<CartesianState> linearDS(BinA);
 
   // evaluating a current pose B in reference frame A should give zero twist (coincident with attractor)
-  state_representation::CartesianTwist twist = linearDS.evaluate(BinA);
+  CartesianTwist twist = linearDS.evaluate(BinA);
   EXPECT_NEAR(twist.data().norm(), 0, 1e-5);
 
   // evaluating pose C in frame A should give some non-zero twist
@@ -139,8 +179,7 @@ TEST(LinearDSTestFrames, FixedReferenceFrames) {
   EXPECT_GE(twist.data().norm(), 1e-5);
 
   // evaluating a state which does not match the DS base frame A should give an error
-  EXPECT_THROW(linearDS.evaluate(CinB),
-               state_representation::exceptions::IncompatibleReferenceFramesException);
+  EXPECT_THROW(linearDS.evaluate(CinB), state_representation::exceptions::IncompatibleReferenceFramesException);
 
   // an inverse state (A expressed in C) should also give an error,
   // since the reference frame does not explicitly match the DS base frame
@@ -148,12 +187,11 @@ TEST(LinearDSTestFrames, FixedReferenceFrames) {
                state_representation::exceptions::IncompatibleReferenceFramesException);
 }
 
-
 TEST(LinearDSTestFrames, UpdateBaseReferenceFrames) {
-  auto BinA = state_representation::CartesianState::Random("B", "A");
+  auto BinA = CartesianState::Random("B", "A");
 
   // initialise the linearDS with attractor at B in reference frame A
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
+  Linear<CartesianState> linearDS(BinA);
 
   // the base frame of the default constructed DS should be an identity frame
   // with the same name as the attractor reference frame
@@ -162,7 +200,7 @@ TEST(LinearDSTestFrames, UpdateBaseReferenceFrames) {
   EXPECT_STREQ(base.get_name().c_str(), base.get_reference_frame().c_str());
   EXPECT_NEAR(base.get_pose().norm(), 1, 1e-5);
 
-  auto AinWorld = state_representation::CartesianState::Random("A", "world");
+  auto AinWorld = CartesianState::Random("A", "world");
   linearDS.set_base_frame(AinWorld);
 
   // check the setter
@@ -172,7 +210,7 @@ TEST(LinearDSTestFrames, UpdateBaseReferenceFrames) {
   EXPECT_NEAR(base.get_pose().norm(), AinWorld.get_pose().norm(), 1e-5);
 
   // evaluating a current pose B in reference frame A should give zero twist (coincident with attractor)
-  state_representation::CartesianTwist twist = linearDS.evaluate(BinA);
+  CartesianTwist twist = linearDS.evaluate(BinA);
   EXPECT_STREQ(twist.get_name().c_str(), BinA.get_name().c_str());
   EXPECT_STREQ(twist.get_reference_frame().c_str(), BinA.get_reference_frame().c_str());
   EXPECT_NEAR(twist.data().norm(), 0, 1e-5);
@@ -192,23 +230,23 @@ TEST(LinearDSTestFrames, UpdateBaseReferenceFrames) {
 }
 
 TEST(LinearDSTestFrames, StackedMovingReferenceFrames) {
-  auto AinWorld = state_representation::CartesianState::Random("A", "world");
-  auto BinA = state_representation::CartesianState::Random("B", "A");
+  auto AinWorld = CartesianState::Random("A", "world");
+  auto BinA = CartesianState::Random("B", "A");
 
-  auto CinA = state_representation::CartesianState::Identity("C", "A");
+  auto CinA = CartesianState::Identity("C", "A");
   CinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
   // initialise the linearDS with attractor at B in reference frame A
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
+  Linear<CartesianState> linearDS(BinA);
 
   // evaluate the twist for a fixed state C in reference frame A
-  state_representation::CartesianTwist twist = linearDS.evaluate(CinA);
+  CartesianTwist twist = linearDS.evaluate(CinA);
 
   // the twist should be the same for a moving state C in reference frame A
   // (the DS should always give the velocity from position, not from velocity)
   CinA.set_linear_velocity(Eigen::Vector3d::Random());
   CinA.set_angular_velocity(Eigen::Vector3d::Random());
-  state_representation::CartesianTwist twist2 = linearDS.evaluate(CinA);
+  CartesianTwist twist2 = linearDS.evaluate(CinA);
 
   EXPECT_NEAR(twist.data().norm(), twist2.data().norm(), 1e-5);
 
@@ -229,13 +267,13 @@ TEST(LinearDSTestFrames, StackedMovingReferenceFrames) {
 }
 
 TEST(LinearDSTestFrames, UpdateAttractorFrame) {
-  state_representation::CartesianState A, B, C, D;
-  A = state_representation::CartesianState::Random("A", "world");
-  B = state_representation::CartesianState::Random("B", "world");
-  C = state_representation::CartesianState::Random("C", "robot");
-  D = state_representation::CartesianState::Random("D", "robot");
+  CartesianState A, B, C, D;
+  A = CartesianState::Random("A", "world");
+  B = CartesianState::Random("B", "world");
+  C = CartesianState::Random("C", "robot");
+  D = CartesianState::Random("D", "robot");
 
-  dynamical_systems::Linear<state_representation::CartesianState> linearDS(A);
+  Linear<CartesianState> linearDS(A);
 
   // state being evaluated must match the DS base frame, which is by default the attractor reference frame
   EXPECT_NO_THROW(linearDS.evaluate(B));
@@ -247,7 +285,7 @@ TEST(LinearDSTestFrames, UpdateAttractorFrame) {
   EXPECT_THROW(linearDS.set_attractor(C), state_representation::exceptions::IncompatibleReferenceFramesException);
 
   // after updating the base frame, the attractor reference frame should also be updated
-  linearDS.set_base_frame(state_representation::CartesianState::Identity(C.get_reference_frame(), C.get_reference_frame()));
+  linearDS.set_base_frame(CartesianState::Identity(C.get_reference_frame(), C.get_reference_frame()));
   EXPECT_STREQ(linearDS.get_attractor().get_reference_frame().c_str(), C.get_reference_frame().c_str());
 
   // with the new base frame, setting the attractor should succeed / fail accordingly

@@ -8,6 +8,7 @@
 
 #include "dynamical_systems/DynamicalSystem.hpp"
 #include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointPositions.hpp"
@@ -42,7 +43,11 @@ protected:
   S compute_dynamics(const S& state) const override;
 
 public:
+  /**
+   * @brief Empty constructor
+   */
   explicit Linear();
+
   /**
    * @brief Constructor with specified attractor and iso gain
    * @param attractor the attractor of the linear system
@@ -124,7 +129,10 @@ inline void Linear<S>::set_attractor(const S& attractor) {
 }
 
 template<>
-void Linear<CartesianState>::set_attractor(const CartesianState& attractor) {
+inline void Linear<CartesianState>::set_attractor(const CartesianState& attractor) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   if (this->get_base_frame().is_empty()) {
     DynamicalSystem<CartesianState>::set_base_frame(CartesianState::Identity(attractor.get_reference_frame(),
                                                                              attractor.get_reference_frame()));
@@ -150,11 +158,16 @@ inline void Linear<S>::set_base_frame(const S& base_frame) {
 }
 template<>
 inline void Linear<CartesianState>::set_base_frame(const CartesianState& base_frame) {
+  if (base_frame.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
+  }
   DynamicalSystem<CartesianState>::set_base_frame(base_frame);
-  // update reference frame of attractor
-  auto attractor = this->get_attractor();
-  attractor.set_reference_frame(base_frame.get_name());
-  this->set_attractor(attractor);
+  if (!this->get_attractor().is_empty()) {
+    // update reference frame of attractor
+    auto attractor = this->get_attractor();
+    attractor.set_reference_frame(base_frame.get_name());
+    this->set_attractor(attractor);
+  }
 }
 
 template<class S>

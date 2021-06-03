@@ -17,7 +17,7 @@ showcases the `robot_model` module (#136, #139)
 - Remove `set_rows` and `set_cols` from Jacobian class due to inexpedience (#144)
 - Add constructor for the CartesianPose with only a quaternion provided (#145)
 - Add empty constructor for the Jacobian (#146)
-
+- Fix operators in JointState (#148)
 
 ## 2.0.0
 

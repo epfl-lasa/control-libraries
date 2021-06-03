@@ -32,12 +32,24 @@ bool DynamicalSystem<state_representation::CartesianState>::is_compatible(const 
       && state.get_reference_frame() != this->get_base_frame().get_reference_frame());
 }
 
+template<>
+bool DynamicalSystem<state_representation::JointState>::is_compatible(const state_representation::JointState& state) {
+  return (state.get_name() == this->get_base_frame().get_name()
+      && state.get_names() == this->get_base_frame().get_names());
+}
+
 template<class S>
 S DynamicalSystem<S>::evaluate(const S& state) const {
   return this->compute_dynamics(state);
 }
 
-template JointState DynamicalSystem<JointState>::evaluate(const JointState& state) const;
+template<>
+JointState DynamicalSystem<JointState>::evaluate(const JointState& state) const {
+  if (this->get_base_frame().is_empty()) {
+    throw exceptions::EmptyBaseFrameException("The base frame of the dynamical system is empty.");
+  }
+  return this->compute_dynamics(state);
+}
 
 template<>
 CartesianState DynamicalSystem<CartesianState>::evaluate(const CartesianState& state) const {

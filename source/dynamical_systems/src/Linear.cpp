@@ -1,5 +1,6 @@
 #include "dynamical_systems/Linear.hpp"
 
+#include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
 using namespace state_representation;
@@ -9,12 +10,6 @@ namespace dynamical_systems {
 template<>
 void Linear<CartesianState>::set_gain(double iso_gain) {
   this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(6, 6));
-}
-
-template<>
-void Linear<JointState>::set_gain(double iso_gain) {
-  int nb_joints = this->get_attractor().get_size();
-  this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(nb_joints, nb_joints));
 }
 
 template<>
@@ -64,7 +59,7 @@ Linear<CartesianState>::Linear() :
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
   this->attractor_->get_value().set_empty();
-  this->set_gain(0);
+  this->set_gain(1);
 }
 
 template<>
@@ -73,7 +68,6 @@ Linear<JointState>::Linear() :
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", JointPositions()))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
   this->attractor_->get_value().set_empty();
-  this->set_gain(0);
 }
 
 template<>
@@ -89,7 +83,7 @@ Linear<CartesianState>::Linear(const CartesianState& attractor, double iso_gain)
 
 template<>
 Linear<JointState>::Linear(const JointState& attractor, double iso_gain) :
-    DynamicalSystem<JointState>(),
+    DynamicalSystem<JointState>(JointState::Zero(attractor.get_name(), attractor.get_names())),
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
   if (attractor.is_empty()) {

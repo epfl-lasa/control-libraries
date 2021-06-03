@@ -5,10 +5,11 @@
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
 #include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 
-using namespace dynamical_systems;
 using namespace state_representation;
+using namespace dynamical_systems;
 using namespace std::literals::chrono_literals;
 
 class LinearDSTest : public testing::Test {
@@ -23,12 +24,6 @@ protected:
     std::cout << abs(current_pose.get_orientation().dot(target_pose.get_orientation())) << std::endl;
   }
 
-  void test_closeness() {
-    // print_current_and_target_pose();
-    EXPECT_NEAR((current_pose.get_position() - target_pose.get_position()).norm(), 0.0f, linear_tol);
-    EXPECT_NEAR(current_pose.get_orientation().angularDistance(target_pose.get_orientation()), 0.0f, angular_tol);
-  }
-
   CartesianPose current_pose;
   CartesianPose target_pose;
   unsigned int nb_steps = 100;
@@ -37,40 +32,79 @@ protected:
   double angular_tol = 1e-3;
 };
 
-TEST_F(LinearDSTest, EmptyConstructors) {
+TEST_F(LinearDSTest, EmptyConstructorCartesianState) {
   // construct empty cartesian state DS
-  Linear<CartesianState> cartesianDS;
-  CartesianState cartesian_state1 = CartesianState::Identity("B", "A");
-  CartesianState cartesian_state2("D", "C");
-  CartesianState cartesian_state3("C", "A");
-  CartesianState cartesian_state4("C", "B");
+  CartesianPose attractor = CartesianPose::Identity("CAttractor", "A");
+  Linear<CartesianState> ds;
+  // base frame and attractor should be empty
+  EXPECT_TRUE(ds.get_base_frame().is_empty());
+  EXPECT_TRUE(ds.get_attractor().is_empty());
+  ds.set_attractor(attractor);
+  EXPECT_FALSE(ds.get_attractor().is_empty());
+  // when attractor was set without a base frame, expect base frame to be identity with name / reference_frame of attractor
+  EXPECT_EQ(ds.get_base_frame().get_name(), attractor.get_reference_frame());
+  EXPECT_EQ(ds.get_base_frame().get_reference_frame(), attractor.get_reference_frame());
+  EXPECT_EQ(ds.get_base_frame().get_transformation_matrix(), Eigen::Matrix4d::Identity());
+
+  ds = Linear<CartesianState>();
+  CartesianState state1 = CartesianState::Identity("B", "A");
+  CartesianState state2("D", "C");
+  CartesianState state3("C", "A");
+  CartesianState state4("C", "B");
   // if no base frame is set, an exception is thrown
-  EXPECT_THROW(cartesianDS.evaluate(cartesian_state1), dynamical_systems::exceptions::EmptyBaseFrameException);
-  cartesianDS.set_base_frame(cartesian_state1);
-  // if no cartesian state is incompatible, an exception is thrown
-  EXPECT_THROW(cartesianDS.evaluate(cartesian_state2),
+  EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
+  ds.set_base_frame(state1);
+  // if cartesian state is incompatible, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state2),
                state_representation::exceptions::IncompatibleReferenceFramesException);
   // if cartesian state needs to be transformed to other frame first and is empty, an exception is thrown
-  EXPECT_THROW(cartesianDS.evaluate(cartesian_state3), state_representation::exceptions::EmptyStateException);
+  EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::EmptyStateException);
   // if no attractor is set, an exception is thrown
-  EXPECT_THROW(cartesianDS.evaluate(cartesian_state4), dynamical_systems::exceptions::EmptyAttractorException);
+  EXPECT_THROW(ds.evaluate(state4), dynamical_systems::exceptions::EmptyAttractorException);
 
-  CartesianPose attractor = CartesianPose::Identity("CAttractor", "A");
-  cartesianDS.set_attractor(attractor);
-  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state1));
-  EXPECT_FALSE(cartesianDS.is_compatible(cartesian_state2));
-  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state3));
-  EXPECT_TRUE(cartesianDS.is_compatible(cartesian_state4));
+  ds.set_attractor(attractor);
+  EXPECT_TRUE(ds.is_compatible(state1));
+  EXPECT_FALSE(ds.is_compatible(state2));
+  EXPECT_TRUE(ds.is_compatible(state3));
+  EXPECT_TRUE(ds.is_compatible(state4));
+}
 
-  cartesianDS = Linear<CartesianState>();
-  EXPECT_TRUE(cartesianDS.get_base_frame().is_empty());
-  EXPECT_TRUE(cartesianDS.get_attractor().is_empty());
-  cartesianDS.set_attractor(attractor);
-  EXPECT_FALSE(cartesianDS.get_attractor().is_empty());
-  // when attractor was set without a base frame, expect base frame to be identity with name / reference_frame of attractor
-  EXPECT_EQ(cartesianDS.get_base_frame().get_name(), attractor.get_reference_frame());
-  EXPECT_EQ(cartesianDS.get_base_frame().get_reference_frame(), attractor.get_reference_frame());
-  EXPECT_EQ(cartesianDS.get_base_frame().get_transformation_matrix(), Eigen::Matrix4d::Identity());
+TEST_F(LinearDSTest, EmptyConstructorJointState) {
+  // construct empty joint state DS
+  Linear<JointState> ds;
+  JointState attractor = JointState::Zero("robot", 3);
+
+  EXPECT_TRUE(ds.get_base_frame().is_empty());
+  EXPECT_TRUE(ds.get_attractor().is_empty());
+  ds.set_attractor(attractor);
+  EXPECT_FALSE(ds.get_attractor().is_empty());
+  // when attractor was set without a base frame, expect base frame to be zero with name of attractor
+  EXPECT_EQ(ds.get_base_frame().get_name(), attractor.get_name());
+  EXPECT_EQ(ds.get_base_frame().get_names(), attractor.get_names());
+  EXPECT_EQ(ds.get_base_frame().data(), Eigen::VectorXd::Zero(attractor.get_size() * 4));
+
+  ds = Linear<JointState>();
+  JointState state1 = JointState::Zero("robot", 2);
+  JointState state2 = JointState::Zero("robot", 3);
+  JointState state3 = JointState::Zero("dummy", 2);
+  JointState state4 = JointState::Zero("dummy", 3);
+  // if no base frame is set, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
+  ds.set_base_frame(state1);
+  // if no attractor is set, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state2), dynamical_systems::exceptions::EmptyAttractorException);
+  // if attractor with incompatible robot names should be set, an exception is thrown
+  EXPECT_THROW(ds.set_attractor(state3), state_representation::exceptions::IncompatibleReferenceFramesException);
+  // if attractor with incompatible joint names should be set, an exception is thrown
+  EXPECT_THROW(ds.set_attractor(attractor), state_representation::exceptions::IncompatibleReferenceFramesException);
+  ds.set_base_frame(state2);
+  ds.set_attractor(attractor);
+  EXPECT_TRUE(ds.is_compatible(state2));
+  EXPECT_FALSE(ds.is_compatible(state3));
+  EXPECT_FALSE(ds.is_compatible(state4));
+  EXPECT_NO_THROW(ds.evaluate(state2));
+  EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::IncompatibleStatesException);
+  EXPECT_THROW(ds.evaluate(state4), state_representation::exceptions::IncompatibleStatesException);
 }
 
 TEST_F(LinearDSTest, IsCompatible) {
@@ -101,8 +135,7 @@ TEST_F(LinearDSTest, PositionOnly) {
     CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
-
-  test_closeness();
+  EXPECT_NEAR(current_pose.dist(target_pose, CartesianStateVariable::POSITION), 0, linear_tol);
 }
 
 TEST_F(LinearDSTest, OrientationOnly) {
@@ -115,7 +148,7 @@ TEST_F(LinearDSTest, OrientationOnly) {
     CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
-  test_closeness();
+  EXPECT_NEAR(current_pose.dist(target_pose, CartesianStateVariable::ORIENTATION), 0, angular_tol);
 }
 
 TEST_F(LinearDSTest, PositionAndOrientation) {
@@ -125,8 +158,20 @@ TEST_F(LinearDSTest, PositionAndOrientation) {
     CartesianTwist twist = linearDS.evaluate(current_pose);
     current_pose += dt * twist;
   }
+  EXPECT_NEAR(current_pose.dist(target_pose, CartesianStateVariable::POSITION), 0, linear_tol);
+  EXPECT_NEAR(current_pose.dist(target_pose, CartesianStateVariable::ORIENTATION), 0, angular_tol);
+}
 
-  test_closeness();
+TEST_F(LinearDSTest, JointState) {
+  auto current_positions = JointPositions::Zero("robot", 3);
+  auto target_positions = JointPositions::Random("robot", 3);
+  Linear<JointState> linearDS(target_positions);
+
+  for (unsigned int i = 0; i < nb_steps; ++i) {
+    JointVelocities velocities = linearDS.evaluate(current_positions);
+    current_positions += dt * velocities;
+  }
+  EXPECT_NEAR(current_positions.dist(target_positions), 0, linear_tol);
 }
 
 TEST_F(LinearDSTest, NonUniformGainValues) {

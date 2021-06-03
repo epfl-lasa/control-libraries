@@ -124,7 +124,7 @@ void JointState::multiply_state_variable(const Eigen::MatrixXd& lambda, const Jo
                                         + std::to_string(expected_size) + ", given " + std::to_string(lambda.rows())
                                         + "x" + std::to_string(lambda.cols()));
   }
-  this->set_all_state_variables(lambda * this->get_all_state_variables());
+  this->set_state_variable(lambda * this->get_state_variable(state_variable_type), state_variable_type);
 }
 
 JointState& JointState::operator*=(const Eigen::ArrayXd& lambda) {

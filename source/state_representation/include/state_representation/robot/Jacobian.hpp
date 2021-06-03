@@ -34,16 +34,21 @@ private:
 
 public:
   /**
+   * @brief Empty constructor for a Jacobian
+   */
+  Jacobian();
+
+  /**
    * @brief Constructor with name, number of joints, frame name and reference frame provided
    * @param robot_name the name of the associated robot
    * @param nb_joints the number of joints of the robot
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
-  explicit Jacobian(const std::string& robot_name,
-                    unsigned int nb_joints,
-                    const std::string& frame,
-                    const std::string& reference_frame = "world");
+  Jacobian(const std::string& robot_name,
+           unsigned int nb_joints,
+           const std::string& frame,
+           const std::string& reference_frame = "world");
 
   /**
    * @brief Constructor with name, joint names, frame name and reference frame provided
@@ -52,10 +57,10 @@ public:
    * @param frame the name of the frame at which the Jacobian is computed
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
-  explicit Jacobian(const std::string& robot_name,
-                    const std::vector<std::string>& joint_names,
-                    const std::string& frame,
-                    const std::string& reference_frame = "world");
+  Jacobian(const std::string& robot_name,
+           const std::vector<std::string>& joint_names,
+           const std::string& frame,
+           const std::string& reference_frame = "world");
 
   /**
    * @brief Constructor with name, frame, Jacobian matrix and reference frame provided
@@ -64,10 +69,10 @@ public:
    * @param data the values of the Jacobian matrix
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
-  explicit Jacobian(const std::string& robot_name,
-                    const std::string& frame,
-                    const Eigen::MatrixXd& data,
-                    const std::string& reference_frame = "world");
+  Jacobian(const std::string& robot_name,
+           const std::string& frame,
+           const Eigen::MatrixXd& data,
+           const std::string& reference_frame = "world");
 
   /**
    * @brief Constructor with name, joint names, frame name, Jacobian matrix and reference frame provided
@@ -77,11 +82,11 @@ public:
    * @param data the values of the Jacobian matrix
    * @param reference_frame the name of the reference frame in which the Jacobian is expressed (default "world")
    */
-  explicit Jacobian(const std::string& robot_name,
-                    const std::vector<std::string>& joint_names,
-                    const std::string& frame,
-                    const Eigen::MatrixXd& data,
-                    const std::string& reference_frame = "world");
+  Jacobian(const std::string& robot_name,
+           const std::vector<std::string>& joint_names,
+           const std::string& frame,
+           const Eigen::MatrixXd& data,
+           const std::string& reference_frame = "world");
 
   /**
    * @brief Copy constructor of a Jacobian

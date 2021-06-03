@@ -4,6 +4,10 @@
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 namespace state_representation {
+Jacobian::Jacobian() : State(StateType::JACOBIANMATRIX) {
+  this->State::initialize();
+}
+
 Jacobian::Jacobian(const std::string& robot_name,
                    unsigned int nb_joints,
                    const std::string& frame,

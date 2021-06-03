@@ -18,6 +18,7 @@ showcases the `robot_model` module (#136, #139)
 - Add constructor for the CartesianPose with only a quaternion provided (#145)
 - Add empty constructor for the Jacobian (#146)
 - Fix operators in JointState (#148)
+- Add empty constructors for JointState and CartesianState linear DS and improve unittests (#147)
 
 ## 2.0.0
 

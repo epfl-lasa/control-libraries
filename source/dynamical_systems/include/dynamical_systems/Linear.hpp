@@ -16,8 +16,6 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 
-using namespace state_representation;
-
 namespace dynamical_systems {
 /**
  * @class Linear
@@ -27,8 +25,8 @@ namespace dynamical_systems {
 template<class S>
 class Linear : public DynamicalSystem<S> {
 private:
-  std::shared_ptr<Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
-  std::shared_ptr<Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
+  std::shared_ptr<state_representation::Parameter<S>> attractor_;         ///< attractor of the dynamical system in the space
+  std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>> gain_;///< gain associate to the system
 
 protected:
   /**
@@ -52,7 +50,7 @@ public:
    * @param attractor the attractor of the linear system
    * @param iso_gain the iso gain of the system
    */
-  Linear(const S& attractor, double iso_gain = 1.0);
+  explicit Linear(const S& attractor, double iso_gain = 1.0);
 
   /**
    * @brief Constructor with specified attractor and different gains specified as diagonal coefficients
@@ -114,11 +112,11 @@ public:
    * @brief Return a list of all the parameters of the dynamical system
    * @return the list of parameters
    */
-  std::list<std::shared_ptr<ParameterInterface>> get_parameters() const override;
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
 template<>
-void Linear<JointState>::set_gain(double iso_gain) {
+inline void Linear<state_representation::JointState>::set_gain(double iso_gain) {
   int nb_joints = this->get_attractor().get_size();
   this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(nb_joints, nb_joints));
 }
@@ -134,12 +132,12 @@ inline void Linear<S>::set_attractor(const S& attractor) {
 }
 
 template<>
-inline void Linear<CartesianState>::set_attractor(const CartesianState& attractor) {
+inline void Linear<state_representation::CartesianState>::set_attractor(const state_representation::CartesianState& attractor) {
   if (attractor.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
   }
   if (this->get_base_frame().is_empty()) {
-    DynamicalSystem<CartesianState>::set_base_frame(CartesianState::Identity(attractor.get_reference_frame(),
+    DynamicalSystem<state_representation::CartesianState>::set_base_frame(state_representation::CartesianState::Identity(attractor.get_reference_frame(),
                                                                              attractor.get_reference_frame()));
   }
   // validate that the reference frame of the attractor is always compatible with the DS reference frame
@@ -157,12 +155,12 @@ inline void Linear<CartesianState>::set_attractor(const CartesianState& attracto
 }
 
 template<>
-inline void Linear<JointState>::set_attractor(const JointState& attractor) {
+inline void Linear<state_representation::JointState>::set_attractor(const state_representation::JointState& attractor) {
   if (attractor.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
   }
   if (this->get_base_frame().is_empty()) {
-    DynamicalSystem<JointState>::set_base_frame(JointState::Zero(attractor.get_name(), attractor.get_names()));
+    DynamicalSystem<state_representation::JointState>::set_base_frame(state_representation::JointState::Zero(attractor.get_name(), attractor.get_names()));
   }
   // validate that the attractor is compatible with the DS reference name
   if (!this->is_compatible(attractor)) {
@@ -182,11 +180,11 @@ inline void Linear<S>::set_base_frame(const S& base_frame) {
 }
 
 template<>
-inline void Linear<CartesianState>::set_base_frame(const CartesianState& base_frame) {
+inline void Linear<state_representation::CartesianState>::set_base_frame(const state_representation::CartesianState& base_frame) {
   if (base_frame.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
   }
-  DynamicalSystem<CartesianState>::set_base_frame(base_frame);
+  DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
   if (!this->get_attractor().is_empty()) {
     // update reference frame of attractor
     auto attractor = this->get_attractor();
@@ -196,11 +194,11 @@ inline void Linear<CartesianState>::set_base_frame(const CartesianState& base_fr
 }
 
 template<>
-inline void Linear<JointState>::set_base_frame(const JointState& base_frame) {
+inline void Linear<state_representation::JointState>::set_base_frame(const state_representation::JointState& base_frame) {
   if (base_frame.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
   }
-  DynamicalSystem<JointState>::set_base_frame(base_frame);
+  DynamicalSystem<state_representation::JointState>::set_base_frame(base_frame);
   if (!this->get_attractor().is_empty()) {
     // update name of attractor
     auto attractor = this->get_attractor();
@@ -216,8 +214,8 @@ inline const Eigen::MatrixXd& Linear<S>::get_gain() const {
 }
 
 template<class S>
-std::list<std::shared_ptr<ParameterInterface>> Linear<S>::get_parameters() const {
-  std::list<std::shared_ptr<ParameterInterface>> param_list;
+std::list<std::shared_ptr<state_representation::ParameterInterface>> Linear<S>::get_parameters() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
   param_list.push_back(this->attractor_);
   param_list.push_back(this->gain_);
   return param_list;

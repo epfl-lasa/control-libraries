@@ -5,7 +5,6 @@
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 
 using namespace state_representation;
@@ -37,10 +36,11 @@ TEST_F(LinearDSTest, EmptyConstructorCartesianState) {
   CartesianPose attractor = CartesianPose::Identity("CAttractor", "A");
   Linear<CartesianState> ds;
   // base frame and attractor should be empty
-  EXPECT_TRUE(ds.get_base_frame().is_empty());
   EXPECT_TRUE(ds.get_attractor().is_empty());
+  EXPECT_TRUE(ds.get_base_frame().is_empty());
   ds.set_attractor(attractor);
   EXPECT_FALSE(ds.get_attractor().is_empty());
+  EXPECT_FALSE(ds.get_base_frame().is_empty());
   // when attractor was set without a base frame, expect base frame to be identity with name / reference_frame of attractor
   EXPECT_EQ(ds.get_base_frame().get_name(), attractor.get_reference_frame());
   EXPECT_EQ(ds.get_base_frame().get_reference_frame(), attractor.get_reference_frame());
@@ -74,10 +74,11 @@ TEST_F(LinearDSTest, EmptyConstructorJointState) {
   Linear<JointState> ds;
   JointState attractor = JointState::Zero("robot", 3);
 
-  EXPECT_TRUE(ds.get_base_frame().is_empty());
   EXPECT_TRUE(ds.get_attractor().is_empty());
+  EXPECT_TRUE(ds.get_base_frame().is_empty());
   ds.set_attractor(attractor);
   EXPECT_FALSE(ds.get_attractor().is_empty());
+  EXPECT_FALSE(ds.get_base_frame().is_empty());
   // when attractor was set without a base frame, expect base frame to be zero with name of attractor
   EXPECT_EQ(ds.get_base_frame().get_name(), attractor.get_name());
   EXPECT_EQ(ds.get_base_frame().get_names(), attractor.get_names());
@@ -87,12 +88,13 @@ TEST_F(LinearDSTest, EmptyConstructorJointState) {
   JointState state1 = JointState::Zero("robot", 2);
   JointState state2 = JointState::Zero("robot", 3);
   JointState state3 = JointState::Zero("dummy", 2);
-  JointState state4 = JointState::Zero("dummy", 3);
   // if no base frame is set, an exception is thrown
   EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
   ds.set_base_frame(state1);
+  // if joint state is incompatible (here with empty base frame), an exception is thrown
+  EXPECT_THROW(ds.evaluate(state2), state_representation::exceptions::IncompatibleReferenceFramesException);
   // if no attractor is set, an exception is thrown
-  EXPECT_THROW(ds.evaluate(state2), dynamical_systems::exceptions::EmptyAttractorException);
+  EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyAttractorException);
   // if attractor with incompatible robot names should be set, an exception is thrown
   EXPECT_THROW(ds.set_attractor(state3), state_representation::exceptions::IncompatibleReferenceFramesException);
   // if attractor with incompatible joint names should be set, an exception is thrown
@@ -101,10 +103,8 @@ TEST_F(LinearDSTest, EmptyConstructorJointState) {
   ds.set_attractor(attractor);
   EXPECT_TRUE(ds.is_compatible(state2));
   EXPECT_FALSE(ds.is_compatible(state3));
-  EXPECT_FALSE(ds.is_compatible(state4));
   EXPECT_NO_THROW(ds.evaluate(state2));
-  EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::IncompatibleStatesException);
-  EXPECT_THROW(ds.evaluate(state4), state_representation::exceptions::IncompatibleStatesException);
+  EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::IncompatibleReferenceFramesException);
 }
 
 TEST_F(LinearDSTest, IsCompatible) {

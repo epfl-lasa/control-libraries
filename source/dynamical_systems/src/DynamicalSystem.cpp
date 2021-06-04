@@ -22,20 +22,19 @@ DynamicalSystem<CartesianState>::DynamicalSystem(const std::string& base_frame) 
     base_frame_(CartesianState::Identity(base_frame, base_frame)) {}
 
 template<class S>
-bool DynamicalSystem<S>::is_compatible(const S&) {
+bool DynamicalSystem<S>::is_compatible(const S&) const {
   throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state");
 }
 
 template<>
-bool DynamicalSystem<state_representation::CartesianState>::is_compatible(const state_representation::CartesianState& state) {
+bool DynamicalSystem<state_representation::CartesianState>::is_compatible(const state_representation::CartesianState& state) const {
   return !(state.get_reference_frame() != this->get_base_frame().get_name()
       && state.get_reference_frame() != this->get_base_frame().get_reference_frame());
 }
 
 template<>
-bool DynamicalSystem<state_representation::JointState>::is_compatible(const state_representation::JointState& state) {
-  return (state.get_name() == this->get_base_frame().get_name()
-      && state.get_names() == this->get_base_frame().get_names());
+bool DynamicalSystem<state_representation::JointState>::is_compatible(const state_representation::JointState& state) const {
+  return this->base_frame_.is_compatible(state);
 }
 
 template<class S>
@@ -47,6 +46,11 @@ template<>
 JointState DynamicalSystem<JointState>::evaluate(const JointState& state) const {
   if (this->get_base_frame().is_empty()) {
     throw exceptions::EmptyBaseFrameException("The base frame of the dynamical system is empty.");
+  }
+  if (!this->is_compatible(state)) {
+    throw state_representation::exceptions::IncompatibleReferenceFramesException(
+        "The evaluated state " + state.get_name() + " is incompatible with the base frame of the dynamical system "
+            + this->get_base_frame().get_name() + ".");
   }
   return this->compute_dynamics(state);
 }
@@ -60,9 +64,8 @@ CartesianState DynamicalSystem<CartesianState>::evaluate(const CartesianState& s
     if (state.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
           "The evaluated state " + state.get_name() + " in frame " + state.get_reference_frame()
-              + " is incompatible with the base frame of the dynamical system "
-              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + "."
-      );
+              + " is incompatible with the base frame of the dynamical system " + this->get_base_frame().get_name()
+              + " in frame " + this->get_base_frame().get_reference_frame() + ".");
     }
     CartesianState result = this->get_base_frame().inverse() * state;
     result = this->compute_dynamics(result);

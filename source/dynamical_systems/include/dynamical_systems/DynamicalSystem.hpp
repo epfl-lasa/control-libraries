@@ -79,7 +79,7 @@ public:
    * @param state the state to check for compatibility
    * @return true if the state is compatible with the dynamical system
    */
-  virtual bool is_compatible(const S& state);
+  virtual bool is_compatible(const S& state) const;
 };
 
 template<class S>

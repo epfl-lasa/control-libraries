@@ -7,7 +7,7 @@
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"
-#include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointPositions.hpp"
@@ -37,9 +37,14 @@ protected:
    * @param state the input state
    * @return the output state
    */
-  S compute_dynamics(const S& state) const;
+  S compute_dynamics(const S& state) const override;
 
 public:
+  /**
+   * @brief Empty constructor
+   */
+  Linear();
+
   /**
    * @brief Constructor with specified attractor and iso gain
    * @param attractor the attractor of the linear system
@@ -52,14 +57,14 @@ public:
    * @param attractor the attractor of the linear system
    * @param diagonal_coefficients the gains values specified as diagonal coefficients
    */
-  explicit Linear(const S& attractor, const std::vector<double>& diagonal_coefficients);
+  Linear(const S& attractor, const std::vector<double>& diagonal_coefficients);
 
   /**
    * @brief Constructor with specified attractor and different gains specified as full gain matrix
    * @param attractor the attractor of the linear system
    * @param gain_matrix the gains values specified as a full matrix
    */
-  explicit Linear(const S& attractor, const Eigen::MatrixXd& gain_matrix);
+  Linear(const S& attractor, const Eigen::MatrixXd& gain_matrix);
 
   /**
    * @brief Getter of the attractor
@@ -110,6 +115,12 @@ public:
   std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 };
 
+template<>
+inline void Linear<state_representation::JointState>::set_gain(double iso_gain) {
+  int nb_joints = this->get_attractor().get_size();
+  this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(nb_joints, nb_joints));
+}
+
 template<class S>
 inline const S& Linear<S>::get_attractor() const {
   return this->attractor_->get_value();
@@ -122,14 +133,20 @@ inline void Linear<S>::set_attractor(const S& attractor) {
 
 template<>
 inline void Linear<state_representation::CartesianState>::set_attractor(const state_representation::CartesianState& attractor) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
+  if (this->get_base_frame().is_empty()) {
+    DynamicalSystem<state_representation::CartesianState>::set_base_frame(state_representation::CartesianState::Identity(attractor.get_reference_frame(),
+                                                                             attractor.get_reference_frame()));
+  }
   // validate that the reference frame of the attractor is always compatible with the DS reference frame
   if (attractor.get_reference_frame() != this->get_base_frame().get_name()) {
     if (attractor.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
-          "The reference frame of the attractor " + attractor.get_name() + " in frame " + attractor.get_reference_frame()
-              + " is incompatible with the base frame of the dynamical system "
-              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + "."
-      );
+          "The reference frame of the attractor " + attractor.get_name() + " in frame "
+              + attractor.get_reference_frame() + " is incompatible with the base frame of the dynamical system "
+              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + ".");
     }
     this->attractor_->set_value(this->get_base_frame().inverse() * attractor);
   } else {
@@ -137,17 +154,58 @@ inline void Linear<state_representation::CartesianState>::set_attractor(const st
   }
 }
 
+template<>
+inline void Linear<state_representation::JointState>::set_attractor(const state_representation::JointState& attractor) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
+  if (this->get_base_frame().is_empty()) {
+    DynamicalSystem<state_representation::JointState>::set_base_frame(state_representation::JointState::Zero(attractor.get_name(), attractor.get_names()));
+  }
+  // validate that the attractor is compatible with the DS reference name
+  if (!this->is_compatible(attractor)) {
+    throw state_representation::exceptions::IncompatibleReferenceFramesException(
+        "The attractor " + attractor.get_name() + " is incompatible with the base frame of the dynamical system "
+            + this->get_base_frame().get_name() + ".");
+  }
+  this->attractor_->set_value(attractor);
+  if (this->get_gain().size() == 0) {
+    this->set_gain(1);
+  }
+}
+
 template<class S>
 inline void Linear<S>::set_base_frame(const S& base_frame) {
   DynamicalSystem<S>::set_base_frame(base_frame);
 }
+
 template<>
 inline void Linear<state_representation::CartesianState>::set_base_frame(const state_representation::CartesianState& base_frame) {
+  if (base_frame.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
+  }
   DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
-  // update reference frame of attractor
-  auto attractor = this->get_attractor();
-  attractor.set_reference_frame(base_frame.get_name());
-  this->set_attractor(attractor);
+  if (!this->get_attractor().is_empty()) {
+    // update reference frame of attractor
+    auto attractor = this->get_attractor();
+    attractor.set_reference_frame(base_frame.get_name());
+    this->set_attractor(attractor);
+  }
+}
+
+template<>
+inline void Linear<state_representation::JointState>::set_base_frame(const state_representation::JointState& base_frame) {
+  if (base_frame.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
+  }
+  DynamicalSystem<state_representation::JointState>::set_base_frame(base_frame);
+  if (!this->get_attractor().is_empty()) {
+    // update name of attractor
+    auto attractor = this->get_attractor();
+    attractor.set_name(base_frame.get_name());
+    attractor.set_names(base_frame.get_names());
+    this->set_attractor(attractor);
+  }
 }
 
 template<class S>

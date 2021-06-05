@@ -1,5 +1,8 @@
 #include "dynamical_systems/Linear.hpp"
 
+#include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
+
 using namespace state_representation;
 
 namespace dynamical_systems {
@@ -7,12 +10,6 @@ namespace dynamical_systems {
 template<>
 void Linear<CartesianState>::set_gain(double iso_gain) {
   this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(6, 6));
-}
-
-template<>
-void Linear<JointState>::set_gain(double iso_gain) {
-  int nb_joints = this->get_attractor().get_size();
-  this->gain_->set_value(iso_gain * Eigen::MatrixXd::Identity(nb_joints, nb_joints));
 }
 
 template<>
@@ -57,18 +54,41 @@ void Linear<JointState>::set_gain(const Eigen::MatrixXd& gain_matrix) {
 }
 
 template<>
+Linear<CartesianState>::Linear() :
+    DynamicalSystem<CartesianState>(),
+    attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  this->attractor_->get_value().set_empty();
+  this->set_gain(1);
+}
+
+template<>
+Linear<JointState>::Linear() :
+    DynamicalSystem<JointState>(),
+    attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", JointPositions()))),
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  this->attractor_->get_value().set_empty();
+}
+
+template<>
 Linear<CartesianState>::Linear(const CartesianState& attractor, double iso_gain) :
     DynamicalSystem<CartesianState>(attractor.get_reference_frame()),
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(iso_gain);
 }
 
 template<>
 Linear<JointState>::Linear(const JointState& attractor, double iso_gain) :
-    DynamicalSystem<JointState>(),
+    DynamicalSystem<JointState>(JointState::Zero(attractor.get_name(), attractor.get_names())),
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(iso_gain);
 }
 
@@ -77,6 +97,9 @@ Linear<CartesianState>::Linear(const CartesianState& attractor, const std::vecto
     DynamicalSystem<CartesianState>(attractor.get_reference_frame()),
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(diagonal_coefficients);
 }
 
@@ -85,6 +108,9 @@ Linear<JointState>::Linear(const JointState& attractor, const std::vector<double
     DynamicalSystem<JointState>(),
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(diagonal_coefficients);
 }
 
@@ -93,19 +119,28 @@ Linear<CartesianState>::Linear(const CartesianState& attractor, const Eigen::Mat
     DynamicalSystem<CartesianState>(attractor.get_reference_frame()),
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", attractor))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(gain_matrix);
 }
 
 template<>
-Linear<JointState>::Linear(const JointState& attractor, const Eigen::MatrixXd& gain_matrix)
-    : DynamicalSystem<JointState>(),
-      attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", attractor))),
-      gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+Linear<JointState>::Linear(const JointState& attractor, const Eigen::MatrixXd& gain_matrix) :
+    DynamicalSystem<JointState>(),
+    attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor", attractor))),
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  if (attractor.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
+  }
   this->set_gain(gain_matrix);
 }
 
 template<>
 CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& state) const {
+  if (this->get_attractor().is_empty()) {
+    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
+  }
   CartesianTwist twist = CartesianPose(this->get_attractor()) - CartesianPose(state);
   twist *= this->get_gain();
   return twist;
@@ -113,6 +148,9 @@ CartesianState Linear<CartesianState>::compute_dynamics(const CartesianState& st
 
 template<>
 JointState Linear<JointState>::compute_dynamics(const JointState& state) const {
+  if (this->get_attractor().is_empty()) {
+    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
+  }
   JointVelocities velocities = JointPositions(this->get_attractor()) - JointPositions(state);
   velocities *= this->get_gain();
   return velocities;

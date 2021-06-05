@@ -1,8 +1,57 @@
 # CHANGELOG
 
 Release Versions:
+- [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 3.0.0
+
+Version 3.0.0 introduces Python bindings for the most commonly used
+`state_representation` classes, a ROS demo showcasing `robot_model`,
+a simple `CartesianTwistController` for 6DOF twist, and a handful
+of useful improvements to the`state_representation` API.
+
+### Breaking changes
+
+A very minor breaking change to the API is the removal of two setters
+from the `state_representation::Jacobian` class.
+
+**state_representation**
+
+The following functions have been removed:
+- `Jacobian::set_rows`
+- `Jacobian::set_cols`
+
+### Features
+
+**python**
+
+A top-level `python` directory has been added to provide an
+installable Python version of `state_representation`, including
+the many useful transformation operators between state types.
+- Add initial Python bindings for state_representation classes (#113, #137, #140)
+
+**demos**
+- Add a joint velocity control demo in the ROS demo package that 
+showcases the `robot_model` module (#136, #139)
+
+**controllers**
+- Add a concrete CartesianTwistController to easily control
+linear and angular velocity with a set of 4 gains (#135)
+
+**state_representation**
+- Add a function to check compatibility between a state and a dynamical system (#142)
+- Add constructor for the CartesianPose with only a quaternion provided (#145)
+- Add empty constructor for the Jacobian (#146)
+- Add empty constructors for JointState and CartesianState linear DS and improve unittests (#147)
+
+### Fixes and improvements
+- Remove `set_rows` and `set_cols` from Jacobian class due to inexpedience (#144)
+- Fix operators in JointState (#148)
+
+### Behind the scenes
+- RSA authentication for development server and better launch script (#149)
 
 ## 2.0.0
 

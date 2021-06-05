@@ -72,16 +72,24 @@ FROM development-dependencies as remote-development
 
 RUN ( \
     echo 'LogLevel DEBUG2'; \
-    echo 'PermitRootLogin yes'; \
-    echo 'PasswordAuthentication yes'; \
+    echo 'PubkeyAuthentication yes'; \
     echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
   ) > /etc/ssh/sshd_config_development \
   && mkdir /run/sshd
 
-ENV DEBIAN_FRONTEND=keyboard-interactive
-RUN useradd -m remote && yes password | passwd remote
+RUN useradd -m remote && yes | passwd remote && usermod -s /bin/bash remote
+WORKDIR /home/remote
 
-CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_development"]
+RUN ( \
+    echo '#!/bin/bash'; \
+    echo 'mkdir -p /home/remote/.ssh'; \
+    echo 'echo "$1" > /home/remote/.ssh/authorized_keys'; \
+    echo 'chmod -R 755 /home/remote/.ssh'; \
+    echo 'chown -R remote:remote /home/remote/.ssh'; \
+    echo '/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config_development'; \
+  ) > /.ssh_entrypoint.sh && chmod 744 /.ssh_entrypoint.sh
+
+ENTRYPOINT ["/.ssh_entrypoint.sh"]
 
 
 FROM development-dependencies as build-testing

@@ -23,14 +23,16 @@ as long as they adhere to the overall contribution guidelines.
 
 Prerequisites: Install [Docker](https://docs.docker.com/get-docker/) and [CLion IDE](https://www.jetbrains.com/clion/download).
 
-Step 1: Build and run the development container server with `./dev-server.sh`.
+Step 1: Build and run the development container server with `./dev-server.sh`. The script requires access
+to your public RSA key file. You may additionally specify a custom port.
+Run `./dev-server.sh --help` for more details.
 
 Step 2: If not already done, [create a remote toolchain in CLion](https://www.jetbrains.com/help/clion/remote-projects-support.html#remote-toolchain)
 using the following credentials:
- - host `127.0.0.1`
- - port `2222`
- - username `remote`
- - password `password`
+ - Host: `127.0.0.1`
+ - Port: `2222` (or custom specified port)
+ - User name: `remote`
+ - Authentication type: `Key pair`
  
 Step 3: If not already done, [create a CMake profile that uses the remote toolchain](https://www.jetbrains.com/help/clion/remote-projects-support.html#CMakeProfile).
 

@@ -17,8 +17,8 @@ HELP_MESSAGE="Usage: [sudo] ./install.sh [OPTIONS]
 An install script for the control libraries.
 
 Options:
-  -y, --auto               Suppresses any input prompts and
-                           automatically approves install steps.
+  -y, --auto               Suppress any input prompts and
+                           automatically approve install steps.
   -d, --dir [path]         Configure the installation directory
                            (default: /usr/local).
 
@@ -100,6 +100,9 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   git clone https://github.com/robotology/osqp-eigen.git
   cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && mkdir -p build && cd build || exit 1
   cmake .. && make -j && make install
+
+  ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/
+  ldconfig
 fi
 
 # install testing dependencies

@@ -76,14 +76,14 @@ public:
   CartesianTwist(const CartesianPose& pose);
 
   /**
-   * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates for the linear velocity.
+   * @brief Construct a CartesianTwist from a linear velocity given as a vector.
    */
   explicit CartesianTwist(const std::string& name,
                           const Eigen::Vector3d& linear_velocity,
                           const std::string& reference = "world");
 
   /**
-   * @brief Construct a CartesianTwist from a linear_velocity given as a vector of coordinates and a quaternion.
+   * @brief Construct a CartesianTwist from a linear velocity and angular velocity given as vectors.
    */
   explicit CartesianTwist(const std::string& name,
                           const Eigen::Vector3d& linear_velocity,

@@ -68,14 +68,14 @@ public:
   CartesianWrench(const CartesianState& state);
 
   /**
-   * @brief Construct a CartesianWrench from a force given as a vector of coordinates.
+   * @brief Construct a CartesianWrench from a force given as a vector.
    */
   explicit CartesianWrench(const std::string& name,
                            const Eigen::Vector3d& force,
                            const std::string& reference = "world");
 
   /**
-   * @brief Construct a CartesianWrench from a force given as a vector of coordinates and a quaternion.
+   * @brief Construct a CartesianWrench from a force and torque given as vectors.
    */
   explicit CartesianWrench(const std::string& name,
                            const Eigen::Vector3d& force,
@@ -107,24 +107,24 @@ public:
 
   /**
    * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param pose the pose with value to assign
-   * @return reference to the current pose with new values
+   * @param wrench the wrench with value to assign
+   * @return reference to the current wrench with new values
    */
-  CartesianWrench& operator=(const CartesianWrench& pose) = default;
+  CartesianWrench& operator=(const CartesianWrench& wrench) = default;
 
   /**
    * @brief Overload the *= operator
    * @param wrench CartesianWrench to multiply with
    * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
    */
-  CartesianWrench& operator*=(const CartesianWrench& twist);
+  CartesianWrench& operator*=(const CartesianWrench& wrench);
 
   /**
    * @brief Overload the * operator with a wrench
    * @param wrench CartesianWrench to multiply with
    * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
    */
-  CartesianWrench operator*(const CartesianWrench& twist) const;
+  CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Overload the += operator

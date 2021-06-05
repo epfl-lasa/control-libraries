@@ -1,8 +1,13 @@
 #include "state_representation/robot/Jacobian.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 namespace state_representation {
+Jacobian::Jacobian() : State(StateType::JACOBIANMATRIX) {
+  this->State::initialize();
+}
+
 Jacobian::Jacobian(const std::string& robot_name,
                    unsigned int nb_joints,
                    const std::string& frame,
@@ -300,6 +305,13 @@ Jacobian operator*(const CartesianPose& pose, const Jacobian& jacobian) {
 }
 
 Eigen::MatrixXd operator*(const Eigen::MatrixXd& matrix, const Jacobian& jacobian) {
+  // check compatibility
+  if (jacobian.is_empty()) {
+    throw EmptyStateException(jacobian.get_name() + " state is empty");
+  }
+  if (matrix.cols() != jacobian.rows()) {
+    throw IncompatibleStatesException("The matrix and the Jacobian have incompatible sizes");
+  }
   return matrix * jacobian.data();
 }
 }// namespace state_representation

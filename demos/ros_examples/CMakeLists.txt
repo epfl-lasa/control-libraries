@@ -29,7 +29,13 @@ find_library(robot_model REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     tf
+    std_msgs
+    sensor_msgs
 )
+
+find_package(Boost REQUIRED COMPONENTS system)
+add_compile_definitions(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)
+add_compile_definitions(BOOST_MPL_LIMIT_LIST_SIZE=30)
 
 catkin_package(
     CATKIN_DEPENDS roscpp tf
@@ -49,9 +55,9 @@ include_directories(
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
+    joint_space_velocity_control
 )
-
-set(FIXTURE_INSTALL_PATH ${CATKIN_PACKAGE_SHARE_DESTINATION}/fixtures/)
+set(FIXTURE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/fixtures/)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})

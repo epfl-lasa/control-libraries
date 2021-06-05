@@ -57,7 +57,7 @@ public:
   explicit JointPositions(const std::string& robot_name, const Eigen::VectorXd& positions);
 
   /**
-   * @brief Constructor with name, a list of joint names  and position values provided
+   * @brief Constructor with name, a list of joint names and position values provided
    * @brief name the name of the state
    * @brief joint_names list of joint names
    * @brief positions the vector of positions
@@ -78,7 +78,7 @@ public:
   /**
    * @brief Copy constructor from a JointVelocities by considering that it is equivalent to multiplying the velocities by 1 second
    */
-  JointPositions(const JointVelocities& positions);
+  JointPositions(const JointVelocities& velocities);
 
   /**
    * @brief Constructor for the zero JointPositions
@@ -220,7 +220,7 @@ public:
    * @brief Returns the positions data as an Eigen vector
    * @return the positions data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
 
   /**
    * @brief Overload the ostream operator for printing

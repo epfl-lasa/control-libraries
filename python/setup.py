@@ -4,7 +4,7 @@ from pybind11.setup_helpers import Pybind11Extension
 from pybind11.setup_helpers import ParallelCompile, naive_recompile
 import os
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 __libraries__ = ['state_representation']
 __include_dirs__ = []
 

@@ -34,6 +34,9 @@ CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(sta
   // set all the state variables to 0 except linear and angular velocities
   this->set_zero();
   this->set_twist(state.get_twist());
+  if (state.is_empty()) {
+    this->set_empty();
+  }
 }
 
 CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianTwist(static_cast<const CartesianState&>(twist)) {}

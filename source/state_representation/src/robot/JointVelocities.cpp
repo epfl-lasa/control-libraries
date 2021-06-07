@@ -25,6 +25,9 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {
   // set all the state variables to 0 except velocities
   this->set_zero();
   this->set_velocities(state.get_velocities());
+  if (state.is_empty()) {
+    this->set_empty();
+  }
 }
 
 JointVelocities::JointVelocities(const JointVelocities& velocities) : JointVelocities(static_cast<const JointState&>(velocities)) {}

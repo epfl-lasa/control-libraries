@@ -14,8 +14,7 @@ TEST(JointStateTest, ZeroInitialization) {
   // all data should be zero
   EXPECT_EQ(zero.data().norm(), 0);
   // same for the second initializer
-  JointState zero2 = JointState::Zero("test",
-                                      std::vector<std::string>{"j0", "j1"});
+  JointState zero2 = JointState::Zero("test", std::vector<std::string>{"j0", "j1"});
   // the joint state should not be considered empty (as it is properly initialized)
   EXPECT_FALSE(zero2.is_empty());
   // all data should be zero
@@ -33,9 +32,7 @@ TEST(JointStateTest, RandomStateInitialization) {
   EXPECT_GT(random.get_accelerations().norm(), 0);
   EXPECT_GT(random.get_torques().norm(), 0);
   // same for the second initializer
-  JointState random2 =
-      JointState::Random("test",
-                         std::vector<std::string>{"j0", "j1"});
+  JointState random2 = JointState::Random("test", std::vector<std::string>{"j0", "j1"});
   // all data should be random (non 0)
   EXPECT_GT(random2.get_positions().norm(), 0);
   EXPECT_GT(random2.get_velocities().norm(), 0);
@@ -51,9 +48,7 @@ TEST(JointStateTest, RandomPositionsInitialization) {
   EXPECT_EQ(static_cast<JointState&>(random).get_accelerations().norm(), 0);
   EXPECT_EQ(static_cast<JointState&>(random).get_torques().norm(), 0);
   // same for the second initializer
-  JointPositions random2 =
-      JointPositions::Random("test",
-                             std::vector<std::string>{"j0", "j1"});
+  JointPositions random2 = JointPositions::Random("test", std::vector<std::string>{"j0", "j1"});
   // only position should be random
   EXPECT_GT(random2.get_positions().norm(), 0);
   EXPECT_EQ(static_cast<JointState&>(random2).get_velocities().norm(), 0);
@@ -69,9 +64,7 @@ TEST(JointStateTest, RandomVelocitiesInitialization) {
   EXPECT_EQ(static_cast<JointState&>(random).get_accelerations().norm(), 0);
   EXPECT_EQ(static_cast<JointState&>(random).get_torques().norm(), 0);
   // same for the second initializer
-  JointVelocities random2 =
-      JointVelocities::Random("test",
-                              std::vector<std::string>{"j0", "j1"});
+  JointVelocities random2 = JointVelocities::Random("test", std::vector<std::string>{"j0", "j1"});
   // only velocities should be random
   EXPECT_EQ(static_cast<JointState&>(random2).get_positions().norm(), 0);
   EXPECT_GT(random2.get_velocities().norm(), 0);
@@ -87,9 +80,7 @@ TEST(JointStateTest, RandomTorquesInitialization) {
   EXPECT_EQ(static_cast<JointState&>(random).get_accelerations().norm(), 0);
   EXPECT_GT(random.get_torques().norm(), 0);
   // same for the second initializer
-  JointTorques random2 =
-      JointTorques::Random("test",
-                           std::vector<std::string>{"j0", "j1"});
+  JointTorques random2 = JointTorques::Random("test", std::vector<std::string>{"j0", "j1"});
   // only torques should be random
   EXPECT_EQ(static_cast<JointState&>(random2).get_positions().norm(), 0);
   EXPECT_EQ(static_cast<JointState&>(random2).get_velocities().norm(), 0);

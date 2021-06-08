@@ -8,6 +8,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Preserve emptiness upon copy construction (#152)
+- Add set_data function (#153)
 
 ## 3.0.0
 

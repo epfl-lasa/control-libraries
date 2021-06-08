@@ -11,6 +11,7 @@ Release Versions:
 - Use release configuration in install script (#155)
 - Fix CartesianPose constructor in Python bindings and revise run script (#157)
 - Add CI workflow for Python bindings (#159)
+- Add emtpy constructors for Circular and Ring DS (#154)
 
 ## 3.0.0
 

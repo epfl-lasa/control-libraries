@@ -62,13 +62,16 @@ The **Linear** DS can be thought of as a point attractor, with a velocity that i
 to the distance of the current state from the attractor.
 It is currently implemented for the `CartesianState` and `JointState` types.
 
-The Linear DS is constructed with a state as an argument; this becomes the attractor.
 ```c++
+// empty construction results in empty base frame and attractor
+dynamical_systems::Linear<S> emptyDS;
+
+// construction with an attractor and default value for the gain
 state_representation::CartesianState cartesianAttractor("A");
-dynamical_systems::Linear<state_representation::CartesianState> linear(cartesianAttractor);
+dynamical_systems::Linear<state_representation::CartesianState> linearDS1(cartesianAttractor);
 
 state_representation::JointState jointAttractor("B");
-dynamical_systems::Linear<state_representation::JointState> linear(jointAttractor);
+dynamical_systems::Linear<state_representation::JointState> linearDS2(jointAttractor);
 ```
 
 ### Configuring the Linear DS
@@ -117,11 +120,11 @@ state_representation::CartesianTwist twist = linear.evaluate(csB);
 
 The returned velocity will always be expressed in the same reference frame as the input state.
 
-### Reference frames
+### Reference frames (this applies to all of them, also a note on empty construction?!)
 
 The following section applies for the `CartesianState` type.
 
-The `evaulate()` function will always return a twist expressed in the same reference frame as the input state,
+The `evaluate()` function will always return a twist expressed in the same reference frame as the input state,
 provided that the input state is compatible with the DS.
 
 The input state must be expressed in one of two supported reference frames:
@@ -177,7 +180,7 @@ are automatically combined with the DS result with respect to the common referen
 
 Setting the base frame of the DS has some benefits. In some cases, the state variable to be
 evaluated is not directly expressed in the frame of the DS.
-Similarly the output twist may need to be expressed in a different reference frame.
+Similarly, the output twist may need to be expressed in a different reference frame.
 
 As a practical example, consider a case where the state of an end-effector is
 reported in the reference frame of a robot, while a linear attractor is expressed
@@ -235,6 +238,10 @@ in the constructor, the limit cycle has a constant radius.
 If an elliptical limit cycle is desired, the DS can be constructed directly from an `Ellipsoid` type.
 
 ```c++
+// empty construction results in empty base frame and limit cycle
+dynamical_systems::Circular emptyDS;
+emptyDS.set_limit_cycle(ellipse); // sets a null base frame according to the reference frame of the limit cycle
+
 // construct the circular DS limit cycle using a CartesianState center
 state_representation::CartesianState center("center");
 
@@ -305,6 +312,10 @@ A clockwise rotation can be achieved by rotating the ring 180 degrees about its 
 It only supports the `CartesianState` type, and always acts in a circular ring. 
 
 ```c++
+// empty construction results in empty base frame and center state
+dynamical_systems::Ring emptyDS;
+
+// construction with center state and default values for parameters
 state_representation::CartesianState center("center");
 dynamical_systems::Ring ringDS(center);
 ```

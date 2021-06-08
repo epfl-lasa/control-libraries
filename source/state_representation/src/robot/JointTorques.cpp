@@ -24,9 +24,7 @@ JointTorques::JointTorques(const JointState& state) : JointState(state) {
   // set all the state variables to 0 except torques
   this->set_zero();
   this->set_torques(state.get_torques());
-  if (state.is_empty()) {
-    this->set_empty();
-  }
+  this->set_empty(state.is_empty());
 }
 
 JointTorques::JointTorques(const JointTorques& torques) : JointTorques(static_cast<const JointState&>(torques)) {}

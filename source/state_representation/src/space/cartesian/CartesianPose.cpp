@@ -38,9 +38,7 @@ CartesianPose::CartesianPose(const CartesianState& state) : CartesianState(state
   // set all the state variables to 0 except position and orientation
   this->set_zero();
   this->set_pose(state.get_pose());
-  if (state.is_empty()) {
-    this->set_empty();
-  }
+  this->set_empty(state.is_empty());
 }
 
 CartesianPose::CartesianPose(const CartesianPose& pose) : CartesianPose(static_cast<const CartesianState&>(pose)) {}

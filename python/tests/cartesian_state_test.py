@@ -9,6 +9,7 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'clamp_state_variable',
     'copy',
     'data',
+    'set_data',
     'dist',
     'from_list',
     'get_accelerations',

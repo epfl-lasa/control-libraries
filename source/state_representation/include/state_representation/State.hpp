@@ -101,7 +101,7 @@ public:
 
   /**
    * @brief Setter of the empty attribute
-   * @param empty bool if the state should be empty or not
+   * @param empty bool if the state should be empty or not (default is true)
    */
   void set_empty(bool empty = true);
 

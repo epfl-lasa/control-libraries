@@ -100,9 +100,10 @@ public:
   bool is_empty() const;
 
   /**
-   * @brief Setter of the empty attribute to true
+   * @brief Setter of the empty attribute
+   * @param empty bool if the state should be empty or not (default is true)
    */
-  void set_empty();
+  void set_empty(bool empty = true);
 
   /**
    * @brief Setter of the empty attribute to false and also reset the timestamp
@@ -177,8 +178,8 @@ inline bool State::is_empty() const {
   return this->empty_;
 }
 
-inline void State::set_empty() {
-  this->empty_ = true;
+inline void State::set_empty(bool empty) {
+  this->empty_ = empty;
 }
 
 inline void State::set_filled() {

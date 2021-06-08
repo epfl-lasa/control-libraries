@@ -78,6 +78,11 @@ TEST(CartesianStateTest, CopyState) {
   EXPECT_EQ(state1.get_name(), state3.get_name());
   EXPECT_EQ(state1.get_reference_frame(), state3.get_reference_frame());
   EXPECT_TRUE(state1.data().isApprox(state3.data()));
+
+  CartesianState state4;
+  EXPECT_TRUE(state4.is_empty());
+  CartesianState state5 = state4;
+  EXPECT_TRUE(state5.is_empty());
 }
 
 TEST(CartesianStateTest, CopyPose) {
@@ -110,6 +115,11 @@ TEST(CartesianStateTest, CopyPose) {
   EXPECT_EQ(static_cast<CartesianState&>(pose5).get_twist().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(pose5).get_accelerations().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(pose5).get_wrench().norm(), 0);
+
+  CartesianPose pose6;
+  EXPECT_TRUE(pose6.is_empty());
+  CartesianPose pose7 = pose6;
+  EXPECT_TRUE(pose7.is_empty());
 }
 
 TEST(CartesianStateTest, CopyTwist) {
@@ -150,6 +160,11 @@ TEST(CartesianStateTest, CopyTwist) {
   EXPECT_EQ(static_cast<CartesianState&>(twist5).get_orientation().w(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(twist5).get_accelerations().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(twist5).get_wrench().norm(), 0);
+
+  CartesianTwist twist6;
+  EXPECT_TRUE(twist6.is_empty());
+  CartesianTwist twist7 = twist6;
+  EXPECT_TRUE(twist7.is_empty());
 }
 
 TEST(CartesianStateTest, CopyWrench) {
@@ -190,6 +205,11 @@ TEST(CartesianStateTest, CopyWrench) {
   EXPECT_EQ(static_cast<CartesianState&>(wrench5).get_orientation().w(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(wrench5).get_twist().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(wrench5).get_accelerations().norm(), 0);
+
+  CartesianWrench wrench6;
+  EXPECT_TRUE(wrench6.is_empty());
+  CartesianWrench wrench7 = wrench6;
+  EXPECT_TRUE(wrench7.is_empty());
 }
 
 TEST(CartesianStateTest, GetData) {

@@ -126,6 +126,10 @@ Eigen::VectorXd JointVelocities::data() const {
   return this->get_velocities();
 }
 
+void JointVelocities::set_data(const Eigen::VectorXd& data) {
+  this->set_velocities(data);
+}
+
 void JointVelocities::clamp(double max_absolute_value, double noise_ratio) {
   this->clamp_state_variable(max_absolute_value, JointStateVariable::VELOCITIES, noise_ratio);
 }

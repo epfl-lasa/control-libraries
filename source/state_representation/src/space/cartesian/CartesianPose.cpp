@@ -123,6 +123,10 @@ Eigen::VectorXd CartesianPose::data() const {
   return this->get_pose();
 }
 
+void CartesianPose::set_data(const Eigen::VectorXd& data) {
+  this->set_pose(data);
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   if (pose.is_empty()) {
     os << "Empty CartesianPose";

@@ -79,6 +79,10 @@ Eigen::VectorXd CartesianState::data() const {
   return this->get_state_variable(CartesianStateVariable::ALL);
 }
 
+void CartesianState::set_data(const Eigen::VectorXd& data) {
+  this->set_state_variable(data, CartesianStateVariable::ALL);
+}
+
 Eigen::ArrayXd CartesianState::array() const {
   return this->data().array();
 }

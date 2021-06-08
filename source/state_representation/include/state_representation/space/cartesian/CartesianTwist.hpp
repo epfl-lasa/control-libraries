@@ -224,6 +224,12 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the twist data from an Eigen vector
+   * @param the twist data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
    * @brief Compute the norms of the state variable specified by the input type (default is full twist)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector

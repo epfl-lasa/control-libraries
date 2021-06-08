@@ -149,6 +149,10 @@ Eigen::VectorXd CartesianTwist::data() const {
   return this->get_twist();
 }
 
+void CartesianTwist::set_data(const Eigen::VectorXd& data) {
+  this->set_twist(data);
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {
   if (twist.is_empty()) {
     os << "Empty CartesianTwist";

@@ -203,6 +203,12 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the torques data from an Eigen vector
+   * @param the torques data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
    * @brief Clamp inplace the magnitude of the torque to the values in argument
    * @param max_absolute_value the maximum magnitude of torque for all the joints
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which

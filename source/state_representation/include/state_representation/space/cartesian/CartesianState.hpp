@@ -364,6 +364,13 @@ public:
   virtual Eigen::VectorXd data() const;
 
   /**
+   * @brief Set the data of the state from
+   * all the state variables in a single vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
+
+  /**
    * @brief Return the data vector as an Eigen Array
    * @return the concatenated data array
    */

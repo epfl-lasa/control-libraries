@@ -44,6 +44,11 @@ protected:
 
 public:
   /**
+   * @brief Empty constructor
+  */
+  Ring();
+
+  /**
    * @brief Default constructor with center and fixed radius
    * @param center the center of the limit cycle
    * @param radius radius of the limit cycle (default=1.)

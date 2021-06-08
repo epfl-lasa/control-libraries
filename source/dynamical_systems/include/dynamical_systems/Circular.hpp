@@ -11,6 +11,7 @@
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include <cmath>
 #include <vector>
 
@@ -39,14 +40,20 @@ protected:
    * @param state the input state
    * @return the output state
    */
-  state_representation::CartesianState compute_dynamics(const state_representation::CartesianState& state) const;
+  state_representation::CartesianState
+  compute_dynamics(const state_representation::CartesianState& state) const override;
 
 public:
   /**
+   * @brief Empty constructor
+   */
+  Circular();
+
+  /**
    * @brief Default constructor with center and fixed radius
    * @param center the center of the limit cycle
-   * @param radius radius of the limit cycle (default=1.)
-   * @param gain gain of the dynamical system (default=1.)
+   * @param radius radius of the limit cycle (default is 1.)
+   * @param gain gain of the dynamical system (default is 1.)
    * @param circular_velocity circular velocity to move around the limit cycle
    */
   explicit Circular(const state_representation::CartesianState& center,
@@ -55,9 +62,9 @@ public:
                     double circular_velocity = M_PI / 2);
 
   /**
-   * @brief Cnstructor with an elliptic limit cycle
+   * @brief Constructor with an elliptic limit cycle
    * @param limit_cycle the limit cycle as an ellipsoid
-   * @param gain gain of the dynamical system (default=1.)
+   * @param gain gain of the dynamical system (default is 1.)
    * @param circular_velocity circular velocity to move around the limit cycle
    */
   explicit Circular(const state_representation::Ellipsoid& limit_cycle,
@@ -110,7 +117,7 @@ public:
   void set_normal_gain(double gain);
 
   /**
-   * @brief Getter of the radiuses of the limit cycle
+   * @brief Getter of the radius's of the limit cycle
    * @return the radius value
    */
 
@@ -130,20 +137,20 @@ public:
   const std::vector<double>& get_radiuses() const;
 
   /**
-   * @brief Setter of the radiuses of the limit cycle
-   * @param radiuses the new radiuses values
+   * @brief Setter of the radius's of the limit cycle
+   * @param radiuses the new radius's values
    */
   void set_radiuses(const std::vector<double>& radiuses);
 
   /**
    * @brief Setter of the radius of the limit cycle as a single value, i.e. perfect cycle
-   * @param radiuses the new radiuses values
+   * @param radiuses the new radius's values
    */
   void set_radius(double radius);
 
   /**
    * @brief Getter of the circular velocity attribute
-   * @return the cirular velocity value
+   * @return the circular velocity value
    */
   double get_circular_velocity() const;
 
@@ -177,7 +184,25 @@ inline const state_representation::CartesianPose& Circular::get_center() const {
 }
 
 inline void Circular::set_center(const state_representation::CartesianPose& center) {
-  this->limit_cycle_->get_value().set_center_pose(center);
+  if (center.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(center.get_name() + " state is empty");
+  }
+  if (this->get_base_frame().is_empty()) {
+    DynamicalSystem<state_representation::CartesianState>::set_base_frame(state_representation::CartesianState::Identity(
+        center.get_reference_frame(),
+        center.get_reference_frame()));
+  }
+  if (center.get_reference_frame() != this->get_base_frame().get_name()) {
+    if (center.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
+      throw state_representation::exceptions::IncompatibleReferenceFramesException(
+          "The reference frame of the center " + center.get_name() + " in frame " + center.get_reference_frame()
+              + " is incompatible with the base frame of the dynamical system " + this->get_base_frame().get_name()
+              + " in frame " + this->get_base_frame().get_reference_frame() + ".");
+    }
+    this->limit_cycle_->get_value().set_center_state(this->get_base_frame().inverse() * center);
+  } else {
+    this->limit_cycle_->get_value().set_center_state(center);
+  }
 }
 
 inline double Circular::get_planar_gain() const {

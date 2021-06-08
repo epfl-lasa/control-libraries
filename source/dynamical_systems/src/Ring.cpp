@@ -1,11 +1,27 @@
 #include "dynamical_systems/Ring.hpp"
 
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;
 
 namespace dynamical_systems {
+
+Ring::Ring() :
+    DynamicalSystem<CartesianState>(),
+    center_(std::make_shared<Parameter<CartesianPose>>("center", CartesianPose())),
+    rotation_offset_(std::make_shared<Parameter<CartesianPose>>("rotation_offset", CartesianPose())),
+    radius_(std::make_shared<Parameter<double>>("radius", 1.0)),
+    width_(std::make_shared<Parameter<double>>("width", 0.5)),
+    speed_(std::make_shared<Parameter<double>>("speed", 1.0)),
+    field_strength_(std::make_shared<Parameter<double>>("field_strength", 1.0)),
+    normal_gain_(std::make_shared<Parameter<double>>("normal_gain", 1.0)),
+    angular_gain_(std::make_shared<Parameter<double>>("angular_gain", 1.0)) {
+  this->center_->get_value().set_empty();
+  this->set_rotation_offset(Eigen::Quaterniond::Identity());
+}
 
 Ring::Ring(const CartesianState& center,
            double radius,
@@ -28,6 +44,9 @@ Ring::Ring(const CartesianState& center,
 }
 
 CartesianState Ring::compute_dynamics(const CartesianState& state) const {
+  if (this->get_center().is_empty()) {
+    throw exceptions::EmptyAttractorException("The center of the dynamical system is empty.");
+  }
   // put the point in the reference of the center
   CartesianPose pose(state);
   pose = this->get_center().inverse() * pose;
@@ -37,14 +56,15 @@ CartesianState Ring::compute_dynamics(const CartesianState& state) const {
   CartesianTwist twist(pose.get_name(), pose.get_reference_frame());
   double local_field_strength;
   twist.set_linear_velocity(this->calculate_local_linear_velocity(pose, local_field_strength));
-  twist.set_angular_velocity(this->calculate_local_angular_velocity(pose, twist.get_linear_velocity(), local_field_strength));
+  twist.set_angular_velocity(this->calculate_local_angular_velocity(pose,
+                                                                    twist.get_linear_velocity(),
+                                                                    local_field_strength));
 
   // transform the twist back to the base reference frame
   return CartesianState(this->get_center()) * twist;
 }
 
-Eigen::Vector3d Ring::calculate_local_linear_velocity(const CartesianPose& pose,
-                                                      double& local_field_strength) const {
+Eigen::Vector3d Ring::calculate_local_linear_velocity(const CartesianPose& pose, double& local_field_strength) const {
   Eigen::Vector3d local_linear_velocity = Eigen::Vector3d::Zero();
 
   // get the 2d components of position on the XY plane
@@ -134,32 +154,43 @@ Eigen::Vector3d Ring::calculate_local_angular_velocity(const CartesianPose& pose
 }
 
 void Ring::set_base_frame(const state_representation::CartesianState& base_frame) {
+  if (base_frame.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
+  }
   DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
   // update reference frame of center
   auto center = this->get_center();
-  center.set_reference_frame(base_frame.get_name());
-  this->set_center(center);
+  if (!center.is_empty()) {
+    center.set_reference_frame(base_frame.get_name());
+    this->set_center(center);
+  }
 }
 
 void Ring::set_center(const CartesianPose& center) {
+  if (center.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(center.get_name() + " state is empty");
+  }
+  if (this->get_base_frame().is_empty()) {
+    DynamicalSystem<CartesianState>::set_base_frame(CartesianState::Identity(center.get_reference_frame(),
+                                                                             center.get_reference_frame()));
+  }
   // validate that the reference frame of the center is always compatible with the DS reference frame
   if (center.get_reference_frame() != this->get_base_frame().get_name()) {
     if (center.get_reference_frame() != this->get_base_frame().get_reference_frame()) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
           "The reference frame of the center " + center.get_name() + " in frame " + center.get_reference_frame()
-              + " is incompatible with the base frame of the dynamical system "
-              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + "."
-      );
+              + " is incompatible with the base frame of the dynamical system " + this->get_base_frame().get_name()
+              + " in frame " + this->get_base_frame().get_reference_frame() + ".");
     }
     this->center_->set_value(this->get_base_frame().inverse() * center);
   } else {
     this->center_->set_value(center);
   }
+  this->set_rotation_offset(this->get_rotation_offset());
 }
 
 void Ring::set_rotation_offset(const Eigen::Quaterniond& rotation) {
-  auto pose = CartesianPose::Identity("rotation", this->get_center().get_name());
-  pose.set_orientation(rotation);
+  auto pose = CartesianPose("rotation", rotation, this->get_center().get_name());
   this->rotation_offset_->set_value(pose);
 }
 

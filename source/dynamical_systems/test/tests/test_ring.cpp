@@ -52,8 +52,7 @@ TEST_F(RingDSTest, EmptyConstructor) {
   EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
   ds.set_base_frame(state1);
   // if cartesian state is incompatible, an exception is thrown
-  EXPECT_THROW(ds.evaluate(state2),
-               state_representation::exceptions::IncompatibleReferenceFramesException);
+  EXPECT_THROW(ds.evaluate(state2), state_representation::exceptions::IncompatibleReferenceFramesException);
   // if cartesian state needs to be transformed to other frame first and is empty, an exception is thrown
   EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::EmptyStateException);
   // if no attractor is set, an exception is thrown
@@ -284,10 +283,7 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
   // still be zero if the current position and orientation matches the rotation offset
   rotation = Eigen::Quaterniond::UnitRandom();
   ring.set_rotation_offset(rotation);
-  current_pose = CartesianPose("B",
-                                                     Eigen::Vector3d(radius, 0, 0),
-                                                     ring.get_rotation_offset(),
-                                                     "A");
+  current_pose = CartesianPose("B", Eigen::Vector3d(radius, 0, 0), ring.get_rotation_offset(), "A");
   current_pose = center * current_pose;
   twist = ring.evaluate(current_pose);
   EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, tol);
@@ -295,10 +291,9 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
   // any additional orientation in the ring frame on top of the rotation offset
   // should give the same local command, regardless of the center frame
   current_pose = CartesianPose("B",
-                                                     Eigen::Vector3d(radius, 0, 0),
-                                                     Eigen::Quaterniond(1, 1, 0, 0).normalized()
-                                                         * ring.get_rotation_offset(),
-                                                     "A");
+                               Eigen::Vector3d(radius, 0, 0),
+                               Eigen::Quaterniond(1, 1, 0, 0).normalized() * ring.get_rotation_offset(),
+                               "A");
   current_pose = center * current_pose;
   twist = ring.evaluate(current_pose);
 

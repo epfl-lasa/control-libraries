@@ -216,7 +216,15 @@ TEST(CartesianStateTest, GetData) {
   CartesianState cs = CartesianState::Random("test");
   Eigen::VectorXd concatenated_state(25);
   concatenated_state << cs.get_pose(), cs.get_twist(), cs.get_accelerations(), cs.get_wrench();
-  EXPECT_NEAR(concatenated_state.norm(), cs.data().norm(), 1e-4);
+  EXPECT_TRUE(concatenated_state.isApprox(cs.data()));
+}
+
+TEST(CartesianStateTest, SetData) {
+  CartesianState cs = CartesianState("test");
+  Eigen::VectorXd concatenated_state(25);
+  concatenated_state << cs.get_pose(), cs.get_twist(), cs.get_accelerations(), cs.get_wrench();
+  cs.set_data(concatenated_state);
+  EXPECT_TRUE(concatenated_state.isApprox(cs.data()));
 }
 
 TEST(CartesianStateTest, CartesianStateToStdVector) {

@@ -212,7 +212,15 @@ TEST(JointStateTest, GetData) {
   JointState js = JointState::Random("test_robot", 4);
   Eigen::VectorXd concatenated_state(js.get_size() * 4);
   concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
-  EXPECT_NEAR(concatenated_state.norm(), js.data().norm(), 1e-4);
+  EXPECT_TRUE(concatenated_state.isApprox(js.data()));
+}
+
+TEST(JointStateTest, SetData) {
+  JointState js = JointState("test");
+  Eigen::VectorXd concatenated_state(js.get_size() * 4);
+  concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
+  js.set_data(concatenated_state);
+  EXPECT_TRUE(concatenated_state.isApprox(js.data()));
 }
 
 TEST(JointStateTest, JointStateToStdVector) {

@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
 #include "state_representation/robot/JointPositions.hpp"

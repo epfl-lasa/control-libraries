@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"

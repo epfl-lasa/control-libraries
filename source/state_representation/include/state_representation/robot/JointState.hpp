@@ -1,15 +1,9 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/State.hpp"
 #include <eigen3/Eigen/Core>
 #include <iostream>
-#include <math.h>
 #include <string>
 #include <vector>
 
@@ -311,6 +305,13 @@ public:
    * @return the concatenated data vector
    */
   virtual Eigen::VectorXd data() const;
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
 
   /**
    * @brief Returns the data vector as an Eigen Array

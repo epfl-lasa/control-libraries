@@ -221,7 +221,7 @@ public:
    * @brief Returns the twist data as an Eigen vector
    * @return the twist data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
 
   /**
    * @brief Compute the norms of the state variable specified by the input type (default is full twist)

@@ -8,6 +8,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Preserve emptiness upon copy construction (#152)
+- Use release configuration in install script (#155)
 
 ## 3.0.0
 

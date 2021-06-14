@@ -35,10 +35,10 @@ Options:
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -p|--port) SSH_PORT=$2; shift 1;;
-    -k|--key-file) SSH_KEY_FILE=$2; shift 1;;
+    -p|--port) SSH_PORT=$2; shift 2;;
+    -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
-    -*) echo "Unknown option: $1" >&2; echo "${HELP_MESSAGE}"; exit 1;;
+    *) echo "Unknown option: $1" >&2; echo "${HELP_MESSAGE}"; exit 1;;
   esac
 done
 

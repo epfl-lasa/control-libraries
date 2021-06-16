@@ -186,9 +186,9 @@ inline void Linear<state_representation::CartesianState>::set_base_frame(const s
     throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
   }
   DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
-  auto attractor = this->get_attractor();
-  if (!attractor.is_empty()) {
+  if (!this->get_attractor().is_empty()) {
     // update reference frame of attractor
+    auto attractor = this->get_attractor();
     attractor.set_reference_frame(base_frame.get_name());
     this->set_attractor(attractor);
   }
@@ -200,9 +200,9 @@ inline void Linear<state_representation::JointState>::set_base_frame(const state
     throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
   }
   DynamicalSystem<state_representation::JointState>::set_base_frame(base_frame);
-  auto attractor = this->get_attractor();
-  if (!attractor.is_empty()) {
+  if (!this->get_attractor().is_empty()) {
     // update name of attractor
+    auto attractor = this->get_attractor();
     attractor.set_name(base_frame.get_name());
     attractor.set_names(base_frame.get_names());
     this->set_attractor(attractor);

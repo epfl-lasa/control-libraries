@@ -159,8 +159,8 @@ void Ring::set_base_frame(const state_representation::CartesianState& base_frame
   }
   DynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
   // update reference frame of center
-  auto center = this->get_center();
-  if (!center.is_empty()) {
+  if (!this->get_center().is_empty()) {
+    auto center = this->get_center();
     center.set_reference_frame(base_frame.get_name());
     this->set_center(center);
   }

@@ -52,8 +52,8 @@ public:
   /**
    * @brief Default constructor with center and fixed radius
    * @param center the center of the limit cycle
-   * @param radius radius of the limit cycle (default is 1.)
-   * @param gain gain of the dynamical system (default is 1.)
+   * @param radius radius of the limit cycle
+   * @param gain gain of the dynamical system
    * @param circular_velocity circular velocity to move around the limit cycle
    */
   explicit Circular(const state_representation::CartesianState& center,
@@ -64,7 +64,7 @@ public:
   /**
    * @brief Constructor with an elliptic limit cycle
    * @param limit_cycle the limit cycle as an ellipsoid
-   * @param gain gain of the dynamical system (default is 1.)
+   * @param gain gain of the dynamical system
    * @param circular_velocity circular velocity to move around the limit cycle
    */
   explicit Circular(const state_representation::Ellipsoid& limit_cycle,
@@ -117,7 +117,7 @@ public:
   void set_normal_gain(double gain);
 
   /**
-   * @brief Getter of the radius's of the limit cycle
+   * @brief Getter of the rotation angle attribute
    * @return the radius value
    */
 
@@ -130,21 +130,21 @@ public:
   void set_rotation_angle(double angle);
 
   /**
-   * @brief Getter of the rotation angle attribute
+   * @brief Getter of the radiuses of the limit cycle
    * @param The rotation angle value
    */
 
   const std::vector<double>& get_radiuses() const;
 
   /**
-   * @brief Setter of the radius's of the limit cycle
-   * @param radiuses the new radius's values
+   * @brief Setter of the radiuses of the limit cycle
+   * @param radiuses the new radiuses values
    */
   void set_radiuses(const std::vector<double>& radiuses);
 
   /**
    * @brief Setter of the radius of the limit cycle as a single value, i.e. perfect cycle
-   * @param radiuses the new radius's values
+   * @param radiuses the new radiuses values
    */
   void set_radius(double radius);
 

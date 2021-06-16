@@ -9,10 +9,10 @@ This description covers most of the functionalities starting from the spatial tr
 ## Table of contents:
 * [Base DynamicalSystem](#base-dynamicalsystem)
   * [Base frame](#base-frame)
+  * [Reference frames](#reference-frames)
 * [Linear](#linear)
   * [Configuring the Linear DS](#configuring-the-linear-ds)
   * [Evaluating the Linear DS](#evaluating-the-linear-ds)
-  * [Reference frames](#reference-frames)
 * [Circular](#circular)
   * [Configuring the Circular DS](#configuring-the-circular-ds)
 * [Ring](#ring)
@@ -54,7 +54,105 @@ In most cases, the constructor for the base DynamicalSystem should not be used d
 and rather the derived DS classes should construct the base accordingly.
 
 However, the `set_base_frame()` method remains useful in combination with derived classes.
-See the section on [Linear DS reference frames](#reference-frames) for examples.
+
+### Reference frames
+
+The following section applies to derived DS classes using the `CartesianState` type. The [Linear DS](#linear) 
+will be used as an example.
+
+The `evaluate()` function will always return a twist expressed in the same reference frame as the input state,
+provided that the input state is compatible with the DS.
+
+The input state must be expressed in one of two supported reference frames:
+1. The reference frame of the input is the DS base frame
+2. The reference frame of the input matches the reference frame of the DS base frame
+
+The following snippet illustrates the difference in these two options.
+```c++
+// create a linear DS with attractor B in frame A
+state_representation::CartesianState BinA("B", "A");
+dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
+
+linearDS.get_attractor().get_name();             // "B"
+linearDS.get_attractor().get_reference_frame();  // "A"
+linearDS.get_base_frame().get_name();            // "A"
+linearDS.get_base_frame().get_reference_frame(); // "A"
+
+// evaluate a point C in frame A
+state_representation::CartesianState CinA("C", "A");
+auto twist0 = linearDS.evaluate(CinA); // valid, twist is expressed in frame A
+
+// set the base from of the DS to be A expressed in the world frame
+state_representation::CartesianState AinWorld("A", "world");
+linearDS.set_base_frame(AinWorld);
+
+linearDS.get_attractor().get_name();             // "B"
+linearDS.get_attractor().get_reference_frame();  // "A"
+linearDS.get_base_frame().get_name();            // "A"
+linearDS.get_base_frame().get_reference_frame(); // "world"
+
+// option 1: reference frame of the input is the same as the base frame 
+// -> reference frame of the input: "A"
+// -> DS base frame: "A"
+// -> reference frame of the output: "A"
+auto twist1 = linearDS.evaluate(CinA);
+
+// option 2: reference frame of the input is the same as the base frame 
+// -> reference frame of the input: "world"
+// -> DS base frame reference frame: "world"
+// -> reference frame of the output: "world"
+auto CinWorld = AinWorld * CinA;
+auto twist2 = linearDS.evaluate(CinWorld);
+
+// as a note, you can mix and match the approach as necessary.
+// the following is using option 1 with an additional external operation
+// to yield a final result equivalent to option 2.
+auto twist3 =  AinWorld * linearDS.evaluate(CinA);
+// twist2 === twist3
+```
+
+Note that the base frame can have its own velocity or other state properties, which
+are automatically combined with the DS result with respect to the common reference frame.
+
+Setting the base frame of the DS has some benefits. In some cases, the state variable to be
+evaluated is not directly expressed in the frame of the DS.
+Similarly, the output twist may need to be expressed in a different reference frame.
+
+As a practical example, consider a case where the state of an end-effector is
+reported in the reference frame of a robot, while a linear attractor is expressed
+in some moving task frame.
+The robot controller expects a twist expressed in the robot frame.
+By updating the DS base frame with respect to the robot frame,
+any pre-transformation of the end-effector state or post-transformation of the twist can be avoided.
+
+```c++
+state_representation::CartesianState EE("end_effector", "robot");
+state_representation::CartesianState attractor("attractor", "task");
+state_representation::CartesianState taskInRobot("task", "robot");
+
+dynamical_systems::Linear<state_representation::CartesianState> linearDS(attractor);
+
+// control loop
+while (...) {
+  // update the EE state from robot feedback 
+  EE.set_pose(...);
+
+  // update the state of the task with respect to the robot (for example, from optitrack)
+  taskInRobot.set_pose(...);
+  taskInRobot.set_linear_velocity(...);
+  taskInRobot.set_angular_velocity(...);
+  
+  // now update the DS base frame
+  linearDS.set_base_frame(taskInRobot);
+  
+  // find the twist in the robot reference frame 
+  // directly from the end-effector position in the robot reference frame
+  auto twist = linearDS.evaluate(EE);
+  
+  // send twist command to controller
+  update_controller(twist);
+}
+```
 
 ## Linear
 
@@ -119,104 +217,6 @@ state_representation::CartesianTwist twist = linear.evaluate(csB);
 ```
 
 The returned velocity will always be expressed in the same reference frame as the input state.
-
-### Reference frames (this applies to all of them, also a note on empty construction?!)
-
-The following section applies for the `CartesianState` type.
-
-The `evaluate()` function will always return a twist expressed in the same reference frame as the input state,
-provided that the input state is compatible with the DS.
-
-The input state must be expressed in one of two supported reference frames:
-1. The reference frame of the input is the DS base frame
-2. The reference frame of the input matches the reference frame of the DS base frame
-
-The following snippet illustrates the difference in these two options.
-```c++
-// create a linear DS with attractor B in frame A
-state_representation::CartesianState BinA("B", "A");
-dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
-
-linearDS.get_attractor().get_name();             // "B"
-linearDS.get_attractor().get_reference_frame();  // "A"
-linearDS.get_base_frame().get_name();            // "A"
-linearDS.get_base_frame().get_reference_frame(); // "A"
-
-// evaluate a point C in frame A
-state_representation::CartesianState CinA("C", "A");
-auto twist0 = linearDS.evaluate(CinA); // valid, twist is expressed in frame A
-
-// set the base from of the DS to be A expressed in the world frame
-state_representation::CartesianState AinWorld("A", "world");
-linearDS.set_base_frame(AinWorld);
-
-linearDS.get_attractor().get_name();             // "B"
-linearDS.get_attractor().get_reference_frame();  // "A"
-linearDS.get_base_frame().get_name();            // "A"
-linearDS.get_base_frame().get_reference_frame(); // "world"
-
-// option 1: reference frame of the input is the same as the base frame 
-// -> reference frame of the input: "A"
-// -> DS base frame: "A"
-// -> reference frame of the output: "A"
-auto twist1 = linearDS.evaluate(CinA);
-
-// option 2: reference frame of the input is the same as the base frame 
-// -> reference frame of the input: "world"
-// -> DS base frame reference frame: "world"
-// -> reference frame of the output: "world"
-auto CinWorld = AinWorld * CinA;
-auto twist2 = linearDS.evaluate(CinWorld);
-
-// as a note, you can mix and match the approach as necessary.
-// the following is using option 1 with an additional external operation
-// to yield a final result equivalent to option 2.
-auto twist3 =  AinWorld * linearDS.evaluate(CinA);
-// twist2 === twist3
-```
-
-Note that the base frame can have its own velocity or other state properties, which 
-are automatically combined with the DS result with respect to the common reference frame.
-
-Setting the base frame of the DS has some benefits. In some cases, the state variable to be
-evaluated is not directly expressed in the frame of the DS.
-Similarly, the output twist may need to be expressed in a different reference frame.
-
-As a practical example, consider a case where the state of an end-effector is
-reported in the reference frame of a robot, while a linear attractor is expressed
-in some moving task frame.
-The robot controller expects a twist expressed in the robot frame.
-By updating the DS base frame with respect to the robot frame, 
-any pre-transformation of the end-effector state or post-transformation of the twist can be avoided.
-
-```c++
-state_representation::CartesianState EE("end_effector", "robot");
-state_representation::CartesianState attractor("attractor", "task");
-state_representation::CartesianState taskInRobot("task", "robot");
-
-dynamical_systems::Linear<state_representation::CartesianState> linearDS(attractor);
-
-// control loop
-while (...) {
-  // update the EE state from robot feedback 
-  EE.set_pose(...);
-
-  // update the state of the task with respect to the robot (for example, from optitrack)
-  taskInRobot.set_pose(...);
-  taskInRobot.set_linear_velocity(...);
-  taskInRobot.set_angular_velocity(...);
-  
-  // now update the DS base frame
-  linearDS.set_base_frame(taskInRobot);
-  
-  // find the twist in the robot reference frame 
-  // directly from the end-effector position in the robot reference frame
-  auto twist = linearDS.evaluate(EE);
-  
-  // send twist command to controller
-  update_controller(twist);
-}
-```
 
 ## Circular
 

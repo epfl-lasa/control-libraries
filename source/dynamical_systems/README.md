@@ -42,13 +42,17 @@ joint velocity.
 
 ### Base frame
 
-The **DynamicalSystem** base class has a private `base_frame` property, which can be thought of as the DS origin. 
+The *DynamicalSystem* base class has a private `base_frame` property, which can be thought of as the DS origin. 
 The functions `get_base_frame()` and `set_base_frame(const S& state)` can be used to access or modify this base frame.
 
-The DynamicalSystem can be constructed with a `state` to set the base frame, or with string frame name. In 
-the latter case the base frame is set as a null / Identity frame with the specified name.
+The `DynamicalSystem<CartesianState>` can be constructed with a `state` to set the base frame, or with string frame name. In 
+the latter case the base frame is set as a null / identity frame with the specified name.
 For example, `DynamicalSystem<CartesianState>("base")` will create a dynamical system with the null base frame "base",
 expressed in its own frame "base".
+
+The `DynamicalSystem<JointState>` can only be constructed with a `state` to set the base frame. Whilst the term 
+*base frame* makes more sense for a `CartesianState` DS, it rather refers to a specific robot with corresponding name
+and joint names in the case of a `JointState` DS.
 
 In most cases, the constructor for the base DynamicalSystem should not be used directly,
 and rather the derived DS classes should construct the base accordingly.
@@ -70,7 +74,7 @@ The input state must be expressed in one of two supported reference frames:
 The following snippet illustrates the difference in these two options.
 ```c++
 // create a linear DS with attractor B in frame A
-state_representation::CartesianState BinA("B", "A");
+state_representation::CartesianState BinA = state_representation::CartesianState::Identity("B", "A");
 dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
 
 linearDS.get_attractor().get_name();             // "B"
@@ -79,11 +83,11 @@ linearDS.get_base_frame().get_name();            // "A"
 linearDS.get_base_frame().get_reference_frame(); // "A"
 
 // evaluate a point C in frame A
-state_representation::CartesianState CinA("C", "A");
+state_representation::CartesianState CinA = state_representation::CartesianState::Random("C", "A");
 auto twist0 = linearDS.evaluate(CinA); // valid, twist is expressed in frame A
 
 // set the base from of the DS to be A expressed in the world frame
-state_representation::CartesianState AinWorld("A", "world");
+state_representation::CartesianState AinWorld = state_representation::CartesianState::Identity("A", "world");
 linearDS.set_base_frame(AinWorld);
 
 linearDS.get_attractor().get_name();             // "B"
@@ -127,7 +131,7 @@ any pre-transformation of the end-effector state or post-transformation of the t
 
 ```c++
 state_representation::CartesianState EE("end_effector", "robot");
-state_representation::CartesianState attractor("attractor", "task");
+state_representation::CartesianState attractor = state_representation::CartesianState::Random("attractor", "task");
 state_representation::CartesianState taskInRobot("task", "robot");
 
 dynamical_systems::Linear<state_representation::CartesianState> linearDS(attractor);
@@ -165,10 +169,10 @@ It is currently implemented for the `CartesianState` and `JointState` types.
 dynamical_systems::Linear<S> emptyDS;
 
 // construction with an attractor and default value for the gain
-state_representation::CartesianState cartesianAttractor("A");
+state_representation::CartesianState cartesianAttractor = state_representation::CartesianState::Identity("A");
 dynamical_systems::Linear<state_representation::CartesianState> linearDS1(cartesianAttractor);
 
-state_representation::JointState jointAttractor("B");
+state_representation::JointState jointAttractor = state_representation::JointState::Zero(6);
 dynamical_systems::Linear<state_representation::JointState> linearDS2(jointAttractor);
 ```
 
@@ -190,7 +194,7 @@ length, or as a scalar (which sets the value along the diagonal elements of the 
 ```c++
 // set a gain (scalar, vector or matrix during construction)
 double gain = 10;
-state_representation::CartesianState csA("A");
+state_representation::CartesianState csA = state_representation::CartesianState::Identity("A");
 dynamical_systems::Linear<state_representation::CartesianState> linear(csA, gain);
 
 // or set / update the gain for the created object
@@ -198,7 +202,7 @@ std::vector<double> gains = {1, 2, 3, 4, 5, 6};
 linear.set_gain(gains);
 
 // update the attractor
-state_representation::CartesianState csB("B");
+state_representation::CartesianState csB = state_representation::CartesianState::Random("B");
 linear.set_attractor(csB);
 ```
 
@@ -207,9 +211,10 @@ linear.set_attractor(csB);
 To get the velocity from a state, simply call the `evaluate()` function.
 
 ```c++
-state_representation::CartesianState csA("A"), csB("B");
+state_representation::CartesianState csA = state_representation::CartesianState::Identity("A");
 dynamical_systems::Linear<state_representation::CartesianState> linear(csA);
 
+state_representation::CartesianState csB = state_representation::CartesianState::Random("B");
 // note: the return type of evaluate() is a CartesianState, but
 // it can be directly assigned to a CartesianTwist because the =operator
 // has been defined for that purpose
@@ -243,7 +248,7 @@ dynamical_systems::Circular emptyDS;
 emptyDS.set_limit_cycle(ellipse); // sets a null base frame according to the reference frame of the limit cycle
 
 // construct the circular DS limit cycle using a CartesianState center
-state_representation::CartesianState center("center");
+state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
 
 // default constructor (radius = 1)
 dynamical_systems::Circular circularDS1(center);
@@ -316,7 +321,7 @@ It only supports the `CartesianState` type, and always acts in a circular ring.
 dynamical_systems::Ring emptyDS;
 
 // construction with center state and default values for parameters
-state_representation::CartesianState center("center");
+state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
 dynamical_systems::Ring ringDS(center);
 ```
 

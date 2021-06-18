@@ -48,8 +48,8 @@ public:
   void set_torque(const Eigen::Vector3d& torque) = delete;
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
   CartesianState inverse() const = delete;
-  CartesianState& operator*=(const CartesianState& twist) = delete;
-  CartesianState operator*(const CartesianState& twist) = delete;
+  CartesianState& operator*=(const CartesianState& state) = delete;
+  CartesianState operator*(const CartesianState& state) = delete;
 
   /**
    * @brief Empty constructor

@@ -45,8 +45,8 @@ public:
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
   void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
   CartesianState inverse() const = delete;
-  CartesianState& operator*=(const CartesianState& twist) = delete;
-  CartesianState operator*(const CartesianState& twist) = delete;
+  CartesianState& operator*=(const CartesianState& state) = delete;
+  CartesianState operator*(const CartesianState& state) = delete;
 
   /**
    * @brief Empty constructor

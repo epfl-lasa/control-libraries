@@ -99,4 +99,9 @@ The docker image installs the core control libraries and subsequently installs t
 The [`run.sh`](./run.sh) script will build the docker image and launch an interactive container
 with the test files in the [`tests`](./tests) directory copied to the local path.
 
+The run script tries to the clone the current local git branch when installing the control libraries
+in the Dockerfile. If the local branch does not exist on the remote, or if you want to test the 
+python bindings against a difference control libraries source branch, you can supply a specific
+branch as the first argument to the run script. For example, `./run.sh develop` to use the `develop` branch.
+
 You can run these tests with `python <test_name.py>`, or just enter a python shell with `python`.

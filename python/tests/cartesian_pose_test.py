@@ -13,11 +13,11 @@ class TestCartesianPose(unittest.TestCase):
         self.assert_np_array_equal(A.get_orientation(), [1, 0, 0, 0])
 
         A = CartesianPose("A", np.array([1, 2, 3, 4]), "B")
-        self.assert_np_array_equal(A.get_orientation(), [0, 0, 0])
+        self.assert_np_array_equal(A.get_position(), [0, 0, 0])
         self.assert_np_array_equal(A.get_orientation(), [1, 2, 3, 4] / np.linalg.norm([1, 2, 3, 4]))
 
         A = CartesianPose("A", np.array([1, 2, 3]), np.array([1, 2, 3, 4]), "B")
-        self.assert_np_array_equal(A.get_orientation(), [1, 2, 3])
+        self.assert_np_array_equal(A.get_position(), [1, 2, 3])
         self.assert_np_array_equal(A.get_orientation(), [1, 2, 3, 4] / np.linalg.norm([1, 2, 3, 4]))
 
 if __name__ == '__main__':

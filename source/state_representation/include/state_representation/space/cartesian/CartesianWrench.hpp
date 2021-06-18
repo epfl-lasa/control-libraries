@@ -44,9 +44,6 @@ public:
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
   void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
-  CartesianState inverse() const = delete;
-  CartesianState& operator*=(const CartesianState& state) = delete;
-  CartesianState operator*(const CartesianState& state) = delete;
 
   /**
    * @brief Empty constructor
@@ -114,6 +111,20 @@ public:
    * @return reference to the current wrench with new values
    */
   CartesianWrench& operator=(const CartesianWrench& wrench) = default;
+
+  /**
+   * @brief Overload the *= operator
+   * @param wrench CartesianWrench to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
+   */
+  [[deprecated]] CartesianWrench& operator*=(const CartesianWrench& wrench);
+
+  /**
+   * @brief Overload the * operator with a wrench
+   * @param wrench CartesianWrench to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
+   */
+  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Overload the += operator
@@ -194,6 +205,12 @@ public:
    * @return the wrench data vector
    */
   Eigen::VectorXd data() const;
+
+  /**
+ * @brief Compute the inverse of the current CartesianWrench
+ * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
+ */
+  CartesianWrench inverse() const;
 
   /**
    * @brief Compute the norms of the state variable specified by the input type (default is full wrench)

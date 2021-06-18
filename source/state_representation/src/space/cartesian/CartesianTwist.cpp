@@ -51,6 +51,15 @@ CartesianTwist CartesianTwist::Random(const std::string& name, const std::string
   return CartesianTwist(name, random, reference);
 }
 
+CartesianTwist& CartesianTwist::operator*=(const CartesianTwist& twist) {
+  this->CartesianState::operator*=(twist);
+  return (*this);
+}
+
+CartesianTwist CartesianTwist::operator*(const CartesianTwist& twist) const {
+  return this->CartesianState::operator*(twist);
+}
+
 CartesianTwist& CartesianTwist::operator+=(const CartesianTwist& twist) {
   this->CartesianState::operator+=(twist);
   return (*this);
@@ -138,6 +147,11 @@ CartesianTwist CartesianTwist::copy() const {
 
 Eigen::VectorXd CartesianTwist::data() const {
   return this->get_twist();
+}
+
+CartesianTwist CartesianTwist::inverse() const {
+  CartesianTwist result = this->CartesianState::inverse();
+  return result;
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {

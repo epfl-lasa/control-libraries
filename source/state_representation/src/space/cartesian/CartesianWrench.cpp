@@ -45,6 +45,15 @@ CartesianWrench CartesianWrench::Random(const std::string& name, const std::stri
   return CartesianWrench(name, random, reference);
 }
 
+CartesianWrench& CartesianWrench::operator*=(const CartesianWrench& wrench) {
+  this->CartesianState::operator*=(wrench);
+  return (*this);
+}
+
+CartesianWrench CartesianWrench::operator*(const CartesianWrench& wrench) const {
+  return this->CartesianState::operator*(wrench);
+}
+
 CartesianWrench& CartesianWrench::operator+=(const CartesianWrench& wrench) {
   this->CartesianState::operator+=(wrench);
   return (*this);
@@ -95,6 +104,10 @@ CartesianWrench CartesianWrench::copy() const {
 
 Eigen::VectorXd CartesianWrench::data() const {
   return this->get_wrench();
+}
+
+CartesianWrench CartesianWrench::inverse() const {
+  return this->CartesianState::inverse();
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {

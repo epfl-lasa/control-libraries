@@ -201,8 +201,7 @@ CartesianState CartesianState::inverse() const {
   CartesianState result(*this);
   // inverse name and reference frame
   std::string ref = result.get_reference_frame();
-  std::string name = result.get_name();
-  result.set_reference_frame(name);
+  result.set_reference_frame(result.get_name());
   result.set_name(ref);
   // intermediate variables for f_S_b
   Eigen::Vector3d f_P_b = this->get_position();

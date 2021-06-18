@@ -66,6 +66,18 @@ CartesianPose CartesianPose::operator*(const CartesianPose& pose) const {
   return this->CartesianState::operator*(pose);
 }
 
+CartesianState CartesianPose::operator*(const CartesianState& state) const {
+  return this->CartesianState::operator*(state);
+}
+
+CartesianTwist CartesianPose::operator*(const CartesianTwist& twist) const {
+  return this->CartesianState::operator*(twist);
+}
+
+CartesianWrench CartesianPose::operator*(const CartesianWrench& wrench) const {
+  return this->CartesianState::operator*(wrench);
+}
+
 CartesianPose& CartesianPose::operator*=(double lambda) {
   this->CartesianState::operator*=(lambda);
   return (*this);
@@ -121,6 +133,25 @@ CartesianPose CartesianPose::copy() const {
 
 Eigen::VectorXd CartesianPose::data() const {
   return this->get_pose();
+}
+
+CartesianPose CartesianPose::inverse() const {
+  CartesianPose result(*this);
+  // inverse name and reference frame
+  std::string ref = result.get_reference_frame();
+  std::string name = result.get_name();
+  result.set_reference_frame(name);
+  result.set_name(ref);
+  // intermediate variables for f_S_b
+  Eigen::Vector3d f_P_b = this->get_position();
+  Eigen::Quaterniond f_R_b = this->get_orientation();
+  // computation for b_S_f
+  Eigen::Quaterniond b_R_f = f_R_b.conjugate();
+  Eigen::Vector3d b_P_f = b_R_f * (-f_P_b);
+  // collect the results
+  result.set_position(b_P_f);
+  result.set_orientation(b_R_f);
+  return result;
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {

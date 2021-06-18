@@ -47,6 +47,9 @@ public:
   void set_force(const Eigen::Vector3d& force) = delete;
   void set_torque(const Eigen::Vector3d& torque) = delete;
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
+  CartesianState inverse() const = delete;
+  CartesianState& operator*=(const CartesianState& twist) = delete;
+  CartesianState operator*(const CartesianState& twist) = delete;
 
   /**
    * @brief Empty constructor
@@ -119,20 +122,6 @@ public:
    * @return reference to the current twist with new values
    */
   CartesianTwist& operator=(const CartesianTwist& twist) = default;
-
-  /**
-   * @brief Overload the *= operator
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  CartesianTwist& operator*=(const CartesianTwist& twist);
-
-  /**
-   * @brief Overload the * operator with a twist
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  CartesianTwist operator*(const CartesianTwist& twist) const;
 
   /**
    * @brief Overload the += operator

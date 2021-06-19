@@ -11,6 +11,7 @@
 
 namespace state_representation {
 class CartesianTwist;
+class CartesianWrench;
 
 /**
  * @class CartesianPose
@@ -149,7 +150,7 @@ public:
    * @param pose CartesianPose to multiply with
    * @return the current CartesianPose multiplied by the CartesianPose given in argument
    */
-  CartesianPose& operator*=(const CartesianPose& pose);
+  [[deprecated]] CartesianPose& operator*=(const CartesianPose& pose);
 
   /**
    * @brief Overload the * operator
@@ -269,9 +270,16 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const CartesianPose& pose);
 
   /**
+   * @brief Overload the * operator with a CartesianState
+   * @param state the state to multiply with
+   * @return the CartesianPose provided multiplied by the state
+   */
+  friend CartesianPose operator*(const CartesianState& state, const CartesianPose& pose);
+
+  /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianPose provided multiply by lambda
+   * @return the CartesianPose provided multiplied by lambda
    */
   friend CartesianPose operator*(double lambda, const CartesianPose& pose);
 

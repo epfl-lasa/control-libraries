@@ -6,8 +6,12 @@
 #pragma once
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 
 namespace state_representation {
+class CartesianPose;
+class CartesianTwist;
 /**
  * @class CartesianWrench
  * @brief Class to define wrench in cartesian space as 3D force and torque vectors
@@ -127,6 +131,27 @@ public:
   [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
+   * @brief Overload the * operator
+   * @param state CartesianState to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianState given in argument
+   */
+  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianPose to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianPose given in argument
+   */
+  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianWrench to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianTwist given in argument
+   */
+  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
+
+  /**
    * @brief Overload the += operator
    * @param wrench CartesianWrench to add
    * @return the current CartesianWrench added the CartesianWrench given in argument
@@ -233,6 +258,13 @@ public:
    * @return the appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench);
+
+  /**
+   * @brief Overload the * operator with a CartesianState
+   * @param state the state to multiply with
+   * @return the CartesianWrench provided multiplied by the state
+   */
+  friend CartesianWrench operator*(const CartesianState& state, const CartesianWrench& wrench);
 
   /**
    * @brief Overload the * operator with a scalar

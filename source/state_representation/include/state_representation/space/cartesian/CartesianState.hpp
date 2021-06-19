@@ -379,7 +379,7 @@ public:
    * @param state the state to compose with corresponding to b_S_c
    * @return the CartesianState corresponding f_S_c = f_S_b * b_S_c (assuming this is f_S_b)
    */
-  CartesianState& operator*=(const CartesianState& state);
+  [[deprecated]] CartesianState& operator*=(const CartesianState& state);
 
   /**
    * @brief Overload the * operator with another state by deriving the equations of motions

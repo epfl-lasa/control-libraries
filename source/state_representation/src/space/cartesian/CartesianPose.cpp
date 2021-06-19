@@ -161,6 +161,10 @@ std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   return os;
 }
 
+CartesianPose operator*(const CartesianState& state, const CartesianPose& pose) {
+  return CartesianPose(state.operator*(pose));
+}
+
 CartesianPose operator*(double lambda, const CartesianPose& pose) {
   return pose * lambda;
 }

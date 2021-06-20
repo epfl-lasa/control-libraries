@@ -36,3 +36,15 @@ jobs:
         uses: ./.github/actions/build-test
         with:
           configuration: Release
+
+  build-test-python:
+    needs: build-test-release
+    runs-on: ubuntu-latest
+    name: Python bindings test
+    steps:
+      # First check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Load the repository build-test-python action
+      - name: Build and Test Python
+        uses: ./.github/actions/build-test-python

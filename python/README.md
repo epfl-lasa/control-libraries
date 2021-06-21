@@ -87,7 +87,7 @@ installation dependencies (namely `setuptools` and `pybind11`) in a temporary ca
 allowing the subsequent `setup.py` to be evaluated without needing a local installation of `pybind11`.
 This feature requires a [`pip`](https://pypi.org/project/pip/) version 10.0 or newer.
 
-The [`tests`](./tests) directory contains some Python scripts that import and check the bindings
+The [`test`](./test) directory contains some Python scripts that import and check the bindings
 using the Python `unittest` framework. They are not currently comprehensive.
 
 ## Dockerfile
@@ -97,11 +97,13 @@ A Dockerfile and run script are provided to test the installation of the binding
 The docker image installs the core control libraries and subsequently installs the python bindings.
 
 The [`run.sh`](./run.sh) script will build the docker image and launch an interactive container
-with the test files in the [`tests`](./tests) directory copied to the local path.
+with the test files in the [`test`](./test) directory copied to the local path.
 
 The run script tries to the clone the current local git branch when installing the control libraries
 in the Dockerfile. If the local branch does not exist on the remote, or if you want to test the 
 python bindings against a difference control libraries source branch, you can supply a specific
 branch as the first argument to the run script. For example, `./run.sh develop` to use the `develop` branch.
 
-You can run these tests with `python <test_name.py>`, or just enter a python shell with `python`.
+You can run a single test with `python <test_name.py>`, or just enter a python shell with `python`.
+Run all tests with `python -m unittest discover <path_to_test_dir>`, or just `python -m unittest` if
+the [`test`](./test) directory in your current working directory.

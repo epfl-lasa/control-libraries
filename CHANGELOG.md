@@ -10,6 +10,7 @@ Release Versions:
 - Preserve emptiness upon copy construction (#152)
 - Use release configuration in install script (#155)
 - Fix CartesianPose constructor in Python bindings and revise run script (#157)
+- Add CI workflow for Python bindings (#159)
 
 ## 3.0.0
 

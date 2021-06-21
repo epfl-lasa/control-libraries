@@ -55,9 +55,7 @@ RUN apt-get update && apt-get install -y \
     tar \
     python \
     sudo \
-    iputils-ping \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    iputils-ping
 
 # install gtest
 WORKDIR /tmp/gtest_build
@@ -65,7 +63,15 @@ RUN cmake /usr/src/gtest \
   && make \
   && cp lib/* /usr/local/lib || cp *.a /usr/local/lib
 
-RUN rm -rf /tmp/*
+# install python requirements
+RUN apt-get install -y \
+    python3-dev \
+    python3-pip \
+    && pip3 install numpy setuptools pybind11
+
+RUN apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /tmp/*
 
 
 FROM development-dependencies as remote-development

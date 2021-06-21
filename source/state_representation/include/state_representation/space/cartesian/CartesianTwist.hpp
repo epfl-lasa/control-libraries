@@ -127,7 +127,7 @@ public:
    * @param twist CartesianTwist to multiply with
    * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
    */
-  [[deprecated]] CartesianTwist& operator*=(const CartesianTwist& twist);
+  CartesianTwist& operator*=(const CartesianTwist& twist);
 
   /**
    * @brief Overload the * operator with a twist

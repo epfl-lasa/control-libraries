@@ -84,12 +84,6 @@ Eigen::ArrayXd CartesianState::array() const {
 }
 
 CartesianState& CartesianState::operator*=(const CartesianState& state) {
-  *this = *this * state;
-  return (*this);
-}
-
-CartesianState CartesianState::operator*(const CartesianState& state) const {
-  CartesianState result(*this);
   // sanity check
   if (this->is_empty()) {
     throw EmptyStateException(this->get_name() + " state is empty");
@@ -100,7 +94,7 @@ CartesianState CartesianState::operator*(const CartesianState& state) const {
   if (this->get_name() != state.get_reference_frame()) {
     throw IncompatibleReferenceFramesException("Expected " + this->get_name() + ", got " + state.get_reference_frame());
   }
-  result.set_name(state.get_name());
+  this->set_name(state.get_name());
   // intermediate variables for f_S_b
   Eigen::Vector3d f_P_b = this->get_position();
   Eigen::Quaterniond f_R_b = this->get_orientation();
@@ -117,24 +111,26 @@ CartesianState CartesianState::operator*(const CartesianState& state) const {
   Eigen::Vector3d b_a_c = state.get_linear_acceleration();
   Eigen::Vector3d b_alpha_c = state.get_angular_acceleration();
   // pose
-  result.set_position(f_P_b + f_R_b * b_P_c);
-  result.set_orientation(f_R_b * b_R_c);
+  this->set_position(f_P_b + f_R_b * b_P_c);
+  this->set_orientation(f_R_b * b_R_c);
   // twist
-  result.set_linear_velocity(f_v_b + f_R_b * b_v_c + f_omega_b.cross(f_R_b * b_P_c));
-  result.set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
+  this->set_linear_velocity(f_v_b + f_R_b * b_v_c + f_omega_b.cross(f_R_b * b_P_c));
+  this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
-  result.set_linear_acceleration(f_a_b + f_R_b * b_a_c
-                                    + f_alpha_b.cross(f_R_b * b_P_c)
-                                    + 2 * f_omega_b.cross(f_R_b * b_v_c)
-                                    + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
-  result.set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
+  this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
+                                + f_alpha_b.cross(f_R_b * b_P_c)
+                                + 2 * f_omega_b.cross(f_R_b * b_v_c)
+                                + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
+  this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
   // wrench
   //TODO
-  return result;
+  return (*this);
+}
 
-//  CartesianState result(*this);
-//  result *= state;
-//  return result;
+CartesianState CartesianState::operator*(const CartesianState& state) const {
+  CartesianState result(*this);
+  result *= state;
+  return result;
 }
 
 CartesianState& CartesianState::operator+=(const CartesianState& state) {

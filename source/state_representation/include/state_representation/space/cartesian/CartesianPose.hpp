@@ -150,7 +150,7 @@ public:
    * @param pose CartesianPose to multiply with
    * @return the current CartesianPose multiplied by the CartesianPose given in argument
    */
-  [[deprecated]] CartesianPose& operator*=(const CartesianPose& pose);
+  CartesianPose& operator*=(const CartesianPose& pose);
 
   /**
    * @brief Overload the * operator

@@ -121,7 +121,7 @@ public:
    * @param wrench CartesianWrench to multiply with
    * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
    */
-  [[deprecated]] CartesianWrench& operator*=(const CartesianWrench& wrench);
+  CartesianWrench& operator*=(const CartesianWrench& wrench);
 
   /**
    * @brief Overload the * operator with a wrench
@@ -269,7 +269,7 @@ public:
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench provided multiply by lambda
+   * @return the CartesianWrench provided multiplied by lambda
    */
   friend CartesianWrench operator*(double lambda, const CartesianWrench& wrench);
 };

@@ -136,8 +136,7 @@ Eigen::VectorXd CartesianPose::data() const {
 }
 
 CartesianPose CartesianPose::inverse() const {
-  CartesianPose result = this->CartesianState::inverse();
-  return result;
+  return this->CartesianState::inverse();
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
@@ -162,7 +161,7 @@ std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
 }
 
 CartesianPose operator*(const CartesianState& state, const CartesianPose& pose) {
-  return CartesianPose(state.operator*(pose));
+  return state.operator*(pose);
 }
 
 CartesianPose operator*(double lambda, const CartesianPose& pose) {

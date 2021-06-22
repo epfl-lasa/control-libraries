@@ -1,8 +1,20 @@
 #include "dynamical_systems/Circular.hpp"
 
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
+
 using namespace state_representation;
 
 namespace dynamical_systems {
+
+Circular::Circular() :
+    DynamicalSystem<CartesianState>(),
+    limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle", Ellipsoid("limit_cycle", "limit_cycle"))),
+    planar_gain_(std::make_shared<Parameter<double>>("planar_gain", 1.0)),
+    normal_gain_(std::make_shared<Parameter<double>>("normal_gain", 1.0)),
+    circular_velocity_(std::make_shared<Parameter<double>>("circular_velocity", M_PI / 2)) {
+  this->limit_cycle_->get_value().set_center_state(CartesianState("limit_cycle", "limit_cycle"));
+}
+
 Circular::Circular(const CartesianState& center, double radius, double gain, double circular_velocity) :
     DynamicalSystem(center.get_reference_frame()),
     limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle",
@@ -15,13 +27,16 @@ Circular::Circular(const CartesianState& center, double radius, double gain, dou
 }
 
 Circular::Circular(const Ellipsoid& limit_cycle, double gain, double circular_velocity) :
-    DynamicalSystem(limit_cycle.get_center_pose().get_reference_frame()),
+    DynamicalSystem(limit_cycle.get_center_state().get_reference_frame()),
     limit_cycle_(std::make_shared<Parameter<Ellipsoid>>("limit_cycle", limit_cycle)),
     planar_gain_(std::make_shared<Parameter<double>>("planar_gain", gain)),
     normal_gain_(std::make_shared<Parameter<double>>("normal_gain", gain)),
     circular_velocity_(std::make_shared<Parameter<double>>("circular_velocity", circular_velocity)) {}
 
 CartesianState Circular::compute_dynamics(const CartesianState& state) const {
+  if (this->get_limit_cycle().get_center_state().is_empty()) {
+    throw exceptions::EmptyAttractorException("The limit cycle of the dynamical system is empty.");
+  }
   // put the point in the reference of the center
   auto pose = CartesianPose(state);
   pose = this->get_limit_cycle().get_rotation().inverse() * this->get_center().inverse() * pose;
@@ -35,11 +50,11 @@ CartesianState Circular::compute_dynamics(const CartesianState& state) const {
   double a2ratio = (pose.get_position()[0] * pose.get_position()[0]) / (radiuses[0] * radiuses[0]);
   double b2ratio = (pose.get_position()[1] * pose.get_position()[1]) / (radiuses[1] * radiuses[1]);
   double dradius = -this->get_planar_gain() * radiuses[0] * radiuses[1] * (a2ratio + b2ratio - 1);
-  double tangeant_velocity_x = -radiuses[0] / radiuses[1] * pose.get_position()[1];
-  double tangeant_velocity_y = radiuses[1] / radiuses[0] * pose.get_position()[0];
+  double tangent_velocity_x = -radiuses[0] / radiuses[1] * pose.get_position()[1];
+  double tangent_velocity_y = radiuses[1] / radiuses[0] * pose.get_position()[0];
 
-  linear_velocity(0) = this->get_circular_velocity() * tangeant_velocity_x + dradius * tangeant_velocity_y;
-  linear_velocity(1) = this->get_circular_velocity() * tangeant_velocity_y - dradius * tangeant_velocity_x;
+  linear_velocity(0) = this->get_circular_velocity() * tangent_velocity_x + dradius * tangent_velocity_y;
+  linear_velocity(1) = this->get_circular_velocity() * tangent_velocity_y - dradius * tangent_velocity_x;
 
   velocity.set_linear_velocity(linear_velocity);
   velocity.set_angular_velocity(Eigen::Vector3d::Zero());
@@ -59,10 +74,15 @@ std::list<std::shared_ptr<ParameterInterface>> Circular::get_parameters() const 
 }
 
 void Circular::set_base_frame(const CartesianState& base_frame) {
+  if (base_frame.is_empty()) {
+    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
+  }
   DynamicalSystem<CartesianState>::set_base_frame(base_frame);
   // update reference frame of center
-  auto center_state = this->limit_cycle_->get_value().get_center_state();
-  center_state.set_reference_frame(base_frame.get_name());
-  this->limit_cycle_->get_value().set_center_state(center_state);
+  if (!this->limit_cycle_->get_value().get_center_state().is_empty()) {
+    auto center_state = this->limit_cycle_->get_value().get_center_state();
+    center_state.set_reference_frame(base_frame.get_name());
+    this->limit_cycle_->get_value().set_center_state(center_state);
+  }
 }
 }// namespace dynamical_systems

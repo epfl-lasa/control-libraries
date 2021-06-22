@@ -1,20 +1,23 @@
 #include <gtest/gtest.h>
-
 #include "dynamical_systems/Ring.hpp"
+#include "dynamical_systems/exceptions/EmptyBaseFrameException.hpp"
+#include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 
+using namespace state_representation;
 using namespace std::literals::chrono_literals;
 
 class RingDSTest : public ::testing::Test {
 protected:
   RingDSTest() {
-    center = state_representation::CartesianPose::Identity("A");
-    current_pose = state_representation::CartesianPose("B", radius * Eigen::Vector3d::Random());
+    center = CartesianPose::Identity("A");
+    current_pose = CartesianPose("B", radius * Eigen::Vector3d::Random());
   }
 
-  state_representation::CartesianPose current_pose;
-  state_representation::CartesianPose center;
+  CartesianPose current_pose;
+  CartesianPose center;
   std::vector<double> vlim = {10, 10, 0.001, 0.001};
   double radius = 10;
   double width = 1;
@@ -25,9 +28,46 @@ protected:
   double tol = 1e-3;
 };
 
+TEST_F(RingDSTest, EmptyConstructor) {
+  // construct empty cartesian state DS
+  CartesianPose center = CartesianPose::Identity("CAttractor", "A");
+  dynamical_systems::Ring ds;
+  // base frame and attractor should be empty
+  EXPECT_TRUE(ds.get_center().is_empty());
+  EXPECT_TRUE(ds.get_base_frame().is_empty());
+  ds.set_center(center);
+  EXPECT_FALSE(ds.get_center().is_empty());
+  EXPECT_FALSE(ds.get_base_frame().is_empty());
+  // when attractor was set without a base frame, expect base frame to be identity with name / reference_frame of attractor
+  EXPECT_EQ(ds.get_base_frame().get_name(), center.get_reference_frame());
+  EXPECT_EQ(ds.get_base_frame().get_reference_frame(), center.get_reference_frame());
+  EXPECT_EQ(ds.get_base_frame().get_transformation_matrix(), Eigen::Matrix4d::Identity());
+
+  ds = dynamical_systems::Ring();
+  CartesianState state1 = CartesianState::Identity("B", "A");
+  CartesianState state2("D", "C");
+  CartesianState state3("C", "A");
+  CartesianState state4("C", "B");
+  // if no base frame is set, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
+  ds.set_base_frame(state1);
+  // if cartesian state is incompatible, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state2), state_representation::exceptions::IncompatibleReferenceFramesException);
+  // if cartesian state needs to be transformed to other frame first and is empty, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::EmptyStateException);
+  // if no attractor is set, an exception is thrown
+  EXPECT_THROW(ds.evaluate(state4), dynamical_systems::exceptions::EmptyAttractorException);
+
+  ds.set_center(center);
+  EXPECT_TRUE(ds.is_compatible(state1));
+  EXPECT_FALSE(ds.is_compatible(state2));
+  EXPECT_TRUE(ds.is_compatible(state3));
+  EXPECT_TRUE(ds.is_compatible(state4));
+}
+
 TEST_F(RingDSTest, PointsOnRadius) {
   dynamical_systems::Ring ring(center, radius, width, speed);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   // zero output at center
   current_pose = center;
@@ -61,7 +101,7 @@ TEST_F(RingDSTest, PointsOnRadius) {
 
 TEST_F(RingDSTest, PointsNearRadius) {
   dynamical_systems::Ring ring(center, radius, width, speed, field_strength);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   current_pose.set_position(radius + width, 0, 0);
   twist = ring.evaluate(current_pose);
@@ -95,7 +135,7 @@ TEST_F(RingDSTest, BehaviourNearBoundaryAtHighSpeeds) {
   speed = 10;
   field_strength = 2;
   dynamical_systems::Ring ring(center, radius, width, speed, field_strength);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   current_pose.set_position(0, radius + 1.001 * width, 0);
   twist = ring.evaluate(current_pose);
@@ -112,7 +152,7 @@ TEST_F(RingDSTest, ConvergenceOnRadius) {
   dynamical_systems::Ring ring(center, radius);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = ring.evaluate(current_pose);
+    CartesianTwist twist = ring.evaluate(current_pose);
     twist.clamp(vlim[0], vlim[1], vlim[2], vlim[3]);
     current_pose += dt * twist;
   }
@@ -126,7 +166,7 @@ TEST_F(RingDSTest, ConvergenceOnRadiusRandomCenter) {
   dynamical_systems::Ring ring(center, radius);
 
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = ring.evaluate(current_pose);
+    CartesianTwist twist = ring.evaluate(current_pose);
     twist.clamp(vlim[0], vlim[1], vlim[2], vlim[3]);
     current_pose += dt * twist;
   }
@@ -140,7 +180,7 @@ TEST_F(RingDSTest, ZeroNormalGain) {
 
   double startingHeight = current_pose.get_position().z();
   for (unsigned int i = 0; i < nb_steps; ++i) {
-    state_representation::CartesianTwist twist = ring.evaluate(current_pose);
+    CartesianTwist twist = ring.evaluate(current_pose);
     twist.clamp(vlim[0], vlim[1], vlim[2], vlim[3]);
     current_pose += dt * twist;
   }
@@ -149,7 +189,7 @@ TEST_F(RingDSTest, ZeroNormalGain) {
 
 TEST_F(RingDSTest, OrientationAroundCircle) {
   dynamical_systems::Ring ring(center, radius, width, 0);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   // at the position {radius, 0, 0}, the orientation attractor is by default null,
   // so there should be zero angular velocity if the current pose orientation is also null
@@ -179,7 +219,7 @@ TEST_F(RingDSTest, OrientationAroundCircle) {
 
 TEST_F(RingDSTest, OrientationRestitutionAtZeroAngle) {
   dynamical_systems::Ring ring(center, radius, width, 0);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   // at the position {radius, 0, 0}, the orientation attractor is by default null (angle around circle is 0)
   current_pose.set_position(radius, 0, 0);
@@ -208,7 +248,7 @@ TEST_F(RingDSTest, OrientationRestitutionAtZeroAngle) {
 
 TEST_F(RingDSTest, OrientationRotationOffset) {
   dynamical_systems::Ring ring(center, radius, width, 0);
-  state_representation::CartesianTwist twist;
+  CartesianTwist twist;
 
   current_pose.set_position(radius, 0, 0);
 
@@ -233,7 +273,7 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
   // offset that gives a zero command (no rotation offset)
   center.set_orientation(Eigen::Quaterniond::UnitRandom());
   ring.set_center(center);
-  current_pose = state_representation::CartesianPose("B", Eigen::Vector3d(radius, 0, 0), "A");
+  current_pose = CartesianPose("B", Eigen::Vector3d(radius, 0, 0), "A");
   current_pose = center * current_pose;
   ring.set_rotation_offset(Eigen::Quaterniond::Identity());
   twist = ring.evaluate(current_pose);
@@ -243,33 +283,29 @@ TEST_F(RingDSTest, OrientationRotationOffset) {
   // still be zero if the current position and orientation matches the rotation offset
   rotation = Eigen::Quaterniond::UnitRandom();
   ring.set_rotation_offset(rotation);
-  current_pose = state_representation::CartesianPose("B",
-                                                     Eigen::Vector3d(radius, 0, 0),
-                                                     ring.get_rotation_offset(),
-                                                     "A");
+  current_pose = CartesianPose("B", Eigen::Vector3d(radius, 0, 0), ring.get_rotation_offset(), "A");
   current_pose = center * current_pose;
   twist = ring.evaluate(current_pose);
   EXPECT_NEAR(twist.get_angular_velocity().norm(), 0, tol);
 
   // any additional orientation in the ring frame on top of the rotation offset
   // should give the same local command, regardless of the center frame
-  current_pose = state_representation::CartesianPose("B",
-                                                     Eigen::Vector3d(radius, 0, 0),
-                                                     Eigen::Quaterniond(1, 1, 0, 0).normalized()
-                                                         * ring.get_rotation_offset(),
-                                                     "A");
+  current_pose = CartesianPose("B",
+                               Eigen::Vector3d(radius, 0, 0),
+                               Eigen::Quaterniond(1, 1, 0, 0).normalized() * ring.get_rotation_offset(),
+                               "A");
   current_pose = center * current_pose;
   twist = ring.evaluate(current_pose);
 
   // check the twist in the local frame
-  twist = state_representation::CartesianState(center).inverse() * twist;
+  twist = CartesianState(center).inverse() * twist;
   EXPECT_NEAR(twist.get_angular_velocity().x(), -M_PI_2 * ring.get_angular_gain(), tol);
   EXPECT_NEAR(twist.get_angular_velocity().y(), 0, tol);
   EXPECT_NEAR(twist.get_angular_velocity().z(), 0, tol);
 }
 
 TEST_F(RingDSTest, BaseFrameBehaviours) {
-  auto AinB = state_representation::CartesianState::Random("A", "B");
+  auto AinB = CartesianState::Random("A", "B");
   dynamical_systems::Ring ring(AinB);
 
   // setting the center through the constructor should also set the base frame (as Identity frame)
@@ -280,7 +316,7 @@ TEST_F(RingDSTest, BaseFrameBehaviours) {
   EXPECT_NEAR(ring.get_base_frame().get_pose().norm(), 1, tol);
 
   // setting the center should fail if it is incompatible with the base frame
-  auto CinD = state_representation::CartesianState::Random("C", "D");
+  auto CinD = CartesianState::Random("C", "D");
   EXPECT_THROW(ring.set_center(CinD), state_representation::exceptions::IncompatibleReferenceFramesException);
 
   // updating the base frame should "move" the center frame but not change its magnitude
@@ -294,13 +330,13 @@ TEST_F(RingDSTest, BaseFrameBehaviours) {
   EXPECT_NEAR(ring.get_center().get_pose().norm(), centerNorm, tol);
 
   // setting the center should succeed if it is expressed relative to the base frame
-  auto BinC = state_representation::CartesianState::Random("B", "C");
+  auto BinC = CartesianState::Random("B", "C");
   EXPECT_NO_THROW(ring.set_center(BinC));
   EXPECT_STREQ(ring.get_center().get_name().c_str(), "B");
   EXPECT_STREQ(ring.get_center().get_reference_frame().c_str(), "C");
 
   // setting the center should also succeed if it shares the same reference frame as the base frame
-  auto BinD = state_representation::CartesianState::Random("B", "D");
+  auto BinD = CartesianState::Random("B", "D");
   EXPECT_NO_THROW(ring.set_center(BinD));
   EXPECT_STREQ(ring.get_center().get_name().c_str(), "B");
   // the reference frame is still C, not D, because the center is internally represented relative to the base frame (C)
@@ -310,7 +346,7 @@ TEST_F(RingDSTest, BaseFrameBehaviours) {
 TEST_F(RingDSTest, SettersAndGetters) {
   dynamical_systems::Ring ring(center);
 
-  auto pose = state_representation::CartesianState::Random("C");
+  auto pose = CartesianState::Random("C");
   ring.set_center(pose);
   auto pose2 = ring.get_center();
   EXPECT_STREQ(pose.get_name().c_str(), pose2.get_name().c_str());

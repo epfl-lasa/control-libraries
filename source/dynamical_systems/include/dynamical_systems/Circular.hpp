@@ -120,7 +120,6 @@ public:
    * @brief Getter of the rotation angle attribute
    * @return the radius value
    */
-
   double get_rotation_angle() const;
 
   /**
@@ -133,7 +132,6 @@ public:
    * @brief Getter of the radiuses of the limit cycle
    * @param The rotation angle value
    */
-
   const std::vector<double>& get_radiuses() const;
 
   /**

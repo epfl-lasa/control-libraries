@@ -164,8 +164,7 @@ Eigen::VectorXd CartesianTwist::data() const {
 }
 
 CartesianTwist CartesianTwist::inverse() const {
-  CartesianTwist result = this->CartesianState::inverse();
-  return result;
+  return this->CartesianState::inverse();
 }
 
 std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {
@@ -184,7 +183,7 @@ std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {
 }
 
 CartesianTwist operator*(const CartesianState& state, const CartesianTwist& twist) {
-  return CartesianTwist(state.operator*(twist));
+  return state.operator*(twist);
 }
 
 CartesianTwist operator*(double lambda, const CartesianTwist& twist) {

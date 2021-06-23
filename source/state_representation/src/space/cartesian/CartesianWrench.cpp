@@ -141,7 +141,7 @@ std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {
 }
 
 CartesianWrench operator*(const CartesianState& state, const CartesianWrench& wrench) {
-  return CartesianWrench(state.operator*(wrench));
+  return state.operator*(wrench);
 }
 
 CartesianWrench operator*(double lambda, const CartesianWrench& wrench) {

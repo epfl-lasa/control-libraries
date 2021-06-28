@@ -20,7 +20,7 @@ Running the scripts uses ROS commands, e.g. to run the `task_space_control_loop`
 rosrun ros_examples task_space_control_loop
 ```
 
-You can also directly use the launchfile that starts any requirement for the demo to run correctly:
+You can also directly use the launch file that starts any requirement for the demo to run correctly:
 
 ```console
 rolaunch ros_examples task_space_control_loop.launch
@@ -38,18 +38,18 @@ At each control step, the scripts publishes the current and attractor poses usin
 
 This demonstration shows how to create a control loop with a `Linear` dynamical system in task space (`CartesianState`) 
 and compute forward kinematics and inverse velocity with a robot `Model`. A ROS subscriber is set up to receive the joint 
-state from the `/joint_states` topic.
+state from the `joint_states` topic.
 The robot moves a pose towards a random attractor in a `500Hz` control loop.
-At each control step, the scripts publishes the desired joint velocity to the `/velocity_controller/command`.
+At each control step, the scripts publishes the desired joint velocity to the `velocity_controller/command` topic.
 
-To run this script and visualize the robot, follow the steps below to launch a `PyBullet` simulation with a ROS interface:
+To run this script and visualize the robot, follow the steps below to launch a *PyBullet* simulation with a ROS interface:
 
-- in a terminal, run:
+- in a first terminal, run:
     ```bash
     cd control_libraries/demos/ros_examples
     bash run-demo.sh # this will build a docker image and spin up a container
     # inside the container
-    roslaunch ros_examples joint_space_velocity_control.launch
+    roslaunch ros_examples joint_space_velocity_control.launch robot_name:=franka
     ```
 - in a second terminal, run:
     ```bash

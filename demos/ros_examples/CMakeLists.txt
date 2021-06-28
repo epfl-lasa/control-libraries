@@ -56,6 +56,7 @@ include_directories(
 set(DEMOS_SCRIPTS
     task_space_control_loop
     joint_space_velocity_control
+    joint_space_torque_control
 )
 set(FIXTURE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/fixtures/)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})

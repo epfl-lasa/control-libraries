@@ -1,0 +1,11 @@
+<launch>
+    <arg name="robot_name" default=""/>
+
+    <group if="$(eval robot_name == '')">
+        <node type="joint_space_torque_control" name="joint_space_torque_control" pkg="ros_examples" output="screen"/>
+    </group>
+
+    <group unless="$(eval robot_name == '')">
+        <node ns="$(arg robot_name)" type="joint_space_torque_control" name="joint_space_torque_control" pkg="ros_examples" output="screen"/>
+    </group>
+</launch>

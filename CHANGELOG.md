@@ -62,6 +62,7 @@ of the libraries.
 
 **dynamical_systems**
 - Add emtpy constructors for Circular and Ring DS (#154)
+- Update ROS1 example because simulation is more developed (#160)
 
 **general**
 - Use release configuration in install script (#155)

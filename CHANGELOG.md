@@ -12,6 +12,7 @@ Release Versions:
 - Fix CartesianPose constructor in Python bindings and revise run script (#157)
 - Add CI workflow for Python bindings (#159)
 - Add emtpy constructors for Circular and Ring DS (#154)
+- Update ROS1 example because simulation is more developed (#160)
 
 ## 3.0.0
 

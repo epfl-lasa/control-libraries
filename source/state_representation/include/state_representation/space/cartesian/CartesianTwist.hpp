@@ -7,9 +7,11 @@
 
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 
 namespace state_representation {
 class CartesianPose;
+class CartesianWrench;
 
 /**
  * @class CartesianTwist
@@ -132,7 +134,28 @@ public:
    * @param twist CartesianTwist to multiply with
    * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
    */
-  CartesianTwist operator*(const CartesianTwist& twist) const;
+  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianState to multiply with
+   * @return the current CartesianTwist multiplied by the CartesianState given in argument
+   */
+  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianPose to multiply with
+   * @return the current CartesianTwist multiplied by the CartesianPose given in argument
+   */
+  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianWrench to multiply with
+   * @return the current CartesianTwist multiplied by the CartesianWrench given in argument
+   */
+  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Overload the += operator
@@ -229,6 +252,12 @@ public:
   Eigen::VectorXd data() const;
 
   /**
+   * @brief Compute the inverse of the current CartesianTwist
+   * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
+   */
+  CartesianTwist inverse() const;
+
+  /**
    * @brief Compute the norms of the state variable specified by the input type (default is full twist)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
@@ -249,6 +278,13 @@ public:
    * @return the appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist);
+
+  /**
+   * @brief Overload the * operator with a CartesianState
+   * @param state the state to multiply with
+   * @return the CartesianTwist provided multiplied by the state
+   */
+  friend CartesianTwist operator*(const CartesianState& state, const CartesianTwist& twist);
 
   /**
    * @brief Overload the * operator with a scalar

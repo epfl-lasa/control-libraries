@@ -66,6 +66,18 @@ CartesianPose CartesianPose::operator*(const CartesianPose& pose) const {
   return this->CartesianState::operator*(pose);
 }
 
+CartesianState CartesianPose::operator*(const CartesianState& state) const {
+  return this->CartesianState::operator*(state);
+}
+
+CartesianTwist CartesianPose::operator*(const CartesianTwist& twist) const {
+  return this->CartesianState::operator*(twist);
+}
+
+CartesianWrench CartesianPose::operator*(const CartesianWrench& wrench) const {
+  return this->CartesianState::operator*(wrench);
+}
+
 CartesianPose& CartesianPose::operator*=(double lambda) {
   this->CartesianState::operator*=(lambda);
   return (*this);
@@ -123,6 +135,10 @@ Eigen::VectorXd CartesianPose::data() const {
   return this->get_pose();
 }
 
+CartesianPose CartesianPose::inverse() const {
+  return this->CartesianState::inverse();
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
   if (pose.is_empty()) {
     os << "Empty CartesianPose";
@@ -142,6 +158,10 @@ std::ostream& operator<<(std::ostream& os, const CartesianPose& pose) {
     os << axis_angle.axis()(2) << ")";
   }
   return os;
+}
+
+CartesianPose operator*(const CartesianState& state, const CartesianPose& pose) {
+  return state.operator*(pose);
 }
 
 CartesianPose operator*(double lambda, const CartesianPose& pose) {

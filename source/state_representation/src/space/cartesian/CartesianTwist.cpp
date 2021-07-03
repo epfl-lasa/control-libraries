@@ -60,6 +60,20 @@ CartesianTwist CartesianTwist::operator*(const CartesianTwist& twist) const {
   return this->CartesianState::operator*(twist);
 }
 
+CartesianState CartesianTwist::operator*(const CartesianState& state) const {
+  return this->CartesianState::operator*(state);
+}
+
+
+CartesianPose CartesianTwist::operator*(const CartesianPose& pose) const {
+  return this->CartesianState::operator*(pose);
+}
+
+
+CartesianWrench CartesianTwist::operator*(const CartesianWrench& wrench) const {
+  return this->CartesianState::operator*(wrench);
+}
+
 CartesianTwist& CartesianTwist::operator+=(const CartesianTwist& twist) {
   this->CartesianState::operator+=(twist);
   return (*this);
@@ -149,6 +163,10 @@ Eigen::VectorXd CartesianTwist::data() const {
   return this->get_twist();
 }
 
+CartesianTwist CartesianTwist::inverse() const {
+  return this->CartesianState::inverse();
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {
   if (twist.is_empty()) {
     os << "Empty CartesianTwist";
@@ -162,6 +180,10 @@ std::ostream& operator<<(std::ostream& os, const CartesianTwist& twist) {
     os << twist.get_angular_velocity()(2) << ")";
   }
   return os;
+}
+
+CartesianTwist operator*(const CartesianState& state, const CartesianTwist& twist) {
+  return state.operator*(twist);
 }
 
 CartesianTwist operator*(double lambda, const CartesianTwist& twist) {

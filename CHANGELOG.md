@@ -13,6 +13,16 @@ Release Versions:
 - Add CI workflow for Python bindings (#159)
 - Add emtpy constructors for Circular and Ring DS (#154)
 - Update ROS1 example because simulation is more developed (#160)
+- Define `inverse` and `*` operators for Cartesian types explicitly (#158)
+
+## Important TODOs
+
+- Revise `*=` and `*` operators in Cartesian types before the next release with 
+  breaking changes (some are marked *deprecated*, and some are left as is, but 
+  they should be deleted). See issue #156
+- Add the wrench computation in the `*` operator and `inverse` function (#134)
+- Refactor and improve unittests for state_representation (especially JointState
+  and CartesianState)
 
 ## 3.0.0
 

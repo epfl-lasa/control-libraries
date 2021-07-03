@@ -7,9 +7,11 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 
 namespace state_representation {
 class CartesianTwist;
+class CartesianWrench;
 
 /**
  * @class CartesianPose
@@ -158,6 +160,27 @@ public:
   CartesianPose operator*(const CartesianPose& pose) const;
 
   /**
+   * @brief Overload the * operator
+   * @param state CartesianState to multiply with
+   * @return the current CartesianPose multiplied by the CartesianState given in argument
+   */
+  CartesianState operator*(const CartesianState& state) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param twist CartesianTwist to multiply with
+   * @return the current CartesianPose multiplied by the CartesianTwist given in argument
+   */
+  CartesianTwist operator*(const CartesianTwist& twist) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param wrench CartesianWrench to multiply with
+   * @return the current CartesianPose multiplied by the CartesianWrench given in argument
+   */
+  CartesianWrench operator*(const CartesianWrench& wrench) const;
+
+  /**
    * @brief Overload the *= operator with a scalar
    * @param lambda the scalar to multiply with
    * @return the CartesianPose multiplied by lambda
@@ -226,6 +249,12 @@ public:
   std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::POSE) const override;
 
   /**
+   * @brief Compute the inverse of the current CartesianPose
+   * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
+   */
+  CartesianPose inverse() const;
+
+  /**
    * @brief Compute the normalized pose at the state variable given in argument (default is full pose)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the normalized pose
@@ -241,9 +270,16 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const CartesianPose& pose);
 
   /**
+   * @brief Overload the * operator with a CartesianState
+   * @param state the state to multiply with
+   * @return the CartesianPose provided multiplied by the state
+   */
+  friend CartesianPose operator*(const CartesianState& state, const CartesianPose& pose);
+
+  /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianPose provided multiply by lambda
+   * @return the CartesianPose provided multiplied by lambda
    */
   friend CartesianPose operator*(double lambda, const CartesianPose& pose);
 

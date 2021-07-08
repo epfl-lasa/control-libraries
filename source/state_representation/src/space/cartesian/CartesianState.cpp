@@ -118,7 +118,7 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
   this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
-                                + f_alpha_b.cross(f_R_b * b_P_c) 
+                                + f_alpha_b.cross(f_R_b * b_P_c)
                                 + 2 * f_omega_b.cross(f_R_b * b_v_c)
                                 + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
   this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
@@ -201,8 +201,7 @@ CartesianState CartesianState::inverse() const {
   CartesianState result(*this);
   // inverse name and reference frame
   std::string ref = result.get_reference_frame();
-  std::string name = result.get_name();
-  result.set_reference_frame(name);
+  result.set_reference_frame(result.get_name());
   result.set_name(ref);
   // intermediate variables for f_S_b
   Eigen::Vector3d f_P_b = this->get_position();

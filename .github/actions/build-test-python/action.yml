@@ -1,0 +1,5 @@
+name: 'Build and Test Python'
+description: 'Build the python bindings and run all unit tests'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

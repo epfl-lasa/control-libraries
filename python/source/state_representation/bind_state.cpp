@@ -40,7 +40,7 @@ void state(py::module_& m) {
 
   c.def("get_type", &State::get_type, "Getter of the type attribute");
   c.def("is_empty", &State::is_empty, "Getter of the empty attribute");
-  c.def("set_empty", &State::set_empty, "Setter of the empty attribute to true");
+  c.def("set_empty", &State::set_empty, "Setter of the empty attribute", "empty"_a=true);
   c.def("set_filled", &State::set_filled, "Setter of the empty attribute to false and also reset the timestamp");
   c.def("get_timestamp", &State::get_timestamp, "Getter of the timestamp attribute");
   c.def("reset_timestamp", &State::reset_timestamp, "Reset the timestamp attribute to now");

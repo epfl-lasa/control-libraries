@@ -6,8 +6,12 @@
 #pragma once
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianTwist.hpp"
 
 namespace state_representation {
+class CartesianPose;
+class CartesianTwist;
 /**
  * @class CartesianWrench
  * @brief Class to define wrench in cartesian space as 3D force and torque vectors
@@ -124,7 +128,28 @@ public:
    * @param wrench CartesianWrench to multiply with
    * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
    */
-  CartesianWrench operator*(const CartesianWrench& wrench) const;
+  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianState to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianState given in argument
+   */
+  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianPose to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianPose given in argument
+   */
+  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param state CartesianWrench to multiply with
+   * @return the current CartesianWrench multiplied by the CartesianTwist given in argument
+   */
+  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
 
   /**
    * @brief Overload the += operator
@@ -207,6 +232,12 @@ public:
   Eigen::VectorXd data() const;
 
   /**
+ * @brief Compute the inverse of the current CartesianWrench
+ * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
+ */
+  CartesianWrench inverse() const;
+
+  /**
    * @brief Compute the norms of the state variable specified by the input type (default is full wrench)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
@@ -229,9 +260,16 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench);
 
   /**
+   * @brief Overload the * operator with a CartesianState
+   * @param state the state to multiply with
+   * @return the CartesianWrench provided multiplied by the state
+   */
+  friend CartesianWrench operator*(const CartesianState& state, const CartesianWrench& wrench);
+
+  /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench provided multiply by lambda
+   * @return the CartesianWrench provided multiplied by lambda
    */
   friend CartesianWrench operator*(double lambda, const CartesianWrench& wrench);
 };

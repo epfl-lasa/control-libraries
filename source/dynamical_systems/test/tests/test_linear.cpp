@@ -55,8 +55,7 @@ TEST_F(LinearDSTest, EmptyConstructorCartesianState) {
   EXPECT_THROW(ds.evaluate(state1), dynamical_systems::exceptions::EmptyBaseFrameException);
   ds.set_base_frame(state1);
   // if cartesian state is incompatible, an exception is thrown
-  EXPECT_THROW(ds.evaluate(state2),
-               state_representation::exceptions::IncompatibleReferenceFramesException);
+  EXPECT_THROW(ds.evaluate(state2), state_representation::exceptions::IncompatibleReferenceFramesException);
   // if cartesian state needs to be transformed to other frame first and is empty, an exception is thrown
   EXPECT_THROW(ds.evaluate(state3), state_representation::exceptions::EmptyStateException);
   // if no attractor is set, an exception is thrown

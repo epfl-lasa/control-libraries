@@ -26,8 +26,8 @@ public:
 
   explicit RobotInterface(ros::NodeHandle* node_handle, const std::string& robot_name, const std::string& urdf_path) :
       robot_(robot_name, urdf_path) {
-    subscriber_ = node_handle->subscribe("/joint_states", 10, &RobotInterface::robot_state_callback, this);
-    publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("/velocity_controller/command", 10, false);
+    subscriber_ = node_handle->subscribe("joint_states", 10, &RobotInterface::robot_state_callback, this);
+    publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("velocity_controller/command", 10, false);
     joint_state_ = JointState(robot_name, robot_.get_joint_frames());
   }
 
@@ -96,13 +96,13 @@ int main(int argc, char** argv) {
   ros::NodeHandle node_handle;
 
   std::string robot_description;
-  if (!node_handle.getParam("/robot_description", robot_description)) {
+  if (!node_handle.getParam("robot_description", robot_description)) {
     ROS_ERROR("Could load parameter 'robot_description' from parameter server.");
     return -1;
   }
 
-  std::string robot_name = "robot";
-  std::string urdf_path = std::string(SCRIPT_FIXTURES) + "robot.urdf";
+  std::string robot_name = ros::this_node::getNamespace();
+  std::string urdf_path = std::string(SCRIPT_FIXTURES) + robot_name + ".urdf";
   Model::create_urdf_from_string(robot_description, urdf_path);
   RobotInterface robot(&node_handle, robot_name, urdf_path);
 

@@ -55,8 +55,8 @@ docker run \
   --rm \
   --net="host" \
   --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-  --volume="$XAUTH:$XAUTH" \
+  --volume="${XAUTHORITY}:${XAUTHORITY}" \
   --volume="${PACKAGE_NAME}_rviz_vol:/home/ros/ros_ws/src/ros_examples/rviz/:rw" \
-  --env XAUTHORITY="$XAUTH" \
+  --env XAUTHORITY="${XAUTHORITY}" \
   --env DISPLAY="${DISPLAY}" \
   "${IMAGE_NAME}:${TAG}"

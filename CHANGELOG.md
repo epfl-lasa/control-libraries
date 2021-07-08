@@ -1,9 +1,43 @@
 # CHANGELOG
 
 Release Versions:
+- [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 3.1.0
+
+Version 3.1.0 contains a few improvements to the behaviour and usage
+of the libraries.
+
+### Fixes and improvements
+
+**python**
+- Fix CartesianPose constructor in Python bindings and revise run script (#157)
+- Add CI workflow for Python bindings (#159)
+
+**demos**
+- Update ROS1 example with a more developed simulation (#160)
+
+**state_representation**
+- Preserve emptiness upon copy construction of CartesianState and JointState types (#152)
+- Define `inverse` and `*` operators for Cartesian types explicitly (#158)
+
+**dynamical_systems**
+- Add emtpy constructors for Circular and Ring DS (#154)
+
+**general**
+- Use release configuration in install script (#155)
+
+### Pending TODOs for the next release
+
+- Revise `*=` and `*` operators in Cartesian types before the next release with 
+  breaking changes (some are marked *deprecated*, and some are left as is, but 
+  they should be deleted) (#156)
+- Add the wrench computation in the `*` operator and `inverse` function (#134)
+- Refactor and improve unittests for state_representation (especially JointState
+  and CartesianState)
 
 ## 3.0.0
 

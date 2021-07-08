@@ -137,8 +137,8 @@ inline void Linear<state_representation::CartesianState>::set_attractor(const st
     throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
   }
   if (this->get_base_frame().is_empty()) {
-    DynamicalSystem<state_representation::CartesianState>::set_base_frame(state_representation::CartesianState::Identity(attractor.get_reference_frame(),
-                                                                             attractor.get_reference_frame()));
+    DynamicalSystem<state_representation::CartesianState>::set_base_frame(
+        state_representation::CartesianState::Identity(attractor.get_reference_frame(), attractor.get_reference_frame()));
   }
   // validate that the reference frame of the attractor is always compatible with the DS reference frame
   if (attractor.get_reference_frame() != this->get_base_frame().get_name()) {
@@ -160,7 +160,8 @@ inline void Linear<state_representation::JointState>::set_attractor(const state_
     throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
   }
   if (this->get_base_frame().is_empty()) {
-    DynamicalSystem<state_representation::JointState>::set_base_frame(state_representation::JointState::Zero(attractor.get_name(), attractor.get_names()));
+    DynamicalSystem<state_representation::JointState>::set_base_frame(
+        state_representation::JointState::Zero(attractor.get_name(), attractor.get_names()));
   }
   // validate that the attractor is compatible with the DS reference name
   if (!this->is_compatible(attractor)) {

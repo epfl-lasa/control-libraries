@@ -30,6 +30,7 @@ CartesianWrench::CartesianWrench(const CartesianState& state) : CartesianState(s
   // set all the state variables to 0 except force and torque
   this->set_zero();
   this->set_wrench(state.get_wrench());
+  this->set_empty(state.is_empty());
 }
 
 CartesianWrench::CartesianWrench(const CartesianWrench& wrench) : CartesianWrench(static_cast<const CartesianState&>(wrench)) {}
@@ -51,6 +52,20 @@ CartesianWrench& CartesianWrench::operator*=(const CartesianWrench& wrench) {
 
 CartesianWrench CartesianWrench::operator*(const CartesianWrench& wrench) const {
   return this->CartesianState::operator*(wrench);
+}
+
+CartesianState CartesianWrench::operator*(const CartesianState& state) const {
+  return this->CartesianState::operator*(state);
+}
+
+
+CartesianPose CartesianWrench::operator*(const CartesianPose& pose) const {
+  return this->CartesianState::operator*(pose);
+}
+
+
+CartesianTwist CartesianWrench::operator*(const CartesianTwist& twist) const {
+  return this->CartesianState::operator*(twist);
 }
 
 CartesianWrench& CartesianWrench::operator+=(const CartesianWrench& wrench) {
@@ -105,6 +120,10 @@ Eigen::VectorXd CartesianWrench::data() const {
   return this->get_wrench();
 }
 
+CartesianWrench CartesianWrench::inverse() const {
+  return this->CartesianState::inverse();
+}
+
 std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {
   if (wrench.is_empty()) {
     os << "Empty CartesianWrench";
@@ -119,6 +138,10 @@ std::ostream& operator<<(std::ostream& os, const CartesianWrench& wrench) {
     os << wrench.get_torque()(2) << ")";
   }
   return os;
+}
+
+CartesianWrench operator*(const CartesianState& state, const CartesianWrench& wrench) {
+  return state.operator*(wrench);
 }
 
 CartesianWrench operator*(double lambda, const CartesianWrench& wrench) {

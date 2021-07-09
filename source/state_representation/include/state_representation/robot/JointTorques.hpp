@@ -209,7 +209,7 @@ public:
   virtual void set_data(const Eigen::VectorXd& data) override;
 
   /**
-   * @brief Set the torques data from an std vector
+   * @brief Set the torques data from a std vector
    * @param the torques data vector
    */
   virtual void set_data(const std::vector<double>& data) override;

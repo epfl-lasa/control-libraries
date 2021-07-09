@@ -224,7 +224,7 @@ public:
   virtual void set_data(const Eigen::VectorXd& data) override;
 
   /**
-   * @brief Set the velocities data from an std vector
+   * @brief Set the velocities data from a std vector
    * @param the velocities data vector
    */
   virtual void set_data(const std::vector<double>& data) override;

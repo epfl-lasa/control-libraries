@@ -224,7 +224,7 @@ public:
   virtual void set_data(const Eigen::VectorXd& data) override;
 
   /**
-   * @brief Set the positions data from an std vector
+   * @brief Set the positions data from a std vector
    * @param the positions data vector
    */
   virtual void set_data(const std::vector<double>& data) override;

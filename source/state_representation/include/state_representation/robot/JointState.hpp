@@ -303,6 +303,20 @@ public:
   virtual Eigen::VectorXd data() const;
 
   /**
+   * @brief Set the data of the state from
+   * all the state variables in a single Eigen vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single std vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const std::vector<double>& data);
+
+  /**
    * @brief Returns the data vector as an Eigen Array
    * @return the concatenated data array
    */
@@ -479,6 +493,11 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
 }
 
 inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  if (new_values.size() != 4 * this->get_size()) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
+            + std::to_string(new_values.size()));
+  }
   this->set_positions(new_values.segment(0, this->get_size()));
   this->set_velocities(new_values.segment(this->get_size(), this->get_size()));
   this->set_accelerations(new_values.segment(2 * this->get_size(), this->get_size()));

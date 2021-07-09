@@ -110,6 +110,14 @@ Eigen::VectorXd JointTorques::data() const {
   return this->get_torques();
 }
 
+void JointTorques::set_data(const Eigen::VectorXd& data) {
+  this->set_torques(data);
+}
+
+void JointTorques::set_data(const std::vector<double>& data) {
+  this->set_torques(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 void JointTorques::clamp(double max_absolute_value, double noise_ratio) {
   this->clamp_state_variable(max_absolute_value, JointStateVariable::TORQUES, noise_ratio);
 }

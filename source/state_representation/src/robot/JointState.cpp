@@ -174,6 +174,14 @@ Eigen::VectorXd JointState::data() const {
   return this->get_all_state_variables();
 }
 
+void JointState::set_data(const Eigen::VectorXd& data) {
+  this->set_all_state_variables(data);
+}
+
+void JointState::set_data(const std::vector<double>& data) {
+  this->set_all_state_variables(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 Eigen::ArrayXd JointState::array() const {
   return this->data().array();
 }

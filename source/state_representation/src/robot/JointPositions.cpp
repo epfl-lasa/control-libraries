@@ -127,6 +127,14 @@ Eigen::VectorXd JointPositions::data() const {
   return this->get_positions();
 }
 
+void JointPositions::set_data(const Eigen::VectorXd& data) {
+  this->set_positions(data);
+}
+
+void JointPositions::set_data(const std::vector<double>& data) {
+  this->set_positions(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   if (positions.is_empty()) {
     os << "Empty JointPositions";

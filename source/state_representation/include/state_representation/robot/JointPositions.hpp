@@ -218,6 +218,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the positions data from an Eigen vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the positions data from an std vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to append the string representing the state
    * @param positions the state to print

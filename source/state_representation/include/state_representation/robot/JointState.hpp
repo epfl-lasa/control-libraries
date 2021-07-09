@@ -66,7 +66,8 @@ private:
   void set_state_variable(Eigen::VectorXd& state_variable, const std::vector<double>& new_value);
 
   /**
-   * @brief Set new_value in the provided all the state variables (positions, velocities, accelerations and torques)
+   * @brief Set new_value in all the state variables (positions, velocities, accelerations and torques)
+   * @param new_values the new values of the state variables
    */
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 

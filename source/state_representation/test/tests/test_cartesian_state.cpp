@@ -216,7 +216,31 @@ TEST(CartesianStateTest, GetData) {
   CartesianState cs = CartesianState::Random("test");
   Eigen::VectorXd concatenated_state(25);
   concatenated_state << cs.get_pose(), cs.get_twist(), cs.get_accelerations(), cs.get_wrench();
-  EXPECT_NEAR(concatenated_state.norm(), cs.data().norm(), 1e-4);
+  EXPECT_TRUE(concatenated_state.isApprox(cs.data()));
+}
+
+TEST(CartesianStateTest, SetData) {
+  CartesianState cs1 = CartesianState::Identity("test");
+  CartesianState cs2 = CartesianState::Random("test");
+  auto data = cs2.data();
+  cs1.set_data(data);
+  EXPECT_TRUE(data.isApprox(cs1.data()));
+  EXPECT_THROW(cs1.set_data(Eigen::Vector3d::Zero()), exceptions::IncompatibleSizeException);
+
+  CartesianPose cp1 = CartesianPose::Identity("test");
+  CartesianPose cp2 = CartesianPose::Random("test");
+  auto pose = cp2.data();
+  cp1.set_data(pose);
+  EXPECT_TRUE(pose.isApprox(cp1.data()));
+
+  CartesianTwist ct1 = CartesianTwist::Zero("test");
+  std::vector<double> twist{1, 2, 3, 4, 5};
+  EXPECT_THROW(cs1.set_data(twist), exceptions::IncompatibleSizeException);
+  twist.insert(twist.end(), 6);
+  ct1.set_data(twist);
+  for (std::size_t j = 0; j < 6; ++j) {
+    EXPECT_FLOAT_EQ(twist.at(j), ct1.data()(j));
+  }
 }
 
 TEST(CartesianStateTest, CartesianStateToStdVector) {

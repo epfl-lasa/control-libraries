@@ -212,7 +212,31 @@ TEST(JointStateTest, GetData) {
   JointState js = JointState::Random("test_robot", 4);
   Eigen::VectorXd concatenated_state(js.get_size() * 4);
   concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
-  EXPECT_NEAR(concatenated_state.norm(), js.data().norm(), 1e-4);
+  EXPECT_TRUE(concatenated_state.isApprox(js.data()));
+}
+
+TEST(JointStateTest, SetData) {
+  JointState js1 = JointState::Zero("test", 4);
+  JointState js2 = JointState::Random("test", 4);
+  auto data = js2.data();
+  js1.set_data(data);
+  EXPECT_TRUE(data.isApprox(js1.data()));
+
+  JointPositions jp1 = JointPositions::Zero("test", 4);
+  JointPositions jp2 = JointPositions::Random("test", 4);
+  auto positions = jp2.data();
+  EXPECT_THROW(js1.set_data(Eigen::Vector3d::Zero()), IncompatibleSizeException);
+  jp1.set_data(positions);
+  EXPECT_TRUE(positions.isApprox(jp1.data()));
+
+  JointVelocities jv1 = JointVelocities::Zero("test", 4);
+  std::vector<double> velocities{1, 2, 3};
+  EXPECT_THROW(js1.set_data(velocities), IncompatibleSizeException);
+  velocities.insert(velocities.end(), 4);
+  jp1.set_data(velocities);
+  for (std::size_t j = 0; j < jv1.get_size(); ++j) {
+    EXPECT_FLOAT_EQ(velocities.at(j), jp1.data()(j));
+  }
 }
 
 TEST(JointStateTest, JointStateToStdVector) {

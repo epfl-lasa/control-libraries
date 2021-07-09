@@ -6,6 +6,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Add set_data function (#163)
+
 ## 3.1.0
 
 Version 3.1.0 contains a few improvements to the behaviour and usage

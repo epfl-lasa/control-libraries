@@ -247,6 +247,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the twist data from an Eigen vector
+   * @param the twist data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the twist data from a std vector
+   * @param the twist data vector
+   */
+  void set_data(const std::vector<double>& data) override;
+
+  /**
    * @brief Compute the inverse of the current CartesianTwist
    * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
    */

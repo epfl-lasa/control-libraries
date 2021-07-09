@@ -227,6 +227,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the wrench data from an Eigen vector
+   * @param the wrench data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the wrench data from a std vector
+   * @param the wrench data vector
+   */
+  void set_data(const std::vector<double>& data) override;
+
+  /**
  * @brief Compute the inverse of the current CartesianWrench
  * @return the inverse corresponding to b_S_f (assuming this is f_S_b)
  */

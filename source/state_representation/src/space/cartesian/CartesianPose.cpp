@@ -135,6 +135,18 @@ Eigen::VectorXd CartesianPose::data() const {
   return this->get_pose();
 }
 
+void CartesianPose::set_data(const Eigen::VectorXd& data) {
+  if (data.size() != 7) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected 7, given " + std::to_string(data.size()));
+  }
+  this->set_pose(data);
+}
+
+void CartesianPose::set_data(const std::vector<double>& data) {
+  this->set_data(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 CartesianPose CartesianPose::inverse() const {
   return this->CartesianState::inverse();
 }

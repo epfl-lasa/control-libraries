@@ -237,6 +237,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the pose data from an Eigen vector
+   * @param the pose data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the pose data from a std vector
+   * @param the pose data vector
+   */
+  void set_data(const std::vector<double>& data) override;
+
+  /**
    * @brief Compute the norms of the state variable specified by the input type (default is full pose)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector

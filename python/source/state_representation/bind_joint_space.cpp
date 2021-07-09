@@ -54,6 +54,8 @@ void joint_state(py::module_& m) {
   c.def("copy", &JointState::copy, "Return a copy of the JointState");
   c.def("data", &JointState::data, "Returns the data as the concatenation of all the state variables in a single vector");
   c.def("array", &JointState::array, "Returns the data vector as an array");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointState::set_data), "Set the data of the state from all the state variables in a single vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointState::set_data), "Set the data of the state from all the state variables in a single list", "data"_a);
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);
@@ -131,6 +133,8 @@ void joint_positions(py::module_& m) {
 
   c.def("copy", &JointPositions::copy, "Return a copy of the JointPositions");
   c.def("data", &JointPositions::data, "Returns the positions data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointPositions::set_data), "Set the positions data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointPositions::set_data), "Set the positions data from a list", "data"_a);
 
   c.def("from_list", &JointPositions::from_std_vector, "Set the value from a list");
 
@@ -190,6 +194,8 @@ void joint_velocities(py::module_& m) {
 
   c.def("copy", &JointVelocities::copy, "Return a copy of the JointVelocities");
   c.def("data", &JointVelocities::data, "Returns the velocities data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointVelocities::set_data), "Set the velocities data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointVelocities::set_data), "Set the velocities data from a list", "data"_a);
 
   c.def("clamp", py::overload_cast<double, double>(&JointVelocities::clamp), "Clamp inplace the magnitude of the velocity to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);
   c.def("clamped", py::overload_cast<double, double>(&JointVelocities::clamp), "Return the velocity clamped to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);
@@ -248,6 +254,8 @@ void joint_torques(py::module_& m) {
 
   c.def("copy", &JointTorques::copy, "Return a copy of the JointTorques");
   c.def("data", &JointTorques::data, "Returns the torques data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointTorques::set_data), "Set the torques data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointTorques::set_data), "Set the torques data from a list", "data"_a);
 
   c.def("clamp", py::overload_cast<double, double>(&JointTorques::clamp), "Clamp inplace the magnitude of the torque to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);
   c.def("clamped", py::overload_cast<double, double>(&JointTorques::clamp), "Return the torque clamped to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);

@@ -1,12 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
-#include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointPositions.hpp"
 
 namespace state_representation {
 class JointPositions;

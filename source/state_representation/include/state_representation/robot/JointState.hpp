@@ -1,17 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/State.hpp"
-#include <eigen3/Eigen/Core>
-#include <iostream>
-#include <math.h>
-#include <string>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 using namespace state_representation::exceptions;
 

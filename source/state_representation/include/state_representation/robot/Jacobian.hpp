@@ -1,17 +1,11 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
+#include "state_representation/State.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/robot/JointTorques.hpp"
 #include "state_representation/robot/JointVelocities.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include "state_representation/State.hpp"
-#include <eigen3/Eigen/Core>
 
 namespace state_representation {
 class CartesianTwist;

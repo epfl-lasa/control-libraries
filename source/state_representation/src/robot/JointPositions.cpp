@@ -1,6 +1,6 @@
 #include "state_representation/robot/JointPositions.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 

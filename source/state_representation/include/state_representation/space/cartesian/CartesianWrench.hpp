@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/13
- */
-
 #pragma once
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
@@ -229,7 +224,7 @@ public:
    * @brief Returns the wrench data as an Eigen vector
    * @return the wrench data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
 
   /**
  * @brief Compute the inverse of the current CartesianWrench

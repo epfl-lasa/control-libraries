@@ -1,12 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/06/07
- */
-
 #pragma once
 
-#include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
 
 namespace state_representation {
@@ -249,7 +244,7 @@ public:
    * @brief Returns the twist data as an Eigen vector
    * @return the twist data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
 
   /**
    * @brief Compute the inverse of the current CartesianTwist

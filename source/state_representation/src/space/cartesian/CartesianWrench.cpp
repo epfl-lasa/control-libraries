@@ -1,5 +1,4 @@
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation::exceptions;
 

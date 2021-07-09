@@ -1,16 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/space/SpatialState.hpp"
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
-#include <iostream>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 namespace state_representation {
 class CartesianState;

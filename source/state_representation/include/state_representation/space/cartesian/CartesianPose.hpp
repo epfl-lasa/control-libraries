@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/06/07
- */
-
 #pragma once
 
 #include "state_representation/space/cartesian/CartesianState.hpp"

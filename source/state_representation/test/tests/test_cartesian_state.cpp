@@ -220,26 +220,55 @@ TEST(CartesianStateTest, GetData) {
 }
 
 TEST(CartesianStateTest, SetData) {
+  // CartesianState
   CartesianState cs1 = CartesianState::Identity("test");
   CartesianState cs2 = CartesianState::Random("test");
-  auto data = cs2.data();
-  cs1.set_data(data);
-  EXPECT_TRUE(data.isApprox(cs1.data()));
+  cs1.set_data(cs2.data());
+  EXPECT_TRUE(cs2.data().isApprox(cs1.data()));
+
+  auto state_vec = cs2.to_std_vector();
+  cs1.set_data(state_vec);
+  for (std::size_t j = 0; j < state_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(state_vec.at(j), cs1.data()(j));
+  }
   EXPECT_THROW(cs1.set_data(Eigen::Vector3d::Zero()), exceptions::IncompatibleSizeException);
 
+  // CartesianPose
   CartesianPose cp1 = CartesianPose::Identity("test");
   CartesianPose cp2 = CartesianPose::Random("test");
-  auto pose = cp2.data();
-  cp1.set_data(pose);
-  EXPECT_TRUE(pose.isApprox(cp1.data()));
+  cp1.set_data(cp2.data());
+  EXPECT_TRUE(cp2.data().isApprox(cp1.data()));
 
+  auto pose_vec = cp2.to_std_vector();
+  cp1.set_data(pose_vec);
+  for (std::size_t j = 0; j < pose_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(pose_vec.at(j), cp1.data()(j));
+  }
+
+  // CartesianTwist
   CartesianTwist ct1 = CartesianTwist::Zero("test");
+  CartesianTwist ct2 = CartesianTwist::Random("test");
+  ct1.set_data(ct2.data());
+  EXPECT_TRUE(ct2.data().isApprox(ct1.data()));
+
+  auto twist_vec = ct2.to_std_vector();
+  ct1.set_data(twist_vec);
+  for (std::size_t j = 0; j < twist_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(twist_vec.at(j), ct1.data()(j));
+  }
   std::vector<double> twist{1, 2, 3, 4, 5};
-  EXPECT_THROW(cs1.set_data(twist), exceptions::IncompatibleSizeException);
-  twist.insert(twist.end(), 6);
-  ct1.set_data(twist);
-  for (std::size_t j = 0; j < 6; ++j) {
-    EXPECT_FLOAT_EQ(twist.at(j), ct1.data()(j));
+  EXPECT_THROW(ct1.set_data(twist), exceptions::IncompatibleSizeException);
+
+  // CartesianWrench
+  CartesianWrench cw1 = CartesianWrench::Zero("test");
+  CartesianWrench cw2 = CartesianWrench::Random("test");
+  cw1.set_data(cw2.data());
+  EXPECT_TRUE(cw2.data().isApprox(cw1.data()));
+
+  auto wrench_vec = cw2.to_std_vector();
+  cw1.set_data(wrench_vec);
+  for (std::size_t j = 0; j < wrench_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(wrench_vec.at(j), cw1.data()(j));
   }
 }
 

@@ -514,7 +514,7 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  virtual void from_std_vector(const std::vector<double>& value);
+  [[deprecated]] virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(CartesianState& state1, CartesianState& state2) {

@@ -262,6 +262,6 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  void from_std_vector(const std::vector<double>& value);
+  [[deprecated]] void from_std_vector(const std::vector<double>& value);
 };
 }// namespace state_representation

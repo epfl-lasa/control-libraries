@@ -1,6 +1,5 @@
 #include "state_representation/robot/JointVelocities.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -125,6 +124,14 @@ JointVelocities JointVelocities::copy() const {
 
 Eigen::VectorXd JointVelocities::data() const {
   return this->get_velocities();
+}
+
+void JointVelocities::set_data(const Eigen::VectorXd& data) {
+  this->set_velocities(data);
+}
+
+void JointVelocities::set_data(const std::vector<double>& data) {
+  this->set_velocities(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 void JointVelocities::clamp(double max_absolute_value, double noise_ratio) {

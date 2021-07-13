@@ -163,6 +163,18 @@ Eigen::VectorXd CartesianTwist::data() const {
   return this->get_twist();
 }
 
+void CartesianTwist::set_data(const Eigen::VectorXd& data) {
+  if (data.size() != 6) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected 6, given " + std::to_string(data.size()));
+  }
+  this->set_twist(data);
+}
+
+void CartesianTwist::set_data(const std::vector<double>& data) {
+  this->set_data(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 CartesianTwist CartesianTwist::inverse() const {
   return this->CartesianState::inverse();
 }

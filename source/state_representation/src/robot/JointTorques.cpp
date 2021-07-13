@@ -1,6 +1,4 @@
 #include "state_representation/robot/JointTorques.hpp"
-#include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -110,6 +108,14 @@ JointTorques JointTorques::copy() const {
 
 Eigen::VectorXd JointTorques::data() const {
   return this->get_torques();
+}
+
+void JointTorques::set_data(const Eigen::VectorXd& data) {
+  this->set_torques(data);
+}
+
+void JointTorques::set_data(const std::vector<double>& data) {
+  this->set_torques(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 void JointTorques::clamp(double max_absolute_value, double noise_ratio) {

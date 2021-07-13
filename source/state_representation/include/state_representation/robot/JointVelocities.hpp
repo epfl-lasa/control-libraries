@@ -1,12 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
-#include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointPositions.hpp"
 
 namespace state_representation {
 class JointPositions;
@@ -221,6 +216,18 @@ public:
    * @return the velocities data vector
    */
   Eigen::VectorXd data() const override;
+
+  /**
+   * @brief Set the velocities data from an Eigen vector
+   * @param the velocities data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the velocities data from a std vector
+   * @param the velocities data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument

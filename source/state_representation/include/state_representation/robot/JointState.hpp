@@ -1,17 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/State.hpp"
-#include <eigen3/Eigen/Core>
-#include <iostream>
-#include <math.h>
-#include <string>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -76,7 +66,8 @@ private:
   void set_state_variable(Eigen::VectorXd& state_variable, const std::vector<double>& new_value);
 
   /**
-   * @brief Set new_value in the provided all the state variables (positions, velocities, accelerations and torques)
+   * @brief Set new_value in all the state variables (positions, velocities, accelerations and torques)
+   * @param new_values the new values of the state variables
    */
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 
@@ -313,6 +304,20 @@ public:
   virtual Eigen::VectorXd data() const;
 
   /**
+   * @brief Set the data of the state from
+   * all the state variables in a single Eigen vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single std vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const std::vector<double>& data);
+
+  /**
    * @brief Returns the data vector as an Eigen Array
    * @return the concatenated data array
    */
@@ -450,7 +455,7 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  virtual void from_std_vector(const std::vector<double>& value);
+  [[deprecated]] virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(JointState& state1, JointState& state2) {
@@ -489,6 +494,11 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
 }
 
 inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  if (new_values.size() != 4 * this->get_size()) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
+            + std::to_string(new_values.size()));
+  }
   this->set_positions(new_values.segment(0, this->get_size()));
   this->set_velocities(new_values.segment(this->get_size(), this->get_size()));
   this->set_accelerations(new_values.segment(2 * this->get_size(), this->get_size()));

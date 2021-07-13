@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/06/07
- */
-
 #pragma once
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
@@ -242,6 +237,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the pose data from an Eigen vector
+   * @param the pose data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the pose data from a std vector
+   * @param the pose data vector
+   */
+  void set_data(const std::vector<double>& data) override;
+
+  /**
    * @brief Compute the norms of the state variable specified by the input type (default is full pose)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
@@ -287,7 +294,7 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  void from_std_vector(const std::vector<double>& value) override;
+  [[deprecated]] void from_std_vector(const std::vector<double>& value) override;
 };
 
 inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const {

@@ -1,5 +1,4 @@
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -118,6 +117,18 @@ CartesianWrench CartesianWrench::copy() const {
 
 Eigen::VectorXd CartesianWrench::data() const {
   return this->get_wrench();
+}
+
+void CartesianWrench::set_data(const Eigen::VectorXd& data) {
+  if (data.size() != 6) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected 6, given " + std::to_string(data.size()));
+  }
+  this->set_wrench(data);
+}
+
+void CartesianWrench::set_data(const std::vector<double>& data) {
+  this->set_data(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 CartesianWrench CartesianWrench::inverse() const {

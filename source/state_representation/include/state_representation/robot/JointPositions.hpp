@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
 #include "state_representation/robot/JointState.hpp"
@@ -223,6 +218,18 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the positions data from an Eigen vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the positions data from a std vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to append the string representing the state
    * @param positions the state to print
@@ -255,6 +262,6 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  void from_std_vector(const std::vector<double>& value);
+  [[deprecated]] void from_std_vector(const std::vector<double>& value);
 };
 }// namespace state_representation

@@ -212,7 +212,60 @@ TEST(JointStateTest, GetData) {
   JointState js = JointState::Random("test_robot", 4);
   Eigen::VectorXd concatenated_state(js.get_size() * 4);
   concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
-  EXPECT_NEAR(concatenated_state.norm(), js.data().norm(), 1e-4);
+  EXPECT_TRUE(concatenated_state.isApprox(js.data()));
+}
+
+TEST(JointStateTest, SetData) {
+  // JointState
+  JointState js1 = JointState::Zero("test", 4);
+  JointState js2 = JointState::Random("test", 4);
+  js1.set_data(js2.data());
+  EXPECT_TRUE(js2.data().isApprox(js1.data()));
+
+  auto state_vec = js2.to_std_vector();
+  js1.set_data(state_vec);
+  for (std::size_t j = 0; j < state_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(state_vec.at(j), js1.data()(j));
+  }
+  EXPECT_THROW(js1.set_data(Eigen::Vector3d::Zero()), exceptions::IncompatibleSizeException);
+
+  // JointPositions
+  JointPositions jp1 = JointPositions::Zero("test", 4);
+  JointPositions jp2 = JointPositions::Random("test", 4);
+  jp1.set_data(jp2.data());
+  EXPECT_TRUE(jp2.data().isApprox(jp1.data()));
+
+  auto pos_vec = jp2.to_std_vector();
+  jp1.set_data(pos_vec);
+  for (std::size_t j = 0; j < pos_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(pos_vec.at(j), jp1.data()(j));
+  }
+
+  // JointVelocities
+  JointVelocities jv1 = JointVelocities::Zero("test", 4);
+  JointVelocities jv2 = JointVelocities::Random("test", 4);
+  jv1.set_data(jv2.data());
+  EXPECT_TRUE(jv2.data().isApprox(jv1.data()));
+
+  auto vel_vec = jv2.to_std_vector();
+  jv1.set_data(vel_vec);
+  for (std::size_t j = 0; j < vel_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(vel_vec.at(j), jv1.data()(j));
+  }
+  std::vector<double> velocities{1, 2, 3, 4, 5};
+  EXPECT_THROW(jv1.set_data(velocities), exceptions::IncompatibleSizeException);
+
+  // JointTorques
+  JointTorques jt1 = JointTorques::Zero("test", 4);
+  JointTorques jt2 = JointTorques::Random("test", 4);
+  jt1.set_data(jt2.data());
+  EXPECT_TRUE(jt2.data().isApprox(jt1.data()));
+
+  auto torque_vec = jt2.to_std_vector();
+  jt1.set_data(torque_vec);
+  for (std::size_t j = 0; j < torque_vec.size(); ++j) {
+    EXPECT_FLOAT_EQ(torque_vec.at(j), jt1.data()(j));
+  }
 }
 
 TEST(JointStateTest, JointStateToStdVector) {

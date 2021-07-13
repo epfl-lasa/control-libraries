@@ -1,6 +1,6 @@
 #include "state_representation/robot/JointPositions.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -125,6 +125,14 @@ JointPositions JointPositions::copy() const {
 
 Eigen::VectorXd JointPositions::data() const {
   return this->get_positions();
+}
+
+void JointPositions::set_data(const Eigen::VectorXd& data) {
+  this->set_positions(data);
+}
+
+void JointPositions::set_data(const std::vector<double>& data) {
+  this->set_positions(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {

@@ -1,16 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/space/SpatialState.hpp"
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
-#include <iostream>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 namespace state_representation {
 class CartesianState;
@@ -62,6 +53,12 @@ private:
   Eigen::Vector3d angular_acceleration_;///< angular acceleration of the point
   Eigen::Vector3d force_;               ///< force applied at the point
   Eigen::Vector3d torque_;              ///< torque applied at the point
+
+  /**
+   * @brief Set new_values in all the state variables (pose, twist, wrench)
+   * @param new_values the new values of the state variables
+   */
+  void set_all_state_variables(const Eigen::VectorXd& new_values);
 
   /**
    * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
@@ -375,6 +372,20 @@ public:
   Eigen::ArrayXd array() const;
 
   /**
+   * @brief Set the data of the state from
+   * all the state variables in a single Eigen vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single std vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const std::vector<double>& data);
+
+  /**
    * @brief Overload the *= operator with another state by deriving the equations of motions
    * @param state the state to compose with corresponding to b_S_c
    * @return the CartesianState corresponding f_S_c = f_S_b * b_S_c (assuming this is f_S_b)
@@ -503,7 +514,7 @@ public:
    * @brief Set the value from a std vector
    * @param value the value as a std vector
    */
-  virtual void from_std_vector(const std::vector<double>& value);
+  [[deprecated]] virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(CartesianState& state1, CartesianState& state2) {
@@ -638,6 +649,17 @@ inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVa
   }
   // this never goes here but is compulsory to avoid a warning
   return Eigen::Vector3d::Zero();
+}
+
+inline void CartesianState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  if (new_values.size() != 25) {
+    throw state_representation::exceptions::IncompatibleSizeException(
+        "Input is of incorrect size: expected 25, given " + std::to_string(new_values.size()));
+  }
+  this->set_pose(new_values.segment(0, 7));
+  this->set_twist(new_values.segment(7, 6));
+  this->set_accelerations(new_values.segment(13, 6));
+  this->set_wrench(new_values.segment(19, 6));
 }
 
 inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const Eigen::Vector3d& new_value) {

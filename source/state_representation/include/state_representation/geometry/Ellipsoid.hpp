@@ -71,7 +71,7 @@ public:
   double get_rotation_angle() const;
 
   /**
-   * @brief Seetter of the rotation angle
+   * @brief Setter of the rotation angle
    * @param rotation_angle the rotation angle
    */
   void set_rotation_angle(double rotation_angle);
@@ -111,14 +111,26 @@ public:
   const std::vector<double> to_std_vector() const;
 
   /**
-   * @brief Create an ellipsoid from an std vector representaiton of its parameter
+   * @brief Create an ellipsoid from an std vector representation of its parameter
    * @param an std vector with [center_position, rotation_angle, axis_lengths]
    */
-  void from_std_vector(const std::vector<double>& parameters);
+  [[deprecated]] void from_std_vector(const std::vector<double>& parameters);
+
+  /**
+   * @brief Set the ellipsoid data from an Eigen vector
+   * @param the data vector with [center_position, rotation_angle, axis_lengths]
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the ellipsoid data from a std vector
+   * @param the data vector with [center_position, rotation_angle, axis_lengths]
+   */
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
     * @brief Overload the ostream operator for printing
-    * @param os the ostream to happend the string representing the Ellipsoid to
+    * @param os the ostream to append the string representing the Ellipsoid to
     * @param ellipsoid the Ellipsoid to print
     * @return the appended ostream
      */

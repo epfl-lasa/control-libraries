@@ -1,12 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
 #include "state_representation/MathTools.hpp"
-#include <assert.h>
+#include <cassert>
 #include <chrono>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
@@ -147,6 +142,25 @@ public:
    * @brief Initialize the State to a zero value
    */
   virtual void initialize();
+
+  /**
+   * @brief Set the data of the state from a single Eigen vector
+   * @param the data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data);
+
+  /**
+   * @brief Set the data of the state from a single std vector
+   * @param the data vector
+   */
+  virtual void set_data(const std::vector<double>& data);
+
+  /**
+   * @brief Set the data of the state from an Eigen matrix
+   * @param the data vector
+   */
+  virtual void set_data(const Eigen::MatrixXd& data);
+
 
   /**
    * @brief Overload the ostream operator for printing

@@ -1,4 +1,5 @@
 #include "state_representation/State.hpp"
+#include "state_representation/exceptions/NotImplementedException.hpp"
 
 namespace state_representation {
 State::State() : type_(StateType::STATE), name_("none"), empty_(true) {}
@@ -10,6 +11,18 @@ State::State(const StateType& type, const std::string& name, const bool& empty)
 
 State::State(const State& state)
     : type_(state.type_), name_(state.name_), empty_(state.empty_), timestamp_(std::chrono::steady_clock::now()) {}
+
+void State::set_data(const Eigen::VectorXd& data) {
+  throw exceptions::NotImplementedException("set_data() is not implemented for the base State class");
+}
+
+void State::set_data(const std::vector<double>& data) {
+  throw exceptions::NotImplementedException("set_data() is not implemented for the base State class");
+}
+
+void State::set_data(const Eigen::MatrixXd& data) {
+  throw exceptions::NotImplementedException("set_data() is not implemented for the base State class");
+}
 
 std::ostream& operator<<(std::ostream& os, const State& state) {
   if (state.is_empty()) {

@@ -1,5 +1,6 @@
 #include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/exceptions/NoSolutionToFitException.hpp"
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 namespace state_representation {
 Ellipsoid::Ellipsoid(const std::string& name, const std::string& reference_frame) :
@@ -163,6 +164,20 @@ const Ellipsoid Ellipsoid::fit(const std::string& name,
     delta = coefficients[1] * coefficients[1] - 4 * coefficients[0] * coefficients[2];
   } while (delta > 0);
   return from_algebraic_equation(name, coefficients, reference_frame);
+}
+
+void Ellipsoid::set_data(const Eigen::VectorXd& data) {
+  if (data.size() != 6) {
+    throw exceptions::IncompatibleSizeException(
+        "Input is of incorrect size: expected 6, given " + std::to_string(data.size()));
+  }
+  this->set_center_position(data.head(3));
+  this->set_rotation_angle(data(3));
+  this->set_axis_lengths({data(4), data(5)});
+}
+
+void Ellipsoid::set_data(const std::vector<double>& data) {
+  this->set_data(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 std::ostream& operator<<(std::ostream& os, const Ellipsoid& ellipsoid) {

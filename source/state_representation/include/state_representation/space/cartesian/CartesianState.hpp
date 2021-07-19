@@ -376,14 +376,14 @@ public:
    * all the state variables in a single Eigen vector
    * @param the concatenated data vector
    */
-  virtual void set_data(const Eigen::VectorXd& data);
+  virtual void set_data(const Eigen::VectorXd& data) override;
 
   /**
    * @brief Set the data of the state from
    * all the state variables in a single std vector
    * @param the concatenated data vector
    */
-  virtual void set_data(const std::vector<double>& data);
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
    * @brief Overload the *= operator with another state by deriving the equations of motions

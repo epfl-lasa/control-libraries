@@ -9,6 +9,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Add set_data function (#163)
+- Move set_data declaration to State and add it for Ellipsoid (#166)
 
 ## 3.1.0
 

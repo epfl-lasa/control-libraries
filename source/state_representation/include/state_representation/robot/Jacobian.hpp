@@ -195,7 +195,7 @@ public:
   /**
    * @brief Setter of the data attribute
    */
-  void set_data(const Eigen::MatrixXd& data);
+  void set_data(const Eigen::MatrixXd& data) override;
 
   /**
    * @brief Check if the Jacobian matrix is compatible for operations with the state given as argument

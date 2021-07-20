@@ -151,35 +151,33 @@ state_representation::Jacobian Model::compute_jacobian(const state_representatio
   return this->compute_jacobian(joint_positions, frame_id);
 }
 
-Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                        const state_representation::JointVelocities& joint_velocities,
-                                                        unsigned int frame_id) {
-  if (joint_positions.get_size() != this->get_number_of_joints()) {
-    throw (exceptions::InvalidJointStateSizeException(joint_positions.get_size(), this->get_number_of_joints()));
-  }
-  if (joint_velocities.get_size() != this->get_number_of_joints()) {
-    throw (exceptions::InvalidJointStateSizeException(joint_velocities.get_size(), this->get_number_of_joints()));
+state_representation::Jacobian Model::compute_jacobian_time_derivative(const state_representation::JointState& joint_state,
+                                                                       unsigned int frame_id) {
+  if (joint_state.get_size() != this->get_number_of_joints()) {
+    throw (exceptions::InvalidJointStateSizeException(joint_state.get_size(), this->get_number_of_joints()));
   }
   // compute the Jacobian from the joint state
   pinocchio::Data::Matrix6x dJ = Eigen::MatrixXd::Zero(6, this->get_number_of_joints());
   pinocchio::computeJointJacobiansTimeVariation(this->robot_model_,
                                                 this->robot_data_,
-                                                joint_positions.data(),
-                                                joint_velocities.data());
+                                                joint_state.get_positions(),
+                                                joint_state.get_velocities());
   pinocchio::getFrameJacobianTimeVariation(this->robot_model_,
                                            this->robot_data_,
                                            frame_id,
                                            pinocchio::LOCAL_WORLD_ALIGNED,
                                            dJ);
-  // the model does not have any reference frame
-  return dJ;
+  return state_representation::Jacobian(this->get_robot_name(),
+                                        this->get_joint_frames(),
+                                        this->robot_model_.frames[frame_id].name,
+                                        dJ,
+                                        this->get_base_frame());
 }
 
-Eigen::MatrixXd Model::compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                        const state_representation::JointVelocities& joint_velocities,
-                                                        const std::string& frame_name) {
+state_representation::Jacobian Model::compute_jacobian_time_derivative(const state_representation::JointState& joint_state,
+                                                                       const std::string& frame_name) {
   auto frame_id = get_frame_id(frame_name);
-  return this->compute_jacobian_time_derivative(joint_positions, joint_velocities, frame_id);
+  return this->compute_jacobian_time_derivative(joint_state, frame_id);
 }
 
 Eigen::MatrixXd Model::compute_inertia_matrix(const state_representation::JointPositions& joint_positions) {

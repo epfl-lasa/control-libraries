@@ -321,21 +321,21 @@ TEST_F(RobotModelKinematicsTest, ComputeJacobian) {
 
 TEST_F(RobotModelKinematicsTest, ComputeJacobianTimeDerivative) {
   for (std::size_t config = 0; config < test_configs.size(); ++config) {
-    state_representation::JointVelocities velocities = test_configs[config];
-    state_representation::JointPositions pos1 = test_configs[config];
-    state_representation::JointPositions pos2 = pos1 + std::chrono::milliseconds(1) * velocities;
-    auto jac1 = franka->compute_jacobian(pos1);
+    state_representation::JointState state = test_configs[config];
+    state_representation::JointPositions
+        pos2 = state + std::chrono::milliseconds(1) * state_representation::JointVelocities(state);
+    auto jac1 = franka->compute_jacobian(state);
     auto jac2 = franka->compute_jacobian(pos2);
 
-    auto jac1_dt = franka->compute_jacobian_time_derivative(pos1, velocities);
-    auto jac2_expect = jac1.data() + 0.001 * jac1_dt;
+    auto jac1_dt = franka->compute_jacobian_time_derivative(state);
+    auto jac2_expect = jac1.data() + 0.001 * jac1_dt.data();
 
-    for (Eigen::Index index = 0; index < jac1_dt.size(); ++index) {
+    for (Eigen::Index index = 0; index < jac1_dt.data().size(); ++index) {
       EXPECT_NEAR(jac2.data()(index), jac2_expect(index), 1e-3);
     }
 
-    velocities.set_zero();
-    auto jt = franka->compute_jacobian_time_derivative(pos1, velocities);
-    EXPECT_NEAR(jt.sum(), 0, tol);
+    state.set_velocities(Eigen::VectorXd::Zero(state.get_size()));
+    auto jt = franka->compute_jacobian_time_derivative(state);
+    EXPECT_NEAR(jt.data().sum(), 0, tol);
   }
 }

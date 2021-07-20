@@ -104,15 +104,13 @@ private:
                                                   unsigned int frame_id);
 
   /**
-   * @brief Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter
-   * @param joint_positions containing the joint positions of the robot
-   * @param joint_velocities containing the joint positions of the robot
+   * @brief Compute the time derivative of the Jacobian from given joint state at the frame in parameter
+   * @param joint_state containing the joint positions and velocities of the robot
    * @param joint_id id of the frame at which to compute the Jacobian
    * @return the time derivative of Jacobian matrix
    */
-  Eigen::MatrixXd compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                   const state_representation::JointVelocities& joint_velocities,
-                                                   unsigned int frame_id);
+  state_representation::Jacobian compute_jacobian_time_derivative(const state_representation::JointState& joint_state,
+                                                                  unsigned int frame_id);
 
   /**
    * @brief Compute the forward kinematics, i.e. the pose of certain frames from the joint positions
@@ -139,9 +137,8 @@ private:
    * @param upper_limits the upper bounds of the limits
    * @return true if all the elements are inside at their limits, false otherwise.
    */
-  static bool in_range(const Eigen::VectorXd& vector,
-                       const Eigen::VectorXd& lower_limits,
-                       const Eigen::VectorXd& upper_limits);
+  static bool
+  in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
 
   /**
    * @brief Clamp the vector's elements according to the parameter limits
@@ -286,15 +283,13 @@ public:
                                                   const std::string& frame_name = "");
 
   /**
-   * @brief Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter
-   * @param joint_positions containing the joint positions of the robot
-   * @param joint_velocities containing the joint positions of the robot
+   * @brief Compute the time derivative of the Jacobian from given joint state at the frame in parameter
+   * @param joint_state containing the joint positions and velocities of the robot
    * @param frame_name name of the frame at which to compute the Jacobian, if empty computed for the last frame
    * @return the time derivative of Jacobian matrix
    */
-  Eigen::MatrixXd compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
-                                                   const state_representation::JointVelocities& joint_velocities,
-                                                   const std::string& frame_name = "");
+  state_representation::Jacobian compute_jacobian_time_derivative(const state_representation::JointState& joint_state,
+                                                                  const std::string& frame_name = "");
 
   /**
    * @brief Compute the Inertia matrix from a given joint positions
@@ -508,7 +503,6 @@ inline Model& Model::operator=(const Model& model) {
   swap(*this, tmp);
   return *this;
 }
-
 
 inline const std::string& Model::get_robot_name() const {
   return this->robot_name_->get_value();

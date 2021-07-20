@@ -137,8 +137,9 @@ private:
    * @param upper_limits the upper bounds of the limits
    * @return true if all the elements are inside at their limits, false otherwise.
    */
-  static bool
-  in_range(const Eigen::VectorXd& vector, const Eigen::VectorXd& lower_limits, const Eigen::VectorXd& upper_limits);
+  static bool in_range(const Eigen::VectorXd& vector,
+                       const Eigen::VectorXd& lower_limits,
+                       const Eigen::VectorXd& upper_limits);
 
   /**
    * @brief Clamp the vector's elements according to the parameter limits

@@ -10,4 +10,5 @@ DOCKER_BUILDKIT=1 docker build -f ../Dockerfile --target "${STAGE_NAME}" --tag "
 docker run -it --rm \
   --name "${CONTAINER_NAME}" \
   --hostname "${CONTAINER_HOSTNAME}" \
-  "${IMAGE_NAME}" /bin/bash
+  --entrypoint /bin/bash \
+  "${IMAGE_NAME}"

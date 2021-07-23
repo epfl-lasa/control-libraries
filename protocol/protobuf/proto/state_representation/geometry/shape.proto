@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+import "state_representation/space/cartesian/cartesian_state.proto";
+
+message Shape {
+    State state = 1;
+    CartesianState center = 2;
+}

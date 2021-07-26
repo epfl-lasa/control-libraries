@@ -35,12 +35,12 @@ message CartesianPose {
 
 message CartesianTwist {
   SpatialState spatial_state = 1;
-  Vector3d linear_velocity = 4;
-  Vector3d angular_velocity = 5;
+  Vector3d linear_velocity = 2;
+  Vector3d angular_velocity = 3;
 }
 
 message CartesianWrench {
   SpatialState spatial_state = 1;
-  Vector3d force = 8;
-  Vector3d torque = 9;
+  Vector3d force = 2;
+  Vector3d torque = 3;
 }

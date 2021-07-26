@@ -8,6 +8,8 @@ Release Versions:
 
 ## Upcoming changes (in development)
 
+- Protobuf message protocol and C++ binding library `clproto` for
+serializing and deserializing control library objects (#168)
 - Add set_data function (#163)
 - Move set_data declaration to State and add it for Ellipsoid (#166)
 - Add automatic documentation generation and deployment to GitHub Pages (#170)

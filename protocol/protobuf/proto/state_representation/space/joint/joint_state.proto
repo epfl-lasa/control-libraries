@@ -22,11 +22,11 @@ message JointPositions {
 message JointVelocities {
   State state = 1;
   repeated string joint_names = 2;
-  repeated double velocities = 4;
+  repeated double velocities = 3;
 }
 
 message JointTorques {
   State state = 1;
   repeated string joint_names = 2;
-  repeated double torques = 6;
+  repeated double torques = 3;
 }

@@ -24,13 +24,19 @@ jobs:
         if: ${{ github.event_name == 'release' }}
         shell: bash
         run: |
-          mv ./doxygen/docs/html ./doxygen/docs/${GITHUB_REF#refs/tags/}
+          TAG="${GITHUB_REF#refs/heads/}"
+          TAG="${TAG/\//-}"
+          mkdir -p doxygen/docs/versions
+          sudo mv doxygen/docs/html doxygen/docs/versions/${TAG}
 
       - name: Tag branch version
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         shell: bash
         run: |
-          mv ./doxygen/docs/html ./doxygen/docs/${GITHUB_REF#refs/heads/}
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          BRANCH="${BRANCH/\//-}"
+          mkdir -p doxygen/docs/versions
+          sudo mv doxygen/docs/html doxygen/docs/versions/${BRANCH}
 
       - name: Deploy to documentation branch
         uses: peaceiris/actions-gh-pages@v3
@@ -38,4 +44,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: docs
           publish_dir: ./doxygen/docs
-          destination_dir: docs
+          keep_files: true

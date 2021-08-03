@@ -6,9 +6,9 @@ Currently, only documentation for the [source](../source) folder is generated.
 
 ## Manual generation
 
-Use `doxygen doxygen.conf` to generate an html directory.
+Use `doxygen doxygen.conf` to generate an html directory in `docs/html`.
 
-You can view the generated documentation by running `python -m http.server --directory html`
+You can view the generated documentation by running `python -m http.server --directory docs/html`
 and opening http://localhost:8000 in a browser.
 
 ## Automatic generation

@@ -1,0 +1,57 @@
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies as remote-development
+
+RUN ( \
+    echo 'LogLevel DEBUG2'; \
+    echo 'PubkeyAuthentication yes'; \
+    echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
+  ) > /etc/ssh/sshd_config_development \
+  && mkdir /run/sshd
+
+RUN useradd -m remote && yes | passwd remote && usermod -s /bin/bash remote
+WORKDIR /home/remote
+
+RUN ( \
+    echo '#!/bin/bash'; \
+    echo 'mkdir -p /home/remote/.ssh'; \
+    echo 'echo "$1" > /home/remote/.ssh/authorized_keys'; \
+    echo 'chmod -R 755 /home/remote/.ssh'; \
+    echo 'chown -R remote:remote /home/remote/.ssh'; \
+    echo '/usr/sbin/sshd -D -e -f /etc/ssh/sshd_config_development'; \
+  ) > /.ssh_entrypoint.sh && chmod 744 /.ssh_entrypoint.sh
+
+ENTRYPOINT ["/.ssh_entrypoint.sh"]
+
+
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies as build-testing
+ARG BUILD_TESTING=ON
+ARG BUILD_CONTROLLERS=ON
+ARG BUILD_DYNAMICAL_SYSTEMS=ON
+ARG BUILD_ROBOT_MODEL=ON
+
+WORKDIR /tmp/control_lib
+COPY ./ ./
+
+WORKDIR /tmp/control_lib/build
+RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
+    -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
+    -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
+    -DBUILD_TESTING="${BUILD_TESTING}" .. \
+  && make -j all
+
+RUN CTEST_OUTPUT_ON_FAILURE=1 make test
+
+
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies as source-dependencies
+
+WORKDIR /tmp/control_lib
+COPY ./ ./
+
+WORKDIR /tmp/control_lib/build
+RUN cmake -DBUILD_CONTROLLERS="ON" \
+    -DBUILD_DYNAMICAL_SYSTEMS="ON" \
+    -DBUILD_ROBOT_MODEL="ON" \
+    -DBUILD_TESTING="OFF" .. \
+  && make -j all \
+  && make install
+
+RUN rm -rf /tmp/control_lib/

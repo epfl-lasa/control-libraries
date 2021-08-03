@@ -31,4 +31,5 @@ if [ "$REBUILD" -eq 1 ]; then
     BUILD_FLAGS+=(--no-cache)
 fi
 
-DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}"  .
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
+DOCKER_BUILDKIT=1 docker build ./source --file ./source/Dockerfile.source "${BUILD_FLAGS[@]}"

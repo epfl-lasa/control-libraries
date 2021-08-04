@@ -43,7 +43,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
-DOCKER_BUILDKIT=1 docker build ./source --file ./source/Dockerfile --target "${STAGE_NAME}" --tag "${IMAGE_NAME}"
+DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile --target "${STAGE_NAME}" --tag "${IMAGE_NAME}"
 
 docker container stop "${CONTAINER_NAME}" >/dev/null 2>&1
 docker rm --force "${CONTAINER_NAME}" >/dev/null 2>&1

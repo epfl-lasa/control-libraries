@@ -32,4 +32,4 @@ if [ "$REBUILD" -eq 1 ]; then
 fi
 
 docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
-DOCKER_BUILDKIT=1 docker build ./source --file ./source/Dockerfile.source "${BUILD_FLAGS[@]}"
+DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.source "${BUILD_FLAGS[@]}"

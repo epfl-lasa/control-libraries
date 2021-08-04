@@ -94,10 +94,18 @@ The `develop` branch is always considered to be a "release candidate" that conta
 code. If, at release time, there are features on `develop` that are considered unfinished or broken,
 they can be marked as `EXPERIMENTAL` to exclude them from compilation.
 
-At the time of release, a release branch should be made from development which updates the project version number
-in the [top-level CMakeLists](source/CMakeLists.txt) and finalises the [changelog](CHANGELOG.md).
-A linear GitFlow strategy is used to merge this release branch into `main`, and then additionally squash and rebase
-the release branch back into `develop`.
+At the time of release, a release branch should be made from development. In the release branch,
+the project version number should be updated in the following locations:
+- The [top-level CMakeLists](source/CMakeLists.txt) 
+- The [python bindings setup.py](python/setup.py)
+- The PROJECT_NUMBER in the [doxygen config](doxygen/doxygen.conf)
+
+In addition, the release branch should be used to finalize the [changelog](CHANGELOG.md), which includes
+moving all content from the "Upcoming changes (in development)" header under a new header with the corresponding
+release version.
+
+Once the changes specific to the release have been approved, a linear GitFlow strategy is used to
+merge this release branch into `main`, and then additionally squash and rebase the release branch back into `develop`.
 
 View and join the full discussion surrounding release workflow and strategy here: \
 https://github.com/epfl-lasa/control_libraries/discussions/77

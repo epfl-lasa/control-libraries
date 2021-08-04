@@ -1,0 +1,47 @@
+name: Generate and Deploy Documentation
+on:
+  push:
+    branches:
+      - main
+      - develop
+  release:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Generate and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Generate docs
+        uses: mattnotmitt/doxygen-action@v1
+        with:
+          working-directory: 'doxygen'
+          doxyfile-path: 'doxygen.conf'
+
+      - name: Tag release version
+        if: ${{ github.event_name == 'release' }}
+        shell: bash
+        run: |
+          TAG="${GITHUB_REF#refs/heads/}"
+          TAG="${TAG/\//-}"
+          mkdir -p doxygen/docs/versions
+          sudo mv doxygen/docs/html doxygen/docs/versions/${TAG}
+
+      - name: Tag branch version
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          BRANCH="${BRANCH/\//-}"
+          mkdir -p doxygen/docs/versions
+          sudo mv doxygen/docs/html doxygen/docs/versions/${BRANCH}
+
+      - name: Deploy to documentation branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: docs
+          publish_dir: ./doxygen/docs
+          keep_files: true

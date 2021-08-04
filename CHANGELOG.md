@@ -11,6 +11,8 @@ Release Versions:
 - Add automatic documentation generation and deployment to GitHub Pages (#170)
 - Add set_data function (#163)
 - Move set_data declaration to State and add it for Ellipsoid (#166)
+- Build and push development dependencies image in CI and related 
+  restructuring of Docker resources (#169)
 
 ## 3.1.0
 

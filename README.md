@@ -5,7 +5,11 @@
     </tr>
     <tr>
         <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/main">Main</a></td>
-        <td width="75%"><img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=main"></td>
+        <td width="75%">
+            <img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=main">
+            <br>
+            <img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-push.yml/badge.svg?branch=main">
+        </td>
     </tr>
     <tr>
         <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/develop">Development</a></td>
@@ -13,50 +17,24 @@
     </tr>
 </table>
 
-# `control_libraries`
+# Control Libraries
 A set of libraries to facilitate the creation of full control loop algorithms,
 including trajectory planning, kinematics, dynamics and control.
 
-## `state_representation`
+## Core libraries
 
-This library provides a set of classes to represent **states** in **Cartesian** or **joint** spaces.
-The classes define and combine variables such as position, velocity, acceleration and force into
-a consistent internal representation used across the other libraries.
+For the implementation and documentation of the core libraries, see the
+[source](./source) folder.
 
-Dependencies: [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page)
+## Python bindings
 
-[**Documentation**](source/state_representation/README.md)
+There exist Python bindings for the control libraries (currently not all libraries
+supported). See the [python](./python) folder for installation instructions and
+currently supported libraries.
 
-## `dynamical_systems`
+## Demos
 
-This library provides a collection of classes that behave as differential equations to calculate
-a derivative of a state variable. For example, a position state input might
-yield a desired velocity output. This can be used to generate time-invariant trajectories.
-
-Dependencies: `state_representation`
-
-[**Documentation**](source/dynamical_systems/README.md)
-
-## `robot_model`
-
-This library allows the creation of a robot model from a URDF file and defines many helpful
-rigid-body algorithms for solving kinematic and dynamic problems.
-
-It is a wrapper for [Pinocchio](https://github.com/stack-of-tasks/pinocchio)
-that is compatible with the internal `state_representation` types.
-
-Dependencies: `state_representation`, [Pinocchio](https://stack-of-tasks.github.io/pinocchio/download.html)
-
-[**Documentation**](source/robot_model/README.md)
-
-## `controllers`
-
-This library provides classes designed to convert an input state to an output command in order to control
-a robot. 
-
-Dependencies: `state_representation`
-
-[**Documentation**](source/controllers/README.md)
+For examples and demos in plain C++, ROS, and ROS2, refer to the [demos](./demos) folder.
 
 ---
 ## Installation

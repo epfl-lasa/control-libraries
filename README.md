@@ -5,7 +5,11 @@
     </tr>
     <tr>
         <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/main">Main</a></td>
-        <td width="75%"><img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=main"><br><img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-push.yml/badge.svg?branch=main"></td>
+        <td width="75%">
+            <img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-test.yml/badge.svg?branch=main">
+            <br>
+            <img src="https://github.com/epfl-lasa/control_libraries/actions/workflows/build-push.yml/badge.svg?branch=main">
+        </td>
     </tr>
     <tr>
         <td width="25%"><a href="https://github.com/epfl-lasa/control_libraries/tree/develop">Development</a></td>

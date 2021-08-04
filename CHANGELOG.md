@@ -13,7 +13,6 @@ Release Versions:
 - Add automatic documentation generation and deployment to GitHub Pages (#170)
 - Build and push development dependencies image in CI and related 
   restructuring of Docker resources (#169)
-- Build and push action on develop (to be removed for next release) (#171)
 
 ## 3.1.0
 
@@ -48,7 +47,6 @@ of the libraries.
 - Refactor and improve unittests for state_representation (especially JointState
   and CartesianState)
 - Rename repository
-- Remove develop branch from build and push action
 
 ## 3.0.0
 

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<title>Control Libraries Documentation</title>
+</head>
+<body>
+<h1>Documented branches and tags</h1>
+<ul id="version_list"/>
+<script>
+// discover all documented versions and link them in the version list
+var root_path = "https://api.github.com/repos/epfl-lasa/control_libraries/git/trees/docs";
+fetch(root_path).then((resp) => resp.json()).then(function(data) {
+  var versions_dir = data.tree.filter(f=>/versions/.test(f.path));
+  fetch(versions_dir[0].url).then((resp) => resp.json()).then(function(data) {
+    var versions = data.tree;
+    versions.forEach(f=>appendVersionList(f.path))
+  });
+});
+
+function appendVersionList(version) {
+  var ul = document.getElementById("version_list");
+  var li = document.createElement("li");
+  var a = document.createElement("a");
+  a.textContent = version;
+  a.setAttribute('href', generateLink(version));
+  li.appendChild(a);
+  ul.appendChild(li);
+}
+
+function generateLink(version) {
+  var location = window.location;
+  return "https://" + location.hostname + location.pathname + "versions/" + version;
+}
+</script>
+</body>
+</html>

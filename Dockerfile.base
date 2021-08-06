@@ -96,8 +96,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --from=google-dependencies /usr/include/gtest /usr/include/gtest
+COPY --from=google-dependencies /usr/local/include/google /usr/local/include/google
 COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib
 COPY --from=google-dependencies /usr/local/lib/libproto* /usr/local/lib
-COPY --from=google-dependencies /usr/local/include/google /usr/local/include/google
 COPY --from=google-dependencies /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig

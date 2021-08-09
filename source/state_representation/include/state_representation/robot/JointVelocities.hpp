@@ -2,9 +2,11 @@
 
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/robot/JointAccelerations.hpp"
 
 namespace state_representation {
 class JointPositions;
+class JointAccelerations;
 
 /**
  * @class JointVelocities
@@ -199,6 +201,13 @@ public:
   JointVelocities operator/(double lambda) const;
 
   /**
+   * @brief Overload the / operator with a time period
+   * @param dt the time period to multiply with
+   * @return the JointAccelerations corresponding to the accelerations over the time period
+   */
+  JointAccelerations operator/(const std::chrono::nanoseconds& dt) const;
+
+  /**
    * @brief Overload the * operator with a time period
    * @param dt the time period to multiply with
    * @return the JointPositions corresponding to the displacement over the time period
@@ -231,34 +240,34 @@ public:
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
-   * @param max_absolute_value the maximum magnitude of torque for all the joints
+   * @param max_absolute_value the maximum magnitude of velocity for all the joints
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which
-   * the torque will be set to 0
+   * the velocity will be set to 0
    */
   void clamp(double max_absolute_value, double noise_ratio = 0.);
 
   /**
    * @brief Return the velocity clamped to the values in argument
-   * @param max_absolute_value the maximum magnitude of torque for all the joints
+   * @param max_absolute_value the maximum magnitude of velocity for all the joints
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which
-   * the torque will be set to 0
+   * the velocity will be set to 0
    * @return the clamped JointVelocities
    */
   JointVelocities clamped(double max_absolute_value, double noise_ratio = 0.) const;
 
   /**
    * @brief Clamp inplace the magnitude of the velocity to the values in argument
-   * @param max_absolute_value_array the maximum magnitude of torque for each joint
+   * @param max_absolute_value_array the maximum magnitude of velocity for each joint
    * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
-   * the torque will be set to 0
+   * the velocity will be set to 0
    */
   void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
 
   /**
    * @brief Return the velocity clamped to the values in argument
-   * @param max_absolute_value_array the maximum magnitude of torque for each joint
+   * @param max_absolute_value_array the maximum magnitude of velocity for each joint
    * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
-   * the torque will be set to 0
+   * the velocity will be set to 0
    * @return the clamped JointVelocities
    */
   JointVelocities clamped(const Eigen::ArrayXd& max_absolute_value_array,

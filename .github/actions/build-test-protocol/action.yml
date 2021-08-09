@@ -1,0 +1,5 @@
+name: 'Build and Test Protocol'
+description: 'Build the protobuf message libraries and run all unit tests'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

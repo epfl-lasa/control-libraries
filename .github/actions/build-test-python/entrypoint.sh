@@ -1,5 +1,6 @@
 #!/bin/sh -l
 
+echo ">>> Installing control libraries..."
 bash /github/workspace/source/install.sh --auto --no-controllers --no-dynamical-systems --no-robot-model || exit 1
 ldconfig
 

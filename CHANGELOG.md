@@ -18,6 +18,7 @@ serializing and deserializing control library objects (#168)
 - Correct an error in the `makefile` of the protobuf bindings and remove
   the generated bindings from the repository, while providing installation
   scripts (#174)
+- Add class JointAccelerations (#173)
 
 ## 3.1.0
 

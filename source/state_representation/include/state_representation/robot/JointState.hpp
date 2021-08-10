@@ -268,27 +268,27 @@ public:
   void set_zero();
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
+   * @brief Clamp inplace the magnitude of the a specific state variable (positions, velocities, accelerations or torques)
    * @param max_absolute_value the maximum absolute magnitude of the state variable
    * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
    * @param noise_ratio if provided, this value will be used to apply a dead zone under which
-   * the velocity will be set to 0
+   * the state variable will be set to 0
    */
   void clamp_state_variable(double max_absolute_value,
                             const JointStateVariable& state_variable_type,
                             double noise_ratio = 0);
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
-   * for each individual joints
+   * @brief Clamp inplace the magnitude of the a specific state variable (positions, velocities, accelerations or torques)
+   * for each individual joint
    * @param max_absolute_value_array the maximum absolute magnitude of the state variable for each joints individually
    * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
-   * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
-   * the velocity will be set to 0
+   * @param noise_ratio_array those values will be used to apply a dead zone under which
+   * the state variable will be set to 0 for each individual joint
    */
-  void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
+  void clamp_state_variable(const Eigen::VectorXd& max_absolute_value_array,
                             const JointStateVariable& state_variable_type,
-                            const Eigen::ArrayXd& noise_ratio_array);
+                            const Eigen::VectorXd& noise_ratio_array);
 
   /**
    * @brief Return a copy of the JointState

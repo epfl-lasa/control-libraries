@@ -85,7 +85,6 @@ void joint_state(py::module_& m) {
   });
 }
 
-
 void joint_positions(py::module_& m) {
   py::class_<JointPositions, JointState> c(m, "JointPositions");
 
@@ -145,8 +144,6 @@ void joint_positions(py::module_& m) {
   });
 }
 
-
-
 void joint_velocities(py::module_& m) {
   py::class_<JointVelocities, JointState> c(m, "JointVelocities");
 
@@ -155,7 +152,7 @@ void joint_velocities(py::module_& m) {
   c.def(py::init<const std::string&, const std::vector<std::string>&>(), "Constructor with name and list of joint names provided", "robot_name"_a, "joint_names"_a);
   c.def(py::init<const std::string&, const Eigen::VectorXd&>(), "Constructor with name and velocity values provided", "robot_name"_a, "velocities"_a);
   c.def(py::init<const std::string&, const std::vector<std::string>&, const Eigen::VectorXd&>(), "Constructor with name, a list of joint names and velocity values provided", "robot_name"_a, "joint_names"_a, "velocities"_a);
-  c.def(py::init<const JointVelocities&>(), "Copy constructor", "positions"_a);
+  c.def(py::init<const JointVelocities&>(), "Copy constructor", "velocities"_a);
   c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
   c.def(py::init<const JointPositions&>(), "Copy constructor from a JointPositions by considering that it is equivalent to dividing the positions by 1 second", "positions"_a);
 
@@ -187,6 +184,7 @@ void joint_velocities(py::module_& m) {
   c.def(py::self * Eigen::MatrixXd());
   c.def(py::self /= double());
   c.def(py::self / double());
+  c.def(py::self / std::chrono::nanoseconds());
   c.def(py::self * std::chrono::nanoseconds());
   c.def(double() * py::self);
   c.def(Eigen::ArrayXd() * py::self);
@@ -205,6 +203,68 @@ void joint_velocities(py::module_& m) {
   c.def("__repr__", [](const JointVelocities& velocities) {
     std::stringstream buffer;
     buffer << velocities;
+    return buffer.str();
+  });
+}
+
+void joint_accelerations(py::module_& m) {
+  py::class_<JointAccelerations, JointState> c(m, "JointAccelerations");
+
+  c.def(py::init(), "Empty constructor");
+  c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided", "robot_name"_a, "nb_joints"_a=0);
+  c.def(py::init<const std::string&, const std::vector<std::string>&>(), "Constructor with name and list of joint names provided", "robot_name"_a, "joint_names"_a);
+  c.def(py::init<const std::string&, const Eigen::VectorXd&>(), "Constructor with name and acceleration values provided", "robot_name"_a, "accelerations"_a);
+  c.def(py::init<const std::string&, const std::vector<std::string>&, const Eigen::VectorXd&>(), "Constructor with name, a list of joint names and acceleration values provided", "robot_name"_a, "joint_names"_a, "accelerations"_a);
+  c.def(py::init<const JointAccelerations&>(), "Copy constructor", "accelerations"_a);
+  c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
+  c.def(py::init<const JointVelocities&>(), "Copy constructor from a JointVelocities by considering that it is equivalent to dividing the velocities by 1 second", "velocities"_a);
+
+  c.def_static("Zero", py::overload_cast<const std::string&, unsigned int>(&JointAccelerations::Zero), "Constructor for the zero JointAccelerations", "robot_name"_a, "nb_joints"_a);
+  c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointAccelerations::Zero), "Constructor for the zero JointAccelerations", "robot_name"_a, "joint_names"_a);
+  c.def_static("Random", py::overload_cast<const std::string&, unsigned int>(&JointAccelerations::Random), "Constructor for the random JointAccelerations", "robot_name"_a, "nb_joints"_a);
+  c.def_static("Random", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointAccelerations::Random), "Constructor for the random JointAccelerations", "robot_name"_a, "joint_names"_a);
+
+  std::vector<std::string> deleted_attributes = {
+      "positions",
+      "velocities",
+      "torques",
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const JointAccelerations&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const JointAccelerations& accelerations) -> JointAccelerations { return accelerations; }, "Deleted method from parent class.");
+  }
+
+  c.def(py::self += py::self);
+  c.def(py::self + py::self);
+  c.def(py::self -= py::self);
+  c.def(py::self - py::self);
+  c.def(py::self *= double());
+  c.def(py::self * double());
+  c.def(py::self *= Eigen::ArrayXd());
+  c.def(py::self * Eigen::ArrayXd());
+  c.def(py::self *= Eigen::MatrixXd());
+  c.def(py::self * Eigen::MatrixXd());
+  c.def(py::self /= double());
+  c.def(py::self / double());
+  c.def(py::self * std::chrono::nanoseconds());
+  c.def(double() * py::self);
+  c.def(Eigen::ArrayXd() * py::self);
+  c.def(Eigen::MatrixXd() * py::self);
+
+  c.def("copy", &JointAccelerations::copy, "Return a copy of the JointAccelerations");
+  c.def("data", &JointAccelerations::data, "Returns the accelerations data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointAccelerations::set_data), "Set the accelerations data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointAccelerations::set_data), "Set the accelerations data from a list", "data"_a);
+
+  c.def("clamp", py::overload_cast<double, double>(&JointAccelerations::clamp), "Clamp inplace the magnitude of the accelerations to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);
+  c.def("clamped", py::overload_cast<double, double>(&JointAccelerations::clamp), "Return the accelerations clamped to the values in argument", "max_absolute_value"_a, "noise_ratio"_a=0.0);
+  c.def("clamp", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointAccelerations::clamp), "Clamp inplace the magnitude of the accelerations to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
+  c.def("clamped", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointAccelerations::clamp), "Return the accelerations clamped to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
+
+  c.def("__repr__", [](const JointAccelerations& accelerations) {
+    std::stringstream buffer;
+    buffer << accelerations;
     return buffer.str();
   });
 }

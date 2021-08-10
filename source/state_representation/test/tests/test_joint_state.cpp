@@ -4,6 +4,8 @@
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/robot/JointTorques.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;
 
@@ -212,6 +214,27 @@ TEST(JointState, ClampVariable) {
 
   EXPECT_THROW(js.clamp_state_variable(Eigen::Array2d::Ones(), JointStateVariable::ALL, Eigen::Array2d::Zero()),
                IncompatibleSizeException);
+}
+
+TEST(JointState, Distance) {
+  JointState js;
+  JointState js1 = JointState::Random("test", 3);
+  JointState js2 = JointState::Random("test", 2);
+  EXPECT_THROW(js.dist(js1), EmptyStateException);
+  EXPECT_THROW(js1.dist(js), EmptyStateException);
+  EXPECT_THROW(js1.dist(js2), IncompatibleStatesException);
+
+  Eigen::VectorXd data1 = Eigen::VectorXd::Random(js1.get_size() * 4);
+  js1.set_data(data1);
+  JointState js3 = JointState("test", 3);
+  Eigen::VectorXd data2 = Eigen::VectorXd::Random(js1.get_size() * 4);
+  js3.set_data(data2);
+
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::POSITIONS), (data1.head(3) - data2.head(3)).norm());
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::VELOCITIES), (data1.segment(3, 3) - data2.segment(3, 3)).norm());
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::ACCELERATIONS), (data1.segment(6, 3) - data2.segment(6, 3)).norm());
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::TORQUES), (data1.tail(3) - data2.tail(3)).norm());
+  EXPECT_FLOAT_EQ(js1.dist(js3), js3.dist(js1));
 }
 
 //TEST(JointStateTest, AddTwoState) {

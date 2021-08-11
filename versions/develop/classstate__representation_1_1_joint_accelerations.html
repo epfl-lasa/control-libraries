@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Control Libraries: state_representation::JointVelocities Class Reference</title>
+<title>Control Libraries: state_representation::JointAccelerations Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,7 +62,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>state_representation</b></li><li class="navelem"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a></li>  </ul>
+<li class="navelem"><b>state_representation</b></li><li class="navelem"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -70,153 +70,150 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
-<a href="classstate__representation_1_1_joint_velocities-members.html">List of all members</a>  </div>
+<a href="classstate__representation_1_1_joint_accelerations-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">state_representation::JointVelocities Class Reference</div>  </div>
+<div class="title">state_representation::JointAccelerations Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Class to define velocities of the joints.  
- <a href="classstate__representation_1_1_joint_velocities.html#details">More...</a></p>
+<p>Class to define accelerations of the joints.  
+ <a href="classstate__representation_1_1_joint_accelerations.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_joint_velocities_8hpp_source.html">JointVelocities.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_joint_accelerations_8hpp_source.html">JointAccelerations.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for state_representation::JointVelocities:</div>
+Inheritance diagram for state_representation::JointAccelerations:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classstate__representation_1_1_joint_velocities.png" usemap="#state_5Frepresentation::JointVelocities_map" alt=""/>
-  <map id="state_5Frepresentation::JointVelocities_map" name="state_5Frepresentation::JointVelocities_map">
-<area href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space." alt="state_representation::JointState" shape="rect" coords="0,56,214,80"/>
-<area href="classstate__representation_1_1_state.html" title="Abstract class to represent a state." alt="state_representation::State" shape="rect" coords="0,0,214,24"/>
+  <img src="classstate__representation_1_1_joint_accelerations.png" usemap="#state_5Frepresentation::JointAccelerations_map" alt=""/>
+  <map id="state_5Frepresentation::JointAccelerations_map" name="state_5Frepresentation::JointAccelerations_map">
+<area href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space." alt="state_representation::JointState" shape="rect" coords="0,56,237,80"/>
+<area href="classstate__representation_1_1_state.html" title="Abstract class to represent a state." alt="state_representation::State" shape="rect" coords="0,0,237,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a69fe464974c5322fc899da39a700a79a"><td class="memItemLeft" align="right" valign="top"><a id="a69fe464974c5322fc899da39a700a79a"></a>
+<tr class="memitem:a6da55597cacc0f8f2f9f1cbdefcf0626"><td class="memItemLeft" align="right" valign="top"><a id="a6da55597cacc0f8f2f9f1cbdefcf0626"></a>
 const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_positions</b> () const =delete</td></tr>
-<tr class="separator:a69fe464974c5322fc899da39a700a79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0206695618bae3d0bb42b804d42a69c3"><td class="memItemLeft" align="right" valign="top"><a id="a0206695618bae3d0bb42b804d42a69c3"></a>
+<tr class="separator:a6da55597cacc0f8f2f9f1cbdefcf0626"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f29f38ab365176103d8419eca19cddd"><td class="memItemLeft" align="right" valign="top"><a id="a8f29f38ab365176103d8419eca19cddd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_positions</b> (const Eigen::VectorXd &amp;positions)=delete</td></tr>
-<tr class="separator:a0206695618bae3d0bb42b804d42a69c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff79ac42941e47d0b99bf9ab2c71e866"><td class="memItemLeft" align="right" valign="top"><a id="aff79ac42941e47d0b99bf9ab2c71e866"></a>
+<tr class="separator:a8f29f38ab365176103d8419eca19cddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b0791a8e9b830b2fc74cca292c4890"><td class="memItemLeft" align="right" valign="top"><a id="a69b0791a8e9b830b2fc74cca292c4890"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_positions</b> (const std::vector&lt; double &gt; &amp;positions)=delete</td></tr>
-<tr class="separator:aff79ac42941e47d0b99bf9ab2c71e866"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8573e8cc5448af793aa343bb6b19350b"><td class="memItemLeft" align="right" valign="top"><a id="a8573e8cc5448af793aa343bb6b19350b"></a>
-const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_accelerations</b> () const =delete</td></tr>
-<tr class="separator:a8573e8cc5448af793aa343bb6b19350b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca9566ce36d79d5903a77faa105bcffd"><td class="memItemLeft" align="right" valign="top"><a id="aca9566ce36d79d5903a77faa105bcffd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_accelerations</b> (const Eigen::VectorXd &amp;accelerations)=delete</td></tr>
-<tr class="separator:aca9566ce36d79d5903a77faa105bcffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0da0f3df5ffee7cc9125288d5d1a4bff"><td class="memItemLeft" align="right" valign="top"><a id="a0da0f3df5ffee7cc9125288d5d1a4bff"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_accelerations</b> (const std::vector&lt; double &gt; &amp;accelerations)=delete</td></tr>
-<tr class="separator:a0da0f3df5ffee7cc9125288d5d1a4bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a960ab1e8ca0d8119875b95c74cca7914"><td class="memItemLeft" align="right" valign="top"><a id="a960ab1e8ca0d8119875b95c74cca7914"></a>
+<tr class="separator:a69b0791a8e9b830b2fc74cca292c4890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecb7e45bdb6d913df0aebb8fe789398a"><td class="memItemLeft" align="right" valign="top"><a id="aecb7e45bdb6d913df0aebb8fe789398a"></a>
+const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_velocities</b> () const =delete</td></tr>
+<tr class="separator:aecb7e45bdb6d913df0aebb8fe789398a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6a02b3681fd38b2628ca390593d391c"><td class="memItemLeft" align="right" valign="top"><a id="ad6a02b3681fd38b2628ca390593d391c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_velocities</b> (const Eigen::VectorXd &amp;accelerations)=delete</td></tr>
+<tr class="separator:ad6a02b3681fd38b2628ca390593d391c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95b803f5225e4fabf9f762c0ce7b8f1f"><td class="memItemLeft" align="right" valign="top"><a id="a95b803f5225e4fabf9f762c0ce7b8f1f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_velocities</b> (const std::vector&lt; double &gt; &amp;accelerations)=delete</td></tr>
+<tr class="separator:a95b803f5225e4fabf9f762c0ce7b8f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44ebc1e2d0f7d4ef2cefdd3ba2e041a1"><td class="memItemLeft" align="right" valign="top"><a id="a44ebc1e2d0f7d4ef2cefdd3ba2e041a1"></a>
 const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_torques</b> () const =delete</td></tr>
-<tr class="separator:a960ab1e8ca0d8119875b95c74cca7914"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abca609aa51c2c5c84a861e46d18aba6a"><td class="memItemLeft" align="right" valign="top"><a id="abca609aa51c2c5c84a861e46d18aba6a"></a>
+<tr class="separator:a44ebc1e2d0f7d4ef2cefdd3ba2e041a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69ead8434a9a7d5429ad03a2fb2fc63c"><td class="memItemLeft" align="right" valign="top"><a id="a69ead8434a9a7d5429ad03a2fb2fc63c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_torques</b> (const Eigen::VectorXd &amp;torques)=delete</td></tr>
-<tr class="separator:abca609aa51c2c5c84a861e46d18aba6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc9ed12479f9541547004fe2f50b4332"><td class="memItemLeft" align="right" valign="top"><a id="abc9ed12479f9541547004fe2f50b4332"></a>
+<tr class="separator:a69ead8434a9a7d5429ad03a2fb2fc63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdfafaecc93338bcb5280eb6d71330c1"><td class="memItemLeft" align="right" valign="top"><a id="acdfafaecc93338bcb5280eb6d71330c1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_torques</b> (const std::vector&lt; double &gt; &amp;torques)=delete</td></tr>
-<tr class="separator:abc9ed12479f9541547004fe2f50b4332"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99a1d078ed0830418ed5f237943607a8"><td class="memItemLeft" align="right" valign="top"><a id="a99a1d078ed0830418ed5f237943607a8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a99a1d078ed0830418ed5f237943607a8">JointVelocities</a> ()=default</td></tr>
-<tr class="memdesc:a99a1d078ed0830418ed5f237943607a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor. <br /></td></tr>
-<tr class="separator:a99a1d078ed0830418ed5f237943607a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acff0d8f3f4bd1d8c038c3d49d285df86"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#acff0d8f3f4bd1d8c038c3d49d285df86">JointVelocities</a> (const std::string &amp;robot_name, unsigned int nb_joints=0)</td></tr>
-<tr class="memdesc:acff0d8f3f4bd1d8c038c3d49d285df86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and number of joints provided.  <a href="classstate__representation_1_1_joint_velocities.html#acff0d8f3f4bd1d8c038c3d49d285df86">More...</a><br /></td></tr>
-<tr class="separator:acff0d8f3f4bd1d8c038c3d49d285df86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50804d2ed381baab45cc5ece6d0d1192"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a50804d2ed381baab45cc5ece6d0d1192">JointVelocities</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
-<tr class="memdesc:a50804d2ed381baab45cc5ece6d0d1192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and list of joint names provided.  <a href="classstate__representation_1_1_joint_velocities.html#a50804d2ed381baab45cc5ece6d0d1192">More...</a><br /></td></tr>
-<tr class="separator:a50804d2ed381baab45cc5ece6d0d1192"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04b34b9eb7913044db97e7f698af2351"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a04b34b9eb7913044db97e7f698af2351">JointVelocities</a> (const std::string &amp;robot_name, const Eigen::VectorXd &amp;velocities)</td></tr>
-<tr class="memdesc:a04b34b9eb7913044db97e7f698af2351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and velocity values provided.  <a href="classstate__representation_1_1_joint_velocities.html#a04b34b9eb7913044db97e7f698af2351">More...</a><br /></td></tr>
-<tr class="separator:a04b34b9eb7913044db97e7f698af2351"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab10cea6aa51c41014df0d1155d368dc1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ab10cea6aa51c41014df0d1155d368dc1">JointVelocities</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names, const Eigen::VectorXd &amp;velocities)</td></tr>
-<tr class="memdesc:ab10cea6aa51c41014df0d1155d368dc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name, a list of joint names and velocity values provided.  <a href="classstate__representation_1_1_joint_velocities.html#ab10cea6aa51c41014df0d1155d368dc1">More...</a><br /></td></tr>
-<tr class="separator:ab10cea6aa51c41014df0d1155d368dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad496b7288ebce8e4b837ec9758ab4334"><td class="memItemLeft" align="right" valign="top"><a id="ad496b7288ebce8e4b837ec9758ab4334"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ad496b7288ebce8e4b837ec9758ab4334">JointVelocities</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:ad496b7288ebce8e4b837ec9758ab4334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
-<tr class="separator:ad496b7288ebce8e4b837ec9758ab4334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a576724e9c5ac1971ff8ece893314906e"><td class="memItemLeft" align="right" valign="top"><a id="a576724e9c5ac1971ff8ece893314906e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a576724e9c5ac1971ff8ece893314906e">JointVelocities</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &amp;state)</td></tr>
-<tr class="memdesc:a576724e9c5ac1971ff8ece893314906e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor from a <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a>. <br /></td></tr>
-<tr class="separator:a576724e9c5ac1971ff8ece893314906e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a521e8d9bf80536756757d739395ae26c"><td class="memItemLeft" align="right" valign="top"><a id="a521e8d9bf80536756757d739395ae26c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a521e8d9bf80536756757d739395ae26c">JointVelocities</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a> &amp;positions)</td></tr>
-<tr class="memdesc:a521e8d9bf80536756757d739395ae26c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor from a <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> by considering that it is equivalent to dividing the positions by 1 second. <br /></td></tr>
-<tr class="separator:a521e8d9bf80536756757d739395ae26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94f4ab12e4799463ec15156adba9846a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a94f4ab12e4799463ec15156adba9846a">operator=</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)=default</td></tr>
-<tr class="memdesc:a94f4ab12e4799463ec15156adba9846a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy assignment operator that have to be defined to the custom assignment operator.  <a href="classstate__representation_1_1_joint_velocities.html#a94f4ab12e4799463ec15156adba9846a">More...</a><br /></td></tr>
-<tr class="separator:a94f4ab12e4799463ec15156adba9846a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add89e69e6edb40efd4c682ccaf952b9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#add89e69e6edb40efd4c682ccaf952b9e">operator+=</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:add89e69e6edb40efd4c682ccaf952b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the += operator.  <a href="classstate__representation_1_1_joint_velocities.html#add89e69e6edb40efd4c682ccaf952b9e">More...</a><br /></td></tr>
-<tr class="separator:add89e69e6edb40efd4c682ccaf952b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a0b7f789a5563b7ed0d2b912bc58e3c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a0a0b7f789a5563b7ed0d2b912bc58e3c">operator+</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities) const</td></tr>
-<tr class="memdesc:a0a0b7f789a5563b7ed0d2b912bc58e3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the + operator.  <a href="classstate__representation_1_1_joint_velocities.html#a0a0b7f789a5563b7ed0d2b912bc58e3c">More...</a><br /></td></tr>
-<tr class="separator:a0a0b7f789a5563b7ed0d2b912bc58e3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ef4be2eb54e834b36bd5addcadfaba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a7ef4be2eb54e834b36bd5addcadfaba5">operator-=</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:a7ef4be2eb54e834b36bd5addcadfaba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the -= operator.  <a href="classstate__representation_1_1_joint_velocities.html#a7ef4be2eb54e834b36bd5addcadfaba5">More...</a><br /></td></tr>
-<tr class="separator:a7ef4be2eb54e834b36bd5addcadfaba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae78f1cb995797201ef1cce47365a7852"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ae78f1cb995797201ef1cce47365a7852">operator-</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities) const</td></tr>
-<tr class="memdesc:ae78f1cb995797201ef1cce47365a7852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the - operator.  <a href="classstate__representation_1_1_joint_velocities.html#ae78f1cb995797201ef1cce47365a7852">More...</a><br /></td></tr>
-<tr class="separator:ae78f1cb995797201ef1cce47365a7852"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7186617f9428ca4c874e1a86d9fa86d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a7186617f9428ca4c874e1a86d9fa86d7">operator*=</a> (double lambda)</td></tr>
-<tr class="memdesc:a7186617f9428ca4c874e1a86d9fa86d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with a double gain.  <a href="classstate__representation_1_1_joint_velocities.html#a7186617f9428ca4c874e1a86d9fa86d7">More...</a><br /></td></tr>
-<tr class="separator:a7186617f9428ca4c874e1a86d9fa86d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecfe3439a85627a68e54f57f8798a392"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#aecfe3439a85627a68e54f57f8798a392">operator*</a> (double lambda) const</td></tr>
-<tr class="memdesc:aecfe3439a85627a68e54f57f8798a392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a double gain.  <a href="classstate__representation_1_1_joint_velocities.html#aecfe3439a85627a68e54f57f8798a392">More...</a><br /></td></tr>
-<tr class="separator:aecfe3439a85627a68e54f57f8798a392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42e4484e7c1be7d4f269563a68f5fd3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a42e4484e7c1be7d4f269563a68f5fd3f">operator*=</a> (const Eigen::ArrayXd &amp;lambda)</td></tr>
-<tr class="memdesc:a42e4484e7c1be7d4f269563a68f5fd3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_velocities.html#a42e4484e7c1be7d4f269563a68f5fd3f">More...</a><br /></td></tr>
-<tr class="separator:a42e4484e7c1be7d4f269563a68f5fd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3223af23eeb75be57119bb7605780f22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a3223af23eeb75be57119bb7605780f22">operator*</a> (const Eigen::ArrayXd &amp;lambda) const</td></tr>
-<tr class="memdesc:a3223af23eeb75be57119bb7605780f22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_velocities.html#a3223af23eeb75be57119bb7605780f22">More...</a><br /></td></tr>
-<tr class="separator:a3223af23eeb75be57119bb7605780f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7495bb31deb4053bfb8bb08ef5a76ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ae7495bb31deb4053bfb8bb08ef5a76ec">operator*=</a> (const Eigen::MatrixXd &amp;lambda)</td></tr>
-<tr class="memdesc:ae7495bb31deb4053bfb8bb08ef5a76ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_velocities.html#ae7495bb31deb4053bfb8bb08ef5a76ec">More...</a><br /></td></tr>
-<tr class="separator:ae7495bb31deb4053bfb8bb08ef5a76ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7dc6fcd2e8a69b10f279e099a81c43a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ad7dc6fcd2e8a69b10f279e099a81c43a">operator*</a> (const Eigen::MatrixXd &amp;lambda) const</td></tr>
-<tr class="memdesc:ad7dc6fcd2e8a69b10f279e099a81c43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_velocities.html#ad7dc6fcd2e8a69b10f279e099a81c43a">More...</a><br /></td></tr>
-<tr class="separator:ad7dc6fcd2e8a69b10f279e099a81c43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dc7a61aea3b17fe598947c2266c4681"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a3dc7a61aea3b17fe598947c2266c4681">operator/=</a> (double lambda)</td></tr>
-<tr class="memdesc:a3dc7a61aea3b17fe598947c2266c4681"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the /= operator with a scalar.  <a href="classstate__representation_1_1_joint_velocities.html#a3dc7a61aea3b17fe598947c2266c4681">More...</a><br /></td></tr>
-<tr class="separator:a3dc7a61aea3b17fe598947c2266c4681"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaceb1fdae0af9279f1e1989d8c4c493"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#afaceb1fdae0af9279f1e1989d8c4c493">operator/</a> (double lambda) const</td></tr>
-<tr class="memdesc:afaceb1fdae0af9279f1e1989d8c4c493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the / operator with a scalar.  <a href="classstate__representation_1_1_joint_velocities.html#afaceb1fdae0af9279f1e1989d8c4c493">More...</a><br /></td></tr>
-<tr class="separator:afaceb1fdae0af9279f1e1989d8c4c493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90c90dec8ae9a90bd11e44cd040f6cdd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a90c90dec8ae9a90bd11e44cd040f6cdd">operator/</a> (const std::chrono::nanoseconds &amp;dt) const</td></tr>
-<tr class="memdesc:a90c90dec8ae9a90bd11e44cd040f6cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the / operator with a time period.  <a href="classstate__representation_1_1_joint_velocities.html#a90c90dec8ae9a90bd11e44cd040f6cdd">More...</a><br /></td></tr>
-<tr class="separator:a90c90dec8ae9a90bd11e44cd040f6cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29b42934e821d5800e1ecd4245c6740f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a29b42934e821d5800e1ecd4245c6740f">operator*</a> (const std::chrono::nanoseconds &amp;dt) const</td></tr>
-<tr class="memdesc:a29b42934e821d5800e1ecd4245c6740f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a time period.  <a href="classstate__representation_1_1_joint_velocities.html#a29b42934e821d5800e1ecd4245c6740f">More...</a><br /></td></tr>
-<tr class="separator:a29b42934e821d5800e1ecd4245c6740f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c866b57ad496d93b11d616e5df0ea95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a8c866b57ad496d93b11d616e5df0ea95">copy</a> () const</td></tr>
-<tr class="memdesc:a8c866b57ad496d93b11d616e5df0ea95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>.  <a href="classstate__representation_1_1_joint_velocities.html#a8c866b57ad496d93b11d616e5df0ea95">More...</a><br /></td></tr>
-<tr class="separator:a8c866b57ad496d93b11d616e5df0ea95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a211eab16aeded78b2464a13d18133029"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a211eab16aeded78b2464a13d18133029">data</a> () const override</td></tr>
-<tr class="memdesc:a211eab16aeded78b2464a13d18133029"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the velocities data as an Eigen vector.  <a href="classstate__representation_1_1_joint_velocities.html#a211eab16aeded78b2464a13d18133029">More...</a><br /></td></tr>
-<tr class="separator:a211eab16aeded78b2464a13d18133029"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3914cf1da58ce0bc751da01a5bcc2d6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#af3914cf1da58ce0bc751da01a5bcc2d6">set_data</a> (const Eigen::VectorXd &amp;<a class="el" href="classstate__representation_1_1_joint_velocities.html#a211eab16aeded78b2464a13d18133029">data</a>) override</td></tr>
-<tr class="memdesc:af3914cf1da58ce0bc751da01a5bcc2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the velocities data from an Eigen vector.  <a href="classstate__representation_1_1_joint_velocities.html#af3914cf1da58ce0bc751da01a5bcc2d6">More...</a><br /></td></tr>
-<tr class="separator:af3914cf1da58ce0bc751da01a5bcc2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23f641ae14ca3aca8c09e3ba08dedb43"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a23f641ae14ca3aca8c09e3ba08dedb43">set_data</a> (const std::vector&lt; double &gt; &amp;<a class="el" href="classstate__representation_1_1_joint_velocities.html#a211eab16aeded78b2464a13d18133029">data</a>) override</td></tr>
-<tr class="memdesc:a23f641ae14ca3aca8c09e3ba08dedb43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the velocities data from a std vector.  <a href="classstate__representation_1_1_joint_velocities.html#a23f641ae14ca3aca8c09e3ba08dedb43">More...</a><br /></td></tr>
-<tr class="separator:a23f641ae14ca3aca8c09e3ba08dedb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7c6ab203b74b9349649e2cd83979112"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ad7c6ab203b74b9349649e2cd83979112">clamp</a> (double max_absolute_value, double noise_ratio=0.)</td></tr>
-<tr class="memdesc:ad7c6ab203b74b9349649e2cd83979112"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the velocity to the values in argument.  <a href="classstate__representation_1_1_joint_velocities.html#ad7c6ab203b74b9349649e2cd83979112">More...</a><br /></td></tr>
-<tr class="separator:ad7c6ab203b74b9349649e2cd83979112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88ddadbe567a4dc98f105379a61f267e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a88ddadbe567a4dc98f105379a61f267e">clamped</a> (double max_absolute_value, double noise_ratio=0.) const</td></tr>
-<tr class="memdesc:a88ddadbe567a4dc98f105379a61f267e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the velocity clamped to the values in argument.  <a href="classstate__representation_1_1_joint_velocities.html#a88ddadbe567a4dc98f105379a61f267e">More...</a><br /></td></tr>
-<tr class="separator:a88ddadbe567a4dc98f105379a61f267e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24479e230b5f035545696dc7a7ac88e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a24479e230b5f035545696dc7a7ac88e3">clamp</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array)</td></tr>
-<tr class="memdesc:a24479e230b5f035545696dc7a7ac88e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the velocity to the values in argument.  <a href="classstate__representation_1_1_joint_velocities.html#a24479e230b5f035545696dc7a7ac88e3">More...</a><br /></td></tr>
-<tr class="separator:a24479e230b5f035545696dc7a7ac88e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa05ed6b820afc20f3d176f4218681a7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#aa05ed6b820afc20f3d176f4218681a7b">clamped</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array) const</td></tr>
-<tr class="memdesc:aa05ed6b820afc20f3d176f4218681a7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the velocity clamped to the values in argument.  <a href="classstate__representation_1_1_joint_velocities.html#aa05ed6b820afc20f3d176f4218681a7b">More...</a><br /></td></tr>
-<tr class="separator:aa05ed6b820afc20f3d176f4218681a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:acdfafaecc93338bcb5280eb6d71330c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c1c5a09c150b327f23c094699520e1f"><td class="memItemLeft" align="right" valign="top"><a id="a7c1c5a09c150b327f23c094699520e1f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a7c1c5a09c150b327f23c094699520e1f">JointAccelerations</a> ()=default</td></tr>
+<tr class="memdesc:a7c1c5a09c150b327f23c094699520e1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor. <br /></td></tr>
+<tr class="separator:a7c1c5a09c150b327f23c094699520e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e1d2a619bf140e19a82e292adf3e60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a02e1d2a619bf140e19a82e292adf3e60">JointAccelerations</a> (const std::string &amp;robot_name, unsigned int nb_joints=0)</td></tr>
+<tr class="memdesc:a02e1d2a619bf140e19a82e292adf3e60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and number of joints provided.  <a href="classstate__representation_1_1_joint_accelerations.html#a02e1d2a619bf140e19a82e292adf3e60">More...</a><br /></td></tr>
+<tr class="separator:a02e1d2a619bf140e19a82e292adf3e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ce31cc05f09ee16e9022219843c024a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a8ce31cc05f09ee16e9022219843c024a">JointAccelerations</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
+<tr class="memdesc:a8ce31cc05f09ee16e9022219843c024a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and list of joint names provided.  <a href="classstate__representation_1_1_joint_accelerations.html#a8ce31cc05f09ee16e9022219843c024a">More...</a><br /></td></tr>
+<tr class="separator:a8ce31cc05f09ee16e9022219843c024a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86651c6eb5be0f37e2b86741ccef10c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a86651c6eb5be0f37e2b86741ccef10c2">JointAccelerations</a> (const std::string &amp;robot_name, const Eigen::VectorXd &amp;accelerations)</td></tr>
+<tr class="memdesc:a86651c6eb5be0f37e2b86741ccef10c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name and acceleration values provided.  <a href="classstate__representation_1_1_joint_accelerations.html#a86651c6eb5be0f37e2b86741ccef10c2">More...</a><br /></td></tr>
+<tr class="separator:a86651c6eb5be0f37e2b86741ccef10c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fbccdfc993df1559adfb815de62d0ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a9fbccdfc993df1559adfb815de62d0ca">JointAccelerations</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names, const Eigen::VectorXd &amp;accelerations)</td></tr>
+<tr class="memdesc:a9fbccdfc993df1559adfb815de62d0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with name, a list of joint names and accelerations values provided.  <a href="classstate__representation_1_1_joint_accelerations.html#a9fbccdfc993df1559adfb815de62d0ca">More...</a><br /></td></tr>
+<tr class="separator:a9fbccdfc993df1559adfb815de62d0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5372db406c7a4107de261923113067e"><td class="memItemLeft" align="right" valign="top"><a id="ad5372db406c7a4107de261923113067e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#ad5372db406c7a4107de261923113067e">JointAccelerations</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:ad5372db406c7a4107de261923113067e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
+<tr class="separator:ad5372db406c7a4107de261923113067e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c9fe7af7ccba7a3d947b3b27a36db9"><td class="memItemLeft" align="right" valign="top"><a id="aa9c9fe7af7ccba7a3d947b3b27a36db9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#aa9c9fe7af7ccba7a3d947b3b27a36db9">JointAccelerations</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &amp;state)</td></tr>
+<tr class="memdesc:aa9c9fe7af7ccba7a3d947b3b27a36db9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor from a <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a>. <br /></td></tr>
+<tr class="separator:aa9c9fe7af7ccba7a3d947b3b27a36db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a108e7fe74d454d88a6dcdc708b8213c1"><td class="memItemLeft" align="right" valign="top"><a id="a108e7fe74d454d88a6dcdc708b8213c1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a108e7fe74d454d88a6dcdc708b8213c1">JointAccelerations</a> (const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
+<tr class="memdesc:a108e7fe74d454d88a6dcdc708b8213c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor from a <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> by considering that it is equivalent to dividing the velocities by 1 second. <br /></td></tr>
+<tr class="separator:a108e7fe74d454d88a6dcdc708b8213c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98532505b6a7f9f3efc41c5f5ebbb99c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a98532505b6a7f9f3efc41c5f5ebbb99c">operator=</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)=default</td></tr>
+<tr class="memdesc:a98532505b6a7f9f3efc41c5f5ebbb99c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy assignment operator that have to be defined to the custom assignment operator.  <a href="classstate__representation_1_1_joint_accelerations.html#a98532505b6a7f9f3efc41c5f5ebbb99c">More...</a><br /></td></tr>
+<tr class="separator:a98532505b6a7f9f3efc41c5f5ebbb99c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f41e966e03db34e6916b18d43396690"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a3f41e966e03db34e6916b18d43396690">operator+=</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:a3f41e966e03db34e6916b18d43396690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the += operator.  <a href="classstate__representation_1_1_joint_accelerations.html#a3f41e966e03db34e6916b18d43396690">More...</a><br /></td></tr>
+<tr class="separator:a3f41e966e03db34e6916b18d43396690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a83f81ae70a44a1208f9ee223391eee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a4a83f81ae70a44a1208f9ee223391eee">operator+</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations) const</td></tr>
+<tr class="memdesc:a4a83f81ae70a44a1208f9ee223391eee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the + operator.  <a href="classstate__representation_1_1_joint_accelerations.html#a4a83f81ae70a44a1208f9ee223391eee">More...</a><br /></td></tr>
+<tr class="separator:a4a83f81ae70a44a1208f9ee223391eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f49180e6caf9424863cc1fbae25aff7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a0f49180e6caf9424863cc1fbae25aff7">operator-=</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:a0f49180e6caf9424863cc1fbae25aff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the -= operator.  <a href="classstate__representation_1_1_joint_accelerations.html#a0f49180e6caf9424863cc1fbae25aff7">More...</a><br /></td></tr>
+<tr class="separator:a0f49180e6caf9424863cc1fbae25aff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66deeb6f4652af7d2f6cbc48a44fbee3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a66deeb6f4652af7d2f6cbc48a44fbee3">operator-</a> (const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations) const</td></tr>
+<tr class="memdesc:a66deeb6f4652af7d2f6cbc48a44fbee3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the - operator.  <a href="classstate__representation_1_1_joint_accelerations.html#a66deeb6f4652af7d2f6cbc48a44fbee3">More...</a><br /></td></tr>
+<tr class="separator:a66deeb6f4652af7d2f6cbc48a44fbee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8cfc375f79862b2a887f234bbc0a50a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#ab8cfc375f79862b2a887f234bbc0a50a">operator*=</a> (double lambda)</td></tr>
+<tr class="memdesc:ab8cfc375f79862b2a887f234bbc0a50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with a double gain.  <a href="classstate__representation_1_1_joint_accelerations.html#ab8cfc375f79862b2a887f234bbc0a50a">More...</a><br /></td></tr>
+<tr class="separator:ab8cfc375f79862b2a887f234bbc0a50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab566014976d058dcf767efd4dc0247fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#ab566014976d058dcf767efd4dc0247fb">operator*</a> (double lambda) const</td></tr>
+<tr class="memdesc:ab566014976d058dcf767efd4dc0247fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a double gain.  <a href="classstate__representation_1_1_joint_accelerations.html#ab566014976d058dcf767efd4dc0247fb">More...</a><br /></td></tr>
+<tr class="separator:ab566014976d058dcf767efd4dc0247fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49010876235be2ada4e69307ffdaf1d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a49010876235be2ada4e69307ffdaf1d1">operator*=</a> (const Eigen::ArrayXd &amp;lambda)</td></tr>
+<tr class="memdesc:a49010876235be2ada4e69307ffdaf1d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#a49010876235be2ada4e69307ffdaf1d1">More...</a><br /></td></tr>
+<tr class="separator:a49010876235be2ada4e69307ffdaf1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30cf55d2d181ae2ef8d5d5d6aff517a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a30cf55d2d181ae2ef8d5d5d6aff517a6">operator*</a> (const Eigen::ArrayXd &amp;lambda) const</td></tr>
+<tr class="memdesc:a30cf55d2d181ae2ef8d5d5d6aff517a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#a30cf55d2d181ae2ef8d5d5d6aff517a6">More...</a><br /></td></tr>
+<tr class="separator:a30cf55d2d181ae2ef8d5d5d6aff517a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18bd4d13303f8e1617391f63a3ae294b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a18bd4d13303f8e1617391f63a3ae294b">operator*=</a> (const Eigen::MatrixXd &amp;lambda)</td></tr>
+<tr class="memdesc:a18bd4d13303f8e1617391f63a3ae294b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#a18bd4d13303f8e1617391f63a3ae294b">More...</a><br /></td></tr>
+<tr class="separator:a18bd4d13303f8e1617391f63a3ae294b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af40105c182da686c46e201dd4bf976f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#af40105c182da686c46e201dd4bf976f9">operator*</a> (const Eigen::MatrixXd &amp;lambda) const</td></tr>
+<tr class="memdesc:af40105c182da686c46e201dd4bf976f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#af40105c182da686c46e201dd4bf976f9">More...</a><br /></td></tr>
+<tr class="separator:af40105c182da686c46e201dd4bf976f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d9ecaa6d8b8bce29194afd7ca86a2ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a5d9ecaa6d8b8bce29194afd7ca86a2ed">operator/=</a> (double lambda)</td></tr>
+<tr class="memdesc:a5d9ecaa6d8b8bce29194afd7ca86a2ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the /= operator with a scalar.  <a href="classstate__representation_1_1_joint_accelerations.html#a5d9ecaa6d8b8bce29194afd7ca86a2ed">More...</a><br /></td></tr>
+<tr class="separator:a5d9ecaa6d8b8bce29194afd7ca86a2ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4258b06ea216baa0d469fc0fb9f165a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#ab4258b06ea216baa0d469fc0fb9f165a">operator/</a> (double lambda) const</td></tr>
+<tr class="memdesc:ab4258b06ea216baa0d469fc0fb9f165a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the / operator with a scalar.  <a href="classstate__representation_1_1_joint_accelerations.html#ab4258b06ea216baa0d469fc0fb9f165a">More...</a><br /></td></tr>
+<tr class="separator:ab4258b06ea216baa0d469fc0fb9f165a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84d398de4ddfe8bdf535fe86554d97c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a84d398de4ddfe8bdf535fe86554d97c2">operator*</a> (const std::chrono::nanoseconds &amp;dt) const</td></tr>
+<tr class="memdesc:a84d398de4ddfe8bdf535fe86554d97c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a time period.  <a href="classstate__representation_1_1_joint_accelerations.html#a84d398de4ddfe8bdf535fe86554d97c2">More...</a><br /></td></tr>
+<tr class="separator:a84d398de4ddfe8bdf535fe86554d97c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0980f74a81f093743ea17f3f390017d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a0980f74a81f093743ea17f3f390017d0">copy</a> () const</td></tr>
+<tr class="memdesc:a0980f74a81f093743ea17f3f390017d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>.  <a href="classstate__representation_1_1_joint_accelerations.html#a0980f74a81f093743ea17f3f390017d0">More...</a><br /></td></tr>
+<tr class="separator:a0980f74a81f093743ea17f3f390017d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b2089ea515ca6dca559dd3eaeaa61f1"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a4b2089ea515ca6dca559dd3eaeaa61f1">data</a> () const override</td></tr>
+<tr class="memdesc:a4b2089ea515ca6dca559dd3eaeaa61f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the accelerations data as an Eigen vector.  <a href="classstate__representation_1_1_joint_accelerations.html#a4b2089ea515ca6dca559dd3eaeaa61f1">More...</a><br /></td></tr>
+<tr class="separator:a4b2089ea515ca6dca559dd3eaeaa61f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a698e8a7589a08ef01dcd3e5df24abaab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a698e8a7589a08ef01dcd3e5df24abaab">set_data</a> (const Eigen::VectorXd &amp;<a class="el" href="classstate__representation_1_1_joint_accelerations.html#a4b2089ea515ca6dca559dd3eaeaa61f1">data</a>) override</td></tr>
+<tr class="memdesc:a698e8a7589a08ef01dcd3e5df24abaab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the accelerations data from an Eigen vector.  <a href="classstate__representation_1_1_joint_accelerations.html#a698e8a7589a08ef01dcd3e5df24abaab">More...</a><br /></td></tr>
+<tr class="separator:a698e8a7589a08ef01dcd3e5df24abaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef0d434f01c54ece8f8930a8d450c91e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#aef0d434f01c54ece8f8930a8d450c91e">set_data</a> (const std::vector&lt; double &gt; &amp;<a class="el" href="classstate__representation_1_1_joint_accelerations.html#a4b2089ea515ca6dca559dd3eaeaa61f1">data</a>) override</td></tr>
+<tr class="memdesc:aef0d434f01c54ece8f8930a8d450c91e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the accelerations data from a std vector.  <a href="classstate__representation_1_1_joint_accelerations.html#aef0d434f01c54ece8f8930a8d450c91e">More...</a><br /></td></tr>
+<tr class="separator:aef0d434f01c54ece8f8930a8d450c91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9808a11813fc4b039e86dafa6f2b6eee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a9808a11813fc4b039e86dafa6f2b6eee">clamp</a> (double max_absolute_value, double noise_ratio=0.)</td></tr>
+<tr class="memdesc:a9808a11813fc4b039e86dafa6f2b6eee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the acceleration to the values in argument.  <a href="classstate__representation_1_1_joint_accelerations.html#a9808a11813fc4b039e86dafa6f2b6eee">More...</a><br /></td></tr>
+<tr class="separator:a9808a11813fc4b039e86dafa6f2b6eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a52999e6f74b01cc970f0fb3d1ce594"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a5a52999e6f74b01cc970f0fb3d1ce594">clamped</a> (double max_absolute_value, double noise_ratio=0.) const</td></tr>
+<tr class="memdesc:a5a52999e6f74b01cc970f0fb3d1ce594"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the acceleration clamped to the values in argument.  <a href="classstate__representation_1_1_joint_accelerations.html#a5a52999e6f74b01cc970f0fb3d1ce594">More...</a><br /></td></tr>
+<tr class="separator:a5a52999e6f74b01cc970f0fb3d1ce594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a837f1b46fb71955d0d456a3ce568acb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a837f1b46fb71955d0d456a3ce568acb2">clamp</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array)</td></tr>
+<tr class="memdesc:a837f1b46fb71955d0d456a3ce568acb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the acceleration to the values in argument.  <a href="classstate__representation_1_1_joint_accelerations.html#a837f1b46fb71955d0d456a3ce568acb2">More...</a><br /></td></tr>
+<tr class="separator:a837f1b46fb71955d0d456a3ce568acb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e7899298fd68662d5c2cfc0fe7e3fab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a9e7899298fd68662d5c2cfc0fe7e3fab">clamped</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array) const</td></tr>
+<tr class="memdesc:a9e7899298fd68662d5c2cfc0fe7e3fab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the acceleration clamped to the values in argument.  <a href="classstate__representation_1_1_joint_accelerations.html#a9e7899298fd68662d5c2cfc0fe7e3fab">More...</a><br /></td></tr>
+<tr class="separator:a9e7899298fd68662d5c2cfc0fe7e3fab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstate__representation_1_1_joint_state"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstate__representation_1_1_joint_state')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a></td></tr>
 <tr class="memitem:a2b7000fbaff48a17d35532f03e15b87f inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top"><a id="a2b7000fbaff48a17d35532f03e15b87f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a2b7000fbaff48a17d35532f03e15b87f">JointState</a> ()</td></tr>
@@ -425,18 +422,18 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2e902f6a17206b53bb43bc901d9105c1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a2e902f6a17206b53bb43bc901d9105c1">Zero</a> (const std::string &amp;robot_name, unsigned int nb_joints)</td></tr>
-<tr class="memdesc:a2e902f6a17206b53bb43bc901d9105c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>.  <a href="classstate__representation_1_1_joint_velocities.html#a2e902f6a17206b53bb43bc901d9105c1">More...</a><br /></td></tr>
-<tr class="separator:a2e902f6a17206b53bb43bc901d9105c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5458b4f9563c64d4a1af97555aa993e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ab5458b4f9563c64d4a1af97555aa993e">Zero</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
-<tr class="memdesc:ab5458b4f9563c64d4a1af97555aa993e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>.  <a href="classstate__representation_1_1_joint_velocities.html#ab5458b4f9563c64d4a1af97555aa993e">More...</a><br /></td></tr>
-<tr class="separator:ab5458b4f9563c64d4a1af97555aa993e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11272fd877a70a0dd808c47896c14f13"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a11272fd877a70a0dd808c47896c14f13">Random</a> (const std::string &amp;robot_name, unsigned int nb_joints)</td></tr>
-<tr class="memdesc:a11272fd877a70a0dd808c47896c14f13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the random <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>.  <a href="classstate__representation_1_1_joint_velocities.html#a11272fd877a70a0dd808c47896c14f13">More...</a><br /></td></tr>
-<tr class="separator:a11272fd877a70a0dd808c47896c14f13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fea12360082cfe87ebe80cdfe379efa"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a5fea12360082cfe87ebe80cdfe379efa">Random</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
-<tr class="memdesc:a5fea12360082cfe87ebe80cdfe379efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the random <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>.  <a href="classstate__representation_1_1_joint_velocities.html#a5fea12360082cfe87ebe80cdfe379efa">More...</a><br /></td></tr>
-<tr class="separator:a5fea12360082cfe87ebe80cdfe379efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8465b9399bf35b79138862fef0eafb6f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a8465b9399bf35b79138862fef0eafb6f">Zero</a> (const std::string &amp;robot_name, unsigned int nb_joints)</td></tr>
+<tr class="memdesc:a8465b9399bf35b79138862fef0eafb6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>.  <a href="classstate__representation_1_1_joint_accelerations.html#a8465b9399bf35b79138862fef0eafb6f">More...</a><br /></td></tr>
+<tr class="separator:a8465b9399bf35b79138862fef0eafb6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3d37c7e8a54c66e5e5dcd070846bd9d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#af3d37c7e8a54c66e5e5dcd070846bd9d">Zero</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
+<tr class="memdesc:af3d37c7e8a54c66e5e5dcd070846bd9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>.  <a href="classstate__representation_1_1_joint_accelerations.html#af3d37c7e8a54c66e5e5dcd070846bd9d">More...</a><br /></td></tr>
+<tr class="separator:af3d37c7e8a54c66e5e5dcd070846bd9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c283ac9fe84befc987b16811c330ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#af2c283ac9fe84befc987b16811c330ec">Random</a> (const std::string &amp;robot_name, unsigned int nb_joints)</td></tr>
+<tr class="memdesc:af2c283ac9fe84befc987b16811c330ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the random <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>.  <a href="classstate__representation_1_1_joint_accelerations.html#af2c283ac9fe84befc987b16811c330ec">More...</a><br /></td></tr>
+<tr class="separator:af2c283ac9fe84befc987b16811c330ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83e02e07290dfc94c5f455e626329cb4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a83e02e07290dfc94c5f455e626329cb4">Random</a> (const std::string &amp;robot_name, const std::vector&lt; std::string &gt; &amp;joint_names)</td></tr>
+<tr class="memdesc:a83e02e07290dfc94c5f455e626329cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the random <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>.  <a href="classstate__representation_1_1_joint_accelerations.html#a83e02e07290dfc94c5f455e626329cb4">More...</a><br /></td></tr>
+<tr class="separator:a83e02e07290dfc94c5f455e626329cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_classstate__representation_1_1_joint_state"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classstate__representation_1_1_joint_state')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a></td></tr>
 <tr class="memitem:a4cc5fdffbf317fd0f44c5146771d5149 inherit pub_static_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a4cc5fdffbf317fd0f44c5146771d5149">Zero</a> (const std::string &amp;robot_name, unsigned int nb_joints)</td></tr>
 <tr class="memdesc:a4cc5fdffbf317fd0f44c5146771d5149 inherit pub_static_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a>.  <a href="classstate__representation_1_1_joint_state.html#a4cc5fdffbf317fd0f44c5146771d5149">More...</a><br /></td></tr>
@@ -453,21 +450,20 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ac0c51ab0b7b246090adc59dbb29a2cbb"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#ac0c51ab0b7b246090adc59dbb29a2cbb">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:ac0c51ab0b7b246090adc59dbb29a2cbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the ostream operator for printing.  <a href="classstate__representation_1_1_joint_velocities.html#ac0c51ab0b7b246090adc59dbb29a2cbb">More...</a><br /></td></tr>
-<tr class="separator:ac0c51ab0b7b246090adc59dbb29a2cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6027e53a835a4097a79a203eaba8c7af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a6027e53a835a4097a79a203eaba8c7af">operator*</a> (double lambda, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:a6027e53a835a4097a79a203eaba8c7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a scalar.  <a href="classstate__representation_1_1_joint_velocities.html#a6027e53a835a4097a79a203eaba8c7af">More...</a><br /></td></tr>
-<tr class="separator:a6027e53a835a4097a79a203eaba8c7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff809445aa7add24233a9523bde16c20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#aff809445aa7add24233a9523bde16c20">operator*</a> (const Eigen::ArrayXd &amp;lambda, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:aff809445aa7add24233a9523bde16c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with an array of gains.  <a href="classstate__representation_1_1_joint_velocities.html#aff809445aa7add24233a9523bde16c20">More...</a><br /></td></tr>
-<tr class="separator:aff809445aa7add24233a9523bde16c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3159447161eaffc7066fd0f27f4c40cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#a3159447161eaffc7066fd0f27f4c40cb">operator*</a> (const Eigen::MatrixXd &amp;lambda, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:a3159447161eaffc7066fd0f27f4c40cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_velocities.html#a3159447161eaffc7066fd0f27f4c40cb">More...</a><br /></td></tr>
-<tr class="separator:a3159447161eaffc7066fd0f27f4c40cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af697d30df830ad290f79aa39a4b9fa83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_velocities.html#af697d30df830ad290f79aa39a4b9fa83">operator*</a> (const std::chrono::nanoseconds &amp;dt, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;velocities)</td></tr>
-<tr class="memdesc:af697d30df830ad290f79aa39a4b9fa83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a time period.  <a href="classstate__representation_1_1_joint_velocities.html#af697d30df830ad290f79aa39a4b9fa83">More...</a><br /></td></tr>
-<tr class="separator:af697d30df830ad290f79aa39a4b9fa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69f632cadc0915755b3f556b55cbe90b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a69f632cadc0915755b3f556b55cbe90b">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:a69f632cadc0915755b3f556b55cbe90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the ostream operator for printing.  <a href="classstate__representation_1_1_joint_accelerations.html#a69f632cadc0915755b3f556b55cbe90b">More...</a><br /></td></tr>
+<tr class="separator:a69f632cadc0915755b3f556b55cbe90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68dc915564c82c8a5adafea6fc67e076"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a68dc915564c82c8a5adafea6fc67e076">operator*</a> (double lambda, const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:a68dc915564c82c8a5adafea6fc67e076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a scalar.  <a href="classstate__representation_1_1_joint_accelerations.html#a68dc915564c82c8a5adafea6fc67e076">More...</a><br /></td></tr>
+<tr class="separator:a68dc915564c82c8a5adafea6fc67e076"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c0efdc449eac7f444763b965bc42768"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a3c0efdc449eac7f444763b965bc42768">operator*</a> (const Eigen::ArrayXd &amp;lambda, const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:a3c0efdc449eac7f444763b965bc42768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with an array of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#a3c0efdc449eac7f444763b965bc42768">More...</a><br /></td></tr>
+<tr class="separator:a3c0efdc449eac7f444763b965bc42768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1792594fa676e57561a79688e3216c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#ad1792594fa676e57561a79688e3216c6">operator*</a> (const Eigen::MatrixXd &amp;lambda, const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="memdesc:ad1792594fa676e57561a79688e3216c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_accelerations.html#ad1792594fa676e57561a79688e3216c6">More...</a><br /></td></tr>
+<tr class="separator:ad1792594fa676e57561a79688e3216c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a881a77ff05c34d8749015f97d2f8df06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_accelerations.html#a881a77ff05c34d8749015f97d2f8df06">operator*</a> (const std::chrono::nanoseconds &amp;dt, const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;accelerations)</td></tr>
+<tr class="separator:a881a77ff05c34d8749015f97d2f8df06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -486,10 +482,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a461a8348a98cc7cc155886c72c9f409b inherit pro_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class to define velocities of the joints. </p>
+<div class="textblock"><p>Class to define accelerations of the joints. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="acff0d8f3f4bd1d8c038c3d49d285df86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acff0d8f3f4bd1d8c038c3d49d285df86">&#9670;&nbsp;</a></span>JointVelocities() <span class="overload">[1/4]</span></h2>
+<a id="a02e1d2a619bf140e19a82e292adf3e60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e1d2a619bf140e19a82e292adf3e60">&#9670;&nbsp;</a></span>JointAccelerations() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -498,7 +494,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">state_representation::JointVelocities::JointVelocities </td>
+          <td class="memname">state_representation::JointAccelerations::JointAccelerations </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -528,8 +524,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a50804d2ed381baab45cc5ece6d0d1192"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50804d2ed381baab45cc5ece6d0d1192">&#9670;&nbsp;</a></span>JointVelocities() <span class="overload">[2/4]</span></h2>
+<a id="a8ce31cc05f09ee16e9022219843c024a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ce31cc05f09ee16e9022219843c024a">&#9670;&nbsp;</a></span>JointAccelerations() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -538,7 +534,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">state_representation::JointVelocities::JointVelocities </td>
+          <td class="memname">state_representation::JointAccelerations::JointAccelerations </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -568,8 +564,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a04b34b9eb7913044db97e7f698af2351"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04b34b9eb7913044db97e7f698af2351">&#9670;&nbsp;</a></span>JointVelocities() <span class="overload">[3/4]</span></h2>
+<a id="a86651c6eb5be0f37e2b86741ccef10c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86651c6eb5be0f37e2b86741ccef10c2">&#9670;&nbsp;</a></span>JointAccelerations() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -578,7 +574,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">state_representation::JointVelocities::JointVelocities </td>
+          <td class="memname">state_representation::JointAccelerations::JointAccelerations </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -587,7 +583,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -602,14 +598,14 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor with name and velocity values provided. </p>
+<p>Constructor with name and acceleration values provided. </p>
 <p>name the name of the state</p>
-<p>velocities the vector of velocities </p>
+<p>accelerations the vector of accelerations </p>
 
 </div>
 </div>
-<a id="ab10cea6aa51c41014df0d1155d368dc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab10cea6aa51c41014df0d1155d368dc1">&#9670;&nbsp;</a></span>JointVelocities() <span class="overload">[4/4]</span></h2>
+<a id="a9fbccdfc993df1559adfb815de62d0ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fbccdfc993df1559adfb815de62d0ca">&#9670;&nbsp;</a></span>JointAccelerations() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -618,7 +614,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">state_representation::JointVelocities::JointVelocities </td>
+          <td class="memname">state_representation::JointAccelerations::JointAccelerations </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -633,7 +629,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -648,22 +644,22 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor with name, a list of joint names and velocity values provided. </p>
+<p>Constructor with name, a list of joint names and accelerations values provided. </p>
 <p>name the name of the state</p>
 <p>joint_names list of joint names</p>
-<p>velocities the vector of velocities </p>
+<p>accelerations the vector of accelerations </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a24479e230b5f035545696dc7a7ac88e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24479e230b5f035545696dc7a7ac88e3">&#9670;&nbsp;</a></span>clamp() <span class="overload">[1/2]</span></h2>
+<a id="a837f1b46fb71955d0d456a3ce568acb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a837f1b46fb71955d0d456a3ce568acb2">&#9670;&nbsp;</a></span>clamp() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void state_representation::JointVelocities::clamp </td>
+          <td class="memname">void state_representation::JointAccelerations::clamp </td>
           <td>(</td>
           <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
           <td class="paramname"><em>max_absolute_value_array</em>, </td>
@@ -682,25 +678,25 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clamp inplace the magnitude of the velocity to the values in argument. </p>
+<p>Clamp inplace the magnitude of the acceleration to the values in argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum magnitude of velocity for each joint </td></tr>
-    <tr><td class="paramname">noise_ratio_array</td><td>if provided, this value will be used to apply a dead zone under which the velocity will be set to 0 </td></tr>
+    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum magnitude of acceleration for each joint </td></tr>
+    <tr><td class="paramname">noise_ratio_array</td><td>if provided, this value will be used to apply a dead zone under which the acceleration will be set to 0 </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ad7c6ab203b74b9349649e2cd83979112"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7c6ab203b74b9349649e2cd83979112">&#9670;&nbsp;</a></span>clamp() <span class="overload">[2/2]</span></h2>
+<a id="a9808a11813fc4b039e86dafa6f2b6eee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9808a11813fc4b039e86dafa6f2b6eee">&#9670;&nbsp;</a></span>clamp() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void state_representation::JointVelocities::clamp </td>
+          <td class="memname">void state_representation::JointAccelerations::clamp </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>max_absolute_value</em>, </td>
@@ -719,25 +715,25 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clamp inplace the magnitude of the velocity to the values in argument. </p>
+<p>Clamp inplace the magnitude of the acceleration to the values in argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_absolute_value</td><td>the maximum magnitude of velocity for all the joints </td></tr>
-    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone under which the velocity will be set to 0 </td></tr>
+    <tr><td class="paramname">max_absolute_value</td><td>the maximum magnitude of acceleration for all the joints </td></tr>
+    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone under which the acceleration will be set to 0 </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="aa05ed6b820afc20f3d176f4218681a7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa05ed6b820afc20f3d176f4218681a7b">&#9670;&nbsp;</a></span>clamped() <span class="overload">[1/2]</span></h2>
+<a id="a9e7899298fd68662d5c2cfc0fe7e3fab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e7899298fd68662d5c2cfc0fe7e3fab">&#9670;&nbsp;</a></span>clamped() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::clamped </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::clamped </td>
           <td>(</td>
           <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
           <td class="paramname"><em>max_absolute_value_array</em>, </td>
@@ -756,26 +752,26 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Return the velocity clamped to the values in argument. </p>
+<p>Return the acceleration clamped to the values in argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum magnitude of velocity for each joint </td></tr>
-    <tr><td class="paramname">noise_ratio_array</td><td>if provided, this value will be used to apply a dead zone under which the velocity will be set to 0 </td></tr>
+    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum magnitude of acceleration for each joint </td></tr>
+    <tr><td class="paramname">noise_ratio_array</td><td>if provided, this value will be used to apply a dead zone under which the acceleration will be set to 0 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> </dd></dl>
 
 </div>
 </div>
-<a id="a88ddadbe567a4dc98f105379a61f267e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88ddadbe567a4dc98f105379a61f267e">&#9670;&nbsp;</a></span>clamped() <span class="overload">[2/2]</span></h2>
+<a id="a5a52999e6f74b01cc970f0fb3d1ce594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a52999e6f74b01cc970f0fb3d1ce594">&#9670;&nbsp;</a></span>clamped() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::clamped </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::clamped </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>max_absolute_value</em>, </td>
@@ -794,26 +790,26 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Return the velocity clamped to the values in argument. </p>
+<p>Return the acceleration clamped to the values in argument. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_absolute_value</td><td>the maximum magnitude of velocity for all the joints </td></tr>
-    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone under which the velocity will be set to 0 </td></tr>
+    <tr><td class="paramname">max_absolute_value</td><td>the maximum magnitude of acceleration for all the joints </td></tr>
+    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone under which the acceleration will be set to 0 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> </dd></dl>
 
 </div>
 </div>
-<a id="a8c866b57ad496d93b11d616e5df0ea95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c866b57ad496d93b11d616e5df0ea95">&#9670;&nbsp;</a></span>copy()</h2>
+<a id="a0980f74a81f093743ea17f3f390017d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0980f74a81f093743ea17f3f390017d0">&#9670;&nbsp;</a></span>copy()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::copy </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::copy </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -821,13 +817,13 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Return a copy of the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>. </p>
+<p>Return a copy of the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>the copy </dd></dl>
 
 </div>
 </div>
-<a id="a211eab16aeded78b2464a13d18133029"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a211eab16aeded78b2464a13d18133029">&#9670;&nbsp;</a></span>data()</h2>
+<a id="a4b2089ea515ca6dca559dd3eaeaa61f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b2089ea515ca6dca559dd3eaeaa61f1">&#9670;&nbsp;</a></span>data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -836,7 +832,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::VectorXd state_representation::JointVelocities::data </td>
+          <td class="memname">Eigen::VectorXd state_representation::JointAccelerations::data </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -849,21 +845,21 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the velocities data as an Eigen vector. </p>
-<dl class="section return"><dt>Returns</dt><dd>the velocities data vector </dd></dl>
+<p>Returns the accelerations data as an Eigen vector. </p>
+<dl class="section return"><dt>Returns</dt><dd>the accelerations data vector </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classstate__representation_1_1_joint_state.html#afc0197b9568761e8611eafd033f24773">state_representation::JointState</a>.</p>
 
 </div>
 </div>
-<a id="a3223af23eeb75be57119bb7605780f22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3223af23eeb75be57119bb7605780f22">&#9670;&nbsp;</a></span>operator*() <span class="overload">[1/4]</span></h2>
+<a id="a30cf55d2d181ae2ef8d5d5d6aff517a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30cf55d2d181ae2ef8d5d5d6aff517a6">&#9670;&nbsp;</a></span>operator*() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator* </td>
           <td>(</td>
           <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -879,18 +875,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="ad7dc6fcd2e8a69b10f279e099a81c43a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7dc6fcd2e8a69b10f279e099a81c43a">&#9670;&nbsp;</a></span>operator*() <span class="overload">[2/4]</span></h2>
+<a id="af40105c182da686c46e201dd4bf976f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af40105c182da686c46e201dd4bf976f9">&#9670;&nbsp;</a></span>operator*() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator* </td>
           <td>(</td>
           <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -906,18 +902,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a29b42934e821d5800e1ecd4245c6740f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29b42934e821d5800e1ecd4245c6740f">&#9670;&nbsp;</a></span>operator*() <span class="overload">[3/4]</span></h2>
+<a id="a84d398de4ddfe8bdf535fe86554d97c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84d398de4ddfe8bdf535fe86554d97c2">&#9670;&nbsp;</a></span>operator*() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a> state_representation::JointVelocities::operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointAccelerations::operator* </td>
           <td>(</td>
           <td class="paramtype">const std::chrono::nanoseconds &amp;&#160;</td>
           <td class="paramname"><em>dt</em></td><td>)</td>
@@ -933,18 +929,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> corresponding to the displacement over the time period </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> corresponding to the velocities over the time period </dd></dl>
 
 </div>
 </div>
-<a id="aecfe3439a85627a68e54f57f8798a392"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecfe3439a85627a68e54f57f8798a392">&#9670;&nbsp;</a></span>operator*() <span class="overload">[4/4]</span></h2>
+<a id="ab566014976d058dcf767efd4dc0247fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab566014976d058dcf767efd4dc0247fb">&#9670;&nbsp;</a></span>operator*() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator* </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -960,18 +956,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a42e4484e7c1be7d4f269563a68f5fd3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42e4484e7c1be7d4f269563a68f5fd3f">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[1/3]</span></h2>
+<a id="a49010876235be2ada4e69307ffdaf1d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49010876235be2ada4e69307ffdaf1d1">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator*= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator*= </td>
           <td>(</td>
           <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -987,18 +983,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="ae7495bb31deb4053bfb8bb08ef5a76ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7495bb31deb4053bfb8bb08ef5a76ec">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[2/3]</span></h2>
+<a id="a18bd4d13303f8e1617391f63a3ae294b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18bd4d13303f8e1617391f63a3ae294b">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator*= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator*= </td>
           <td>(</td>
           <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -1014,18 +1010,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a7186617f9428ca4c874e1a86d9fa86d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7186617f9428ca4c874e1a86d9fa86d7">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[3/3]</span></h2>
+<a id="ab8cfc375f79862b2a887f234bbc0a50a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8cfc375f79862b2a887f234bbc0a50a">&#9670;&nbsp;</a></span>operator*=() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator*= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator*= </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -1041,21 +1037,21 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> multiplied by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> multiplied by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a0a0b7f789a5563b7ed0d2b912bc58e3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a0b7f789a5563b7ed0d2b912bc58e3c">&#9670;&nbsp;</a></span>operator+()</h2>
+<a id="a4a83f81ae70a44a1208f9ee223391eee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a83f81ae70a44a1208f9ee223391eee">&#9670;&nbsp;</a></span>operator+()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator+ </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator+ </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1064,25 +1060,25 @@ Additional Inherited Members</h2></td></tr>
 <p>Overload the + operator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">velocities</td><td><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> to add </td></tr>
+    <tr><td class="paramname">accelerations</td><td><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> to add </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> added the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> given in argument </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> added the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> given in argument </dd></dl>
 
 </div>
 </div>
-<a id="add89e69e6edb40efd4c682ccaf952b9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add89e69e6edb40efd4c682ccaf952b9e">&#9670;&nbsp;</a></span>operator+=()</h2>
+<a id="a3f41e966e03db34e6916b18d43396690"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f41e966e03db34e6916b18d43396690">&#9670;&nbsp;</a></span>operator+=()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator+= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator+= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1091,25 +1087,25 @@ Additional Inherited Members</h2></td></tr>
 <p>Overload the += operator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">velocities</td><td><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> to add </td></tr>
+    <tr><td class="paramname">accelerations</td><td><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> to add </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> added the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> given in argument </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> added the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> given in argument </dd></dl>
 
 </div>
 </div>
-<a id="ae78f1cb995797201ef1cce47365a7852"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae78f1cb995797201ef1cce47365a7852">&#9670;&nbsp;</a></span>operator-()</h2>
+<a id="a66deeb6f4652af7d2f6cbc48a44fbee3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66deeb6f4652af7d2f6cbc48a44fbee3">&#9670;&nbsp;</a></span>operator-()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator- </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator- </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1118,25 +1114,25 @@ Additional Inherited Members</h2></td></tr>
 <p>Overload the - operator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">velocities</td><td><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> to subtract </td></tr>
+    <tr><td class="paramname">accelerations</td><td><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> to subtract </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> subtracted the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> given in argument </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> subtracted the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> given in argument </dd></dl>
 
 </div>
 </div>
-<a id="a7ef4be2eb54e834b36bd5addcadfaba5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ef4be2eb54e834b36bd5addcadfaba5">&#9670;&nbsp;</a></span>operator-=()</h2>
+<a id="a0f49180e6caf9424863cc1fbae25aff7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f49180e6caf9424863cc1fbae25aff7">&#9670;&nbsp;</a></span>operator-=()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator-= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator-= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1145,49 +1141,22 @@ Additional Inherited Members</h2></td></tr>
 <p>Overload the -= operator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">velocities</td><td><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> to subtract </td></tr>
+    <tr><td class="paramname">accelerations</td><td><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> to subtract </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> subtracted the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> given in argument </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> subtracted the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> given in argument </dd></dl>
 
 </div>
 </div>
-<a id="a90c90dec8ae9a90bd11e44cd040f6cdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90c90dec8ae9a90bd11e44cd040f6cdd">&#9670;&nbsp;</a></span>operator/() <span class="overload">[1/2]</span></h2>
+<a id="ab4258b06ea216baa0d469fc0fb9f165a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4258b06ea216baa0d469fc0fb9f165a">&#9670;&nbsp;</a></span>operator/()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointVelocities::operator/ </td>
-          <td>(</td>
-          <td class="paramtype">const std::chrono::nanoseconds &amp;&#160;</td>
-          <td class="paramname"><em>dt</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Overload the / operator with a time period. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">dt</td><td>the time period to multiply with </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> corresponding to the accelerations over the time period </dd></dl>
-
-</div>
-</div>
-<a id="afaceb1fdae0af9279f1e1989d8c4c493"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afaceb1fdae0af9279f1e1989d8c4c493">&#9670;&nbsp;</a></span>operator/() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::operator/ </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::operator/ </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -1203,18 +1172,18 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> divided by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> divided by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a3dc7a61aea3b17fe598947c2266c4681"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3dc7a61aea3b17fe598947c2266c4681">&#9670;&nbsp;</a></span>operator/=()</h2>
+<a id="a5d9ecaa6d8b8bce29194afd7ca86a2ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d9ecaa6d8b8bce29194afd7ca86a2ed">&#9670;&nbsp;</a></span>operator/=()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp; state_representation::JointVelocities::operator/= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp; state_representation::JointAccelerations::operator/= </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lambda</em></td><td>)</td>
@@ -1230,12 +1199,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> divided by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> divided by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a94f4ab12e4799463ec15156adba9846a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94f4ab12e4799463ec15156adba9846a">&#9670;&nbsp;</a></span>operator=()</h2>
+<a id="a98532505b6a7f9f3efc41c5f5ebbb99c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98532505b6a7f9f3efc41c5f5ebbb99c">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1244,10 +1213,10 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a>&amp; state_representation::JointVelocities::operator= </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a>&amp; state_representation::JointAccelerations::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1261,7 +1230,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Copy assignment operator that have to be defined to the custom assignment operator. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">velocities</td><td>the state with value to assign </td></tr>
+    <tr><td class="paramname">accelerations</td><td>the state with value to assign </td></tr>
   </table>
   </dd>
 </dl>
@@ -1269,8 +1238,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a5fea12360082cfe87ebe80cdfe379efa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fea12360082cfe87ebe80cdfe379efa">&#9670;&nbsp;</a></span>Random() <span class="overload">[1/2]</span></h2>
+<a id="a83e02e07290dfc94c5f455e626329cb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83e02e07290dfc94c5f455e626329cb4">&#9670;&nbsp;</a></span>Random() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1279,7 +1248,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::Random </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::Random </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -1303,7 +1272,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor for the random <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>. </p>
+<p>Constructor for the random <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">robot_name</td><td>the name of the associated robot </td></tr>
@@ -1311,12 +1280,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> with random velocities values </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> with random accelerations values </dd></dl>
 
 </div>
 </div>
-<a id="a11272fd877a70a0dd808c47896c14f13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11272fd877a70a0dd808c47896c14f13">&#9670;&nbsp;</a></span>Random() <span class="overload">[2/2]</span></h2>
+<a id="af2c283ac9fe84befc987b16811c330ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2c283ac9fe84befc987b16811c330ec">&#9670;&nbsp;</a></span>Random() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1325,7 +1294,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::Random </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::Random </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -1349,7 +1318,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor for the random <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>. </p>
+<p>Constructor for the random <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">robot_name</td><td>the name of the associated robot </td></tr>
@@ -1357,12 +1326,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> with random velocities values </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> with random accelerations values </dd></dl>
 
 </div>
 </div>
-<a id="af3914cf1da58ce0bc751da01a5bcc2d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3914cf1da58ce0bc751da01a5bcc2d6">&#9670;&nbsp;</a></span>set_data() <span class="overload">[1/2]</span></h2>
+<a id="a698e8a7589a08ef01dcd3e5df24abaab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a698e8a7589a08ef01dcd3e5df24abaab">&#9670;&nbsp;</a></span>set_data() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1371,7 +1340,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void state_representation::JointVelocities::set_data </td>
+          <td class="memname">void state_representation::JointAccelerations::set_data </td>
           <td>(</td>
           <td class="paramtype">const Eigen::VectorXd &amp;&#160;</td>
           <td class="paramname"><em>data</em></td><td>)</td>
@@ -1385,10 +1354,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set the velocities data from an Eigen vector. </p>
+<p>Set the accelerations data from an Eigen vector. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the</td><td>velocities data vector </td></tr>
+    <tr><td class="paramname">the</td><td>accelerations data vector </td></tr>
   </table>
   </dd>
 </dl>
@@ -1397,8 +1366,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a23f641ae14ca3aca8c09e3ba08dedb43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23f641ae14ca3aca8c09e3ba08dedb43">&#9670;&nbsp;</a></span>set_data() <span class="overload">[2/2]</span></h2>
+<a id="aef0d434f01c54ece8f8930a8d450c91e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef0d434f01c54ece8f8930a8d450c91e">&#9670;&nbsp;</a></span>set_data() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1407,7 +1376,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void state_representation::JointVelocities::set_data </td>
+          <td class="memname">void state_representation::JointAccelerations::set_data </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>data</em></td><td>)</td>
@@ -1421,10 +1390,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set the velocities data from a std vector. </p>
+<p>Set the accelerations data from a std vector. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">the</td><td>velocities data vector </td></tr>
+    <tr><td class="paramname">the</td><td>accelerations data vector </td></tr>
   </table>
   </dd>
 </dl>
@@ -1433,8 +1402,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5458b4f9563c64d4a1af97555aa993e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5458b4f9563c64d4a1af97555aa993e">&#9670;&nbsp;</a></span>Zero() <span class="overload">[1/2]</span></h2>
+<a id="af3d37c7e8a54c66e5e5dcd070846bd9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3d37c7e8a54c66e5e5dcd070846bd9d">&#9670;&nbsp;</a></span>Zero() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1443,7 +1412,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::Zero </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::Zero </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -1467,7 +1436,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>. </p>
+<p>Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">robot_name</td><td>the name of the associated robot </td></tr>
@@ -1475,12 +1444,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> with zero velocities values </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> with zero accelerations values </dd></dl>
 
 </div>
 </div>
-<a id="a2e902f6a17206b53bb43bc901d9105c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e902f6a17206b53bb43bc901d9105c1">&#9670;&nbsp;</a></span>Zero() <span class="overload">[2/2]</span></h2>
+<a id="a8465b9399bf35b79138862fef0eafb6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8465b9399bf35b79138862fef0eafb6f">&#9670;&nbsp;</a></span>Zero() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1489,7 +1458,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> state_representation::JointVelocities::Zero </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> state_representation::JointAccelerations::Zero </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>robot_name</em>, </td>
@@ -1513,7 +1482,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a>. </p>
+<p>Constructor for the zero <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">robot_name</td><td>the name of the associated robot </td></tr>
@@ -1521,13 +1490,13 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> with zero velocities values </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> with zero accelerations values </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="aff809445aa7add24233a9523bde16c20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff809445aa7add24233a9523bde16c20">&#9670;&nbsp;</a></span>operator* <span class="overload">[1/4]</span></h2>
+<a id="a3c0efdc449eac7f444763b965bc42768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c0efdc449eac7f444763b965bc42768">&#9670;&nbsp;</a></span>operator* <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1536,7 +1505,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> operator* </td>
           <td>(</td>
           <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em>, </td>
@@ -1544,8 +1513,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1567,12 +1536,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
 </div>
 </div>
-<a id="a3159447161eaffc7066fd0f27f4c40cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3159447161eaffc7066fd0f27f4c40cb">&#9670;&nbsp;</a></span>operator* <span class="overload">[2/4]</span></h2>
+<a id="ad1792594fa676e57561a79688e3216c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1792594fa676e57561a79688e3216c6">&#9670;&nbsp;</a></span>operator* <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1581,7 +1550,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> operator* </td>
           <td>(</td>
           <td class="paramtype">const Eigen::MatrixXd &amp;&#160;</td>
           <td class="paramname"><em>lambda</em>, </td>
@@ -1589,8 +1558,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1612,12 +1581,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
 </div>
 </div>
-<a id="af697d30df830ad290f79aa39a4b9fa83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af697d30df830ad290f79aa39a4b9fa83">&#9670;&nbsp;</a></span>operator* <span class="overload">[3/4]</span></h2>
+<a id="a881a77ff05c34d8749015f97d2f8df06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a881a77ff05c34d8749015f97d2f8df06">&#9670;&nbsp;</a></span>operator* <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1626,7 +1595,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a> operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> operator* </td>
           <td>(</td>
           <td class="paramtype">const std::chrono::nanoseconds &amp;&#160;</td>
           <td class="paramname"><em>dt</em>, </td>
@@ -1634,8 +1603,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1649,20 +1618,18 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Overload the * operator with a time period. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dt</td><td>the time period to multiply with </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> corresponding to the displacement over the time period </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> corresponding to the velocities over the time period </dd></dl>
 
 </div>
 </div>
-<a id="a6027e53a835a4097a79a203eaba8c7af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6027e53a835a4097a79a203eaba8c7af">&#9670;&nbsp;</a></span>operator* <span class="overload">[4/4]</span></h2>
+<a id="a68dc915564c82c8a5adafea6fc67e076"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68dc915564c82c8a5adafea6fc67e076">&#9670;&nbsp;</a></span>operator* <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1671,7 +1638,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> operator* </td>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> operator* </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lambda</em>, </td>
@@ -1679,8 +1646,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1702,12 +1669,12 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
 </div>
 </div>
-<a id="ac0c51ab0b7b246090adc59dbb29a2cbb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0c51ab0b7b246090adc59dbb29a2cbb">&#9670;&nbsp;</a></span>operator&lt;&lt;</h2>
+<a id="a69f632cadc0915755b3f556b55cbe90b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f632cadc0915755b3f556b55cbe90b">&#9670;&nbsp;</a></span>operator&lt;&lt;</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1724,8 +1691,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> &amp;&#160;</td>
-          <td class="paramname"><em>velocities</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_joint_accelerations.html">JointAccelerations</a> &amp;&#160;</td>
+          <td class="paramname"><em>accelerations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1753,8 +1720,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/github/workspace/source/state_representation/include/state_representation/robot/<a class="el" href="_joint_velocities_8hpp_source.html">JointVelocities.hpp</a></li>
-<li>/github/workspace/source/state_representation/src/robot/JointVelocities.cpp</li>
+<li>/github/workspace/source/state_representation/include/state_representation/robot/<a class="el" href="_joint_accelerations_8hpp_source.html">JointAccelerations.hpp</a></li>
+<li>/github/workspace/source/state_representation/src/robot/JointAccelerations.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

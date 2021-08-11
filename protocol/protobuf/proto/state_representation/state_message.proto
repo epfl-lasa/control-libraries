@@ -16,15 +16,15 @@ message StateMessage {
     SpatialState spatial_state = 2;
     CartesianState cartesian_state = 3;
     CartesianPose cartesian_pose = 4;
-    CartesianTwist cartesian_twist= 5;
+    CartesianTwist cartesian_twist = 5;
     CartesianWrench cartesian_wrench = 6;
     Jacobian jacobian = 7;
     JointState joint_state = 8;
     JointPositions joint_positions = 9;
     JointVelocities joint_velocities = 10;
+    JointAccelerations joint_accelerations = 14;
     JointTorques joint_torques = 11;
     Shape shape = 12;
     Ellipsoid ellipsoid = 13;
   }
 }
-

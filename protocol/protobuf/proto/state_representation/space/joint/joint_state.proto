@@ -25,6 +25,12 @@ message JointVelocities {
   repeated double velocities = 3;
 }
 
+message JointAccelerations {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double accelerations = 3;
+}
+
 message JointTorques {
   State state = 1;
   repeated string joint_names = 2;

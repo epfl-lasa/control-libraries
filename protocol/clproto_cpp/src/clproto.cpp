@@ -10,6 +10,7 @@
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/robot/JointPositions.hpp>
 #include <state_representation/robot/JointVelocities.hpp>
+#include <state_representation/robot/JointAccelerations.hpp>
 #include <state_representation/robot/JointTorques.hpp>
 #include <state_representation/geometry/Shape.hpp>
 #include <state_representation/geometry/Ellipsoid.hpp>
@@ -694,6 +695,50 @@ bool decode(const std::string& msg, JointVelocities& obj) {
     auto state = message.joint_velocities();
     obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
     obj.set_velocities(decoder(state.velocities()));
+    obj.set_empty(state.state().empty());
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+template<>
+std::string encode<JointAccelerations>(const JointAccelerations& obj);
+template<>
+JointAccelerations decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, JointAccelerations& obj);
+template<>
+std::string encode<JointAccelerations>(const JointAccelerations& obj) {
+  proto::StateMessage message;
+  proto::JointState joint_state = encoder(static_cast<JointState>(obj));
+  *message.mutable_joint_accelerations()->mutable_state() = joint_state.state();
+  *message.mutable_joint_accelerations()->mutable_joint_names() = joint_state.joint_names();
+  *message.mutable_joint_accelerations()->mutable_accelerations() = joint_state.accelerations();
+  return message.SerializeAsString();
+}
+template<>
+JointAccelerations decode(const std::string& msg) {
+  JointAccelerations obj;
+  if (!decode(msg, obj)) {
+    throw DecodingException("Could not decode the message into a JointAccelerations");
+  }
+  return obj;
+}
+template<>
+bool decode(const std::string& msg, JointAccelerations& obj) {
+  try {
+    proto::StateMessage message;
+    if (!(message.ParseFromString(msg)
+    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointAccelerations)) {
+      if (!message.mutable_joint_accelerations()->ParseFromString(msg)) {
+        return false;
+      }
+    }
+
+    auto state = message.joint_accelerations();
+    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
+    obj.set_accelerations(decoder(state.accelerations()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {

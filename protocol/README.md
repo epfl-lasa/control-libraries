@@ -32,7 +32,8 @@ COPY --from=ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest 
 RUN ldconfig
 ```
 
-Once `protoc` is installed, you can generate the bindings by running `make all` in the [protobuf](./protobuf) directory.
+Once `protoc` is installed, you can generate the bindings in the [protobuf](./protobuf) directory and the cmake target `clproto` in [clproto_cpp](./clproto_cpp) by running:
 
-Finally, build and install the cmake target `clproto` in [clproto_cpp](./clproto_cpp) to
-use the messaging library.
+```console
+(sudo) ./install.sh
+```

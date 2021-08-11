@@ -13,6 +13,7 @@ set(CORE_SOURCES
   src/robot/JointState.cpp
   src/robot/JointPositions.cpp
   src/robot/JointVelocities.cpp
+  src/robot/JointAccelerations.cpp
   src/robot/JointTorques.cpp
   src/robot/Jacobian.cpp
   src/parameters/ParameterInterface.cpp

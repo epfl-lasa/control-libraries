@@ -105,6 +105,18 @@ JointVelocities JointVelocities::operator/(double lambda) const {
   return this->JointState::operator/(lambda);
 }
 
+JointAccelerations JointVelocities::operator/(const std::chrono::nanoseconds& dt) const {
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  // operations
+  JointAccelerations accelerations(this->get_name(), this->get_names());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  // divide the positions by this period value and assign it as velocities
+  accelerations.set_accelerations(this->get_velocities() / period);
+  return accelerations;
+}
+
 JointPositions JointVelocities::operator*(const std::chrono::nanoseconds& dt) const {
   if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
   // operations

@@ -15,6 +15,9 @@ serializing and deserializing control library objects (#168)
 - Add automatic documentation generation and deployment to GitHub Pages (#170)
 - Build and push development dependencies image in CI and related 
   restructuring of Docker resources (#169)
+- Correct an error in the `makefile` of the protobuf bindings and remove
+  the generated bindings from the repository, while providing installation
+  scripts (#174)
 
 ## 3.1.0
 

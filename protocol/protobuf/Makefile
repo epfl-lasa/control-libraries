@@ -1,8 +1,8 @@
 MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-PROTO_PATH := $(MAKEFILE_DIR)/proto
+PROTO_PATH := $(MAKEFILE_DIR)proto
 PROTO_SOURCES := $(shell find $(PROTO_PATH) -name "*.proto")
-BUILD_DIR := $(MAKEFILE_DIR)/bindings
+BUILD_DIR := $(MAKEFILE_DIR)bindings
 CPP_BUILD_DIR := $(BUILD_DIR)/cpp
 PYTHON_BUILD_DIR := $(BUILD_DIR)/python
 

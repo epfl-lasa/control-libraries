@@ -40,7 +40,3 @@ if (!clproto::is_valid(message)) {
 clproto::MessageType type = clproto::check_message_type(msg);
 
 ```
-
-## Installation (TODO)
-
-- How to build clproto and use it in an external project

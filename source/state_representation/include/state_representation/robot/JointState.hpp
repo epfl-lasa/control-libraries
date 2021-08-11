@@ -286,9 +286,9 @@ public:
    * @param noise_ratio_array those values will be used to apply a dead zone under which
    * the state variable will be set to 0 for each individual joint
    */
-  void clamp_state_variable(const Eigen::VectorXd& max_absolute_value_array,
+  void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
                             const JointStateVariable& state_variable_type,
-                            const Eigen::VectorXd& noise_ratio_array);
+                            const Eigen::ArrayXd& noise_ratio_array);
 
   /**
    * @brief Return a copy of the JointState
@@ -373,7 +373,7 @@ public:
   JointState& operator*=(const Eigen::ArrayXd& lambda);
 
   /**
-   * @brief Overload the *= operator with an array of gains
+   * @brief Overload the * operator with an array of gains
    * @param lambda the gain array to multiply with
    * @return the JointState multiplied by lambda
    */

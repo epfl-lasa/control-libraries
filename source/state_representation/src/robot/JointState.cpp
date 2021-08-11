@@ -186,9 +186,9 @@ Eigen::ArrayXd JointState::array() const {
   return this->data().array();
 }
 
-void JointState::clamp_state_variable(const Eigen::VectorXd& max_absolute_value_array,
+void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
                                       const JointStateVariable& state_variable_type,
-                                      const Eigen::VectorXd& noise_ratio_array) {
+                                      const Eigen::ArrayXd& noise_ratio_array) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
   if (max_absolute_value_array.size() != expected_size) {
@@ -220,8 +220,8 @@ void JointState::clamp_state_variable(double max_absolute_value, const JointStat
                                       double noise_ratio) {
   Eigen::VectorXd state_variable = this->get_state_variable(state_variable_type);
   int expected_size = state_variable.size();
-  this->clamp_state_variable(max_absolute_value * Eigen::VectorXd::Ones(expected_size), state_variable_type,
-                             noise_ratio * Eigen::VectorXd::Ones(expected_size));
+  this->clamp_state_variable(max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type,
+                             noise_ratio * Eigen::ArrayXd::Ones(expected_size));
 }
 
 double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {

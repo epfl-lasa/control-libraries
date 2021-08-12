@@ -35,7 +35,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PUBLIC protobuf state_representation PRIVATE ${PROJECT_NAME}_bindings)
 
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include
+install(DIRECTORY include
     DESTINATION include
 )
 

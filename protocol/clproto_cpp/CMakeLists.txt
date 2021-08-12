@@ -30,6 +30,12 @@ file(GLOB_RECURSE GENERATED_PROTO_BINDINGS "${PROTOBUF_BINDINGDS_DIR}/*.pb.cc" "
 add_library(${PROJECT_NAME}_bindings SHARED ${GENERATED_PROTO_BINDINGS})
 target_include_directories(${PROJECT_NAME}_bindings PUBLIC ${PROTOBUF_BINDINGDS_DIR})
 
+install(TARGETS ${PROJECT_NAME}_bindings
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+
 add_library(${PROJECT_NAME} SHARED src/clproto.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PUBLIC protobuf state_representation PRIVATE ${PROJECT_NAME}_bindings)

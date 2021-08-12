@@ -14,4 +14,4 @@ cd ${CLPROTO_DIR} && mkdir -p build && cd build || exit 1
 cmake -DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX="${INSTALL_DESTINATION}" .. 
 
-make -j && make install
+make -j && sudo make install

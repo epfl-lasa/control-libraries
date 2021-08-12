@@ -39,6 +39,12 @@ message CartesianTwist {
   Vector3d angular_velocity = 3;
 }
 
+message CartesianAcceleration {
+  SpatialState spatial_state = 1;
+  Vector3d linear_acceleration = 2;
+  Vector3d angular_acceleration = 3;
+}
+
 message CartesianWrench {
   SpatialState spatial_state = 1;
   Vector3d force = 2;

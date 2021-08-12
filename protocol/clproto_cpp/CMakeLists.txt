@@ -57,6 +57,7 @@ if (BUILD_TESTING)
     target_link_libraries(test_${PROJECT_NAME}
         protobuf
         ${PROJECT_NAME}
+        ${PROJECT_NAME}_bindings
         state_representation
         ${GTEST_LIBRARIES}
         pthread

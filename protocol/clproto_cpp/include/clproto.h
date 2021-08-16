@@ -10,11 +10,6 @@ public:
   explicit DecodingException(const std::string& msg);
 };
 
-class NotImplementedException : public std::runtime_error {
-public:
-  explicit NotImplementedException(const std::string& msg);
-};
-
 enum MessageType {
   UNKNOWN_MESSAGE = 0,
   STATE_MESSAGE = 1,
@@ -81,21 +76,5 @@ template<typename T> T decode(const std::string& msg);
  * @return A success status boolean
  */
 template<typename T> bool decode(const std::string& msg, T& obj);
-
-
-template<typename T>
-std::string encode(const T& obj) {
-  throw NotImplementedException("The encoding of the requested type is not implemented");
-}
-
-template<typename T>
-T decode(const std::string& msg) {
-  throw NotImplementedException("The decoding of the requested type is not implemented");
-}
-
-template<typename T>
-bool decode(const std::string& msg, T& obj) {
-  throw NotImplementedException("The decoding of the requested type is not implemented");
-}
 
 }

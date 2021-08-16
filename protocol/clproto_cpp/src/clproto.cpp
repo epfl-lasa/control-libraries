@@ -29,7 +29,6 @@ using namespace state_representation;
 namespace clproto {
 
 DecodingException::DecodingException(const std::string& msg) : std::runtime_error(msg) {}
-NotImplementedException::NotImplementedException(const std::string& msg) : std::runtime_error(msg) {}
 
 bool is_valid(const std::string& msg) {
   return check_message_type(msg) != MessageType::UNKNOWN_MESSAGE;

@@ -27,28 +27,18 @@ add_custom_target(generate_proto_bindings COMMAND make cpp_bindings
 
 file(GLOB_RECURSE GENERATED_PROTO_BINDINGS "${PROTOBUF_BINDINGDS_DIR}/*.pb.cc" "${PROTOBUF_BINDINGDS_DIR}/*.pb.h")
 
-add_library(${PROJECT_NAME}_bindings SHARED ${GENERATED_PROTO_BINDINGS})
+add_library(${PROJECT_NAME}_bindings STATIC ${GENERATED_PROTO_BINDINGS})
 target_include_directories(${PROJECT_NAME}_bindings PUBLIC ${PROTOBUF_BINDINGDS_DIR})
 
-install(TARGETS ${PROJECT_NAME}_bindings
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-)
-
-add_library(${PROJECT_NAME} SHARED src/clproto.cpp)
+add_library(${PROJECT_NAME} STATIC src/clproto.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PROJECT_SOURCE_DIR}/include/clproto.h)
 target_link_libraries(${PROJECT_NAME} PUBLIC protobuf state_representation PRIVATE ${PROJECT_NAME}_bindings)
 
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-    DESTINATION include
-)
-
 install(TARGETS ${PROJECT_NAME}
+    PUBLIC_HEADER DESTINATION include
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
 )
 
 if (BUILD_TESTING)
@@ -57,7 +47,6 @@ if (BUILD_TESTING)
     target_link_libraries(test_${PROJECT_NAME}
         protobuf
         ${PROJECT_NAME}
-        ${PROJECT_NAME}_bindings
         state_representation
         ${GTEST_LIBRARIES}
         pthread

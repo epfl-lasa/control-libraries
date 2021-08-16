@@ -18,6 +18,8 @@ else()
     find_package(GTest QUIET)
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 set(PROTOBUF_DIR ${PROJECT_SOURCE_DIR}/../protobuf)
 set(PROTOBUF_BINDINGDS_DIR ${PROTOBUF_DIR}/bindings/cpp)
 

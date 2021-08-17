@@ -34,8 +34,12 @@ TEST(CartesianProtoTest, DecodeInvalidString) {
   EXPECT_THROW(clproto::decode<State>(dummy_msg), clproto::DecodingException);
 }
 
-TEST(CartesianProtoTest, EncodeInvalidObject) {
-  Eigen::Vector3d invalid_object;
+/* If an encode / decode template is invoked that is not implemented in clproto,
+ * there will be a linker error "undefined reference" at compile time.
+ * Of course, it's not really possible to test this at run-time.
+PSEUDO_TEST(CartesianProtoTest, EncodeInvalidObject) {
+  foo::Object invalid_object;
 
-  EXPECT_THROW(clproto::encode(invalid_object), clproto::NotImplementedException);
+  EXPECT_LINKER_ERROR(clproto::encode(invalid_object));
 }
+*/

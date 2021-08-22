@@ -20,26 +20,7 @@ EncoderNotImplementedException::EncoderNotImplementedException(const std::string
 
 template<>
 proto::StateType encoder(const StateType& type) {
-  switch (type) {
-    case state_representation::StateType::STATE:
-      return proto::StateType::STATE;
-    case state_representation::StateType::CARTESIANSTATE:
-      return proto::StateType::CARTESIANSTATE;
-    case state_representation::StateType::DUALQUATERNIONSTATE:
-      return proto::StateType::DUALQUATERNIONSTATE;
-    case state_representation::StateType::JOINTSTATE:
-      return proto::StateType::JOINTSTATE;
-    case state_representation::StateType::JACOBIANMATRIX:
-      return proto::StateType::JACOBIANMATRIX;
-    case state_representation::StateType::TRAJECTORY:
-      return proto::StateType::TRAJECTORY;
-    case state_representation::StateType::GEOMETRY_SHAPE:
-      return proto::StateType::GEOMETRY_SHAPE;
-    case state_representation::StateType::GEOMETRY_ELLIPSOID:
-      return proto::StateType::GEOMETRY_ELLIPSOID;
-    default:
-      return proto::StateType::STATE;
-  }
+  return static_cast<proto::StateType>(type);
 }
 
 template<>

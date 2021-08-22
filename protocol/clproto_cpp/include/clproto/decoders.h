@@ -1,40 +1,27 @@
 #pragma once
 
-#include <state_representation/State.hpp>
-
-#include "state_representation/state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
-
-using namespace state_representation;
+#include "clproto.h"
 
 namespace clproto {
 
-/**
- * @brief Local decoding helper for StateType
- * @param type The state representation StateType
- * @return The equivalent proto StateType
- */
-state_representation::StateType decoder(const proto::StateType& message);
+class DecoderNotImplementedException : public DecodingException {
+public:
+  explicit DecoderNotImplementedException(const std::string& msg);
+};
 
 /**
- * @brief Local decoding helper for Vector3d
- * @param type The proto Vector3d
- * @return The equivalent Eigen Vector3d
+ * @brief Decoding helper method
+ * @tparam ObjT The control libraries output type
+ * @tparam MsgT The protocol message input type
+ * @param message The protocol message object
+ * @return The equivalent decoded control libraries object
  */
-Eigen::Vector3d decoder(const proto::Vector3d& message);
+template<typename ObjT, typename MsgT>
+ObjT decoder(const MsgT& message);
 
-/**
- * @brief Local decoding helper for Quaterniond
- * @param type The proto Quaterniond
- * @return The equivalent Eigen Quaterniond
- */
-Eigen::Quaterniond decoder(const proto::Quaterniond& message);
-
-/**
- * @brief Local decoding helper for repeated double data
- * @param type The protobuf RepeatedField<double> data
- * @return The equivalent STL vector
- */
-std::vector<double> decoder(const google::protobuf::RepeatedField<double>& message);
+template<typename ObjT, typename MsgT>
+ObjT decoder(const MsgT&) {
+  throw DecoderNotImplementedException("Templated decoder function not implemented!");
+}
 
 }

@@ -1,83 +1,45 @@
 #pragma once
 
-#include <state_representation/State.hpp>
-#include <state_representation/space/SpatialState.hpp>
-#include <state_representation/space/cartesian/CartesianState.hpp>
-#include <state_representation/robot/Jacobian.hpp>
-#include <state_representation/robot/JointState.hpp>
-
-#include "state_representation/state.pb.h"
-#include "state_representation/space/spatial_state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
-#include "state_representation/space/joint/jacobian.pb.h"
-#include "state_representation/space/joint/joint_state.pb.h"
-
-using namespace state_representation;
+#include <google/protobuf/repeated_field.h>
 
 namespace clproto {
 
-/**
- * @brief Local encoding helper for StateType
- * @param type The state representation StateType
- * @return The equivalent proto StateType
- */
-proto::StateType encoder(const StateType& type);
+class EncoderNotImplementedException : public std::runtime_error {
+public:
+  explicit EncoderNotImplementedException(const std::string& msg);
+};
 
 /**
- * @brief Local encoding helper for State
- * @param type The state representation State
- * @return The equivalent proto State
+ * @brief Encoding helper method
+ * @tparam MsgT The protocol message output type
+ * @tparam ObjT The control libraries input type
+ * @param object The control libraries object
+ * @return The equivalent encoded protocol message object
  */
-proto::State encoder(const State& state);
+template<typename MsgT, typename ObjT>
+MsgT encoder(const ObjT& object);
+
+
 
 /**
- * @brief Local encoding helper for SpatialState
- * @param type The state representation SpatialState
- * @return The equivalent proto SpatialState
+ * @brief Encoding helper method for C-style arrays into
+ * a RepeatedField message type
+ * @tparam FieldT The datatype within the repeated field
+ * @param data A C-style array of data
+ * @param size The length of the data array
+ * @return The encoded RepeatedField protocol message object
  */
-proto::SpatialState encoder(const SpatialState& spatial_state);
+template<typename FieldT>
+google::protobuf::RepeatedField<FieldT> encoder(const FieldT* data, std::size_t size);
 
-/**
- * @brief Local encoding helper for Vector3d
- * @param type The Eigen Vector3d
- * @return The equivalent proto Vector3d
- */
-proto::Vector3d encoder(const Eigen::Vector3d& vector);
+template<typename MsgT, typename ObjT>
+MsgT encoder(const ObjT&) {
+  throw EncoderNotImplementedException("Templated encoder function not implemented!");
+}
 
-/**
- * @brief Local encoding helper for Quaterniond
- * @param type The Eigen Quaterniond
- * @return The equivalent proto Quaterniond
- */
-proto::Quaterniond encoder(const Eigen::Quaterniond& quaternion);
-
-/**
- * Local encoding helper for generic Eigen data
- * @param data The data buffer as type double
- * @param size The size of the data buffer
- * @return A protobuf RepeatedField<double> type
- */
-google::protobuf::RepeatedField<double> encoder(const double* data, Eigen::Index size);
-
-/**
- * @brief Local encoding helper for CartesianState
- * @param type The state representation CartesianState
- * @return The equivalent proto CartesianState
- */
-proto::CartesianState encoder(const CartesianState& cartesian_state);
-
-/**
- * @brief Local encoding helper for Jacobian
- * @param type The state representation Jacobian
- * @return The equivalent proto Jacobian
- */
-proto::Jacobian encoder(const Jacobian& jacobian);
-
-/**
- * @brief Local encoding helper for JointState
- * @param type The state representation JointState
- * @return The equivalent proto JointState
- */
-proto::JointState encoder(const JointState& joint_state);
+template<typename FieldT>
+google::protobuf::RepeatedField<FieldT> encoder(const FieldT*, std::size_t) {
+  throw EncoderNotImplementedException("Templated encoder function not implemented!");
+}
 
 }

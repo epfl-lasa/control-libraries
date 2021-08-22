@@ -31,7 +31,11 @@ add_library(${PROJECT_NAME}_bindings STATIC ${GENERATED_PROTO_BINDINGS})
 target_include_directories(${PROJECT_NAME}_bindings PUBLIC ${PROTOBUF_BINDINGDS_DIR})
 set_property(TARGET ${PROJECT_NAME}_bindings PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_library(${PROJECT_NAME} SHARED src/clproto.cpp)
+add_library(${PROJECT_NAME} SHARED
+    ${PROJECT_SOURCE_DIR}/src/clproto.cpp
+    ${PROJECT_SOURCE_DIR}/src/decoders.cpp
+    ${PROJECT_SOURCE_DIR}/src/encoders.cpp
+)
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PROJECT_SOURCE_DIR}/include/clproto.h)
 target_link_libraries(${PROJECT_NAME} PUBLIC protobuf state_representation PRIVATE ${PROJECT_NAME}_bindings)

@@ -224,7 +224,7 @@ void JointState::clamp_state_variable(
   this->clamp_state_variable(
       max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type,
       noise_ratio * Eigen::ArrayXd::Ones(expected_size)
-      );
+  );
 }
 
 double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {

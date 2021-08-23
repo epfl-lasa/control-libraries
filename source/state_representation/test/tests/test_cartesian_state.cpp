@@ -465,11 +465,14 @@ TEST(CartesianStateTest, TestStateClamping) {
   CartesianState state = CartesianState::Identity("test");
   EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::ORIENTATION), exceptions::NotImplementedException);
   EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::POSE), exceptions::NotImplementedException);
-  state.set_linear_velocity(Eigen::Vector3d(-2.0, 1, 5));
-  state.clamp_state_variable(3.0, CartesianStateVariable::LINEAR_VELOCITY);
-  EXPECT_EQ(state.get_linear_velocity().norm(), 3.0);
-  state.clamp_state_variable(10.0, CartesianStateVariable::LINEAR_VELOCITY, 0.5);
-  EXPECT_EQ(state.get_linear_velocity().norm(), 0.0);
+  Eigen::Vector3d position(-2.0, 1, 5);
+  state.set_position(position);
+  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION);
+  EXPECT_EQ(state.get_position(), position);
+  state.clamp_state_variable(3.0, CartesianStateVariable::POSITION);
+  EXPECT_EQ(state.get_position().norm(), 3.0);
+  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION, 0.5);
+  EXPECT_EQ(state.get_position().norm(), 0.0);
 }
 
 TEST(CartesianStateTest, TestVelocityClamping) {

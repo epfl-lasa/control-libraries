@@ -1,10 +1,6 @@
 #include "clproto/decoders.h"
 
-#include <state_representation/State.hpp>
-
-#include "state_representation/state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
+#include "state_representation/state_message.pb.h"
 
 using namespace state_representation;
 

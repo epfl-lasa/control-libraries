@@ -16,6 +16,7 @@ public:
 };
 
 /**
+ * @enum MessageType
  * @brief The MessageType enumeration contains the possible
  * message types in the clproto.
  * @details The values and order of this enumeration
@@ -66,7 +67,8 @@ MessageType check_message_type(const std::string& msg);
  * @param obj The control libraries object to encode
  * @return The serialized binary string encoding
  */
-template<typename T> std::string encode(const T& obj);
+template<typename T>
+std::string encode(const T& obj);
 
 /**
  * @brief Decode a serialized binary string from
@@ -77,7 +79,8 @@ template<typename T> std::string encode(const T& obj);
  * @param msg The serialized binary string to decode
  * @return A new instance of the control libraries object
  */
-template<typename T> T decode(const std::string& msg);
+template<typename T>
+T decode(const std::string& msg);
 
 /**
  * @brief Exception safe decoding of a serialized binary string
@@ -89,6 +92,7 @@ template<typename T> T decode(const std::string& msg);
  * @param obj A reference to a control libraries object
  * @return A success status boolean
  */
-template<typename T> bool decode(const std::string& msg, T& obj);
+template<typename T>
+bool decode(const std::string& msg, T& obj);
 
 }

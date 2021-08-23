@@ -6,11 +6,7 @@
 #include <state_representation/robot/Jacobian.hpp>
 #include <state_representation/robot/JointState.hpp>
 
-#include "state_representation/state.pb.h"
-#include "state_representation/space/spatial_state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
-#include "state_representation/space/joint/jacobian.pb.h"
-#include "state_representation/space/joint/joint_state.pb.h"
+#include "state_representation/state_message.pb.h"
 
 using namespace state_representation;
 

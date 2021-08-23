@@ -19,13 +19,6 @@
 #include <state_representation/geometry/Ellipsoid.hpp>
 
 #include "state_representation/state_message.pb.h"
-#include "state_representation/state.pb.h"
-#include "state_representation/space/spatial_state.pb.h"
-#include "state_representation/space/cartesian/cartesian_state.pb.h"
-#include "state_representation/space/joint/jacobian.pb.h"
-#include "state_representation/space/joint/joint_state.pb.h"
-#include "state_representation/geometry/shape.pb.h"
-#include "state_representation/geometry/ellipsoid.pb.h"
 
 using namespace state_representation;
 
@@ -60,6 +53,9 @@ MessageType check_message_type(const std::string& msg) {
   return MessageType::UNKNOWN_MESSAGE;
 }
 
+/* ----------------------
+ *         State
+ * ---------------------- */
 template<>
 std::string encode<State>(const State& obj);
 template<>
@@ -84,7 +80,8 @@ template<>
 bool decode(const std::string& msg, State& obj) {
   try {
     proto::StateMessage message;
-    if (!(message.ParseFromString(msg) && message.message_type_case() == proto::StateMessage::MessageTypeCase::kState)) {
+    if (!(message.ParseFromString(msg)
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kState)) {
       if (!message.mutable_state()->ParseFromString(msg)) {
         return false;
       }
@@ -102,6 +99,9 @@ bool decode(const std::string& msg, State& obj) {
   }
 }
 
+/* ----------------------
+ *      SpatialState
+ * ---------------------- */
 template<>
 std::string encode<SpatialState>(const SpatialState& obj);
 template<>
@@ -127,17 +127,16 @@ bool decode(const std::string& msg, SpatialState& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kSpatialState)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kSpatialState)) {
       if (!message.mutable_spatial_state()->ParseFromString(msg)) {
         return false;
       }
     }
 
     auto spatial_state = message.spatial_state();
-    obj = SpatialState(decoder<StateType>(spatial_state.state().type()),
-                       spatial_state.state().name(),
-                       spatial_state.reference_frame(),
-                       spatial_state.state().empty());
+    obj = SpatialState(
+        decoder<StateType>(spatial_state.state().type()), spatial_state.state().name(), spatial_state.reference_frame(),
+        spatial_state.state().empty());
 
     return true;
   } catch (...) {
@@ -145,6 +144,9 @@ bool decode(const std::string& msg, SpatialState& obj) {
   }
 }
 
+/* ----------------------
+ *     CartesianState
+ * ---------------------- */
 template<>
 std::string encode<CartesianState>(const CartesianState& obj);
 template<>
@@ -194,6 +196,9 @@ bool decode(const std::string& msg, CartesianState& obj) {
   }
 }
 
+/* ----------------------
+ *     CartesianPose
+ * ---------------------- */
 template<>
 std::string encode<CartesianPose>(const CartesianPose& obj);
 template<>
@@ -203,7 +208,7 @@ bool decode(const std::string& msg, CartesianPose& obj);
 template<>
 std::string encode<CartesianPose>(const CartesianPose& obj) {
   proto::StateMessage message;
-  proto::CartesianState cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
+  auto cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
   *message.mutable_cartesian_pose()->mutable_spatial_state() = cartesian_state.spatial_state();
   *message.mutable_cartesian_pose()->mutable_position() = cartesian_state.position();
   *message.mutable_cartesian_pose()->mutable_orientation() = cartesian_state.orientation();
@@ -222,7 +227,7 @@ bool decode(const std::string& msg, CartesianPose& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianPose)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianPose)) {
       if (!message.mutable_cartesian_pose()->ParseFromString(msg)) {
         return false;
       }
@@ -239,6 +244,9 @@ bool decode(const std::string& msg, CartesianPose& obj) {
   }
 }
 
+/* ----------------------
+ *     CartesianTwist
+ * ---------------------- */
 template<>
 std::string encode<CartesianTwist>(const CartesianTwist& obj);
 template<>
@@ -248,7 +256,7 @@ bool decode(const std::string& msg, CartesianTwist& obj);
 template<>
 std::string encode<CartesianTwist>(const CartesianTwist& obj) {
   proto::StateMessage message;
-  proto::CartesianState cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
+  auto cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
   *message.mutable_cartesian_twist()->mutable_spatial_state() = cartesian_state.spatial_state();
   *message.mutable_cartesian_twist()->mutable_linear_velocity() = cartesian_state.linear_velocity();
   *message.mutable_cartesian_twist()->mutable_angular_velocity() = cartesian_state.angular_velocity();
@@ -267,7 +275,7 @@ bool decode(const std::string& msg, CartesianTwist& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianTwist)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianTwist)) {
       if (!message.mutable_cartesian_twist()->ParseFromString(msg)) {
         return false;
       }
@@ -284,6 +292,9 @@ bool decode(const std::string& msg, CartesianTwist& obj) {
   }
 }
 
+/* ----------------------
+ *    CartesianWrench
+ * ---------------------- */
 template<>
 std::string encode<CartesianWrench>(const CartesianWrench& obj);
 template<>
@@ -293,7 +304,7 @@ bool decode(const std::string& msg, CartesianWrench& obj);
 template<>
 std::string encode<CartesianWrench>(const CartesianWrench& obj) {
   proto::StateMessage message;
-  proto::CartesianState cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
+  auto cartesian_state = encoder<proto::CartesianState>(static_cast<CartesianState>(obj));
   *message.mutable_cartesian_wrench()->mutable_spatial_state() = cartesian_state.spatial_state();
   *message.mutable_cartesian_wrench()->mutable_force() = cartesian_state.force();
   *message.mutable_cartesian_wrench()->mutable_torque() = cartesian_state.torque();
@@ -312,7 +323,7 @@ bool decode(const std::string& msg, CartesianWrench& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianWrench)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianWrench)) {
       if (!message.mutable_cartesian_wrench()->ParseFromString(msg)) {
         return false;
       }
@@ -329,6 +340,9 @@ bool decode(const std::string& msg, CartesianWrench& obj) {
   }
 }
 
+/* ----------------------
+ *        Jacobian
+ * ---------------------- */
 template<>
 std::string encode<Jacobian>(const Jacobian& obj);
 template<>
@@ -354,7 +368,7 @@ bool decode(const std::string& msg, Jacobian& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJacobian)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJacobian)) {
       if (!message.mutable_jacobian()->ParseFromString(msg)) {
         return false;
       }
@@ -363,17 +377,18 @@ bool decode(const std::string& msg, Jacobian& obj) {
     auto jacobian = message.jacobian();
     auto raw_data = const_cast<double*>(jacobian.data().data());
     auto data = Eigen::Map<Eigen::MatrixXd>(raw_data, jacobian.rows(), jacobian.cols());
-    obj = Jacobian(jacobian.state().name(),
-                   {jacobian.joint_names().begin(), jacobian.joint_names().end()},
-                   jacobian.frame(),
-                   data,
-                   jacobian.reference_frame());
+    obj = Jacobian(
+        jacobian.state().name(), {jacobian.joint_names().begin(), jacobian.joint_names().end()}, jacobian.frame(), data,
+        jacobian.reference_frame());
     return true;
   } catch (...) {
     return false;
   }
 }
 
+/* ----------------------
+ *       JointState
+ * ---------------------- */
 template<>
 std::string encode<JointState>(const JointState& obj);
 template<>
@@ -399,7 +414,7 @@ bool decode(const std::string& msg, JointState& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointState)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointState)) {
       if (!message.mutable_joint_state()->ParseFromString(msg)) {
         return false;
       }
@@ -418,6 +433,9 @@ bool decode(const std::string& msg, JointState& obj) {
   }
 }
 
+/* ----------------------
+ *     JointPositions
+ * ---------------------- */
 template<>
 std::string encode<JointPositions>(const JointPositions& obj);
 template<>
@@ -427,7 +445,7 @@ bool decode(const std::string& msg, JointPositions& obj);
 template<>
 std::string encode<JointPositions>(const JointPositions& obj) {
   proto::StateMessage message;
-  proto::JointState joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
+  auto joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
   *message.mutable_joint_positions()->mutable_state() = joint_state.state();
   *message.mutable_joint_positions()->mutable_joint_names() = joint_state.joint_names();
   *message.mutable_joint_positions()->mutable_positions() = joint_state.positions();
@@ -446,7 +464,7 @@ bool decode(const std::string& msg, JointPositions& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointPositions)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointPositions)) {
       if (!message.mutable_joint_positions()->ParseFromString(msg)) {
         return false;
       }
@@ -462,6 +480,9 @@ bool decode(const std::string& msg, JointPositions& obj) {
   }
 }
 
+/* ----------------------
+ *    JointVelocities
+ * ---------------------- */
 template<>
 std::string encode<JointVelocities>(const JointVelocities& obj);
 template<>
@@ -471,7 +492,7 @@ bool decode(const std::string& msg, JointVelocities& obj);
 template<>
 std::string encode<JointVelocities>(const JointVelocities& obj) {
   proto::StateMessage message;
-  proto::JointState joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
+  auto joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
   *message.mutable_joint_velocities()->mutable_state() = joint_state.state();
   *message.mutable_joint_velocities()->mutable_joint_names() = joint_state.joint_names();
   *message.mutable_joint_velocities()->mutable_velocities() = joint_state.velocities();
@@ -490,7 +511,7 @@ bool decode(const std::string& msg, JointVelocities& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointVelocities)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointVelocities)) {
       if (!message.mutable_joint_velocities()->ParseFromString(msg)) {
         return false;
       }
@@ -506,6 +527,9 @@ bool decode(const std::string& msg, JointVelocities& obj) {
   }
 }
 
+/* ----------------------
+ *   JointAccelerations
+ * ---------------------- */
 template<>
 std::string encode<JointAccelerations>(const JointAccelerations& obj);
 template<>
@@ -515,7 +539,7 @@ bool decode(const std::string& msg, JointAccelerations& obj);
 template<>
 std::string encode<JointAccelerations>(const JointAccelerations& obj) {
   proto::StateMessage message;
-  proto::JointState joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
+  auto joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
   *message.mutable_joint_accelerations()->mutable_state() = joint_state.state();
   *message.mutable_joint_accelerations()->mutable_joint_names() = joint_state.joint_names();
   *message.mutable_joint_accelerations()->mutable_accelerations() = joint_state.accelerations();
@@ -534,7 +558,7 @@ bool decode(const std::string& msg, JointAccelerations& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointAccelerations)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointAccelerations)) {
       if (!message.mutable_joint_accelerations()->ParseFromString(msg)) {
         return false;
       }
@@ -550,6 +574,9 @@ bool decode(const std::string& msg, JointAccelerations& obj) {
   }
 }
 
+/* ----------------------
+ *      JointTorques
+ * ---------------------- */
 template<>
 std::string encode<JointTorques>(const JointTorques& obj);
 template<>
@@ -559,7 +586,7 @@ bool decode(const std::string& msg, JointTorques& obj);
 template<>
 std::string encode<JointTorques>(const JointTorques& obj) {
   proto::StateMessage message;
-  proto::JointState joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
+  auto joint_state = encoder<proto::JointState>(static_cast<JointState>(obj));
   *message.mutable_joint_torques()->mutable_state() = joint_state.state();
   *message.mutable_joint_torques()->mutable_joint_names() = joint_state.joint_names();
   *message.mutable_joint_torques()->mutable_torques() = joint_state.torques();
@@ -578,7 +605,7 @@ bool decode(const std::string& msg, JointTorques& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
-    && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointTorques)) {
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointTorques)) {
       if (!message.mutable_joint_torques()->ParseFromString(msg)) {
         return false;
       }

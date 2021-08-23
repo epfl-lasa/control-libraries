@@ -19,16 +19,16 @@ else()
 endif()
 
 set(PROTOBUF_DIR ${PROJECT_SOURCE_DIR}/../protobuf)
-set(PROTOBUF_BINDINGDS_DIR ${PROTOBUF_DIR}/bindings/cpp)
+set(PROTOBUF_BINDINGS_DIR ${PROTOBUF_DIR}/bindings/cpp)
 
 add_custom_target(generate_proto_bindings COMMAND make cpp_bindings
     WORKING_DIRECTORY ${PROTOBUF_DIR}
 )
 
-file(GLOB_RECURSE GENERATED_PROTO_BINDINGS "${PROTOBUF_BINDINGDS_DIR}/*.pb.cc" "${PROTOBUF_BINDINGDS_DIR}/*.pb.h")
+file(GLOB_RECURSE GENERATED_PROTO_BINDINGS "${PROTOBUF_BINDINGS_DIR}/*.pb.cc" "${PROTOBUF_BINDINGS_DIR}/*.pb.h")
 
 add_library(${PROJECT_NAME}_bindings STATIC ${GENERATED_PROTO_BINDINGS})
-target_include_directories(${PROJECT_NAME}_bindings PUBLIC ${PROTOBUF_BINDINGDS_DIR})
+target_include_directories(${PROJECT_NAME}_bindings PUBLIC ${PROTOBUF_BINDINGS_DIR})
 set_property(TARGET ${PROJECT_NAME}_bindings PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(${PROJECT_NAME} SHARED

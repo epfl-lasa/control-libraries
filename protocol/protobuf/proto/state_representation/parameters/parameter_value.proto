@@ -31,7 +31,7 @@ message Vector {
 }
 
 message Matrix {
-  repeated double double = 1;
+  repeated double value = 1;
   uint32 rows = 2;
   uint32 cols = 3;
 }

@@ -628,7 +628,227 @@ bool decode(const std::string& msg, JointTorques& obj) {
   }
 }
 
-/* Generic template code for future types:
+/* ----------------------
+ *      Parameter<T>
+ * ---------------------- */
+template<typename T>
+static std::string encode_parameter(const Parameter<T>& obj);
+template<typename T>
+static Parameter<T> decode_parameter(const std::string& msg);
+template<typename T>
+static bool decode_parameter(const std::string& msg, Parameter<T>& obj);
+
+template<typename T>
+static std::string encode_parameter(const Parameter<T>& obj) {
+  proto::StateMessage message;
+  *message.mutable_parameter() = encoder<T>(obj);
+  return message.SerializeAsString();
+}
+template<typename T>
+static Parameter<T> decode_parameter(const std::string& msg) {
+  Parameter<T> obj("");
+  if (!decode(msg, obj)) {
+    throw DecodingException("Could not decode the message into a Parameter");
+  }
+  return obj;
+}
+template<typename T>
+static bool decode_parameter(const std::string& msg, Parameter<T>& obj) {
+  try {
+    proto::StateMessage message;
+    if (!(message.ParseFromString(msg)
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kParameter)) {
+      if (!message.mutable_parameter()->ParseFromString(msg)) {
+        return false;
+      }
+    }
+    obj = decoder<T>(message.parameter());
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+/* ----------------------
+ *        DOUBLE
+ * ---------------------- */
+template<>
+std::string encode<Parameter<double>>(const Parameter<double>& obj);
+template<>
+Parameter<double> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<double>& obj);
+template<>
+std::string encode<Parameter<double>>(const Parameter<double>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<double> decode(const std::string& msg) {
+  return decode_parameter<double>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<double>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *      DOUBLE_ARRAY
+ * ---------------------- */
+template<>
+std::string encode<Parameter<std::vector<double>>>(const Parameter<std::vector<double>>& obj);
+template<>
+Parameter<std::vector<double>> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<double>>& obj);
+template<>
+std::string encode<Parameter<std::vector<double>>>(const Parameter<std::vector<double>>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<std::vector<double>> decode(const std::string& msg) {
+  return decode_parameter<std::vector<double>>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<double>>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *          BOOL
+ * ---------------------- */
+template<>
+std::string encode<Parameter<bool>>(const Parameter<bool>& obj);
+template<>
+Parameter<bool> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<bool>& obj);
+template<>
+std::string encode<Parameter<bool>>(const Parameter<bool>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<bool> decode(const std::string& msg) {
+  return decode_parameter<bool>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<bool>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *       BOOL_ARRAY
+ * ---------------------- */
+template<>
+std::string encode<Parameter<std::vector<bool>>>(const Parameter<std::vector<bool>>& obj);
+template<>
+Parameter<std::vector<bool>> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<bool>>& obj);
+template<>
+std::string encode<Parameter<std::vector<bool>>>(const Parameter<std::vector<bool>>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<std::vector<bool>> decode(const std::string& msg) {
+  return decode_parameter<std::vector<bool>>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<bool>>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *         STRING
+ * ---------------------- */
+template<>
+std::string encode<Parameter<std::string>>(const Parameter<std::string>& obj);
+template<>
+Parameter<std::string> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<std::string>& obj);
+template<>
+std::string encode<Parameter<std::string>>(const Parameter<std::string>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<std::string> decode(const std::string& msg) {
+  return decode_parameter<std::string>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<std::string>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *      STRING_ARRAY
+ * ---------------------- */
+template<>
+std::string encode<Parameter<std::vector<std::string>>>(const Parameter<std::vector<std::string>>& obj);
+template<>
+Parameter<std::vector<std::string>> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<std::string>>& obj);
+template<>
+std::string encode<Parameter<std::vector<std::string>>>(const Parameter<std::vector<std::string>>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<std::vector<std::string>> decode(const std::string& msg) {
+  return decode_parameter<std::vector<std::string>>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<std::string>>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *         VECTOR
+ * ---------------------- */
+template<>
+std::string encode<Parameter<Eigen::VectorXd>>(const Parameter<Eigen::VectorXd>& obj);
+template<>
+Parameter<Eigen::VectorXd> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<Eigen::VectorXd>& obj);
+template<>
+std::string encode<Parameter<Eigen::VectorXd>>(const Parameter<Eigen::VectorXd>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<Eigen::VectorXd> decode(const std::string& msg) {
+  return decode_parameter<Eigen::VectorXd>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<Eigen::VectorXd>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *         MATRIX
+ * ---------------------- */
+template<>
+std::string encode<Parameter<Eigen::MatrixXd>>(const Parameter<Eigen::MatrixXd>& obj);
+template<>
+Parameter<Eigen::MatrixXd> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<Eigen::MatrixXd>& obj);
+template<>
+std::string encode<Parameter<Eigen::MatrixXd>>(const Parameter<Eigen::MatrixXd>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<Eigen::MatrixXd> decode(const std::string& msg) {
+  return decode_parameter<Eigen::MatrixXd>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<Eigen::MatrixXd>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+// Generic template code for future types:
+/* ----------------------
+ *        __TYPE__
+ * ---------------------- */ /*
 template<> std::string encode<__TYPE__>(const __TYPE__& obj);
 template<> __TYPE__ decode(const std::string& msg);
 template<> bool decode(const std::string& msg, __TYPE__& obj);
@@ -657,6 +877,29 @@ template<> bool decode(const std::string& msg, __TYPE__& obj) {
   } catch (...) {
     return false;
   }
+}
+*/
+
+/* ----------------------
+ *   Parameter<ParamT>
+ * ---------------------- */ /*
+template<>
+std::string encode<Parameter<ParamT>>(const Parameter<ParamT>& obj);
+template<>
+Parameter<ParamT> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<ParamT>& obj);
+template<>
+std::string encode<Parameter<ParamT>>(const Parameter<ParamT>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<ParamT> decode(const std::string& msg) {
+  return decode_parameter<ParamT>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<ParamT>& obj) {
+  return decode_parameter(msg, obj);
 }
 */
 

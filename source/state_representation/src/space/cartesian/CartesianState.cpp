@@ -241,7 +241,7 @@ void CartesianState::clamp_state_variable(
 ) {
   if (state_variable_type == CartesianStateVariable::ORIENTATION
       || state_variable_type == CartesianStateVariable::POSE) {
-    throw (NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable"));
+    throw NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable");
   }
   Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
   if (noise_ratio != 0 && state_variable_value.norm() < noise_ratio * max_norm) {

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+import "state_representation/parameters/parameter_value.proto";
+
+message Parameter {
+  State state = 1;
+  ParameterValue parameter_value = 2;
+}
+
+message ParameterValue {
+  oneof value_type {
+    parameter.Double double = 1;
+    parameter.DoubleArray double_array = 2;
+    parameter.Bool bool = 3;
+    parameter.BoolArray bool_array = 4;
+    parameter.String string = 5;
+    parameter.StringArray string_array = 6;
+    parameter.Matrix matrix = 7;
+    parameter.Vector vector = 8;
+  }
+}

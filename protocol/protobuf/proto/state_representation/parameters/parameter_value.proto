@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package state_representation.proto.parameter;
+
+message Double {
+  double value = 1;
+}
+
+message DoubleArray {
+  repeated double value = 1;
+}
+
+message Bool {
+  bool value = 1;
+}
+
+message BoolArray {
+  repeated bool value = 1;
+}
+
+message String {
+  string value = 1;
+}
+
+message StringArray {
+  repeated string value = 1;
+}
+
+message Vector {
+  repeated double value = 1;
+}
+
+message Matrix {
+  repeated double double = 1;
+  uint32 rows = 2;
+  uint32 cols = 3;
+}

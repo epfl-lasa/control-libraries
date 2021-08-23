@@ -16,8 +16,9 @@ JointPositions::JointPositions(const std::string& robot_name, const Eigen::Vecto
 JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names) :
     JointState(robot_name, joint_names) {}
 
-JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                               const Eigen::VectorXd& positions) : JointState(robot_name, joint_names) {
+JointPositions::JointPositions(
+    const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions
+) : JointState(robot_name, joint_names) {
   this->set_positions(positions);
 }
 
@@ -28,9 +29,11 @@ JointPositions::JointPositions(const JointState& state) : JointState(state) {
   this->set_empty(state.is_empty());
 }
 
-JointPositions::JointPositions(const JointPositions& positions) : JointPositions(static_cast<const JointState&>(positions)) {}
+JointPositions::JointPositions(const JointPositions& positions) :
+    JointPositions(static_cast<const JointState&>(positions)) {}
 
-JointPositions::JointPositions(const JointVelocities& velocities) : JointPositions(std::chrono::seconds(1) * velocities) {}
+JointPositions::JointPositions(const JointVelocities& velocities) :
+    JointPositions(std::chrono::seconds(1) * velocities) {}
 
 JointPositions JointPositions::Zero(const std::string& robot_name, unsigned int nb_joints) {
   return JointState::Zero(robot_name, nb_joints);
@@ -149,8 +152,9 @@ void JointPositions::clamp(const Eigen::ArrayXd& max_absolute_value_array, const
   this->clamp_state_variable(max_absolute_value_array, JointStateVariable::POSITIONS, noise_ratio_array);
 }
 
-JointPositions JointPositions::clamped(const Eigen::ArrayXd& max_absolute_value_array,
-                                       const Eigen::ArrayXd& noise_ratio_array) const {
+JointPositions JointPositions::clamped(
+    const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array
+) const {
   JointPositions result(*this);
   result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;

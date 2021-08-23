@@ -57,8 +57,9 @@ public:
    * @brief joint_names list of joint names
    * @brief positions the vector of positions
    */
-  explicit JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                          const Eigen::VectorXd& positions);
+  explicit JointPositions(
+      const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions
+  );
 
   /**
    * @brief Copy constructor

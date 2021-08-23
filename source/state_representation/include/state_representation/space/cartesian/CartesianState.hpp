@@ -549,7 +549,8 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
 inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
   return Eigen::Vector4d(
       this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(),
-      this->get_orientation().z());
+      this->get_orientation().z()
+      );
 }
 
 inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {

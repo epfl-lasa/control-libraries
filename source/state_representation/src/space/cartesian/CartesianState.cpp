@@ -41,8 +41,7 @@ CartesianState CartesianState::Identity(const std::string& name, const std::stri
 CartesianState CartesianState::Random(const std::string& name, const std::string& reference) {
   CartesianState random = CartesianState(name, reference);
   // set all the state variables to random
-  random.set_state_variable(Eigen::VectorXd::Random(25),
-                            CartesianStateVariable::ALL);
+  random.set_state_variable(Eigen::VectorXd::Random(25), CartesianStateVariable::ALL);
   return random;
 }
 
@@ -112,8 +111,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   Eigen::Vector3d f_alpha_b = this->get_angular_acceleration();
   // intermediate variables for b_S_c
   Eigen::Vector3d b_P_c = state.get_position();
-  Eigen::Quaterniond b_R_c = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                        : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond b_R_c =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   Eigen::Vector3d b_v_c = state.get_linear_velocity();
   Eigen::Vector3d b_omega_c = state.get_angular_velocity();
   Eigen::Vector3d b_a_c = state.get_linear_acceleration();
@@ -125,10 +125,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   this->set_linear_velocity(f_v_b + f_R_b * b_v_c + f_omega_b.cross(f_R_b * b_P_c));
   this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
-  this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
-                                + f_alpha_b.cross(f_R_b * b_P_c)
-                                + 2 * f_omega_b.cross(f_R_b * b_v_c)
-                                + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
+  this->set_linear_acceleration(
+      f_a_b + f_R_b * b_a_c + f_alpha_b.cross(f_R_b * b_P_c) + 2 * f_omega_b.cross(f_R_b * b_v_c)
+          + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
   this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
   // wrench
   //TODO
@@ -155,8 +154,9 @@ CartesianState& CartesianState::operator+=(const CartesianState& state) {
   // operation on pose
   this->set_position(this->get_position() + state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation);
   // operation on twist
   this->set_twist(this->get_twist() + state.get_twist());
@@ -187,8 +187,9 @@ CartesianState& CartesianState::operator-=(const CartesianState& state) {
   // operation on pose
   this->set_position(this->get_position() - state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation.conjugate());
   // operation on twist
   this->set_twist(this->get_twist() - state.get_twist());
@@ -237,17 +238,21 @@ CartesianState CartesianState::inverse() const {
   return result;
 }
 
-void CartesianState::clamp_state_variable(double max_value,
-                                          const CartesianStateVariable& state_variable_type,
-                                          double noise_ratio) {
-  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
-  if (noise_ratio != 0) {
-    state_variable_value -= noise_ratio * state_variable_value.normalized();
-    // apply a deadzone
-    if (state_variable_value.norm() < noise_ratio) { state_variable_value.setZero(); }
+void CartesianState::clamp_state_variable(
+    double max_norm, const CartesianStateVariable& state_variable_type, double noise_ratio
+) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION
+      || state_variable_type == CartesianStateVariable::POSE) {
+    throw (NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable"));
   }
-  // clamp the values to their maximum amplitude provided
-  if (state_variable_value.norm() > max_value) { state_variable_value = max_value * state_variable_value.normalized(); }
+  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
+  if (noise_ratio != 0 && state_variable_value.norm() < noise_ratio * max_norm) {
+    // apply a dead zone
+    state_variable_value.setZero();
+  } else if (state_variable_value.norm() > max_norm) {
+    // clamp the values to their maximum amplitude provided
+    state_variable_value = max_norm * state_variable_value.normalized();
+  }
   this->set_state_variable(state_variable_value, state_variable_type);
 }
 

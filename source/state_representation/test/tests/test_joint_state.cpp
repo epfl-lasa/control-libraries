@@ -403,3 +403,21 @@ TEST(JointStateTest, MultiplyByArray) {
   JointState jscaled = gain * js;
   EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
 }
+
+TEST(JointStateTest, StateClamping) {
+  JointState js = JointState("test_robot", 4);
+  js.set_data(10 * Eigen::VectorXd::Ones(4 * 4));
+  js.clamp_state_variable(9, JointStateVariable::ALL, 0);
+  EXPECT_EQ(js.data(), 9 * Eigen::VectorXd::Ones(4 * 4));
+
+  js.set_positions(2 * Eigen::VectorXd::Ones(4));
+  js.clamp_state_variable(9, JointStateVariable::POSITIONS, 0.5);
+  EXPECT_EQ(js.get_positions(), Eigen::VectorXd::Zero(4));
+
+  Eigen::VectorXd accelerations(4), result(4);
+  accelerations << -2.0, 1.0, -4.0, 4.0;
+  result << -2.0, 0.0, -3.0, 3.0;
+  js.set_accelerations(accelerations);
+  js.clamp_state_variable(3 * Eigen::ArrayXd::Ones(4), JointStateVariable::ACCELERATIONS, 0.5 * Eigen::ArrayXd::Ones(4));
+  EXPECT_EQ(js.get_accelerations(), result);
+}

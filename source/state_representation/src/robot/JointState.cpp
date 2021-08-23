@@ -208,7 +208,7 @@ void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_a
       state_variable(i) = 0.0;
     } else if (abs(state_variable(i)) > max_absolute_value_array(i)) {
       // clamp to max value
-      state_variable(i) *= max_absolute_value_array(i) / state_variable(i);
+      state_variable(i) *= max_absolute_value_array(i) / abs(state_variable(i));
     }
   }
   this->set_state_variable(state_variable, state_variable_type);

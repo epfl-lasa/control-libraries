@@ -5,11 +5,24 @@
 
 namespace clproto {
 
+/**
+ * @class DecodingException
+ * @brief A DedocdingException is raised whenever a
+ * decoding operation fails due to invalid encoding.
+ */
 class DecodingException : public std::runtime_error {
 public:
   explicit DecodingException(const std::string& msg);
 };
 
+/**
+ * @brief The MessageType enumeration contains the possible
+ * message types in the clproto.
+ * @details The values and order of this enumeration
+ * are synchronized with the fields of the protobuf
+ * StateMessage type, allowing a one-to-one mapping
+ * to the StateMessage type case.
+ */
 enum MessageType {
   UNKNOWN_MESSAGE = 0,
   STATE_MESSAGE = 1,
@@ -27,6 +40,7 @@ enum MessageType {
   JOINT_TORQUES_MESSAGE = 13,
   SHAPE_MESSAGE = 14,
   ELLIPSOID_MESSAGE = 15,
+  PARAMETER_MESSAGE = 16
 };
 
 /**

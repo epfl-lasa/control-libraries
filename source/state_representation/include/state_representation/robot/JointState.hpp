@@ -14,11 +14,7 @@ class JointState;
  * of the JointState
  */
 enum class JointStateVariable {
-  POSITIONS,
-  VELOCITIES,
-  ACCELERATIONS,
-  TORQUES,
-  ALL
+  POSITIONS, VELOCITIES, ACCELERATIONS, TORQUES, ALL
 };
 
 /**
@@ -29,9 +25,9 @@ enum class JointStateVariable {
  * the distance on (default ALL for full distance across all dimensions)
  * @return the distance between the two states
  */
-double dist(const JointState& s1,
-            const JointState& s2,
-            const JointStateVariable& state_variable_type = JointStateVariable::ALL);
+double dist(
+    const JointState& s1, const JointState& s2, const JointStateVariable& state_variable_type = JointStateVariable::ALL
+);
 
 /**
  * @class JointState
@@ -274,9 +270,9 @@ public:
    * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
    * under which the state variable will be set to 0
    */
-  void clamp_state_variable(double max_absolute_value,
-                            const JointStateVariable& state_variable_type,
-                            double noise_ratio = 0);
+  void clamp_state_variable(
+      double max_absolute_value, const JointStateVariable& state_variable_type, double noise_ratio = 0
+  );
 
   /**
    * @brief Clamp inplace the magnitude of the a specific joint state variable
@@ -286,9 +282,10 @@ public:
    * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
    * under which the state variable will be set to 0 for each individual joint
    */
-  void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
-                            const JointStateVariable& state_variable_type,
-                            const Eigen::ArrayXd& noise_ratio_array);
+  void clamp_state_variable(
+      const Eigen::ArrayXd& max_absolute_value_array, const JointStateVariable& state_variable_type,
+      const Eigen::ArrayXd& noise_ratio_array
+  );
 
   /**
    * @brief Return a copy of the JointState
@@ -614,8 +611,9 @@ inline Eigen::VectorXd JointState::get_state_variable(const JointStateVariable& 
   return Eigen::Vector3d::Zero();
 }
 
-inline void JointState::set_state_variable(const Eigen::VectorXd& new_value,
-                                           const JointStateVariable& state_variable_type) {
+inline void JointState::set_state_variable(
+    const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type
+) {
   switch (state_variable_type) {
     case JointStateVariable::POSITIONS:
       this->set_positions(new_value);

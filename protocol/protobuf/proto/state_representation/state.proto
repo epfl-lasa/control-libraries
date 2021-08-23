@@ -2,33 +2,35 @@ syntax = "proto3";
 
 package state_representation.proto;
 
+// The values and order of this enumeration must match the original
+// state_representation::StateType in C++.
 enum StateType {
-    STATE = 0;
-    CARTESIANSTATE = 1;
-    DUALQUATERNIONSTATE = 2;
-    JOINTSTATE = 3;
-    JACOBIANMATRIX = 4;
-    TRAJECTORY = 5;
-    GEOMETRY_SHAPE = 6;
-    GEOMETRY_ELLIPSOID = 7;
-    PARAMETER_DOUBLE = 8;
-    PARAMETER_DOUBLE_ARRAY = 9;
-    PARAMETER_BOOL = 10;
-    PARAMETER_BOOL_ARRAY = 11;
-    PARAMETER_STRING = 12;
-    PARAMETER_STRING_ARRAY = 13;
-    PARAMETER_CARTESIANSTATE = 14;
-    PARAMETER_CARTESIANPOSE = 15;
-    PARAMETER_JOINTSTATE = 16;
-    PARAMETER_JOINTPOSITIONS = 17;
-    PARAMETER_ELLIPSOID = 18;
-    PARAMETER_MATRIX = 19;
-    PARAMETER_VECTOR = 20;
+  STATE = 0;
+  CARTESIANSTATE = 1;
+  DUALQUATERNIONSTATE = 2;
+  JOINTSTATE = 3;
+  JACOBIANMATRIX = 4;
+  TRAJECTORY = 5;
+  GEOMETRY_SHAPE = 6;
+  GEOMETRY_ELLIPSOID = 7;
+  PARAMETER_DOUBLE = 8;
+  PARAMETER_DOUBLE_ARRAY = 9;
+  PARAMETER_BOOL = 10;
+  PARAMETER_BOOL_ARRAY = 11;
+  PARAMETER_STRING = 12;
+  PARAMETER_STRING_ARRAY = 13;
+  PARAMETER_CARTESIANSTATE = 14;
+  PARAMETER_CARTESIANPOSE = 15;
+  PARAMETER_JOINTSTATE = 16;
+  PARAMETER_JOINTPOSITIONS = 17;
+  PARAMETER_ELLIPSOID = 18;
+  PARAMETER_MATRIX = 19;
+  PARAMETER_VECTOR = 20;
 };
 
 message State {
-    string name = 1;
-    StateType type = 2;
-    bool empty = 3;
-    int64 timestamp = 4;
+  string name = 1;
+  StateType type = 2;
+  bool empty = 3;
+  int64 timestamp = 4;
 }

@@ -19,8 +19,6 @@ public:
 template<typename MsgT, typename ObjT>
 MsgT encoder(const ObjT& object);
 
-
-
 /**
  * @brief Encoding helper method for C-style arrays into
  * a RepeatedField message type

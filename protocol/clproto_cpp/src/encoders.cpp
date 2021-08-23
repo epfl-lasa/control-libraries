@@ -14,6 +14,10 @@ namespace clproto {
 
 EncoderNotImplementedException::EncoderNotImplementedException(const std::string& msg) : std::runtime_error(msg) {}
 
+google::protobuf::RepeatedField<double> encoder(const Eigen::MatrixXd& matrix) {
+  return encoder(std::vector<double>{matrix.data(), matrix.data() + matrix.size()});
+}
+
 template<>
 proto::StateType encoder(const StateType& type) {
   return static_cast<proto::StateType>(type);
@@ -55,12 +59,6 @@ proto::Quaterniond encoder(const Eigen::Quaterniond& quaternion) {
 }
 
 template<>
-google::protobuf::RepeatedField<double> encoder(const double* data, std::size_t size) {
-  std::vector<double> a(data, data + size);
-  return google::protobuf::RepeatedField<double>({a.begin(), a.end()});
-}
-
-template<>
 proto::CartesianState encoder(const CartesianState& cartesian_state) {
   proto::CartesianState message;
   *message.mutable_spatial_state() = encoder<proto::SpatialState>(static_cast<SpatialState>(cartesian_state));
@@ -84,7 +82,7 @@ proto::Jacobian encoder(const Jacobian& jacobian) {
   message.set_reference_frame(jacobian.get_reference_frame());
   message.set_rows(jacobian.rows());
   message.set_cols(jacobian.cols());
-  *message.mutable_data() = encoder(jacobian.data().data(), jacobian.data().size());
+  *message.mutable_data() = encoder(jacobian.data());
   return message;
 }
 
@@ -93,12 +91,82 @@ proto::JointState encoder(const JointState& joint_state) {
   proto::JointState message;
   *message.mutable_state() = encoder<proto::State>(static_cast<State>(joint_state));
   *message.mutable_joint_names() = {joint_state.get_names().begin(), joint_state.get_names().end()};
-  *message.mutable_positions() = encoder(joint_state.get_positions().data(), joint_state.get_positions().size());
-  *message.mutable_velocities() = encoder(joint_state.get_velocities().data(), joint_state.get_velocities().size());
-  *message.mutable_accelerations() =
-      encoder(joint_state.get_accelerations().data(), joint_state.get_accelerations().size());
-  *message.mutable_torques() = encoder(joint_state.get_torques().data(), joint_state.get_torques().size());
+  *message.mutable_positions() = encoder(joint_state.get_positions());
+  *message.mutable_velocities() = encoder(joint_state.get_velocities());
+  *message.mutable_accelerations() = encoder(joint_state.get_accelerations());
+  *message.mutable_torques() = encoder(joint_state.get_torques());
   return message;
 }
 
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<double>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  message.mutable_parameter_value()->mutable_double_()->set_value(parameter.get_value());
+  return message;
+}
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<std::vector<double>>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_double_array()->mutable_value() =
+      {parameter.get_value().begin(), parameter.get_value().end()};
+  return message;
+}
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<bool>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  message.mutable_parameter_value()->mutable_bool_()->set_value(parameter.get_value());
+  return message;
+}
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<std::vector<bool>>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_bool_array()->mutable_value() =
+      {parameter.get_value().begin(), parameter.get_value().end()};
+  return message;
+}
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<std::string>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  message.mutable_parameter_value()->mutable_string()->set_value(parameter.get_value());
+  return message;
+}
+template<>
+state_representation::proto::Parameter
+encoder(const state_representation::Parameter<std::vector<std::string>>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_string_array()->mutable_value() =
+      {parameter.get_value().begin(), parameter.get_value().end()};
+  return message;
+}
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<Eigen::VectorXd>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_vector()->mutable_value() = encoder(parameter.get_value());
+  return message;
+}
+
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<Eigen::MatrixXd>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() =
+      encoder<state_representation::proto::State>(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_matrix()->mutable_value() = encoder(parameter.get_value());
+  message.mutable_parameter_value()->mutable_matrix()->set_rows(parameter.get_value().rows());
+  message.mutable_parameter_value()->mutable_matrix()->set_cols(parameter.get_value().cols());
+  return message;
+}
 }

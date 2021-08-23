@@ -203,14 +203,12 @@ void JointState::clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_a
             + std::to_string(noise_ratio_array.size()));
   }
   for (int i = 0; i < expected_size; ++i) {
-    if (state_variable(i) > 0) {
-      state_variable(i) = (state_variable(i) - noise_ratio_array(i) < 0) ? 0 : state_variable(i);
-      state_variable(i) =
-          (state_variable(i) > max_absolute_value_array(i)) ? max_absolute_value_array(i) : state_variable(i);
-    } else {
-      state_variable(i) = (state_variable(i) + noise_ratio_array(i) > 0) ? 0 : state_variable(i);
-      state_variable(i) =
-          (state_variable(i) < -max_absolute_value_array(i)) ? -max_absolute_value_array(i) : state_variable(i);
+    if (noise_ratio_array(i) != 0.0 && abs(state_variable(i)) < noise_ratio_array(i) * max_absolute_value_array(i)) {
+      // apply dead zone
+      state_variable(i) = 0.0;
+    } else if (abs(state_variable(i)) > max_absolute_value_array(i)) {
+      // clamp to max value
+      state_variable(i) *= max_absolute_value_array(i) / state_variable(i);
     }
   }
   this->set_state_variable(state_variable, state_variable_type);

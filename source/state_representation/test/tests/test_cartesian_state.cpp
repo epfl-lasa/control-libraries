@@ -4,6 +4,7 @@
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
+#include "state_representation/exceptions/NotImplementedException.hpp"
 
 using namespace state_representation;
 
@@ -458,6 +459,20 @@ TEST(CartesianStateTest, TestImplicitConversion) {
   vel.set_linear_velocity(Eigen::Vector3d(0.1, 0.1, 0.1));
   vel.set_angular_velocity(Eigen::Vector3d(0.1, 0.1, 0));
   tf1 += vel;
+}
+
+TEST(CartesianStateTest, TestStateClamping) {
+  CartesianState state = CartesianState::Identity("test");
+  EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::ORIENTATION), exceptions::NotImplementedException);
+  EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::POSE), exceptions::NotImplementedException);
+  Eigen::Vector3d position(-2.0, 1, 5);
+  state.set_position(position);
+  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION);
+  EXPECT_EQ(state.get_position(), position);
+  state.clamp_state_variable(3.0, CartesianStateVariable::POSITION);
+  EXPECT_EQ(state.get_position().norm(), 3.0);
+  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION, 0.5);
+  EXPECT_EQ(state.get_position().norm(), 0.0);
 }
 
 TEST(CartesianStateTest, TestVelocityClamping) {

@@ -9,7 +9,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Protobuf message protocol and C++ binding library `clproto` for
-serializing and deserializing control library objects (#168)
+serializing and deserializing control library objects (#168, #175, #177, #179)
 - Add set_data function (#163)
 - Move set_data declaration to State and add it for Ellipsoid (#166)
 - Add automatic documentation generation and deployment to GitHub Pages (#170)
@@ -19,6 +19,7 @@ serializing and deserializing control library objects (#168)
   the generated bindings from the repository, while providing installation
   scripts (#174)
 - Add class JointAccelerations (#173)
+- Fix clamp_state_variable function for CartesianState and JointState (#176)
 
 ## 3.1.0
 

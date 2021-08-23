@@ -57,8 +57,9 @@ public:
    * @brief joint_names list of joint names
    * @brief positions the vector of positions
    */
-  explicit JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                          const Eigen::VectorXd& positions);
+  explicit JointPositions(
+      const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions
+  );
 
   /**
    * @brief Copy constructor
@@ -228,6 +229,40 @@ public:
    * @param the positions data vector
    */
   virtual void set_data(const std::vector<double>& data) override;
+
+  /**
+   * @brief Clamp inplace the magnitude of the positions to the value in argument
+   * @param max_absolute_value the maximum value of position for all the joints
+   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0
+   */
+  void clamp(double max_absolute_value, double noise_ratio = 0.);
+
+  /**
+   * @brief Return the position clamped to the value in argument
+   * @param max_absolute_value the maximum value of position for all the joints
+   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0
+   * @return the clamped JointPositions
+   */
+  JointPositions clamped(double max_absolute_value, double noise_ratio = 0.) const;
+
+  /**
+   * @brief Clamp inplace the magnitude of the positions to the values in argument
+   * @param max_absolute_value_array the maximum value of position for each joint
+   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0 for each individual joint
+   */
+  void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
+
+  /**
+   * @brief Return the position clamped to the values in argument
+   * @param max_absolute_value_array the maximum value of position for each joint
+   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0 for each individual joint
+   * @return the clamped JointPositions
+   */
+  JointPositions clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const;
 
   /**
    * @brief Overload the ostream operator for printing

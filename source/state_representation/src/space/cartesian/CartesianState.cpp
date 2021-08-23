@@ -41,8 +41,7 @@ CartesianState CartesianState::Identity(const std::string& name, const std::stri
 CartesianState CartesianState::Random(const std::string& name, const std::string& reference) {
   CartesianState random = CartesianState(name, reference);
   // set all the state variables to random
-  random.set_state_variable(Eigen::VectorXd::Random(25),
-                            CartesianStateVariable::ALL);
+  random.set_state_variable(Eigen::VectorXd::Random(25), CartesianStateVariable::ALL);
   return random;
 }
 
@@ -237,17 +236,21 @@ CartesianState CartesianState::inverse() const {
   return result;
 }
 
-void CartesianState::clamp_state_variable(double max_value,
-                                          const CartesianStateVariable& state_variable_type,
-                                          double noise_ratio) {
-  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
-  if (noise_ratio != 0) {
-    state_variable_value -= noise_ratio * state_variable_value.normalized();
-    // apply a deadzone
-    if (state_variable_value.norm() < noise_ratio) { state_variable_value.setZero(); }
+void CartesianState::clamp_state_variable(
+    double max_norm, const CartesianStateVariable& state_variable_type, double noise_ratio
+) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION
+      || state_variable_type == CartesianStateVariable::POSE) {
+    throw NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable");
   }
-  // clamp the values to their maximum amplitude provided
-  if (state_variable_value.norm() > max_value) { state_variable_value = max_value * state_variable_value.normalized(); }
+  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
+  if (noise_ratio != 0 && state_variable_value.norm() < noise_ratio * max_norm) {
+    // apply a dead zone
+    state_variable_value.setZero();
+  } else if (state_variable_value.norm() > max_norm) {
+    // clamp the values to their maximum amplitude provided
+    state_variable_value = max_norm * state_variable_value.normalized();
+  }
   this->set_state_variable(state_variable_value, state_variable_type);
 }
 

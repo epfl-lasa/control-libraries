@@ -104,7 +104,7 @@ RUN pip3 install numpy setuptools pybind11
 # install google dependencies
 COPY --from=google-dependencies /usr/include/gtest /usr/include/gtest
 COPY --from=google-dependencies /usr/local/include/google /usr/local/include/google
-COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib
-COPY --from=google-dependencies /usr/local/lib/libproto* /usr/local/lib
+COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib/
+COPY --from=google-dependencies /usr/local/lib/libproto* /usr/local/lib/
 COPY --from=google-dependencies /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig

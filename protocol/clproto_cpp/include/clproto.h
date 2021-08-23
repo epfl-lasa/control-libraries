@@ -45,6 +45,27 @@ enum MessageType {
 };
 
 /**
+ * @enum ParameterMessageType
+ * @brief The ParameterMessageType enumeration contains the
+ * possible value types contained in a parameter message.
+ * @details The values and order of this enumeration
+ * are synchronized with the fields of the protobuf
+ * ParameterValue type, allowing a one-to-one mapping
+ * to the ParameterValue type case.
+ */
+enum ParameterMessageType {
+  UNKNOWN_PARAMETER = 0,
+  DOUBLE = 1,
+  DOUBLE_ARRAY = 2,
+  BOOL = 3,
+  BOOL_ARRAY = 4,
+  STRING = 5,
+  STRING_ARRAY = 6,
+  MATRIX = 7,
+  VECTOR = 8
+};
+
+/**
  * @brief Check if a serialized binary string can be
  * decoded into a support control libraries message type.
  * @param msg The serialized binary string to check
@@ -59,6 +80,14 @@ bool is_valid(const std::string& msg);
  * @return The MessageType of the contained type or UNKNOWN
  */
 MessageType check_message_type(const std::string& msg);
+
+/**
+ * @brief Check which control libraries parameter type a
+ * serialized binary string can be decoded as, if at all.
+ * @param msg The serialized binary string to check
+ * @return The ParameterMessageType of the contained type or UNKNOWN
+ */
+ParameterMessageType check_parameter_message_type(const std::string& msg);
 
 /**
  * @brief Encode a control libraries object into

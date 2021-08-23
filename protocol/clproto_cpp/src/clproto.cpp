@@ -53,6 +53,13 @@ MessageType check_message_type(const std::string& msg) {
   return MessageType::UNKNOWN_MESSAGE;
 }
 
+ParameterMessageType check_parameter_message_type(const std::string& msg) {
+  if (proto::StateMessage message; message.ParseFromString(msg) && message.has_parameter()) {
+    return static_cast<ParameterMessageType>(message.parameter().parameter_value().value_type_case());
+  }
+  return ParameterMessageType::UNKNOWN_PARAMETER;
+}
+
 /* ----------------------
  *         State
  * ---------------------- */

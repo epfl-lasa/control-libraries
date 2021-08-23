@@ -135,6 +135,27 @@ void JointPositions::set_data(const std::vector<double>& data) {
   this->set_positions(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
+void JointPositions::clamp(double max_absolute_value, double noise_ratio) {
+  this->clamp_state_variable(max_absolute_value, JointStateVariable::POSITIONS, noise_ratio);
+}
+
+JointPositions JointPositions::clamped(double max_absolute_value, double noise_ratio) const {
+  JointPositions result(*this);
+  result.clamp(max_absolute_value, noise_ratio);
+  return result;
+}
+
+void JointPositions::clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) {
+  this->clamp_state_variable(max_absolute_value_array, JointStateVariable::POSITIONS, noise_ratio_array);
+}
+
+JointPositions JointPositions::clamped(const Eigen::ArrayXd& max_absolute_value_array,
+                                       const Eigen::ArrayXd& noise_ratio_array) const {
+  JointPositions result(*this);
+  result.clamp(max_absolute_value_array, noise_ratio_array);
+  return result;
+}
+
 std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   if (positions.is_empty()) {
     os << "Empty JointPositions";

@@ -202,6 +202,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_torques</b> (cons
 <tr class="memitem:a846a78f0835a7890a6a525099ef5c379"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#a846a78f0835a7890a6a525099ef5c379">set_data</a> (const std::vector&lt; double &gt; &amp;<a class="el" href="classstate__representation_1_1_joint_positions.html#a3c34219504422492542edc8217ece950">data</a>) override</td></tr>
 <tr class="memdesc:a846a78f0835a7890a6a525099ef5c379"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the positions data from a std vector.  <a href="classstate__representation_1_1_joint_positions.html#a846a78f0835a7890a6a525099ef5c379">More...</a><br /></td></tr>
 <tr class="separator:a846a78f0835a7890a6a525099ef5c379"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d71865e2304e1a1ff9e3699b686885b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#a0d71865e2304e1a1ff9e3699b686885b">clamp</a> (double max_absolute_value, double noise_ratio=0.)</td></tr>
+<tr class="memdesc:a0d71865e2304e1a1ff9e3699b686885b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the positions to the value in argument.  <a href="classstate__representation_1_1_joint_positions.html#a0d71865e2304e1a1ff9e3699b686885b">More...</a><br /></td></tr>
+<tr class="separator:a0d71865e2304e1a1ff9e3699b686885b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa21d5fec25c7d34d00bcb6d8d1434cb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#aa21d5fec25c7d34d00bcb6d8d1434cb0">clamped</a> (double max_absolute_value, double noise_ratio=0.) const</td></tr>
+<tr class="memdesc:aa21d5fec25c7d34d00bcb6d8d1434cb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the position clamped to the value in argument.  <a href="classstate__representation_1_1_joint_positions.html#aa21d5fec25c7d34d00bcb6d8d1434cb0">More...</a><br /></td></tr>
+<tr class="separator:aa21d5fec25c7d34d00bcb6d8d1434cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade7075fa41fabc8f10f9f98d099810b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#ade7075fa41fabc8f10f9f98d099810b0">clamp</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array)</td></tr>
+<tr class="memdesc:ade7075fa41fabc8f10f9f98d099810b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the positions to the values in argument.  <a href="classstate__representation_1_1_joint_positions.html#ade7075fa41fabc8f10f9f98d099810b0">More...</a><br /></td></tr>
+<tr class="separator:ade7075fa41fabc8f10f9f98d099810b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68bb6d87899eb441cb864e700229e1e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#a68bb6d87899eb441cb864e700229e1e1">clamped</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const Eigen::ArrayXd &amp;noise_ratio_array) const</td></tr>
+<tr class="memdesc:a68bb6d87899eb441cb864e700229e1e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the position clamped to the values in argument.  <a href="classstate__representation_1_1_joint_positions.html#a68bb6d87899eb441cb864e700229e1e1">More...</a><br /></td></tr>
+<tr class="separator:a68bb6d87899eb441cb864e700229e1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addfce2bbfb49fabb38931c268fe2e45f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_positions.html#addfce2bbfb49fabb38931c268fe2e45f">from_std_vector</a> (const std::vector&lt; double &gt; &amp;value)</td></tr>
 <tr class="memdesc:addfce2bbfb49fabb38931c268fe2e45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value from a std vector.  <a href="classstate__representation_1_1_joint_positions.html#addfce2bbfb49fabb38931c268fe2e45f">More...</a><br /></td></tr>
 <tr class="separator:addfce2bbfb49fabb38931c268fe2e45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -299,10 +311,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:a37e33229014bf5037eb47f5f267ed337 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classstate__representation_1_1_state.html" title="Abstract class to represent a state.">State</a> to a zero value. <br /></td></tr>
 <tr class="separator:a37e33229014bf5037eb47f5f267ed337 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46bb1912fa2d1cbede60dc97f6511a06 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a46bb1912fa2d1cbede60dc97f6511a06">clamp_state_variable</a> (double max_absolute_value, const JointStateVariable &amp;state_variable_type, double noise_ratio=0)</td></tr>
-<tr class="memdesc:a46bb1912fa2d1cbede60dc97f6511a06 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)  <a href="classstate__representation_1_1_joint_state.html#a46bb1912fa2d1cbede60dc97f6511a06">More...</a><br /></td></tr>
+<tr class="memdesc:a46bb1912fa2d1cbede60dc97f6511a06 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the a specific joint state variable.  <a href="classstate__representation_1_1_joint_state.html#a46bb1912fa2d1cbede60dc97f6511a06">More...</a><br /></td></tr>
 <tr class="separator:a46bb1912fa2d1cbede60dc97f6511a06 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c3877c9312a72560a9a8e9cb1fd3ade inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a5c3877c9312a72560a9a8e9cb1fd3ade">clamp_state_variable</a> (const Eigen::ArrayXd &amp;max_absolute_value_array, const JointStateVariable &amp;state_variable_type, const Eigen::ArrayXd &amp;noise_ratio_array)</td></tr>
-<tr class="memdesc:a5c3877c9312a72560a9a8e9cb1fd3ade inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces) for each individual joints.  <a href="classstate__representation_1_1_joint_state.html#a5c3877c9312a72560a9a8e9cb1fd3ade">More...</a><br /></td></tr>
+<tr class="memdesc:a5c3877c9312a72560a9a8e9cb1fd3ade inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the a specific joint state variable for each individual joint.  <a href="classstate__representation_1_1_joint_state.html#a5c3877c9312a72560a9a8e9cb1fd3ade">More...</a><br /></td></tr>
 <tr class="separator:a5c3877c9312a72560a9a8e9cb1fd3ade inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e6f21559e2fe65bef9c6ea2af8d5066 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a5e6f21559e2fe65bef9c6ea2af8d5066">copy</a> () const</td></tr>
 <tr class="memdesc:a5e6f21559e2fe65bef9c6ea2af8d5066 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a>.  <a href="classstate__representation_1_1_joint_state.html#a5e6f21559e2fe65bef9c6ea2af8d5066">More...</a><br /></td></tr>
@@ -332,7 +344,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:ad35b47fcfc5f673e5ba46131d3583ce0 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_state.html#ad35b47fcfc5f673e5ba46131d3583ce0">More...</a><br /></td></tr>
 <tr class="separator:ad35b47fcfc5f673e5ba46131d3583ce0 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3156df4e4f0f2c37d4f230b5af74e831 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#a3156df4e4f0f2c37d4f230b5af74e831">operator*</a> (const Eigen::ArrayXd &amp;lambda) const</td></tr>
-<tr class="memdesc:a3156df4e4f0f2c37d4f230b5af74e831 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with an array of gains.  <a href="classstate__representation_1_1_joint_state.html#a3156df4e4f0f2c37d4f230b5af74e831">More...</a><br /></td></tr>
+<tr class="memdesc:a3156df4e4f0f2c37d4f230b5af74e831 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with an array of gains.  <a href="classstate__representation_1_1_joint_state.html#a3156df4e4f0f2c37d4f230b5af74e831">More...</a><br /></td></tr>
 <tr class="separator:a3156df4e4f0f2c37d4f230b5af74e831 inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4b2ab2248bc41aba539294e88c0e75e inherit pub_methods_classstate__representation_1_1_joint_state"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_joint_state.html#ad4b2ab2248bc41aba539294e88c0e75e">operator*=</a> (const Eigen::MatrixXd &amp;lambda)</td></tr>
 <tr class="memdesc:ad4b2ab2248bc41aba539294e88c0e75e inherit pub_methods_classstate__representation_1_1_joint_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the *= operator with a matrix of gains.  <a href="classstate__representation_1_1_joint_state.html#ad4b2ab2248bc41aba539294e88c0e75e">More...</a><br /></td></tr>
@@ -638,6 +650,156 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ade7075fa41fabc8f10f9f98d099810b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade7075fa41fabc8f10f9f98d099810b0">&#9670;&nbsp;</a></span>clamp() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void state_representation::JointPositions::clamp </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
+          <td class="paramname"><em>max_absolute_value_array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
+          <td class="paramname"><em>noise_ratio_array</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clamp inplace the magnitude of the positions to the values in argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum value of position for each joint </td></tr>
+    <tr><td class="paramname">noise_ratio_array</td><td>those values will be used to apply a dead zone relative to the maximum absolute value under which the position will be set to 0 for each individual joint </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0d71865e2304e1a1ff9e3699b686885b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d71865e2304e1a1ff9e3699b686885b">&#9670;&nbsp;</a></span>clamp() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void state_representation::JointPositions::clamp </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max_absolute_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>noise_ratio</em> = <code>0.</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clamp inplace the magnitude of the positions to the value in argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_absolute_value</td><td>the maximum value of position for all the joints </td></tr>
+    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone relative to the maximum absolute value under which the position will be set to 0 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a68bb6d87899eb441cb864e700229e1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68bb6d87899eb441cb864e700229e1e1">&#9670;&nbsp;</a></span>clamped() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a> state_representation::JointPositions::clamped </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
+          <td class="paramname"><em>max_absolute_value_array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::ArrayXd &amp;&#160;</td>
+          <td class="paramname"><em>noise_ratio_array</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the position clamped to the values in argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_absolute_value_array</td><td>the maximum value of position for each joint </td></tr>
+    <tr><td class="paramname">noise_ratio_array</td><td>those values will be used to apply a dead zone relative to the maximum absolute value under which the position will be set to 0 for each individual joint </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> </dd></dl>
+
+</div>
+</div>
+<a id="aa21d5fec25c7d34d00bcb6d8d1434cb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa21d5fec25c7d34d00bcb6d8d1434cb0">&#9670;&nbsp;</a></span>clamped() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_joint_positions.html">JointPositions</a> state_representation::JointPositions::clamped </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>max_absolute_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>noise_ratio</em> = <code>0.</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the position clamped to the value in argument. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_absolute_value</td><td>the maximum value of position for all the joints </td></tr>
+    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone relative to the maximum absolute value under which the position will be set to 0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the clamped <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> </dd></dl>
+
+</div>
+</div>
 <a id="ac33d7ade38d1f120c128c950adb1d734"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac33d7ade38d1f120c128c950adb1d734">&#9670;&nbsp;</a></span>copy()</h2>
 

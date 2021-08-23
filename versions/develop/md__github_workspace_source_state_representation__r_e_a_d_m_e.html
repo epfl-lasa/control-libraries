@@ -96,7 +96,7 @@ $(function() {
 <div class="line"> </div>
 <div class="line">s1.set_position(Eigen::Vector3d(0, 1, 0)); <span class="comment">// 1 meter in y direction</span></div>
 <div class="line">s1.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));</div>
-<div class="ttc" id="aclassstate__representation_1_1_cartesian_state_html"><div class="ttname"><a href="classstate__representation_1_1_cartesian_state.html">state_representation::CartesianState</a></div><div class="ttdoc">Class to represent a state in Cartesian space.</div><div class="ttdef"><b>Definition:</b> CartesianState.hpp:46</div></div>
+<div class="ttc" id="aclassstate__representation_1_1_cartesian_state_html"><div class="ttname"><a href="classstate__representation_1_1_cartesian_state.html">state_representation::CartesianState</a></div><div class="ttdoc">Class to represent a state in Cartesian space.</div><div class="ttdef"><b>Definition:</b> CartesianState.hpp:47</div></div>
 </div><!-- fragment --><p>By default, quaternions are normalized on setting, therefore:</p>
 <div class="fragment"><div class="line"><span class="comment">// will be rendered as Eigen::Quaterniond(0.70710678, 0.70710678, 0. , 0.)</span></div>
 <div class="line">s2.set_orientation(Eigen::Quaterniond(1, 1, 0, 0));</div>
@@ -196,7 +196,7 @@ $(function() {
 <p>A <code>JointState</code> is defined by the name of the corresponding robot and the name of each joints.</p>
 <div class="fragment"><div class="line"><span class="comment">// create a state for myrobot with 3 joints</span></div>
 <div class="line"><a class="code" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> js(<span class="stringliteral">&quot;myrobot&quot;</span>, std::vector&lt;string&gt;({<span class="stringliteral">&quot;joint0&quot;</span>, <span class="stringliteral">&quot;joint1&quot;</span>, <span class="stringliteral">&quot;joint2&quot;</span>}));</div>
-<div class="ttc" id="aclassstate__representation_1_1_joint_state_html"><div class="ttname"><a href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a></div><div class="ttdoc">Class to define a state in joint space.</div><div class="ttdef"><b>Definition:</b> JointState.hpp:40</div></div>
+<div class="ttc" id="aclassstate__representation_1_1_joint_state_html"><div class="ttname"><a href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a></div><div class="ttdoc">Class to define a state in joint space.</div><div class="ttdef"><b>Definition:</b> JointState.hpp:36</div></div>
 </div><!-- fragment --><p>Note that if the joints of the robot are named <code>{"joint0", "joint1", ..., "jointN"}</code> as above, you can also use the constructor that takes the number of joints as input which will name them accordingly:</p>
 <div class="fragment"><div class="line"><span class="comment">// create a state for myrobot with 3 joints named {&quot;joint0&quot;, &quot;joint1&quot;, &quot;joint3&quot;}</span></div>
 <div class="line"><a class="code" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> js(<span class="stringliteral">&quot;myrobot&quot;</span>, 3);</div>

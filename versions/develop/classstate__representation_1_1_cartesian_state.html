@@ -240,9 +240,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#a07a7dbc44ec54973f4c6800dfe06069e">set_zero</a> ()</td></tr>
 <tr class="memdesc:a07a7dbc44ec54973f4c6800dfe06069e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the <a class="el" href="classstate__representation_1_1_state.html" title="Abstract class to represent a state.">State</a> to a zero value. <br /></td></tr>
 <tr class="separator:a07a7dbc44ec54973f4c6800dfe06069e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac52b45a7df4737dba8d4c5b572ccce97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#ac52b45a7df4737dba8d4c5b572ccce97">clamp_state_variable</a> (double max_value, const CartesianStateVariable &amp;state_variable_type, double noise_ratio=0)</td></tr>
-<tr class="memdesc:ac52b45a7df4737dba8d4c5b572ccce97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force)  <a href="classstate__representation_1_1_cartesian_state.html#ac52b45a7df4737dba8d4c5b572ccce97">More...</a><br /></td></tr>
-<tr class="separator:ac52b45a7df4737dba8d4c5b572ccce97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f565718082645b493c2449006101b7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#a7f565718082645b493c2449006101b7a">clamp_state_variable</a> (double max_norm, const CartesianStateVariable &amp;state_variable_type, double noise_ratio=0)</td></tr>
+<tr class="memdesc:a7f565718082645b493c2449006101b7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clamp inplace the norm of the a specific state variable.  <a href="classstate__representation_1_1_cartesian_state.html#a7f565718082645b493c2449006101b7a">More...</a><br /></td></tr>
+<tr class="separator:a7f565718082645b493c2449006101b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2f87ff125ebb8c4814cb636d812004e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#ac2f87ff125ebb8c4814cb636d812004e">copy</a> () const</td></tr>
 <tr class="memdesc:ac2f87ff125ebb8c4814cb636d812004e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a copy of the <a class="el" href="classstate__representation_1_1_cartesian_state.html" title="Class to represent a state in Cartesian space.">CartesianState</a>.  <a href="classstate__representation_1_1_cartesian_state.html#ac2f87ff125ebb8c4814cb636d812004e">More...</a><br /></td></tr>
 <tr class="separator:ac2f87ff125ebb8c4814cb636d812004e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -482,8 +482,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac52b45a7df4737dba8d4c5b572ccce97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac52b45a7df4737dba8d4c5b572ccce97">&#9670;&nbsp;</a></span>clamp_state_variable()</h2>
+<a id="a7f565718082645b493c2449006101b7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f565718082645b493c2449006101b7a">&#9670;&nbsp;</a></span>clamp_state_variable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -492,7 +492,7 @@ Friends</h2></td></tr>
           <td class="memname">void state_representation::CartesianState::clamp_state_variable </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>max_value</em>, </td>
+          <td class="paramname"><em>max_norm</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -514,12 +514,12 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force) </p>
+<p>Clamp inplace the norm of the a specific state variable. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">max_value</td><td>the maximum absolute magnitude of the state variable </td></tr>
+    <tr><td class="paramname">max_norm</td><td>the maximum norm of the state variable </td></tr>
     <tr><td class="paramname">state_variable_type</td><td>name of the variable from the CartesianStateVariable structure to clamp </td></tr>
-    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a deadzone under which the velocity will be set to 0 </td></tr>
+    <tr><td class="paramname">noise_ratio</td><td>if provided, this value will be used to apply a dead zone under which the norm of the state variable will be set to 0 </td></tr>
   </table>
   </dd>
 </dl>

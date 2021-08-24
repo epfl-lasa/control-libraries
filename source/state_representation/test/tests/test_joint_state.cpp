@@ -96,6 +96,7 @@ TEST(JointState, GetSetFields) {
   // name
   js.set_name("robot");
   EXPECT_EQ(js.get_name(), "robot");
+  EXPECT_EQ(js.get_size(), 3);
   std::vector<std::string> joint_names{"j1", "j2", "j3"};
   js.set_names(joint_names);
   for (std::size_t i = 0; i < joint_names.size(); ++i) {
@@ -149,23 +150,82 @@ TEST(JointState, Compatibility) {
   EXPECT_FALSE(js1.is_compatible(js4));
 }
 
-TEST(JointState, GetData) {
-  JointState js = JointState::Random("test", 3);
-  Eigen::VectorXd concatenated_state(js.get_size() * 4);
-  concatenated_state << js.get_positions(), js.get_velocities(), js.get_accelerations(), js.get_torques();
-  EXPECT_TRUE(concatenated_state.isApprox(js.data()));
+TEST(JointState, SetZero) {
+  JointState random1 = JointState::Random("test", 3);
+  random1.initialize();
+  EXPECT_EQ(random1.data().norm(), 0);
+
+  JointState random2 = JointState::Random("test", 3);
+  random2.set_zero();
+  EXPECT_EQ(random2.data().norm(), 0);
 }
 
-TEST(JointState, SetData) {
+TEST(JointState, ClampVariable) {
+  JointState js1("test", 3);
+
+  js1.set_data(-10 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(15, JointStateVariable::ALL);
+  EXPECT_EQ(js1.data(), -10 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(9, JointStateVariable::ALL);
+  EXPECT_EQ(js1.data(), -9 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(20, JointStateVariable::ALL, 0.5);
+  EXPECT_EQ(js1.data(), Eigen::VectorXd::Zero(js1.get_size() * 4));
+
+  js1.set_data(10 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(15, JointStateVariable::ALL);
+  EXPECT_EQ(js1.data(), 10 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(9, JointStateVariable::ALL);
+  EXPECT_EQ(js1.data(), 9 * Eigen::VectorXd::Ones(js1.get_size() * 4));
+  js1.clamp_state_variable(20, JointStateVariable::ALL, 0.5);
+  EXPECT_EQ(js1.data(), Eigen::VectorXd::Zero(js1.get_size() * 4));
+
+  JointState js2("test", 3);
+  js2.set_data(10 * Eigen::VectorXd::Ones(js2.get_size() * 4));
+  js2.clamp_state_variable(8, JointStateVariable::POSITIONS);
+  EXPECT_EQ(js2.get_positions(), 8 * Eigen::VectorXd::Ones(js2.get_size()));
+
+  Eigen::Vector3d max_absolute_values(4, 5, 6);
+  js2.clamp_state_variable(max_absolute_values.array(), JointStateVariable::VELOCITIES, Eigen::Array3d::Zero());
+  EXPECT_EQ(js2.get_velocities(), max_absolute_values);
+
+  js2.clamp_state_variable(
+      50 * Eigen::Array3d::Ones(), JointStateVariable::ACCELERATIONS, 0.5 * Eigen::Array3d::Ones());
+  EXPECT_EQ(js2.get_accelerations(), Eigen::VectorXd::Zero(js2.get_size()));
+
+  Eigen::VectorXd torques(3), result(3);
+  torques << -2.0, 1.0, -4.0;
+  result << -2.0, 0.0, -3.0;
+  js2.set_torques(torques);
+  js2.clamp_state_variable(10, JointStateVariable::TORQUES);
+  EXPECT_EQ(js2.get_torques(), torques);
+  js2.clamp_state_variable(
+      3 * Eigen::ArrayXd::Ones(js2.get_size()), JointStateVariable::TORQUES,
+      0.5 * Eigen::ArrayXd::Ones(js2.get_size()));
+  EXPECT_EQ(js2.get_torques(), result);
+
+  EXPECT_THROW(js2.clamp_state_variable(Eigen::Array2d::Ones(), JointStateVariable::ALL, Eigen::Array3d::Zero()),
+               IncompatibleSizeException);
+  EXPECT_THROW(js2.clamp_state_variable(Eigen::Array3d::Ones(), JointStateVariable::ALL, Eigen::Array2d::Zero()),
+               IncompatibleSizeException);
+}
+
+TEST(JointState, GetSetData) {
   JointState js1 = JointState::Zero("test", 3);
   JointState js2 = JointState::Random("test", 3);
+  Eigen::VectorXd concatenated_state(js1.get_size() * 4);
+  concatenated_state << js1.get_positions(), js1.get_velocities(), js1.get_accelerations(), js1.get_torques();
+  EXPECT_EQ(concatenated_state, js1.data());
+  for (std::size_t i = 0; i < js1.get_size(); ++i) {
+    EXPECT_EQ(concatenated_state.array()(i), js1.array()(i));
+  }
+
   js1.set_data(js2.data());
   EXPECT_TRUE(js2.data().isApprox(js1.data()));
 
   auto state_vec = js2.to_std_vector();
   js1.set_data(state_vec);
   for (std::size_t i = 0; i < state_vec.size(); ++i) {
-    EXPECT_FLOAT_EQ(state_vec.at(i), js1.data()(i));
+    EXPECT_EQ(state_vec.at(i), js1.data()(i));
   }
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
 }
@@ -174,46 +234,8 @@ TEST(JointState, JointStateToStdVector) {
   JointState js = JointState::Random("test", 3);
   std::vector<double> vec_data = js.to_std_vector();
   for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_EQ(js.data()(i), vec_data[i]);
+    EXPECT_EQ(js.data()(i), vec_data.at(i));
   }
-}
-
-TEST(JointState, ClampVariable) {
-  JointState js("test", 3);
-  js.set_data(-10 * Eigen::VectorXd::Ones(js.get_size() * 4));
-  js.clamp_state_variable(9, JointStateVariable::ALL);
-  for (std::size_t i = 0; i < js.get_size() * 4; ++i) {
-    EXPECT_EQ(js.data()(i), -9);
-  }
-  js.set_data(10 * Eigen::VectorXd::Ones(js.get_size() * 4));
-  js.clamp_state_variable(9, JointStateVariable::ALL);
-  for (std::size_t i = 0; i < js.get_size() * 4; ++i) {
-    EXPECT_EQ(js.data()(i), 9);
-  }
-
-  js.clamp_state_variable(8, JointStateVariable::POSITIONS);
-  for (std::size_t i = 0; i < js.get_size(); ++i) {
-    EXPECT_EQ(js.get_positions()(i), 8);
-  }
-
-  Eigen::Array3d max_absolute_value_array(4, 5, 6);
-  js.clamp_state_variable(max_absolute_value_array, JointStateVariable::VELOCITIES, Eigen::Array3d::Zero());
-  for (std::size_t i = 0; i < js.get_size(); ++i) {
-    EXPECT_EQ(js.get_velocities()(i), max_absolute_value_array(i));
-  }
-
-  js.clamp_state_variable(100 * Eigen::Array3d::Ones(), JointStateVariable::ACCELERATIONS, 10 * Eigen::Array3d::Ones());
-  for (std::size_t i = 0; i < js.get_size(); ++i) {
-    EXPECT_EQ(js.get_accelerations()(i), 0);
-  }
-
-  js.clamp_state_variable(10 * Eigen::Array3d::Ones(), JointStateVariable::TORQUES, 3 * Eigen::Array3d::Ones());
-  for (std::size_t i = 0; i < js.get_size(); ++i) {
-    EXPECT_EQ(js.get_torques()(i), 9);
-  }
-
-  EXPECT_THROW(js.clamp_state_variable(Eigen::Array2d::Ones(), JointStateVariable::ALL, Eigen::Array2d::Zero()),
-               IncompatibleSizeException);
 }
 
 TEST(JointState, Distance) {
@@ -227,13 +249,18 @@ TEST(JointState, Distance) {
   Eigen::VectorXd data1 = Eigen::VectorXd::Random(js1.get_size() * 4);
   js1.set_data(data1);
   JointState js3 = JointState("test", 3);
-  Eigen::VectorXd data2 = Eigen::VectorXd::Random(js1.get_size() * 4);
-  js3.set_data(data2);
+  Eigen::VectorXd data3 = Eigen::VectorXd::Random(js3.get_size() * 4);
+  js3.set_data(data3);
 
-  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::POSITIONS), (data1.head(3) - data2.head(3)).norm());
-  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::VELOCITIES), (data1.segment(3, 3) - data2.segment(3, 3)).norm());
-  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::ACCELERATIONS), (data1.segment(6, 3) - data2.segment(6, 3)).norm());
-  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::TORQUES), (data1.tail(3) - data2.tail(3)).norm());
+  double pos_dist = (data1.head(3) - data3.head(3)).norm();
+  double vel_dist = (data1.segment(3, 3) - data3.segment(3, 3)).norm();
+  double acc_dist = (data1.segment(6, 3) - data3.segment(6, 3)).norm();
+  double tor_dist = (data1.tail(3) - data3.tail(3)).norm();
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::ALL), pos_dist + vel_dist + acc_dist + tor_dist);
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::POSITIONS), pos_dist);
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::VELOCITIES), vel_dist);
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::ACCELERATIONS), acc_dist);
+  EXPECT_FLOAT_EQ(js1.dist(js3, JointStateVariable::TORQUES), tor_dist);
   EXPECT_FLOAT_EQ(js1.dist(js3), js3.dist(js1));
 }
 
@@ -264,25 +291,3 @@ TEST(JointState, Distance) {
 //  EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
 //}
 
-TEST(JointStateTest, StateClamping) {
-  JointState js = JointState("test_robot", 4);
-  js.set_data(10 * Eigen::VectorXd::Ones(4 * 4));
-  js.clamp_state_variable(9, JointStateVariable::ALL, 0);
-  EXPECT_EQ(js.data(), 9 * Eigen::VectorXd::Ones(4 * 4));
-
-  js.clamp_state_variable(10, JointStateVariable::POSITIONS, 0.5);
-  EXPECT_EQ(js.get_positions(), 9 * Eigen::VectorXd::Ones(4));
-  js.set_positions(2 * Eigen::VectorXd::Ones(4));
-  js.clamp_state_variable(9, JointStateVariable::POSITIONS, 0.5);
-  EXPECT_EQ(js.get_positions(), Eigen::VectorXd::Zero(4));
-
-  Eigen::VectorXd accelerations(4), result(4);
-  accelerations << -2.0, 1.0, -4.0, 4.0;
-  result << -2.0, 0.0, -3.0, 3.0;
-  js.set_accelerations(accelerations);
-  js.clamp_state_variable(10, JointStateVariable::ACCELERATIONS);
-  EXPECT_EQ(js.get_accelerations(), accelerations);
-  js.clamp_state_variable(
-      3 * Eigen::ArrayXd::Ones(4), JointStateVariable::ACCELERATIONS, 0.5 * Eigen::ArrayXd::Ones(4));
-  EXPECT_EQ(js.get_accelerations(), result);
-}

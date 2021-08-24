@@ -189,7 +189,7 @@ bool decode(const std::string& msg, CartesianState& obj) {
     obj.set_name(state.spatial_state().state().name());
     obj.set_reference_frame(state.spatial_state().reference_frame());
     obj.set_position(decoder<Eigen::Vector3d>(state.position()));
-    obj.set_orientation(decoder<Eigen::Quaterniond>(state.orientation()));
+    obj.set_orientation(decoder<Eigen::Quaterniond, proto::Quaterniond>(state.orientation()));
     obj.set_linear_velocity(decoder<Eigen::Vector3d>(state.linear_velocity()));
     obj.set_angular_velocity(decoder<Eigen::Vector3d>(state.angular_velocity()));
     obj.set_linear_acceleration(decoder<Eigen::Vector3d>(state.linear_acceleration()));
@@ -243,7 +243,7 @@ bool decode(const std::string& msg, CartesianPose& obj) {
     obj.set_name(pose.spatial_state().state().name());
     obj.set_reference_frame(pose.spatial_state().reference_frame());
     obj.set_position(decoder<Eigen::Vector3d>(pose.position()));
-    obj.set_orientation(decoder<Eigen::Quaterniond>(pose.orientation()));
+    obj.set_orientation(decoder<Eigen::Quaterniond, proto::Quaterniond>(pose.orientation()));
     obj.set_empty(pose.spatial_state().state().empty());
     return true;
   } catch (...) {
@@ -406,6 +406,7 @@ template<>
 std::string encode<JointState>(const JointState& obj) {
   proto::StateMessage message;
   *message.mutable_joint_state() = encoder<proto::JointState>(obj);
+  message.PrintDebugString();
   return message.SerializeAsString();
 }
 template<>
@@ -428,11 +429,11 @@ bool decode(const std::string& msg, JointState& obj) {
     }
 
     auto state = message.joint_state();
-    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
-    obj.set_positions(decoder<std::vector<double>>(state.positions()));
-    obj.set_velocities(decoder<std::vector<double>>(state.velocities()));
-    obj.set_accelerations(decoder<std::vector<double>>(state.accelerations()));
-    obj.set_torques(decoder<std::vector<double>>(state.torques()));
+    obj = JointState(state.state().name(), decoder<std::string>(state.joint_names()));
+    obj.set_positions(decoder(state.positions()));
+    obj.set_velocities(decoder(state.velocities()));
+    obj.set_accelerations(decoder(state.accelerations()));
+    obj.set_torques(decoder(state.torques()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {
@@ -478,8 +479,8 @@ bool decode(const std::string& msg, JointPositions& obj) {
     }
 
     auto state = message.joint_positions();
-    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
-    obj.set_positions(decoder<std::vector<double>>(state.positions()));
+    obj = JointState(state.state().name(), decoder(state.joint_names()));
+    obj.set_positions(decoder(state.positions()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {
@@ -525,8 +526,8 @@ bool decode(const std::string& msg, JointVelocities& obj) {
     }
 
     auto state = message.joint_velocities();
-    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
-    obj.set_velocities(decoder<std::vector<double>>(state.velocities()));
+    obj = JointState(state.state().name(), decoder(state.joint_names()));
+    obj.set_velocities(decoder(state.velocities()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {
@@ -572,8 +573,8 @@ bool decode(const std::string& msg, JointAccelerations& obj) {
     }
 
     auto state = message.joint_accelerations();
-    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
-    obj.set_accelerations(decoder<std::vector<double>>(state.accelerations()));
+    obj = JointState(state.state().name(), decoder(state.joint_names()));
+    obj.set_accelerations(decoder(state.accelerations()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {
@@ -619,8 +620,8 @@ bool decode(const std::string& msg, JointTorques& obj) {
     }
 
     auto state = message.joint_torques();
-    obj = JointState(state.state().name(), {state.joint_names().begin(), state.joint_names().end()});
-    obj.set_torques(decoder<std::vector<double>>(state.torques()));
+    obj = JointState(state.state().name(), decoder(state.joint_names()));
+    obj.set_torques(decoder(state.torques()));
     obj.set_empty(state.state().empty());
     return true;
   } catch (...) {

@@ -1,31 +1,23 @@
 #include "clproto/decoders.h"
 
-#include "state_representation/state_message.pb.h"
-
 using namespace state_representation;
 
 namespace clproto {
 
-DecoderNotImplementedException::DecoderNotImplementedException(const std::string& msg) : DecodingException(msg) {}
-
-template<>
 std::vector<bool> decoder(const google::protobuf::RepeatedField<bool>& message) {
   // explicit construction is needed for the bool vector due to stl optimisations
   std::vector<bool> vec(message.begin(), message.end());
   return vec;
 }
 
-template<>
 StateType decoder(const proto::StateType& message) {
   return static_cast<StateType>(message);
 }
 
-template<>
 Eigen::Vector3d decoder(const proto::Vector3d& message) {
   return {message.x(), message.y(), message.z()};
 }
 
-template<>
 Eigen::Quaterniond decoder(const proto::Quaterniond& message) {
   return {message.w(), message.vec().x(), message.vec().y(), message.vec().z()};
 }

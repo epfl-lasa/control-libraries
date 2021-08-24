@@ -8,8 +8,9 @@ echo ">>> Building proto bindings..."
 cd /github/workspace/protocol/protobuf && make all || exit 2
 
 echo ">>> Configuring clproto_cpp cmake..."
-cd /github/workspace/protocol/clproto_cpp && mkdir build && cd build && cmake -DBUILD_TESTING=ON .. || \
-  (echo ">>> [ERROR] Configuration stage failed!" && exit 3) || exit $?
+cd /github/workspace/protocol/clproto_cpp && mkdir build && cd build \
+  && cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_TESTING=ON .. \
+  || (echo ">>> [ERROR] Configuration stage failed!" && exit 3) || exit $?
 
 echo ">>> Building clproto_cpp..."
 make all || (echo ">>> [ERROR] Build stage failed!" && exit 4) || exit $?

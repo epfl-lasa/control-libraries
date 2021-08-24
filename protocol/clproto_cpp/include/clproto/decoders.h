@@ -1,27 +1,13 @@
 #pragma once
 
 #include <google/protobuf/repeated_field.h>
-#include <state_representation/parameters/Parameter.hpp>
-#include <state_representation/parameters/parameter.pb.h>
 
-#include "clproto.h"
+#include <state_representation/State.hpp>
+#include <state_representation/parameters/Parameter.hpp>
+
+#include "state_representation/state_message.pb.h"
 
 namespace clproto {
-
-class DecoderNotImplementedException : public DecodingException {
-public:
-  explicit DecoderNotImplementedException(const std::string& msg);
-};
-
-/**
- * @brief Decoding helper method.
- * @tparam ObjT The control libraries output type
- * @tparam MsgT The protocol message input type
- * @param message The protocol message object
- * @return The equivalent decoded control libraries object
- */
-template<typename ObjT, typename MsgT>
-ObjT decoder(const MsgT& message);
 
 /**
  * @brief Decoding helper method for a RepeatedField message
@@ -52,11 +38,17 @@ std::vector<FieldT> decoder(const google::protobuf::RepeatedPtrField<FieldT>& me
 template<typename ParamT>
 state_representation::Parameter<ParamT> decoder(const state_representation::proto::Parameter& message);
 
-template<typename ObjT, typename MsgT>
-ObjT decoder(const MsgT&) {
-  throw DecoderNotImplementedException("Templated decoder function not implemented!");
-}
+/*
+ * Declarations for decoding helpers
+ */
+std::vector<bool> decoder(const google::protobuf::RepeatedField<bool>& message);
+state_representation::StateType decoder(const state_representation::proto::StateType& message);
+Eigen::Vector3d decoder(const state_representation::proto::Vector3d& message);
+Eigen::Quaterniond decoder(const state_representation::proto::Quaterniond& message);
 
+/*
+ * Definitions for templated RepeatedField methods
+ */
 template<typename FieldT>
 std::vector<FieldT> decoder(const google::protobuf::RepeatedField<FieldT>& message) {
   return {message.begin(), message.end()};
@@ -66,4 +58,5 @@ template<typename FieldT>
 std::vector<FieldT> decoder(const google::protobuf::RepeatedPtrField<FieldT>& message) {
   return {message.begin(), message.end()};
 }
+
 }

@@ -385,7 +385,7 @@ bool decode(const std::string& msg, Jacobian& obj) {
     auto raw_data = const_cast<double*>(jacobian.data().data());
     auto data = Eigen::Map<Eigen::MatrixXd>(raw_data, jacobian.rows(), jacobian.cols());
     obj = Jacobian(
-        jacobian.state().name(), {jacobian.joint_names().begin(), jacobian.joint_names().end()}, jacobian.frame(), data,
+        jacobian.state().name(), decoder<std::string>(jacobian.joint_names()), jacobian.frame(), data,
         jacobian.reference_frame());
     return true;
   } catch (...) {
@@ -406,7 +406,6 @@ template<>
 std::string encode<JointState>(const JointState& obj) {
   proto::StateMessage message;
   *message.mutable_joint_state() = encoder<proto::JointState>(obj);
-  message.PrintDebugString();
   return message.SerializeAsString();
 }
 template<>

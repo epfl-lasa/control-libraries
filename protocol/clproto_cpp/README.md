@@ -51,6 +51,12 @@ into one high level message packet. For example, a robot might broadcast the `Ca
 of its end-effector together with its `JointState`. A client controller might want to listen
 for the combined "Robot State" on a single subscription topic.
 
+The clproto library facilitates this usage by providing the methods `pack_fields` and `unpack_fields`.
+An ordered vector of encoded messages are combined into a data packet by the `pack_fields` method.
+For N fields, it adds a message header with (N + 1) values, describing the number of fields
+and the data size of each ordered field method. This allows the `unpack_fields` method to split
+the encoded fields back into an ordered vector to be decoded.
+
 ```c++
 #include <clproto.h>
 #include <state_representation/space/cartesian/CartesianState.hpp>

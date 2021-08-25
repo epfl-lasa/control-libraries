@@ -264,30 +264,56 @@ TEST(JointState, Distance) {
   EXPECT_FLOAT_EQ(js1.dist(js3), js3.dist(js1));
 }
 
-//TEST(JointStateTest, AddTwoState) {
-//  JointState j1 = JointState::Random("test_robot", 4);
-//  JointState j2 = JointState::Random("test_robot", 4);
-//  JointState jsum = j1 + j2;
-//  EXPECT_NEAR(jsum.data().norm(), (j1.data() + j2.data()).norm(), 1e-4);
-//}
+TEST(JointStateTest, Addition) {
+  JointState js1 = JointState::Random("test", 3);
+  JointState js2 = JointState::Random("test", 3);
+  JointState js3 = JointState::Random("test", 4);
+  EXPECT_THROW(js1 + js3, IncompatibleStatesException);
+  JointState jsum = js1 + js2;
+  EXPECT_EQ(jsum.data(), js1.data() + js2.data());
+  js2 += js1;
+  EXPECT_EQ(jsum.data(), js2.data());
+}
 
-//TEST(JointStateTest, SubstractTwoState) {
-//  JointState j1 = JointState::Random("test_robot", 4);
-//  JointState j2 = JointState::Random("test_robot", 4);
-//  JointState jdiff = j1 - j2;
-//  EXPECT_NEAR(jdiff.data().norm(), (j1.data() - j2.data()).norm(), 1e-4);
-//}
-//
-//TEST(JointStateTest, MultiplyByScalar) {
-//  JointState js = JointState::Random("test_robot", 4);
-//  JointState jscaled = 0.5 * js;
-//  EXPECT_NEAR(jscaled.data().norm(), (0.5 * js.data()).norm(), 1e-4);
-//}
-//
-//TEST(JointStateTest, MultiplyByArray) {
-//  JointState js = JointState::Random("test_robot", 4);
-//  Eigen::MatrixXd gain = Eigen::VectorXd::Random(16).asDiagonal();
-//  JointState jscaled = gain * js;
-//  EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
+TEST(JointStateTest, Subtraction) {
+  JointState js1 = JointState::Random("test", 3);
+  JointState js2 = JointState::Random("test", 3);
+  JointState js3 = JointState::Random("test", 4);
+  EXPECT_THROW(js1 - js3, IncompatibleStatesException);
+  JointState jdiff = js1 - js2;
+  EXPECT_EQ(jdiff.data(), js1.data() - js2.data());
+  js1 -= js2;
+  EXPECT_EQ(jdiff.data(), js1.data());
+}
+
+TEST(JointStateTest, ScalarMultiplication) {
+  JointState js = JointState::Random("test", 3);
+  JointState jscaled = 0.5 * js;
+  EXPECT_EQ(jscaled.data(), 0.5 * js.data());
+  js *= 0.5;
+  EXPECT_EQ(jscaled.data(), js.data());
+
+  JointState empty;
+  EXPECT_THROW(0.5 * empty, EmptyStateException);
+}
+
+TEST(JointStateTest, ScalarDivision) {
+  JointState js = JointState::Random("test", 3);
+  JointState jscaled = js / 0.5;
+  EXPECT_EQ(jscaled.data(), js.data() / 0.5);
+  js /= 0.5;
+  EXPECT_EQ(jscaled.data(), js.data());
+
+  JointState empty;
+  EXPECT_THROW(empty / 0.5, EmptyStateException);
+}
+
+//TEST(JointStateTest, ArrayMatrixMultiplication) {
+//  JointState js = JointState::Random("test", 3);
+//  Eigen::VectorXd gains = Eigen::VectorXd::Random(4 * js.get_size());
+//  Eigen::ArrayXd gain_array = gains.array();
+//  Eigen::MatrixXd gain_matrix = gains.asDiagonal();
+//  JointState jscaled_array = gain_array * js;
+////  EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
 //}
 

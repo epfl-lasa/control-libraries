@@ -290,6 +290,7 @@ TEST(JointStateTest, ScalarMultiplication) {
   JointState js = JointState::Random("test", 3);
   JointState jscaled = 0.5 * js;
   EXPECT_EQ(jscaled.data(), 0.5 * js.data());
+  EXPECT_EQ((js * 0.5).data(), jscaled.data());
   js *= 0.5;
   EXPECT_EQ(jscaled.data(), js.data());
 
@@ -308,12 +309,32 @@ TEST(JointStateTest, ScalarDivision) {
   EXPECT_THROW(empty / 0.5, EmptyStateException);
 }
 
-//TEST(JointStateTest, ArrayMatrixMultiplication) {
-//  JointState js = JointState::Random("test", 3);
-//  Eigen::VectorXd gains = Eigen::VectorXd::Random(4 * js.get_size());
-//  Eigen::ArrayXd gain_array = gains.array();
-//  Eigen::MatrixXd gain_matrix = gains.asDiagonal();
-//  JointState jscaled_array = gain_array * js;
-////  EXPECT_NEAR(jscaled.data().norm(), (gain * js.data()).norm(), 1e-4);
-//}
+TEST(JointStateTest, MatrixMultiplication) {
+  JointState js = JointState::Random("test", 3);
+  Eigen::MatrixXd gains = Eigen::VectorXd::Random(4 * js.get_size()).asDiagonal();
+
+  JointState jscaled = gains * js;
+  EXPECT_EQ(jscaled.data(), gains * js.data());
+  EXPECT_EQ((js * gains).data(), jscaled.data());
+  js *= gains;
+  EXPECT_EQ(jscaled.data(), js.data());
+  JointState jscaled2 = js * gains;
+
+  gains = Eigen::VectorXd::Random(js.get_size()).asDiagonal();
+  EXPECT_THROW(gains * js, IncompatibleSizeException);
+}
+
+TEST(JointStateTest, ArrayMultiplication) {
+  JointState js = JointState::Random("test", 3);
+  Eigen::ArrayXd gains = Eigen::ArrayXd::Random(4 * js.get_size());
+
+  JointState jscaled = gains * js;
+  EXPECT_EQ(jscaled.data(), (gains * js.array()).matrix());
+  EXPECT_EQ((js * gains).data(), jscaled.data());
+  js *= gains;
+  EXPECT_EQ(jscaled.data(), js.data());
+
+  gains = Eigen::ArrayXd::Random(js.get_size());
+  EXPECT_THROW(gains * js, IncompatibleSizeException);
+}
 

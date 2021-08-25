@@ -38,7 +38,6 @@ if (!clproto::is_valid(message)) {
 }
 
 clproto::MessageType type = clproto::check_message_type(msg);
-
 ```
 
 ## Combining multiple message into a packet
@@ -100,7 +99,6 @@ The packing and unpacking of the message should be handled according to the netw
 This sections shows an example for ZMQ messaging.
 
 ```c++
-
 #include <zmq.h>
 
 // Combine encoded state messages into an ordered vector
@@ -142,5 +140,4 @@ std::size_t packet_size = sizeof(proto::field_length_t) * encoded_fields.size();
 for (const auto& field : encoded_fields) {
   packet_size += field.size();
 }
-
 ```

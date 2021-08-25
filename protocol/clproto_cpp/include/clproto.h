@@ -5,11 +5,25 @@
 
 namespace clproto {
 
+/**
+ * @class DecodingException
+ * @brief A DedocdingException is raised whenever a
+ * decoding operation fails due to invalid encoding.
+ */
 class DecodingException : public std::runtime_error {
 public:
   explicit DecodingException(const std::string& msg);
 };
 
+/**
+ * @enum MessageType
+ * @brief The MessageType enumeration contains the possible
+ * message types in the clproto.
+ * @details The values and order of this enumeration
+ * are synchronized with the fields of the protobuf
+ * StateMessage type, allowing a one-to-one mapping
+ * to the StateMessage type case.
+ */
 enum MessageType {
   UNKNOWN_MESSAGE = 0,
   STATE_MESSAGE = 1,
@@ -27,6 +41,28 @@ enum MessageType {
   JOINT_TORQUES_MESSAGE = 13,
   SHAPE_MESSAGE = 14,
   ELLIPSOID_MESSAGE = 15,
+  PARAMETER_MESSAGE = 16
+};
+
+/**
+ * @enum ParameterMessageType
+ * @brief The ParameterMessageType enumeration contains the
+ * possible value types contained in a parameter message.
+ * @details The values and order of this enumeration
+ * are synchronized with the fields of the protobuf
+ * ParameterValue type, allowing a one-to-one mapping
+ * to the ParameterValue type case.
+ */
+enum ParameterMessageType {
+  UNKNOWN_PARAMETER = 0,
+  DOUBLE = 1,
+  DOUBLE_ARRAY = 2,
+  BOOL = 3,
+  BOOL_ARRAY = 4,
+  STRING = 5,
+  STRING_ARRAY = 6,
+  MATRIX = 7,
+  VECTOR = 8
 };
 
 /**
@@ -46,13 +82,22 @@ bool is_valid(const std::string& msg);
 MessageType check_message_type(const std::string& msg);
 
 /**
+ * @brief Check which control libraries parameter type a
+ * serialized binary string can be decoded as, if at all.
+ * @param msg The serialized binary string to check
+ * @return The ParameterMessageType of the contained type or UNKNOWN
+ */
+ParameterMessageType check_parameter_message_type(const std::string& msg);
+
+/**
  * @brief Encode a control libraries object into
  * a serialized binary string representation (wire format).
  * @tparam T The provided control libraries object type
  * @param obj The control libraries object to encode
  * @return The serialized binary string encoding
  */
-template<typename T> std::string encode(const T& obj);
+template<typename T>
+std::string encode(const T& obj);
 
 /**
  * @brief Decode a serialized binary string from
@@ -63,7 +108,8 @@ template<typename T> std::string encode(const T& obj);
  * @param msg The serialized binary string to decode
  * @return A new instance of the control libraries object
  */
-template<typename T> T decode(const std::string& msg);
+template<typename T>
+T decode(const std::string& msg);
 
 /**
  * @brief Exception safe decoding of a serialized binary string
@@ -75,6 +121,7 @@ template<typename T> T decode(const std::string& msg);
  * @param obj A reference to a control libraries object
  * @return A success status boolean
  */
-template<typename T> bool decode(const std::string& msg, T& obj);
+template<typename T>
+bool decode(const std::string& msg, T& obj);
 
 }

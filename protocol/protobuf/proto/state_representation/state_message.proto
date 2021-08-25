@@ -9,6 +9,7 @@ import "state_representation/space/joint/jacobian.proto";
 import "state_representation/space/joint/joint_state.proto";
 import "state_representation/geometry/shape.proto";
 import "state_representation/geometry/ellipsoid.proto";
+import "state_representation/parameters/parameter.proto";
 
 message StateMessage {
   oneof message_type {
@@ -27,5 +28,6 @@ message StateMessage {
     JointTorques joint_torques = 13;
     Shape shape = 14;
     Ellipsoid ellipsoid = 15;
+    Parameter parameter = 16;
   }
 }

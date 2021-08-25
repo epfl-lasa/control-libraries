@@ -9,7 +9,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Protobuf message protocol and C++ binding library `clproto` for
-serializing and deserializing control library objects (#168, #175, #177, #179)
+serializing and deserializing control library objects (#168, #175, #177, #179, #180)
 - Add set_data function (#163)
 - Move set_data declaration to State and add it for Ellipsoid (#166)
 - Add automatic documentation generation and deployment to GitHub Pages (#170)
@@ -20,6 +20,16 @@ serializing and deserializing control library objects (#168, #175, #177, #179)
   scripts (#174)
 - Add class JointAccelerations (#173)
 - Fix clamp_state_variable function for CartesianState and JointState (#176)
+
+### Pending TODOs for the next release
+
+- Revise `*=` and `*` operators in Cartesian types before the next release with
+  breaking changes (some are marked *deprecated*, and some are left as is, but
+  they should be deleted) (#156)
+- Add the wrench computation in the `*` operator and `inverse` function (#134)
+- Refactor and improve unittests for state_representation (especially JointState
+  and CartesianState)
+- Rename repository
 
 ## 3.1.0
 
@@ -44,16 +54,6 @@ of the libraries.
 
 **general**
 - Use release configuration in install script (#155)
-
-### Pending TODOs for the next release
-
-- Revise `*=` and `*` operators in Cartesian types before the next release with 
-  breaking changes (some are marked *deprecated*, and some are left as is, but 
-  they should be deleted) (#156)
-- Add the wrench computation in the `*` operator and `inverse` function (#134)
-- Refactor and improve unittests for state_representation (especially JointState
-  and CartesianState)
-- Rename repository
 
 ## 3.0.0
 

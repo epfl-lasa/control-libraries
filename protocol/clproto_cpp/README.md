@@ -140,7 +140,7 @@ std::vector<std::string> encoded_fields = ...;
 // The packet header starts with N + 1 values of size proto::field_length_t,
 // where N is the number of fields N. The first value stores the number of fields,
 // while the following N values store the data length of each respective field.
-std::size_t packet_size = sizeof(proto::field_length_t) * encoded_fields.size();
+std::size_t packet_size = sizeof(proto::field_length_t) * (encoded_fields.size() + 1);
 
 // Add the size of each field
 for (const auto& field : encoded_fields) {

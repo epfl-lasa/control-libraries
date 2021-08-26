@@ -2,8 +2,20 @@
 
 #include <stdexcept>
 #include <string>
+#include <vector>
+
+#define CLPROTO_PACKING_MAX_FIELD_LENGTH (4096)
+#define CLPROTO_PACKING_MAX_FIELDS (64)
 
 namespace clproto {
+
+/**
+ * @typedef field_length_t
+ * @brief Size type used to indicate number of fields
+ * and field data length in ::pack_fields() and
+ * ::unpack_fields() methods
+ */
+typedef std::size_t field_length_t;
 
 /**
  * @class DecodingException
@@ -123,5 +135,33 @@ T decode(const std::string& msg);
  */
 template<typename T>
 bool decode(const std::string& msg, T& obj);
+
+/**
+ * @brief Pack an ordered vector of encoded field messages into a single data array.
+ * @details To send multiple messages in one packet, there must
+ * be some delimiting logic to distinguish the end of one field from the
+ * start of the next. This packing function encodes the number of fields (N)
+ * as the first data entry in the packet, then the size of each field in the
+ * next N data entries, followed by the raw concatenated data of each field.
+ * The order of the original vector is preserved. The corresponding
+ * ::unpack_fields() method can be used to restore the original vector
+ * of fields from the data buffer.
+ * @param fields An ordered vector of encoded message fields
+ * @param[out] data A raw data array to be packed with the fields
+ */
+void pack_fields(const std::vector<std::string>& fields, char* data);
+
+/**
+ * @brief Unpack a data array into an ordered vector of encoded field messages.
+ * @details A buffer of encoded fields serialized by ::pack_fields()
+ * can be unpacked by this method. It expects the first data entry
+ * in the data buffer to contain the number of fields (N). The next
+ * N data entries then must contain the data length of each subsequent
+ * field. Finally, the rest of the data is broken into ordered fields
+ * based on the interpreted field data lengths.
+ * @param data A raw data array that has been packed by ::pack_fields()
+ * @return An ordered vector of encoded message fields
+ */
+std::vector<std::string> unpack_fields(const char* data);
 
 }

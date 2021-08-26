@@ -60,6 +60,58 @@ ParameterMessageType check_parameter_message_type(const std::string& msg) {
   return ParameterMessageType::UNKNOWN_PARAMETER;
 }
 
+typedef std::size_t field_length_t;
+
+// --- Serialization methods --- //
+
+void pack_fields(const std::vector<std::string>& fields, char* data) {
+  std::size_t index = 0;
+  field_length_t nfields;
+  field_length_t sizes[CLPROTO_PACKING_MAX_FIELDS];
+
+  // write out the number of fields
+  nfields = static_cast<field_length_t>(fields.size());
+  memcpy(data, &nfields, sizeof(field_length_t));
+  index += sizeof(field_length_t);
+
+  // write out the data size of each field
+  for (std::size_t field = 0; field < nfields; ++field) {
+    sizes[field] = static_cast<field_length_t>(fields.at(field).size());
+  }
+  memcpy(&data[index], sizes, nfields * sizeof(field_length_t));
+  index += nfields * sizeof(field_length_t);
+
+  // write out each field
+  for (std::size_t field = 0; field < nfields; ++field) {
+    memcpy(&data[index], fields.at(field).c_str(), sizes[field]);
+    index += sizes[field];
+  }
+}
+
+std::vector<std::string> unpack_fields(const char* data) {
+  std::size_t index = 0;
+  field_length_t nfields;
+  field_length_t sizes[CLPROTO_PACKING_MAX_FIELDS];
+  char field_buffer[CLPROTO_PACKING_MAX_FIELD_LENGTH];
+  std::vector<std::string> fields;
+
+  // read out the number of fields
+  memcpy(&nfields, data, sizeof(field_length_t));
+  index += sizeof(field_length_t);
+
+  // read out the data size of each field
+  memcpy(sizes, &data[index], nfields * sizeof(field_length_t));
+  index += nfields * sizeof(field_length_t);
+
+  // read out each field
+  for (std::size_t field = 0; field < nfields; ++field) {
+    memcpy(field_buffer, &data[index], sizes[field]);
+    fields.emplace_back(std::string(field_buffer, sizes[field]));
+    index += sizes[field];
+  }
+  return fields;
+}
+
 /* ----------------------
  *         State
  * ---------------------- */

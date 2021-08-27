@@ -22,6 +22,7 @@ into serialized message packets (#182)
   scripts (#174)
 - Add class JointAccelerations (#173)
 - Fix clamp_state_variable function for CartesianState and JointState (#176)
+- Install tagged versions of osqp and osqpEigen (#184)
 
 ### Pending TODOs for the next release
 

@@ -9,6 +9,9 @@ BUILD_TESTING="OFF"
 INSTALL_DESTINATION="/usr/local"
 AUTO_INSTALL=""
 
+OSQP_TAG=v0.6.2
+OSQP_EIGEN_TAG=v0.6.4
+
 FAIL_MESSAGE="The provided input arguments are not valid.
 Run the script with the '--help' argument."
 
@@ -93,12 +96,12 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   mkdir -p "${SOURCE_PATH}"/tmp/lib
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone --recursive https://github.com/oxfordcontrol/osqp
-  cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout v0.6.2 && mkdir -p build && cd build || exit 1
+  cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1
   cmake -G "Unix Makefiles" .. && cmake --build . --target install || exit 1
   # install osqp eigen wrapper
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone https://github.com/robotology/osqp-eigen.git
-  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout v0.6.4 && mkdir -p build && cd build || exit 1
+  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout "${OSQP_EIGEN_TAG}" && mkdir -p build && cd build || exit 1
   cmake .. && make -j && make install || exit 1
 
   ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/

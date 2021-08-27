@@ -98,7 +98,7 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   # install osqp eigen wrapper
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone https://github.com/robotology/osqp-eigen.git
-  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout  v0.6.4 && mkdir -p build && cd build || exit 1
+  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout v0.6.4 && mkdir -p build && cd build || exit 1
   cmake .. && make -j && make install || exit 1
 
   ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/

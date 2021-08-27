@@ -1,15 +1,13 @@
 #include <fstream>
 #include <gtest/gtest.h>
-#include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
-#include "state_representation/robot/JointTorques.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;
 
-TEST(JointState, Constructors) {
+TEST(JointStateTest, Constructors) {
   JointState empty;
   EXPECT_EQ(empty.get_name(), "none");
   EXPECT_EQ(empty.get_type(), StateType::JOINTSTATE);
@@ -37,7 +35,7 @@ TEST(JointState, Constructors) {
   EXPECT_EQ(js2.data().norm(), 0);
 }
 
-TEST(JointState, ZeroInitialization) {
+TEST(JointStateTest, ZeroInitialization) {
   JointState zero = JointState::Zero("test", 3);
   EXPECT_FALSE(zero.is_empty());
   EXPECT_EQ(zero.data().norm(), 0);
@@ -47,7 +45,7 @@ TEST(JointState, ZeroInitialization) {
   EXPECT_EQ(zero2.data().norm(), 0);
 }
 
-TEST(JointState, RandomStateInitialization) {
+TEST(JointStateTest, RandomStateInitialization) {
   JointState random = JointState::Random("test", 3);
   EXPECT_GT(random.get_positions().norm(), 0);
   EXPECT_GT(random.get_velocities().norm(), 0);
@@ -61,7 +59,7 @@ TEST(JointState, RandomStateInitialization) {
   EXPECT_GT(random2.get_torques().norm(), 0);
 }
 
-TEST(JointState, CopyConstructor) {
+TEST(JointStateTest, CopyConstructor) {
   JointState random = JointState::Random("test", 3);
   JointState copy1(random);
   EXPECT_EQ(random.get_name(), copy1.get_name());
@@ -90,7 +88,7 @@ TEST(JointState, CopyConstructor) {
   EXPECT_TRUE(copy6.is_empty());
 }
 
-TEST(JointState, GetSetFields) {
+TEST(JointStateTest, GetSetFields) {
   JointState js("test", 3);
 
   // name
@@ -139,7 +137,7 @@ TEST(JointState, GetSetFields) {
   EXPECT_EQ(js.is_empty(), true);
 }
 
-TEST(JointState, Compatibility) {
+TEST(JointStateTest, Compatibility) {
   JointState js1("test", 3);
   JointState js2("test", std::vector<std::string>{"j1", "j2", "j3"});
   JointState js3("test", 4);
@@ -150,7 +148,7 @@ TEST(JointState, Compatibility) {
   EXPECT_FALSE(js1.is_compatible(js4));
 }
 
-TEST(JointState, SetZero) {
+TEST(JointStateTest, SetZero) {
   JointState random1 = JointState::Random("test", 3);
   random1.initialize();
   EXPECT_EQ(random1.data().norm(), 0);
@@ -160,7 +158,7 @@ TEST(JointState, SetZero) {
   EXPECT_EQ(random2.data().norm(), 0);
 }
 
-TEST(JointState, ClampVariable) {
+TEST(JointStateTest, ClampVariable) {
   JointState js1("test", 3);
 
   js1.set_data(-10 * Eigen::VectorXd::Ones(js1.get_size() * 4));
@@ -209,7 +207,7 @@ TEST(JointState, ClampVariable) {
                IncompatibleSizeException);
 }
 
-TEST(JointState, GetSetData) {
+TEST(JointStateTest, GetSetData) {
   JointState js1 = JointState::Zero("test", 3);
   JointState js2 = JointState::Random("test", 3);
   Eigen::VectorXd concatenated_state(js1.get_size() * 4);
@@ -230,7 +228,7 @@ TEST(JointState, GetSetData) {
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
 }
 
-TEST(JointState, JointStateToStdVector) {
+TEST(JointStateTest, JointStateToStdVector) {
   JointState js = JointState::Random("test", 3);
   std::vector<double> vec_data = js.to_std_vector();
   for (size_t i = 0; i < vec_data.size(); ++i) {
@@ -238,7 +236,7 @@ TEST(JointState, JointStateToStdVector) {
   }
 }
 
-TEST(JointState, Distance) {
+TEST(JointStateTest, Distance) {
   JointState js;
   JointState js1 = JointState::Random("test", 3);
   JointState js2 = JointState::Random("test", 2);

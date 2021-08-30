@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/exceptions/NotImplementedException.hpp"
 
 using namespace state_representation;
 

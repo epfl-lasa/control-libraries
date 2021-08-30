@@ -21,14 +21,14 @@ TEST(CartesianStateTest, IdentityInitialization) {
 TEST(CartesianStateTest, RandomStateInitialization) {
   CartesianState random = CartesianState::Random("test");
   // all data should be random (non 0)
-  EXPECT_GT(random.get_position().norm(), 0);
-  EXPECT_GT(abs(random.get_orientation().w()), 0);
-  EXPECT_GT(abs(random.get_orientation().x()), 0);
-  EXPECT_GT(abs(random.get_orientation().y()), 0);
-  EXPECT_GT(abs(random.get_orientation().z()), 0);
-  EXPECT_GT(random.get_twist().norm(), 0);
-  EXPECT_GT(random.get_accelerations().norm(), 0);
-  EXPECT_GT(random.get_wrench().norm(), 0);
+  EXPECT_NE(random.get_position().norm(), 0);
+  EXPECT_NE(abs(random.get_orientation().w()), 0);
+  EXPECT_NE(abs(random.get_orientation().x()), 0);
+  EXPECT_NE(abs(random.get_orientation().y()), 0);
+  EXPECT_NE(abs(random.get_orientation().z()), 0);
+  EXPECT_NE(random.get_twist().norm(), 0);
+  EXPECT_NE(random.get_accelerations().norm(), 0);
+  EXPECT_NE(random.get_wrench().norm(), 0);
 }
 
 TEST(CartesianStateTest, CopyState) {
@@ -96,7 +96,7 @@ TEST(CartesianStateTest, TestAllNorms) {
   CartesianState cs = CartesianState::Random("cs");
   // first test all norms
   std::vector<double> norms = cs.norms();
-  EXPECT_TRUE(norms.size() == 8);
+  ASSERT_TRUE(norms.size() == 8);
   EXPECT_NEAR(norms[0], cs.get_position().norm(), tolerance);
   EXPECT_NEAR(norms[1], cs.get_orientation().norm(), tolerance);
   EXPECT_NEAR(norms[2], cs.get_linear_velocity().norm(), tolerance);

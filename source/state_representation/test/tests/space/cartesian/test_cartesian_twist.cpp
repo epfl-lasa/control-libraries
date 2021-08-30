@@ -4,15 +4,18 @@
 
 using namespace state_representation;
 
+static void expect_only_twist(CartesianTwist& twist) {
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_position().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().norm(), 1);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().w(), 1);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_wrench().norm(), 0);
+}
+
 TEST(CartesianTwistTest, RandomTwistInitialization) {
   CartesianTwist random = CartesianTwist::Random("test");
-  // only position should be random
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_position().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_orientation().norm(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_orientation().w(), 1);
   EXPECT_GT(random.get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_wrench().norm(), 0);
+  expect_only_twist(random);
 }
 
 TEST(CartesianTwistTest, CopyTwist) {
@@ -20,39 +23,26 @@ TEST(CartesianTwistTest, CopyTwist) {
   CartesianTwist twist2(twist1);
   EXPECT_EQ(twist1.get_name(), twist2.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist2.get_reference_frame());
-  EXPECT_TRUE(twist1.data().isApprox(twist2.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(twist2).get_position().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist2).get_orientation().norm(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist2).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist2).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist2).get_wrench().norm(), 0);
+  EXPECT_EQ(twist1.data(), twist2.data());
+  expect_only_twist(twist2);
+
   CartesianTwist twist3 = twist1;
   EXPECT_EQ(twist1.get_name(), twist3.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist3.get_reference_frame());
-  EXPECT_TRUE(twist1.data().isApprox(twist3.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(twist3).get_position().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist3).get_orientation().norm(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist3).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist3).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist3).get_wrench().norm(), 0);
+  EXPECT_EQ(twist1.data(), twist3.data());
+  expect_only_twist(twist3);
+
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(twist1).set_pose(Eigen::VectorXd::Random(7));
   static_cast<CartesianState&>(twist1).set_accelerations(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(twist1).set_wrench(Eigen::VectorXd::Random(6));
   CartesianTwist twist4 = twist1;
-  EXPECT_TRUE(twist1.data().isApprox(twist4.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(twist4).get_position().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist4).get_orientation().norm(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist4).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist4).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist4).get_wrench().norm(), 0);
+  EXPECT_EQ(twist1.data(), twist4.data());
+  expect_only_twist(twist4);
+
   // copy a state, only the pose variables should be non 0
   CartesianTwist twist5 = CartesianState::Random("test");
-  EXPECT_EQ(static_cast<CartesianState&>(twist5).get_position().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist5).get_orientation().norm(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist5).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist5).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(twist5).get_wrench().norm(), 0);
+  expect_only_twist(twist5);
 
   CartesianTwist twist6;
   EXPECT_TRUE(twist6.is_empty());

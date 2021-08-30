@@ -72,7 +72,8 @@ public:
   JointPositions(const JointState& state);
 
   /**
-   * @brief Copy constructor from a JointVelocities by considering that it is equivalent to multiplying the velocities by 1 second
+   * @brief Integration constructor from a JointVelocities by considering that it is equivalent to multiplying the
+   * velocities by 1 second
    */
   JointPositions(const JointVelocities& velocities);
 

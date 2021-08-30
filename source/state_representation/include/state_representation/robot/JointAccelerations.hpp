@@ -57,9 +57,9 @@ public:
    * @brief joint_names list of joint names
    * @brief accelerations the vector of accelerations
    */
-  explicit JointAccelerations(const std::string& robot_name,
-                              const std::vector<std::string>& joint_names,
-                              const Eigen::VectorXd& accelerations);
+  explicit JointAccelerations(
+      const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& accelerations
+  );
 
   /**
    * @brief Copy constructor
@@ -72,7 +72,8 @@ public:
   JointAccelerations(const JointState& state);
 
   /**
-   * @brief Copy constructor from a JointVelocities by considering that it is equivalent to dividing the velocities by 1 second
+   * @brief Differentiation constructor from a JointVelocities by considering that it is equivalent to dividing
+   * the velocities by 1 second
    */
   JointAccelerations(const JointVelocities& velocities);
 
@@ -262,8 +263,9 @@ public:
    * the acceleration will be set to 0
    * @return the clamped JointAccelerations
    */
-  JointAccelerations clamped(const Eigen::ArrayXd& max_absolute_value_array,
-                             const Eigen::ArrayXd& noise_ratio_array) const;
+  JointAccelerations clamped(
+      const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array
+  ) const;
 
   /**
    * @brief Overload the ostream operator for printing

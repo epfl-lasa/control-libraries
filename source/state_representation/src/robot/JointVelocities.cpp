@@ -15,8 +15,9 @@ JointVelocities::JointVelocities(const std::string& robot_name, const Eigen::Vec
 JointVelocities::JointVelocities(const std::string& robot_name, const std::vector<std::string>& joint_names) :
     JointState(robot_name, joint_names) {}
 
-JointVelocities::JointVelocities(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                                 const Eigen::VectorXd& velocities) : JointState(robot_name, joint_names) {
+JointVelocities::JointVelocities(
+    const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& velocities
+) : JointState(robot_name, joint_names) {
   this->set_velocities(velocities);
 }
 
@@ -27,9 +28,14 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {
   this->set_empty(state.is_empty());
 }
 
-JointVelocities::JointVelocities(const JointVelocities& velocities) : JointVelocities(static_cast<const JointState&>(velocities)) {}
+JointVelocities::JointVelocities(const JointVelocities& velocities) :
+    JointVelocities(static_cast<const JointState&>(velocities)) {}
 
-JointVelocities::JointVelocities(const JointPositions& positions) : JointVelocities(positions / std::chrono::seconds(1)) {}
+JointVelocities::JointVelocities(const JointAccelerations& accelerations) :
+    JointVelocities(std::chrono::seconds(1) * accelerations) {}
+
+JointVelocities::JointVelocities(const JointPositions& positions) :
+    JointVelocities(positions / std::chrono::seconds(1)) {}
 
 JointVelocities JointVelocities::Zero(const std::string& robot_name, unsigned int nb_joints) {
   return JointState::Zero(robot_name, nb_joints);
@@ -160,8 +166,9 @@ void JointVelocities::clamp(const Eigen::ArrayXd& max_absolute_value_array, cons
   this->clamp_state_variable(max_absolute_value_array, JointStateVariable::VELOCITIES, noise_ratio_array);
 }
 
-JointVelocities JointVelocities::clamped(const Eigen::ArrayXd& max_absolute_value_array,
-                                         const Eigen::ArrayXd& noise_ratio_array) const {
+JointVelocities JointVelocities::clamped(
+    const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array
+) const {
   JointVelocities result(*this);
   result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;
@@ -173,7 +180,7 @@ std::ostream& operator<<(std::ostream& os, const JointVelocities& velocities) {
   } else {
     os << velocities.get_name() << " JointVelocities" << std::endl;
     os << "names: [";
-    for (auto& n : velocities.get_names()) { os << n << ", "; }
+    for (auto& n: velocities.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "velocities: [";
     for (unsigned int i = 0; i < velocities.get_size(); ++i) { os << velocities.get_velocities()(i) << ", "; }

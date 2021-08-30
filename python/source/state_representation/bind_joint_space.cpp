@@ -95,7 +95,7 @@ void joint_positions(py::module_& m) {
   c.def(py::init<const std::string&, const std::vector<std::string>&, const Eigen::VectorXd&>(), "Constructor with name, a list of joint names and position values provided", "robot_name"_a, "joint_names"_a, "positions"_a);
   c.def(py::init<const JointPositions&>(), "Copy constructor", "positions"_a);
   c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
-  c.def(py::init<const JointVelocities&>(), "Copy constructor from a JointVelocities by considering that it is equivalent to multiplying the velocities by 1 second", "velocities"_a);
+  c.def(py::init<const JointVelocities&>(), "Integration constructor from a JointVelocities by considering that it is equivalent to multiplying the velocities by 1 second", "velocities"_a);
 
   c.def_static("Zero", py::overload_cast<const std::string&, unsigned int>(&JointPositions::Zero), "Constructor for the zero JointPositions", "robot_name"_a, "nb_joints"_a);
   c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointPositions::Zero), "Constructor for the zero JointPositions", "robot_name"_a, "joint_names"_a);
@@ -154,7 +154,8 @@ void joint_velocities(py::module_& m) {
   c.def(py::init<const std::string&, const std::vector<std::string>&, const Eigen::VectorXd&>(), "Constructor with name, a list of joint names and velocity values provided", "robot_name"_a, "joint_names"_a, "velocities"_a);
   c.def(py::init<const JointVelocities&>(), "Copy constructor", "velocities"_a);
   c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
-  c.def(py::init<const JointPositions&>(), "Copy constructor from a JointPositions by considering that it is equivalent to dividing the positions by 1 second", "positions"_a);
+  c.def(py::init<const JointPositions&>(), "Differentiation constructor from a JointPositions by considering that it is equivalent to dividing the positions by 1 second", "positions"_a);
+  c.def(py::init<const JointAccelerations&>(), "Integration constructor from a JointAccelerations by considering that it is equivalent to multiplying the accelerations by 1 second", "accelerations"_a);
 
   c.def_static("Zero", py::overload_cast<const std::string&, unsigned int>(&JointVelocities::Zero), "Constructor for the zero JointVelocities", "robot_name"_a, "nb_joints"_a);
   c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointVelocities::Zero), "Constructor for the zero JointVelocities", "robot_name"_a, "joint_names"_a);
@@ -217,7 +218,7 @@ void joint_accelerations(py::module_& m) {
   c.def(py::init<const std::string&, const std::vector<std::string>&, const Eigen::VectorXd&>(), "Constructor with name, a list of joint names and acceleration values provided", "robot_name"_a, "joint_names"_a, "accelerations"_a);
   c.def(py::init<const JointAccelerations&>(), "Copy constructor", "accelerations"_a);
   c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
-  c.def(py::init<const JointVelocities&>(), "Copy constructor from a JointVelocities by considering that it is equivalent to dividing the velocities by 1 second", "velocities"_a);
+  c.def(py::init<const JointVelocities&>(), "Differentiation constructor from a JointVelocities by considering that it is equivalent to dividing the velocities by 1 second", "velocities"_a);
 
   c.def_static("Zero", py::overload_cast<const std::string&, unsigned int>(&JointAccelerations::Zero), "Constructor for the zero JointAccelerations", "robot_name"_a, "nb_joints"_a);
   c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointAccelerations::Zero), "Constructor for the zero JointAccelerations", "robot_name"_a, "joint_names"_a);

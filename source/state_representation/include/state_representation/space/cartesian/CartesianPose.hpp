@@ -70,9 +70,9 @@ public:
    * @param position the position data given as Eigen vector
    * @param reference the name of the reference frame (default is "world")
    */
-  explicit CartesianPose(const std::string& name,
-                         const Eigen::Vector3d& position,
-                         const std::string& reference = "world");
+  explicit CartesianPose(
+      const std::string& name, const Eigen::Vector3d& position, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor of a CartesianPose from a position given as three scalar coordinates
@@ -82,11 +82,9 @@ public:
    * @param z the z coordinate of the position
    * @param reference the name of the reference frame (default is "world")
    */
-  explicit CartesianPose(const std::string& name,
-                         double x,
-                         double y,
-                         double z,
-                         const std::string& reference = "world");
+  explicit CartesianPose(
+      const std::string& name, double x, double y, double z, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor of a CartesianPose from a quaternion
@@ -94,9 +92,9 @@ public:
    * @param orientation the orientation given as Eigen quaternion
    * @param reference the name of the reference frame (default is "world")
    */
-  explicit CartesianPose(const std::string& name,
-                         const Eigen::Quaterniond& orientation,
-                         const std::string& reference = "world");
+  explicit CartesianPose(
+      const std::string& name, const Eigen::Quaterniond& orientation, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor of a CartesianPose from a position given as a vector of coordinates and a quaternion
@@ -105,10 +103,10 @@ public:
    * @param orientation the orientation given as Eigen quaternion
    * @param reference the name of the reference frame (default is "world")
    */
-  explicit CartesianPose(const std::string& name,
-                         const Eigen::Vector3d& position,
-                         const Eigen::Quaterniond& orientation,
-                         const std::string& reference = "world");
+  explicit CartesianPose(
+      const std::string& name, const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation,
+      const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor for the identity pose
@@ -253,7 +251,8 @@ public:
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
    */
-  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::POSE) const override;
+  std::vector<double>
+  norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::POSE) const override;
 
   /**
    * @brief Compute the inverse of the current CartesianPose

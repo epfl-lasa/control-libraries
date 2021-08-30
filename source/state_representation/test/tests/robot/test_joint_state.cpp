@@ -47,16 +47,16 @@ TEST(JointStateTest, ZeroInitialization) {
 
 TEST(JointStateTest, RandomStateInitialization) {
   JointState random = JointState::Random("test", 3);
-  EXPECT_GT(random.get_positions().norm(), 0);
-  EXPECT_GT(random.get_velocities().norm(), 0);
-  EXPECT_GT(random.get_accelerations().norm(), 0);
-  EXPECT_GT(random.get_torques().norm(), 0);
+  EXPECT_NE(random.get_positions().norm(), 0);
+  EXPECT_NE(random.get_velocities().norm(), 0);
+  EXPECT_NE(random.get_accelerations().norm(), 0);
+  EXPECT_NE(random.get_torques().norm(), 0);
 
   JointState random2 = JointState::Random("test", std::vector<std::string>{"j0", "j1"});
-  EXPECT_GT(random2.get_positions().norm(), 0);
-  EXPECT_GT(random2.get_velocities().norm(), 0);
-  EXPECT_GT(random2.get_accelerations().norm(), 0);
-  EXPECT_GT(random2.get_torques().norm(), 0);
+  EXPECT_NE(random2.get_positions().norm(), 0);
+  EXPECT_NE(random2.get_velocities().norm(), 0);
+  EXPECT_NE(random2.get_accelerations().norm(), 0);
+  EXPECT_NE(random2.get_torques().norm(), 0);
 }
 
 TEST(JointStateTest, CopyConstructor) {

@@ -59,11 +59,11 @@ TEST(JointTorquesTest, StateCopyConstructor) {
 
 TEST(JointTorquesTest, RandomInitialization) {
   JointTorques random1 = JointTorques::Random("test", 3);
-  EXPECT_GT(random1.get_torques().norm(), 0);
+  EXPECT_NE(random1.get_torques().norm(), 0);
   expect_only_torques(random1);
 
   JointTorques random2 = JointTorques::Random("test", std::vector<std::string>{"j0", "j1"});
-  EXPECT_GT(random2.get_torques().norm(), 0);
+  EXPECT_NE(random2.get_torques().norm(), 0);
   expect_only_torques(random2);
 }
 

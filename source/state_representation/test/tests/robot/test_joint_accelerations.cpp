@@ -80,11 +80,11 @@ TEST(JointAccelerationsTest, VelocitiesCopyConstructor) {
 
 TEST(JointAccelerationsTest, RandomInitialization) {
   JointAccelerations random1 = JointAccelerations::Random("test", 3);
-  EXPECT_GT(random1.get_accelerations().norm(), 0);
+  EXPECT_NE(random1.get_accelerations().norm(), 0);
   expect_only_accelerations(random1);
 
   JointAccelerations random2 = JointAccelerations::Random("test", std::vector<std::string>{"j0", "j1"});
-  EXPECT_GT(random2.get_accelerations().norm(), 0);
+  EXPECT_NE(random2.get_accelerations().norm(), 0);
   expect_only_accelerations(random2);
 }
 

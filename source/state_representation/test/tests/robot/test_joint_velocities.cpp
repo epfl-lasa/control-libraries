@@ -101,11 +101,11 @@ TEST(JointVelocitiesTest, PositionsCopyConstructor) {
 
 TEST(JointVelocitiesTest, RandomInitialization) {
   JointVelocities random1 = JointVelocities::Random("test", 3);
-  EXPECT_GT(random1.get_velocities().norm(), 0);
+  EXPECT_NE(random1.get_velocities().norm(), 0);
   expect_only_velocities(random1);
 
   JointVelocities random2 = JointVelocities::Random("test", std::vector<std::string>{"j0", "j1"});
-  EXPECT_GT(random2.get_velocities().norm(), 0);
+  EXPECT_NE(random2.get_velocities().norm(), 0);
   expect_only_velocities(random2);
 }
 

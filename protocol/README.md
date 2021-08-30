@@ -21,9 +21,20 @@ string messages can be decoded back into the equivalent objects.
 
 ## Installation
 
-In order to generate and use those bindings, you need google protobuf to be installed on your computer (cf. https://github.com/protocolbuffers/protobuf/blob/master/src/README.md).
-If you are using Docker, `protoc` is already built in the `development-dependencies` image.
-You can copy the library using docker `COPY` functionality:
+The C++ `clproto` library requires control libraries [`state_representation`](../source/state_representation/README.md)
+and [Google Protobuf](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md)
+to be installed on your computer, which includes the compiler `protoc` and the runtime library `libprotobuf.so`.
+
+The easiest way to install `clproto` is to use the included [install script](./install.sh).
+By supplying the `--auto` flag to this script, it will automatically and recursively install any dependencies.
+If Protobuf is not yet installed, this step will take some time.
+```shell
+git clone https://github.com/epfl-lasa/control_libraries.git
+sudo control_libraries/clproto/install.sh --auto
+```
+
+If you are using Docker, the Protobuf dependencies already built in the [`development-dependencies`](ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest) image.
+You can copy the artefacts across using docker `COPY` functionality:
 
 ```Dockerfile
 COPY --from=ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest /usr/local/include/google /usr/local/include/google
@@ -32,7 +43,8 @@ COPY --from=ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest 
 RUN ldconfig
 ```
 
-Once `protoc` is installed, you can generate the bindings in the [protobuf](./protobuf) directory and the cmake target `clproto` in [clproto_cpp](./clproto_cpp) by running:
+If `state_representation`, `protoc` and `libprotobuf` are already installed,
+you can generate the bindings in the [protobuf](./protobuf) directory and the cmake target `clproto` in [clproto_cpp](./clproto_cpp) by running:
 
 ```console
 (sudo) ./install.sh

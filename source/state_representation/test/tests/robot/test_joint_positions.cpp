@@ -4,6 +4,12 @@
 
 using namespace state_representation;
 
+static void expect_only_positions(JointPositions& pos) {
+  EXPECT_EQ(static_cast<JointState&>(pos).get_velocities().norm(), 0);
+  EXPECT_EQ(static_cast<JointState&>(pos).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<JointState&>(pos).get_torques().norm(), 0);
+}
+
 TEST(JointPositionsTest, Constructors) {
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d positions = Eigen::Vector2d::Random();
@@ -11,7 +17,7 @@ TEST(JointPositionsTest, Constructors) {
   EXPECT_EQ(jp1.get_name(), "test");
   EXPECT_FALSE(jp1.is_empty());
   EXPECT_EQ(jp1.get_size(), positions.size());
-  for (std::size_t i = 0; i < positions.size(); ++i) {
+  for (auto i = 0; i < positions.size(); ++i) {
     EXPECT_EQ(jp1.get_names().at(i), "joint" + std::to_string(i));
   }
   EXPECT_EQ(jp1.data(), positions);
@@ -33,18 +39,14 @@ TEST(JointPositionsTest, StateCopyConstructor) {
   EXPECT_EQ(random_state.get_names(), copy1.get_names());
   EXPECT_EQ(random_state.get_size(), copy1.get_size());
   EXPECT_EQ(random_state.get_positions(), copy1.data());
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_torques().norm(), 0);
+  expect_only_positions(copy1);
 
   JointPositions copy2 = random_state;
   EXPECT_EQ(random_state.get_name(), copy2.get_name());
   EXPECT_EQ(random_state.get_names(), copy2.get_names());
   EXPECT_EQ(random_state.get_size(), copy2.get_size());
   EXPECT_EQ(random_state.get_positions(), copy2.data());
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_torques().norm(), 0);
+  expect_only_positions(copy2);
 
   JointState empty_state;
   JointPositions copy3(empty_state);
@@ -62,18 +64,14 @@ TEST(JointPositionsTest, VelocitiesCopyConstructor) {
   EXPECT_EQ(random_velocities.get_names(), copy1.get_names());
   EXPECT_EQ(random_velocities.get_size(), copy1.get_size());
   EXPECT_EQ((std::chrono::seconds(1) * random_velocities).data(), copy1.data());
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy1).get_torques().norm(), 0);
+  expect_only_positions(copy1);
 
   JointPositions copy2 = random_velocities;
   EXPECT_EQ(random_velocities.get_name(), copy1.get_name());
   EXPECT_EQ(random_velocities.get_names(), copy1.get_names());
   EXPECT_EQ(random_velocities.get_size(), copy1.get_size());
   EXPECT_EQ((std::chrono::seconds(1) * random_velocities).data(), copy1.data());
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(copy2).get_torques().norm(), 0);
+  expect_only_positions(copy2);
 
   JointVelocities empty_velocities;
   EXPECT_THROW(JointPositions copy(empty_velocities), exceptions::EmptyStateException);
@@ -81,17 +79,13 @@ TEST(JointPositionsTest, VelocitiesCopyConstructor) {
 }
 
 TEST(JointPositionsTest, RandomInitialization) {
-  JointPositions random = JointPositions::Random("test", 3);
-  EXPECT_GT(random.get_positions().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random).get_torques().norm(), 0);
+  JointPositions random1 = JointPositions::Random("test", 3);
+  EXPECT_GT(random1.get_positions().norm(), 0);
+  expect_only_positions(random1);
 
   JointPositions random2 = JointPositions::Random("test", std::vector<std::string>{"j0", "j1"});
   EXPECT_GT(random2.get_positions().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random2).get_velocities().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random2).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<JointState&>(random2).get_torques().norm(), 0);
+  expect_only_positions(random2);
 }
 
 TEST(JointPositionsTest, Clamping) {

@@ -23,6 +23,7 @@ into serialized message packets (#182)
 - Add class JointAccelerations (#173)
 - Fix clamp_state_variable function for CartesianState and JointState (#176)
 - Install tagged versions of osqp and osqpEigen (#184)
+- Refactor JointState tests and split them into separate test suites (#183)
 
 ### Pending TODOs for the next release
 

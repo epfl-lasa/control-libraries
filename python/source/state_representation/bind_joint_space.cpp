@@ -76,7 +76,6 @@ void joint_state(py::module_& m) {
   c.def("dist", &JointState::dist, "Compute the distance to another state as the sum of distances between each features", "state"_a, "state_variable_type"_a=JointStateVariable::ALL);
 
   c.def("to_list", &JointState::to_std_vector, "Return the state as a list");
-  c.def("from_list", &JointState::from_std_vector, "Set the state from a list");
 
   c.def("__repr__", [](const JointState& state) {
     std::stringstream buffer;
@@ -134,8 +133,6 @@ void joint_positions(py::module_& m) {
   c.def("data", &JointPositions::data, "Returns the positions data as a vector");
   c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointPositions::set_data), "Set the positions data from a vector", "data"_a);
   c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointPositions::set_data), "Set the positions data from a list", "data"_a);
-
-  c.def("from_list", &JointPositions::from_std_vector, "Set the value from a list");
 
   c.def("__repr__", [](const JointPositions& positions) {
     std::stringstream buffer;

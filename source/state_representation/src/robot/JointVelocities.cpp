@@ -29,6 +29,8 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {
 
 JointVelocities::JointVelocities(const JointVelocities& velocities) : JointVelocities(static_cast<const JointState&>(velocities)) {}
 
+JointVelocities::JointVelocities(const JointAccelerations& accelerations) : JointVelocities(std::chrono::seconds(1) * accelerations) {}
+
 JointVelocities::JointVelocities(const JointPositions& positions) : JointVelocities(positions / std::chrono::seconds(1)) {}
 
 JointVelocities JointVelocities::Zero(const std::string& robot_name, unsigned int nb_joints) {

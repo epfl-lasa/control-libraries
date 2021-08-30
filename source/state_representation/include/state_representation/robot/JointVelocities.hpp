@@ -73,6 +73,11 @@ public:
   JointVelocities(const JointState& state);
 
   /**
+   * @brief Copy Copy constructor from a JointAccelerations by considering that it is equivalent to multiplying the accelerations by 1 second
+   */
+  JointVelocities(const JointAccelerations& accelerations);
+
+  /**
    * @brief Copy constructor from a JointPositions by considering that it is equivalent to dividing the positions by 1 second
    */
   JointVelocities(const JointPositions& positions);

@@ -228,14 +228,6 @@ TEST(JointStateTest, GetSetData) {
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
 }
 
-TEST(JointStateTest, JointStateToStdVector) {
-  JointState js = JointState::Random("test", 3);
-  std::vector<double> vec_data = js.to_std_vector();
-  for (size_t i = 0; i < vec_data.size(); ++i) {
-    EXPECT_EQ(js.data()(i), vec_data.at(i));
-  }
-}
-
 TEST(JointStateTest, Distance) {
   JointState js;
   JointState js1 = JointState::Random("test", 3);

@@ -437,8 +437,4 @@ CartesianState operator*(double lambda, const CartesianState& state) {
 double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type) {
   return s1.dist(s2, state_variable_type);
 }
-
-void CartesianState::from_std_vector(const std::vector<double>&) {
-  throw (NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
-}
 }// namespace state_representation

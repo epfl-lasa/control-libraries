@@ -179,16 +179,4 @@ CartesianPose operator*(const CartesianState& state, const CartesianPose& pose) 
 CartesianPose operator*(double lambda, const CartesianPose& pose) {
   return pose * lambda;
 }
-
-void CartesianPose::from_std_vector(const std::vector<double>& value) {
-  if (value.size() == 3) {
-    this->set_position(value);
-  } else if (value.size() == 4) {
-    this->set_orientation(value);
-  } else if (value.size() == 7) {
-    this->set_pose(value);
-  } else {
-    throw IncompatibleSizeException("The input vector is of incorrect size");
-  }
-}
 }// namespace state_representation

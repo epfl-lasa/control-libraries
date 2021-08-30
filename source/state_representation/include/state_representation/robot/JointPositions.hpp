@@ -293,11 +293,5 @@ public:
    * @return the JointPositions provided multiply by lambda
    */
   friend JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& positions);
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  [[deprecated]] void from_std_vector(const std::vector<double>& value);
 };
 }// namespace state_representation

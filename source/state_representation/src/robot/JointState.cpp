@@ -299,8 +299,4 @@ JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
   result *= lambda;
   return result;
 }
-
-void JointState::from_std_vector(const std::vector<double>&) {
-  throw NotImplementedException("from_std_vector() is not implemented for the base JointState class");
-}
 }// namespace state_representation

@@ -111,12 +111,6 @@ public:
   const std::vector<double> to_std_vector() const;
 
   /**
-   * @brief Create an ellipsoid from an std vector representation of its parameter
-   * @param an std vector with [center_position, rotation_angle, axis_lengths]
-   */
-  [[deprecated]] void from_std_vector(const std::vector<double>& parameters);
-
-  /**
    * @brief Set the ellipsoid data from an Eigen vector
    * @param the data vector with [center_position, rotation_angle, axis_lengths]
    */
@@ -183,12 +177,6 @@ inline const std::vector<double> Ellipsoid::to_std_vector() const {
   representation[4] = this->get_axis_length(0);
   representation[5] = this->get_axis_length(1);
   return representation;
-}
-
-inline void Ellipsoid::from_std_vector(const std::vector<double>& parameters) {
-  this->set_center_position(Eigen::Vector3d(parameters[0], parameters[1], parameters[2]));
-  this->set_rotation_angle(parameters[3]);
-  this->set_axis_lengths({parameters[4], parameters[5]});
 }
 
 inline const CartesianPose Ellipsoid::get_rotation() const {

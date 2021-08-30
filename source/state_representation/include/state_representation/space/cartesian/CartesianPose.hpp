@@ -289,12 +289,6 @@ public:
    * @return the CartesianPose provided multiplied by lambda
    */
   friend CartesianPose operator*(double lambda, const CartesianPose& pose);
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  [[deprecated]] void from_std_vector(const std::vector<double>& value) override;
 };
 
 inline std::vector<double> CartesianPose::norms(const CartesianStateVariable& state_variable_type) const {

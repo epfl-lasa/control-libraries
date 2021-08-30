@@ -192,8 +192,4 @@ JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& po
   result *= lambda;
   return result;
 }
-
-void JointPositions::from_std_vector(const std::vector<double>& value) {
-  this->set_positions(value);
-}
 }// namespace state_representation

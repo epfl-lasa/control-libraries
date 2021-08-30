@@ -155,6 +155,7 @@ void joint_velocities(py::module_& m) {
   c.def(py::init<const JointVelocities&>(), "Copy constructor", "velocities"_a);
   c.def(py::init<const JointState&>(), "Copy constructor from a JointState", "state"_a);
   c.def(py::init<const JointPositions&>(), "Copy constructor from a JointPositions by considering that it is equivalent to dividing the positions by 1 second", "positions"_a);
+  c.def(py::init<const JointAccelerations&>(), "Copy constructor from a JointAccelerations by considering that it is equivalent to multiplying the accelerations by 1 second", "accelerations"_a);
 
   c.def_static("Zero", py::overload_cast<const std::string&, unsigned int>(&JointVelocities::Zero), "Constructor for the zero JointVelocities", "robot_name"_a, "nb_joints"_a);
   c.def_static("Zero", py::overload_cast<const std::string&, const std::vector<std::string>&>(&JointVelocities::Zero), "Constructor for the zero JointVelocities", "robot_name"_a, "joint_names"_a);

@@ -112,7 +112,7 @@ TEST(CartesianStateTest, TestNormalize) {
   CartesianState cs = CartesianState::Random("cs");
   cs.normalize();
   std::vector<double> norms = cs.norms();
-  for (double n : norms) {
+  for (double n: norms) {
     EXPECT_NEAR(n, 1.0, tolerance);
   }
 }
@@ -122,7 +122,7 @@ TEST(CartesianStateTest, TestNormalized) {
   CartesianState cs = CartesianState::Random("cs");
   CartesianState csn = cs.normalized();
   std::vector<double> norms = csn.norms();
-  for (double n : norms) {
+  for (double n: norms) {
     EXPECT_NEAR(n, 1.0, tolerance);
   }
 }

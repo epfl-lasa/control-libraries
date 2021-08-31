@@ -193,12 +193,12 @@ TEST_F(CartesianPoseTestClass, TestImplicitConversion) {
 }
 
 TEST(CartesianPoseTest, TestPoseDistance) {
-  CartesianPose p1("test",
-                   Eigen::Vector3d(-0.353849997774433, -0.823586525156853, -1.57705702279920),
-                   Eigen::Quaterniond(-0.20495, -0.53709, -0.26785, -0.77316));
-  CartesianPose p2("test",
-                   Eigen::Vector3d(0.507974650905946, 0.281984063670556, 0.0334798822444514),
-                   Eigen::Quaterniond(-0.34616, 0.78063, 0.51161, 0.095041));
+  CartesianPose p1(
+      "test", Eigen::Vector3d(-0.353849997774433, -0.823586525156853, -1.57705702279920),
+      Eigen::Quaterniond(-0.20495, -0.53709, -0.26785, -0.77316));
+  CartesianPose p2(
+      "test", Eigen::Vector3d(0.507974650905946, 0.281984063670556, 0.0334798822444514),
+      Eigen::Quaterniond(-0.34616, 0.78063, 0.51161, 0.095041));
   EXPECT_FLOAT_EQ(p1.dist(p1), 0);
   EXPECT_FLOAT_EQ(dist(p1, p2), p1.dist(p2));
   EXPECT_NEAR(p1.dist(p2, CartesianStateVariable::POSITION), 2.13514804509215, 1e-3);

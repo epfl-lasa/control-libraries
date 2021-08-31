@@ -124,9 +124,6 @@ const <a class="el" href="classstate__representation_1_1_cartesian_pose.html">Ca
 <tr class="memitem:a9abf4c2a0290314e817523449430bf45"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_ellipsoid.html#a9abf4c2a0290314e817523449430bf45">to_std_vector</a> () const</td></tr>
 <tr class="memdesc:a9abf4c2a0290314e817523449430bf45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the ellipse to an std vector representation of its parameter.  <a href="classstate__representation_1_1_ellipsoid.html#a9abf4c2a0290314e817523449430bf45">More...</a><br /></td></tr>
 <tr class="separator:a9abf4c2a0290314e817523449430bf45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b6a84b9555c21975a59d6491d2f6d79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_ellipsoid.html#a3b6a84b9555c21975a59d6491d2f6d79">from_std_vector</a> (const std::vector&lt; double &gt; &amp;parameters)</td></tr>
-<tr class="memdesc:a3b6a84b9555c21975a59d6491d2f6d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an ellipsoid from an std vector representation of its parameter.  <a href="classstate__representation_1_1_ellipsoid.html#a3b6a84b9555c21975a59d6491d2f6d79">More...</a><br /></td></tr>
-<tr class="separator:a3b6a84b9555c21975a59d6491d2f6d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14960854606c21ba75a6d6800b048606"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_ellipsoid.html#a14960854606c21ba75a6d6800b048606">set_data</a> (const Eigen::VectorXd &amp;data) override</td></tr>
 <tr class="memdesc:a14960854606c21ba75a6d6800b048606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the ellipsoid data from an Eigen vector.  <a href="classstate__representation_1_1_ellipsoid.html#a14960854606c21ba75a6d6800b048606">More...</a><br /></td></tr>
 <tr class="separator:a14960854606c21ba75a6d6800b048606"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -364,40 +361,6 @@ Friends</h2></td></tr>
 
 <p>Compute an ellipsoid from its algebraic equation ax2 + bxy + cy2 + cx + ey + f. </p>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_ellipsoid.html">Ellipsoid</a> in its geometric representation </dd></dl>
-
-</div>
-</div>
-<a id="a3b6a84b9555c21975a59d6491d2f6d79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b6a84b9555c21975a59d6491d2f6d79">&#9670;&nbsp;</a></span>from_std_vector()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void state_representation::Ellipsoid::from_std_vector </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>parameters</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create an ellipsoid from an std vector representation of its parameter. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">an</td><td>std vector with [center_position, rotation_angle, axis_lengths] </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

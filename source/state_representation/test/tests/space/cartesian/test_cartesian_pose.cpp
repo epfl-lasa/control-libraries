@@ -4,17 +4,45 @@
 
 using namespace state_representation;
 
+static void expect_only_pose(CartesianPose& pose) {
+  EXPECT_EQ(static_cast<CartesianState&>(pose).get_orientation().norm(), 1);
+  EXPECT_EQ(static_cast<CartesianState&>(pose).get_twist().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(pose).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(pose).get_wrench().norm(), 0);
+}
+
+class CartesianPoseTestClass : public testing::Test {
+protected:
+  void SetUp() override {
+    Eigen::Vector3d pos1(1, 2, 3);
+    Eigen::Quaterniond rot1(1, 0, 0, 0);
+    tf1 = CartesianPose("t1", pos1, rot1);
+    Eigen::Vector3d pos2(4, 5, 6);
+    Eigen::Quaterniond rot2(1, 0, 0, 0);
+    tf2 = CartesianPose("t2", pos2, rot2, "t1");
+  }
+
+  void expect_near(const Eigen::VectorXd& eigen1, const Eigen::VectorXd& eigen2) const {
+    ASSERT_TRUE(eigen1.size() == eigen2.size());
+    for (int i = 0; i < eigen1.size(); ++i) {
+      EXPECT_NEAR(eigen1(i), eigen2(i), tol);
+    }
+  }
+
+  CartesianPose tf1;
+  CartesianPose tf2;
+
+  double tol = 1e-5;
+};
+
 TEST(CartesianPoseTest, RandomPoseInitialization) {
   CartesianPose random = CartesianPose::Random("test");
-  // only position should be random
-  EXPECT_GT(random.get_position().norm(), 0);
-  EXPECT_GT(abs(random.get_orientation().w()), 0);
-  EXPECT_GT(abs(random.get_orientation().x()), 0);
-  EXPECT_GT(abs(random.get_orientation().y()), 0);
-  EXPECT_GT(abs(random.get_orientation().z()), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(random).get_wrench().norm(), 0);
+  EXPECT_NE(random.get_position().norm(), 0);
+  EXPECT_NE(random.get_orientation().w(), 0);
+  EXPECT_NE(random.get_orientation().x(), 0);
+  EXPECT_NE(random.get_orientation().y(), 0);
+  EXPECT_NE(random.get_orientation().z(), 0);
+  expect_only_pose(random);
 }
 
 TEST(CartesianPoseTest, CopyPose) {
@@ -22,31 +50,26 @@ TEST(CartesianPoseTest, CopyPose) {
   CartesianPose pose2(pose1);
   EXPECT_EQ(pose1.get_name(), pose2.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose2.get_reference_frame());
-  EXPECT_TRUE(pose1.data().isApprox(pose2.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(pose2).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose2).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose2).get_wrench().norm(), 0);
+  EXPECT_EQ(pose1.data(), pose2.data());
+  expect_only_pose(pose2);
+
   CartesianPose pose3 = pose1;
   EXPECT_EQ(pose1.get_name(), pose3.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose3.get_reference_frame());
-  EXPECT_TRUE(pose1.data().isApprox(pose3.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(pose3).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose3).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose3).get_wrench().norm(), 0);
+  EXPECT_EQ(pose1.data(), pose3.data());
+  expect_only_pose(pose3);
+
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(pose1).set_twist(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(pose1).set_accelerations(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(pose1).set_wrench(Eigen::VectorXd::Random(6));
   CartesianPose pose4 = pose1;
-  EXPECT_TRUE(pose1.data().isApprox(pose4.data()));
-  EXPECT_EQ(static_cast<CartesianState&>(pose4).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose4).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose4).get_wrench().norm(), 0);
+  EXPECT_EQ(pose1.data(), pose4.data());
+  expect_only_pose(pose4);
+
   // copy a state, only the pose variables should be non 0
   CartesianPose pose5 = CartesianState::Random("test");
-  EXPECT_EQ(static_cast<CartesianState&>(pose5).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose5).get_accelerations().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose5).get_wrench().norm(), 0);
+  expect_only_pose(pose5);
 
   CartesianPose pose6;
   EXPECT_TRUE(pose6.is_empty());
@@ -58,8 +81,9 @@ TEST(CartesianPoseTest, SetData) {
   CartesianPose cp1 = CartesianPose::Identity("test");
   CartesianPose cp2 = CartesianPose::Random("test");
   cp1.set_data(cp2.data());
-  EXPECT_TRUE(cp2.data().isApprox(cp1.data()));
+  EXPECT_EQ(cp2.data(), cp1.data());
 
+  cp2 = CartesianPose::Random("test");
   auto pose_vec = cp2.to_std_vector();
   cp1.set_data(pose_vec);
   for (std::size_t j = 0; j < pose_vec.size(); ++j) {
@@ -76,89 +100,52 @@ TEST(CartesianPoseTest, CartesianPoseToStdVector) {
   }
 }
 
-TEST(CartesianPoseTest, MultiplyTransformsBothOperators) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(1, 0, 0, 0);
-  CartesianPose tf1("t1", pos1, rot1);
-  Eigen::Vector3d pos2(4, 5, 6);
-  Eigen::Quaterniond rot2(1, 0, 0, 0);
-  CartesianPose tf2("t2", pos2, rot2, "t1");
+TEST_F(CartesianPoseTestClass, MultiplyTransformsBothOperators) {
   CartesianPose tf3 = tf1 * tf2;
   tf1 *= tf2;
   EXPECT_EQ(tf3.get_name(), "t2");
-  for (int i = 0; i < tf1.get_position().size(); ++i)
-    EXPECT_NEAR(tf1.get_position()(i), tf3.get_position()(i), 0.00001);
-}
+  expect_near(tf1.get_position(), tf3.get_position());
 
-TEST(CartesianPoseTest, MultiplyTransformsSameOrientation) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(1, 0, 0, 0);
-  CartesianPose tf1("t1", pos1, rot1);
-  Eigen::Vector3d pos2(4, 5, 6);
-  Eigen::Quaterniond rot2(1, 0, 0, 0);
-  CartesianPose tf2("t2", pos2, rot2, "t1");
-  tf1 *= tf2;
   Eigen::Vector3d pos_truth(5, 7, 9);
-  for (int i = 0; i < pos_truth.size(); ++i) {
-    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  }
+  expect_near(tf1.get_position(), pos_truth);
 }
 
-TEST(CartesianPoseTest, MultiplyTransformsDifferentOrientation) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-  CartesianPose tf1("t1", pos1, rot1);
-  Eigen::Vector3d pos2(4, 5, 6);
-  Eigen::Quaterniond rot2(0., 0., 0.70710678, 0.70710678);
-  CartesianPose tf2("t2", pos2, rot2, "t1");
+TEST_F(CartesianPoseTestClass, MultiplyTransformsDifferentOrientation) {
+  tf1.set_orientation(Eigen::Quaterniond(0.70710678, 0.70710678, 0., 0.));
+  tf2.set_orientation(Eigen::Quaterniond(0., 0., 0.70710678, 0.70710678));
   tf1 *= tf2;
   Eigen::Vector3d pos_truth(5, -4, 8);
   Eigen::Quaterniond rot_truth(0., 0., 0., 1.);
-  for (int i = 0; i < pos_truth.size(); ++i) {
-    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  }
-  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
+  expect_near(tf1.get_position(), pos_truth);
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - tol);
 }
 
-TEST(CartesianPoseTest, TestInverseNullOrientation) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(1., 0., 0., 0.);
-  CartesianPose tf1("t1", pos1, rot1);
+TEST_F(CartesianPoseTestClass, TestInverseNullOrientation) {
   tf1 = tf1.inverse();
   Eigen::Vector3d pos_truth(-1, -2, -3);
   Eigen::Quaterniond rot_truth(1., 0., 0., 0.);
   EXPECT_EQ(tf1.get_name(), "world");
   EXPECT_EQ(tf1.get_reference_frame(), "t1");
-  for (int i = 0; i < pos_truth.size(); ++i) {
-    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  }
-  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
+  expect_near(tf1.get_position(), pos_truth);
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - tol);
 }
 
-TEST(CartesianPoseTest, TestInverseNonNullOrientation) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-  CartesianPose tf1("t1", pos1, rot1);
+TEST_F(CartesianPoseTestClass, TestInverseNonNullOrientation) {
+  tf1.set_orientation(Eigen::Quaterniond(0.70710678, 0.70710678, 0., 0.));
   tf1 = tf1.inverse();
   Eigen::Vector3d pos_truth(-1, -3, 2);
   Eigen::Quaterniond rot_truth(0.70710678, -0.70710678, 0., 0.);
-  for (int i = 0; i < pos_truth.size(); ++i) {
-    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  }
-  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
+  expect_near(tf1.get_position(), pos_truth);
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - tol);
 }
 
-TEST(CartesianPoseTest, TestMultiplyInverseNonNullOrientation) {
-  Eigen::Vector3d pos1(1, 2, 3);
-  Eigen::Quaterniond rot1(0.70710678, 0.70710678, 0., 0.);
-  CartesianPose tf1("t1", pos1, rot1);
+TEST_F(CartesianPoseTestClass, TestMultiplyInverseNonNullOrientation) {
+  tf1.set_orientation(Eigen::Quaterniond(0.70710678, 0.70710678, 0., 0.));
   tf1 *= tf1.inverse();
   Eigen::Vector3d pos_truth(0, 0, 0);
   Eigen::Quaterniond rot_truth(1., 0., 0., 0.);
-  for (int i = 0; i < pos_truth.size(); ++i) {
-    EXPECT_NEAR(tf1.get_position()(i), pos_truth(i), 0.00001);
-  }
-  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - 10E-4);
+  expect_near(tf1.get_position(), pos_truth);
+  EXPECT_GT(abs(tf1.get_orientation().dot(rot_truth)), 1 - tol);
 }
 
 TEST(CartesianPoseTest, MultiplyPoseAndState) {

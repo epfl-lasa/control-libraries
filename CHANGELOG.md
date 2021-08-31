@@ -25,6 +25,7 @@ into serialized message packets (#182)
 - Install tagged versions of osqp and osqpEigen (#184)
 - Refactor JointState tests and split them into separate test suites (#183)
 - Add missing integration constructor from JointAccelerations for JointVelocities (#185)
+- Remove previously deprecated from_std_vector function (#186)
 
 ### Pending TODOs for the next release
 

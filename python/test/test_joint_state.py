@@ -10,7 +10,6 @@ JOINT_STATE_METHOD_EXPECTS = [
     'data',
     'set_data',
     'dist',
-    'from_list',
     'get_accelerations',
     'get_name',
     'get_names',

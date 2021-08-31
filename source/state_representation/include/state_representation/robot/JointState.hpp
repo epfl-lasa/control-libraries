@@ -447,12 +447,6 @@ public:
    * @return std::vector<float> the joint vector as a std vector
    */
   std::vector<double> to_std_vector() const;
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  [[deprecated]] virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(JointState& state1, JointState& state2) {

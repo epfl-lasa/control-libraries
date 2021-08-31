@@ -12,24 +12,22 @@ CartesianPose::CartesianPose(const std::string& name, const Eigen::Vector3d& pos
   this->set_position(position);
 }
 
-CartesianPose::CartesianPose(const std::string& name,
-                             double x,
-                             double y,
-                             double z,
-                             const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(
+    const std::string& name, double x, double y, double z, const std::string& reference
+) : CartesianState(name, reference) {
   this->set_position(x, y, z);
 }
 
-CartesianPose::CartesianPose(const std::string& name,
-                             const Eigen::Quaterniond& orientation,
-                             const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(
+    const std::string& name, const Eigen::Quaterniond& orientation, const std::string& reference
+) : CartesianState(name, reference) {
   this->set_orientation(orientation);
 }
 
-CartesianPose::CartesianPose(const std::string& name,
-                             const Eigen::Vector3d& position,
-                             const Eigen::Quaterniond& orientation,
-                             const std::string& reference) : CartesianState(name, reference) {
+CartesianPose::CartesianPose(
+    const std::string& name, const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation,
+    const std::string& reference
+) : CartesianState(name, reference) {
   this->set_position(position);
   this->set_orientation(orientation);
 }
@@ -178,17 +176,5 @@ CartesianPose operator*(const CartesianState& state, const CartesianPose& pose) 
 
 CartesianPose operator*(double lambda, const CartesianPose& pose) {
   return pose * lambda;
-}
-
-void CartesianPose::from_std_vector(const std::vector<double>& value) {
-  if (value.size() == 3) {
-    this->set_position(value);
-  } else if (value.size() == 4) {
-    this->set_orientation(value);
-  } else if (value.size() == 7) {
-    this->set_pose(value);
-  } else {
-    throw IncompatibleSizeException("The input vector is of incorrect size");
-  }
 }
 }// namespace state_representation

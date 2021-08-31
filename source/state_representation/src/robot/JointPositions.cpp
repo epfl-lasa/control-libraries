@@ -166,7 +166,7 @@ std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   } else {
     os << positions.get_name() << " JointPositions" << std::endl;
     os << "names: [";
-    for (auto& n : positions.get_names()) { os << n << ", "; }
+    for (auto& n: positions.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
     for (unsigned int i = 0; i < positions.get_size(); ++i) { os << positions.get_positions()(i) << ", "; }
@@ -191,9 +191,5 @@ JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& po
   JointPositions result(positions);
   result *= lambda;
   return result;
-}
-
-void JointPositions::from_std_vector(const std::vector<double>& value) {
-  this->set_positions(value);
 }
 }// namespace state_representation

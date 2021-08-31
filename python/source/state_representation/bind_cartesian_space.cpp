@@ -113,7 +113,6 @@ void cartesian_state(py::module_& m) {
   c.def("normalized", &CartesianState::normalized, "Compute the normalized state at the state variable given in argument (default is full state)", "state_variable_type"_a=CartesianStateVariable::ALL);
 
   c.def("to_list", &CartesianState::to_std_vector, "Return the state as a list");
-  c.def("from_list", &CartesianState::from_std_vector, "Set the state from a list");
 
   c.def("__repr__", [](const CartesianState& state) {
     std::stringstream buffer;

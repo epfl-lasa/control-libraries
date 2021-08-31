@@ -223,8 +223,7 @@ void JointState::clamp_state_variable(
   int expected_size = state_variable.size();
   this->clamp_state_variable(
       max_absolute_value * Eigen::ArrayXd::Ones(expected_size), state_variable_type,
-      noise_ratio * Eigen::ArrayXd::Ones(expected_size)
-  );
+      noise_ratio * Eigen::ArrayXd::Ones(expected_size));
 }
 
 double JointState::dist(const JointState& state, const JointStateVariable& state_variable_type) const {
@@ -259,7 +258,7 @@ std::ostream& operator<<(std::ostream& os, const JointState& state) {
   } else {
     os << state.get_name() << " JointState" << std::endl;
     os << "names: [";
-    for (auto& n : state.names_) { os << n << ", "; }
+    for (auto& n: state.names_) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
     for (unsigned int i = 0; i < state.positions_.size(); ++i) { os << state.positions_(i) << ", "; }
@@ -298,9 +297,5 @@ JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state) {
   JointState result(state);
   result *= lambda;
   return result;
-}
-
-void JointState::from_std_vector(const std::vector<double>&) {
-  throw NotImplementedException("from_std_vector() is not implemented for the base JointState class");
 }
 }// namespace state_representation

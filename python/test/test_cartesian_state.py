@@ -11,7 +11,6 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'data',
     'set_data',
     'dist',
-    'from_list',
     'get_accelerations',
     'get_angular_acceleration',
     'get_angular_velocity',

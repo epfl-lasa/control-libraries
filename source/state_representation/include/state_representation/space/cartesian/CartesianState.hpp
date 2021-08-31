@@ -512,12 +512,6 @@ public:
    * @return std::vector<double> the state vector as a std vector
    */
   std::vector<double> to_std_vector() const;
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  [[deprecated]] virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(CartesianState& state1, CartesianState& state2) {

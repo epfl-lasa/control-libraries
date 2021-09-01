@@ -76,14 +76,10 @@ public:
     this->publisher_ =
         this->create_publisher<std_msgs::msg::Float64MultiArray>("/" + robot_name + "/torque_controller/command", 10);
 
-    // add the run thread
-    RCLCPP_ERROR(this->get_logger(), "Adding thread");
     this->timer_ = this->create_wall_timer(dt_, std::bind(&TorqueControl::run, this));
   }
 
   void run() {
-    RCLCPP_ERROR(this->get_logger(), "run");
-
     if (this->state_received) {
       CartesianTwist twist = this->ds_->evaluate(this->get_eef_pose());
       twist.clamp(0.5, 0.5);

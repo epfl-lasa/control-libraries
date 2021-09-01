@@ -177,16 +177,30 @@ public:
   /**
    * @brief Overload the *= operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench multiply by lambda
+   * @return the CartesianWrench multiplied by lambda
    */
   CartesianWrench& operator*=(double lambda);
 
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench multiply by lambda
+   * @return the CartesianWrench multiplied by lambda
    */
   CartesianWrench operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianWrench divided by lambda
+   */
+  CartesianWrench& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianWrench divided by lambda
+   */
+  CartesianWrench operator/(double lambda) const;
 
   /**
    * @brief Clamp inplace the magnitude of the wrench to the values in argument

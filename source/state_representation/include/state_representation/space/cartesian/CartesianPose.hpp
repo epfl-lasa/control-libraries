@@ -183,9 +183,23 @@ public:
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianState multiplied by lambda
+   * @return the CartesianPose multiplied by lambda
    */
   CartesianPose operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianPose divided by lambda
+   */
+  CartesianPose& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianPose divided by lambda
+   */
+  CartesianPose operator/(double lambda) const;
 
   /**
    * @brief Overload the += operator

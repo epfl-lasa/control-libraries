@@ -101,6 +101,15 @@ CartesianTwist CartesianTwist::operator*(double lambda) const {
   return this->CartesianState::operator*(lambda);
 }
 
+CartesianTwist& CartesianTwist::operator/=(double lambda) {
+  this->CartesianState::operator/=(lambda);
+  return (*this);
+}
+
+CartesianTwist CartesianTwist::operator/(double lambda) const {
+  return this->CartesianState::operator/(lambda);
+}
+
 CartesianTwist& CartesianTwist::operator*=(const Eigen::Matrix<double, 6, 6>& lambda) {
   // sanity check
   if (this->is_empty()) {

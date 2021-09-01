@@ -85,6 +85,15 @@ CartesianPose CartesianPose::operator*(double lambda) const {
   return this->CartesianState::operator*(lambda);
 }
 
+CartesianPose& CartesianPose::operator/=(double lambda) {
+  this->CartesianState::operator/=(lambda);
+  return (*this);
+}
+
+CartesianPose CartesianPose::operator/(double lambda) const {
+  return this->CartesianState::operator/(lambda);
+}
+
 CartesianPose& CartesianPose::operator+=(const CartesianPose& pose) {
   this->CartesianState::operator+=(pose);
   return (*this);

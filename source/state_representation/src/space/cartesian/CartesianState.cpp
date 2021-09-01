@@ -69,6 +69,17 @@ CartesianState CartesianState::operator*(double lambda) const {
   return result;
 }
 
+CartesianState& CartesianState::operator/=(double lambda) {
+  lambda = 1.0 / lambda;
+  return this->operator*=(lambda);
+}
+
+CartesianState CartesianState::operator/(double lambda) const {
+  CartesianState result(*this);
+  result /= lambda;
+  return result;
+}
+
 CartesianState CartesianState::copy() const {
   CartesianState result(*this);
   return result;

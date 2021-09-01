@@ -94,6 +94,15 @@ CartesianWrench CartesianWrench::operator*(double lambda) const {
   return this->CartesianState::operator*(lambda);
 }
 
+CartesianWrench& CartesianWrench::operator/=(double lambda) {
+  this->CartesianState::operator/=(lambda);
+  return (*this);
+}
+
+CartesianWrench CartesianWrench::operator/(double lambda) const {
+  return this->CartesianState::operator/(lambda);
+}
+
 void CartesianWrench::clamp(double max_force, double max_torque, double force_noise_ratio, double torque_noise_ratio) {
   // clamp force
   this->clamp_state_variable(max_force, CartesianStateVariable::FORCE, force_noise_ratio);

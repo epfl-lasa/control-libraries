@@ -190,9 +190,23 @@ public:
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianState multiplied by lambda
+   * @return the CartesianTwist multiplied by lambda
    */
   CartesianTwist operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist operator/(double lambda) const;
 
   /**
    * @brief Overload the *= operator with a gain matrix

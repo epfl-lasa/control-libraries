@@ -7,26 +7,23 @@ namespace state_representation {
 CartesianTwist::CartesianTwist(const std::string& name, const std::string& reference) :
     CartesianState(name, reference) {}
 
-CartesianTwist::CartesianTwist(const std::string& name,
-                               const Eigen::Vector3d& linear_velocity,
-                               const std::string& reference) :
-    CartesianState(name, reference) {
+CartesianTwist::CartesianTwist(
+    const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference
+) : CartesianState(name, reference) {
   this->set_linear_velocity(linear_velocity);
 }
 
-CartesianTwist::CartesianTwist(const std::string& name,
-                               const Eigen::Vector3d& linear_velocity,
-                               const Eigen::Vector3d& angular_velocity,
-                               const std::string& reference) :
-    CartesianState(name, reference) {
+CartesianTwist::CartesianTwist(
+    const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity,
+    const std::string& reference
+) : CartesianState(name, reference) {
   this->set_linear_velocity(linear_velocity);
   this->set_angular_velocity(angular_velocity);
 }
 
-CartesianTwist::CartesianTwist(const std::string& name,
-                               const Eigen::Matrix<double, 6, 1>& twist,
-                               const std::string& reference) :
-    CartesianState(name, reference) {
+CartesianTwist::CartesianTwist(
+    const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference
+) : CartesianState(name, reference) {
   this->set_twist(twist);
 }
 
@@ -37,7 +34,8 @@ CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(sta
   this->set_empty(state.is_empty());
 }
 
-CartesianTwist::CartesianTwist(const CartesianTwist& twist) : CartesianTwist(static_cast<const CartesianState&>(twist)) {}
+CartesianTwist::CartesianTwist(const CartesianTwist& twist) :
+    CartesianTwist(static_cast<const CartesianState&>(twist)) {}
 
 CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianTwist(pose / std::chrono::seconds(1)) {}
 
@@ -64,11 +62,9 @@ CartesianState CartesianTwist::operator*(const CartesianState& state) const {
   return this->CartesianState::operator*(state);
 }
 
-
 CartesianPose CartesianTwist::operator*(const CartesianPose& pose) const {
   return this->CartesianState::operator*(pose);
 }
-
 
 CartesianWrench CartesianTwist::operator*(const CartesianWrench& wrench) const {
   return this->CartesianState::operator*(wrench);
@@ -144,20 +140,18 @@ CartesianPose CartesianTwist::operator*(const std::chrono::nanoseconds& dt) cons
   return displacement;
 }
 
-void CartesianTwist::clamp(double max_linear,
-                           double max_angular,
-                           double linear_noise_ratio,
-                           double angular_noise_ratio) {
+void CartesianTwist::clamp(
+    double max_linear, double max_angular, double linear_noise_ratio, double angular_noise_ratio
+) {
   // clamp linear
   this->clamp_state_variable(max_linear, CartesianStateVariable::LINEAR_VELOCITY, linear_noise_ratio);
   // clamp angular
   this->clamp_state_variable(max_angular, CartesianStateVariable::ANGULAR_VELOCITY, angular_noise_ratio);
 }
 
-CartesianTwist CartesianTwist::clamped(double max_linear,
-                                       double max_angular,
-                                       double linear_noise_ratio,
-                                       double angular_noise_ratio) const {
+CartesianTwist CartesianTwist::clamped(
+    double max_linear, double max_angular, double linear_noise_ratio, double angular_noise_ratio
+) const {
   CartesianTwist result(*this);
   result.clamp(max_linear, max_angular, linear_noise_ratio, angular_noise_ratio);
   return result;

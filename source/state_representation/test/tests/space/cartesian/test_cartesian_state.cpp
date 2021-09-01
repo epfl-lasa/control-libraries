@@ -277,7 +277,78 @@ TEST(CartesianStateTest, Distance) {
   EXPECT_FLOAT_EQ(cs1.dist(cs3), cs3.dist(cs1));
 }
 
-TEST(CartesianStateTest, TestScalarDivison) {
+TEST(CartesianStateTest, Inverse) {
+  // TODO
+}
+
+TEST(CartesianStateTest, Addition) {
+  CartesianState cs1 = CartesianState::Random("test");
+  CartesianState cs2 = CartesianState::Random("test");
+  CartesianState cs3 = CartesianState::Random("test", "reference");
+  EXPECT_THROW(cs1 + cs3, exceptions::IncompatibleReferenceFramesException);
+
+  CartesianState csum = cs1 + cs2;
+  EXPECT_EQ(csum.get_position(), cs1.get_position() + cs2.get_position());
+  Eigen::Quaterniond orientation = (cs1.get_orientation().dot(cs2.get_orientation()) > 0) ? cs2.get_orientation()
+                                                                                          : Eigen::Quaterniond(-cs2.get_orientation().coeffs());
+  orientation = cs1.get_orientation() * orientation;
+  EXPECT_TRUE(csum.get_orientation().coeffs().isApprox(orientation.coeffs()));
+  EXPECT_EQ(csum.get_twist(), cs1.get_twist() + cs2.get_twist());
+  EXPECT_EQ(csum.get_accelerations(), cs1.get_accelerations() + cs2.get_accelerations());
+  EXPECT_EQ(csum.get_wrench(), cs1.get_wrench() + cs2.get_wrench());
+
+  cs1 += cs2;
+  EXPECT_EQ(csum.get_position(), cs1.get_position());
+  EXPECT_TRUE(csum.get_orientation().coeffs().isApprox(cs1.get_orientation().coeffs()));
+  EXPECT_EQ(csum.get_twist(), cs1.get_twist());
+  EXPECT_EQ(csum.get_accelerations(), cs1.get_accelerations());
+  EXPECT_EQ(csum.get_wrench(), cs1.get_wrench());
+}
+
+TEST(CartesianStateTest, Subtraction) {
+  CartesianState cs1 = CartesianState::Random("test");
+  CartesianState cs2 = CartesianState::Random("test");
+  CartesianState cs3 = CartesianState::Random("test", "reference");
+  EXPECT_THROW(cs1 - cs3, exceptions::IncompatibleReferenceFramesException);
+
+  CartesianState cdiff = cs1 - cs2;
+  EXPECT_EQ(cdiff.get_position(), cs1.get_position() - cs2.get_position());
+  Eigen::Quaterniond orientation = (cs1.get_orientation().dot(cs2.get_orientation()) > 0) ? cs2.get_orientation()
+                                                                                          : Eigen::Quaterniond(-cs2.get_orientation().coeffs());
+  orientation = cs1.get_orientation() * orientation.conjugate();
+  EXPECT_TRUE(cdiff.get_orientation().coeffs().isApprox(orientation.coeffs()));
+  EXPECT_EQ(cdiff.get_twist(), cs1.get_twist() - cs2.get_twist());
+  EXPECT_EQ(cdiff.get_accelerations(), cs1.get_accelerations() - cs2.get_accelerations());
+  EXPECT_EQ(cdiff.get_wrench(), cs1.get_wrench() - cs2.get_wrench());
+
+  cs1 -= cs2;
+  EXPECT_EQ(cdiff.get_position(), cs1.get_position());
+  EXPECT_TRUE(cdiff.get_orientation().coeffs().isApprox(cs1.get_orientation().coeffs()));
+  EXPECT_EQ(cdiff.get_twist(), cs1.get_twist());
+  EXPECT_EQ(cdiff.get_accelerations(), cs1.get_accelerations());
+  EXPECT_EQ(cdiff.get_wrench(), cs1.get_wrench());
+}
+
+TEST(CartesianStateTest, ScalarMultiplication) {
+  double scalar = 2;
+  CartesianState cs = CartesianState::Random("test");
+  CartesianState cscaled = scalar * cs;
+  EXPECT_EQ(cscaled.get_position(), scalar * cs.get_position());
+  Eigen::Quaterniond qscaled = math_tools::exp(math_tools::log(cs.get_orientation()), scalar / 2.);
+  EXPECT_TRUE(cscaled.get_orientation().coeffs().isApprox(qscaled.coeffs()));
+  EXPECT_EQ(cscaled.get_twist(), scalar * cs.get_twist());
+  EXPECT_EQ(cscaled.get_accelerations(), scalar * cs.get_accelerations());
+  EXPECT_EQ(cscaled.get_wrench(), scalar * cs.get_wrench());
+  EXPECT_EQ((cs * scalar).data(), cscaled.data());
+  cs *= scalar;
+  EXPECT_EQ(cscaled.data(), cs.data());
+
+  CartesianState empty;
+  EXPECT_THROW(scalar * empty, exceptions::EmptyStateException);
+}
+
+
+TEST(CartesianStateTest, ScalarDivision) {
   double scalar = 2;
   CartesianState cs = CartesianState::Random("test");
   CartesianState cscaled = cs / scalar;

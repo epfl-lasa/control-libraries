@@ -21,7 +21,7 @@ into serialized message packets (#182)
   the generated bindings from the repository, while providing installation
   scripts (#174)
 - Add class JointAccelerations (#173)
-- Fix clamp_state_variable function for CartesianState and JointState (#176)
+- Fix clamp_state_variable function for CartesianState and JointState (#176, #191)
 - Install tagged versions of osqp and osqpEigen (#184)
 - Refactor JointState tests and split them into separate test suites (#183, #187)
 - Add missing integration constructor from JointAccelerations for JointVelocities (#185)

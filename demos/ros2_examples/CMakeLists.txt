@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+﻿cmake_minimum_required(VERSION 3.9)
 project(ros2_examples)
 
 # Default to C99
@@ -42,6 +42,7 @@ include_directories(
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
+    joint_space_torque_control_loop
 )
 
 set(FIXTURE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/fixtures/)

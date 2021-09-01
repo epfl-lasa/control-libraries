@@ -31,3 +31,10 @@ ros2 launch ros2_examples task_space_control_loop.py
 This simple demonstration shows how to create a control loop with a `Linear` dynamical system in task space (`CartesianState`).
 It moves a pose towards a random attractor in a `100Hz` control loop.
 At each control step, the scripts publishes the current and attractor poses using ROS2 `tf2` for a visualization in `rviz2`.
+
+## aica-docker
+
+```bash
+aica-docker server control-libraries/ros2-demos:latest -p 7788 -u ros2
+aica-docker connect aica-technology-simulator-backend-ssh -u ros2
+```

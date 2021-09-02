@@ -46,6 +46,7 @@ public:
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
   CartesianState operator*=(const CartesianState& state) = delete;
   CartesianState operator*(const CartesianState& state) = delete;
+  friend CartesianState operator*=(const CartesianState& state, const CartesianTwist& twist) = delete;
 
   /**
    * @brief Empty constructor

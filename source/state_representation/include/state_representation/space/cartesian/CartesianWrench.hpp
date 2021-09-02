@@ -45,6 +45,7 @@ public:
   void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
   CartesianState operator*=(const CartesianState& state) = delete;
   CartesianState operator*(const CartesianState& state) = delete;
+  friend CartesianState operator*=(const CartesianState& state, const CartesianWrench& wrench) = delete;
 
   /**
    * @brief Empty constructor

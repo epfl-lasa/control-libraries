@@ -28,6 +28,7 @@ into serialized message packets (#182)
 - Remove previously deprecated from_std_vector function (#186)
 - Refactor CartesianState tests and split them into separate test suites (#188)
 - Add scalar division operator for CartesianState and its derived classes (#192)
+- Remove invalid multiplication operators for CartesianState and its derived classes (#195)
 
 ### Pending TODOs for the next release
 

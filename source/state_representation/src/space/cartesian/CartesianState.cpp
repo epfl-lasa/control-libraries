@@ -239,8 +239,8 @@ CartesianState CartesianState::inverse() const {
 void CartesianState::clamp_state_variable(
     double max_norm, const CartesianStateVariable& state_variable_type, double noise_ratio
 ) {
-  if (state_variable_type == CartesianStateVariable::ORIENTATION
-      || state_variable_type == CartesianStateVariable::POSE) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
     throw NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable");
   }
   Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);

@@ -49,27 +49,6 @@ CartesianTwist CartesianTwist::Random(const std::string& name, const std::string
   return CartesianTwist(name, random, reference);
 }
 
-CartesianTwist& CartesianTwist::operator*=(const CartesianTwist& twist) {
-  this->CartesianState::operator*=(twist);
-  return (*this);
-}
-
-CartesianTwist CartesianTwist::operator*(const CartesianTwist& twist) const {
-  return this->CartesianState::operator*(twist);
-}
-
-CartesianState CartesianTwist::operator*(const CartesianState& state) const {
-  return this->CartesianState::operator*(state);
-}
-
-CartesianPose CartesianTwist::operator*(const CartesianPose& pose) const {
-  return this->CartesianState::operator*(pose);
-}
-
-CartesianWrench CartesianTwist::operator*(const CartesianWrench& wrench) const {
-  return this->CartesianState::operator*(wrench);
-}
-
 CartesianTwist& CartesianTwist::operator+=(const CartesianTwist& twist) {
   this->CartesianState::operator+=(twist);
   return (*this);

@@ -44,6 +44,9 @@ public:
   void set_force(const Eigen::Vector3d& force) = delete;
   void set_torque(const Eigen::Vector3d& torque) = delete;
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
+  CartesianState operator*=(const CartesianState& state) = delete;
+  CartesianState operator*(const CartesianState& state) = delete;
+  friend CartesianState operator*=(const CartesianState& state, const CartesianTwist& twist) = delete;
 
   /**
    * @brief Empty constructor
@@ -116,41 +119,6 @@ public:
    * @return reference to the current twist with new values
    */
   CartesianTwist& operator=(const CartesianTwist& twist) = default;
-
-  /**
-   * @brief Overload the *= operator
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  CartesianTwist& operator*=(const CartesianTwist& twist);
-
-  /**
-   * @brief Overload the * operator with a twist
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianState to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianState given in argument
-   */
-  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianPose to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianPose given in argument
-   */
-  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianWrench to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianWrench given in argument
-   */
-  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Overload the += operator

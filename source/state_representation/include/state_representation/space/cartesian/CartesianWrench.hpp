@@ -43,6 +43,9 @@ public:
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
   void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  CartesianState operator*=(const CartesianState& state) = delete;
+  CartesianState operator*(const CartesianState& state) = delete;
+  friend CartesianState operator*=(const CartesianState& state, const CartesianWrench& wrench) = delete;
 
   /**
    * @brief Empty constructor
@@ -110,41 +113,6 @@ public:
    * @return reference to the current wrench with new values
    */
   CartesianWrench& operator=(const CartesianWrench& wrench) = default;
-
-  /**
-   * @brief Overload the *= operator
-   * @param wrench CartesianWrench to multiply with
-   * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
-   */
-  CartesianWrench& operator*=(const CartesianWrench& wrench);
-
-  /**
-   * @brief Overload the * operator with a wrench
-   * @param wrench CartesianWrench to multiply with
-   * @return the current CartesianWrench multiplied by the CartesianWrench given in argument
-   */
-  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianState to multiply with
-   * @return the current CartesianWrench multiplied by the CartesianState given in argument
-   */
-  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianPose to multiply with
-   * @return the current CartesianWrench multiplied by the CartesianPose given in argument
-   */
-  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianWrench to multiply with
-   * @return the current CartesianWrench multiplied by the CartesianTwist given in argument
-   */
-  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
 
   /**
    * @brief Overload the += operator

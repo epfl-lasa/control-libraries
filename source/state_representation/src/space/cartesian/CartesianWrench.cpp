@@ -44,27 +44,6 @@ CartesianWrench CartesianWrench::Random(const std::string& name, const std::stri
   return CartesianWrench(name, random, reference);
 }
 
-CartesianWrench& CartesianWrench::operator*=(const CartesianWrench& wrench) {
-  this->CartesianState::operator*=(wrench);
-  return (*this);
-}
-
-CartesianWrench CartesianWrench::operator*(const CartesianWrench& wrench) const {
-  return this->CartesianState::operator*(wrench);
-}
-
-CartesianState CartesianWrench::operator*(const CartesianState& state) const {
-  return this->CartesianState::operator*(state);
-}
-
-CartesianPose CartesianWrench::operator*(const CartesianPose& pose) const {
-  return this->CartesianState::operator*(pose);
-}
-
-CartesianTwist CartesianWrench::operator*(const CartesianTwist& twist) const {
-  return this->CartesianState::operator*(twist);
-}
-
 CartesianWrench& CartesianWrench::operator+=(const CartesianWrench& wrench) {
   this->CartesianState::operator+=(wrench);
   return (*this);

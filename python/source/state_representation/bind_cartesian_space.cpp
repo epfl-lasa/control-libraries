@@ -163,6 +163,9 @@ void cartesian_pose(py::module_& m) {
 
   c.def(py::self *= py::self);
   c.def(py::self * py::self);
+  c.def(py::self * CartesianState());
+  c.def(py::self * CartesianTwist());
+  c.def(py::self * CartesianWrench());
   c.def(py::self * Eigen::Vector3d());
   c.def(py::self *= double());
   c.def(py::self * double());
@@ -223,8 +226,6 @@ void cartesian_twist(py::module_& m) {
     c.def(std::string("set_" + attr).c_str(), [](const CartesianTwist& twist) -> CartesianTwist { return twist; }, "Deleted method from parent class.");
   }
 
-  c.def(py::self *= py::self);
-  c.def(py::self * py::self);
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -289,8 +290,6 @@ void cartesian_wrench(py::module_& m) {
     c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianWrench { return wrench; }, "Deleted method from parent class.");
   }
 
-  c.def(py::self *= py::self);
-  c.def(py::self * py::self);
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);

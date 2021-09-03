@@ -415,6 +415,20 @@ public:
   CartesianState operator*(double lambda) const;
 
   /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianState divided by lambda
+   */
+  CartesianState& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianState divided by lambda
+   */
+  CartesianState operator/(double lambda) const;
+
+  /**
    * @brief Overload the += operator
    * @param state CartesianState to add
    * @return the current CartesianState added the CartesianState given in argument

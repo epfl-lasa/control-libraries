@@ -75,24 +75,24 @@ public:
   /**
    * @brief Construct a CartesianTwist from a linear velocity given as a vector.
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Vector3d& linear_velocity,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianTwist from a linear velocity and angular velocity given as vectors.
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Vector3d& linear_velocity,
-                          const Eigen::Vector3d& angular_velocity,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity,
+      const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianTwist from a single 6d twist vector
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Matrix<double, 6, 1>& twist,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor for the zero twist
@@ -190,9 +190,23 @@ public:
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianState multiplied by lambda
+   * @return the CartesianTwist multiplied by lambda
    */
   CartesianTwist operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist operator/(double lambda) const;
 
   /**
    * @brief Overload the *= operator with a gain matrix
@@ -229,10 +243,9 @@ public:
    * the angular velocity will be set to 0
    * @return the clamped twist
    */
-  CartesianTwist clamped(double max_linear,
-                         double max_angular,
-                         double noise_ratio = 0,
-                         double angular_noise_ratio = 0) const;
+  CartesianTwist clamped(
+      double max_linear, double max_angular, double noise_ratio = 0, double angular_noise_ratio = 0
+  ) const;
 
   /**
    * @brief Return a copy of the CartesianTwist
@@ -269,7 +282,8 @@ public:
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
    */
-  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const override;
+  std::vector<double>
+  norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const override;
 
   /**
    * @brief Compute the normalized twist at the state variable given in argument (default is full twist)

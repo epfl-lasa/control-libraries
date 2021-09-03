@@ -69,24 +69,24 @@ public:
   /**
    * @brief Construct a CartesianWrench from a force given as a vector.
    */
-  explicit CartesianWrench(const std::string& name,
-                           const Eigen::Vector3d& force,
-                           const std::string& reference = "world");
+  explicit CartesianWrench(
+      const std::string& name, const Eigen::Vector3d& force, const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianWrench from a force and torque given as vectors.
    */
-  explicit CartesianWrench(const std::string& name,
-                           const Eigen::Vector3d& force,
-                           const Eigen::Vector3d& torque,
-                           const std::string& reference = "world");
+  explicit CartesianWrench(
+      const std::string& name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque,
+      const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianWrench from a single 6d wrench vector
    */
-  explicit CartesianWrench(const std::string& name,
-                           const Eigen::Matrix<double, 6, 1>& wrench,
-                           const std::string& reference = "world");
+  explicit CartesianWrench(
+      const std::string& name, const Eigen::Matrix<double, 6, 1>& wrench, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor for the zero wrench
@@ -177,16 +177,30 @@ public:
   /**
    * @brief Overload the *= operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench multiply by lambda
+   * @return the CartesianWrench multiplied by lambda
    */
   CartesianWrench& operator*=(double lambda);
 
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianWrench multiply by lambda
+   * @return the CartesianWrench multiplied by lambda
    */
   CartesianWrench operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianWrench divided by lambda
+   */
+  CartesianWrench& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianWrench divided by lambda
+   */
+  CartesianWrench operator/(double lambda) const;
 
   /**
    * @brief Clamp inplace the magnitude of the wrench to the values in argument
@@ -209,10 +223,9 @@ public:
    * the torque will be set to 0
    * @return the clamped wrench
    */
-  CartesianWrench clamped(double max_force,
-                          double max_torque,
-                          double force_noise_ratio = 0,
-                          double torque_noise_ratio = 0) const;
+  CartesianWrench clamped(
+      double max_force, double max_torque, double force_noise_ratio = 0, double torque_noise_ratio = 0
+  ) const;
 
   /**
    * @brief Return a copy of the CartesianWrench
@@ -249,7 +262,8 @@ public:
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
    */
-  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::WRENCH) const override;
+  std::vector<double>
+  norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::WRENCH) const override;
 
   /**
    * @brief Compute the normalized wrench at the state variable given in argument (default is full wrench)

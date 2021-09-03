@@ -270,6 +270,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a766d74b1992ab6c11f0e710a28fc1053"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#a766d74b1992ab6c11f0e710a28fc1053">operator*</a> (double lambda) const</td></tr>
 <tr class="memdesc:a766d74b1992ab6c11f0e710a28fc1053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the * operator with a scalar.  <a href="classstate__representation_1_1_cartesian_state.html#a766d74b1992ab6c11f0e710a28fc1053">More...</a><br /></td></tr>
 <tr class="separator:a766d74b1992ab6c11f0e710a28fc1053"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a708b7b30f978ea11f5814c310c849185"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#a708b7b30f978ea11f5814c310c849185">operator/=</a> (double lambda)</td></tr>
+<tr class="memdesc:a708b7b30f978ea11f5814c310c849185"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the /= operator with a scalar.  <a href="classstate__representation_1_1_cartesian_state.html#a708b7b30f978ea11f5814c310c849185">More...</a><br /></td></tr>
+<tr class="separator:a708b7b30f978ea11f5814c310c849185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7fb247c7436c9c071afba59d72bf43d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#ad7fb247c7436c9c071afba59d72bf43d">operator/</a> (double lambda) const</td></tr>
+<tr class="memdesc:ad7fb247c7436c9c071afba59d72bf43d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the / operator with a scalar.  <a href="classstate__representation_1_1_cartesian_state.html#ad7fb247c7436c9c071afba59d72bf43d">More...</a><br /></td></tr>
+<tr class="separator:ad7fb247c7436c9c071afba59d72bf43d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa881340e8f569f216834725cd424f0ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_cartesian_state.html#aa881340e8f569f216834725cd424f0ca">operator+=</a> (const <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp;state)</td></tr>
 <tr class="memdesc:aa881340e8f569f216834725cd424f0ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the += operator.  <a href="classstate__representation_1_1_cartesian_state.html#aa881340e8f569f216834725cd424f0ca">More...</a><br /></td></tr>
 <tr class="separator:aa881340e8f569f216834725cd424f0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1071,6 +1077,60 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the current <a class="el" href="classstate__representation_1_1_cartesian_state.html" title="Class to represent a state in Cartesian space.">CartesianState</a> minus the <a class="el" href="classstate__representation_1_1_cartesian_state.html" title="Class to represent a state in Cartesian space.">CartesianState</a> given in argument </dd></dl>
+
+</div>
+</div>
+<a id="ad7fb247c7436c9c071afba59d72bf43d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7fb247c7436c9c071afba59d72bf43d">&#9670;&nbsp;</a></span>operator/()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> state_representation::CartesianState::operator/ </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overload the / operator with a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lambda</td><td>the scalar to divide with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_state.html" title="Class to represent a state in Cartesian space.">CartesianState</a> divided by lambda </dd></dl>
+
+</div>
+</div>
+<a id="a708b7b30f978ea11f5814c310c849185"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a708b7b30f978ea11f5814c310c849185">&#9670;&nbsp;</a></span>operator/=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp; state_representation::CartesianState::operator/= </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overload the /= operator with a scalar. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lambda</td><td>the scalar to divide with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_state.html" title="Class to represent a state in Cartesian space.">CartesianState</a> divided by lambda </dd></dl>
 
 </div>
 </div>

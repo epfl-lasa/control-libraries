@@ -70,6 +70,9 @@ CartesianState CartesianState::operator*(double lambda) const {
 }
 
 CartesianState& CartesianState::operator/=(double lambda) {
+  if (std::abs(lambda) < std::numeric_limits<double>::min()) {
+    throw std::runtime_error("Division by zero is not allowed");
+  }
   lambda = 1.0 / lambda;
   return this->operator*=(lambda);
 }

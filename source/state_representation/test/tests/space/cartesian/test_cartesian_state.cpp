@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/NotImplementedException.hpp"
 
 using namespace state_representation;
@@ -125,4 +126,23 @@ TEST(CartesianStateTest, TestNormalized) {
   for (double n: norms) {
     EXPECT_NEAR(n, 1.0, tolerance);
   }
+}
+
+TEST(CartesianStateTest, TestScalarDivison) {
+  double scalar = 2;
+  CartesianState cs = CartesianState::Random("test");
+  CartesianState cscaled = cs / scalar;
+  EXPECT_EQ(cscaled.get_position(), cs.get_position() / scalar);
+  Eigen::Quaterniond qscaled = math_tools::exp(math_tools::log(cs.get_orientation()), 1.0 / (2. * scalar));
+  EXPECT_TRUE(cscaled.get_orientation().coeffs().isApprox(qscaled.coeffs()));
+  EXPECT_EQ(cscaled.get_twist(), cs.get_twist() / scalar);
+  EXPECT_EQ(cscaled.get_accelerations(), cs.get_accelerations() / scalar);
+  EXPECT_EQ(cscaled.get_wrench(), cs.get_wrench() / scalar);
+  cs /= scalar;
+  EXPECT_EQ(cscaled.data(), cs.data());
+
+  EXPECT_THROW(cs / 0.0, std::runtime_error);
+
+  CartesianState empty;
+  EXPECT_THROW(empty / scalar, exceptions::EmptyStateException);
 }

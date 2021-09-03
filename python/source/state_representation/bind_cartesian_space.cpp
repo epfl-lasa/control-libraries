@@ -286,7 +286,7 @@ void cartesian_wrench(py::module_& m) {
 
   for (const std::string& attr : deleted_attributes) {
     c.def(std::string("get_" + attr).c_str(), [](const CartesianWrench&) -> void {}, "Deleted method from parent class.");
-    c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianPose { return wrench; }, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianWrench { return wrench; }, "Deleted method from parent class.");
   }
 
   c.def(py::self *= py::self);

@@ -68,13 +68,13 @@ public:
     std::vector<double> gains = {50.0, 50.0, 50.0, 10.0, 10.0, 10.0};
     this->ds_ = std::make_shared<dynamical_systems::Linear<CartesianState>>(target, gains);
 
-    this->ctrl_ = std::make_shared<controllers::impedance::CartesianTwistController>(10, 10, 1, 1);
+    this->ctrl_ = std::make_shared<controllers::impedance::CartesianTwistController>(100, 100, 10, 10);
 
     subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
         "/" + robot_name + "/joint_states", 10,
         std::bind(&TorqueControl::robot_state_callback, this, std::placeholders::_1));
     this->publisher_ =
-        this->create_publisher<std_msgs::msg::Float64MultiArray>("/" + robot_name + "/torque_controller/command", 10);
+        this->create_publisher<std_msgs::msg::Float64MultiArray>("/" + robot_name + "/effort_controller/command", 10);
 
     this->timer_ = this->create_wall_timer(dt_, std::bind(&TorqueControl::run, this));
   }
@@ -82,7 +82,7 @@ public:
   void run() {
     if (this->state_received) {
       CartesianTwist twist = this->ds_->evaluate(this->get_eef_pose());
-      twist.clamp(0.5, 0.5);
+      twist.clamp(0.5, 0.25);
       JointTorques command = this->ctrl_->compute_command(twist, this->get_eef_pose(), this->get_jacobian());
       this->publish(command);
     }

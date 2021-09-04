@@ -200,6 +200,7 @@ void cartesian_pose(py::module_& m) {
 
   c.def("copy", &CartesianPose::copy, "Return a copy of the CartesianPose");
   c.def("data", &CartesianPose::data, "Returns the pose data as a vector");
+  c.def("inverse", &CartesianPose::inverse, "Compute the inverse of the current CartesianPose");
   c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianPose::set_data), "Set the pose data from a vector", "data"_a);
   c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianPose::set_data), "Set the pose data from a list", "data"_a);
   c.def("norms", &CartesianPose::norms, "Compute the norms of the state variable specified by the input type (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
@@ -272,6 +273,7 @@ void cartesian_twist(py::module_& m) {
 
   c.def("copy", &CartesianTwist::copy, "Return a copy of the CartesianTwist");
   c.def("data", &CartesianTwist::data, "Returns the twist data as a vector");
+  c.def("inverse", &CartesianTwist::inverse, "Compute the inverse of the current CartesianTwist");
   c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianTwist::set_data), "Set the twist data from a vector", "data"_a);
   c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianTwist::set_data), "Set the twist data from a list", "data"_a);
   c.def("norms", &CartesianTwist::norms, "Compute the norms of the state variable specified by the input type (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
@@ -339,6 +341,7 @@ void cartesian_wrench(py::module_& m) {
 
   c.def("copy", &CartesianWrench::copy, "Return a copy of the CartesianWrench");
   c.def("data", &CartesianWrench::data, "Returns the wrench data as a vector");
+  c.def("inverse", &CartesianWrench::inverse, "Compute the inverse of the current CartesianWrench");
   c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianWrench::set_data), "Set the wrench data from a vector", "data"_a);
   c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianWrench::set_data), "Set the wrench data from a list", "data"_a);
   c.def("norms", &CartesianWrench::norms, "Compute the norms of the state variable specified by the input type (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);

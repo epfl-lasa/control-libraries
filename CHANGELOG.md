@@ -9,7 +9,8 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Protobuf message protocol and C++ binding library `clproto` for
-serializing and deserializing control library objects (#168, #175, #177, #179, #180)
+serializing and deserializing control library objects
+(#168, #175, #177, #179, #180, #190)
 - Methods for packing and unpacking multiple encoded state messages
 into serialized message packets (#182)
 - Add set_data function (#163)

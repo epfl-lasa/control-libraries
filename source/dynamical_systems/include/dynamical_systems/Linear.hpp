@@ -1,9 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/07/18
- *
- */
-
 #pragma once
 
 #include "dynamical_systems/DynamicalSystem.hpp"

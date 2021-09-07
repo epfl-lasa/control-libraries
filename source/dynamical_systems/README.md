@@ -1,10 +1,7 @@
-# dynamical_systems
+# Dynamical Systems
 
 This library provides a set of classes to represent **Dynamical Systems**: 
 functions which map a state to a state derivative.
-Those are a set of helpers functions to handle common concepts in robotics such as transformations between frames and 
-the link between them and the robot state.
-This description covers most of the functionalities starting from the spatial transformations.
 
 ## Table of contents:
 * [Base DynamicalSystem](#base-dynamicalsystem)

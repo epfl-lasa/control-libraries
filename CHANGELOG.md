@@ -15,7 +15,7 @@ serializing and deserializing control library objects
 into serialized message packets (#182)
 - Add set_data function (#163)
 - Move set_data declaration to State and add it for Ellipsoid (#166)
-- Add automatic documentation generation and deployment to GitHub Pages (#170)
+- Add automatic documentation generation and deployment to GitHub Pages (#170, #199)
 - Build and push development dependencies image in CI and related 
   restructuring of Docker resources (#169)
 - Correct an error in the `makefile` of the protobuf bindings and remove

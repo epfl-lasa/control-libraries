@@ -1,4 +1,4 @@
-# state_representation
+# State Representation
 
 This library provides a set of classes to represent **states** in **Cartesian** or **joint** spaces, **parameters**, 
 or **geometrical shapes** that can be used as obstacles.

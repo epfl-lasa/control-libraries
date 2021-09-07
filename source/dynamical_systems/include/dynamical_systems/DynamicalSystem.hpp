@@ -1,15 +1,13 @@
-/**
- * @author Baptiste Busch
- * @date 2019/07/18
- *
- */
-
 #pragma once
 
 #include "state_representation/parameters/ParameterInterface.hpp"
 #include <list>
 #include <memory>
 
+/**
+ * @namespace dynamical_systems
+ * @brief Systems of equations relating state variables to their derivatives
+ */
 namespace dynamical_systems {
 /**
  * @class DynamicalSystem

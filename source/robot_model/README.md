@@ -1,4 +1,4 @@
-# robot_model
+# Robot Model
 
 The `robot_model` library is a wrapper for the [Pinocchio](https://github.com/stack-of-tasks/pinocchio) library, used
 to compute dynamics model of a robot.

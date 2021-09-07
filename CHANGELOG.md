@@ -1,46 +1,97 @@
 # CHANGELOG
 
 Release Versions:
+- [4.0.0](#400)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
+## 4.0.0
 
-- Protobuf message protocol and C++ binding library `clproto` for
-serializing and deserializing control library objects
-(#168, #175, #177, #179, #180, #190)
-- Methods for packing and unpacking multiple encoded state messages
-into serialized message packets (#182)
-- Add set_data function (#163)
-- Move set_data declaration to State and add it for Ellipsoid (#166)
+Version 4.0.0 introduces some powerful new features for using `state_representation` objects
+in real applications, including the brand new `clproto` C++ serialization library on the basis of Protobuf.
+
+Many additional fixes and improvements have been made across the modules, and some deprecated methods
+have now been removed with this major version release.
+
+This release also marks the repository being renamed to `control-libraries` (formerly `control_libraries`). 
+
+See the following notes for more details.
+
+### Breaking changes
+
+This release contains the following breaking changes:
+- Rename repository to control-libraries
+- Remove previously deprecated from_std_vector function (#186)
+- Remove invalid multiplication operators for CartesianState and its derived classes (#195)
+
+**Repository namespace**
+
+The repository and all associated references have been renamed from `epfl-lasa/control_libraries` to
+`epfl-lasa/control-libraries`. This is to better match the GitHub repository standard style and to match
+the pattern in the container names. This breaking change will necessitate downstream users to update their 
+installation paths when cloning from GitHub.
+
+**state_representation**
+
+The following functions have been removed:
+- `CartesianState::from_std_vector`
+- `CartesianPose::from_std_vector`
+- `Ellipsoid::from_std_vector`
+- `JointState::from_std_vector`
+- `JointPositions::from_std_vector`
+
+The following multiplication operations are no longer permitted:
+- `CartesianState *= CartesianPose | CartesianTwist | CartesianWrench`
+- `CartesianPose *= CartesianTwist | CartesianWrench | CartesianState`
+- `CartesianTwist *= CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+- `CartesianTwist * CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+- `CartesianWrench *= CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+- `CartesianWrench * CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+
+The permitted multiplication operations are:
+- `CartesianState *= CartesianState`
+- `CartesianState * CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+- `CartesianPose *= CartesianPose`
+- `CartesianPose * CartesianPose | CartesianTwist | CartesianWrench | CartesianState`
+
+### Features
+
+The biggest feature to come with 4.0.0 is the Protobuf schema for `state_representation` types and the 
+associated `clproto` C++ serialization library. See the documentation for more information.
+
+Speaking of documentation, documentation is now generated and hosted for each release and for the main and develop
+branches at:
+[https://epfl-lasa.github.io/control-libraries](https://epfl-lasa.github.io/control-libraries)
+
+Similarly, docker images for development and downstream use are now also built and hosted automatically.
+
+The `state_representation` API has seen a number of smaller features to introduce new classes, methods and operators.
+
+- Protobuf message protocol and C++ binding library `clproto` for serializing and deserializing control library objects
+  (#168, #175, #177, #179, #180, #190)
+- Build and push development dependencies image in CI and related restructuring of Docker resources (#169)
 - Add automatic documentation generation and deployment to GitHub Pages (#170, #199)
-- Build and push development dependencies image in CI and related 
-  restructuring of Docker resources (#169)
-- Correct an error in the `makefile` of the protobuf bindings and remove
-  the generated bindings from the repository, while providing installation
-  scripts (#174)
+- Add set_data function declaration to all State objects (#163, #166)
 - Add class JointAccelerations (#173)
+- Methods for packing and unpacking multiple encoded state messages
+  into serialized message packets (#182)
+- Add scalar division operator for CartesianState and its derived classes (#192)
+
+### Fixes and improvements
+
+- Correct an error in the `makefile` of the protobuf bindings and remove
+  the generated bindings from the repository, while providing installation scripts (#174)
 - Fix clamp_state_variable function for CartesianState and JointState (#176, #191)
 - Install tagged versions of osqp and osqpEigen (#184)
-- Refactor JointState tests and split them into separate test suites (#183, #187)
 - Add missing integration constructor from JointAccelerations for JointVelocities (#185)
-- Remove previously deprecated from_std_vector function (#186)
-- Refactor CartesianState tests and split them into separate test suites (#188)
-- Add scalar division operator for CartesianState and its derived classes (#192)
-- Remove invalid multiplication operators for CartesianState and its derived classes (#195)
 - Fix path to Dockerfile in demos (#197)
 
-### Pending TODOs for the next release
+### Behind the scenes
 
-- Revise `*=` and `*` operators in Cartesian types before the next release with
-  breaking changes (some are marked *deprecated*, and some are left as is, but
-  they should be deleted) (#156)
-- Add the wrench computation in the `*` operator and `inverse` function (#134)
-- Refactor and improve unittests for state_representation (especially JointState
-  and CartesianState)
-- Rename repository
+- Refactor JointState tests and split them into separate test suites (#183, #187)
+- Refactor CartesianState tests and split them into separate test suites (#188)
 
 ## 3.1.0
 

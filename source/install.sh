@@ -131,6 +131,8 @@ cmake -DCMAKE_BUILD_TYPE=Release \
 
 make -j && make install || exit 1
 
+ldconfig
+
 # cleanup any temporary folders
 rm -rf "${SOURCE_PATH}"/tmp
 

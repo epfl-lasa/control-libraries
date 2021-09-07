@@ -134,7 +134,7 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-if [ -x "$(command -v protoc)" ]; then
+if ! [ -x "$(command -v protoc)" ]; then
   echo ">>> PROTOC NOT FOUND"
   install_protobuf || exit 1
 fi

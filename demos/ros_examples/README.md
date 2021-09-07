@@ -23,7 +23,7 @@ rosrun ros_examples task_space_control_loop
 You can also directly use the launch file that starts any requirement for the demo to run correctly:
 
 ```console
-rolaunch ros_examples task_space_control_loop.launch
+roslaunch ros_examples task_space_control_loop.launch
 ```
 
 ## `task_space_control_loop`

@@ -15,6 +15,10 @@
 
 using namespace std::chrono_literals;
 
+/**
+ * @namespace robot_model
+ * @brief Robot kinematics and dynamics
+ */
 namespace robot_model {
 /**
  * @brief parameters for the inverse kinematics function

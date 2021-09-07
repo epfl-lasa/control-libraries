@@ -6,6 +6,10 @@
 #include <list>
 #include <memory>
 
+/**
+ * @namespace controllers
+ * @brief Systems to determine a command output from measured and desired inputs
+ */
 namespace controllers {
 /**
  * @class Controller

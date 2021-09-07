@@ -4,7 +4,7 @@
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
 PYBIND11_MODULE(state_representation, m) {
-  m.doc() = "Python bindings for control_libraries state_representation";
+  m.doc() = "Python bindings for control libraries state_representation";
 
   #ifdef MODULE_VERSION_INFO
   m.attr("__version__") = MACRO_STRINGIFY(MODULE_VERSION_INFO);

@@ -8,6 +8,10 @@
 #include <iostream>
 #include <typeinfo>
 
+/**
+ * @namespace state_representation
+ * @brief Core state variables and objects
+ */
 namespace state_representation {
 enum class StateType {
   STATE,

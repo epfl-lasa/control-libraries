@@ -1,4 +1,4 @@
-# clproto_cpp - Control Libraries Protocol (C++)
+# clproto (C++)
 
 This library provides a simple interface for encoding and decoding
 control library type objects to and from a serialized binary string

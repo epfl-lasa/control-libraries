@@ -7,6 +7,10 @@
 #define CLPROTO_PACKING_MAX_FIELD_LENGTH (4096)
 #define CLPROTO_PACKING_MAX_FIELDS (64)
 
+/**
+ * @namespace clproto
+ * @brief Bindings to encode and decode state objects into serialised binary message
+ */
 namespace clproto {
 
 /**
@@ -19,7 +23,7 @@ typedef std::size_t field_length_t;
 
 /**
  * @class DecodingException
- * @brief A DedocdingException is raised whenever a
+ * @brief A DecodingException is raised whenever a
  * decoding operation fails due to invalid encoding.
  */
 class DecodingException : public std::runtime_error {

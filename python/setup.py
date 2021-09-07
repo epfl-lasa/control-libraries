@@ -5,7 +5,7 @@ from pybind11.setup_helpers import ParallelCompile, naive_recompile
 import os
 
 __version__ = "4.0.0"
-__libraries__ = ['state_representation']
+__libraries__ = ['state_representation', 'clproto']
 __include_dirs__ = []
 
 # check that eigen and state_representation libraries can be found
@@ -23,15 +23,6 @@ try:
 except Exception as e:
     msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
 
-# check that clproto library can be found
-try:
-    for lib in ['clproto']:
-        status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
-        if len(status) == 0:
-            raise Exception(f'Could not find {lib}!')
-except Exception as e:
-    msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
-
 ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
 
 ext_modules = [
@@ -40,13 +31,6 @@ ext_modules = [
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=__libraries__,
-                      define_macros=[('MODULE_VERSION_INFO', __version__)],
-                      ),
-    Pybind11Extension("clproto",
-                      sorted(glob("source/clproto/*.cpp")),
-                      cxx_std=17,
-                      include_dirs=__include_dirs__,
-                      libraries=['clproto'],
                       define_macros=[('MODULE_VERSION_INFO', __version__)],
                       ),
 ]

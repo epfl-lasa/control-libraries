@@ -96,9 +96,10 @@ they can be marked as `EXPERIMENTAL` to exclude them from compilation.
 
 At the time of release, a release branch should be made from development. In the release branch,
 the project version number should be updated in the following locations:
-- The [top-level CMakeLists](source/CMakeLists.txt) 
-- The [python bindings setup.py](python/setup.py)
-- The PROJECT_NUMBER in the [doxygen config](doxygen/doxygen.conf)
+- The [top-level CMakeLists](./source/CMakeLists.txt) 
+- The [python bindings setup.py](./python/setup.py)
+- The [clproto bindings CMakeLists](./protocol/clproto_cpp/CMakeLists.txt)
+- The PROJECT_NUMBER in the [doxygen config](./doxygen/doxygen.conf)
 
 In addition, the release branch should be used to finalize the [changelog](CHANGELOG.md), which includes
 moving all content from the "Upcoming changes (in development)" header under a new header with the corresponding

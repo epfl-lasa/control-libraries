@@ -40,7 +40,7 @@ setup(
     version=__version__,
     author="Enrico Eberhard",
     author_email="enrico.eberhard@epfl.ch",
-    url="https://github.com/epfl-lasa/control_libraries",
+    url="https://github.com/epfl-lasa/control-libraries",
     description="Python bindings for the C++ control libraries",
     long_description="",
     ext_modules=ext_modules,

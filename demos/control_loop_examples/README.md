@@ -7,7 +7,7 @@
 
 ## Running demonstration scripts
 This package contains a set of demonstration scripts that showcase the functionalities introduced in the different
-libraries of `control_libraries`.
+libraries of `control-libraries`.
 The easiest way to run them is to use the `run-demo-script.sh` file.
 Without arguments, this script create a demo container and opens in interactive mode, allowing you to browse the different
 demo scripts and run the one of your choice:

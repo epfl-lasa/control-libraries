@@ -4,8 +4,8 @@ This repository is still under development, and we welcome user engagement to
 find bugs, resolve issues and add useful features.  
 
 Before contributing to this repository, please first discuss the change you wish to make
-by using the repository [Discussions](https://github.com/epfl-lasa/control_libraries/discussions),
-opening an [issue](https://github.com/epfl-lasa/control_libraries/issues),
+by using the repository [Discussions](https://github.com/epfl-lasa/control-libraries/discussions),
+opening an [issue](https://github.com/epfl-lasa/control-libraries/issues),
 or by contacting the maintainers of this repository directly. 
 
 
@@ -109,4 +109,4 @@ Once the changes specific to the release have been approved, a linear GitFlow st
 merge this release branch into `main`, and then additionally squash and rebase the release branch back into `develop`.
 
 View and join the full discussion surrounding release workflow and strategy here: \
-https://github.com/epfl-lasa/control_libraries/discussions/77
+https://github.com/epfl-lasa/control-libraries/discussions/77

@@ -29,7 +29,7 @@ public:
   explicit RobotInterface(ros::NodeHandle* node_handle, const std::string& robot_name, const std::string& urdf_path) :
       robot_(robot_name, urdf_path) {
     subscriber_ = node_handle->subscribe("joint_states", 10, &RobotInterface::robot_state_callback, this);
-    publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("effort_controller/command", 10, false);
+    publisher_ = node_handle->advertise<std_msgs::Float64MultiArray>("torque_controller/command", 10, false);
     joint_state_ = JointState(robot_name, robot_.get_joint_frames());
   }
 

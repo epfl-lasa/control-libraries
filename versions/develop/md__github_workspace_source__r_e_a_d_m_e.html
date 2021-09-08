@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">3.1.0</span>
+   &#160;<span id="projectnumber">4.0.0</span>
    </div>
   </td>
  </tr>
@@ -107,7 +107,7 @@ $(function() {
 <p>Eigen3 is required for building <code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code> and all other libraries. You can install it with: </p><div class="fragment"><div class="line">apt-get install libeigen3-dev</div>
 </div><!-- fragment --><p>Pinocchio is required for building the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> library. Installing this requires some additional steps; see the <a href="./install.sh">install script</a> for reference. If the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> library is not needed, you can skip the installation of Pinocchio.</p>
 <p>Once the dependencies are installed, build and install the libraries by navigating to the source folder and invoking <code>cmake</code> and <code>make</code> as shown below. The library files are installed to <code>usr/local/lib</code>, and the library header files are copied to <code>/usr/local/include</code>.</p>
-<div class="fragment"><div class="line">cd control_libraries/source</div>
+<div class="fragment"><div class="line">cd control-libraries/source</div>
 <div class="line">mkdir build &amp;&amp; cd build</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
 <div class="line">make -j</div>
@@ -118,7 +118,7 @@ $(function() {
 </div><!-- fragment --><p>To also build the library tests, add the CMake flag <code>-DBUILD_TESTING=ON</code>. This requires GTest to be installed on your system. You can then use <code>make test</code> to run all test targets.</p>
 <p>Alternatively, you can include the source code for each library as submodules in your own CMake project, using the CMake directive <code>add_subdirectory(...)</code> to link it with your project.</p>
 <h1>Troubleshooting</h1>
-<p>This section lists common problems that might come up when using the <code>control_libraries</code> modules.</p>
+<p>This section lists common problems that might come up when using the <code>control-libraries</code> modules.</p>
 <h2>Boost container limit compile error in ROS</h2>
 <p>When using the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> module in ROS and trying to <code>catkin_make</code> the workspace, it might produce the following error: </p><div class="fragment"><div class="line">/opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>
 <div class="line">#23 2.389    29 |     # error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>

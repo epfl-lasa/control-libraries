@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">3.1.0</span>
+   &#160;<span id="projectnumber">4.0.0</span>
    </div>
   </td>
  </tr>
@@ -68,22 +68,22 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p>This directory defines Python bindings for the control libraries.</p>
 <h1>Installation</h1>
-<p>You must first install <code>control_libraries</code> before you can install the Python bindings. Refer to the installation instructions in the top-level <a class="el" href="index.html#md__github_workspace_README">README</a> for more information.</p>
+<p>You must first install <code>control-libraries</code> before you can install the Python bindings. Refer to the installation instructions in the top-level <a class="el" href="index.html#md__github_workspace_README">README</a> for more information.</p>
 <p>Additionally, the installation of the bindings requires the following prerequisites:</p><ul>
 <li><code>python3</code> &gt;= 3.0</li>
 <li><code>pip3</code> &gt;= 10.0.0</li>
 </ul>
-<p>The installation itself is then quite straightforward: </p><div class="fragment"><div class="line">git clone https://github.com/epfl-lasa/control_libraries</div>
+<p>The installation itself is then quite straightforward: </p><div class="fragment"><div class="line">git clone https://github.com/epfl-lasa/control-libraries</div>
 <div class="line"> </div>
-<div class="line">## install control_libraries (skip this stage if already done)</div>
-<div class="line">bash control_libraries/source/install.sh</div>
+<div class="line">## install control-libraries (skip this stage if already done)</div>
+<div class="line">bash control-libraries/source/install.sh</div>
 <div class="line"> </div>
 <div class="line">## install the bindings using the pip installer</div>
-<div class="line">pip3 install control_libraries/python</div>
+<div class="line">pip3 install control-libraries/python</div>
 </div><!-- fragment --><p>The example above installs the module to the default dist-packages location. You can see more information about the installed module using <code>pip3 show control-libraries</code>.</p>
 <p>The process also works with Python virtual environments. For example, with <code>pipenv</code>: </p><div class="fragment"><div class="line">## pip3 install pipenv</div>
 <div class="line"> </div>
-<div class="line">pipenv install control_libraries/python</div>
+<div class="line">pipenv install control-libraries/python</div>
 </div><!-- fragment --><p>Once installed, you can simply import the module with an optional short alias: </p><div class="fragment"><div class="line">#!/usr/bin/env python</div>
 <div class="line">import state_representation as sr</div>
 <div class="line"> </div>

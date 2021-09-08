@@ -4,7 +4,7 @@ This directory defines Python bindings for the control libraries.
 
 ## Installation
 
-You must first install `control_libraries` before you can install the Python bindings.
+You must first install `control-libraries` before you can install the Python bindings.
 Refer to the installation instructions in the top-level [README](../README.md) for more information.
 
 Additionally, the installation of the bindings requires the following prerequisites:
@@ -13,13 +13,13 @@ Additionally, the installation of the bindings requires the following prerequisi
 
 The installation itself is then quite straightforward:
 ```shell script
-git clone https://github.com/epfl-lasa/control_libraries
+git clone https://github.com/epfl-lasa/control-libraries
 
-## install control_libraries (skip this stage if already done)
-bash control_libraries/source/install.sh
+## install control-libraries (skip this stage if already done)
+bash control-libraries/source/install.sh
 
 ## install the bindings using the pip installer
-pip3 install control_libraries/python
+pip3 install control-libraries/python
 ```
 
 The example above installs the module to the default dist-packages location.
@@ -29,7 +29,7 @@ The process also works with Python virtual environments. For example, with `pipe
 ```shell script
 ## pip3 install pipenv
 
-pipenv install control_libraries/python
+pipenv install control-libraries/python
 ```
 
 Once installed, you can simply import the module with an optional short alias:

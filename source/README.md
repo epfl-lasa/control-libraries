@@ -97,7 +97,7 @@ The library files are installed to `usr/local/lib`, and the library header files
 are copied to `/usr/local/include`.
 
 ```shell script
-cd control_libraries/source
+cd control-libraries/source
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j
@@ -124,7 +124,7 @@ using the CMake directive `add_subdirectory(...)` to link it with your project.
 
 ## Troubleshooting
 
-This section lists common problems that might come up when using the `control_libraries` modules.
+This section lists common problems that might come up when using the `control-libraries` modules.
 
 ### Boost container limit compile error in ROS
 When using the `robot_model` module in ROS and trying to `catkin_make` the workspace, it might produce the following error:

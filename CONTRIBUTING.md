@@ -4,8 +4,8 @@ This repository is still under development, and we welcome user engagement to
 find bugs, resolve issues and add useful features.  
 
 Before contributing to this repository, please first discuss the change you wish to make
-by using the repository [Discussions](https://github.com/epfl-lasa/control_libraries/discussions),
-opening an [issue](https://github.com/epfl-lasa/control_libraries/issues),
+by using the repository [Discussions](https://github.com/epfl-lasa/control-libraries/discussions),
+opening an [issue](https://github.com/epfl-lasa/control-libraries/issues),
 or by contacting the maintainers of this repository directly. 
 
 
@@ -96,9 +96,10 @@ they can be marked as `EXPERIMENTAL` to exclude them from compilation.
 
 At the time of release, a release branch should be made from development. In the release branch,
 the project version number should be updated in the following locations:
-- The [top-level CMakeLists](source/CMakeLists.txt) 
-- The [python bindings setup.py](python/setup.py)
-- The PROJECT_NUMBER in the [doxygen config](doxygen/doxygen.conf)
+- The [top-level CMakeLists](./source/CMakeLists.txt) 
+- The [python bindings setup.py](./python/setup.py)
+- The [clproto bindings CMakeLists](./protocol/clproto_cpp/CMakeLists.txt)
+- The PROJECT_NUMBER in the [doxygen config](./doxygen/doxygen.conf)
 
 In addition, the release branch should be used to finalize the [changelog](CHANGELOG.md), which includes
 moving all content from the "Upcoming changes (in development)" header under a new header with the corresponding
@@ -108,4 +109,4 @@ Once the changes specific to the release have been approved, a linear GitFlow st
 merge this release branch into `main`, and then additionally squash and rebase the release branch back into `develop`.
 
 View and join the full discussion surrounding release workflow and strategy here: \
-https://github.com/epfl-lasa/control_libraries/discussions/77
+https://github.com/epfl-lasa/control-libraries/discussions/77

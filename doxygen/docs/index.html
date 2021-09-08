@@ -8,7 +8,7 @@
 <ul id="version_list"/>
 <script>
 // discover all documented versions and link them in the version list
-var root_path = "https://api.github.com/repos/epfl-lasa/control_libraries/git/trees/docs";
+var root_path = "https://api.github.com/repos/epfl-lasa/control-libraries/git/trees/docs";
 fetch(root_path).then((resp) => resp.json()).then(function(data) {
   var versions_dir = data.tree.filter(f=>/versions/.test(f.path));
   fetch(versions_dir[0].url).then((resp) => resp.json()).then(function(data) {

@@ -33,8 +33,8 @@ The easiest way to install `clproto` is to use the included install script in au
 By supplying the `--auto` flag to this script, it will automatically and recursively install any dependencies.
 If Protobuf is not yet installed, this step will take some time.
 ```shell
-git clone https://github.com/epfl-lasa/control_libraries.git
-sudo control_libraries/clproto/install.sh --auto
+git clone https://github.com/epfl-lasa/control-libraries.git
+sudo control-libraries/clproto/install.sh --auto
 ```
 
 ### Copying protobuf dependencies

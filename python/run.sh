@@ -9,6 +9,6 @@ echo "Using control libraries branch ${BRANCH}"
 docker build . --file ./Dockerfile.python --build-arg BRANCH="${BRANCH}" --tag control-libraries/python/test || exit 1
 
 docker run -it --rm \
-  --volume "$(pwd)":/source/control_libraries/python \
+  --volume "$(pwd)":/source/control-libraries/python \
   --name control-libraries-python-test \
   control-libraries/python/test

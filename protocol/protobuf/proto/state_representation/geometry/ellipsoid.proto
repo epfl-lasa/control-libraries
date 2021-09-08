@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/geometry/shape.proto";
+
+message Ellipsoid {
+    Shape shape = 1;
+    repeated double axis_lengths = 2;
+    double rotation_angle = 3;
+}

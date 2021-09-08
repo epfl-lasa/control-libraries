@@ -1,0 +1,110 @@
+FROM ubuntu:20.04 AS core-build-dependencies
+ENV DEBIAN_FRONTEND=noninteractive
+
+# install core compilation and access dependencies for building the libraries
+RUN apt-get update && apt-get install -y \
+    autoconf \
+    automake \
+    build-essential \
+    cmake \
+    curl \
+    g++ \
+    gcc \
+    gnupg2 \
+    make \
+    git \
+    wget \
+    libtool \
+    lsb-release \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+
+FROM core-build-dependencies as project-dependencies
+
+# add pinocchio to package list
+RUN echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
+    | tee /etc/apt/sources.list.d/robotpkg.list \
+    && curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key \
+    | apt-key add -
+
+# install dependencies for building the libraries
+RUN apt-get update && apt-get install -y \
+    libeigen3-dev \
+    robotpkg-pinocchio \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install osqp and eigen wrapper
+WORKDIR /tmp/osqp_build
+RUN git clone --recursive https://github.com/oxfordcontrol/osqp \
+    && cd osqp && mkdir build && cd build && cmake -G "Unix Makefiles" .. && cmake --build . --target install
+
+RUN git clone https://github.com/robotology/osqp-eigen.git \
+    && cd osqp-eigen && mkdir build && cd build && cmake .. && make -j && make install
+
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/opt/openrobots/lib/
+
+WORKDIR /home
+RUN rm -rf /tmp/*
+
+
+FROM core-build-dependencies as google-dependencies
+ENV PROTOBUF_VERSION 3.17.0
+
+RUN apt-get update && apt-get install -y \
+    libgtest-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install gtest
+WORKDIR /tmp/gtest_build
+RUN cmake /usr/src/gtest \
+    && make \
+    && cp lib/* /usr/local/lib || cp *.a /usr/local/lib
+
+# install protobuf
+WORKDIR /tmp
+RUN wget -O protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    https://github.com/protocolbuffers/protobuf/releases/download/v"${PROTOBUF_VERSION}"/protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    && tar -xzf protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
+    && rm protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz
+
+WORKDIR /tmp/protobuf-"${PROTOBUF_VERSION}"
+RUN ./autogen.sh \
+    &&./configure \
+    && make \
+    && make install
+
+WORKDIR /home
+RUN rm -rf /tmp/*
+
+
+FROM project-dependencies as development-dependencies
+
+RUN apt-get update && apt-get install -y \
+    clang \
+    iputils-ping \
+    gdb \
+    libssl-dev \
+    python \
+    python3-dev \
+    python3-pip \
+    rsync \
+    ssh \
+    sudo \
+    tar \
+    unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# install python requirements
+RUN pip3 install numpy setuptools pybind11
+
+# install google dependencies
+COPY --from=google-dependencies /usr/include/gtest /usr/include/gtest
+COPY --from=google-dependencies /usr/local/include/google /usr/local/include/google
+COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib/
+COPY --from=google-dependencies /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=google-dependencies /usr/local/bin/protoc /usr/local/bin
+RUN ldconfig

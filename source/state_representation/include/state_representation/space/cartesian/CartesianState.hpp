@@ -1,16 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/space/SpatialState.hpp"
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
-#include <iostream>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 namespace state_representation {
 class CartesianState;
@@ -44,9 +35,10 @@ enum class CartesianStateVariable {
  * the distance on. Default ALL for full distance across all dimensions
  * @return the distance between the two states
  */
-double dist(const CartesianState& s1,
-            const CartesianState& s2,
-            const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL);
+double dist(
+    const CartesianState& s1, const CartesianState& s2,
+    const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL
+);
 
 /**
  * @class CartesianState
@@ -62,6 +54,12 @@ private:
   Eigen::Vector3d angular_acceleration_;///< angular acceleration of the point
   Eigen::Vector3d force_;               ///< force applied at the point
   Eigen::Vector3d torque_;              ///< torque applied at the point
+
+  /**
+   * @brief Set new_values in all the state variables (pose, twist, wrench)
+   * @param new_values the new values of the state variables
+   */
+  void set_all_state_variables(const Eigen::VectorXd& new_values);
 
   /**
    * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
@@ -83,9 +81,10 @@ private:
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
    */
-  void set_state_variable(Eigen::Vector3d& linear_state_variable,
-                          Eigen::Vector3d& angular_state_variable,
-                          const Eigen::Matrix<double, 6, 1>& new_value);
+  void set_state_variable(
+      Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
+      const Eigen::Matrix<double, 6, 1>& new_value
+  );
 
   /**
    * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
@@ -93,9 +92,10 @@ private:
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
    */
-  void set_state_variable(Eigen::Vector3d& linear_state_variable,
-                          Eigen::Vector3d& angular_state_variable,
-                          const std::vector<double>& new_value);
+  void set_state_variable(
+      Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
+      const std::vector<double>& new_value
+  );
 
 protected:
   /**
@@ -345,15 +345,13 @@ public:
   void set_zero();
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force)
-   * @param max_value the maximum absolute magnitude of the state variable
+   * @brief Clamp inplace the norm of the a specific state variable
+   * @param max_norm the maximum norm of the state variable
    * @param state_variable_type name of the variable from the CartesianStateVariable structure to clamp
-   * @param noise_ratio if provided, this value will be used to apply a deadzone under which
-   * the velocity will be set to 0
+   * @param noise_ratio if provided, this value will be used to apply a dead zone under which
+   * the norm of the state variable will be set to 0
    */
-  void clamp_state_variable(double max_value,
-                            const CartesianStateVariable& state_variable_type,
-                            double noise_ratio = 0);
+  void clamp_state_variable(double max_norm, const CartesianStateVariable& state_variable_type, double noise_ratio = 0);
 
   /**
    * @brief Return a copy of the CartesianState
@@ -373,6 +371,20 @@ public:
    * @return the concatenated data array
    */
   Eigen::ArrayXd array() const;
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single Eigen vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single std vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
    * @brief Overload the *= operator with another state by deriving the equations of motions
@@ -401,6 +413,20 @@ public:
    * @return the CartesianState multiplied by lambda
    */
   CartesianState operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianState divided by lambda
+   */
+  CartesianState& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianState divided by lambda
+   */
+  CartesianState operator/(double lambda) const;
 
   /**
    * @brief Overload the += operator
@@ -443,15 +469,17 @@ public:
    * the distance on. Default ALL for full distance across all dimensions
    * @return dist the distance value as a double
    */
-  double dist(const CartesianState& state,
-              const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
+  double dist(
+      const CartesianState& state, const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL
+  ) const;
 
   /**
    * @brief Compute the norms of the state variable specified by the input type (default is full state)
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
    */
-  virtual std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
+  virtual std::vector<double>
+  norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::ALL) const;
 
   /**
    * @brief Normalize inplace the state at the state variable given in argument (default is full state)
@@ -489,21 +517,15 @@ public:
    * default all for full distance across all dimensions
    * @return the distance between the two states
    */
-  friend double dist(const CartesianState& s1,
-                     const CartesianState& s2,
-                     const CartesianStateVariable& state_variable_type);
+  friend double dist(
+      const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type
+  );
 
   /**
    * @brief Return the state as a std vector
    * @return std::vector<double> the state vector as a std vector
    */
   std::vector<double> to_std_vector() const;
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(CartesianState& state1, CartesianState& state2) {
@@ -533,10 +555,10 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
 }
 
 inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
-  return Eigen::Vector4d(this->get_orientation().w(),
-                         this->get_orientation().x(),
-                         this->get_orientation().y(),
-                         this->get_orientation().z());
+  return Eigen::Vector4d(
+      this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(),
+      this->get_orientation().z()
+  );
 }
 
 inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
@@ -640,6 +662,17 @@ inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVa
   return Eigen::Vector3d::Zero();
 }
 
+inline void CartesianState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  if (new_values.size() != 25) {
+    throw state_representation::exceptions::IncompatibleSizeException(
+        "Input is of incorrect size: expected 25, given " + std::to_string(new_values.size()));
+  }
+  this->set_pose(new_values.segment(0, 7));
+  this->set_twist(new_values.segment(7, 6));
+  this->set_accelerations(new_values.segment(13, 6));
+  this->set_wrench(new_values.segment(19, 6));
+}
+
 inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const Eigen::Vector3d& new_value) {
   this->set_filled();
   state_variable = new_value;
@@ -649,16 +682,18 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, 
   this->set_state_variable(state_variable, Eigen::Vector3d::Map(new_value.data(), new_value.size()));
 }
 
-inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable,
-                                               Eigen::Vector3d& angular_state_variable,
-                                               const Eigen::Matrix<double, 6, 1>& new_value) {
+inline void CartesianState::set_state_variable(
+    Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
+    const Eigen::Matrix<double, 6, 1>& new_value
+) {
   this->set_state_variable(linear_state_variable, new_value.head(3));
   this->set_state_variable(angular_state_variable, new_value.tail(3));
 }
 
-inline void CartesianState::set_state_variable(Eigen::Vector3d& linear_state_variable,
-                                               Eigen::Vector3d& angular_state_variable,
-                                               const std::vector<double>& new_value) {
+inline void CartesianState::set_state_variable(
+    Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
+    const std::vector<double>& new_value
+) {
   this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
   this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));
 }
@@ -745,8 +780,9 @@ inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench
   this->set_state_variable(this->force_, this->torque_, wrench);
 }
 
-inline void CartesianState::set_state_variable(const Eigen::VectorXd& new_value,
-                                               const CartesianStateVariable& state_variable_type) {
+inline void CartesianState::set_state_variable(
+    const Eigen::VectorXd& new_value, const CartesianStateVariable& state_variable_type
+) {
   switch (state_variable_type) {
     case CartesianStateVariable::POSITION:
       this->set_position(new_value);

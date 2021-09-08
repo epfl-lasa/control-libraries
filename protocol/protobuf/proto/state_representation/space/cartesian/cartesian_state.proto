@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/space/spatial_state.proto";
+
+message Vector3d {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message Quaterniond {
+  double w = 1;
+  Vector3d vec = 2;
+}
+
+message CartesianState {
+  SpatialState spatial_state = 1;
+  Vector3d position = 2;
+  Quaterniond orientation = 3;
+  Vector3d linear_velocity = 4;
+  Vector3d angular_velocity = 5;
+  Vector3d linear_acceleration = 6;
+  Vector3d angular_acceleration = 7;
+  Vector3d force = 8;
+  Vector3d torque = 9;
+}
+
+message CartesianPose {
+  SpatialState spatial_state = 1;
+  Vector3d position = 2;
+  Quaterniond orientation = 3;
+}
+
+message CartesianTwist {
+  SpatialState spatial_state = 1;
+  Vector3d linear_velocity = 2;
+  Vector3d angular_velocity = 3;
+}
+
+message CartesianAcceleration {
+  SpatialState spatial_state = 1;
+  Vector3d linear_acceleration = 2;
+  Vector3d angular_acceleration = 3;
+}
+
+message CartesianWrench {
+  SpatialState spatial_state = 1;
+  Vector3d force = 2;
+  Vector3d torque = 3;
+}

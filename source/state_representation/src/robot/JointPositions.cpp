@@ -1,6 +1,6 @@
 #include "state_representation/robot/JointPositions.hpp"
+
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -16,8 +16,9 @@ JointPositions::JointPositions(const std::string& robot_name, const Eigen::Vecto
 JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names) :
     JointState(robot_name, joint_names) {}
 
-JointPositions::JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                               const Eigen::VectorXd& positions) : JointState(robot_name, joint_names) {
+JointPositions::JointPositions(
+    const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions
+) : JointState(robot_name, joint_names) {
   this->set_positions(positions);
 }
 
@@ -28,9 +29,11 @@ JointPositions::JointPositions(const JointState& state) : JointState(state) {
   this->set_empty(state.is_empty());
 }
 
-JointPositions::JointPositions(const JointPositions& positions) : JointPositions(static_cast<const JointState&>(positions)) {}
+JointPositions::JointPositions(const JointPositions& positions) :
+    JointPositions(static_cast<const JointState&>(positions)) {}
 
-JointPositions::JointPositions(const JointVelocities& velocities) : JointPositions(std::chrono::seconds(1) * velocities) {}
+JointPositions::JointPositions(const JointVelocities& velocities) :
+    JointPositions(std::chrono::seconds(1) * velocities) {}
 
 JointPositions JointPositions::Zero(const std::string& robot_name, unsigned int nb_joints) {
   return JointState::Zero(robot_name, nb_joints);
@@ -127,13 +130,43 @@ Eigen::VectorXd JointPositions::data() const {
   return this->get_positions();
 }
 
+void JointPositions::set_data(const Eigen::VectorXd& data) {
+  this->set_positions(data);
+}
+
+void JointPositions::set_data(const std::vector<double>& data) {
+  this->set_positions(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
+void JointPositions::clamp(double max_absolute_value, double noise_ratio) {
+  this->clamp_state_variable(max_absolute_value, JointStateVariable::POSITIONS, noise_ratio);
+}
+
+JointPositions JointPositions::clamped(double max_absolute_value, double noise_ratio) const {
+  JointPositions result(*this);
+  result.clamp(max_absolute_value, noise_ratio);
+  return result;
+}
+
+void JointPositions::clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) {
+  this->clamp_state_variable(max_absolute_value_array, JointStateVariable::POSITIONS, noise_ratio_array);
+}
+
+JointPositions JointPositions::clamped(
+    const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array
+) const {
+  JointPositions result(*this);
+  result.clamp(max_absolute_value_array, noise_ratio_array);
+  return result;
+}
+
 std::ostream& operator<<(std::ostream& os, const JointPositions& positions) {
   if (positions.is_empty()) {
     os << "Empty JointPositions";
   } else {
     os << positions.get_name() << " JointPositions" << std::endl;
     os << "names: [";
-    for (auto& n : positions.get_names()) { os << n << ", "; }
+    for (auto& n: positions.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "positions: [";
     for (unsigned int i = 0; i < positions.get_size(); ++i) { os << positions.get_positions()(i) << ", "; }
@@ -158,9 +191,5 @@ JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& po
   JointPositions result(positions);
   result *= lambda;
   return result;
-}
-
-void JointPositions::from_std_vector(const std::vector<double>& value) {
-  this->set_positions(value);
 }
 }// namespace state_representation

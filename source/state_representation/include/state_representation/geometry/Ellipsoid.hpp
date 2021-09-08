@@ -71,7 +71,7 @@ public:
   double get_rotation_angle() const;
 
   /**
-   * @brief Seetter of the rotation angle
+   * @brief Setter of the rotation angle
    * @param rotation_angle the rotation angle
    */
   void set_rotation_angle(double rotation_angle);
@@ -89,9 +89,9 @@ public:
    * @brief Compute an ellipsoid from its algebraic equation ax2 + bxy + cy2 + cx + ey + f
    * @return the Ellipsoid in its geometric representation
    */
-  static const Ellipsoid from_algebraic_equation(const std::string& name,
-                                                 const std::vector<double>& coefficients,
-                                                 const std::string& reference_frame = "world");
+  static const Ellipsoid from_algebraic_equation(
+      const std::string& name, const std::vector<double>& coefficients, const std::string& reference_frame = "world"
+  );
 
   /**
    * @brief Fit an ellipsoid on a set of points
@@ -99,10 +99,10 @@ public:
    * Fitzgibbon, A., et al. (1999). "Direct least square fitting of ellipses."
     * IEEE Transactions on pattern analysis and machine intelligence 21(5)
    */
-  static const Ellipsoid fit(const std::string& name,
-                             const std::list<CartesianPose>& points,
-                             const std::string& reference_frame = "world",
-                             double noise_level = 0.01);
+  static const Ellipsoid fit(
+      const std::string& name, const std::list<CartesianPose>& points, const std::string& reference_frame = "world",
+      double noise_level = 0.01
+  );
 
   /**
    * @brief Convert the ellipse to an std vector representation of its parameter
@@ -111,14 +111,20 @@ public:
   const std::vector<double> to_std_vector() const;
 
   /**
-   * @brief Create an ellipsoid from an std vector representaiton of its parameter
-   * @param an std vector with [center_position, rotation_angle, axis_lengths]
+   * @brief Set the ellipsoid data from an Eigen vector
+   * @param the data vector with [center_position, rotation_angle, axis_lengths]
    */
-  void from_std_vector(const std::vector<double>& parameters);
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the ellipsoid data from a std vector
+   * @param the data vector with [center_position, rotation_angle, axis_lengths]
+   */
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
     * @brief Overload the ostream operator for printing
-    * @param os the ostream to happend the string representing the Ellipsoid to
+    * @param os the ostream to append the string representing the Ellipsoid to
     * @param ellipsoid the Ellipsoid to print
     * @return the appended ostream
      */
@@ -173,17 +179,10 @@ inline const std::vector<double> Ellipsoid::to_std_vector() const {
   return representation;
 }
 
-inline void Ellipsoid::from_std_vector(const std::vector<double>& parameters) {
-  this->set_center_position(Eigen::Vector3d(parameters[0], parameters[1], parameters[2]));
-  this->set_rotation_angle(parameters[3]);
-  this->set_axis_lengths({parameters[4], parameters[5]});
-}
-
 inline const CartesianPose Ellipsoid::get_rotation() const {
   Eigen::Quaterniond rotation(Eigen::AngleAxisd(this->rotation_angle_, Eigen::Vector3d::UnitZ()));
-  return CartesianPose(this->get_center_pose().get_name() + "_rotated",
-                       Eigen::Vector3d::Zero(),
-                       rotation,
-                       this->get_center_pose().get_name());
+  return CartesianPose(
+      this->get_center_pose().get_name() + "_rotated", Eigen::Vector3d::Zero(), rotation,
+      this->get_center_pose().get_name());
 }
 }

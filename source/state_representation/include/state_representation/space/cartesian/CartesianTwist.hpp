@@ -1,12 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/06/07
- */
-
 #pragma once
 
-#include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
 
 namespace state_representation {
@@ -49,6 +44,9 @@ public:
   void set_force(const Eigen::Vector3d& force) = delete;
   void set_torque(const Eigen::Vector3d& torque) = delete;
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
+  CartesianState operator*=(const CartesianState& state) = delete;
+  CartesianState operator*(const CartesianState& state) = delete;
+  friend CartesianState operator*=(const CartesianState& state, const CartesianTwist& twist) = delete;
 
   /**
    * @brief Empty constructor
@@ -80,24 +78,24 @@ public:
   /**
    * @brief Construct a CartesianTwist from a linear velocity given as a vector.
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Vector3d& linear_velocity,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianTwist from a linear velocity and angular velocity given as vectors.
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Vector3d& linear_velocity,
-                          const Eigen::Vector3d& angular_velocity,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity,
+      const std::string& reference = "world"
+  );
 
   /**
    * @brief Construct a CartesianTwist from a single 6d twist vector
    */
-  explicit CartesianTwist(const std::string& name,
-                          const Eigen::Matrix<double, 6, 1>& twist,
-                          const std::string& reference = "world");
+  explicit CartesianTwist(
+      const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference = "world"
+  );
 
   /**
    * @brief Constructor for the zero twist
@@ -121,41 +119,6 @@ public:
    * @return reference to the current twist with new values
    */
   CartesianTwist& operator=(const CartesianTwist& twist) = default;
-
-  /**
-   * @brief Overload the *= operator
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  CartesianTwist& operator*=(const CartesianTwist& twist);
-
-  /**
-   * @brief Overload the * operator with a twist
-   * @param twist CartesianTwist to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianTwist given in argument
-   */
-  [[deprecated]] CartesianTwist operator*(const CartesianTwist& twist) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianState to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianState given in argument
-   */
-  [[deprecated]] CartesianState operator*(const CartesianState& state) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianPose to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianPose given in argument
-   */
-  [[deprecated]] CartesianPose operator*(const CartesianPose& pose) const;
-
-  /**
-   * @brief Overload the * operator
-   * @param state CartesianWrench to multiply with
-   * @return the current CartesianTwist multiplied by the CartesianWrench given in argument
-   */
-  [[deprecated]] CartesianWrench operator*(const CartesianWrench& wrench) const;
 
   /**
    * @brief Overload the += operator
@@ -195,9 +158,23 @@ public:
   /**
    * @brief Overload the * operator with a scalar
    * @param lambda the scalar to multiply with
-   * @return the CartesianState multiplied by lambda
+   * @return the CartesianTwist multiplied by lambda
    */
   CartesianTwist operator*(double lambda) const;
+
+  /**
+   * @brief Overload the /= operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist& operator/=(double lambda);
+
+  /**
+   * @brief Overload the / operator with a scalar
+   * @param lambda the scalar to divide with
+   * @return the CartesianTwist divided by lambda
+   */
+  CartesianTwist operator/(double lambda) const;
 
   /**
    * @brief Overload the *= operator with a gain matrix
@@ -234,10 +211,9 @@ public:
    * the angular velocity will be set to 0
    * @return the clamped twist
    */
-  CartesianTwist clamped(double max_linear,
-                         double max_angular,
-                         double noise_ratio = 0,
-                         double angular_noise_ratio = 0) const;
+  CartesianTwist clamped(
+      double max_linear, double max_angular, double noise_ratio = 0, double angular_noise_ratio = 0
+  ) const;
 
   /**
    * @brief Return a copy of the CartesianTwist
@@ -249,7 +225,19 @@ public:
    * @brief Returns the twist data as an Eigen vector
    * @return the twist data vector
    */
-  Eigen::VectorXd data() const;
+  Eigen::VectorXd data() const override;
+
+  /**
+   * @brief Set the twist data from an Eigen vector
+   * @param the twist data vector
+   */
+  void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the twist data from a std vector
+   * @param the twist data vector
+   */
+  void set_data(const std::vector<double>& data) override;
 
   /**
    * @brief Compute the inverse of the current CartesianTwist
@@ -262,7 +250,8 @@ public:
    * @param state_variable_type the type of state variable to compute the norms on
    * @return the norms of the state variables as a vector
    */
-  std::vector<double> norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const override;
+  std::vector<double>
+  norms(const CartesianStateVariable& state_variable_type = CartesianStateVariable::TWIST) const override;
 
   /**
    * @brief Compute the normalized twist at the state variable given in argument (default is full twist)

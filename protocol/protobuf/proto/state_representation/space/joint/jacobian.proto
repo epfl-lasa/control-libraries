@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+
+message Jacobian {
+  State state = 1;
+  repeated string joint_names = 2;
+  string frame = 3;
+  string reference_frame = 4;
+  uint32 rows = 5;
+  uint32 cols = 6;
+  repeated double data = 7;
+}

@@ -9,8 +9,8 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'clamp_state_variable',
     'copy',
     'data',
+    'set_data',
     'dist',
-    'from_list',
     'get_accelerations',
     'get_angular_acceleration',
     'get_angular_velocity',
@@ -61,6 +61,9 @@ class TestCartesianState(unittest.TestCase):
     def assert_np_array_equal(self, a, b):
         self.assertListEqual(list(a), list(b))
 
+    def assert_np_array_almost_equal(self, a, b):
+        [self.assertAlmostEqual(x, y) for x, y in zip(list(a),list(b))]
+
     def test_callable_methods(self):
         methods = [m for m in dir(CartesianState) if callable(getattr(CartesianState, m))]
         for expected in CARTESIAN_STATE_METHOD_EXPECTS:
@@ -93,6 +96,11 @@ class TestCartesianState(unittest.TestCase):
         self.assert_np_array_equal(A.get_accelerations(), [1, 2, 3, 4, 5, 6])
         A.set_wrench([1, 2, 3, 4, 5, 6])
         self.assert_np_array_equal(A.get_wrench(), [1, 2, 3, 4, 5, 6])
+
+        data = [i for i in range(25)]
+        data[3:7] = A.get_orientation().tolist()
+        A.set_data(data)
+        self.assert_np_array_almost_equal(A.data(), data)
 
     def test_operators(self):
         A = CartesianState.Random("A")

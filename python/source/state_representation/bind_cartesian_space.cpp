@@ -93,6 +93,8 @@ void cartesian_state(py::module_& m) {
   c.def("copy", &CartesianState::copy, "Return a copy of the CartesianState");
   c.def("data", &CartesianState::data, "Returns the data as the concatenation of all the state variables in a single vector");
   c.def("array", &CartesianState::array, "Returns the data vector as an array");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianState::set_data), "Set the data of the state from all the state variables in a single vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianState::set_data), "Set the data of the state from all the state variables in a single list", "data"_a);
 
   c.def(py::self *= py::self);
   c.def(py::self * py::self);
@@ -111,7 +113,6 @@ void cartesian_state(py::module_& m) {
   c.def("normalized", &CartesianState::normalized, "Compute the normalized state at the state variable given in argument (default is full state)", "state_variable_type"_a=CartesianStateVariable::ALL);
 
   c.def("to_list", &CartesianState::to_std_vector, "Return the state as a list");
-  c.def("from_list", &CartesianState::from_std_vector, "Set the state from a list");
 
   c.def("__repr__", [](const CartesianState& state) {
     std::stringstream buffer;
@@ -162,6 +163,9 @@ void cartesian_pose(py::module_& m) {
 
   c.def(py::self *= py::self);
   c.def(py::self * py::self);
+  c.def(py::self * CartesianState());
+  c.def(py::self * CartesianTwist());
+  c.def(py::self * CartesianWrench());
   c.def(py::self * Eigen::Vector3d());
   c.def(py::self *= double());
   c.def(py::self * double());
@@ -176,6 +180,8 @@ void cartesian_pose(py::module_& m) {
 
   c.def("copy", &CartesianPose::copy, "Return a copy of the CartesianPose");
   c.def("data", &CartesianPose::data, "Returns the pose data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianPose::set_data), "Set the pose data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianPose::set_data), "Set the pose data from a list", "data"_a);
   c.def("norms", &CartesianPose::norms, "Compute the norms of the state variable specified by the input type (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
   c.def("normalized", &CartesianPose::normalized, "Compute the normalized pose at the state variable given in argument (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
 
@@ -220,8 +226,6 @@ void cartesian_twist(py::module_& m) {
     c.def(std::string("set_" + attr).c_str(), [](const CartesianTwist& twist) -> CartesianTwist { return twist; }, "Deleted method from parent class.");
   }
 
-  c.def(py::self *= py::self);
-  c.def(py::self * py::self);
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -241,6 +245,8 @@ void cartesian_twist(py::module_& m) {
 
   c.def("copy", &CartesianTwist::copy, "Return a copy of the CartesianTwist");
   c.def("data", &CartesianTwist::data, "Returns the twist data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianTwist::set_data), "Set the twist data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianTwist::set_data), "Set the twist data from a list", "data"_a);
   c.def("norms", &CartesianTwist::norms, "Compute the norms of the state variable specified by the input type (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
   c.def("normalized", &CartesianTwist::normalized, "Compute the normalized twist at the state variable given in argument (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
 
@@ -281,11 +287,9 @@ void cartesian_wrench(py::module_& m) {
 
   for (const std::string& attr : deleted_attributes) {
     c.def(std::string("get_" + attr).c_str(), [](const CartesianWrench&) -> void {}, "Deleted method from parent class.");
-    c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianPose { return wrench; }, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianWrench { return wrench; }, "Deleted method from parent class.");
   }
 
-  c.def(py::self *= py::self);
-  c.def(py::self * py::self);
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -300,6 +304,8 @@ void cartesian_wrench(py::module_& m) {
 
   c.def("copy", &CartesianWrench::copy, "Return a copy of the CartesianWrench");
   c.def("data", &CartesianWrench::data, "Returns the wrench data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianWrench::set_data), "Set the wrench data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianWrench::set_data), "Set the wrench data from a list", "data"_a);
   c.def("norms", &CartesianWrench::norms, "Compute the norms of the state variable specified by the input type (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
   c.def("normalized", &CartesianWrench::normalized, "Compute the normalized twist at the state variable given in argument (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
 

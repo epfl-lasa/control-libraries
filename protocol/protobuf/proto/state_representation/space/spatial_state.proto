@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+
+message SpatialState {
+    State state = 1;
+    string reference_frame = 2;
+}

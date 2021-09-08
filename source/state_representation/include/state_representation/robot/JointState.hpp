@@ -1,17 +1,7 @@
-/**
- * @author Baptiste Busch
- * @date 2019/04/16
- */
-
 #pragma once
 
-#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/State.hpp"
-#include <eigen3/Eigen/Core>
-#include <iostream>
-#include <math.h>
-#include <string>
-#include <vector>
+#include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -24,11 +14,7 @@ class JointState;
  * of the JointState
  */
 enum class JointStateVariable {
-  POSITIONS,
-  VELOCITIES,
-  ACCELERATIONS,
-  TORQUES,
-  ALL
+  POSITIONS, VELOCITIES, ACCELERATIONS, TORQUES, ALL
 };
 
 /**
@@ -39,9 +25,9 @@ enum class JointStateVariable {
  * the distance on (default ALL for full distance across all dimensions)
  * @return the distance between the two states
  */
-double dist(const JointState& s1,
-            const JointState& s2,
-            const JointStateVariable& state_variable_type = JointStateVariable::ALL);
+double dist(
+    const JointState& s1, const JointState& s2, const JointStateVariable& state_variable_type = JointStateVariable::ALL
+);
 
 /**
  * @class JointState
@@ -76,7 +62,8 @@ private:
   void set_state_variable(Eigen::VectorXd& state_variable, const std::vector<double>& new_value);
 
   /**
-   * @brief Set new_value in the provided all the state variables (positions, velocities, accelerations and torques)
+   * @brief Set new_value in all the state variables (positions, velocities, accelerations and torques)
+   * @param new_values the new values of the state variables
    */
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 
@@ -277,27 +264,28 @@ public:
   void set_zero();
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
-   * @param max_absolute_value the maximum absolute magnitude of the state variable
+   * @brief Clamp inplace the magnitude of the a specific joint state variable
+   * @param max_absolute_value the maximum absolute value of the state variable
    * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
-   * @param noise_ratio if provided, this value will be used to apply a dead zone under which
-   * the velocity will be set to 0
+   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * under which the state variable will be set to 0
    */
-  void clamp_state_variable(double max_absolute_value,
-                            const JointStateVariable& state_variable_type,
-                            double noise_ratio = 0);
+  void clamp_state_variable(
+      double max_absolute_value, const JointStateVariable& state_variable_type, double noise_ratio = 0
+  );
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific state variable (velocities, accelerations or forces)
-   * for each individual joints
-   * @param max_absolute_value_array the maximum absolute magnitude of the state variable for each joints individually
+   * @brief Clamp inplace the magnitude of the a specific joint state variable
+   * for each individual joint
+   * @param max_absolute_value_array the maximum absolute value of the state variable for each joints individually
    * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
-   * @param noise_ratio_array if provided, this value will be used to apply a dead zone under which
-   * the velocity will be set to 0
+   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * under which the state variable will be set to 0 for each individual joint
    */
-  void clamp_state_variable(const Eigen::ArrayXd& max_absolute_value_array,
-                            const JointStateVariable& state_variable_type,
-                            const Eigen::ArrayXd& noise_ratio_array);
+  void clamp_state_variable(
+      const Eigen::ArrayXd& max_absolute_value_array, const JointStateVariable& state_variable_type,
+      const Eigen::ArrayXd& noise_ratio_array
+  );
 
   /**
    * @brief Return a copy of the JointState
@@ -311,6 +299,20 @@ public:
    * @return the concatenated data vector
    */
   virtual Eigen::VectorXd data() const;
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single Eigen vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the data of the state from
+   * all the state variables in a single std vector
+   * @param the concatenated data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
 
   /**
    * @brief Returns the data vector as an Eigen Array
@@ -368,7 +370,7 @@ public:
   JointState& operator*=(const Eigen::ArrayXd& lambda);
 
   /**
-   * @brief Overload the *= operator with an array of gains
+   * @brief Overload the * operator with an array of gains
    * @param lambda the gain array to multiply with
    * @return the JointState multiplied by lambda
    */
@@ -445,12 +447,6 @@ public:
    * @return std::vector<float> the joint vector as a std vector
    */
   std::vector<double> to_std_vector() const;
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  virtual void from_std_vector(const std::vector<double>& value);
 };
 
 inline void swap(JointState& state1, JointState& state2) {
@@ -489,6 +485,11 @@ inline void JointState::set_state_variable(Eigen::VectorXd& state_variable, cons
 }
 
 inline void JointState::set_all_state_variables(const Eigen::VectorXd& new_values) {
+  if (new_values.size() != 4 * this->get_size()) {
+    throw IncompatibleSizeException(
+        "Input is of incorrect size: expected " + std::to_string(this->get_size()) + ", given "
+            + std::to_string(new_values.size()));
+  }
   this->set_positions(new_values.segment(0, this->get_size()));
   this->set_velocities(new_values.segment(this->get_size(), this->get_size()));
   this->set_accelerations(new_values.segment(2 * this->get_size(), this->get_size()));
@@ -604,8 +605,9 @@ inline Eigen::VectorXd JointState::get_state_variable(const JointStateVariable& 
   return Eigen::Vector3d::Zero();
 }
 
-inline void JointState::set_state_variable(const Eigen::VectorXd& new_value,
-                                           const JointStateVariable& state_variable_type) {
+inline void JointState::set_state_variable(
+    const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type
+) {
   switch (state_variable_type) {
     case JointStateVariable::POSITIONS:
       this->set_positions(new_value);

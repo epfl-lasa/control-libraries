@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/09
- */
-
 #pragma once
 
 #include "state_representation/robot/JointState.hpp"
@@ -62,8 +57,9 @@ public:
    * @brief joint_names list of joint names
    * @brief positions the vector of positions
    */
-  explicit JointPositions(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                          const Eigen::VectorXd& positions);
+  explicit JointPositions(
+      const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& positions
+  );
 
   /**
    * @brief Copy constructor
@@ -76,7 +72,8 @@ public:
   JointPositions(const JointState& state);
 
   /**
-   * @brief Copy constructor from a JointVelocities by considering that it is equivalent to multiplying the velocities by 1 second
+   * @brief Integration constructor from a JointVelocities by considering that it is equivalent to multiplying the
+   * velocities by 1 second
    */
   JointPositions(const JointVelocities& velocities);
 
@@ -223,6 +220,52 @@ public:
   Eigen::VectorXd data() const override;
 
   /**
+   * @brief Set the positions data from an Eigen vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the positions data from a std vector
+   * @param the positions data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
+
+  /**
+   * @brief Clamp inplace the magnitude of the positions to the value in argument
+   * @param max_absolute_value the maximum value of position for all the joints
+   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0
+   */
+  void clamp(double max_absolute_value, double noise_ratio = 0.);
+
+  /**
+   * @brief Return the position clamped to the value in argument
+   * @param max_absolute_value the maximum value of position for all the joints
+   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0
+   * @return the clamped JointPositions
+   */
+  JointPositions clamped(double max_absolute_value, double noise_ratio = 0.) const;
+
+  /**
+   * @brief Clamp inplace the magnitude of the positions to the values in argument
+   * @param max_absolute_value_array the maximum value of position for each joint
+   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0 for each individual joint
+   */
+  void clamp(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array);
+
+  /**
+   * @brief Return the position clamped to the values in argument
+   * @param max_absolute_value_array the maximum value of position for each joint
+   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * under which the position will be set to 0 for each individual joint
+   * @return the clamped JointPositions
+   */
+  JointPositions clamped(const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array) const;
+
+  /**
    * @brief Overload the ostream operator for printing
    * @param os the ostream to append the string representing the state
    * @param positions the state to print
@@ -250,11 +293,5 @@ public:
    * @return the JointPositions provided multiply by lambda
    */
   friend JointPositions operator*(const Eigen::MatrixXd& lambda, const JointPositions& positions);
-
-  /**
-   * @brief Set the value from a std vector
-   * @param value the value as a std vector
-   */
-  void from_std_vector(const std::vector<double>& value);
 };
 }// namespace state_representation

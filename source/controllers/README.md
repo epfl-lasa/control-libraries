@@ -1,6 +1,6 @@
-# controllers library
+# Controllers
 
-This library introduces a set of controllers to be used in robotic control-loop schemes. Each controller are templated
+This library introduces a set of controllers to be used in robotic control-loop schemes. Each controller is templated
 to accepted an input space from `state_representation` and is derived from the `Controller` base class, e.g.,
 
 ```cpp

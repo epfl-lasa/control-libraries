@@ -1,6 +1,5 @@
 #include "state_representation/robot/JointVelocities.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
-#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -16,8 +15,9 @@ JointVelocities::JointVelocities(const std::string& robot_name, const Eigen::Vec
 JointVelocities::JointVelocities(const std::string& robot_name, const std::vector<std::string>& joint_names) :
     JointState(robot_name, joint_names) {}
 
-JointVelocities::JointVelocities(const std::string& robot_name, const std::vector<std::string>& joint_names,
-                                 const Eigen::VectorXd& velocities) : JointState(robot_name, joint_names) {
+JointVelocities::JointVelocities(
+    const std::string& robot_name, const std::vector<std::string>& joint_names, const Eigen::VectorXd& velocities
+) : JointState(robot_name, joint_names) {
   this->set_velocities(velocities);
 }
 
@@ -28,9 +28,14 @@ JointVelocities::JointVelocities(const JointState& state) : JointState(state) {
   this->set_empty(state.is_empty());
 }
 
-JointVelocities::JointVelocities(const JointVelocities& velocities) : JointVelocities(static_cast<const JointState&>(velocities)) {}
+JointVelocities::JointVelocities(const JointVelocities& velocities) :
+    JointVelocities(static_cast<const JointState&>(velocities)) {}
 
-JointVelocities::JointVelocities(const JointPositions& positions) : JointVelocities(positions / std::chrono::seconds(1)) {}
+JointVelocities::JointVelocities(const JointAccelerations& accelerations) :
+    JointVelocities(std::chrono::seconds(1) * accelerations) {}
+
+JointVelocities::JointVelocities(const JointPositions& positions) :
+    JointVelocities(positions / std::chrono::seconds(1)) {}
 
 JointVelocities JointVelocities::Zero(const std::string& robot_name, unsigned int nb_joints) {
   return JointState::Zero(robot_name, nb_joints);
@@ -106,6 +111,18 @@ JointVelocities JointVelocities::operator/(double lambda) const {
   return this->JointState::operator/(lambda);
 }
 
+JointAccelerations JointVelocities::operator/(const std::chrono::nanoseconds& dt) const {
+  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  // operations
+  JointAccelerations accelerations(this->get_name(), this->get_names());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  // divide the positions by this period value and assign it as velocities
+  accelerations.set_accelerations(this->get_velocities() / period);
+  return accelerations;
+}
+
 JointPositions JointVelocities::operator*(const std::chrono::nanoseconds& dt) const {
   if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
   // operations
@@ -127,6 +144,14 @@ Eigen::VectorXd JointVelocities::data() const {
   return this->get_velocities();
 }
 
+void JointVelocities::set_data(const Eigen::VectorXd& data) {
+  this->set_velocities(data);
+}
+
+void JointVelocities::set_data(const std::vector<double>& data) {
+  this->set_velocities(Eigen::VectorXd::Map(data.data(), data.size()));
+}
+
 void JointVelocities::clamp(double max_absolute_value, double noise_ratio) {
   this->clamp_state_variable(max_absolute_value, JointStateVariable::VELOCITIES, noise_ratio);
 }
@@ -141,8 +166,9 @@ void JointVelocities::clamp(const Eigen::ArrayXd& max_absolute_value_array, cons
   this->clamp_state_variable(max_absolute_value_array, JointStateVariable::VELOCITIES, noise_ratio_array);
 }
 
-JointVelocities JointVelocities::clamped(const Eigen::ArrayXd& max_absolute_value_array,
-                                         const Eigen::ArrayXd& noise_ratio_array) const {
+JointVelocities JointVelocities::clamped(
+    const Eigen::ArrayXd& max_absolute_value_array, const Eigen::ArrayXd& noise_ratio_array
+) const {
   JointVelocities result(*this);
   result.clamp(max_absolute_value_array, noise_ratio_array);
   return result;
@@ -154,7 +180,7 @@ std::ostream& operator<<(std::ostream& os, const JointVelocities& velocities) {
   } else {
     os << velocities.get_name() << " JointVelocities" << std::endl;
     os << "names: [";
-    for (auto& n : velocities.get_names()) { os << n << ", "; }
+    for (auto& n: velocities.get_names()) { os << n << ", "; }
     os << "]" << std::endl;
     os << "velocities: [";
     for (unsigned int i = 0; i < velocities.get_size(); ++i) { os << velocities.get_velocities()(i) << ", "; }

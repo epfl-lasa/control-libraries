@@ -1,8 +1,3 @@
-/**
- * @author Baptiste Busch
- * @date 2019/09/13
- */
-
 #pragma once
 
 #include "state_representation/robot/JointState.hpp"
@@ -206,6 +201,19 @@ public:
    * @return the torque data vector
    */
   Eigen::VectorXd data() const override;
+
+  /**
+   * @brief Set the torques data from an Eigen vector
+   * @param the torques data vector
+   */
+  virtual void set_data(const Eigen::VectorXd& data) override;
+
+  /**
+   * @brief Set the torques data from a std vector
+   * @param the torques data vector
+   */
+  virtual void set_data(const std::vector<double>& data) override;
+
 
   /**
    * @brief Clamp inplace the magnitude of the torque to the values in argument

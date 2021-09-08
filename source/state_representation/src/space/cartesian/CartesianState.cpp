@@ -41,8 +41,7 @@ CartesianState CartesianState::Identity(const std::string& name, const std::stri
 CartesianState CartesianState::Random(const std::string& name, const std::string& reference) {
   CartesianState random = CartesianState(name, reference);
   // set all the state variables to random
-  random.set_state_variable(Eigen::VectorXd::Random(25),
-                            CartesianStateVariable::ALL);
+  random.set_state_variable(Eigen::VectorXd::Random(25), CartesianStateVariable::ALL);
   return random;
 }
 
@@ -70,6 +69,20 @@ CartesianState CartesianState::operator*(double lambda) const {
   return result;
 }
 
+CartesianState& CartesianState::operator/=(double lambda) {
+  if (std::abs(lambda) < std::numeric_limits<double>::min()) {
+    throw std::runtime_error("Division by zero is not allowed");
+  }
+  lambda = 1.0 / lambda;
+  return this->operator*=(lambda);
+}
+
+CartesianState CartesianState::operator/(double lambda) const {
+  CartesianState result(*this);
+  result /= lambda;
+  return result;
+}
+
 CartesianState CartesianState::copy() const {
   CartesianState result(*this);
   return result;
@@ -77,6 +90,14 @@ CartesianState CartesianState::copy() const {
 
 Eigen::VectorXd CartesianState::data() const {
   return this->get_state_variable(CartesianStateVariable::ALL);
+}
+
+void CartesianState::set_data(const Eigen::VectorXd& data) {
+  this->set_all_state_variables(data);
+}
+
+void CartesianState::set_data(const std::vector<double>& data) {
+  this->set_all_state_variables(Eigen::VectorXd::Map(data.data(), data.size()));
 }
 
 Eigen::ArrayXd CartesianState::array() const {
@@ -229,17 +250,21 @@ CartesianState CartesianState::inverse() const {
   return result;
 }
 
-void CartesianState::clamp_state_variable(double max_value,
-                                          const CartesianStateVariable& state_variable_type,
-                                          double noise_ratio) {
-  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
-  if (noise_ratio != 0) {
-    state_variable_value -= noise_ratio * state_variable_value.normalized();
-    // apply a deadzone
-    if (state_variable_value.norm() < noise_ratio) { state_variable_value.setZero(); }
+void CartesianState::clamp_state_variable(
+    double max_norm, const CartesianStateVariable& state_variable_type, double noise_ratio
+) {
+  if (state_variable_type == CartesianStateVariable::ORIENTATION || state_variable_type == CartesianStateVariable::POSE
+      || state_variable_type == CartesianStateVariable::ALL) {
+    throw NotImplementedException("clamp_state_variable is not implemented for this CartesianStateVariable");
   }
-  // clamp the values to their maximum amplitude provided
-  if (state_variable_value.norm() > max_value) { state_variable_value = max_value * state_variable_value.normalized(); }
+  Eigen::VectorXd state_variable_value = this->get_state_variable(state_variable_type);
+  if (noise_ratio != 0 && state_variable_value.norm() < noise_ratio * max_norm) {
+    // apply a dead zone
+    state_variable_value.setZero();
+  } else if (state_variable_value.norm() > max_norm) {
+    // clamp the values to their maximum amplitude provided
+    state_variable_value = max_norm * state_variable_value.normalized();
+  }
   this->set_state_variable(state_variable_value, state_variable_type);
 }
 
@@ -425,9 +450,5 @@ CartesianState operator*(double lambda, const CartesianState& state) {
 
 double dist(const CartesianState& s1, const CartesianState& s2, const CartesianStateVariable& state_variable_type) {
   return s1.dist(s2, state_variable_type);
-}
-
-void CartesianState::from_std_vector(const std::vector<double>&) {
-  throw (NotImplementedException("from_std_vector() is not implemented for the base CartesianState class"));
 }
 }// namespace state_representation

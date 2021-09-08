@@ -24,7 +24,9 @@ if [ "$REBUILD" -eq 1 ]; then
 fi
 
 MULTISTAGE_SOURCE_TARGET="source-dependencies"
-DOCKER_BUILDKIT=1 docker build --target "${MULTISTAGE_SOURCE_TARGET}" -t "control-libraries/${MULTISTAGE_SOURCE_TARGET}" ../.. || exit
+DOCKER_BUILDKIT=1 docker build --target "${MULTISTAGE_SOURCE_TARGET}" \
+  -t "control-libraries/${MULTISTAGE_SOURCE_TARGET}" \
+  -f ../../source/Dockerfile.source ../../source || exit
 DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . || exit
 
 if [ -z "${1}" ]; then

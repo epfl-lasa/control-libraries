@@ -23,7 +23,7 @@ rosrun ros_examples task_space_control_loop
 You can also directly use the launch file that starts any requirement for the demo to run correctly:
 
 ```console
-rolaunch ros_examples task_space_control_loop.launch
+roslaunch ros_examples task_space_control_loop.launch
 ```
 
 ## `task_space_control_loop`
@@ -46,14 +46,14 @@ To run this script and visualize the robot, follow the steps below to launch a *
 
 - in a first terminal, run:
     ```bash
-    cd control_libraries/demos/ros_examples
+    cd control-libraries/demos/ros_examples
     bash run-demo.sh # this will build a docker image and spin up a container
     # inside the container
     roslaunch ros_examples joint_space_velocity_control.launch robot_name:=franka
     ```
 - in a second terminal, run:
     ```bash
-    # in a directory of your choice (preferably not in the control_libraries directory)
+    # in a directory of your choice (preferably not in the control-libraries directory)
     git clone https://github.com/domire8/pybullet_ros.git --branch control-libraries-demo --single-branch
     cd pybullet_ros/docker
     bash build-run.sh # this will build a docker image and spin up a container

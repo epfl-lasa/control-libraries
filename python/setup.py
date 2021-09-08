@@ -4,7 +4,7 @@ from pybind11.setup_helpers import Pybind11Extension
 from pybind11.setup_helpers import ParallelCompile, naive_recompile
 import os
 
-__version__ = "3.1.0"
+__version__ = "4.0.0"
 __libraries__ = ['state_representation']
 __include_dirs__ = []
 
@@ -40,7 +40,7 @@ setup(
     version=__version__,
     author="Enrico Eberhard",
     author_email="enrico.eberhard@epfl.ch",
-    url="https://github.com/epfl-lasa/control_libraries",
+    url="https://github.com/epfl-lasa/control-libraries",
     description="Python bindings for the C++ control libraries",
     long_description="",
     ext_modules=ext_modules,

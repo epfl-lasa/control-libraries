@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+
+message JointState {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double positions = 3;
+  repeated double velocities = 4;
+  repeated double accelerations = 5;
+  repeated double torques = 6;
+}
+
+message JointPositions {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double positions = 3;
+}
+
+message JointVelocities {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double velocities = 3;
+}
+
+message JointAccelerations {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double accelerations = 3;
+}
+
+message JointTorques {
+  State state = 1;
+  repeated string joint_names = 2;
+  repeated double torques = 3;
+}

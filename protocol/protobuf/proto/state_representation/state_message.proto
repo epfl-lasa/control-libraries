@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package state_representation.proto;
+
+import "state_representation/state.proto";
+import "state_representation/space/spatial_state.proto";
+import "state_representation/space/cartesian/cartesian_state.proto";
+import "state_representation/space/joint/jacobian.proto";
+import "state_representation/space/joint/joint_state.proto";
+import "state_representation/geometry/shape.proto";
+import "state_representation/geometry/ellipsoid.proto";
+import "state_representation/parameters/parameter.proto";
+
+message StateMessage {
+  oneof message_type {
+    State state = 1;
+    SpatialState spatial_state = 2;
+    CartesianState cartesian_state = 3;
+    CartesianPose cartesian_pose = 4;
+    CartesianTwist cartesian_twist = 5;
+    CartesianAcceleration cartesian_acceleration = 6;
+    CartesianWrench cartesian_wrench = 7;
+    Jacobian jacobian = 8;
+    JointState joint_state = 9;
+    JointPositions joint_positions = 10;
+    JointVelocities joint_velocities = 11;
+    JointAccelerations joint_accelerations = 12;
+    JointTorques joint_torques = 13;
+    Shape shape = 14;
+    Ellipsoid ellipsoid = 15;
+    Parameter parameter = 16;
+  }
+}

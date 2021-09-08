@@ -9,6 +9,9 @@ BUILD_TESTING="OFF"
 INSTALL_DESTINATION="/usr/local"
 AUTO_INSTALL=""
 
+OSQP_TAG=v0.6.2
+OSQP_EIGEN_TAG=v0.6.4
+
 FAIL_MESSAGE="The provided input arguments are not valid.
 Run the script with the '--help' argument."
 
@@ -93,13 +96,13 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   mkdir -p "${SOURCE_PATH}"/tmp/lib
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone --recursive https://github.com/oxfordcontrol/osqp
-  cd "${SOURCE_PATH}"/tmp/lib/osqp/ && mkdir -p build && cd build || exit 1
-  cmake -G "Unix Makefiles" .. && cmake --build . --target install
+  cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1
+  cmake -G "Unix Makefiles" .. && cmake --build . --target install || exit 1
   # install osqp eigen wrapper
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone https://github.com/robotology/osqp-eigen.git
-  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && mkdir -p build && cd build || exit 1
-  cmake .. && make -j && make install
+  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout "${OSQP_EIGEN_TAG}" && mkdir -p build && cd build || exit 1
+  cmake .. && make -j && make install || exit 1
 
   ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/
   ldconfig
@@ -111,7 +114,7 @@ if [ "${BUILD_TESTING}" == "ON" ]; then
   apt-get update && apt-get install "${AUTO_INSTALL}" libgtest-dev || exit 1
 
   mkdir -p "${SOURCE_PATH}"/tmp/lib/gtest && cd "${SOURCE_PATH}"/tmp/lib/gtest || exit 1
-  cmake /usr/src/gtest && make
+  cmake /usr/src/gtest && make || exit 1
   cp lib/* /usr/local/lib || cp ./*.a /usr/local/lib
 fi
 
@@ -124,9 +127,11 @@ cmake -DCMAKE_BUILD_TYPE=Release \
   -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
   -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
   -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
-  -DBUILD_TESTING="${BUILD_TESTING}" ..
+  -DBUILD_TESTING="${BUILD_TESTING}" .. || exit 1
 
-make -j && make install
+make -j && make install || exit 1
+
+ldconfig
 
 # cleanup any temporary folders
 rm -rf "${SOURCE_PATH}"/tmp

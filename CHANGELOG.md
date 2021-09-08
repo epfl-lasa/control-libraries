@@ -7,6 +7,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Python bindings for clproto (#204)
+
 ## 4.0.0
 
 Version 4.0.0 introduces some powerful new features for using `state_representation` objects

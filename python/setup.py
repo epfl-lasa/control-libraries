@@ -39,7 +39,7 @@ ext_modules = [
                       sorted(glob("source/state_representation/*.cpp")),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
-                      libraries=__libraries__,
+                      libraries=['state_representation'],
                       define_macros=[('MODULE_VERSION_INFO', __version__)],
                       )
 ]

@@ -14,7 +14,7 @@ TEST(JsonProtoTest, JsonToFromBinary) {
   ASSERT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_STATE_MESSAGE);
 
   auto json = clproto::to_json(msg);
-  EXPECT_NE(json.size(), 0);
+  EXPECT_GT(json.size(), 2);  // empty JSON would be "{}"
   auto msg2 = clproto::from_json(json);
 
   CartesianState recv_state;
@@ -30,6 +30,7 @@ TEST(JsonProtoTest, JsonToFromObject) {
   auto send_state = CartesianState::Random("A", "B");
 
   auto json = clproto::to_json(send_state);
+  EXPECT_GT(json.size(), 2);  // empty JSON would be "{}"
   auto recv_state = clproto::from_json<CartesianState>(json);
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());

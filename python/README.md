@@ -87,10 +87,12 @@ Bindings exist for the following modules, classes and methods:
   - `is_valid(msg)`
   - `check_message_type(msg)`
   - `check_parameter_message_type(msg)`
-  - `encode(obj, type)`
-  - `decode(msg)`
+  - `msg = encode(obj, type)`
+  - `obj = decode(msg)`
   - `pack_fields(encoded_fields)`
   - `unpack_fields(packet)`
+  - `json = to_json(msg)`
+  - `msg = from_json(json)`
 
 ## About
 

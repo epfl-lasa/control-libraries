@@ -143,7 +143,10 @@ void methods(py::module_& m) {
       default:
         return py::none();
     }
-  }, "Decode a serialized binary string from wire format into a control libraries object instance.", "message"_a);
+  }, "Decode a serialized binary string from wire format into a control libraries object instance.", "msg"_a);
+
+  m.def("to_json", [](const std::string& msg) { return to_json(msg); }, "Convert a serialized binary string from wire format into a JSON formatted state message description", "msg"_a);
+  m.def("from_json", [](const std::string& json) -> py::bytes { return from_json(json); }, "Convert a JSON formatted state message description into a serialized binary string representation (wire format).", "msg"_a);
 }
 
 void bind_clproto(py::module_& m) {

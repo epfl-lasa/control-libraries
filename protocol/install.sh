@@ -35,7 +35,7 @@ Options:
   -h, --help               Show this help message."
 
 function make_bindings() {
-  cd "${PROTOBUF_DIR}" && make -j all || exit 1
+  cd "${PROTOBUF_DIR}" && make all || exit 1
 }
 
 function clean_bindings() {

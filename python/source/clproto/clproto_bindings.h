@@ -17,6 +17,5 @@
 
 namespace py = pybind11;
 using namespace pybind11::literals;
-using namespace clproto;
 
 void bind_clproto(py::module_& m);

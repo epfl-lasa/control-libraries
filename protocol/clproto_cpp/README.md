@@ -80,14 +80,14 @@ clproto::pack_fields(encoded_robot_state, encoded_packet_buffer);
 
 // The message fields can also be packed into a std::string,
 // provided that sufficient space is reserved for all messages
-std::string encoded_packet_str();
+std::string encoded_packet_str;
 encoded_packet_str.reserve(2 * CLPROTO_PACKING_MAX_FIELD_LENGTH);
 clproto::pack_fields(encoded_robot_state, encoded_packet_str.data());
 
 // Unpack a combined message packet back into an ordered vector of encoded state variables
-std::vector<std::string> unpacked_encoded_robot_state = clproto::unpack(encoded_packet_buffer);
+std::vector<std::string> unpacked_encoded_robot_state = clproto::unpack_fields(encoded_packet_buffer);
 // (or, for a string type encoded packet:)
-unpacked_encoded_robot_state = clproto::unpack(encoded_packet_str.c_str());
+unpacked_encoded_robot_state = clproto::unpack_fields(encoded_packet_str.c_str());
 
 // Finally, decode the encoded fields in the same order as the original packing
 auto decoded_cart_state = clproto::decode<CartesianState>(unpacked_encoded_robot_state.at(0));
@@ -137,10 +137,10 @@ If bandwidth is limited, the following formula can be used to calculate the mini
 ```c++
 std::vector<std::string> encoded_fields = ...;
 
-// The packet header starts with N + 1 values of size proto::field_length_t,
+// The packet header starts with N + 1 values of size clproto::field_length_t,
 // where N is the number of fields N. The first value stores the number of fields,
 // while the following N values store the data length of each respective field.
-std::size_t packet_size = sizeof(proto::field_length_t) * (encoded_fields.size() + 1);
+std::size_t packet_size = sizeof(clproto::field_length_t) * (encoded_fields.size() + 1);
 
 // Add the size of each field
 for (const auto& field : encoded_fields) {

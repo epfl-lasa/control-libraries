@@ -6,6 +6,7 @@ if [ -n "$1" ]; then
 fi
 echo "Using control libraries branch ${BRANCH}"
 
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
 docker build . --file ./Dockerfile.python --build-arg BRANCH="${BRANCH}" --tag control-libraries/python/test || exit 1
 
 docker run -it --rm \

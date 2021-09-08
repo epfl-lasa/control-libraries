@@ -2,15 +2,19 @@ from glob import glob
 from setuptools import setup
 from pybind11.setup_helpers import Pybind11Extension
 from pybind11.setup_helpers import ParallelCompile, naive_recompile
+import warnings
 import os
 
 __version__ = "4.0.0"
-__libraries__ = ['state_representation']
+__libraries__ = ['state_representation', 'clproto']
 __include_dirs__ = []
+
+__install_clproto_module__ = True
 
 # check that eigen and state_representation libraries can be found
 try:
-    eigen_dir = os.popen('cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE').read().strip()
+    eigen_dir = os.popen(
+        'cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE').read().strip()
     if eigen_dir.startswith('-I'):
         __include_dirs__.append(eigen_dir.lstrip('-I'))
     else:
@@ -19,16 +23,12 @@ try:
     for lib in __libraries__:
         status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
         if len(status) == 0:
-            raise Exception(f'Could not find {lib}!')
-except Exception as e:
-    msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
-
-# check that clproto library can be found
-try:
-    for lib in ['clproto']:
-        status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
-        if len(status) == 0:
-            raise Exception(f'Could not find {lib}!')
+            msg = f'Could not find library {lib}!'
+            if lib == 'clproto':
+                warnings.warn(f'{msg} The clproto module will not be installed.')
+                __install_clproto_module__ = False
+            else:
+                raise Exception(msg)
 except Exception as e:
     msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
 
@@ -41,15 +41,19 @@ ext_modules = [
                       include_dirs=__include_dirs__,
                       libraries=__libraries__,
                       define_macros=[('MODULE_VERSION_INFO', __version__)],
-                      ),
-    Pybind11Extension("clproto",
-                      sorted(glob("source/clproto/*.cpp")),
-                      cxx_std=17,
-                      include_dirs=__include_dirs__,
-                      libraries=['clproto'],
-                      define_macros=[('MODULE_VERSION_INFO', __version__)],
-                      ),
+                      )
 ]
+
+if __install_clproto_module__:
+    ext_modules.append(
+        Pybind11Extension("clproto",
+                          sorted(glob("source/clproto/*.cpp")),
+                          cxx_std=17,
+                          include_dirs=__include_dirs__,
+                          libraries=['clproto'],
+                          define_macros=[('MODULE_VERSION_INFO', __version__)],
+                          )
+    )
 
 setup(
     name="control-libraries",

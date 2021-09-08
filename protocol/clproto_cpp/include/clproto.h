@@ -32,6 +32,16 @@ public:
 };
 
 /**
+ * @class JsonParsingException
+ * @brief A JsonParsingException is raised whenever a
+ * JSON conversion operation fails due to invalid encoding.
+ */
+class JsonParsingException : public std::runtime_error {
+public:
+  explicit JsonParsingException(const std::string& msg);
+};
+
+/**
  * @enum MessageType
  * @brief The MessageType enumeration contains the possible
  * message types in the clproto.
@@ -118,9 +128,9 @@ std::string encode(const T& obj);
 /**
  * @brief Decode a serialized binary string from
  * wire format into a control libraries object instance.
- * Throws an exception if the message cannot be decoded
+ * @details Throws an exception if the message cannot be decoded
  * into the desired type.
- * @tparam The desired control libraries object type
+ * @tparam T The desired control libraries object type
  * @param msg The serialized binary string to decode
  * @return A new instance of the control libraries object
  */
@@ -130,7 +140,7 @@ T decode(const std::string& msg);
 /**
  * @brief Exception safe decoding of a serialized binary string
  * wire format into a control libraries object instance.
- * It modifies the object by reference if the decoding is
+ * @details It modifies the object by reference if the decoding is
  * successful, and leaves it unmodified otherwise.
  * @tparam T The desired control libraries object type
  * @param msg The serialized binary string to decode
@@ -168,4 +178,47 @@ void pack_fields(const std::vector<std::string>& fields, char* data);
  */
 std::vector<std::string> unpack_fields(const char* data);
 
+/**
+ * @brief Convert a serialized binary string from
+ * wire format into a JSON formatted state message description.
+ * @param msg The serialized binary string to decode
+ * @return The JSON formatted state message description
+ */
+std::string to_json(const std::string& msg);
+
+/**
+ * @brief Convert a control libraries object into
+ * into a JSON formatted state message description.
+ * @tparam T The provided control libraries object type
+ * @param obj The control libraries object to encode
+ * @return The JSON formatted state message description
+ */
+template<typename T>
+std::string to_json(const T& obj) {
+  return to_json(encode<T>(obj));
+}
+
+/**
+ * @brief Convert a JSON formatted state message description
+ * into a serialized binary string representation (wire format).
+ * @details Throws an exception if the message cannot be decoded
+ * into the desired type.
+ * @param json The JSON formatted state message description
+ * @return The serialized binary string encoding
+ */
+std::string from_json(const std::string& json);
+
+/**
+ * @brief Convert a JSON formatted state message description
+ * into a control libraries object instance.
+ * @details Throws an exception if the message cannot be
+ * converted into the desired type.
+ * @tparam T The desired control libraries object type
+ * @param json The JSON formatted state message description
+ * @return A new instance of the control libraries object
+ */
+template<typename T>
+T from_json(const std::string& json) {
+  return decode<T>(from_json(json));
+}
 }

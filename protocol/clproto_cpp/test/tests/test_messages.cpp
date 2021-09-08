@@ -6,7 +6,7 @@
 
 using namespace state_representation;
 
-TEST(CartesianProtoTest, EncodeDecodeState) {
+TEST(MessageProtoTest, EncodeDecodeState) {
   auto send_state = State(StateType::STATE, "A", false);
   std::string msg = clproto::encode(send_state);
   EXPECT_TRUE(clproto::is_valid(msg));
@@ -21,7 +21,7 @@ TEST(CartesianProtoTest, EncodeDecodeState) {
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
 }
 
-TEST(CartesianProtoTest, DecodeInvalidString) {
+TEST(MessageProtoTest, DecodeInvalidString) {
   std::string dummy_msg = "hello world";
 
   EXPECT_FALSE(clproto::is_valid(dummy_msg));

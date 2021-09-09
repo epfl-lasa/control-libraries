@@ -332,5 +332,6 @@ void bind_joint_space(py::module_& m) {
   joint_state(m);
   joint_positions(m);
   joint_velocities(m);
+  joint_accelerations(m);
   joint_torques(m);
 }

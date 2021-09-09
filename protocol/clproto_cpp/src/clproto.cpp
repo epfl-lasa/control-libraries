@@ -1,5 +1,8 @@
 #include "clproto.h"
 
+#include <google/protobuf/util/json_util.h>
+#include <google/protobuf/util/type_resolver_util.h>
+
 #include "clproto/encoders.h"
 #include "clproto/decoders.h"
 
@@ -25,6 +28,8 @@ using namespace state_representation;
 namespace clproto {
 
 DecodingException::DecodingException(const std::string& msg) : std::runtime_error(msg) {}
+
+JsonParsingException::JsonParsingException(const std::string& msg) : std::runtime_error(msg) {}
 
 bool is_valid(const std::string& msg) {
   return check_message_type(msg) != MessageType::UNKNOWN_MESSAGE;
@@ -110,6 +115,43 @@ std::vector<std::string> unpack_fields(const char* data) {
     index += sizes[field];
   }
   return fields;
+}
+
+// --- JSON utilities --- //
+
+std::string to_json(const std::string& msg) {
+  std::string json;
+
+  auto resolver = std::unique_ptr<google::protobuf::util::TypeResolver>{
+      google::protobuf::util::NewTypeResolverForDescriptorPool(
+          "", google::protobuf::DescriptorPool::generated_pool())
+  };
+
+  auto status = google::protobuf::util::BinaryToJsonString(
+      resolver.get(), "/state_representation.proto.StateMessage", msg, std::addressof(json));
+
+  if (!status.ok() || json.size() <= 2) {
+    throw JsonParsingException("Could not parse the binary data into a JSON formatted state message");
+  }
+  return json;
+}
+
+std::string from_json(const std::string& json) {
+  std::string msg;
+
+  auto resolver = std::unique_ptr<google::protobuf::util::TypeResolver>{
+      google::protobuf::util::NewTypeResolverForDescriptorPool(
+          "", google::protobuf::DescriptorPool::generated_pool())
+  };
+
+  auto status = google::protobuf::util::JsonToBinaryString(
+      resolver.get(), "/state_representation.proto.StateMessage", json, std::addressof(msg));
+
+  if (!status.ok()) {
+    throw JsonParsingException("Could not parse a valid state from the JSON message: " + json);
+  }
+
+  return msg;
 }
 
 /* ----------------------

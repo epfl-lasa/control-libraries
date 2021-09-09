@@ -6,7 +6,7 @@
 
 using namespace state_representation;
 
-TEST(CartesianProtoTest, EncodeDecodeParameterDouble) {
+TEST(ParameterProtoTest, EncodeDecodeParameterDouble) {
   double value = 1.0;
 
   auto send_state = Parameter("A", value);
@@ -23,7 +23,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterDouble) {
   EXPECT_EQ(send_state.get_value(), recv_state.get_value());
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterDoubleArray) {
+TEST(ParameterProtoTest, EncodeDecodeParameterDoubleArray) {
   std::vector<double> value = {1.0, 2.0, 3.0};
 
   auto send_state = Parameter("A", value);
@@ -43,7 +43,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterDoubleArray) {
   }
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterBool) {
+TEST(ParameterProtoTest, EncodeDecodeParameterBool) {
   bool value = true;
 
   auto send_state = Parameter("A", value);
@@ -60,7 +60,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterBool) {
   EXPECT_EQ(send_state.get_value(), recv_state.get_value());
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterBoolArray) {
+TEST(ParameterProtoTest, EncodeDecodeParameterBoolArray) {
   std::vector<bool> value = {true, false, true, false};
 
   auto send_state = Parameter("A", value);
@@ -80,7 +80,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterBoolArray) {
   }
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterString) {
+TEST(ParameterProtoTest, EncodeDecodeParameterString) {
   std::string value = "value";
 
   auto send_state = Parameter("A", value);
@@ -97,7 +97,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterString) {
   EXPECT_STREQ(send_state.get_value().c_str(), recv_state.get_value().c_str());
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterStringArray) {
+TEST(ParameterProtoTest, EncodeDecodeParameterStringArray) {
   std::vector<std::string> value = {"value 1", "value 2", "value 3"};
 
   auto send_state = Parameter("A", value);
@@ -117,7 +117,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterStringArray) {
   }
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterVector) {
+TEST(ParameterProtoTest, EncodeDecodeParameterVector) {
   Eigen::VectorXd value(5);
   value << 1.0, 2.0, 3.0, 4.0, 5.0;
 
@@ -138,7 +138,7 @@ TEST(CartesianProtoTest, EncodeDecodeParameterVector) {
   }
 }
 
-TEST(CartesianProtoTest, EncodeDecodeParameterMatrix) {
+TEST(ParameterProtoTest, EncodeDecodeParameterMatrix) {
   Eigen::MatrixXd value(2, 3);
   value << 1.0, 2.0, 3.0, 4.0, 5.0, 6.0;
 

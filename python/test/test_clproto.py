@@ -25,6 +25,22 @@ class TestClprotoPackUnpack(unittest.TestCase):
         self.assertListEqual(objects[1].get_names(), decoded_objects[1].get_names())
         self.assertAlmostEqual(sr.dist(objects[1], decoded_objects[1]), 0)
 
+class TestClprotoJSON(unittest.TestCase):
+    def test_to_from_json(self):
+        reference_object = sr.CartesianState.Random("A", "B")
+        message_type = clproto.MessageType.CARTESIAN_STATE_MESSAGE
+        msg = clproto.encode(reference_object, message_type)
+        json = clproto.to_json(msg)
+        msg2 = clproto.from_json(json)
+        self.assertTrue(clproto.is_valid(msg2))
+        self.assertEqual(clproto.check_message_type(msg2), message_type)
+        decoded_object = clproto.decode(msg)
+        self.assertIsInstance(decoded_object, type(reference_object))
+
+        self.assertEqual(reference_object.get_name(), decoded_object.get_name())
+        self.assertEqual(reference_object.get_reference_frame(), decoded_object.get_reference_frame())
+        self.assertAlmostEqual(sr.dist(reference_object, decoded_object), 0)
+
 class TestClprotoState(unittest.TestCase):
     def state_class_assertions(self, reference_object, message_type):
         object_type = type(reference_object)

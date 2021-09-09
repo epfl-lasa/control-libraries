@@ -10,6 +10,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Python bindings for clproto (#204)
+- JSON conversion support for clproto (#205)
 
 ## 4.0.0
 

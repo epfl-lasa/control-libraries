@@ -128,14 +128,14 @@ $(function() {
 <div class="line"> </div>
 <div class="line">// The message fields can also be packed into a std::string,</div>
 <div class="line">// provided that sufficient space is reserved for all messages</div>
-<div class="line">std::string encoded_packet_str();</div>
+<div class="line">std::string encoded_packet_str;</div>
 <div class="line">encoded_packet_str.reserve(2 * CLPROTO_PACKING_MAX_FIELD_LENGTH);</div>
 <div class="line">clproto::pack_fields(encoded_robot_state, encoded_packet_str.data());</div>
 <div class="line"> </div>
 <div class="line">// Unpack a combined message packet back into an ordered vector of encoded state variables</div>
-<div class="line">std::vector&lt;std::string&gt; unpacked_encoded_robot_state = clproto::unpack(encoded_packet_buffer);</div>
+<div class="line">std::vector&lt;std::string&gt; unpacked_encoded_robot_state = clproto::unpack_fields(encoded_packet_buffer);</div>
 <div class="line">// (or, for a string type encoded packet:)</div>
-<div class="line">unpacked_encoded_robot_state = clproto::unpack(encoded_packet_str.c_str());</div>
+<div class="line">unpacked_encoded_robot_state = clproto::unpack_fields(encoded_packet_str.c_str());</div>
 <div class="line"> </div>
 <div class="line">// Finally, decode the encoded fields in the same order as the original packing</div>
 <div class="line">auto decoded_cart_state = clproto::decode&lt;CartesianState&gt;(unpacked_encoded_robot_state.at(0));</div>
@@ -168,10 +168,10 @@ $(function() {
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">std::vector&lt;std::string&gt; encoded_fields = ...;</div>
 <div class="line"> </div>
-<div class="line">// The packet header starts with N + 1 values of size proto::field_length_t,</div>
+<div class="line">// The packet header starts with N + 1 values of size clproto::field_length_t,</div>
 <div class="line">// where N is the number of fields N. The first value stores the number of fields,</div>
 <div class="line">// while the following N values store the data length of each respective field.</div>
-<div class="line">std::size_t packet_size = sizeof(proto::field_length_t) * (encoded_fields.size() + 1);</div>
+<div class="line">std::size_t packet_size = sizeof(clproto::field_length_t) * (encoded_fields.size() + 1);</div>
 <div class="line"> </div>
 <div class="line">// Add the size of each field</div>
 <div class="line">for (const auto&amp; field : encoded_fields) {</div>

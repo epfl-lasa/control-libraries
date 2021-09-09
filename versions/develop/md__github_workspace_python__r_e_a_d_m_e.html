@@ -95,8 +95,16 @@ $(function() {
 <div class="line">from state_representation import JointState</div>
 <div class="line"> </div>
 <div class="line">B = JointState.Random(&quot;B&quot;, 3)</div>
+</div><!-- fragment --><p>If the <code>clproto</code> C++ library is installed, the installation steps above will automatically install the <code>clproto</code> Python module which can be used to encode and decode objects into bytes of serialized data. </p><div class="fragment"><div class="line">#!/usr/bin/env python</div>
+<div class="line">from state_representation import JointState</div>
+<div class="line">import clproto</div>
+<div class="line"> </div>
+<div class="line">B = JointState.Random(&quot;B&quot;, 3)</div>
+<div class="line">encoded_msg = clproto.encode(B, clproto.MessageType.JOINT_STATE_MESSAGE)</div>
+<div class="line"> </div>
+<div class="line">decoded_object = clproto.decode(encoded_msg)</div>
 </div><!-- fragment --><h1>Current status</h1>
-<p>The Python binding project is currently under development. Bindings exist for the following libraries and classes:</p>
+<p>The Python binding project is currently under development. Bindings exist for the following modules, classes and methods:</p>
 <ul>
 <li><code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code>:<ul>
 <li><code>State</code></li>
@@ -110,6 +118,18 @@ $(function() {
 <li><code>JointVelocities</code></li>
 <li><code>JointTorques</code></li>
 <li><code>Jacobian</code></li>
+</ul>
+</li>
+<li><code>clproto</code>:<ul>
+<li><code>MessageType</code></li>
+<li><code>ParameterMessageType</code></li>
+<li><code>is_valid(msg)</code></li>
+<li><code>check_message_type(msg)</code></li>
+<li><code>check_parameter_message_type(msg)</code></li>
+<li><code>encode(obj, type)</code></li>
+<li><code>decode(msg)</code></li>
+<li><code>pack_fields(encoded_fields)</code></li>
+<li><code>unpack_fields(packet)</code></li>
 </ul>
 </li>
 </ul>

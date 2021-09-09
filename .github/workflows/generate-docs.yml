@@ -24,7 +24,7 @@ jobs:
         if: ${{ github.event_name == 'release' }}
         shell: bash
         run: |
-          TAG="${GITHUB_REF#refs/heads/}"
+          TAG="${GITHUB_REF#refs-tags/}"
           TAG="${TAG/\//-}"
           mkdir -p doxygen/docs/versions
           sudo mv doxygen/docs/html doxygen/docs/versions/${TAG}

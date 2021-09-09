@@ -5,6 +5,7 @@ on:
       - main
       - develop
   release:
+    types: [published]
   workflow_dispatch:
 
 jobs:

@@ -63,7 +63,7 @@ proto::CartesianState encoder(const CartesianState& cartesian_state) {
 proto::Jacobian encoder(const Jacobian& jacobian) {
   proto::Jacobian message;
   *message.mutable_state() = encoder(static_cast<State>(jacobian));
-  if (!jacobian.is_empty()) {
+  if (jacobian.is_empty()) {
     return message;
   }
   *message.mutable_joint_names() = {jacobian.get_joint_names().begin(), jacobian.get_joint_names().end()};

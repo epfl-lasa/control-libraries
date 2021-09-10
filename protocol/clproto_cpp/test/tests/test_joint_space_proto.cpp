@@ -12,7 +12,7 @@
 using namespace state_representation;
 
 TEST(JointProtoTest, EncodeDecodeJacobian) {
-  auto send_state = Jacobian("robot", 3, "A", "B");
+  auto send_state = Jacobian::Random("robot", {"one", "two", "three"}, "A", "B");
   std::string msg = clproto::encode(send_state);
   EXPECT_TRUE(clproto::is_valid(msg));
   EXPECT_TRUE(clproto::check_message_type(msg) == clproto::JACOBIAN_MESSAGE);
@@ -20,8 +20,10 @@ TEST(JointProtoTest, EncodeDecodeJacobian) {
   Jacobian recv_state;
   EXPECT_NO_THROW(clproto::decode<Jacobian>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
+  EXPECT_STREQ(send_state.get_frame().c_str(), recv_state.get_frame().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_EQ(send_state.rows(), recv_state.rows());
   EXPECT_EQ(send_state.cols(), recv_state.cols());
@@ -42,6 +44,7 @@ TEST(JointProtoTest, EncodeDecodeJointState) {
   JointState recv_state;
   EXPECT_NO_THROW(clproto::decode<JointState>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
@@ -60,6 +63,7 @@ TEST(JointProtoTest, EncodeDecodeJointPositions) {
   JointPositions recv_state;
   EXPECT_NO_THROW(clproto::decode<JointPositions>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
@@ -78,6 +82,7 @@ TEST(JointProtoTest, EncodeDecodeJointVelocities) {
   JointVelocities recv_state;
   EXPECT_NO_THROW(clproto::decode<JointVelocities>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
@@ -96,6 +101,7 @@ TEST(JointProtoTest, EncodeDecodeJointAccelerations) {
   JointAccelerations recv_state;
   EXPECT_NO_THROW(clproto::decode<JointAccelerations>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
@@ -114,6 +120,7 @@ TEST(JointProtoTest, EncodeDecodeJointTorques) {
   JointTorques recv_state;
   EXPECT_NO_THROW(clproto::decode<JointTorques>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());

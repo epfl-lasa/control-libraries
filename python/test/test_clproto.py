@@ -119,6 +119,7 @@ class TestClprotoJacobian(unittest.TestCase):
         self.assertIsInstance(obj2, sr.Jacobian)
         self.assertEqual(obj1.get_name(), obj2.get_name())
         self.assertEqual(obj1.get_frame(), obj2.get_frame())
+        self.assertEqual(obj1.get_reference_frame(), obj2.get_reference_frame())
         self.assertListEqual(obj1.get_joint_names(), obj2.get_joint_names())
         self.assertEqual(obj1.rows(), obj2.rows())
         self.assertEqual(obj1.cols(), obj2.cols())

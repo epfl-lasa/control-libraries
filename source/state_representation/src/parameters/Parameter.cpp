@@ -6,9 +6,7 @@
 namespace state_representation {
 template <>
 Parameter<double>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {
-  this->set_filled();
-}
+    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {}
 
 template <>
 Parameter<double>::Parameter(const std::string& name, const double& value) :
@@ -105,6 +103,10 @@ Parameter<JointPositions>::Parameter(const std::string& name, const JointPositio
     ParameterInterface(StateType::PARAMETER_JOINTPOSITIONS, name), value(value) {
   this->set_filled();
 }
+
+template <>
+Parameter<Ellipsoid>::Parameter(const std::string& name) :
+    ParameterInterface(StateType::PARAMETER_ELLIPSOID, name) {}
 
 template <>
 Parameter<Ellipsoid>::Parameter(const std::string& name, const Ellipsoid& value) :

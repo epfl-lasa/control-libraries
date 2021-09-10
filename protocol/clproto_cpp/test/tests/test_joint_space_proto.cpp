@@ -122,3 +122,69 @@ TEST(JointProtoTest, EncodeDecodeJointTorques) {
   }
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
 }
+
+TEST(JointProtoTest, EncodeDecodeEmptyJacobian) {
+  Jacobian empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  Jacobian recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<Jacobian>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(JointProtoTest, EncodeDecodeEmptyJointPositions) {
+  JointPositions empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  JointPositions recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<JointPositions>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(JointProtoTest, EncodeDecodeEmptyJointState) {
+  JointState empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  JointState recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<JointState>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(JointProtoTest, EncodeDecodeEmptyJointVelocities) {
+  JointVelocities empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  JointVelocities recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<JointVelocities>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(JointProtoTest, EncodeDecodeEmptyJointAccelerations) {
+  JointAccelerations empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  JointAccelerations recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<JointAccelerations>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(JointProtoTest, EncodeDecodeEmptyJointTorques) {
+  JointTorques empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  JointTorques recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<JointTorques>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}

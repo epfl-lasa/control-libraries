@@ -85,3 +85,47 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianWrench) {
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
 }
+
+TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianState) {
+  CartesianState empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  CartesianState recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianState>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianPose) {
+  CartesianPose empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  CartesianPose recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianPose>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianTwist) {
+  CartesianTwist empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  CartesianTwist recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianTwist>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
+
+TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianWrench) {
+  CartesianWrench empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+
+  CartesianWrench recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianWrench>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}

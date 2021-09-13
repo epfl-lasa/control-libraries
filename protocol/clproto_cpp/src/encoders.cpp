@@ -46,6 +46,9 @@ proto::Quaterniond encoder(const Eigen::Quaterniond& quaternion) {
 proto::CartesianState encoder(const CartesianState& cartesian_state) {
   proto::CartesianState message;
   *message.mutable_spatial_state() = encoder(static_cast<SpatialState>(cartesian_state));
+  if (cartesian_state.is_empty()) {
+    return message;
+  }
   *message.mutable_position() = encoder(cartesian_state.get_position());
   *message.mutable_orientation() = encoder(cartesian_state.get_orientation());
   *message.mutable_linear_velocity() = encoder(cartesian_state.get_linear_velocity());
@@ -60,6 +63,9 @@ proto::CartesianState encoder(const CartesianState& cartesian_state) {
 proto::Jacobian encoder(const Jacobian& jacobian) {
   proto::Jacobian message;
   *message.mutable_state() = encoder(static_cast<State>(jacobian));
+  if (jacobian.is_empty()) {
+    return message;
+  }
   *message.mutable_joint_names() = {jacobian.get_joint_names().begin(), jacobian.get_joint_names().end()};
   message.set_frame(jacobian.get_frame());
   message.set_reference_frame(jacobian.get_reference_frame());
@@ -72,6 +78,9 @@ proto::Jacobian encoder(const Jacobian& jacobian) {
 proto::JointState encoder(const JointState& joint_state) {
   proto::JointState message;
   *message.mutable_state() = encoder(static_cast<State>(joint_state));
+  if (joint_state.is_empty()) {
+    return message;
+  }
   *message.mutable_joint_names() = {joint_state.get_names().begin(), joint_state.get_names().end()};
   *message.mutable_positions() = matrix_encoder(joint_state.get_positions());
   *message.mutable_velocities() = matrix_encoder(joint_state.get_velocities());

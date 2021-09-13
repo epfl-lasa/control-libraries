@@ -476,10 +476,15 @@ bool decode(const std::string& msg, Jacobian& obj) {
     }
 
     auto jacobian = message.jacobian();
-    auto raw_data = const_cast<double*>(jacobian.data().data());
-    auto data = Eigen::Map<Eigen::MatrixXd>(raw_data, jacobian.rows(), jacobian.cols());
     obj = Jacobian(
-        jacobian.state().name(), decoder(jacobian.joint_names()), jacobian.frame(), data, jacobian.reference_frame());
+        jacobian.state().name(), decoder(jacobian.joint_names()), jacobian.frame(), jacobian.reference_frame());
+    if (!jacobian.state().empty() && !jacobian.data().empty()) {
+      auto raw_data = const_cast<double*>(jacobian.data().data());
+      auto data = Eigen::Map<Eigen::MatrixXd>(raw_data, jacobian.rows(), jacobian.cols());
+      obj.set_data(data);
+    } else {
+      obj.set_empty();
+    }
     return true;
   } catch (...) {
     return false;
@@ -735,6 +740,9 @@ template<typename T>
 static std::string encode_parameter(const Parameter<T>& obj) {
   proto::StateMessage message;
   *message.mutable_parameter() = encoder<T>(obj);
+  if (obj.is_empty()) {
+    message.mutable_parameter()->mutable_state()->set_empty(true);
+  }
   return message.SerializeAsString();
 }
 template<typename T>
@@ -756,6 +764,9 @@ static bool decode_parameter(const std::string& msg, Parameter<T>& obj) {
       }
     }
     obj = decoder<T>(message.parameter());
+    if (message.parameter().state().empty()) {
+      obj.set_empty();
+    }
     return true;
   } catch (...) {
     return false;

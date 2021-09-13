@@ -6,9 +6,7 @@
 namespace state_representation {
 template <>
 Parameter<double>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {
-  this->set_filled();
-}
+    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {}
 
 template <>
 Parameter<double>::Parameter(const std::string& name, const double& value) :

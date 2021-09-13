@@ -1,3 +1,4 @@
+#include <functional>
 #include <gtest/gtest.h>
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
@@ -6,6 +7,26 @@
 #include "state_representation/exceptions/NotImplementedException.hpp"
 
 using namespace state_representation;
+
+template<int dim>
+void test_clamping(
+    CartesianState& state, std::function<Eigen::Matrix<double, dim, 1>(const CartesianState&)> getter,
+    std::function<void(CartesianState&, Eigen::Matrix<double, dim, 1>)> setter, const CartesianStateVariable& type
+) {
+  Eigen::Matrix<double, dim, 1> data;
+  if (dim == 3) {
+    data << -2.0, 1, 5;
+  } else if (dim == 6) {
+    data << -2.0, 1, 5, 1, -3.0, 2.4;
+  }
+  setter(state, data);
+  state.clamp_state_variable(10.0, type);
+  EXPECT_EQ(getter(state), data);
+  state.clamp_state_variable(3.0, type);
+  EXPECT_EQ(getter(state).norm(), 3.0);
+  state.clamp_state_variable(10.0, type, 0.5);
+  EXPECT_EQ(getter(state).norm(), 0.0);
+}
 
 TEST(CartesianStateTest, Constructors) {
   CartesianState empty1;
@@ -143,10 +164,6 @@ TEST(CartesianStateTest, GetSetFields) {
   cs.set_wrench(wrench);
   EXPECT_EQ(cs.get_wrench(), wrench);
 
-//  EXPECT_THROW(cs.set_position(Eigen::VectorXd::Zero(4)), exceptions::IncompatibleSizeException);
-//  EXPECT_THROW(cs.set_twist(Eigen::VectorXd::Zero(5)), exceptions::IncompatibleSizeException);
-//  EXPECT_THROW(cs.set_wrench(Eigen::VectorXd::Zero(7)), exceptions::IncompatibleSizeException);
-
   cs.set_zero();
   EXPECT_EQ(cs.data().norm(), 1);
   EXPECT_EQ(cs.is_empty(), false);
@@ -201,16 +218,55 @@ TEST(CartesianStateTest, ClampVariable) {
   CartesianState state = CartesianState::Identity("test");
   EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::ORIENTATION), exceptions::NotImplementedException);
   EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::POSE), exceptions::NotImplementedException);
-//  EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::ALL), exceptions::NotImplementedException);
-  Eigen::Vector3d position(-2.0, 1, 5);
-  state.set_position(position);
-  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION);
-  EXPECT_EQ(state.get_position(), position);
-  state.clamp_state_variable(3.0, CartesianStateVariable::POSITION);
-  EXPECT_EQ(state.get_position().norm(), 3.0);
-  state.clamp_state_variable(10.0, CartesianStateVariable::POSITION, 0.5);
-  EXPECT_EQ(state.get_position().norm(), 0.0);
-  // TODO
+  EXPECT_THROW(state.clamp_state_variable(1, CartesianStateVariable::ALL), exceptions::NotImplementedException);
+
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_position(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_position(data); },
+      CartesianStateVariable::POSITION
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_linear_velocity(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_linear_velocity(data); },
+      CartesianStateVariable::LINEAR_VELOCITY
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_angular_velocity(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_angular_velocity(data); },
+      CartesianStateVariable::ANGULAR_VELOCITY
+  );
+  test_clamping<6>(
+      state, [](const CartesianState& state) -> Eigen::Matrix<double, 6, 1> { return state.get_twist(); },
+      [](CartesianState& state, const Eigen::Matrix<double, 6, 1>& data) { state.set_twist(data); },
+      CartesianStateVariable::TWIST
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_linear_acceleration(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_linear_acceleration(data); },
+      CartesianStateVariable::LINEAR_ACCELERATION
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_angular_acceleration(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_angular_acceleration(data); },
+      CartesianStateVariable::ANGULAR_ACCELERATION
+  );
+  test_clamping<6>(
+      state, [](const CartesianState& state) -> Eigen::MatrixXd { return state.get_accelerations(); },
+      [](CartesianState& state, const Eigen::MatrixXd& data) { state.set_accelerations(data); },
+      CartesianStateVariable::ACCELERATIONS
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_force(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_force(data); }, CartesianStateVariable::FORCE
+  );
+  test_clamping<3>(
+      state, [](const CartesianState& state) -> const Eigen::Vector3d& { return state.get_torque(); },
+      [](CartesianState& state, const Eigen::Vector3d& data) { state.set_torque(data); }, CartesianStateVariable::TORQUE
+  );
+  test_clamping<6>(
+      state, [](const CartesianState& state) -> Eigen::MatrixXd { return state.get_wrench(); },
+      [](CartesianState& state, const Eigen::MatrixXd& data) { state.set_wrench(data); }, CartesianStateVariable::WRENCH
+  );
 }
 
 TEST(CartesianStateTest, Norms) {
@@ -346,7 +402,6 @@ TEST(CartesianStateTest, ScalarMultiplication) {
   CartesianState empty;
   EXPECT_THROW(scalar * empty, exceptions::EmptyStateException);
 }
-
 
 TEST(CartesianStateTest, ScalarDivision) {
   double scalar = 2;

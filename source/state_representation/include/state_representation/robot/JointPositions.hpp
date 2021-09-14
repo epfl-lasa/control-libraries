@@ -16,12 +16,18 @@ private:
 
 public:
   const Eigen::VectorXd& get_velocities() const = delete;
+  double get_velocity(unsigned int joint_index) const = delete;
+  double get_velocity(const std::string& joint_name) const = delete;
   void set_velocities(const Eigen::VectorXd& velocities) = delete;
   void set_velocities(const std::vector<double>& velocities) = delete;
   const Eigen::VectorXd& get_accelerations() const = delete;
+  double get_acceleration(unsigned int joint_index) const = delete;
+  double get_acceleration(const std::string& joint_name) const = delete;
   void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
   void set_accelerations(const std::vector<double>& accelerations) = delete;
   const Eigen::VectorXd& get_torques() const = delete;
+  double get_torque(unsigned int joint_index) const = delete;
+  double get_torque(const std::string& joint_name) const = delete;
   void set_torques(const Eigen::VectorXd& torques) = delete;
   void set_torques(const std::vector<double>& torques) = delete;
 

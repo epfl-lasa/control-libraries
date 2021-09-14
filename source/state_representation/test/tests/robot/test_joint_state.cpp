@@ -110,22 +110,42 @@ TEST(JointStateTest, GetSetFields) {
   js.set_positions(positions);
   for (std::size_t i = 0; i < positions.size(); ++i) {
     EXPECT_EQ(js.get_positions()(i), positions.at(i));
+    EXPECT_EQ(js.get_position(i), positions.at(i));
+    EXPECT_EQ(js.get_position(js.get_names().at(i)), positions.at(i));
   }
+  EXPECT_THROW(js.get_position(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_position("test"), exceptions::JointNotFoundException);
+
   std::vector<double> velocities{4, 5, 6};
   js.set_velocities(velocities);
   for (std::size_t i = 0; i < velocities.size(); ++i) {
     EXPECT_EQ(js.get_velocities()(i), velocities.at(i));
+    EXPECT_EQ(js.get_velocity(i), velocities.at(i));
+    EXPECT_EQ(js.get_velocity(js.get_names().at(i)), velocities.at(i));
   }
+  EXPECT_THROW(js.get_velocity(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_velocity("test"), exceptions::JointNotFoundException);
+
   std::vector<double> accelerations{7, 8, 9};
   js.set_accelerations(accelerations);
   for (std::size_t i = 0; i < accelerations.size(); ++i) {
     EXPECT_EQ(js.get_accelerations()(i), accelerations.at(i));
+    EXPECT_EQ(js.get_acceleration(i), accelerations.at(i));
+    EXPECT_EQ(js.get_acceleration(js.get_names().at(i)), accelerations.at(i));
   }
+  EXPECT_THROW(js.get_acceleration(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_acceleration("test"), exceptions::JointNotFoundException);
+
   std::vector<double> torques{10, 11, 12};
   js.set_torques(torques);
   for (std::size_t i = 0; i < torques.size(); ++i) {
     EXPECT_EQ(js.get_torques()(i), torques.at(i));
+    EXPECT_EQ(js.get_torque(i), torques.at(i));
+    EXPECT_EQ(js.get_torque(js.get_names().at(i)), torques.at(i));
   }
+  EXPECT_THROW(js.get_torque(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_torque("test"), exceptions::JointNotFoundException);
+
   EXPECT_THROW(js.set_positions(Eigen::VectorXd::Zero(4)), exceptions::IncompatibleSizeException);
   EXPECT_THROW(js.set_velocities(Eigen::VectorXd::Zero(5)), exceptions::IncompatibleSizeException);
   EXPECT_THROW(js.set_accelerations(Eigen::VectorXd::Zero(6)), exceptions::IncompatibleSizeException);
@@ -231,8 +251,10 @@ TEST(JointStateTest, GetSetData) {
 
 TEST(JointStateTest, GetNameByIndex) {
   JointState js = JointState::Random("test", 3);
-  auto index = js.get_joint_index("joint1");
-  EXPECT_EQ(index, 1);
+  for (std::size_t i = 0; i < js.get_size(); ++i) {
+    auto index = js.get_joint_index("joint" + std::to_string(i));
+    EXPECT_EQ(index, i);
+  }
   EXPECT_THROW(js.get_joint_index("joint5"), exceptions::JointNotFoundException);
 }
 

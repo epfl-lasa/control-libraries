@@ -3,6 +3,7 @@
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/JointNotFoundException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;
@@ -226,6 +227,13 @@ TEST(JointStateTest, GetSetData) {
     EXPECT_EQ(state_vec.at(i), js1.data()(i));
   }
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
+}
+
+TEST(JointStateTest, GetNameByIndex) {
+  JointState js = JointState::Random("test", 3);
+  auto index = js.get_joint_index_by_name("joint1");
+  EXPECT_EQ(index, 1);
+  EXPECT_THROW(js.get_joint_index_by_name("joint5"), exceptions::JointNotFoundException);
 }
 
 TEST(JointStateTest, Distance) {

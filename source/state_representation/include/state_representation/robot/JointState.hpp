@@ -18,12 +18,12 @@ enum class JointStateVariable {
 };
 
 /**
- * @brief Compute the distance between two JointState
- * @param s1 the first JointState
- * @param s2 the second JointState
- * @param state_variable_type name of the field from the JointStateVariable structure to apply
+ * @brief Compute the distance between two JointState.
+ * @param s1 The first JointState
+ * @param s2 The second JointState
+ * @param state_variable_type Name of the field from the JointStateVariable structure to apply
  * the distance on (default ALL for full distance across all dimensions)
- * @return the distance between the two states
+ * @return The distance between the two states
  */
 double dist(
     const JointState& s1, const JointState& s2, const JointStateVariable& state_variable_type = JointStateVariable::ALL
@@ -31,7 +31,7 @@ double dist(
 
 /**
  * @class JointState
- * @brief Class to define a state in joint space
+ * @brief Class to define a state in joint space.
  */
 class JointState : public State {
 private:
@@ -42,250 +42,312 @@ private:
   Eigen::VectorXd torques_;       ///< joints torques
 
   /**
-   * @brief Getter of all the state variables (positions, velocities, accelerations and torques)
-   * @return the concatenated vector of all the state variables
+   * @brief Getter of all the state variables (positions, velocities, accelerations and torques).
+   * @return The concatenated vector of all the state variables
    */
   Eigen::VectorXd get_all_state_variables() const;
 
   /**
-   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
-   * @param state_variable the state variable to fill
-   * @param new_value the new value of the state variable
+   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques).
+   * @param state_variable The state variable to fill
+   * @param new_value The new value of the state variable
    */
   void set_state_variable(Eigen::VectorXd& state_variable, const Eigen::VectorXd& new_value);
 
   /**
-   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
-   * @param state_variable the state variable to fill
-   * @param new_value the new value of the state variable
+   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques).
+   * @param state_variable The state variable to fill
+   * @param new_value The new value of the state variable
    */
   void set_state_variable(Eigen::VectorXd& state_variable, const std::vector<double>& new_value);
 
   /**
-   * @brief Set new_value in all the state variables (positions, velocities, accelerations and torques)
-   * @param new_values the new values of the state variables
+   * @brief Set new_value in all the state variables (positions, velocities, accelerations and torques).
+   * @param new_values The new values of the state variables
    */
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 
 protected:
   /**
-   * @brief Proxy function that multiply the specified state variable by an array of gain
-   * @param lambda the gain array to multiply with
-   * @param state_variable_type the state variable on which to apply the multiplication
+   * @brief Proxy function that multiply the specified state variable by an array of gain.
+   * @param lambda The gain array to multiply with
+   * @param state_variable_type The state variable on which to apply the multiplication
    */
   void multiply_state_variable(const Eigen::ArrayXd& lambda, const JointStateVariable& state_variable_type);
 
   /**
-   * @brief Proxy function that multiply the specified state variable by an array of gain
-   * @param lambda the gain array to multiply with
-   * @param state_variable_type the state variable on which to apply the multiplication
+   * @brief Proxy function that multiply the specified state variable by an array of gain.
+   * @param lambda The gain array to multiply with
+   * @param state_variable_type The state variable on which to apply the multiplication
    */
   void multiply_state_variable(const Eigen::MatrixXd& lambda, const JointStateVariable& state_variable_type);
 
   /**
-   * @brief Getter of the variable value corresponding to the input
-   * @param state_variable_type the type of variable to get
-   * @return the value of the variable as a vector
+   * @brief Getter of the variable value corresponding to the input.
+   * @param state_variable_type The type of variable to get
+   * @return The value of the variable as a vector
    */
   Eigen::VectorXd get_state_variable(const JointStateVariable& state_variable_type) const;
 
   /**
-   * @brief Setter of the variable value corresponding to the input
-   * @param new_value the new value of the variable
-   * @param state_variable_type the type of variable to get
+   * @brief Setter of the variable value corresponding to the input.
+   * @param new_value The new value of the variable
+   * @param state_variable_type The type of variable to get
    */
   void set_state_variable(const Eigen::VectorXd& new_value, const JointStateVariable& state_variable_type);
 
 public:
   /**
-   * @brief Empty constructor for a JointState
+   * @brief Empty constructor for a JointState.
    */
   explicit JointState();
 
   /**
-   * @brief Constructor with name and number of joints provided
-   * @param robot_name the name of the associated robot
-   * @param nb_joints the number of joints for initialization
+   * @brief Constructor with name and number of joints provided.
+   * @param robot_name The name of the associated robot
+   * @param nb_joints The number of joints for initialization
    */
   explicit JointState(const std::string& robot_name, unsigned int nb_joints = 0);
 
   /**
-   * @brief Constructor with name and list of joint names provided
-   * @param robot_name the name of the associated robot
-   * @param joint_names list of joint names
+   * @brief Constructor with name and list of joint names provided.
+   * @param robot_name The name of the associated robot
+   * @param joint_names List of joint names
    */
   explicit JointState(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Copy constructor of a JointState
+   * @brief Copy constructor of a JointState.
+   * @param state The JointState to copy from
    */
   JointState(const JointState& state) = default;
 
   /**
-   * @brief Constructor for the zero JointState
-   * @param robot_name the name of the associated robot
-   * @param nb_joints the number of joints for initialization
+   * @brief Constructor for the zero JointState.
+   * @param robot_name The name of the associated robot
+   * @param nb_joints The number of joints for initialization
    * @return JointState with zero values in all attributes
    */
   static JointState Zero(const std::string& robot_name, unsigned int nb_joints);
 
   /**
-   * @brief Constructor for the zero JointState
-   * @param robot_name the name of the associated robot
-   * @param joint_names list of joint names
+   * @brief Constructor for the zero JointState.
+   * @param robot_name The name of the associated robot
+   * @param joint_names List of joint names
    * @return JointState with zero values in all attributes
    */
   static JointState Zero(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Constructor for the random JointState
-   * @param robot_name the name of the associated robot
-   * @param nb_joints the number of joints for initialization
+   * @brief Constructor for the random JointState.
+   * @param robot_name The name of the associated robot
+   * @param nb_joints The number of joints for initialization
    * @return JointState with random values in all attributes
    */
   static JointState Random(const std::string& robot_name, unsigned int nb_joints);
 
   /**
-   * @brief Constructor for the random JointState
-   * @param robot_name the name of the associated robot
-   * @param joint_names list of joint names
+   * @brief Constructor for the random JointState.
+   * @param robot_name The name of the associated robot
+   * @param joint_names List of joint names
    * @return JointState with random values in all attributes
    */
   static JointState Random(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Swap the values of the two JointState
+   * @brief Swap the values of the two JointState.
    * @param state1 JointState to be swapped with 2
    * @param state2 JointState to be swapped with 1
    */
   friend void swap(JointState& state1, JointState& state2);
 
   /**
-   * @brief Copy assignment operator that have to be defined to the custom assignment operator
-   * @param state the state with value to assign
-   * @return reference to the current state with new values
+   * @brief Copy assignment operator that have to be defined to the custom assignment operator.
+   * @param state The state with value to assign
+   * @return Reference to the current state with new values
    */
   JointState& operator=(const JointState& state);
 
   /**
-   * @brief Getter of the size from the attributes
+   * @brief Getter of the size from the attributes.
+   * @return The size of the joint state
    */
   unsigned int get_size() const;
 
   /**
-   * @brief Getter of the names attribute
+   * @brief Getter of the names attribute.
+   * @return The vector of strings containing the joint names
    */
   const std::vector<std::string>& get_names() const;
 
   /**
-   * @brief Setter of the names attribute from the number of joints
+   * @brief Setter of the names attribute from the number of joints.
+   * @param nb_joints The number of joints of the joint state
    */
   void set_names(unsigned int nb_joints);
 
   /**
-   * @brief Setter of the names attribute
+   * @brief Setter of the names attribute.
+   * @param names The vector of strings containing the joint names
    */
   void set_names(const std::vector<std::string>& names);
 
+  /**
+   * @brief Get joint index by the name of the joint, if it exists.
+   * @param joint_name The name of the desired joint
+   * @return The index of the joint, if it exists
+   */
   unsigned int get_joint_index(const std::string& joint_name) const;
 
   /**
-   * @brief Getter of the positions attribute
+   * @brief Getter of the positions attribute.
+   * @return The joint positions
    */
   const Eigen::VectorXd& get_positions() const;
 
+  /**
+   * @brief Get the position of a joint by its name, if it exists.
+   * @param joint_name The name of the joint
+   * @return The position of the joint, if it exists
+   */
   double get_position(const std::string& joint_name) const;
 
+  /**
+   * @brief Get the position of a joint by its index, if it exists.
+   * @param joint_index The index of the joint
+   * @return The position of the joint, if it exists
+   */
   double get_position(unsigned int joint_index) const;
 
   /**
-   * @brief Setter of the positions attribute
+   * @brief Setter of the positions attribute.
+   * @param positions The joint positions as Eigen vector
    */
   void set_positions(const Eigen::VectorXd& positions);
 
   /**
-   * @brief Setter of the positions from std vector
+   * @brief Setter of the positions from std vector.
+   * @param positions The joint positions as std vector
    */
   void set_positions(const std::vector<double>& positions);
 
   /**
-   * @brief Getter of the velocities attribute
+   * @brief Getter of the velocities attribute.
+   * @return The joint velocities
    */
   const Eigen::VectorXd& get_velocities() const;
 
+  /**
+   * @brief Get the velocity of a joint by its name, if it exists.
+   * @param joint_name The name of the joint
+   * @return The velocity of the joint, if it exists
+   */
   double get_velocity(const std::string& joint_name) const;
 
+  /**
+   * @brief Get the velocity of a joint by its index, if it exists.
+   * @param joint_index The index of the joint
+   * @return The velocity of the joint, if it exists
+   */
   double get_velocity(unsigned int joint_index) const;
 
   /**
-   * @brief Setter of the velocities attribute
+   * @brief Setter of the velocities attribute.
+   * @param velocities The joint velocities as Eigen vector
    */
   void set_velocities(const Eigen::VectorXd& velocities);
 
   /**
-   * @brief Setter of the velocities from std vector
+   * @brief Setter of the velocities from std vector.
+   * @param velocities The joint velocities as std vector
    */
   void set_velocities(const std::vector<double>& velocities);
 
   /**
-   * @brief Getter of the accelerations attribute
+   * @brief Getter of the accelerations attribute.
+   * @return The joint accelerations
    */
   const Eigen::VectorXd& get_accelerations() const;
 
+  /**
+   * @brief Get the acceleration of a joint by its name, if it exists.
+   * @param joint_name The name of the joint
+   * @return The acceleration of the joint, if it exists
+   */
   double get_acceleration(const std::string& joint_name) const;
 
+  /**
+   * @brief Get the acceleration of a joint by its index, if it exists.
+   * @param joint_index The index of the joint
+   * @return The acceleration of the joint, if it exists
+   */
   double get_acceleration(unsigned int joint_index) const;
 
   /**
-   * @brief Setter of the accelerations attribute
+   * @brief Setter of the accelerations attribute.
+   * @param accelerations The joint accelerations as Eigen vector
    */
   void set_accelerations(const Eigen::VectorXd& accelerations);
 
   /**
-   * @brief Setter of the accelerations from std vector
+   * @brief Setter of the accelerations from std vector.
+   * @param accelerations The joint accelerations as std vector
    */
   void set_accelerations(const std::vector<double>& accelerations);
 
   /**
-   * @brief Getter of the torques attribute
+   * @brief Getter of the torques attribute.
+   * @return The joint torques
    */
   const Eigen::VectorXd& get_torques() const;
 
+  /**
+   * @brief Get the torque of a joint by its name, if it exists.
+   * @param joint_name The name of the joint
+   * @return The torque of the joint, if it exists
+   */
   double get_torque(const std::string& joint_name) const;
 
+  /**
+   * @brief Get the torque of a joint by its index, if it exists.
+   * @param joint_index The index of the joint
+   * @return The torque of the joint, if it exists
+   */
   double get_torque(unsigned int joint_index) const;
 
   /**
-   * @brief Setter of the torques attribute
+   * @brief Setter of the torques attribute.
+   * @param torques The joint torques as Eigen vector
    */
   void set_torques(const Eigen::VectorXd& torques);
 
   /**
-   * @brief Setter of the torques from std vector
+   * @brief Setter of the torques attributes.
+   * @param torques The joint torques as std vector
    */
   void set_torques(const std::vector<double>& torques);
 
   /**
-   * @brief Check if the state is compatible for operations with the state given as argument
-   * @param state the state to check compatibility with
+   * @brief Check if the state is compatible for operations with the state given as argument.
+   * @param state The state to check compatibility with
    */
   bool is_compatible(const State& state) const;
 
   /**
-   * @brief Initialize the State to a zero value
+   * @brief Initialize the State to a zero value.
    */
   void initialize();
 
   /**
-   * @brief Set the State to a zero value
+   * @brief Set the State to a zero value.
    */
   void set_zero();
 
   /**
-   * @brief Clamp inplace the magnitude of the a specific joint state variable
-   * @param max_absolute_value the maximum absolute value of the state variable
-   * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
-   * @param noise_ratio if provided, this value will be used to apply a dead zone relative to the maximum absolute value
+   * @brief Clamp inplace the magnitude of the a specific joint state variable.
+   * @param max_absolute_value The maximum absolute value of the state variable
+   * @param state_variable_type Name of the variable from the JointStateVariable structure to clamp
+   * @param noise_ratio If provided, this value will be used to apply a dead zone relative to the maximum absolute value
    * under which the state variable will be set to 0
    */
   void clamp_state_variable(
@@ -294,10 +356,10 @@ public:
 
   /**
    * @brief Clamp inplace the magnitude of the a specific joint state variable
-   * for each individual joint
-   * @param max_absolute_value_array the maximum absolute value of the state variable for each joints individually
-   * @param state_variable_type name of the variable from the JointStateVariable structure to clamp
-   * @param noise_ratio_array those values will be used to apply a dead zone relative to the maximum absolute value
+   * for each individual joint.
+   * @param max_absolute_value_array The maximum absolute value of the state variable for each joints individually
+   * @param state_variable_type Name of the variable from the JointStateVariable structure to clamp
+   * @param noise_ratio_array Those values will be used to apply a dead zone relative to the maximum absolute value
    * under which the state variable will be set to 0 for each individual joint
    */
   void clamp_state_variable(
@@ -306,163 +368,163 @@ public:
   );
 
   /**
-   * @brief Return a copy of the JointState
-   * @return the copy
+   * @brief Return a copy of the JointState.
+   * @return The copy
    */
   JointState copy() const;
 
   /**
    * @brief Returns the data as the concatenation of
-   * all the state variables in a single vector
-   * @return the concatenated data vector
+   * all the state variables in a single vector.
+   * @return The concatenated data vector
    */
   virtual Eigen::VectorXd data() const;
 
   /**
    * @brief Set the data of the state from
-   * all the state variables in a single Eigen vector
-   * @param the concatenated data vector
+   * all the state variables in a single Eigen vector.
+   * @param The concatenated data vector
    */
   virtual void set_data(const Eigen::VectorXd& data) override;
 
   /**
    * @brief Set the data of the state from
-   * all the state variables in a single std vector
-   * @param the concatenated data vector
+   * all the state variables in a single std vector.
+   * @param The concatenated data vector
    */
   virtual void set_data(const std::vector<double>& data) override;
 
   /**
-   * @brief Returns the data vector as an Eigen Array
-   * @return the concatenated data array
+   * @brief Returns the data vector as an Eigen Array.
+   * @return The concatenated data array
    */
   Eigen::ArrayXd array() const;
 
   /**
-   * @brief Overload the += operator
+   * @brief Overload the += operator.
    * @param state JointState to add
-   * @return the current JointState added the JointState given in argument
+   * @return The current JointState added the JointState given in argument
    */
   JointState& operator+=(const JointState& state);
 
   /**
-   * @brief Overload the + operator
+   * @brief Overload the + operator.
    * @param state JointState to add
-   * @return the current JointState added the JointState given in argument
+   * @return The current JointState added the JointState given in argument
    */
   JointState operator+(const JointState& state) const;
 
   /**
-   * @brief Overload the -= operator
+   * @brief Overload the -= operator.
    * @param state JointState to subtract
-   * @return the current JointState subtracted the JointState given in argument
+   * @return The current JointState subtracted the JointState given in argument
    */
   JointState& operator-=(const JointState& state);
 
   /**
-   * @brief Overload the - operator
+   * @brief Overload the - operator.
    * @param state JointState to subtract
-   * @return the current JointState subtracted the JointState given in argument
+   * @return The current JointState subtracted the JointState given in argument
    */
   JointState operator-(const JointState& state) const;
 
   /**
-   * @brief Overload the *= operator with a double gain
-   * @param lambda the gain to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the *= operator with a double gain.
+   * @param lambda The gain to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState& operator*=(double lambda);
 
   /**
-   * @brief Overload the * operator with a double gain
-   * @param lambda the gain to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the * operator with a double gain.
+   * @param lambda The gain to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState operator*(double lambda) const;
 
   /**
-   * @brief Overload the *= operator with an array of gains
-   * @param lambda the gain array to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the *= operator with an array of gains.
+   * @param lambda The gain array to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState& operator*=(const Eigen::ArrayXd& lambda);
 
   /**
-   * @brief Overload the * operator with an array of gains
-   * @param lambda the gain array to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the * operator with an array of gains.
+   * @param lambda The gain array to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState operator*(const Eigen::ArrayXd& lambda) const;
 
   /**
-   * @brief Overload the *= operator with a matrix of gains
-   * @param lambda the matrix to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the *= operator with a matrix of gains.
+   * @param lambda The matrix to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState& operator*=(const Eigen::MatrixXd& lambda);
 
   /**
-   * @brief Overload the * operator with a matrix of gains
-   * @param lambda the matrix to multiply with
-   * @return the JointState multiplied by lambda
+   * @brief Overload the * operator with a matrix of gains.
+   * @param lambda The matrix to multiply with
+   * @return The JointState multiplied by lambda
    */
   JointState operator*(const Eigen::MatrixXd& lambda) const;
 
   /**
-   * @brief Overload the /= operator with a scalar
-   * @param lambda the scalar to divide with
-   * @return the JointState divided by lambda
+   * @brief Overload the /= operator with a scalar.
+   * @param lambda The scalar to divide with
+   * @return The JointState divided by lambda
    */
   JointState& operator/=(double lambda);
 
   /**
-   * @brief Overload the / operator with a scalar
-   * @param lambda the scalar to divide with
-   * @return the JointState divided by lambda
+   * @brief Overload the / operator with a scalar.
+   * @param lambda The scalar to divide with
+   * @return The JointState divided by lambda
    */
   JointState operator/(double lambda) const;
 
   /**
-   * @brief Compute the distance to another state as the sum of distances between each features
-   * @param state the second state
-   * @param state_variable_type name of the variable from the JointStateVariable structure to apply
+   * @brief Compute the distance to another state as the sum of distances between each attribute.
+   * @param state The second state
+   * @param state_variable_type Name of the variable from the JointStateVariable structure to apply
    * the distance on (default ALL for full distance across all dimensions)
-   * @return dist the distance value as a double
+   * @return dist The distance value as a double
    */
   double dist(const JointState& state, const JointStateVariable& state_variable_type = JointStateVariable::ALL) const;
 
   /**
-   * @brief Overload the ostream operator for printing
-   * @param os the ostream to append the string representing the state
-   * @param state the state to print
-   * @return the appended ostream
+   * @brief Overload the ostream operator for printing.
+   * @param os The ostream to append the string representing the state
+   * @param state The state to print
+   * @return The appended ostream
    */
   friend std::ostream& operator<<(std::ostream& os, const JointState& state);
 
   /**
-   * @brief Overload the * operator with a scalar
-   * @param lambda the scalar to multiply with
-   * @return the JointState provided multiply by lambda
+   * @brief Overload the * operator with a scalar.
+   * @param lambda The scalar to multiply with
+   * @return The JointState provided multiply by lambda
    */
   friend JointState operator*(double lambda, const JointState& state);
 
   /**
-   * @brief Overload the * operator with an array of gains
-   * @param lambda the gain array to multiply with
-   * @return the JointState provided multiply by lambda
+   * @brief Overload the * operator with an array of gains.
+   * @param lambda The gain array to multiply with
+   * @return The JointState provided multiply by lambda
    */
   friend JointState operator*(const Eigen::ArrayXd& lambda, const JointState& state);
 
   /**
-   * @brief Overload the * operator with a matrix of gains
-   * @param lambda the matrix to multiply with
-   * @return the JointState provided multiply by lambda
+   * @brief Overload the * operator with a matrix of gains.
+   * @param lambda The matrix to multiply with
+   * @return The JointState provided multiply by lambda
    */
   friend JointState operator*(const Eigen::MatrixXd& lambda, const JointState& state);
 
   /**
-   * @brief Return the joint state as a std vector of floats
-   * @return std::vector<float> the joint vector as a std vector
+   * @brief Return the joint state as a std vector of floats.
+   * @return The joint vector as a std vector
    */
   std::vector<double> to_std_vector() const;
 };

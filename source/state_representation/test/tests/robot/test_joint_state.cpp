@@ -231,9 +231,9 @@ TEST(JointStateTest, GetSetData) {
 
 TEST(JointStateTest, GetNameByIndex) {
   JointState js = JointState::Random("test", 3);
-  auto index = js.get_joint_index_by_name("joint1");
+  auto index = js.get_joint_index("joint1");
   EXPECT_EQ(index, 1);
-  EXPECT_THROW(js.get_joint_index_by_name("joint5"), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_joint_index("joint5"), exceptions::JointNotFoundException);
 }
 
 TEST(JointStateTest, Distance) {

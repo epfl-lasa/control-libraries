@@ -2,7 +2,6 @@
 
 #include "state_representation/State.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
-#include "state_representation/exceptions/JointNotFoundException.hpp"
 
 using namespace state_representation::exceptions;
 
@@ -188,7 +187,7 @@ public:
    */
   void set_names(const std::vector<std::string>& names);
 
-  unsigned int get_joint_index_by_name(const std::string& joint_name) const;
+  unsigned int get_joint_index(const std::string& joint_name) const;
 
   /**
    * @brief Getter of the positions attribute
@@ -555,29 +554,8 @@ inline void JointState::set_names(const std::vector<std::string>& names) {
   this->names_ = names;
 }
 
-inline unsigned int JointState::get_joint_index_by_name(const std::string& joint_name) const {
-  auto finder = std::find(this->names_.begin(), this->names_.end(), joint_name);
-  if (finder == this->names_.end()) {
-    throw JointNotFoundException("The joint with name '" + joint_name + "' could not be found in the joint state.");
-  }
-  return std::distance(this->names_.begin(), finder);
-}
-
 inline const Eigen::VectorXd& JointState::get_positions() const {
   return this->positions_;
-}
-
-inline double JointState::get_position(const std::string& joint_name) const {
-  return this->positions_(this->get_joint_index_by_name(joint_name));
-}
-
-inline double JointState::get_position(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
-  return this->positions_(joint_index);
 }
 
 inline void JointState::set_positions(const Eigen::VectorXd& positions) {
@@ -592,20 +570,6 @@ inline const Eigen::VectorXd& JointState::get_velocities() const {
   return this->velocities_;
 }
 
-inline double JointState::get_velocity(const std::string& joint_name) const {
-  return this->velocities_(this->get_joint_index_by_name(joint_name));
-}
-
-inline double JointState::get_velocity(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
-  return this->velocities_(joint_index);
-}
-
-
 inline void JointState::set_velocities(const Eigen::VectorXd& velocities) {
   this->set_state_variable(this->velocities_, velocities);
 }
@@ -616,19 +580,6 @@ inline void JointState::set_velocities(const std::vector<double>& velocities) {
 
 inline const Eigen::VectorXd& JointState::get_accelerations() const {
   return this->accelerations_;
-}
-
-inline double JointState::get_acceleration(const std::string& joint_name) const {
-  return this->accelerations_(this->get_joint_index_by_name(joint_name));
-}
-
-inline double JointState::get_acceleration(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
-  return this->accelerations_(joint_index);
 }
 
 inline void JointState::set_accelerations(const Eigen::VectorXd& accelerations) {
@@ -642,20 +593,6 @@ inline void JointState::set_accelerations(const std::vector<double>& acceleratio
 inline const Eigen::VectorXd& JointState::get_torques() const {
   return this->torques_;
 }
-
-inline double JointState::get_torque(const std::string& joint_name) const {
-  return this->torques_(this->get_joint_index_by_name(joint_name));
-}
-
-inline double JointState::get_torque(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
-  return this->torques_(joint_index);
-}
-
 
 inline void JointState::set_torques(const Eigen::VectorXd& torques) {
   this->set_state_variable(this->torques_, torques);

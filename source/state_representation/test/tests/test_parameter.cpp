@@ -20,7 +20,6 @@ TEST(ParameterTest, Conversion) {
   for (std::size_t i = 0; i < values.size(); ++i) {
     EXPECT_EQ(int_array_param.get_value().at(i), values.at(i));
   }
-//  int_array_param.set_value({1, 2});
 
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);

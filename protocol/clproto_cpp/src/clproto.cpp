@@ -774,7 +774,7 @@ static bool decode_parameter(const std::string& msg, Parameter<T>& obj) {
 }
 
 /* ----------------------
- *        INT
+ *          INT
  * ---------------------- */
 template<>
 std::string encode<Parameter<int>>(const Parameter<int>& obj);
@@ -796,7 +796,7 @@ bool decode(const std::string& msg, Parameter<int>& obj) {
 }
 
 /* ----------------------
- *      INT_ARRAY
+ *       INT_ARRAY
  * ---------------------- */
 template<>
 std::string encode<Parameter<std::vector<int>>>(const Parameter<std::vector<int>>& obj);

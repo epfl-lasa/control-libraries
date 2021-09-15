@@ -121,16 +121,18 @@ Enumerations</h2></td></tr>
 <tr class="separator:a72ac218baa870e2fd3380b97ad065846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7b6f9404804c7526915782cc0e38945"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#aa7b6f9404804c7526915782cc0e38945">ParameterMessageType</a> { <br />
 &#160;&#160;<b>UNKNOWN_PARAMETER</b> = 0
+, <b>INT</b> = 9
+, <b>INT_ARRAY</b> = 10
 , <b>DOUBLE</b> = 1
-, <b>DOUBLE_ARRAY</b> = 2
+, <br />
+&#160;&#160;<b>DOUBLE_ARRAY</b> = 2
 , <b>BOOL</b> = 3
-, <br />
-&#160;&#160;<b>BOOL_ARRAY</b> = 4
+, <b>BOOL_ARRAY</b> = 4
 , <b>STRING</b> = 5
-, <b>STRING_ARRAY</b> = 6
-, <b>MATRIX</b> = 7
 , <br />
-&#160;&#160;<b>VECTOR</b> = 8
+&#160;&#160;<b>STRING_ARRAY</b> = 6
+, <b>MATRIX</b> = 7
+, <b>VECTOR</b> = 8
 <br />
  }</td></tr>
 <tr class="memdesc:aa7b6f9404804c7526915782cc0e38945"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ParameterMessageType enumeration contains the possible value types contained in a parameter message.  <a href="namespaceclproto.html#aa7b6f9404804c7526915782cc0e38945">More...</a><br /></td></tr>
@@ -334,6 +336,22 @@ template&lt;&gt; </td></tr>
 template&lt;&gt; </td></tr>
 <tr class="memitem:af72bba19475fec89465c93a1a13d6ae0"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_joint_torques.html">JointTorques</a> &amp;obj)</td></tr>
 <tr class="separator:af72bba19475fec89465c93a1a13d6ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memItemLeft" align="right" valign="top"><a id="a9946e207865c4ac1db0c8d93f1cc14d2"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; int &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;obj)</td></tr>
+<tr class="separator:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e78056aec834d4abafeff9afc2c0da3"><td class="memItemLeft" align="right" valign="top"><a id="a8e78056aec834d4abafeff9afc2c0da3"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a8e78056aec834d4abafeff9afc2c0da3"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;obj)</td></tr>
+<tr class="separator:a8e78056aec834d4abafeff9afc2c0da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08da884166f56cc390dda91499f12124"><td class="memItemLeft" align="right" valign="top"><a id="a08da884166f56cc390dda91499f12124"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a08da884166f56cc390dda91499f12124"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; std::vector&lt; int &gt; &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;obj)</td></tr>
+<tr class="separator:a08da884166f56cc390dda91499f12124"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62006db84ec6d59e68d142186a9d7315"><td class="memItemLeft" align="right" valign="top"><a id="a62006db84ec6d59e68d142186a9d7315"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a62006db84ec6d59e68d142186a9d7315"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;obj)</td></tr>
+<tr class="separator:a62006db84ec6d59e68d142186a9d7315"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a543360ff4c23738585a65cacdcb7514f"><td class="memItemLeft" align="right" valign="top"><a id="a543360ff4c23738585a65cacdcb7514f"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a543360ff4c23738585a65cacdcb7514f"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; double &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt; &amp;obj)</td></tr>
@@ -408,9 +426,17 @@ Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><b>decoder</b
 Eigen::Quaterniond&#160;</td><td class="memItemRight" valign="bottom"><b>decoder</b> (const proto::Quaterniond &amp;message)</td></tr>
 <tr class="separator:a1a61f3e20ad37c822022ddcb4a555fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">decoder</a> (const state_representation::proto::Parameter &amp;message)</td></tr>
+<tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">decoder</a> (const state_representation::proto::Parameter &amp;message)</td></tr>
 <tr class="memdesc:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoding helper method for the Parameter type.  <a href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">More...</a><br /></td></tr>
 <tr class="separator:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a902302e7bc4397173c44d5eca9393226"><td class="memItemLeft" align="right" valign="top"><a id="a902302e7bc4397173c44d5eca9393226"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a902302e7bc4397173c44d5eca9393226"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; int &gt; &amp;parameter)</td></tr>
+<tr class="separator:a902302e7bc4397173c44d5eca9393226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memItemLeft" align="right" valign="top"><a id="ae8763b5ab342f16628b3548b1f18e8fd"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;parameter)</td></tr>
+<tr class="separator:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa466ec18371c6370bbeba7fda7ab5aaa"><td class="memItemLeft" align="right" valign="top"><a id="aa466ec18371c6370bbeba7fda7ab5aaa"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:aa466ec18371c6370bbeba7fda7ab5aaa"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; double &gt; &amp;parameter)</td></tr>
@@ -958,7 +984,7 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new instance of the control libraries object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00221">221</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00223">223</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -1121,7 +1147,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The JSON formatted state message description </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00197">197</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00199">199</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>

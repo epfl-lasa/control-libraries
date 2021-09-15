@@ -197,6 +197,8 @@ Enumerations</h2></td></tr>
 , <b>PARAMETER_MATRIX</b>
 , <br />
 &#160;&#160;<b>PARAMETER_VECTOR</b>
+, <b>PARAMETER_INT</b>
+, <b>PARAMETER_INT_ARRAY</b>
 <br />
  }</td></tr>
 <tr class="separator:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,6 +232,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8f634bbd4f26da04441442608416301b"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; T &gt; &amp;parameter)</td></tr>
 <tr class="separator:a8f634bbd4f26da04441442608416301b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0354c80d49b1ea0b977c9fe9e2584cbc"><td class="memItemLeft" align="right" valign="top"><a id="a0354c80d49b1ea0b977c9fe9e2584cbc"></a>
+template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;parameter)</td></tr>
+<tr class="separator:a0354c80d49b1ea0b977c9fe9e2584cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b75e8198b9823b537836c17e236ac01"><td class="memItemLeft" align="right" valign="top"><a id="a0b75e8198b9823b537836c17e236ac01"></a>
 template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt; &amp;parameter)</td></tr>
 <tr class="separator:a0b75e8198b9823b537836c17e236ac01"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -260,6 +265,10 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a9ce26842f86041e3688925c88bb4e6fc"><td class="memItemLeft" align="right" valign="top"><a id="a9ce26842f86041e3688925c88bb4e6fc"></a>
 template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; Eigen::VectorXd &gt; &amp;parameter)</td></tr>
 <tr class="separator:a9ce26842f86041e3688925c88bb4e6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0356956617dcde9988ef7ebafc32a549"><td class="memItemLeft" align="right" valign="top"><a id="a0356956617dcde9988ef7ebafc32a549"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a0356956617dcde9988ef7ebafc32a549"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;parameter)</td></tr>
+<tr class="separator:a0356956617dcde9988ef7ebafc32a549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ff6c9d6b19375bdca41c127e5c334d"><td class="memItemLeft" align="right" valign="top"><a id="ae1ff6c9d6b19375bdca41c127e5c334d"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:ae1ff6c9d6b19375bdca41c127e5c334d"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; double &gt;&gt; &amp;parameter)</td></tr>
@@ -2461,7 +2470,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00178">178</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00179">179</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

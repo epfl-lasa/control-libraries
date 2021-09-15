@@ -7,6 +7,23 @@ from numpy.testing import assert_array_equal
 
 class TestParameters(unittest.TestCase):
 
+    def test_param_int(self):
+        param = sr.Parameter("int", sr.StateType.PARAMETER_INT)
+        self.assertTrue(param.is_empty())
+        self.assertEqual(param.get_name(), "int")
+        self.assertEqual(param.get_type(), sr.StateType.PARAMETER_INT)
+        param.set_value(1)
+        self.assertEqual(param.get_value(), 1)
+
+    def test_param_int_array(self):
+        param = sr.Parameter("int_array", sr.StateType.PARAMETER_INT_ARRAY)
+        self.assertTrue(param.is_empty())
+        self.assertEqual(param.get_name(), "int_array")
+        self.assertEqual(param.get_type(), sr.StateType.PARAMETER_INT_ARRAY)
+        values = [2, 3, 4]
+        param.set_value(values)
+        [self.assertEqual(param.get_value()[i], values[i]) for i in range(len(values))]
+
     def test_param_double(self):
         param = sr.Parameter("double", sr.StateType.PARAMETER_DOUBLE)
         self.assertTrue(param.is_empty())

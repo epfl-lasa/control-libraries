@@ -7,6 +7,8 @@
 #include <state_representation/robot/JointPositions.hpp>
 
 struct ParameterValues {
+  int int_value;
+  std::vector<int> int_array_value;
   double double_value;
   std::vector<double> double_array_value;
   bool bool_value;
@@ -45,6 +47,12 @@ void parameter(py::module_& m) {
 
   c.def("set_value", [](ParameterContainer& parameter, const py::object& value) {
     switch (parameter.get_type()) {
+      case StateType::PARAMETER_INT:
+        parameter.values.int_value = value.cast<int>();
+        break;
+      case StateType::PARAMETER_INT_ARRAY:
+        parameter.values.int_array_value = value.cast<std::vector<int>>();
+        break;
       case StateType::PARAMETER_DOUBLE:
         parameter.values.double_value = value.cast<double>();
         break;
@@ -88,6 +96,10 @@ void parameter(py::module_& m) {
 
   c.def("get_value", [](const ParameterContainer& parameter) -> py::object {
     switch (parameter.get_type()) {
+      case StateType::PARAMETER_INT:
+        return py::cast(parameter.values.int_value);
+      case StateType::PARAMETER_INT_ARRAY:
+        return py::cast(parameter.values.int_array_value);
       case StateType::PARAMETER_DOUBLE:
         return py::cast(parameter.values.double_value);
       case StateType::PARAMETER_DOUBLE_ARRAY:
@@ -120,6 +132,16 @@ void parameter(py::module_& m) {
   c.def("__repr__", [](const ParameterContainer& parameter) {
     std::stringstream buffer;
     switch (parameter.get_type()) {
+      case StateType::PARAMETER_INT: {
+        Parameter<int> param(parameter.get_name(), parameter.values.int_value);
+        buffer << param;
+        break;
+      }
+      case StateType::PARAMETER_INT_ARRAY: {
+        Parameter<std::vector<int>> param(parameter.get_name(), parameter.values.int_array_value);
+        buffer << param;
+        break;
+      }
       case StateType::PARAMETER_DOUBLE: {
         Parameter<double> param(parameter.get_name(), parameter.values.double_value);
         buffer << param;

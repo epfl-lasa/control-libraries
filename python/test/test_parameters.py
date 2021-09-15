@@ -17,6 +17,10 @@ class TestParameters(unittest.TestCase):
         self.assertTrue(joint1.get_size(), joint2.get_size())
         assert_array_equal(joint1.data(), joint2.data())
 
+    def test_param_invalid(self):
+        param = sr.Parameter("test", sr.StateType.CARTESIANSTATE)
+        self.assertRaises(ValueError, param.set_value, 1)
+
     def test_param_int(self):
         param = sr.Parameter("int", sr.StateType.PARAMETER_INT)
         self.assertTrue(param.is_empty())

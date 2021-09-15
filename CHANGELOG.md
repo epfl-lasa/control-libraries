@@ -12,6 +12,7 @@ Release Versions:
 - Python bindings for clproto (#204)
 - JSON conversion support for clproto (#205)
 - Support empty state objects in clproto (#207)
+- Add int and int array parameters (#208)
 
 ## 4.0.0
 

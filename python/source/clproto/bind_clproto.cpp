@@ -50,6 +50,8 @@ void message_type(py::module_& m) {
 void parameter_message_type(py::module_& m) {
   py::enum_<ParameterMessageType>(m, "ParameterMessageType")
       .value("UNKNOWN_PARAMETER", ParameterMessageType::UNKNOWN_PARAMETER)
+      .value("INT", ParameterMessageType::INT)
+      .value("INT_ARRAY", ParameterMessageType::INT_ARRAY)
       .value("DOUBLE", ParameterMessageType::DOUBLE)
       .value("DOUBLE_ARRAY", ParameterMessageType::DOUBLE_ARRAY)
       .value("BOOL", ParameterMessageType::BOOL)

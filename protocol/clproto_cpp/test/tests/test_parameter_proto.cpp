@@ -21,6 +21,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterInt) {
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_EQ(send_state.get_value(), recv_state.get_value());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterIntArray) {
@@ -41,6 +42,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterIntArray) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_EQ(send_state.get_value().at(index), recv_state.get_value().at(index));
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterDouble) {
@@ -58,6 +60,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterDouble) {
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_EQ(send_state.get_value(), recv_state.get_value());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterDoubleArray) {
@@ -78,6 +81,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterDoubleArray) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_EQ(send_state.get_value().at(index), recv_state.get_value().at(index));
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterBool) {
@@ -95,6 +99,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterBool) {
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_EQ(send_state.get_value(), recv_state.get_value());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterBoolArray) {
@@ -115,6 +120,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterBoolArray) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_EQ(send_state.get_value().at(index), recv_state.get_value().at(index));
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterString) {
@@ -132,6 +138,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterString) {
 
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_value().c_str(), recv_state.get_value().c_str());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterStringArray) {
@@ -152,6 +159,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterStringArray) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_STREQ(send_state.get_value().at(index).c_str(), recv_state.get_value().at(index).c_str());
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterVector) {
@@ -173,6 +181,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterVector) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_EQ(send_state.get_value()(index), recv_state.get_value()(index));
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeParameterMatrix) {
@@ -196,6 +205,7 @@ TEST(ParameterProtoTest, EncodeDecodeParameterMatrix) {
   for(std::size_t index = 0; index < send_state.get_value().size(); ++index) {
     EXPECT_EQ(send_state.get_value()(index), recv_state.get_value()(index));
   }
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeEmptyParameterDouble) {
@@ -207,6 +217,7 @@ TEST(ParameterProtoTest, EncodeDecodeEmptyParameterDouble) {
   Parameter<double> recv_state("");
   EXPECT_NO_THROW(recv_state = clproto::decode<Parameter<double>>(msg));
   EXPECT_TRUE(recv_state.is_empty());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeEmptyParameterBool) {
@@ -218,6 +229,7 @@ TEST(ParameterProtoTest, EncodeDecodeEmptyParameterBool) {
   Parameter<bool> recv_state("");
   EXPECT_NO_THROW(recv_state = clproto::decode<Parameter<bool>>(msg));
   EXPECT_TRUE(recv_state.is_empty());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }
 
 TEST(ParameterProtoTest, EncodeDecodeEmptyParameterString) {
@@ -229,4 +241,5 @@ TEST(ParameterProtoTest, EncodeDecodeEmptyParameterString) {
   Parameter<std::string> recv_state("");
   EXPECT_NO_THROW(recv_state = clproto::decode<Parameter<std::string>>(msg));
   EXPECT_TRUE(recv_state.is_empty());
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
 }

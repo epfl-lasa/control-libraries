@@ -81,6 +81,8 @@ enum MessageType {
  */
 enum ParameterMessageType {
   UNKNOWN_PARAMETER = 0,
+  INT = 9,
+  INT_ARRAY = 10,
   DOUBLE = 1,
   DOUBLE_ARRAY = 2,
   BOOL = 3,

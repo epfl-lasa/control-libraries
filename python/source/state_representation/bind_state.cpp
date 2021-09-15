@@ -12,6 +12,8 @@ void state_type(py::module_& m) {
       .value("JACOBIANMATRIX", StateType::JACOBIANMATRIX)
       .value("GEOMETRY_SHAPE", StateType::GEOMETRY_SHAPE)
       .value("GEOMETRY_ELLIPSOID", StateType::GEOMETRY_ELLIPSOID)
+      .value("PARAMETER_INT", StateType::PARAMETER_INT)
+      .value("PARAMETER_INT_ARRAY", StateType::PARAMETER_INT_ARRAY)
       .value("PARAMETER_DOUBLE", StateType::PARAMETER_DOUBLE)
       .value("PARAMETER_DOUBLE_ARRAY", StateType::PARAMETER_DOUBLE_ARRAY)
       .value("PARAMETER_BOOL", StateType::PARAMETER_BOOL)

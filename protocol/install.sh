@@ -75,7 +75,7 @@ function install_state_representation() {
 function install_clproto() {
   cd "${CLPROTO_DIR}" && mkdir -p build && cd build || exit 1
 
-  cmake -DCMAKE_BUILD_TYPE=Release \
+  cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=On \
     -DCMAKE_INSTALL_PREFIX="${INSTALL_DESTINATION}" .. || exit 1
 
   make -j && make install || exit 1

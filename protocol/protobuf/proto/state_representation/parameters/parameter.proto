@@ -12,6 +12,8 @@ message Parameter {
 
 message ParameterValue {
   oneof value_type {
+    parameter.Int int = 9;
+    parameter.IntArray int_array = 10;
     parameter.Double double = 1;
     parameter.DoubleArray double_array = 2;
     parameter.Bool bool = 3;

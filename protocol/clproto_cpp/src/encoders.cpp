@@ -90,6 +90,22 @@ proto::JointState encoder(const JointState& joint_state) {
 }
 
 template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<int>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() = encoder(static_cast<state_representation::State>(parameter));
+  message.mutable_parameter_value()->mutable_int_()->set_value(parameter.get_value());
+  return message;
+}
+
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<std::vector<int>>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() = encoder(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_int_array()->mutable_value() =
+      {parameter.get_value().begin(), parameter.get_value().end()};
+  return message;
+}
+template<>
 state_representation::proto::Parameter encoder(const state_representation::Parameter<double>& parameter) {
   state_representation::proto::Parameter message;
   *message.mutable_state() = encoder(static_cast<state_representation::State>(parameter));

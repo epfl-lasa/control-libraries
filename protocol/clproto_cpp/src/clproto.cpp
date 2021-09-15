@@ -774,6 +774,50 @@ static bool decode_parameter(const std::string& msg, Parameter<T>& obj) {
 }
 
 /* ----------------------
+ *        INT
+ * ---------------------- */
+template<>
+std::string encode<Parameter<int>>(const Parameter<int>& obj);
+template<>
+Parameter<int> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<int>& obj);
+template<>
+std::string encode<Parameter<int>>(const Parameter<int>& obj) {
+return encode_parameter(obj);
+}
+template<>
+Parameter<int> decode(const std::string& msg) {
+  return decode_parameter<int>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<int>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
+ *      INT_ARRAY
+ * ---------------------- */
+template<>
+std::string encode<Parameter<std::vector<int>>>(const Parameter<std::vector<int>>& obj);
+template<>
+Parameter<std::vector<int>> decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<int>>& obj);
+template<>
+std::string encode<Parameter<std::vector<int>>>(const Parameter<std::vector<int>>& obj) {
+  return encode_parameter(obj);
+}
+template<>
+Parameter<std::vector<int>> decode(const std::string& msg) {
+  return decode_parameter<std::vector<int>>(msg);
+}
+template<>
+bool decode(const std::string& msg, Parameter<std::vector<int>>& obj) {
+  return decode_parameter(msg, obj);
+}
+
+/* ----------------------
  *        DOUBLE
  * ---------------------- */
 template<>

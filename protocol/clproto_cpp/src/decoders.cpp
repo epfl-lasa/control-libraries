@@ -23,6 +23,15 @@ Eigen::Quaterniond decoder(const proto::Quaterniond& message) {
 }
 
 template<>
+Parameter<int> decoder(const state_representation::proto::Parameter& message) {
+  return Parameter<int>(message.state().name(), message.parameter_value().int_().value());
+}
+template<>
+Parameter<std::vector<int>> decoder(const state_representation::proto::Parameter& message) {
+  return Parameter<std::vector<int>>(
+      message.state().name(), decoder(message.parameter_value().int_array().value()));
+}
+template<>
 Parameter<double> decoder(const state_representation::proto::Parameter& message) {
   return Parameter<double>(message.state().name(), message.parameter_value().double_().value());
 }

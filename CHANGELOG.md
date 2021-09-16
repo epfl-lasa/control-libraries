@@ -13,6 +13,8 @@ Release Versions:
 - JSON conversion support for clproto (#205)
 - Support empty state objects in clproto (#207)
 - Add int and int array parameters (#208)
+- Add method to get a joint state by name or index of the joint,
+  and to get the index of the joint by its name (#210)
 
 ## 4.0.0
 

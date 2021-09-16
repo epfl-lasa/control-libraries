@@ -194,6 +194,8 @@ public:
 
   /**
    * @brief Get joint index by the name of the joint, if it exists.
+   * @details A JointNotFoundException exception is thrown if the
+   * desired joint doesn't exist.
    * @param joint_name The name of the desired joint
    * @return The index of the joint, if it exists
    */
@@ -207,6 +209,7 @@ public:
 
   /**
    * @brief Get the position of a joint by its name, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_name The name of the joint
    * @return The position of the joint, if it exists
    */
@@ -214,6 +217,7 @@ public:
 
   /**
    * @brief Get the position of a joint by its index, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_index The index of the joint
    * @return The position of the joint, if it exists
    */
@@ -239,6 +243,7 @@ public:
 
   /**
    * @brief Get the velocity of a joint by its name, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_name The name of the joint
    * @return The velocity of the joint, if it exists
    */
@@ -246,6 +251,7 @@ public:
 
   /**
    * @brief Get the velocity of a joint by its index, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_index The index of the joint
    * @return The velocity of the joint, if it exists
    */
@@ -271,6 +277,7 @@ public:
 
   /**
    * @brief Get the acceleration of a joint by its name, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_name The name of the joint
    * @return The acceleration of the joint, if it exists
    */
@@ -278,6 +285,7 @@ public:
 
   /**
    * @brief Get the acceleration of a joint by its index, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_index The index of the joint
    * @return The acceleration of the joint, if it exists
    */
@@ -303,6 +311,7 @@ public:
 
   /**
    * @brief Get the torque of a joint by its name, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_name The name of the joint
    * @return The torque of the joint, if it exists
    */
@@ -310,6 +319,7 @@ public:
 
   /**
    * @brief Get the torque of a joint by its index, if it exists.
+   * @copydetails JointState::get_joint_index()
    * @param joint_index The index of the joint
    * @return The torque of the joint, if it exists
    */

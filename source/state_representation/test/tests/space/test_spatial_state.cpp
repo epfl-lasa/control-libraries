@@ -7,7 +7,7 @@ using namespace state_representation;
 TEST(SpatialStateTest, Constructors) {
   SpatialState state1(StateType::JOINTSTATE);
   EXPECT_EQ(state1.get_type(), StateType::JOINTSTATE);
-  EXPECT_EQ(state1.get_name(), "none");
+  EXPECT_EQ(state1.get_name(), "");
   EXPECT_EQ(state1.get_reference_frame(), "world");
   EXPECT_TRUE(state1.is_empty());
 

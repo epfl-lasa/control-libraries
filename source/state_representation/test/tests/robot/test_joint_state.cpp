@@ -10,7 +10,7 @@ using namespace state_representation;
 
 TEST(JointStateTest, Constructors) {
   JointState empty;
-  EXPECT_EQ(empty.get_name(), "none");
+  EXPECT_EQ(empty.get_name(), "");
   EXPECT_EQ(empty.get_type(), StateType::JOINTSTATE);
   EXPECT_TRUE(empty.is_empty());
   EXPECT_EQ(empty.get_size(), 0);

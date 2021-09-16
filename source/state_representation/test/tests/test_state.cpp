@@ -9,12 +9,12 @@ using namespace state_representation;
 TEST(StateTest, Constructors) {
   State empty1;
   EXPECT_EQ(empty1.get_type(), StateType::STATE);
-  EXPECT_EQ(empty1.get_name(), "none");
+  EXPECT_EQ(empty1.get_name(), "");
   EXPECT_TRUE(empty1.is_empty());
 
   State empty2(StateType::JOINTSTATE);
   EXPECT_EQ(empty2.get_type(), StateType::JOINTSTATE);
-  EXPECT_EQ(empty2.get_name(), "none");
+  EXPECT_EQ(empty2.get_name(), "");
   EXPECT_TRUE(empty2.is_empty());
 
   State empty3(StateType::CARTESIANSTATE, "test", true);

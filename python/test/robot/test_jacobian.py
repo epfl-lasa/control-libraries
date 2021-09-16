@@ -1,6 +1,7 @@
 import unittest
-from state_representation import Jacobian, CartesianPose, CartesianTwist, CartesianWrench, JointVelocities
+
 import numpy as np
+from state_representation import Jacobian, CartesianPose, CartesianTwist, CartesianWrench, JointVelocities
 
 JACOBIAN_METHOD_EXPECTS = [
     'Random',
@@ -24,6 +25,7 @@ JACOBIAN_METHOD_EXPECTS = [
     'copy',
 ]
 
+
 class TestJacobian(unittest.TestCase):
     def assert_np_array_equal(self, a, b):
         self.assertListEqual(list(a), list(b))
@@ -43,8 +45,8 @@ class TestJacobian(unittest.TestCase):
         A = Jacobian("robot", 7, "ee")
         Jacobian(A)
         Jacobian("robot", ["joint_0", "joint_1"], "ee", "robot")
-        Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
-        B = Jacobian.Random("robot", 7, "ee")
+        Jacobian.Random("", ["joint_0", "joint_1"], "ee", "robot")
+        B = Jacobian.Random("", 7, "ee")
         B.copy()
 
     def test_getters(self):
@@ -82,12 +84,13 @@ class TestJacobian(unittest.TestCase):
 
         joint_velocities = JointVelocities.Random("test", 3)
         twist = jac * joint_velocities
-        self.assert_np_array_almost_equal(joint_velocities.get_velocities(), (jac.pseudoinverse() * twist).get_velocities())
+        self.assert_np_array_almost_equal(joint_velocities.get_velocities(),
+                                          (jac.pseudoinverse() * twist).get_velocities())
 
         wrench = CartesianWrench.Random("ee", "robot")
         torques = jac.transpose() * wrench
 
-        pose = CartesianPose.Random("robot", "world")
+        pose = CartesianPose.Random("", "world")
         jac_in_world = pose * jac
 
 

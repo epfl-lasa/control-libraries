@@ -22,7 +22,6 @@ void spatial_state(py::module_& m) {
   c.def("__repr__", [](const SpatialState& state) {
     std::stringstream buffer;
     buffer << state;
-    buffer << state;
     return buffer.str();
   });
 }

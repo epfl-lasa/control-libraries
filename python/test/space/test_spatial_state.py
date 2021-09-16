@@ -23,7 +23,7 @@ class TestState(unittest.TestCase):
     def test_constructors(self):
         state1 = SpatialState(StateType.JOINTSTATE)
         self.assertEqual(state1.get_type(), StateType.JOINTSTATE)
-        self.assertEqual(state1.get_name(), "none")
+        self.assertEqual(state1.get_name(), "")
         self.assertEqual(state1.get_reference_frame(), "world")
         self.assertTrue(state1.is_empty())
 

@@ -28,12 +28,12 @@ class TestState(unittest.TestCase):
     def test_constructors(self):
         empty1 = State()
         self.assertEqual(empty1.get_type(), StateType.STATE)
-        self.assertEqual(empty1.get_name(), "none")
+        self.assertEqual(empty1.get_name(), "")
         self.assertTrue(empty1.is_empty())
 
         empty2 = State(StateType.JOINTSTATE)
         self.assertEqual(empty2.get_type(), StateType.JOINTSTATE)
-        self.assertEqual(empty2.get_name(), "none")
+        self.assertEqual(empty2.get_name(), "")
         self.assertTrue(empty2.is_empty())
 
         empty3 = State(StateType.CARTESIANSTATE, "test", True)

@@ -33,8 +33,6 @@ void state_type(py::module_& m) {
 void state(py::module_& m) {
   py::class_<State> c(m, "State");
 
-  m.def("swap", py::overload_cast<State&, State&>(&state_representation::swap), "Swap the values of the two States", "state1"_a, "state2"_a);
-
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const StateType&>(), "Constructor only specifying the type of the state from the StateType enumeration", "type"_a);
   c.def(py::init<const StateType&, const std::string&, const bool&>(), "Constructor with name specification", "type"_a, "name"_a, "empty"_a=true);

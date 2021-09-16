@@ -7,7 +7,10 @@ fi
 echo "Using control libraries branch ${BRANCH}"
 
 docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
-docker build . --file ./Dockerfile.python --build-arg BRANCH="${BRANCH}" --tag control-libraries/python/test || exit 1
+docker build . --file ./Dockerfile.python \
+  --build-arg BRANCH="${BRANCH}" \
+  --target dev-user \
+  --tag control-libraries/python/test || exit 1
 
 docker run -it --rm \
   --volume "$(pwd)":/source/control-libraries/python \

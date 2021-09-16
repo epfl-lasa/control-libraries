@@ -1,4 +1,5 @@
-FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
+ARG BASE_IMAGE=ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
+FROM ${BASE_IMAGE} AS python-install
 ARG BRANCH=develop
 
 WORKDIR /source
@@ -10,16 +11,19 @@ COPY source control-libraries/python/source
 COPY pyproject.toml setup.py control-libraries/python/
 RUN pip3 install control-libraries/python
 
+
+FROM python-install AS dev-user
+
 RUN useradd --create-home --shell /bin/bash dev
 USER dev
 WORKDIR /home/dev
-
-RUN (\
-    echo "alias pip=pip3"; \
-    echo 'alias python=python3'; \
-    ) >> ./.bashrc
 
 COPY test ./test
 RUN python3 -m unittest
 
 CMD ["/bin/bash"]
+
+
+FROM python-install AS remote-user
+
+ENTRYPOINT ["/.ssh_entrypoint.sh"]

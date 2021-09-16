@@ -1,10 +1,18 @@
 #include "state_representation/robot/JointState.hpp"
 
 #include "state_representation/exceptions/EmptyStateException.hpp"
+#include "state_representation/exceptions/JointNotFoundException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
-#include "state_representation/exceptions/NotImplementedException.hpp"
 
 namespace state_representation {
+
+static void assert_index_in_range(unsigned int joint_index, unsigned int size) {
+  if (joint_index > size) {
+    throw JointNotFoundException(
+        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size" + std::to_string(size));
+  }
+}
+
 JointState::JointState() : State(StateType::JOINTSTATE) {
   this->initialize();
 }
@@ -65,6 +73,50 @@ JointState JointState::Random(const std::string& robot_name, const std::vector<s
   // set all the state variables to random
   random.set_state_variable(Eigen::VectorXd::Random(random.get_size() * 4), JointStateVariable::ALL);
   return random;
+}
+
+unsigned int JointState::get_joint_index(const std::string& joint_name) const {
+  auto finder = std::find(this->names_.begin(), this->names_.end(), joint_name);
+  if (finder == this->names_.end()) {
+    throw JointNotFoundException("The joint with name '" + joint_name + "' could not be found in the joint state.");
+  }
+  return std::distance(this->names_.begin(), finder);
+}
+
+double JointState::get_position(const std::string& joint_name) const {
+  return this->positions_(this->get_joint_index(joint_name));
+}
+
+double JointState::get_position(unsigned int joint_index) const {
+  assert_index_in_range(joint_index, this->get_size());
+  return this->positions_(joint_index);
+}
+
+double JointState::get_velocity(const std::string& joint_name) const {
+  return this->velocities_(this->get_joint_index(joint_name));
+}
+
+double JointState::get_velocity(unsigned int joint_index) const {
+  assert_index_in_range(joint_index, this->get_size());
+  return this->velocities_(joint_index);
+}
+
+double JointState::get_acceleration(const std::string& joint_name) const {
+  return this->accelerations_(this->get_joint_index(joint_name));
+}
+
+double JointState::get_acceleration(unsigned int joint_index) const {
+  assert_index_in_range(joint_index, this->get_size());
+  return this->accelerations_(joint_index);
+}
+
+double JointState::get_torque(const std::string& joint_name) const {
+  return this->torques_(this->get_joint_index(joint_name));
+}
+
+double JointState::get_torque(unsigned int joint_index) const {
+  assert_index_in_range(joint_index, this->get_size());
+  return this->torques_(joint_index);
 }
 
 JointState& JointState::operator+=(const JointState& state) {

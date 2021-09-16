@@ -123,7 +123,7 @@ public:
   JointState(const JointState& state) = default;
 
   /**
-   * @brief Constructor for the zero JointState.
+   * @brief Constructor for a zero JointState.
    * @param robot_name The name of the associated robot
    * @param nb_joints The number of joints for initialization
    * @return JointState with zero values in all attributes
@@ -131,7 +131,7 @@ public:
   static JointState Zero(const std::string& robot_name, unsigned int nb_joints);
 
   /**
-   * @brief Constructor for the zero JointState.
+   * @brief Constructor for a zero JointState.
    * @param robot_name The name of the associated robot
    * @param joint_names List of joint names
    * @return JointState with zero values in all attributes
@@ -139,7 +139,7 @@ public:
   static JointState Zero(const std::string& robot_name, const std::vector<std::string>& joint_names);
 
   /**
-   * @brief Constructor for the random JointState.
+   * @brief Constructor for a random JointState.
    * @param robot_name The name of the associated robot
    * @param nb_joints The number of joints for initialization
    * @return JointState with random values in all attributes
@@ -147,7 +147,7 @@ public:
   static JointState Random(const std::string& robot_name, unsigned int nb_joints);
 
   /**
-   * @brief Constructor for the random JointState.
+   * @brief Constructor for a random JointState.
    * @param robot_name The name of the associated robot
    * @param joint_names List of joint names
    * @return JointState with random values in all attributes
@@ -339,7 +339,7 @@ public:
   void initialize();
 
   /**
-   * @brief Set the State to a zero value.
+   * @brief Set the JointState to a zero value.
    */
   void set_zero();
 

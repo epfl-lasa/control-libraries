@@ -1,5 +1,6 @@
 #!/bin/bash
 
+BASE_IMAGE=controle-libraries/remote-development:latest
 IMAGE_NAME=control-libraries/python/remote
 CONTAINER_NAME=control-libraries-python-ssh
 CONTAINER_HOSTNAME=control-libraries-python
@@ -34,6 +35,15 @@ Options:
                            (default: ${SSH_KEY_FILE})
 
   -h, --help               Show this help message."
+
+function image_not_found() {
+  MESSAGE="Could not find the required Docker image '${BASE_IMAGE}'
+from ../source/Dockerfile.source. Make sure to build it with the 'dev-server.sh' script
+in the 'source' directory."
+  echo "${MESSAGE}" && exit 1
+}
+
+docker image inspect "${BASE_IMAGE}" >/dev/null 2>&1 || image_not_found
 
 while [ "$#" -gt 0 ]; do
   case "$1" in

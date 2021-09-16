@@ -249,7 +249,7 @@ TEST(JointStateTest, GetSetData) {
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
 }
 
-TEST(JointStateTest, GetNameByIndex) {
+TEST(JointStateTest, GetIndexByName) {
   JointState js = JointState::Random("test", 3);
   for (std::size_t i = 0; i < js.get_size(); ++i) {
     auto index = js.get_joint_index("joint" + std::to_string(i));

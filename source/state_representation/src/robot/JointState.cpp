@@ -5,6 +5,14 @@
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 namespace state_representation {
+
+static void assert_index_in_range(unsigned int joint_index, unsigned int size) {
+  if (joint_index > size) {
+    throw JointNotFoundException(
+        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size" + std::to_string(size));
+  }
+}
+
 JointState::JointState() : State(StateType::JOINTSTATE) {
   this->initialize();
 }
@@ -80,11 +88,7 @@ double JointState::get_position(const std::string& joint_name) const {
 }
 
 double JointState::get_position(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
+  assert_index_in_range(joint_index, this->get_size());
   return this->positions_(joint_index);
 }
 
@@ -93,11 +97,7 @@ double JointState::get_velocity(const std::string& joint_name) const {
 }
 
 double JointState::get_velocity(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
+  assert_index_in_range(joint_index, this->get_size());
   return this->velocities_(joint_index);
 }
 
@@ -106,11 +106,7 @@ double JointState::get_acceleration(const std::string& joint_name) const {
 }
 
 double JointState::get_acceleration(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
+  assert_index_in_range(joint_index, this->get_size());
   return this->accelerations_(joint_index);
 }
 
@@ -119,11 +115,7 @@ double JointState::get_torque(const std::string& joint_name) const {
 }
 
 double JointState::get_torque(unsigned int joint_index) const {
-  if (joint_index > this->get_size()) {
-    throw JointNotFoundException(
-        "Index '" + std::to_string(joint_index) + "' is out of range for joint state with size"
-            + std::to_string(this->get_size()));
-  }
+  assert_index_in_range(joint_index, this->get_size());
   return this->torques_(joint_index);
 }
 

@@ -45,8 +45,8 @@ class TestJacobian(unittest.TestCase):
         A = Jacobian("robot", 7, "ee")
         Jacobian(A)
         Jacobian("robot", ["joint_0", "joint_1"], "ee", "robot")
-        Jacobian.Random("", ["joint_0", "joint_1"], "ee", "robot")
-        B = Jacobian.Random("", 7, "ee")
+        Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
+        B = Jacobian.Random("robot", 7, "ee")
         B.copy()
 
     def test_getters(self):
@@ -90,7 +90,7 @@ class TestJacobian(unittest.TestCase):
         wrench = CartesianWrench.Random("ee", "robot")
         torques = jac.transpose() * wrench
 
-        pose = CartesianPose.Random("", "world")
+        pose = CartesianPose.Random("robot", "world")
         jac_in_world = pose * jac
 
 

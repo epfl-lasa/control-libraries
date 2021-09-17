@@ -1,4 +1,5 @@
 #include "clproto_bindings.h"
+#include "parameter_container.h"
 
 #include <string>
 
@@ -44,22 +45,6 @@ void message_type(py::module_& m) {
       .value("SHAPE_MESSAGE", MessageType::SHAPE_MESSAGE)
       .value("ELLIPSOID_MESSAGE", MessageType::ELLIPSOID_MESSAGE)
       .value("PARAMETER_MESSAGE", MessageType::PARAMETER_MESSAGE)
-      .export_values();
-}
-
-void parameter_message_type(py::module_& m) {
-  py::enum_<ParameterMessageType>(m, "ParameterMessageType")
-      .value("UNKNOWN_PARAMETER", ParameterMessageType::UNKNOWN_PARAMETER)
-      .value("INT", ParameterMessageType::INT)
-      .value("INT_ARRAY", ParameterMessageType::INT_ARRAY)
-      .value("DOUBLE", ParameterMessageType::DOUBLE)
-      .value("DOUBLE_ARRAY", ParameterMessageType::DOUBLE_ARRAY)
-      .value("BOOL", ParameterMessageType::BOOL)
-      .value("BOOL_ARRAY", ParameterMessageType::BOOL_ARRAY)
-      .value("STRING", ParameterMessageType::STRING)
-      .value("STRING_ARRAY", ParameterMessageType::STRING_ARRAY)
-      .value("MATRIX", ParameterMessageType::MATRIX)
-      .value("VECTOR", ParameterMessageType::VECTOR)
       .export_values();
 }
 
@@ -111,8 +96,11 @@ void methods(py::module_& m) {
         return encode_bytes<JointAccelerations>(object.cast<JointAccelerations>());
       case MessageType::JOINT_TORQUES_MESSAGE:
         return encode_bytes<JointTorques>(object.cast<JointTorques>());
+      case MessageType::PARAMETER_MESSAGE:
+        return encode_parameter_container(ParameterContainer("test", StateType::PARAMETER_INT));
       default:
-        return py::bytes();
+        throw std::invalid_argument("The message is not a valid encoded StateMessage.");
+        break;
     }
   }, "Encode a control libraries object into a serialized binary string representation (wire format).", py::arg("object"), py::arg("type"));
 
@@ -142,6 +130,8 @@ void methods(py::module_& m) {
         return py::cast(decode<JointAccelerations>(msg));
       case MessageType::JOINT_TORQUES_MESSAGE:
         return py::cast(decode<JointTorques>(msg));
+      case MessageType::PARAMETER_MESSAGE:
+        return decode_parameter_container(msg);
       default:
         return py::none();
     }
@@ -153,6 +143,5 @@ void methods(py::module_& m) {
 
 void bind_clproto(py::module_& m) {
   message_type(m);
-  parameter_message_type(m);
   methods(m);
 }

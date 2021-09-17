@@ -17,6 +17,7 @@ Release Versions:
   and to get the index of the joint by its name (#210)
 - Add possibility to have a ssh server for Python testing (#211)
 - Add Python bindings for Parameter class
+- Add Python bindings for clproto encode / decode of Parameter class (#214)
 
 ## 4.0.0
 

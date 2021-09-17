@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_IMAGE=controle-libraries/remote-development:latest
+BASE_IMAGE=control-libraries/remote-development:latest
 IMAGE_NAME=control-libraries/python/remote
 CONTAINER_NAME=control-libraries-python-ssh
 CONTAINER_HOSTNAME=control-libraries-python

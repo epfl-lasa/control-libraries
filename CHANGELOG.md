@@ -16,6 +16,7 @@ Release Versions:
 - Add method to get a joint state by name or index of the joint,
   and to get the index of the joint by its name (#210)
 - Add possibility to have a ssh server for Python testing (#211)
+- Add Python bindings for Parameter class
 
 ## 4.0.0
 

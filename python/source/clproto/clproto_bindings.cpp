@@ -14,6 +14,5 @@ m.attr("__version__") = "dev";
 
 py::module_::import("state_representation");
 
-bind_clproto_parameters(m);
 bind_clproto(m);
 }

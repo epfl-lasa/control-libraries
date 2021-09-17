@@ -26,6 +26,99 @@ inline py::bytes encode_bytes(const T& object) {
   return py::bytes(encode(object));
 }
 
+py::bytes encode_parameter_container(const ParameterContainer& container) {
+  switch (container.get_type()) {
+    case StateType::PARAMETER_INT:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.int_value)));
+    case StateType::PARAMETER_INT_ARRAY:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.int_array_value)));
+    case StateType::PARAMETER_DOUBLE:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.double_value)));
+    case StateType::PARAMETER_DOUBLE_ARRAY:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.double_array_value)));
+    case StateType::PARAMETER_BOOL:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.bool_value)));
+    case StateType::PARAMETER_BOOL_ARRAY:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.bool_array_value)));
+    case StateType::PARAMETER_STRING:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.string_value)));
+    case StateType::PARAMETER_STRING_ARRAY:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.string_array_value)));
+    case StateType::PARAMETER_MATRIX:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.matrix_value)));
+    case StateType::PARAMETER_VECTOR:
+      return py::bytes(encode(Parameter(container.get_name(), container.values.vector_value)));
+    default:
+      throw std::invalid_argument("This StateType is not a valid Parameter.");
+      break;
+  }
+}
+
+py::object decode_parameter(const std::string& msg) {
+  py::object PyParameter = py::module_::import("state_representation").attr("Parameter");
+  switch (check_parameter_message_type(msg)) {
+    case ParameterMessageType::INT: {
+      auto param = decode<Parameter<int>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::INT_ARRAY: {
+      auto param = decode<Parameter<std::vector<int>>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::DOUBLE: {
+      auto param = decode<Parameter<double>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::DOUBLE_ARRAY: {
+      auto param = decode<Parameter<std::vector<double>>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::BOOL: {
+      auto param = decode<Parameter<bool>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::BOOL_ARRAY: {
+      auto param = decode<Parameter<std::vector<bool>>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::STRING: {
+      auto param = decode<Parameter<std::string>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::STRING_ARRAY: {
+      auto param = decode<Parameter<std::vector<std::string>>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::VECTOR: {
+      auto param = decode<Parameter<Eigen::VectorXd>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    case ParameterMessageType::MATRIX: {
+      auto param = decode<Parameter<Eigen::MatrixXd>>(msg);
+      return PyParameter(param.get_name(), py::cast(param.get_value()), param.get_type());
+    }
+    default:
+      throw std::invalid_argument("The message is not a valid encoded Parameter.");
+      break;
+  }
+}
+
+void parameter_message_type(py::module_& m) {
+  py::enum_<ParameterMessageType>(m, "ParameterMessageType")
+  .value("UNKNOWN_PARAMETER", ParameterMessageType::UNKNOWN_PARAMETER)
+  .value("INT", ParameterMessageType::INT)
+  .value("INT_ARRAY", ParameterMessageType::INT_ARRAY)
+  .value("DOUBLE", ParameterMessageType::DOUBLE)
+  .value("DOUBLE_ARRAY", ParameterMessageType::DOUBLE_ARRAY)
+  .value("BOOL", ParameterMessageType::BOOL)
+  .value("BOOL_ARRAY", ParameterMessageType::BOOL_ARRAY)
+  .value("STRING", ParameterMessageType::STRING)
+  .value("STRING_ARRAY", ParameterMessageType::STRING_ARRAY)
+  .value("MATRIX", ParameterMessageType::MATRIX)
+  .value("VECTOR", ParameterMessageType::VECTOR)
+  .export_values();
+}
+
 void message_type(py::module_& m) {
   py::enum_<MessageType>(m, "MessageType")
       .value("UNKNOWN_MESSAGE", MessageType::UNKNOWN_MESSAGE)
@@ -97,7 +190,7 @@ void methods(py::module_& m) {
       case MessageType::JOINT_TORQUES_MESSAGE:
         return encode_bytes<JointTorques>(object.cast<JointTorques>());
       case MessageType::PARAMETER_MESSAGE:
-        return encode_parameter_container(ParameterContainer("test", StateType::PARAMETER_INT));
+        return encode_parameter_container(object.cast<ParameterContainer>());
       default:
         throw std::invalid_argument("The message is not a valid encoded StateMessage.");
         break;
@@ -131,7 +224,7 @@ void methods(py::module_& m) {
       case MessageType::JOINT_TORQUES_MESSAGE:
         return py::cast(decode<JointTorques>(msg));
       case MessageType::PARAMETER_MESSAGE:
-        return decode_parameter_container(msg);
+        return decode_parameter(msg);
       default:
         return py::none();
     }
@@ -143,5 +236,6 @@ void methods(py::module_& m) {
 
 void bind_clproto(py::module_& m) {
   message_type(m);
+  parameter_message_type(m);
   methods(m);
 }

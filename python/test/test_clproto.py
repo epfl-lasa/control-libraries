@@ -2,6 +2,9 @@ import unittest
 import state_representation as sr
 import clproto
 
+import numpy as np
+from numpy.testing import assert_array_equal
+
 class TestClprotoPackUnpack(unittest.TestCase):
     def test_pack_unpack(self):
         objects = [sr.CartesianState.Random("A", "B"), sr.JointState.Random("robot", ["j1", "j2", "j3"])]
@@ -124,6 +127,70 @@ class TestClprotoJacobian(unittest.TestCase):
         self.assertEqual(obj1.rows(), obj2.rows())
         self.assertEqual(obj1.cols(), obj2.cols())
         [self.assertAlmostEqual(x, y) for x, y in zip(obj1.data().flatten(), obj2.data().flatten())]
+
+class TestClprotoParameters(unittest.TestCase):
+    def param_encode_decode_tester(self, obj1, message_type):
+        msg = clproto.encode(obj1, clproto.MessageType.PARAMETER_MESSAGE)
+        self.assertTrue(clproto.is_valid(msg))
+        self.assertEqual(clproto.check_message_type(msg), clproto.MessageType.PARAMETER_MESSAGE)
+        self.assertEqual(clproto.check_parameter_message_type(msg), message_type)
+        obj2 = clproto.decode(msg)
+        self.assertEqual(obj1.get_name(), obj2.get_name())
+        self.assertEqual(obj1.get_type(), obj2.get_type())
+        if isinstance(obj1, list):
+            self.assertCountEqual(obj1.get_value(), obj2.get_value())
+            for index in range(len(obj1.get_value())):
+                self.assertEqual(type(obj1.get_value()[index]), type(obj2.get_value()[index]))
+                self.assertEqual(obj1.get_value()[index], obj2.get_value()[index])
+        elif isinstance(obj1.get_value(), np.ndarray):
+            assert_array_equal(obj1.get_value(), obj2.get_value())
+        else:
+            self.assertEqual(type(obj1.get_value()), type(obj2.get_value()))
+            self.assertEqual(obj1.get_value(), obj2.get_value())
+
+    def test_encode_decode_param_int(self):
+        obj1 = sr.Parameter("int", 1, sr.StateType.PARAMETER_INT)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.INT)
+
+    def test_encode_decode_param_int_array(self):
+        obj1 = sr.Parameter("int", [1, 2, 3], sr.StateType.PARAMETER_INT_ARRAY)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.INT_ARRAY)
+
+    def test_encode_decode_param_double(self):
+        obj1 = sr.Parameter("double", 1.1, sr.StateType.PARAMETER_DOUBLE)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.DOUBLE)
+
+    def test_encode_decode_param_double_array(self):
+        obj1 = sr.Parameter("double", [1.1, 2.2, 3.3], sr.StateType.PARAMETER_DOUBLE_ARRAY)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.DOUBLE_ARRAY)
+
+    def test_encode_decode_param_bool(self):
+        obj1 = sr.Parameter("bool", True, sr.StateType.PARAMETER_BOOL)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.BOOL)
+
+    def test_encode_decode_param_bool_array(self):
+        obj1 = sr.Parameter("bool", [True, False, True], sr.StateType.PARAMETER_BOOL_ARRAY)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.BOOL_ARRAY)
+
+    def test_encode_decode_param_string(self):
+        obj1 = sr.Parameter("string", "test", sr.StateType.PARAMETER_STRING)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.STRING)
+
+    def test_encode_decode_param_string_array(self):
+        obj1 = sr.Parameter("string", ["1", "2", "3"], sr.StateType.PARAMETER_STRING_ARRAY)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.STRING_ARRAY)
+
+    def test_encode_decode_param_vector(self):
+        obj1 = sr.Parameter("vector", np.random.rand(3), sr.StateType.PARAMETER_VECTOR)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.VECTOR)
+
+    def test_encode_decode_param_matrix(self):
+        obj1 = sr.Parameter("matrix", np.random.rand(3, 2), sr.StateType.PARAMETER_MATRIX)
+        self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.MATRIX)
+
+    def test_encode_decode_param_invalid(self):
+        obj = sr.Parameter("cartesian_state", sr.StateType.PARAMETER_CARTESIANSTATE)
+        self.assertRaises(ValueError, clproto.encode, obj, clproto.MessageType.PARAMETER_MESSAGE)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "state_representation_bindings.h"
 
 #include <state_representation/State.hpp>
@@ -27,7 +29,7 @@ class ParameterContainer : public ParameterInterface {
 public:
   ParameterContainer(const std::string& name, const StateType& type);
   ParameterContainer(const std::string& name, const py::object& value, const StateType& type);
-  explicit ParameterContainer(const ParameterContainer& parameter);
+  ParameterContainer(const ParameterContainer& parameter);
 
   void set_value(const py::object& value);
 
@@ -35,6 +37,3 @@ public:
 
   ParameterValues values;
 };
-
-py::bytes encode_parameter_container(const ParameterContainer& container);
-py::object decode_parameter_container(const std::string& msg);

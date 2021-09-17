@@ -21,6 +21,16 @@ class TestParameters(unittest.TestCase):
         param = sr.Parameter("test", sr.StateType.CARTESIANSTATE)
         self.assertRaises(ValueError, param.set_value, 1)
 
+    def test_param_copy(self):
+        param = sr.Parameter("test", 1, sr.StateType.PARAMETER_INT)
+        self.assertEqual(param.get_name(), "test")
+        self.assertEqual(param.get_type(), sr.StateType.PARAMETER_INT)
+        self.assertEqual(param.get_value(), 1)
+        param_copy = sr.Parameter(param)
+        self.assertEqual(param_copy.get_name(), "test")
+        self.assertEqual(param_copy.get_type(), sr.StateType.PARAMETER_INT)
+        self.assertEqual(param_copy.get_value(), 1)
+
     def test_param_int(self):
         param = sr.Parameter("int", sr.StateType.PARAMETER_INT)
         self.assertTrue(param.is_empty())

@@ -37,7 +37,7 @@ ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
 
 ext_modules = [
     Pybind11Extension("state_representation",
-                      sorted(glob("source/state_representation/*.cpp")),
+                      sorted(glob("source/state_representation/*.cpp") + glob("source/common/*.cpp")),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=['state_representation'],
@@ -48,10 +48,10 @@ ext_modules = [
 if __install_clproto_module__:
     ext_modules.append(
         Pybind11Extension("clproto",
-                          sorted(glob("source/clproto/*.cpp")),
+                          sorted(glob("source/clproto/*.cpp") + glob("source/common/*.cpp")),
                           cxx_std=17,
                           include_dirs=__include_dirs__,
-                          libraries=['clproto'],
+                          libraries=['state_representation', 'clproto'],
                           define_macros=[('MODULE_VERSION_INFO', __version__)],
                           )
     )

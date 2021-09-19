@@ -33,6 +33,12 @@ class TestState(unittest.TestCase):
         self.assertEqual(state2.get_reference_frame(), "robot")
         self.assertFalse(state2.is_empty())
 
+        state3 = SpatialState(state2)
+        self.assertEqual(state2.get_type(), state3.get_type())
+        self.assertEqual(state2.get_name(), state3.get_name())
+        self.assertEqual(state2.get_reference_frame(), state3.get_reference_frame())
+        self.assertEqual(state2.is_empty(), state3.is_empty())
+
     def test_compatibility(self):
         state1 = SpatialState(StateType.CARTESIANSTATE, "test", "robot", True)
         state2 = SpatialState(StateType.STATE, "test")

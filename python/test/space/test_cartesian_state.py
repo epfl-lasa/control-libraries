@@ -149,11 +149,16 @@ class TestCartesianState(unittest.TestCase):
         copy2 = random.copy()
         self.assert_name_frame_data_equal(random, copy2)
 
+        copy3 = CartesianState(random)
+        self.assert_name_frame_data_equal(random, copy3)
+
         empty = CartesianState()
-        copy2 = empty
-        self.assertTrue(copy2.is_empty())
-        copy3 = empty.copy()
-        self.assertTrue(copy3.is_empty())
+        copy4 = empty
+        self.assertTrue(copy4.is_empty())
+        copy5 = CartesianState(empty)
+        self.assertTrue(copy5.is_empty())
+        copy6 = empty.copy()
+        self.assertTrue(copy6.is_empty())
 
     def test_get_set_fields(self):
         cs = CartesianState("test")

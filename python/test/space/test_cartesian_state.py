@@ -1,6 +1,7 @@
 import unittest
 
 import numpy as np
+from numpy.testing import assert_array_equal, assert_array_almost_equal
 from state_representation import CartesianState, StateType, CartesianStateVariable
 
 from .test_spatial_state import SPATIAL_STATE_METHOD_EXPECTS
@@ -63,12 +64,6 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
 
 
 class TestCartesianState(unittest.TestCase):
-    def assert_np_array_equal(self, a, b):
-        self.assertListEqual(list(a), list(b))
-
-    def assert_np_array_almost_equal(self, a, b):
-        [self.assertAlmostEqual(x, y) for x, y in zip(list(a), list(b))]
-
     def assert_name_empty_frame_equal(self, state, name, empty, reference_frame):
         self.assertEqual(state.get_name(), name)
         self.assertEqual(state.is_empty(), empty)
@@ -77,7 +72,7 @@ class TestCartesianState(unittest.TestCase):
     def assert_name_frame_data_equal(self, state1, state2):
         self.assertEqual(state1.get_name(), state2.get_name())
         self.assertEqual(state1.get_reference_frame(), state2.get_reference_frame())
-        self.assert_np_array_almost_equal(state1.data(), state2.data())
+        assert_array_almost_equal(state1.data(), state2.data())
 
     def clamping_helper(self, state, getter, setter, variable, dim):
         if dim == 3:
@@ -175,7 +170,7 @@ class TestCartesianState(unittest.TestCase):
         cs.set_position(position)
         [self.assertAlmostEqual(cs.get_position()[i], position[i]) for i in range(3)]
         cs.set_position(1.1, 2.2, 3.3)
-        self.assert_np_array_equal(np.array([1.1, 2.2, 3.3]), cs.get_position())
+        assert_array_equal(np.array([1.1, 2.2, 3.3]), cs.get_position())
 
         # orientation
         orientation_vec = np.random.rand(4)
@@ -190,51 +185,51 @@ class TestCartesianState(unittest.TestCase):
         trans = matrix[:3, 3]
         # rot = matrix[:3, :3]
         bottom = matrix[3, :]
-        self.assert_np_array_almost_equal(trans, cs.get_position())
+        assert_array_almost_equal(trans, cs.get_position())
         # TODO rotation matrix from quaternion
-        self.assert_np_array_almost_equal(bottom, np.array([0, 0, 0, 1]))
+        assert_array_equal(bottom, np.array([0, 0, 0, 1]))
 
         # pose
         position = [4.4, 5.5, 6.6]
         orientation_vec = np.random.rand(4)
         orientation_vec = orientation_vec / np.linalg.norm(orientation_vec)
         cs.set_pose(np.hstack((position, orientation_vec)))
-        self.assert_np_array_almost_equal(np.hstack((position, orientation_vec)), cs.get_pose())
+        assert_array_almost_equal(np.hstack((position, orientation_vec)), cs.get_pose())
         with self.assertRaises(RuntimeError):
             cs.set_pose(position)
 
         # twist
         linear_velocity = np.random.rand(3)
         cs.set_linear_velocity(linear_velocity)
-        self.assert_np_array_almost_equal(cs.get_linear_velocity(), linear_velocity)
+        assert_array_almost_equal(cs.get_linear_velocity(), linear_velocity)
         angular_velocity = np.random.rand(3)
         cs.set_angular_velocity(angular_velocity)
-        self.assert_np_array_almost_equal(cs.get_angular_velocity(), angular_velocity)
+        assert_array_almost_equal(cs.get_angular_velocity(), angular_velocity)
         twist = np.random.rand(6)
         cs.set_twist(twist)
-        self.assert_np_array_almost_equal(cs.get_twist(), twist)
+        assert_array_almost_equal(cs.get_twist(), twist)
 
         # acceleration
         linear_acceleration = np.random.rand(3)
         cs.set_linear_acceleration(linear_acceleration)
-        self.assert_np_array_almost_equal(cs.get_linear_acceleration(), linear_acceleration)
+        assert_array_almost_equal(cs.get_linear_acceleration(), linear_acceleration)
         angular_acceleration = np.random.rand(3)
         cs.set_angular_acceleration(angular_acceleration)
-        self.assert_np_array_almost_equal(cs.get_angular_acceleration(), angular_acceleration)
+        assert_array_almost_equal(cs.get_angular_acceleration(), angular_acceleration)
         accelerations = np.random.rand(6)
         cs.set_accelerations(accelerations)
-        self.assert_np_array_almost_equal(cs.get_accelerations(), accelerations)
+        assert_array_almost_equal(cs.get_accelerations(), accelerations)
 
         # wrench
         force = np.random.rand(3)
         cs.set_force(force)
-        self.assert_np_array_almost_equal(cs.get_force(), force)
+        assert_array_almost_equal(cs.get_force(), force)
         torque = np.random.rand(3)
         cs.set_torque(torque)
-        self.assert_np_array_almost_equal(cs.get_torque(), torque)
+        assert_array_almost_equal(cs.get_torque(), torque)
         wrench = np.random.rand(6)
         cs.set_wrench(wrench)
-        self.assert_np_array_almost_equal(cs.get_wrench(), wrench)
+        assert_array_almost_equal(cs.get_wrench(), wrench)
 
         cs.set_zero()
         self.assertAlmostEqual(np.linalg.norm(cs.data()), 1)
@@ -265,11 +260,11 @@ class TestCartesianState(unittest.TestCase):
         cs1 = CartesianState().Identity("test")
         cs2 = CartesianState().Random("test")
         concatenated_state = np.hstack((cs1.get_pose(), cs1.get_twist(), cs1.get_accelerations(), cs1.get_wrench()))
-        self.assert_np_array_almost_equal(cs1.data(), concatenated_state)
-        self.assert_np_array_almost_equal(cs1.array(), concatenated_state)
+        assert_array_almost_equal(cs1.data(), concatenated_state)
+        assert_array_almost_equal(cs1.array(), concatenated_state)
 
         cs1.set_data(cs2.data())
-        self.assert_np_array_almost_equal(cs1.data(), cs2.data())
+        assert_array_almost_equal(cs1.data(), cs2.data())
 
         cs2 = CartesianState.Random("test")
         state_vec = cs2.to_list()
@@ -374,15 +369,15 @@ class TestCartesianState(unittest.TestCase):
 
         csum = cs1 + cs2
         self.assertEqual(type(csum), CartesianState)
-        self.assert_np_array_almost_equal(csum.get_position(), cs1.get_position() + cs2.get_position())
+        assert_array_almost_equal(csum.get_position(), cs1.get_position() + cs2.get_position())
         # TODO orientation sum
-        self.assert_np_array_almost_equal(csum.get_twist(), cs1.get_twist() + cs2.get_twist())
-        self.assert_np_array_almost_equal(csum.get_accelerations(), cs1.get_accelerations() + cs2.get_accelerations())
-        self.assert_np_array_almost_equal(csum.get_wrench(), cs1.get_wrench() + cs2.get_wrench())
+        assert_array_almost_equal(csum.get_twist(), cs1.get_twist() + cs2.get_twist())
+        assert_array_almost_equal(csum.get_accelerations(), cs1.get_accelerations() + cs2.get_accelerations())
+        assert_array_almost_equal(csum.get_wrench(), cs1.get_wrench() + cs2.get_wrench())
 
         cs1 += cs2
         self.assertEqual(type(cs1), CartesianState)
-        self.assert_np_array_almost_equal(cs1.data(), csum.data())
+        assert_array_almost_equal(cs1.data(), csum.data())
 
     def test_subtraction(self):
         cs1 = CartesianState().Random("test")
@@ -394,30 +389,30 @@ class TestCartesianState(unittest.TestCase):
 
         cdiff = cs1 - cs2
         self.assertEqual(type(cdiff), CartesianState)
-        self.assert_np_array_almost_equal(cdiff.get_position(), cs1.get_position() - cs2.get_position())
+        assert_array_almost_equal(cdiff.get_position(), cs1.get_position() - cs2.get_position())
         # TODO orientation diff
-        self.assert_np_array_almost_equal(cdiff.get_twist(), cs1.get_twist() - cs2.get_twist())
-        self.assert_np_array_almost_equal(cdiff.get_accelerations(), cs1.get_accelerations() - cs2.get_accelerations())
-        self.assert_np_array_almost_equal(cdiff.get_wrench(), cs1.get_wrench() - cs2.get_wrench())
+        assert_array_almost_equal(cdiff.get_twist(), cs1.get_twist() - cs2.get_twist())
+        assert_array_almost_equal(cdiff.get_accelerations(), cs1.get_accelerations() - cs2.get_accelerations())
+        assert_array_almost_equal(cdiff.get_wrench(), cs1.get_wrench() - cs2.get_wrench())
 
         cs1 -= cs2
         self.assertEqual(type(cs1), CartesianState)
-        self.assert_np_array_almost_equal(cs1.data(), cdiff.data())
+        assert_array_almost_equal(cs1.data(), cdiff.data())
 
     def test_scalar_multiplication(self):
         scalar = 2.0
         cs = CartesianState().Random("test")
         cscaled = scalar * cs
         self.assertEqual(type(cscaled), CartesianState)
-        self.assert_np_array_almost_equal(cscaled.get_position(), scalar * cs.get_position())
+        assert_array_almost_equal(cscaled.get_position(), scalar * cs.get_position())
         # TODO orientation mult
-        self.assert_np_array_almost_equal(cscaled.get_twist(), scalar * cs.get_twist())
-        self.assert_np_array_almost_equal(cscaled.get_accelerations(), scalar * cs.get_accelerations())
-        self.assert_np_array_almost_equal(cscaled.get_wrench(), scalar * cs.get_wrench())
+        assert_array_almost_equal(cscaled.get_twist(), scalar * cs.get_twist())
+        assert_array_almost_equal(cscaled.get_accelerations(), scalar * cs.get_accelerations())
+        assert_array_almost_equal(cscaled.get_wrench(), scalar * cs.get_wrench())
 
         cs *= scalar
         self.assertEqual(type(cs), CartesianState)
-        self.assert_np_array_almost_equal(cs.data(), cscaled.data())
+        assert_array_almost_equal(cs.data(), cscaled.data())
 
         empty = CartesianState()
         with self.assertRaises(RuntimeError):
@@ -428,15 +423,15 @@ class TestCartesianState(unittest.TestCase):
         cs = CartesianState().Random("test")
         cscaled = cs / scalar
         self.assertEqual(type(cscaled), CartesianState)
-        self.assert_np_array_almost_equal(cscaled.get_position(), cs.get_position() / scalar)
+        assert_array_almost_equal(cscaled.get_position(), cs.get_position() / scalar)
         # TODO orientation diff
-        self.assert_np_array_almost_equal(cscaled.get_twist(), cs.get_twist() / scalar)
-        self.assert_np_array_almost_equal(cscaled.get_accelerations(), cs.get_accelerations() / scalar)
-        self.assert_np_array_almost_equal(cscaled.get_wrench(), cs.get_wrench() / scalar)
+        assert_array_almost_equal(cscaled.get_twist(), cs.get_twist() / scalar)
+        assert_array_almost_equal(cscaled.get_accelerations(), cs.get_accelerations() / scalar)
+        assert_array_almost_equal(cscaled.get_wrench(), cs.get_wrench() / scalar)
 
         cs /= scalar
         self.assertEqual(type(cs), CartesianState)
-        self.assert_np_array_almost_equal(cs.data(), cscaled.data())
+        assert_array_almost_equal(cs.data(), cscaled.data())
 
         with self.assertRaises(RuntimeError):
             cs / 0.0

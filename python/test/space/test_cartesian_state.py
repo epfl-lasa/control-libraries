@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
-from state_representation import CartesianState, StateType, CartesianStateVariable
+from state_representation import State, CartesianState, StateType, CartesianStateVariable
 
 from .test_spatial_state import SPATIAL_STATE_METHOD_EXPECTS
 from ..test_state import STATE_METHOD_EXPECTS
@@ -104,6 +104,7 @@ class TestCartesianState(unittest.TestCase):
 
     def test_constructors(self):
         empty1 = CartesianState()
+        self.assertTrue(isinstance(empty1, State))
         self.assertEqual(type(empty1), CartesianState)
         self.assertEqual(empty1.get_type(), StateType.CARTESIANSTATE)
         self.assert_name_empty_frame_equal(empty1, "", True, "world")
@@ -123,6 +124,7 @@ class TestCartesianState(unittest.TestCase):
 
     def test_identity_initialization(self):
         identity = CartesianState().Identity("test")
+        self.assertTrue(isinstance(identity, State))
         self.assertFalse(identity.is_empty())
         self.assertAlmostEqual(np.linalg.norm(identity.get_position()), 0)
         self.assertAlmostEqual(np.linalg.norm(identity.get_orientation()), 1)
@@ -133,6 +135,7 @@ class TestCartesianState(unittest.TestCase):
 
     def test_random_initialization(self):
         random = CartesianState().Random("test")
+        self.assertTrue(isinstance(random, State))
         self.assertFalse(random.is_empty())
         self.assertTrue(np.linalg.norm(random.get_position()) > 0)
         self.assertAlmostEqual(np.linalg.norm(random.get_orientation()), 1)

@@ -19,6 +19,11 @@ Release Versions:
 - Add Python bindings for Parameter class (#209)
 - Add Python bindings for clproto encode / decode of Parameter class (#214)
 
+### Pending TODOs for the next release
+
+- Including a quaternion extension (numpy-quaternion, pyquaternion, ...)
+  for binding the Eigen::Quaternion to a specific object in Python.
+
 ## 4.0.0
 
 Version 4.0.0 introduces some powerful new features for using `state_representation` objects

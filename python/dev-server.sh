@@ -45,9 +45,11 @@ in the 'source' directory."
 
 docker image inspect "${BASE_IMAGE}" >/dev/null 2>&1 || image_not_found
 
+BUILD_ARGS=(--build-arg BASE_IMAGE=control-libraries/remote-development:latest)
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -b|--branch) BRANCH=$2; shift 2;;
+    -r|--rebuild) BUILD_ARGS+=(--no-cache); shift 1;;
     -p|--port) SSH_PORT=$2; shift 2;;
     -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
@@ -56,10 +58,10 @@ while [ "$#" -gt 0 ]; do
 done
 
 echo "Using control libraries branch ${BRANCH}"
+BUILD_ARGS+=(--build-arg BRANCH="${BRANCH}")
 
 DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.python \
-  --build-arg BASE_IMAGE=control-libraries/remote-development:latest \
-  --build-arg BRANCH="${BRANCH}" \
+  "${BUILD_ARGS[@]}" \
   --target remote-user \
   --tag "${IMAGE_NAME}" || exit 1
 

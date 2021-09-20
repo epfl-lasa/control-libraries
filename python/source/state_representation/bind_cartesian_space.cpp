@@ -105,6 +105,8 @@ void cartesian_state(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -174,6 +176,8 @@ void cartesian_pose(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);
@@ -237,6 +241,8 @@ void cartesian_twist(py::module_& m) {
 
   c.def(py::self *= double());
   c.def(py::self * double());
+  c.def(py::self /= double());
+  c.def(py::self / double());
   c.def(py::self *= Eigen::Matrix<double, 6, 6>());
   c.def(py::self * std::chrono::nanoseconds());
 
@@ -302,6 +308,8 @@ void cartesian_wrench(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
 
   c.def("clamp", &CartesianWrench::clamp, "Clamp inplace the magnitude of the wrench to the values in argument", "max_force"_a, "max_torque"_a, "force_noise_ratio"_a=0, "torque_noise_ratio"_a=0);
   c.def("clamped", &CartesianWrench::clamped, "Return the clamped wrench", "max_force"_a, "max_torque"_a, "force_noise_ratio"_a=0, "torque_noise_ratio"_a=0);

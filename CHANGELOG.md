@@ -18,6 +18,7 @@ Release Versions:
 - Add possibility to have a ssh server for Python testing (#211)
 - Add Python bindings for Parameter class (#209)
 - Add Python bindings for clproto encode / decode of Parameter class (#214)
+- Improve CartesianState tests in C++ and Python (#213)
 
 ### Pending TODOs for the next release
 

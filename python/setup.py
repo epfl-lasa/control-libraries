@@ -7,7 +7,7 @@ import os
 
 __version__ = "4.0.0"
 __libraries__ = ['state_representation', 'clproto']
-__include_dirs__ = []
+__include_dirs__ = ['include']
 
 __install_clproto_module__ = True
 
@@ -31,12 +31,13 @@ try:
                 raise Exception(msg)
 except Exception as e:
     msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
+    warnings.warn(msg)
 
 ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
 
 ext_modules = [
     Pybind11Extension("state_representation",
-                      sorted(glob("source/state_representation/*.cpp")),
+                      sorted(glob("source/state_representation/*.cpp") + glob("source/common/*.cpp")),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=['state_representation'],
@@ -47,10 +48,10 @@ ext_modules = [
 if __install_clproto_module__:
     ext_modules.append(
         Pybind11Extension("clproto",
-                          sorted(glob("source/clproto/*.cpp")),
+                          sorted(glob("source/clproto/*.cpp") + glob("source/common/*.cpp")),
                           cxx_std=17,
                           include_dirs=__include_dirs__,
-                          libraries=['clproto'],
+                          libraries=['state_representation', 'clproto'],
                           define_macros=[('MODULE_VERSION_INFO', __version__)],
                           )
     )

@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
   if (state.is_empty()) {
     os << "Empty ";
   }
-  os << " State: " << state.get_name() << std::endl;
+  os << " State: " << state.get_name();
   return os;
 }
 }// namespace state_representation

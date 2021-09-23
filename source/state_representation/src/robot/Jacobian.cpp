@@ -268,7 +268,10 @@ std::ostream& operator<<(std::ostream& os, const Jacobian& jacobian) {
       for (unsigned int j = 1; j < jacobian.cols_; ++j) {
         os << ", " << jacobian(i, j);
       }
-      os << " |" << std::endl;
+      os << " |";
+      if (i != jacobian.rows_ - 1) {
+        os << std::endl;
+      }
     }
   }
   return os;

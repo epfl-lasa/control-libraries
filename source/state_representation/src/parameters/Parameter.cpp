@@ -153,9 +153,9 @@ Parameter<Eigen::VectorXd>::Parameter(const std::string& name, const Eigen::Vect
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const Parameter<T>& parameter) {
   if (parameter.is_empty()) {
-    os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
+    os << " Parameter " << parameter.get_name() << " is empty";
   } else {
-    os << " Parameter " << parameter.get_name() << ": " << parameter.value << std::endl;
+    os << " Parameter " << parameter.get_name() << ": " << parameter.value;
   }
   return os;
 }

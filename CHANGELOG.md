@@ -19,6 +19,7 @@ Release Versions:
 - Add Python bindings for Parameter class (#209)
 - Add Python bindings for clproto encode / decode of Parameter class (#214)
 - Improve CartesianState tests in C++ and Python (#213)
+- Add build testing option to clproto install (#216)
 
 ### Pending TODOs for the next release
 

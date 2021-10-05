@@ -3,7 +3,7 @@ ARG BRANCH=develop
 
 WORKDIR /source
 RUN git clone --single-branch --branch $BRANCH https://github.com/epfl-lasa/control-libraries
-RUN bash control-libraries/source/install.sh --auto --no-controllers --no-robot-model
+RUN bash control-libraries/source/install.sh --auto --no-controllers
 RUN bash control-libraries/protocol/install.sh --auto
 
 COPY include control-libraries/python/include

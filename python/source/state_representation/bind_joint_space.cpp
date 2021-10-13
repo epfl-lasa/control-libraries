@@ -50,12 +50,20 @@ void joint_state(py::module_& m) {
   c.def("set_names", py::overload_cast<const std::vector<std::string>&>(&JointState::set_names), "Setter of the names attribute.", "names"_a);
   c.def("set_positions", py::overload_cast<const Eigen::VectorXd&>(&JointState::set_positions), "Setter of the positions attribute from a vector.", "positions"_a);
   c.def("set_positions", py::overload_cast<const std::vector<double>&>(&JointState::set_positions), "Setter of the positions attribute from a list.", "positions"_a);
+  c.def("set_position", py::overload_cast<double, const std::string&>(&JointState::set_position), "Set the position of a joint by its name.", "position"_a, "joint_name"_a);
+  c.def("set_position", py::overload_cast<double, unsigned int>(&JointState::set_position), "Set the position of a joint by its index.", "position"_a, "joint_index"_a);
   c.def("set_velocities", py::overload_cast<const Eigen::VectorXd&>(&JointState::set_velocities), "Setter of the velocities attribute from a vector.", "velocities"_a);
   c.def("set_velocities", py::overload_cast<const std::vector<double>&>(&JointState::set_velocities), "Setter of the velocities attribute from a list.", "velocities"_a);
+  c.def("set_velocity", py::overload_cast<double, const std::string&>(&JointState::set_velocity), "Set the velocity of a joint by its name.", "velocity"_a, "joint_name"_a);
+  c.def("set_velocity", py::overload_cast<double, unsigned int>(&JointState::set_velocity), "Set the velocity of a joint by its index.", "velocity"_a, "joint_index"_a);
   c.def("set_accelerations", py::overload_cast<const Eigen::VectorXd&>(&JointState::set_accelerations), "Setter of the accelerations attribute from a vector.", "accelerations"_a);
   c.def("set_accelerations", py::overload_cast<const std::vector<double>&>(&JointState::set_accelerations), "Setter of the accelerations attribute from a list.", "accelerations"_a);
+  c.def("set_acceleration", py::overload_cast<double, const std::string&>(&JointState::set_acceleration), "Set the acceleration of a joint by its name.", "acceleration"_a, "joint_name"_a);
+  c.def("set_acceleration", py::overload_cast<double, unsigned int>(&JointState::set_acceleration), "Set the acceleration of a joint by its index.", "acceleration"_a, "joint_index"_a);
   c.def("set_torques", py::overload_cast<const Eigen::VectorXd&>(&JointState::set_torques), "Setter of the torques attribute from a vector.", "torques"_a);
   c.def("set_torques", py::overload_cast<const std::vector<double>&>(&JointState::set_torques), "Setter of the torques attribute from a list.", "torques"_a);
+  c.def("set_torque", py::overload_cast<double, const std::string&>(&JointState::set_torque), "Set the torque of a joint by its name.", "torque"_a, "joint_name"_a);
+  c.def("set_torque", py::overload_cast<double, unsigned int>(&JointState::set_torque), "Set the torque of a joint by its index.", "torque"_a, "joint_index"_a);
 
   c.def("set_zero", &JointState::set_zero, "Set the JointState to a zero value.");
   c.def("clamp_state_variable", py::overload_cast<double, const JointStateVariable&, double>(&JointState::clamp_state_variable), "Clamp inplace the magnitude of the a specific state variable.", "value"_a, "state_variable_type"_a, "noise_ratio"_a=double(0));

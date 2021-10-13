@@ -245,7 +245,7 @@ public:
   /**
    * @brief Set the position of a joint by its index.
    * @param position The position of the joint
-   * @param joint_index The name of the joint
+   * @param joint_index The index of the joint
    */
   void set_position(double position, unsigned int joint_index);
 
@@ -293,7 +293,7 @@ public:
   /**
    * @brief Set the velocity of a joint by its index.
    * @param velocity The velocity of the joint
-   * @param joint_index The name of the joint
+   * @param joint_index The index of the joint
    */
   void set_velocity(double velocity, unsigned int joint_index);
 
@@ -341,7 +341,7 @@ public:
   /**
    * @brief Set the acceleration of a joint by its index.
    * @param acceleration The acceleration of the joint
-   * @param joint_index The name of the joint
+   * @param joint_index The index of the joint
    */
   void set_acceleration(double acceleration, unsigned int joint_index);
 
@@ -389,7 +389,7 @@ public:
   /**
    * @brief Set the torque of a joint by its index.
    * @param torque The torque of the joint
-   * @param joint_index The name of the joint
+   * @param joint_index The index of the joint
    */
   void set_torque(double torque, unsigned int joint_index);
 

@@ -158,6 +158,35 @@ TEST(JointStateTest, GetSetFields) {
   EXPECT_EQ(js.is_empty(), true);
 }
 
+TEST(JointStateTest, GetSetField) {
+  JointState js("test", 2);
+
+  // fields
+  js.set_position(1.1, 1);
+  EXPECT_EQ(js.get_position(0), 0);
+  EXPECT_EQ(js.get_position(1), 1.1);
+  EXPECT_THROW(js.set_position(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_position(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_velocity(2.2, 1);
+  EXPECT_EQ(js.get_velocity(0), 0);
+  EXPECT_EQ(js.get_velocity(1), 2.2);
+  EXPECT_THROW(js.set_velocity(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_velocity(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_acceleration(3.3, 1);
+  EXPECT_EQ(js.get_acceleration(0), 0);
+  EXPECT_EQ(js.get_acceleration(1), 3.3);
+  EXPECT_THROW(js.set_acceleration(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_acceleration(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_torque(4.4, 1);
+  EXPECT_EQ(js.get_torque(0), 0);
+  EXPECT_EQ(js.get_torque(1), 4.4);
+  EXPECT_THROW(js.set_torque(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_torque(1, "test"), exceptions::JointNotFoundException);
+}
+
 TEST(JointStateTest, Compatibility) {
   JointState js1("test", 3);
   JointState js2("test", std::vector<std::string>{"j1", "j2", "j3"});

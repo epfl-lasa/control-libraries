@@ -83,6 +83,10 @@ unsigned int JointState::get_joint_index(const std::string& joint_name) const {
   return std::distance(this->names_.begin(), finder);
 }
 
+const Eigen::VectorXd& JointState::get_positions() const {
+  return this->positions_;
+}
+
 double JointState::get_position(const std::string& joint_name) const {
   return this->positions_(this->get_joint_index(joint_name));
 }
@@ -90,6 +94,27 @@ double JointState::get_position(const std::string& joint_name) const {
 double JointState::get_position(unsigned int joint_index) const {
   assert_index_in_range(joint_index, this->get_size());
   return this->positions_(joint_index);
+}
+
+void JointState::set_positions(const Eigen::VectorXd& positions) {
+  this->set_state_variable(this->positions_, positions);
+}
+
+void JointState::set_positions(const std::vector<double>& positions) {
+  this->set_state_variable(this->positions_, positions);
+}
+
+void JointState::set_position(double position, const std::string& joint_name) {
+  this->positions_(this->get_joint_index(joint_name)) = position;
+}
+
+void JointState::set_position(double position, unsigned int joint_index) {
+  assert_index_in_range(joint_index, this->get_size());
+  this->positions_(joint_index) = position;
+}
+
+const Eigen::VectorXd& JointState::get_velocities() const {
+  return this->velocities_;
 }
 
 double JointState::get_velocity(const std::string& joint_name) const {
@@ -101,6 +126,27 @@ double JointState::get_velocity(unsigned int joint_index) const {
   return this->velocities_(joint_index);
 }
 
+void JointState::set_velocities(const Eigen::VectorXd& velocities) {
+  this->set_state_variable(this->velocities_, velocities);
+}
+
+void JointState::set_velocities(const std::vector<double>& velocities) {
+  this->set_state_variable(this->velocities_, velocities);
+}
+
+void JointState::set_velocity(double velocity, const std::string& joint_name) {
+  this->velocities_(this->get_joint_index(joint_name)) = velocity;
+}
+
+void JointState::set_velocity(double velocity, unsigned int joint_index) {
+  assert_index_in_range(joint_index, this->get_size());
+  this->velocities_(joint_index) = velocity;
+}
+
+const Eigen::VectorXd& JointState::get_accelerations() const {
+  return this->accelerations_;
+}
+
 double JointState::get_acceleration(const std::string& joint_name) const {
   return this->accelerations_(this->get_joint_index(joint_name));
 }
@@ -110,6 +156,27 @@ double JointState::get_acceleration(unsigned int joint_index) const {
   return this->accelerations_(joint_index);
 }
 
+void JointState::set_accelerations(const Eigen::VectorXd& accelerations) {
+  this->set_state_variable(this->accelerations_, accelerations);
+}
+
+void JointState::set_accelerations(const std::vector<double>& accelerations) {
+  this->set_state_variable(this->accelerations_, accelerations);
+}
+
+void JointState::set_acceleration(double acceleration, const std::string& joint_name) {
+  this->accelerations_(this->get_joint_index(joint_name)) = acceleration;
+}
+
+void JointState::set_acceleration(double acceleration, unsigned int joint_index) {
+  assert_index_in_range(joint_index, this->get_size());
+  this->accelerations_(joint_index) = acceleration;
+}
+
+const Eigen::VectorXd& JointState::get_torques() const {
+  return this->torques_;
+}
+
 double JointState::get_torque(const std::string& joint_name) const {
   return this->torques_(this->get_joint_index(joint_name));
 }
@@ -117,6 +184,23 @@ double JointState::get_torque(const std::string& joint_name) const {
 double JointState::get_torque(unsigned int joint_index) const {
   assert_index_in_range(joint_index, this->get_size());
   return this->torques_(joint_index);
+}
+
+void JointState::set_torques(const Eigen::VectorXd& torques) {
+  this->set_state_variable(this->torques_, torques);
+}
+
+void JointState::set_torques(const std::vector<double>& torques) {
+  this->set_state_variable(this->torques_, torques);
+}
+
+void JointState::set_torque(double torque, const std::string& joint_name) {
+  this->torques_(this->get_joint_index(joint_name)) = torque;
+}
+
+void JointState::set_torque(double torque, unsigned int joint_index) {
+  assert_index_in_range(joint_index, this->get_size());
+  this->torques_(joint_index) = torque;
 }
 
 JointState& JointState::operator+=(const JointState& state) {

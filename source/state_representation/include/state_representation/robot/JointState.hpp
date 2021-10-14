@@ -236,6 +236,20 @@ public:
   void set_positions(const std::vector<double>& positions);
 
   /**
+   * @brief Set the position of a joint by its name.
+   * @param position The position of the joint
+   * @param joint_name The name of the joint
+   */
+  void set_position(double position, const std::string& joint_name);
+
+  /**
+   * @brief Set the position of a joint by its index.
+   * @param position The position of the joint
+   * @param joint_index The index of the joint
+   */
+  void set_position(double position, unsigned int joint_index);
+
+  /**
    * @brief Getter of the velocities attribute.
    * @return The joint velocities
    */
@@ -268,6 +282,20 @@ public:
    * @param velocities The joint velocities as std vector
    */
   void set_velocities(const std::vector<double>& velocities);
+
+  /**
+   * @brief Set the velocity of a joint by its name.
+   * @param velocity The velocity of the joint
+   * @param joint_name The name of the joint
+   */
+  void set_velocity(double velocity, const std::string& joint_name);
+
+  /**
+   * @brief Set the velocity of a joint by its index.
+   * @param velocity The velocity of the joint
+   * @param joint_index The index of the joint
+   */
+  void set_velocity(double velocity, unsigned int joint_index);
 
   /**
    * @brief Getter of the accelerations attribute.
@@ -304,6 +332,20 @@ public:
   void set_accelerations(const std::vector<double>& accelerations);
 
   /**
+   * @brief Set the acceleration of a joint by its name.
+   * @param acceleration The acceleration of the joint
+   * @param joint_name The name of the joint
+   */
+  void set_acceleration(double acceleration, const std::string& joint_name);
+
+  /**
+   * @brief Set the acceleration of a joint by its index.
+   * @param acceleration The acceleration of the joint
+   * @param joint_index The index of the joint
+   */
+  void set_acceleration(double acceleration, unsigned int joint_index);
+
+  /**
    * @brief Getter of the torques attribute.
    * @return The joint torques
    */
@@ -336,6 +378,20 @@ public:
    * @param torques The joint torques as std vector
    */
   void set_torques(const std::vector<double>& torques);
+
+  /**
+   * @brief Set the torque of a joint by its name.
+   * @param torque The torque of the joint
+   * @param joint_name The name of the joint
+   */
+  void set_torque(double torque, const std::string& joint_name);
+
+  /**
+   * @brief Set the torque of a joint by its index.
+   * @param torque The torque of the joint
+   * @param joint_index The index of the joint
+   */
+  void set_torque(double torque, unsigned int joint_index);
 
   /**
    * @brief Check if the state is compatible for operations with the state given as argument.
@@ -624,54 +680,6 @@ inline void JointState::set_names(const std::vector<std::string>& names) {
             + std::to_string(names.size()));
   }
   this->names_ = names;
-}
-
-inline const Eigen::VectorXd& JointState::get_positions() const {
-  return this->positions_;
-}
-
-inline void JointState::set_positions(const Eigen::VectorXd& positions) {
-  this->set_state_variable(this->positions_, positions);
-}
-
-inline void JointState::set_positions(const std::vector<double>& positions) {
-  this->set_state_variable(this->positions_, positions);
-}
-
-inline const Eigen::VectorXd& JointState::get_velocities() const {
-  return this->velocities_;
-}
-
-inline void JointState::set_velocities(const Eigen::VectorXd& velocities) {
-  this->set_state_variable(this->velocities_, velocities);
-}
-
-inline void JointState::set_velocities(const std::vector<double>& velocities) {
-  this->set_state_variable(this->velocities_, velocities);
-}
-
-inline const Eigen::VectorXd& JointState::get_accelerations() const {
-  return this->accelerations_;
-}
-
-inline void JointState::set_accelerations(const Eigen::VectorXd& accelerations) {
-  this->set_state_variable(this->accelerations_, accelerations);
-}
-
-inline void JointState::set_accelerations(const std::vector<double>& accelerations) {
-  this->set_state_variable(this->accelerations_, accelerations);
-}
-
-inline const Eigen::VectorXd& JointState::get_torques() const {
-  return this->torques_;
-}
-
-inline void JointState::set_torques(const Eigen::VectorXd& torques) {
-  this->set_state_variable(this->torques_, torques);
-}
-
-inline void JointState::set_torques(const std::vector<double>& torques) {
-  this->set_state_variable(this->torques_, torques);
 }
 
 inline Eigen::VectorXd JointState::get_state_variable(const JointStateVariable& state_variable_type) const {

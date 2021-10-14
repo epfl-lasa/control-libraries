@@ -35,8 +35,13 @@ JOINT_STATE_METHOD_EXPECTS = [
     'set_name',
     'set_names',
     'set_positions',
-    'set_torques',
+    'set_position',
     'set_velocities',
+    'set_velocity',
+    'set_accelerations',
+    'set_acceleration',
+    'set_torques',
+    'set_torque',
     'set_zero',
     'to_list'
 ]

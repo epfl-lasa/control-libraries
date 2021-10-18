@@ -9,6 +9,7 @@ STATE_METHOD_EXPECTS = [
     'set_empty',
     'set_filled',
     'get_timestamp',
+    'set_timestamp',
     'reset_timestamp',
     'get_name',
     'set_name',

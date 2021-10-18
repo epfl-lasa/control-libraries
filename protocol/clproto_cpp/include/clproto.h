@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -20,6 +21,13 @@ namespace clproto {
  * ::unpack_fields() methods
  */
 typedef std::size_t field_length_t;
+
+/**
+ * @typedef timestamp_duration_t
+ * @brief Duration type to use when representing
+ * chrono timestamps as integer count since epoch
+ */
+typedef std::chrono::nanoseconds timestamp_duration_t;
 
 /**
  * @class DecodingException

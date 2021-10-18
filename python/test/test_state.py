@@ -71,7 +71,7 @@ class TestState(unittest.TestCase):
         self.assertFalse(state.is_deprecated(0.1))
         time.sleep(0.2)
         self.assertTrue(state.is_deprecated(0.1))
-        state.set_timestamp(time.localtime())
+        state.set_timestamp(datetime.datetime.now().timestamp())
         self.assertFalse(state.is_deprecated(0.1))
 
 

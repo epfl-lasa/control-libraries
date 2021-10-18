@@ -115,26 +115,27 @@ $(function() {
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  c.def(<span class="stringliteral">&quot;set_empty&quot;</span>, &amp;State::set_empty, <span class="stringliteral">&quot;Setter of the empty attribute&quot;</span>, <span class="stringliteral">&quot;empty&quot;</span>_a=<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  c.def(<span class="stringliteral">&quot;set_filled&quot;</span>, &amp;State::set_filled, <span class="stringliteral">&quot;Setter of the empty attribute to false and also reset the timestamp&quot;</span>);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  c.def(<span class="stringliteral">&quot;get_timestamp&quot;</span>, &amp;State::get_timestamp, <span class="stringliteral">&quot;Getter of the timestamp attribute&quot;</span>);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  c.def(<span class="stringliteral">&quot;reset_timestamp&quot;</span>, &amp;State::reset_timestamp, <span class="stringliteral">&quot;Reset the timestamp attribute to now&quot;</span>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  c.def(<span class="stringliteral">&quot;get_name&quot;</span>, &amp;State::get_name, <span class="stringliteral">&quot;Getter of the name&quot;</span>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  c.def(<span class="stringliteral">&quot;set_name&quot;</span>, &amp;State::set_name, <span class="stringliteral">&quot;Setter of the name&quot;</span>);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  c.def(<span class="stringliteral">&quot;is_deprecated&quot;</span>, &amp;State::is_deprecated&lt;std::micro&gt;, <span class="stringliteral">&quot;Check if the state is deprecated given a certain time delay with microsecond precision&quot;</span>);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  c.def(<span class="stringliteral">&quot;is_compatible&quot;</span>, &amp;State::is_compatible, <span class="stringliteral">&quot;Check if the state is compatible for operations with the state given as argument&quot;</span>, <span class="stringliteral">&quot;state&quot;</span>_a);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  c.def(<span class="stringliteral">&quot;initialize&quot;</span>, &amp;State::initialize, <span class="stringliteral">&quot;Initialize the State to a zero value&quot;</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>&amp; state) {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    std::stringstream buffer;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    buffer &lt;&lt; state;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  });</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keywordtype">void</span> bind_state(py::module_&amp; m) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  state_type(m);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  state(m);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  c.def(<span class="stringliteral">&quot;set_timestamp&quot;</span>, &amp;State::set_timestamp, <span class="stringliteral">&quot;Setter of the timestamp attribute&quot;</span>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  c.def(<span class="stringliteral">&quot;reset_timestamp&quot;</span>, &amp;State::reset_timestamp, <span class="stringliteral">&quot;Reset the timestamp attribute to now&quot;</span>);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  c.def(<span class="stringliteral">&quot;get_name&quot;</span>, &amp;State::get_name, <span class="stringliteral">&quot;Getter of the name&quot;</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  c.def(<span class="stringliteral">&quot;set_name&quot;</span>, &amp;State::set_name, <span class="stringliteral">&quot;Setter of the name&quot;</span>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  c.def(<span class="stringliteral">&quot;is_deprecated&quot;</span>, &amp;State::is_deprecated&lt;std::micro&gt;, <span class="stringliteral">&quot;Check if the state is deprecated given a certain time delay with microsecond precision&quot;</span>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  c.def(<span class="stringliteral">&quot;is_compatible&quot;</span>, &amp;State::is_compatible, <span class="stringliteral">&quot;Check if the state is compatible for operations with the state given as argument&quot;</span>, <span class="stringliteral">&quot;state&quot;</span>_a);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  c.def(<span class="stringliteral">&quot;initialize&quot;</span>, &amp;State::initialize, <span class="stringliteral">&quot;Initialize the State to a zero value&quot;</span>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>&amp; state) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::stringstream buffer;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    buffer &lt;&lt; state;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  });</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">void</span> bind_state(py::module_&amp; m) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  state_type(m);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  state(m);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
 <div class="ttc" id="aclassstate__representation_1_1_state_html"><div class="ttname"><a href="classstate__representation_1_1_state.html">state_representation::State</a></div><div class="ttdoc">Abstract class to represent a state.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8hpp_source.html#l00046">State.hpp:46</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

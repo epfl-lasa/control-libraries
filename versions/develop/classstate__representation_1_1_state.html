@@ -141,6 +141,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 const std::chrono::time_point&lt; std::chrono::steady_clock &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#a72fb2a85c36f9e6fe1785df043f240e8">get_timestamp</a> () const</td></tr>
 <tr class="memdesc:a72fb2a85c36f9e6fe1785df043f240e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter of the timestamp attribute. <br /></td></tr>
 <tr class="separator:a72fb2a85c36f9e6fe1785df043f240e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b84d85baa36429ccd033c72780e6ab0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#a1b84d85baa36429ccd033c72780e6ab0">set_timestamp</a> (const std::chrono::time_point&lt; std::chrono::steady_clock &gt; &amp;timepoint)</td></tr>
+<tr class="memdesc:a1b84d85baa36429ccd033c72780e6ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter of the timestamp attribute.  <a href="classstate__representation_1_1_state.html#a1b84d85baa36429ccd033c72780e6ab0">More...</a><br /></td></tr>
+<tr class="separator:a1b84d85baa36429ccd033c72780e6ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a001cb2b235481442ca4d904b39b8f0d2"><td class="memItemLeft" align="right" valign="top"><a id="a001cb2b235481442ca4d904b39b8f0d2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#a001cb2b235481442ca4d904b39b8f0d2">reset_timestamp</a> ()</td></tr>
 <tr class="memdesc:a001cb2b235481442ca4d904b39b8f0d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the timestamp attribute to now. <br /></td></tr>
@@ -305,7 +308,7 @@ Friends</h2></td></tr>
 <p>Getter of the type attribute. </p>
 <dl class="section return"><dt>Returns</dt><dd>the type of the <a class="el" href="classstate__representation_1_1_state.html" title="Abstract class to represent a state.">State</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00192">192</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00198">198</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -343,7 +346,7 @@ Friends</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classstate__representation_1_1_spatial_state.html#a3b36cee6bb9781b11fd5cf8ea2de9f8a">state_representation::SpatialState</a>, <a class="el" href="classstate__representation_1_1_jacobian.html#aa378fc7dc31f76ad0b7f5c61c96b1ffc">state_representation::Jacobian</a>, and <a class="el" href="classstate__representation_1_1_joint_state.html#a74bd20318b6dfcecfd2273f84f7024fe">state_representation::JointState</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00230">230</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00240">240</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -381,7 +384,7 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00218">218</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00228">228</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -418,7 +421,7 @@ template&lt;typename DurationT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>reference to the current state with new values </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00186">186</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00192">192</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +571,43 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00200">200</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00206">206</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1b84d85baa36429ccd033c72780e6ab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b84d85baa36429ccd033c72780e6ab0">&#9670;&nbsp;</a></span>set_timestamp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void state_representation::State::set_timestamp </td>
+          <td>(</td>
+          <td class="paramtype">const std::chrono::time_point&lt; std::chrono::steady_clock &gt; &amp;&#160;</td>
+          <td class="paramname"><em>timepoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setter of the timestamp attribute. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timepoint</td><td>the new value for the timestamp </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00219">219</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -664,7 +703,7 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00179">179</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00185">185</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

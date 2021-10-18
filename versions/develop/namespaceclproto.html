@@ -90,6 +90,10 @@ Typedefs</h2></td></tr>
 typedef std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a01d1aa530ee71315b78de255c0959aa9">field_length_t</a></td></tr>
 <tr class="memdesc:a01d1aa530ee71315b78de255c0959aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size type used to indicate number of fields and field data length in <a class="el" href="namespaceclproto.html#ab707c8834e0c762b9b8a531df8d373b5" title="Pack an ordered vector of encoded field messages into a single data array.">pack_fields()</a> and <a class="el" href="namespaceclproto.html#ac7a129b4c8398f6ad220743f766b270b" title="Unpack a data array into an ordered vector of encoded field messages.">unpack_fields()</a> methods. <br /></td></tr>
 <tr class="separator:a01d1aa530ee71315b78de255c0959aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084015d6d706a81a2f66f9e0567cf7af"><td class="memItemLeft" align="right" valign="top"><a id="a084015d6d706a81a2f66f9e0567cf7af"></a>
+typedef std::chrono::nanoseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a084015d6d706a81a2f66f9e0567cf7af">timestamp_duration_t</a></td></tr>
+<tr class="memdesc:a084015d6d706a81a2f66f9e0567cf7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Duration type to use when representing chrono timestamps as integer count since epoch. <br /></td></tr>
+<tr class="separator:a084015d6d706a81a2f66f9e0567cf7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -488,7 +492,7 @@ template&lt;&gt; </td></tr>
 <p>The MessageType enumeration contains the possible message types in the clproto. </p>
 <p>The values and order of this enumeration are synchronized with the fields of the protobuf StateMessage type, allowing a one-to-one mapping to the StateMessage type case. </p>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00053">53</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00061">61</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -507,7 +511,7 @@ template&lt;&gt; </td></tr>
 <p>The ParameterMessageType enumeration contains the possible value types contained in a parameter message. </p>
 <p>The values and order of this enumeration are synchronized with the fields of the protobuf ParameterValue type, allowing a one-to-one mapping to the ParameterValue type case. </p>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00082">82</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00090">90</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -941,7 +945,7 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The encoded RepeatedField protocol message object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="encoders_8h_source.html#l00059">59</a> of file <a class="el" href="encoders_8h_source.html">encoders.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="encoders_8h_source.html#l00060">60</a> of file <a class="el" href="encoders_8h_source.html">encoders.h</a>.</p>
 
 </div>
 </div>
@@ -984,7 +988,7 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new instance of the control libraries object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00223">223</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00231">231</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -1147,7 +1151,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The JSON formatted state message description </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00199">199</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00207">207</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>

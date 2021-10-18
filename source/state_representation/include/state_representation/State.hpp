@@ -117,6 +117,12 @@ public:
   const std::chrono::time_point<std::chrono::steady_clock>& get_timestamp() const;
 
   /**
+   * @brief Setter of the timestamp attribute
+   * @param timepoint the new value for the timestamp
+   */
+  void set_timestamp(const std::chrono::time_point<std::chrono::steady_clock>& timepoint);
+
+  /**
    * @brief Reset the timestamp attribute to now
    */
   void reset_timestamp();
@@ -208,6 +214,10 @@ inline void State::set_filled() {
 
 inline const std::chrono::time_point<std::chrono::steady_clock>& State::get_timestamp() const {
   return this->timestamp_;
+}
+
+inline void State::set_timestamp(const std::chrono::time_point<std::chrono::steady_clock>& timepoint) {
+  this->timestamp_ = timepoint;
 }
 
 inline void State::reset_timestamp() {

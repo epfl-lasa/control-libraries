@@ -21,6 +21,7 @@ Release Versions:
 - Improve CartesianState tests in C++ and Python (#213)
 - Add build testing option to clproto install (#216)
 - Add method to set a joint state by name or index of the joint (#217)
+- Add the `set_timestamp` method to the `State` base class (#218)
 
 ### Pending TODOs for the next release
 

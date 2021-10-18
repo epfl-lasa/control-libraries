@@ -17,8 +17,10 @@ TEST(MessageProtoTest, EncodeDecodeState) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
 
   EXPECT_EQ(send_state.is_empty(), recv_state.is_empty());
-  EXPECT_EQ(recv_state.get_type(), StateType::STATE);
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
+  EXPECT_EQ(send_state.get_timestamp().time_since_epoch().count(),
+            recv_state.get_timestamp().time_since_epoch().count());
 }
 
 TEST(MessageProtoTest, DecodeInvalidString) {

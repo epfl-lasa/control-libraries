@@ -1,5 +1,6 @@
 import time
 import unittest
+import datetime
 
 from state_representation import State, StateType
 
@@ -9,6 +10,7 @@ STATE_METHOD_EXPECTS = [
     'set_empty',
     'set_filled',
     'get_timestamp',
+    'set_timestamp',
     'reset_timestamp',
     'get_name',
     'set_name',
@@ -68,6 +70,10 @@ class TestState(unittest.TestCase):
         time.sleep(0.2)
         self.assertTrue(state.is_deprecated(0.1))
         state.reset_timestamp()
+        self.assertFalse(state.is_deprecated(0.1))
+        time.sleep(0.2)
+        self.assertTrue(state.is_deprecated(0.1))
+        state.set_timestamp(datetime.datetime.now().timestamp())
         self.assertFalse(state.is_deprecated(0.1))
 
 

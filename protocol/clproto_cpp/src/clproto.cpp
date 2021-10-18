@@ -190,9 +190,8 @@ bool decode(const std::string& msg, State& obj) {
 
     auto state = message.state();
     obj = State(decoder(state.type()), state.name(), state.empty());
-
-    //TODO: (maybe) add set_timestamp method to State and add decoder for int to chrono
-    //obj.set_timestamp(state.timestamp());
+    std::chrono::time_point<std::chrono::steady_clock> timepoint(timestamp_duration_t(state.timestamp()));
+    obj.set_timestamp(timepoint);
 
     return true;
   } catch (...) {

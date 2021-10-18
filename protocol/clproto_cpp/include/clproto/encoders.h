@@ -9,6 +9,7 @@
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 
+#include "clproto.h"
 #include "state_representation/state_message.pb.h"
 
 namespace clproto {

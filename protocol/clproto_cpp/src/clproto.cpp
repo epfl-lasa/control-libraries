@@ -183,9 +183,7 @@ bool decode(const std::string& msg, State& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kState)) {
-      if (!message.mutable_state()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.state();
@@ -228,9 +226,7 @@ bool decode(const std::string& msg, SpatialState& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kSpatialState)) {
-      if (!message.mutable_spatial_state()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto spatial_state = message.spatial_state();
@@ -273,9 +269,7 @@ bool decode(const std::string& msg, CartesianState& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianState)) {
-      if (!message.mutable_cartesian_state()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.cartesian_state();
@@ -328,9 +322,7 @@ bool decode(const std::string& msg, CartesianPose& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianPose)) {
-      if (!message.mutable_cartesian_pose()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
     auto pose = message.cartesian_pose();
     obj.set_name(pose.spatial_state().state().name());
@@ -376,9 +368,7 @@ bool decode(const std::string& msg, CartesianTwist& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianTwist)) {
-      if (!message.mutable_cartesian_twist()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
     auto twist = message.cartesian_twist();
     obj.set_name(twist.spatial_state().state().name());
@@ -424,9 +414,7 @@ bool decode(const std::string& msg, CartesianWrench& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianWrench)) {
-      if (!message.mutable_cartesian_wrench()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
     auto wrench = message.cartesian_wrench();
     obj.set_name(wrench.spatial_state().state().name());
@@ -469,9 +457,7 @@ bool decode(const std::string& msg, Jacobian& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJacobian)) {
-      if (!message.mutable_jacobian()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto jacobian = message.jacobian();
@@ -519,9 +505,7 @@ bool decode(const std::string& msg, JointState& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointState)) {
-      if (!message.mutable_joint_state()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.joint_state();
@@ -569,9 +553,7 @@ bool decode(const std::string& msg, JointPositions& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointPositions)) {
-      if (!message.mutable_joint_positions()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.joint_positions();
@@ -616,9 +598,7 @@ bool decode(const std::string& msg, JointVelocities& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointVelocities)) {
-      if (!message.mutable_joint_velocities()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.joint_velocities();
@@ -663,9 +643,7 @@ bool decode(const std::string& msg, JointAccelerations& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointAccelerations)) {
-      if (!message.mutable_joint_accelerations()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.joint_accelerations();
@@ -710,9 +688,7 @@ bool decode(const std::string& msg, JointTorques& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kJointTorques)) {
-      if (!message.mutable_joint_torques()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
 
     auto state = message.joint_torques();
@@ -758,9 +734,7 @@ static bool decode_parameter(const std::string& msg, Parameter<T>& obj) {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg)
         && message.message_type_case() == proto::StateMessage::MessageTypeCase::kParameter)) {
-      if (!message.mutable_parameter()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
     obj = decoder<T>(message.parameter());
     if (message.parameter().state().empty()) {
@@ -783,7 +757,7 @@ template<>
 bool decode(const std::string& msg, Parameter<int>& obj);
 template<>
 std::string encode<Parameter<int>>(const Parameter<int>& obj) {
-return encode_parameter(obj);
+  return encode_parameter(obj);
 }
 template<>
 Parameter<int> decode(const std::string& msg) {
@@ -1015,9 +989,7 @@ template<> bool decode(const std::string& msg, __TYPE__& obj) {
   try {
     proto::StateMessage message;
     if (!(message.ParseFromString(msg) && message.message_type_case() == proto::StateMessage::MessageTypeCase::k__TYPE__)) {
-      if (!message.mutable___TYPE__()->ParseFromString(msg)) {
-        return false;
-      }
+      return false;
     }
     // decode
     return true;

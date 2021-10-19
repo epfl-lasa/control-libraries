@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
 #include <state_representation/State.hpp>
+#include <state_representation/space/cartesian/CartesianState.hpp>
+#include <state_representation/space/cartesian/CartesianPose.hpp>
 
 #include "clproto.h"
 
@@ -34,6 +36,16 @@ TEST(MessageProtoTest, DecodeInvalidString) {
   EXPECT_FALSE(clproto::decode(dummy_msg, obj));
 
   EXPECT_THROW(clproto::decode<State>(dummy_msg), clproto::DecodingException);
+}
+
+TEST(MessageProtoTest, DecodeParallelTypes) {
+  auto state = CartesianState::Random("A", "B");
+  auto pose = CartesianPose::Random("C", "D");
+  auto encoded_state = clproto::encode(state);
+  auto encoded_pose = clproto::encode(pose);
+
+  EXPECT_THROW(clproto::decode<CartesianState>(encoded_pose), clproto::DecodingException);
+  EXPECT_THROW(clproto::decode<CartesianPose>(encoded_state), clproto::DecodingException);
 }
 
 /* If an encode / decode template is invoked that is not implemented in clproto,

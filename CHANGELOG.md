@@ -22,6 +22,7 @@ Release Versions:
 - Add build testing option to clproto install (#216)
 - Add method to set a joint state by name or index of the joint (#217)
 - Add the `set_timestamp` method to the `State` base class (#218)
+- Fix the field size type for clproto pack_fields (#222)
 
 ### Pending TODOs for the next release
 

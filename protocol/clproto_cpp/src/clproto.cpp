@@ -65,8 +65,6 @@ ParameterMessageType check_parameter_message_type(const std::string& msg) {
   return ParameterMessageType::UNKNOWN_PARAMETER;
 }
 
-typedef std::size_t field_length_t;
-
 // --- Serialization methods --- //
 
 void pack_fields(const std::vector<std::string>& fields, char* data) {

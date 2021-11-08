@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <chrono>
 #include <stdexcept>
 #include <string>
@@ -20,7 +21,7 @@ namespace clproto {
  * and field data length in ::pack_fields() and
  * ::unpack_fields() methods
  */
-typedef std::size_t field_length_t;
+typedef uint32_t field_length_t;
 
 /**
  * @typedef timestamp_duration_t

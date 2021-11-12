@@ -26,11 +26,13 @@ enum StateType {
   PARAMETER_ELLIPSOID = 18;
   PARAMETER_MATRIX = 19;
   PARAMETER_VECTOR = 20;
+  PARAMETER_INT = 21;
+  PARAMETER_INT_ARRAY = 22;
 };
 
 message State {
   string name = 1;
   StateType type = 2;
   bool empty = 3;
-  int64 timestamp = 4;
+  int64 timestamp = 4;  // timestamp is encoded as nanoseconds since the system steady_clock epoch
 }

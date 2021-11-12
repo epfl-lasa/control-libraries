@@ -2,7 +2,7 @@
 
 echo ">>> Installing control libraries..."
 bash /github/workspace/source/install.sh --auto --no-controllers --no-dynamical-systems --no-robot-model || exit 1
-ldconfig
+bash /github/workspace/protocol/install.sh --auto || exit 1
 
 echo ">>> Building Python bindings..."
 pip3 install /github/workspace/python || (echo ">>> [ERROR] Build stage failed!" && exit 2) || exit $?

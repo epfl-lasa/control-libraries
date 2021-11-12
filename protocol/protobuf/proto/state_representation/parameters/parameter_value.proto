@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package state_representation.proto.parameter;
 
+message Int {
+  sint32 value = 1;
+}
+
+message IntArray {
+  repeated sint32 value = 1;
+}
+
 message Double {
   double value = 1;
 }

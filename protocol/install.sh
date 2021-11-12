@@ -4,6 +4,7 @@ PROTOBUF_DIR="${SCRIPT_DIR}"/protobuf
 CLPROTO_DIR="${SCRIPT_DIR}"/clproto_cpp
 
 INSTALL_DESTINATION="/usr/local"
+BUILD_TESTING="OFF"
 AUTO_INSTALL=""
 BINDINGS_ONLY=false
 PROTOBUF_VERSION="3.17.0"
@@ -22,6 +23,8 @@ Options:
   -d, --dir [path]         Configure the installation directory
                            (default: ${INSTALL_DESTINATION}).
 
+  --build-tests            Build the unittest targets.
+
   --clean-bindings         Clean any previously generated protobuf
                            bindings.
 
@@ -35,7 +38,7 @@ Options:
   -h, --help               Show this help message."
 
 function make_bindings() {
-  cd "${PROTOBUF_DIR}" && make -j all || exit 1
+  cd "${PROTOBUF_DIR}" && make all || exit 1
 }
 
 function clean_bindings() {
@@ -75,7 +78,7 @@ function install_state_representation() {
 function install_clproto() {
   cd "${CLPROTO_DIR}" && mkdir -p build && cd build || exit 1
 
-  cmake -DCMAKE_BUILD_TYPE=Release \
+  cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING="${BUILD_TESTING}" \
     -DCMAKE_INSTALL_PREFIX="${INSTALL_DESTINATION}" .. || exit 1
 
   make -j && make install || exit 1
@@ -106,6 +109,10 @@ while [ "$#" -gt 0 ]; do
     ;;
   --bindings-only)
     BINDINGS_ONLY=true
+    shift 1
+    ;;
+  --build-tests)
+    BUILD_TESTING="ON"
     shift 1
     ;;
   --clean-bindings)

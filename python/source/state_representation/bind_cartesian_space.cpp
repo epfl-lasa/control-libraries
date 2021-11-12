@@ -11,15 +11,19 @@
 void spatial_state(py::module_& m) {
   py::class_<SpatialState, State> c(m, "SpatialState");
 
-  m.def("swap", py::overload_cast<SpatialState&, SpatialState&>(&state_representation::swap), "Swap the values of the two SpatialStates", "state1"_a, "state2"_a);
+  c.def(py::init<const StateType&>(), "Constructor only specifying the type.", "type"_a);
+  c.def(py::init<const StateType&, const std::string&, const std::string&, const bool&>(), "Constructor with name and reference frame specification.", "type"_a, "name"_a, "reference_frame"_a=std::string("world"), "empty"_a=true);
+  c.def(py::init<const SpatialState&>(), "Copy constructor from another SpatialState.", "state"_a);
 
-  c.def(py::init<const StateType&>(), "Constructor only specifying the type", "type"_a);
-  c.def(py::init<const StateType&, const std::string&, const std::string&, const bool&>(), "Constructor with name and reference frame specification", "type"_a, "name"_a, "reference_frame"_a, "empty"_a=true);
-  c.def(py::init<const SpatialState&>(), "Copy constructor from another SpatialState", "state"_a);
+  c.def("get_reference_frame", &SpatialState::get_reference_frame, "Getter of the reference frame.");
+  c.def("set_reference_frame", &SpatialState::set_reference_frame, "Setter of the reference frame.", "reference_frame"_a);
+  c.def("is_compatible", &SpatialState::is_compatible, "Check if the state is compatible for operations with the state given as argument.", "state"_a);
 
-  c.def("get_reference_frame", &SpatialState::get_reference_frame, "Getter of the reference frame");
-  c.def("set_reference_frame", &SpatialState::set_reference_frame, "Setter of the reference frame");
-  c.def("is_compatible", &SpatialState::is_compatible, "Check if the state is compatible for operations with the state given as argument", "state"_a);
+  c.def("__repr__", [](const SpatialState& state) {
+    std::stringstream buffer;
+    buffer << state;
+    return buffer.str();
+  });
 }
 
 void cartesian_state_variable(py::module_& m) {
@@ -101,6 +105,8 @@ void cartesian_state(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
   c.def(py::self += py::self);
   c.def(py::self + py::self);
   c.def(py::self -= py::self);
@@ -170,6 +176,8 @@ void cartesian_pose(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);
@@ -233,6 +241,8 @@ void cartesian_twist(py::module_& m) {
 
   c.def(py::self *= double());
   c.def(py::self * double());
+  c.def(py::self /= double());
+  c.def(py::self / double());
   c.def(py::self *= Eigen::Matrix<double, 6, 6>());
   c.def(py::self * std::chrono::nanoseconds());
 
@@ -298,6 +308,8 @@ void cartesian_wrench(py::module_& m) {
   c.def(py::self *= double());
   c.def(py::self * double());
   c.def(double() * py::self);
+  c.def(py::self /= double());
+  c.def(py::self / double());
 
   c.def("clamp", &CartesianWrench::clamp, "Clamp inplace the magnitude of the wrench to the values in argument", "max_force"_a, "max_torque"_a, "force_noise_ratio"_a=0, "torque_noise_ratio"_a=0);
   c.def("clamped", &CartesianWrench::clamped, "Return the clamped wrench", "max_force"_a, "max_torque"_a, "force_noise_ratio"_a=0, "torque_noise_ratio"_a=0);

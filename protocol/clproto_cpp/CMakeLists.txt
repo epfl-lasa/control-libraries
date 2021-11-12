@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
-project(clproto VERSION 4.0.0)
+project(clproto VERSION 4.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_library(state_representation REQUIRED)
@@ -38,7 +39,7 @@ add_library(${PROJECT_NAME} SHARED
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${PROJECT_SOURCE_DIR}/include/clproto.h)
-target_link_libraries(${PROJECT_NAME} PUBLIC protobuf state_representation PRIVATE ${PROJECT_NAME}_bindings)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${PROTOBUF_LIBRARY} state_representation PRIVATE ${PROJECT_NAME}_bindings)
 
 install(TARGETS ${PROJECT_NAME}
     PUBLIC_HEADER DESTINATION include

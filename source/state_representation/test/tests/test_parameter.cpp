@@ -4,18 +4,33 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include <gtest/gtest.h>
 
+using namespace state_representation;
+
 TEST(ParameterTest, Conversion) {
-  using namespace state_representation;
+  Parameter<int> int_param("test");
+  EXPECT_TRUE(int_param.is_empty());
+  EXPECT_EQ(int_param.get_type(), StateType::PARAMETER_INT);
+  int_param.set_value(2);
+  EXPECT_EQ(int_param.get_value(), 2);
+
+  std::vector<int> values{1, 2, 3};
+  Parameter<std::vector<int>> int_array_param("test", values);
+  EXPECT_FALSE(int_array_param.is_empty());
+  EXPECT_EQ(int_array_param.get_type(), StateType::PARAMETER_INT_ARRAY);
+  for (std::size_t i = 0; i < values.size(); ++i) {
+    EXPECT_EQ(int_array_param.get_value().at(i), values.at(i));
+  }
+
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);
   EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANPOSE);
 
-  std::shared_ptr<Parameter<CartesianState>> test3 = std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("test", CartesianPose::Random("test")));
+  std::shared_ptr<Parameter<CartesianState>> test3 =
+      std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("test", CartesianPose::Random("test")));
   EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANPOSE);
 }
 
 TEST(ParameterTest, Event) {
-  using namespace state_representation;
   Event e("test");
   EXPECT_FALSE(e.get_value());
   EXPECT_FALSE(e.get_previous_value());

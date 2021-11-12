@@ -18,14 +18,26 @@ private:
 
 public:
   const Eigen::VectorXd& get_positions() const = delete;
+  double get_position(unsigned int joint_index) const = delete;
+  double get_position(const std::string& joint_name) const = delete;
   void set_positions(const Eigen::VectorXd& positions) = delete;
   void set_positions(const std::vector<double>& positions) = delete;
+  void set_position(double position, unsigned int joint_index) const = delete;
+  void set_position(double position, const std::string& joint_name) const = delete;
   const Eigen::VectorXd& get_accelerations() const = delete;
+  double get_acceleration(unsigned int joint_index) const = delete;
+  double get_acceleration(const std::string& joint_name) const = delete;
   void set_accelerations(const Eigen::VectorXd& accelerations) = delete;
   void set_accelerations(const std::vector<double>& accelerations) = delete;
+  void set_acceleration(double acceleration, unsigned int joint_index) const = delete;
+  void set_acceleration(double acceleration, const std::string& joint_name) const = delete;
   const Eigen::VectorXd& get_torques() const = delete;
+  double get_torque(unsigned int joint_index) const = delete;
+  double get_torque(const std::string& joint_name) const = delete;
   void set_torques(const Eigen::VectorXd& torques) = delete;
   void set_torques(const std::vector<double>& torques) = delete;
+  void set_torque(double torque, unsigned int joint_index) const = delete;
+  void set_torque(double torque, const std::string& joint_name) const = delete;
 
   /**
    * @brief Empty constructor

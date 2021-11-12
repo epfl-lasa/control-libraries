@@ -3,13 +3,14 @@
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
+#include "state_representation/exceptions/JointNotFoundException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;
 
 TEST(JointStateTest, Constructors) {
   JointState empty;
-  EXPECT_EQ(empty.get_name(), "none");
+  EXPECT_EQ(empty.get_name(), "");
   EXPECT_EQ(empty.get_type(), StateType::JOINTSTATE);
   EXPECT_TRUE(empty.is_empty());
   EXPECT_EQ(empty.get_size(), 0);
@@ -109,22 +110,42 @@ TEST(JointStateTest, GetSetFields) {
   js.set_positions(positions);
   for (std::size_t i = 0; i < positions.size(); ++i) {
     EXPECT_EQ(js.get_positions()(i), positions.at(i));
+    EXPECT_EQ(js.get_position(i), positions.at(i));
+    EXPECT_EQ(js.get_position(js.get_names().at(i)), positions.at(i));
   }
+  EXPECT_THROW(js.get_position(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_position("test"), exceptions::JointNotFoundException);
+
   std::vector<double> velocities{4, 5, 6};
   js.set_velocities(velocities);
   for (std::size_t i = 0; i < velocities.size(); ++i) {
     EXPECT_EQ(js.get_velocities()(i), velocities.at(i));
+    EXPECT_EQ(js.get_velocity(i), velocities.at(i));
+    EXPECT_EQ(js.get_velocity(js.get_names().at(i)), velocities.at(i));
   }
+  EXPECT_THROW(js.get_velocity(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_velocity("test"), exceptions::JointNotFoundException);
+
   std::vector<double> accelerations{7, 8, 9};
   js.set_accelerations(accelerations);
   for (std::size_t i = 0; i < accelerations.size(); ++i) {
     EXPECT_EQ(js.get_accelerations()(i), accelerations.at(i));
+    EXPECT_EQ(js.get_acceleration(i), accelerations.at(i));
+    EXPECT_EQ(js.get_acceleration(js.get_names().at(i)), accelerations.at(i));
   }
+  EXPECT_THROW(js.get_acceleration(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_acceleration("test"), exceptions::JointNotFoundException);
+
   std::vector<double> torques{10, 11, 12};
   js.set_torques(torques);
   for (std::size_t i = 0; i < torques.size(); ++i) {
     EXPECT_EQ(js.get_torques()(i), torques.at(i));
+    EXPECT_EQ(js.get_torque(i), torques.at(i));
+    EXPECT_EQ(js.get_torque(js.get_names().at(i)), torques.at(i));
   }
+  EXPECT_THROW(js.get_torque(js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.get_torque("test"), exceptions::JointNotFoundException);
+
   EXPECT_THROW(js.set_positions(Eigen::VectorXd::Zero(4)), exceptions::IncompatibleSizeException);
   EXPECT_THROW(js.set_velocities(Eigen::VectorXd::Zero(5)), exceptions::IncompatibleSizeException);
   EXPECT_THROW(js.set_accelerations(Eigen::VectorXd::Zero(6)), exceptions::IncompatibleSizeException);
@@ -135,6 +156,43 @@ TEST(JointStateTest, GetSetFields) {
   EXPECT_EQ(js.is_empty(), false);
   js.set_empty();
   EXPECT_EQ(js.is_empty(), true);
+}
+
+TEST(JointStateTest, GetSetField) {
+  JointState js("test", 3);
+
+  // fields
+  js.set_position(1.0, "joint0");
+  js.set_position(1.1, 1);
+  EXPECT_EQ(js.get_position(0), 1.0);
+  EXPECT_EQ(js.get_position(1), 1.1);
+  EXPECT_EQ(js.get_position(2), 0);
+  EXPECT_THROW(js.set_position(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_position(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_velocity(2.0, "joint0");
+  js.set_velocity(2.2, 1);
+  EXPECT_EQ(js.get_velocity(0), 2.0);
+  EXPECT_EQ(js.get_velocity(1), 2.2);
+  EXPECT_EQ(js.get_velocity(2), 0);
+  EXPECT_THROW(js.set_velocity(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_velocity(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_acceleration(3.0, "joint0");
+  js.set_acceleration(3.3, 1);
+  EXPECT_EQ(js.get_acceleration(0), 3);
+  EXPECT_EQ(js.get_acceleration(1), 3.3);
+  EXPECT_EQ(js.get_acceleration(2), 0);
+  EXPECT_THROW(js.set_acceleration(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_acceleration(1, "test"), exceptions::JointNotFoundException);
+
+  js.set_torque(4.0, "joint0");
+  js.set_torque(4.4, 1);
+  EXPECT_EQ(js.get_torque(0), 4);
+  EXPECT_EQ(js.get_torque(1), 4.4);
+  EXPECT_EQ(js.get_torque(2), 0);
+  EXPECT_THROW(js.set_torque(1, js.get_size() + 1), exceptions::JointNotFoundException);
+  EXPECT_THROW(js.set_torque(1, "test"), exceptions::JointNotFoundException);
 }
 
 TEST(JointStateTest, Compatibility) {
@@ -226,6 +284,15 @@ TEST(JointStateTest, GetSetData) {
     EXPECT_EQ(state_vec.at(i), js1.data()(i));
   }
   EXPECT_THROW(js1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
+}
+
+TEST(JointStateTest, GetIndexByName) {
+  JointState js = JointState::Random("test", 3);
+  for (std::size_t i = 0; i < js.get_size(); ++i) {
+    auto index = js.get_joint_index("joint" + std::to_string(i));
+    EXPECT_EQ(index, i);
+  }
+  EXPECT_THROW(js.get_joint_index("joint5"), exceptions::JointNotFoundException);
 }
 
 TEST(JointStateTest, Distance) {

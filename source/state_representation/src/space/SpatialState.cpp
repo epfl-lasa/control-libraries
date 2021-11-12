@@ -14,7 +14,7 @@ std::ostream& operator<<(std::ostream& os, const SpatialState& state) {
   if (state.is_empty()) {
     os << "Empty ";
   }
-  os << " State: " << state.get_name() << " expressed in " << state.get_reference_frame() << " frame" << std::endl;
+  os << " State: " << state.get_name() << " expressed in " << state.get_reference_frame() << " frame";
   return os;
 }
 }

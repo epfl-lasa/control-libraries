@@ -2,9 +2,9 @@
 #include "state_representation/exceptions/NotImplementedException.hpp"
 
 namespace state_representation {
-State::State() : type_(StateType::STATE), name_("none"), empty_(true) {}
+State::State() : type_(StateType::STATE), name_(""), empty_(true) {}
 
-State::State(const StateType& type) : type_(type), name_("none"), empty_(true) {}
+State::State(const StateType& type) : type_(type), name_(""), empty_(true) {}
 
 State::State(const StateType& type, const std::string& name, const bool& empty)
     : type_(type), name_(name), empty_(empty), timestamp_(std::chrono::steady_clock::now()) {}
@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
   if (state.is_empty()) {
     os << "Empty ";
   }
-  os << " State: " << state.get_name() << std::endl;
+  os << " State: " << state.get_name();
   return os;
 }
 }// namespace state_representation

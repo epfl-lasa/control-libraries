@@ -4,144 +4,163 @@
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 
 namespace state_representation {
-template <>
-Parameter<double>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {
+template<>
+Parameter<int>::Parameter(const std::string& name) :
+    ParameterInterface(StateType::PARAMETER_INT, name) {}
+
+template<>
+Parameter<int>::Parameter(const std::string& name, const int& value) :
+    ParameterInterface(StateType::PARAMETER_INT, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
+Parameter<std::vector<int>>::Parameter(const std::string& name) :
+    ParameterInterface(StateType::PARAMETER_INT_ARRAY, name) {}
+
+template<>
+Parameter<std::vector<int>>::Parameter(const std::string& name, const std::vector<int>& value) :
+    ParameterInterface(StateType::PARAMETER_INT_ARRAY, name), value(value) {
+  this->set_filled();
+}
+
+template<>
+Parameter<double>::Parameter(const std::string& name) :
+    ParameterInterface(StateType::PARAMETER_DOUBLE, name) {}
+
+template<>
 Parameter<double>::Parameter(const std::string& name, const double& value) :
     ParameterInterface(StateType::PARAMETER_DOUBLE, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_DOUBLE_ARRAY, name) {}
 
-template <>
+template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name, const std::vector<double>& value) :
     ParameterInterface(StateType::PARAMETER_DOUBLE_ARRAY, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<bool>::Parameter(const std::string& name) : ParameterInterface(StateType::PARAMETER_BOOL, name) {}
 
-template <>
+template<>
 Parameter<bool>::Parameter(const std::string& name, const bool& value) :
     ParameterInterface(StateType::PARAMETER_BOOL, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<std::vector<bool>>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_BOOL_ARRAY, name) {
 }
 
-template <>
+template<>
 Parameter<std::vector<bool>>::Parameter(const std::string& name, const std::vector<bool>& value) :
     ParameterInterface(StateType::PARAMETER_BOOL_ARRAY, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<std::string>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_STRING, name) {}
 
-template <>
+template<>
 Parameter<std::string>::Parameter(const std::string& name, const std::string& value) :
     ParameterInterface(StateType::PARAMETER_STRING, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_STRING_ARRAY, name) {}
 
-template <>
+template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name, const std::vector<std::string>& value) :
     ParameterInterface(StateType::PARAMETER_STRING_ARRAY, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<CartesianState>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_CARTESIANSTATE, name) {}
 
-template <>
+template<>
 Parameter<CartesianState>::Parameter(const std::string& name, const CartesianState& value) :
     ParameterInterface(StateType::PARAMETER_CARTESIANSTATE, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<CartesianPose>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_CARTESIANPOSE, name) {}
 
-template <>
+template<>
 Parameter<CartesianPose>::Parameter(const std::string& name, const CartesianPose& value) :
     ParameterInterface(StateType::PARAMETER_CARTESIANPOSE, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<JointState>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_JOINTSTATE, name) {}
 
-template <>
+template<>
 Parameter<JointState>::Parameter(const std::string& name, const JointState& value) :
     ParameterInterface(StateType::PARAMETER_JOINTSTATE, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<JointPositions>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_JOINTPOSITIONS, name) {}
 
-template <>
+template<>
 Parameter<JointPositions>::Parameter(const std::string& name, const JointPositions& value) :
     ParameterInterface(StateType::PARAMETER_JOINTPOSITIONS, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<Ellipsoid>::Parameter(const std::string& name, const Ellipsoid& value) :
     ParameterInterface(StateType::PARAMETER_ELLIPSOID, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_MATRIX, name) {}
 
-template <>
+template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name, const Eigen::MatrixXd& value) :
     ParameterInterface(StateType::PARAMETER_MATRIX, name), value(value) {
   this->set_filled();
 }
 
-template <>
+template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name) :
     ParameterInterface(StateType::PARAMETER_VECTOR, name) {}
 
-template <>
+template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name, const Eigen::VectorXd& value) :
     ParameterInterface(StateType::PARAMETER_VECTOR, name), value(value) {
   this->set_filled();
 }
 
-template <typename T>
+template<typename T>
 std::ostream& operator<<(std::ostream& os, const Parameter<T>& parameter) {
   if (parameter.is_empty()) {
-    os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
+    os << " Parameter " << parameter.get_name() << " is empty";
   } else {
-    os << " Parameter " << parameter.get_name() << ": " << parameter.value << std::endl;
+    os << " Parameter " << parameter.get_name() << ": " << parameter.value;
   }
   return os;
 }
 
+template std::ostream& operator<<(std::ostream& os, const Parameter<int>& parameter);
 template std::ostream& operator<<(std::ostream& os, const Parameter<double>& parameter);
 template std::ostream& operator<<(std::ostream& os, const Parameter<bool>& parameter);
 template std::ostream& operator<<(std::ostream& os, const Parameter<std::string>& parameter);
@@ -153,13 +172,27 @@ template std::ostream& operator<<(std::ostream& os, const Parameter<Ellipsoid>& 
 template std::ostream& operator<<(std::ostream& os, const Parameter<Eigen::MatrixXd>& parameter);
 template std::ostream& operator<<(std::ostream& os, const Parameter<Eigen::VectorXd>& parameter);
 
-template <>
+template<>
+std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<int>>& parameter) {
+  if (parameter.is_empty()) {
+    os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
+  } else {
+    os << " Parameter " << parameter.get_name() << ": ";
+    for (auto& v: parameter.value) {
+      os << v << " | ";
+    }
+    os << std::endl;
+  }
+  return os;
+}
+
+template<>
 std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<double>>& parameter) {
   if (parameter.is_empty()) {
     os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
   } else {
     os << " Parameter " << parameter.get_name() << ": ";
-    for (auto& v : parameter.value) {
+    for (auto& v: parameter.value) {
       os << v << " | ";
     }
     os << std::endl;
@@ -167,13 +200,13 @@ std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<double>>&
   return os;
 }
 
-template <>
+template<>
 std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<bool>>& parameter) {
   if (parameter.is_empty()) {
     os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
   } else {
     os << " Parameter " << parameter.get_name() << ": ";
-    for (auto v : parameter.value) {
+    for (auto v: parameter.value) {
       os << v << " | ";
     }
     os << std::endl;
@@ -181,13 +214,13 @@ std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<bool>>& p
   return os;
 }
 
-template <>
+template<>
 std::ostream& operator<<(std::ostream& os, const Parameter<std::vector<std::string>>& parameter) {
   if (parameter.is_empty()) {
     os << " Parameter " << parameter.get_name() << " is empty" << std::endl;
   } else {
     os << " Parameter " << parameter.get_name() << ": ";
-    for (auto& v : parameter.value) {
+    for (auto& v: parameter.value) {
       os << v << " | ";
     }
     os << std::endl;

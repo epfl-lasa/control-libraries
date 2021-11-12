@@ -34,7 +34,9 @@ enum class StateType {
   PARAMETER_JOINTPOSITIONS,
   PARAMETER_ELLIPSOID,
   PARAMETER_MATRIX,
-  PARAMETER_VECTOR
+  PARAMETER_VECTOR,
+  PARAMETER_INT,
+  PARAMETER_INT_ARRAY
 };
 
 /**
@@ -115,6 +117,12 @@ public:
   const std::chrono::time_point<std::chrono::steady_clock>& get_timestamp() const;
 
   /**
+   * @brief Setter of the timestamp attribute
+   * @param timepoint the new value for the timestamp
+   */
+  void set_timestamp(const std::chrono::time_point<std::chrono::steady_clock>& timepoint);
+
+  /**
    * @brief Reset the timestamp attribute to now
    */
   void reset_timestamp();
@@ -133,7 +141,7 @@ public:
    * @brief Check if the state is deprecated given a certain time delay
    * @param time_delay the time after which to consider the state as deprecated
    */
-  template <typename DurationT>
+  template<typename DurationT>
   bool is_deprecated(const std::chrono::duration<int64_t, DurationT>& time_delay);
 
   /**
@@ -164,7 +172,6 @@ public:
    * @param the data vector
    */
   virtual void set_data(const Eigen::MatrixXd& data);
-
 
   /**
    * @brief Overload the ostream operator for printing
@@ -209,11 +216,15 @@ inline const std::chrono::time_point<std::chrono::steady_clock>& State::get_time
   return this->timestamp_;
 }
 
+inline void State::set_timestamp(const std::chrono::time_point<std::chrono::steady_clock>& timepoint) {
+  this->timestamp_ = timepoint;
+}
+
 inline void State::reset_timestamp() {
   this->timestamp_ = std::chrono::steady_clock::now();
 }
 
-template <typename DurationT>
+template<typename DurationT>
 inline bool State::is_deprecated(const std::chrono::duration<int64_t, DurationT>& time_delay) {
   return ((std::chrono::steady_clock::now() - this->timestamp_) > time_delay);
 }

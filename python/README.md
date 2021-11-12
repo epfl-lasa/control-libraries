@@ -51,10 +51,23 @@ from state_representation import JointState
 B = JointState.Random("B", 3)
 ```
 
+If the `clproto` C++ library is installed, the installation steps above will automatically install the `clproto`
+Python module which can be used to encode and decode objects into bytes of serialized data.
+```python
+#!/usr/bin/env python
+from state_representation import JointState
+import clproto
+
+B = JointState.Random("B", 3)
+encoded_msg = clproto.encode(B, clproto.MessageType.JOINT_STATE_MESSAGE)
+
+decoded_object = clproto.decode(encoded_msg)
+```
+
 ## Current status
 
 The Python binding project is currently under development.
-Bindings exist for the following libraries and classes:
+Bindings exist for the following modules, classes and methods:
 
 - `state_representation`:
   - `State`
@@ -68,6 +81,18 @@ Bindings exist for the following libraries and classes:
   - `JointVelocities`
   - `JointTorques`
   - `Jacobian`
+- `clproto`:
+  - `MessageType`
+  - `ParameterMessageType`
+  - `is_valid(msg)`
+  - `check_message_type(msg)`
+  - `check_parameter_message_type(msg)`
+  - `msg = encode(obj, type)`
+  - `obj = decode(msg)`
+  - `pack_fields(encoded_fields)`
+  - `unpack_fields(packet)`
+  - `json = to_json(msg)`
+  - `msg = from_json(json)`
 
 ## About
 

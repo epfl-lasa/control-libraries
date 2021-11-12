@@ -12,6 +12,8 @@ void state_type(py::module_& m) {
       .value("JACOBIANMATRIX", StateType::JACOBIANMATRIX)
       .value("GEOMETRY_SHAPE", StateType::GEOMETRY_SHAPE)
       .value("GEOMETRY_ELLIPSOID", StateType::GEOMETRY_ELLIPSOID)
+      .value("PARAMETER_INT", StateType::PARAMETER_INT)
+      .value("PARAMETER_INT_ARRAY", StateType::PARAMETER_INT_ARRAY)
       .value("PARAMETER_DOUBLE", StateType::PARAMETER_DOUBLE)
       .value("PARAMETER_DOUBLE_ARRAY", StateType::PARAMETER_DOUBLE_ARRAY)
       .value("PARAMETER_BOOL", StateType::PARAMETER_BOOL)
@@ -31,8 +33,6 @@ void state_type(py::module_& m) {
 void state(py::module_& m) {
   py::class_<State> c(m, "State");
 
-  m.def("swap", py::overload_cast<State&, State&>(&state_representation::swap), "Swap the values of the two States", "state1"_a, "state2"_a);
-
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const StateType&>(), "Constructor only specifying the type of the state from the StateType enumeration", "type"_a);
   c.def(py::init<const StateType&, const std::string&, const bool&>(), "Constructor with name specification", "type"_a, "name"_a, "empty"_a=true);
@@ -43,6 +43,7 @@ void state(py::module_& m) {
   c.def("set_empty", &State::set_empty, "Setter of the empty attribute", "empty"_a=true);
   c.def("set_filled", &State::set_filled, "Setter of the empty attribute to false and also reset the timestamp");
   c.def("get_timestamp", &State::get_timestamp, "Getter of the timestamp attribute");
+  c.def("set_timestamp", &State::set_timestamp, "Setter of the timestamp attribute");
   c.def("reset_timestamp", &State::reset_timestamp, "Reset the timestamp attribute to now");
   c.def("get_name", &State::get_name, "Getter of the name");
   c.def("set_name", &State::set_name, "Setter of the name");

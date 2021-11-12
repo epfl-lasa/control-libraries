@@ -17,7 +17,8 @@ proto::State encoder(const State& state) {
   message.set_name(state.get_name());
   message.set_type(encoder(state.get_type()));
   message.set_empty(state.is_empty());
-  message.set_timestamp(state.get_timestamp().time_since_epoch().count());
+  auto timestamp = std::chrono::duration_cast<timestamp_duration_t>(state.get_timestamp().time_since_epoch());
+  message.set_timestamp(timestamp.count());
   return message;
 }
 
@@ -46,6 +47,9 @@ proto::Quaterniond encoder(const Eigen::Quaterniond& quaternion) {
 proto::CartesianState encoder(const CartesianState& cartesian_state) {
   proto::CartesianState message;
   *message.mutable_spatial_state() = encoder(static_cast<SpatialState>(cartesian_state));
+  if (cartesian_state.is_empty()) {
+    return message;
+  }
   *message.mutable_position() = encoder(cartesian_state.get_position());
   *message.mutable_orientation() = encoder(cartesian_state.get_orientation());
   *message.mutable_linear_velocity() = encoder(cartesian_state.get_linear_velocity());
@@ -60,6 +64,9 @@ proto::CartesianState encoder(const CartesianState& cartesian_state) {
 proto::Jacobian encoder(const Jacobian& jacobian) {
   proto::Jacobian message;
   *message.mutable_state() = encoder(static_cast<State>(jacobian));
+  if (jacobian.is_empty()) {
+    return message;
+  }
   *message.mutable_joint_names() = {jacobian.get_joint_names().begin(), jacobian.get_joint_names().end()};
   message.set_frame(jacobian.get_frame());
   message.set_reference_frame(jacobian.get_reference_frame());
@@ -72,6 +79,9 @@ proto::Jacobian encoder(const Jacobian& jacobian) {
 proto::JointState encoder(const JointState& joint_state) {
   proto::JointState message;
   *message.mutable_state() = encoder(static_cast<State>(joint_state));
+  if (joint_state.is_empty()) {
+    return message;
+  }
   *message.mutable_joint_names() = {joint_state.get_names().begin(), joint_state.get_names().end()};
   *message.mutable_positions() = matrix_encoder(joint_state.get_positions());
   *message.mutable_velocities() = matrix_encoder(joint_state.get_velocities());
@@ -80,6 +90,22 @@ proto::JointState encoder(const JointState& joint_state) {
   return message;
 }
 
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<int>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() = encoder(static_cast<state_representation::State>(parameter));
+  message.mutable_parameter_value()->mutable_int_()->set_value(parameter.get_value());
+  return message;
+}
+
+template<>
+state_representation::proto::Parameter encoder(const state_representation::Parameter<std::vector<int>>& parameter) {
+  state_representation::proto::Parameter message;
+  *message.mutable_state() = encoder(static_cast<state_representation::State>(parameter));
+  *message.mutable_parameter_value()->mutable_int_array()->mutable_value() =
+      {parameter.get_value().begin(), parameter.get_value().end()};
+  return message;
+}
 template<>
 state_representation::proto::Parameter encoder(const state_representation::Parameter<double>& parameter) {
   state_representation::proto::Parameter message;

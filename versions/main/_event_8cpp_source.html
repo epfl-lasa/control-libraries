@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">4.0.0</span>
+   &#160;<span id="projectnumber">4.1.0</span>
    </div>
   </td>
  </tr>
@@ -76,7 +76,7 @@ $(function() {
 <div class="line"><a name="l00004"></a><span class="lineno"><a class="line" href="classstate__representation_1_1_event.html#a8dd58d02197a1a061f18d38ebc765681">    4</a></span>&#160;<a class="code" href="classstate__representation_1_1_event.html#a8dd58d02197a1a061f18d38ebc765681">Event::Event</a>(<span class="keyword">const</span> std::string&amp; name) : <a class="code" href="classstate__representation_1_1_predicate.html">Predicate</a>(name), previous_predicate_value_(false) {}</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;std::ostream&amp; <a class="code" href="namespacestate__representation.html#a8d253fbc08f3cb1aba43c5295f6e234e">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_event.html">Event</a>&amp; event) {</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  os &lt;&lt; <span class="stringliteral">&quot; Event &quot;</span> &lt;&lt; <span class="keyword">event</span>.get_name() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; <span class="keyword">event</span>.get_value() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  os &lt;&lt; <span class="stringliteral">&quot; Event &quot;</span> &lt;&lt; <span class="keyword">event</span>.get_name() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; <span class="keyword">event</span>.get_value();</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;  <span class="keywordflow">return</span> os;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;}</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;}<span class="comment">// namespace state_representation</span></div>

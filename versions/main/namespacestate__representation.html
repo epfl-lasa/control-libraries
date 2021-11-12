@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">4.0.0</span>
+   &#160;<span id="projectnumber">4.1.0</span>
    </div>
   </td>
  </tr>
@@ -197,6 +197,8 @@ Enumerations</h2></td></tr>
 , <b>PARAMETER_MATRIX</b>
 , <br />
 &#160;&#160;<b>PARAMETER_VECTOR</b>
+, <b>PARAMETER_INT</b>
+, <b>PARAMETER_INT_ARRAY</b>
 <br />
  }</td></tr>
 <tr class="separator:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,6 +232,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8f634bbd4f26da04441442608416301b"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; T &gt; &amp;parameter)</td></tr>
 <tr class="separator:a8f634bbd4f26da04441442608416301b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0354c80d49b1ea0b977c9fe9e2584cbc"><td class="memItemLeft" align="right" valign="top"><a id="a0354c80d49b1ea0b977c9fe9e2584cbc"></a>
+template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;parameter)</td></tr>
+<tr class="separator:a0354c80d49b1ea0b977c9fe9e2584cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b75e8198b9823b537836c17e236ac01"><td class="memItemLeft" align="right" valign="top"><a id="a0b75e8198b9823b537836c17e236ac01"></a>
 template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt; &amp;parameter)</td></tr>
 <tr class="separator:a0b75e8198b9823b537836c17e236ac01"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -260,6 +265,10 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a9ce26842f86041e3688925c88bb4e6fc"><td class="memItemLeft" align="right" valign="top"><a id="a9ce26842f86041e3688925c88bb4e6fc"></a>
 template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; Eigen::VectorXd &gt; &amp;parameter)</td></tr>
 <tr class="separator:a9ce26842f86041e3688925c88bb4e6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0356956617dcde9988ef7ebafc32a549"><td class="memItemLeft" align="right" valign="top"><a id="a0356956617dcde9988ef7ebafc32a549"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a0356956617dcde9988ef7ebafc32a549"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;parameter)</td></tr>
+<tr class="separator:a0356956617dcde9988ef7ebafc32a549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1ff6c9d6b19375bdca41c127e5c334d"><td class="memItemLeft" align="right" valign="top"><a id="ae1ff6c9d6b19375bdca41c127e5c334d"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:ae1ff6c9d6b19375bdca41c127e5c334d"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; double &gt;&gt; &amp;parameter)</td></tr>
@@ -362,8 +371,7 @@ template&lt;&gt; </td></tr>
 <tr class="separator:ac4ec8c9bc8ac5d07af242028030da487"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a600552d3b0b2c2e6e1e36c13146d252b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a600552d3b0b2c2e6e1e36c13146d252b">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_dual_quaternion_twist.html">DualQuaternionTwist</a> &amp;state)</td></tr>
 <tr class="separator:a600552d3b0b2c2e6e1e36c13146d252b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12f56d40b4a1bbe15bd985ab8b83dee0"><td class="memItemLeft" align="right" valign="top"><a id="a12f56d40b4a1bbe15bd985ab8b83dee0"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_spatial_state.html">SpatialState</a> &amp;state)</td></tr>
+<tr class="memitem:a12f56d40b4a1bbe15bd985ab8b83dee0"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a12f56d40b4a1bbe15bd985ab8b83dee0">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_spatial_state.html">SpatialState</a> &amp;state)</td></tr>
 <tr class="separator:a12f56d40b4a1bbe15bd985ab8b83dee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21a18748c983b2f629f88399e1229a41"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a21a18748c983b2f629f88399e1229a41">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classstate__representation_1_1_state.html">State</a> &amp;state)</td></tr>
 <tr class="separator:a21a18748c983b2f629f88399e1229a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -453,15 +461,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>Compute the distance between two <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s1</td><td>the first <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> </td></tr>
-    <tr><td class="paramname">s2</td><td>the second <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> </td></tr>
-    <tr><td class="paramname">state_variable_type</td><td>name of the field from the JointStateVariable structure to apply the distance on (default ALL for full distance across all dimensions) </td></tr>
+    <tr><td class="paramname">s1</td><td>The first <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> </td></tr>
+    <tr><td class="paramname">s2</td><td>The second <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> </td></tr>
+    <tr><td class="paramname">state_variable_type</td><td>Name of the field from the JointStateVariable structure to apply the distance on (default ALL for full distance across all dimensions) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the distance between the two states </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The distance between the two states </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00279">279</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00415">415</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
 
 </div>
 </div>
@@ -553,7 +561,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_jacobian.html" title="Class to define a robot Jacobian matrix.">Jacobian</a> expressed in the new reference frame </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00277">277</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00280">280</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
 
 </div>
 </div>
@@ -769,13 +777,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lambda</td><td>the gain array to multiply with </td></tr>
+    <tr><td class="paramname">lambda</td><td>The gain array to multiply with </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00296">296</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00432">432</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
 
 </div>
 </div>
@@ -991,13 +999,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lambda</td><td>the matrix to multiply with </td></tr>
+    <tr><td class="paramname">lambda</td><td>The matrix to multiply with </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00290">290</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00426">426</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
 
 </div>
 </div>
@@ -1109,7 +1117,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the matrix multiplied by the jacobian matrix </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00307">307</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00310">310</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
 
 </div>
 </div>
@@ -1510,13 +1518,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lambda</td><td>the scalar to multiply with </td></tr>
+    <tr><td class="paramname">lambda</td><td>The scalar to multiply with </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="classstate__representation_1_1_joint_state.html" title="Class to define a state in joint space.">JointState</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00283">283</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00419">419</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
 
 </div>
 </div>
@@ -1595,7 +1603,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a323b4cab976a7171e8b9c04763f3c3fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a323b4cab976a7171e8b9c04763f3c3fa">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a323b4cab976a7171e8b9c04763f3c3fa">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1633,7 +1641,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a7c4678bb5acdf070f0039eff1d8032fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c4678bb5acdf070f0039eff1d8032fd">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c4678bb5acdf070f0039eff1d8032fd">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1671,7 +1679,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a7e3d53ca08f32ae9fa382b1f8602e300"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e3d53ca08f32ae9fa382b1f8602e300">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e3d53ca08f32ae9fa382b1f8602e300">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1709,7 +1717,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a453657a4ff8913f8dcf07727b57f8299"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a453657a4ff8913f8dcf07727b57f8299">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a453657a4ff8913f8dcf07727b57f8299">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1747,7 +1755,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="aac1763cbeb882101adea1eb25ca812bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac1763cbeb882101adea1eb25ca812bf">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aac1763cbeb882101adea1eb25ca812bf">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1785,7 +1793,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="ac4ec8c9bc8ac5d07af242028030da487"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4ec8c9bc8ac5d07af242028030da487">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[6/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4ec8c9bc8ac5d07af242028030da487">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[6/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1823,7 +1831,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a600552d3b0b2c2e6e1e36c13146d252b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a600552d3b0b2c2e6e1e36c13146d252b">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a600552d3b0b2c2e6e1e36c13146d252b">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1861,7 +1869,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a8d253fbc08f3cb1aba43c5295f6e234e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d253fbc08f3cb1aba43c5295f6e234e">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[8/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d253fbc08f3cb1aba43c5295f6e234e">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[8/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1899,7 +1907,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a9a51f5f098aa3fa2b8eec12a93e37694"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a51f5f098aa3fa2b8eec12a93e37694">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[9/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a51f5f098aa3fa2b8eec12a93e37694">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[9/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1937,7 +1945,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="ae8838aef22c3b7e887d349e4bc35a611"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8838aef22c3b7e887d349e4bc35a611">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[10/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8838aef22c3b7e887d349e4bc35a611">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[10/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1975,7 +1983,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="ac1bf41b61d156b78b76c6a43ac1c2910"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1bf41b61d156b78b76c6a43ac1c2910">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[11/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1bf41b61d156b78b76c6a43ac1c2910">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[11/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2013,7 +2021,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="aa9a259b5ad26441cd2b43a435761cc51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9a259b5ad26441cd2b43a435761cc51">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[12/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9a259b5ad26441cd2b43a435761cc51">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[12/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2039,19 +2047,19 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">os</td><td>the ostream to append the string representing the state </td></tr>
-    <tr><td class="paramname">state</td><td>the state to print </td></tr>
+    <tr><td class="paramname">os</td><td>The ostream to append the string representing the state </td></tr>
+    <tr><td class="paramname">state</td><td>The state to print </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00255">255</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8cpp_source.html#l00391">391</a> of file <a class="el" href="_joint_state_8cpp_source.html">JointState.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a33a1f1c5f2450f68282a298f835d6dab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33a1f1c5f2450f68282a298f835d6dab">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[13/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a33a1f1c5f2450f68282a298f835d6dab">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[13/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2089,7 +2097,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="ab02014f17b7fbfa1c6190a13fb242073"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab02014f17b7fbfa1c6190a13fb242073">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[14/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab02014f17b7fbfa1c6190a13fb242073">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[14/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2127,7 +2135,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="a8ffbc4ed7807b6fcc474407a74619acc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ffbc4ed7807b6fcc474407a74619acc">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[15/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ffbc4ed7807b6fcc474407a74619acc">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[15/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2165,7 +2173,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div>
 </div>
 <a id="adbcc249941dfc96910558ddbf8236b4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbcc249941dfc96910558ddbf8236b4c">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[16/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adbcc249941dfc96910558ddbf8236b4c">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[16/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2202,8 +2210,46 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
+<a id="a12f56d40b4a1bbe15bd985ab8b83dee0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12f56d40b4a1bbe15bd985ab8b83dee0">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[17/18]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; state_representation::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classstate__representation_1_1_spatial_state.html">SpatialState</a> &amp;&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td>The ostream to append the string representing the <a class="el" href="classstate__representation_1_1_spatial_state.html">SpatialState</a> to </td></tr>
+    <tr><td class="paramname">state</td><td>The <a class="el" href="classstate__representation_1_1_spatial_state.html">SpatialState</a> to print </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The appended ostream </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_spatial_state_8cpp_source.html#l00013">13</a> of file <a class="el" href="_spatial_state_8cpp_source.html">SpatialState.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a21a18748c983b2f629f88399e1229a41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21a18748c983b2f629f88399e1229a41">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[17/17]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a18748c983b2f629f88399e1229a41">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[18/18]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2371,7 +2417,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_state_8hpp_source.html#l00452">452</a> of file <a class="el" href="_joint_state_8hpp_source.html">JointState.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_state_8hpp_source.html#l00598">598</a> of file <a class="el" href="_joint_state_8hpp_source.html">JointState.hpp</a>.</p>
 
 </div>
 </div>
@@ -2416,7 +2462,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_spatial_state_8hpp_source.html#l00064">64</a> of file <a class="el" href="_spatial_state_8hpp_source.html">SpatialState.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_spatial_state_8hpp_source.html#l00074">74</a> of file <a class="el" href="_spatial_state_8hpp_source.html">SpatialState.hpp</a>.</p>
 
 </div>
 </div>
@@ -2461,7 +2507,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00178">178</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00185">185</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

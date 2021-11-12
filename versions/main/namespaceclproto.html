@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">4.0.0</span>
+   &#160;<span id="projectnumber">4.1.0</span>
    </div>
   </td>
  </tr>
@@ -80,13 +80,20 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclproto_1_1_decoding_exception.html">DecodingException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classclproto_1_1_decoding_exception.html" title="A DecodingException is raised whenever a decoding operation fails due to invalid encoding.">DecodingException</a> is raised whenever a decoding operation fails due to invalid encoding.  <a href="classclproto_1_1_decoding_exception.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclproto_1_1_json_parsing_exception.html">JsonParsingException</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="classclproto_1_1_json_parsing_exception.html" title="A JsonParsingException is raised whenever a JSON conversion operation fails due to invalid encoding.">JsonParsingException</a> is raised whenever a JSON conversion operation fails due to invalid encoding.  <a href="classclproto_1_1_json_parsing_exception.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a01d1aa530ee71315b78de255c0959aa9"><td class="memItemLeft" align="right" valign="top"><a id="a01d1aa530ee71315b78de255c0959aa9"></a>
-typedef std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a01d1aa530ee71315b78de255c0959aa9">field_length_t</a></td></tr>
-<tr class="memdesc:a01d1aa530ee71315b78de255c0959aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size type used to indicate number of fields and field data length in <a class="el" href="namespaceclproto.html#ab707c8834e0c762b9b8a531df8d373b5" title="Pack an ordered vector of encoded field messages into a single data array.">pack_fields()</a> and <a class="el" href="namespaceclproto.html#ac7a129b4c8398f6ad220743f766b270b" title="Unpack a data array into an ordered vector of encoded field messages.">unpack_fields()</a> methods. <br /></td></tr>
-<tr class="separator:a01d1aa530ee71315b78de255c0959aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2206d75223cf442de40e80aecfaf412a"><td class="memItemLeft" align="right" valign="top"><a id="a2206d75223cf442de40e80aecfaf412a"></a>
+typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a2206d75223cf442de40e80aecfaf412a">field_length_t</a></td></tr>
+<tr class="memdesc:a2206d75223cf442de40e80aecfaf412a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size type used to indicate number of fields and field data length in <a class="el" href="namespaceclproto.html#ab707c8834e0c762b9b8a531df8d373b5" title="Pack an ordered vector of encoded field messages into a single data array.">pack_fields()</a> and <a class="el" href="namespaceclproto.html#ac7a129b4c8398f6ad220743f766b270b" title="Unpack a data array into an ordered vector of encoded field messages.">unpack_fields()</a> methods. <br /></td></tr>
+<tr class="separator:a2206d75223cf442de40e80aecfaf412a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084015d6d706a81a2f66f9e0567cf7af"><td class="memItemLeft" align="right" valign="top"><a id="a084015d6d706a81a2f66f9e0567cf7af"></a>
+typedef std::chrono::nanoseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a084015d6d706a81a2f66f9e0567cf7af">timestamp_duration_t</a></td></tr>
+<tr class="memdesc:a084015d6d706a81a2f66f9e0567cf7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Duration type to use when representing chrono timestamps as integer count since epoch. <br /></td></tr>
+<tr class="separator:a084015d6d706a81a2f66f9e0567cf7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -118,16 +125,18 @@ Enumerations</h2></td></tr>
 <tr class="separator:a72ac218baa870e2fd3380b97ad065846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7b6f9404804c7526915782cc0e38945"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#aa7b6f9404804c7526915782cc0e38945">ParameterMessageType</a> { <br />
 &#160;&#160;<b>UNKNOWN_PARAMETER</b> = 0
+, <b>INT</b> = 9
+, <b>INT_ARRAY</b> = 10
 , <b>DOUBLE</b> = 1
-, <b>DOUBLE_ARRAY</b> = 2
+, <br />
+&#160;&#160;<b>DOUBLE_ARRAY</b> = 2
 , <b>BOOL</b> = 3
-, <br />
-&#160;&#160;<b>BOOL_ARRAY</b> = 4
+, <b>BOOL_ARRAY</b> = 4
 , <b>STRING</b> = 5
-, <b>STRING_ARRAY</b> = 6
-, <b>MATRIX</b> = 7
 , <br />
-&#160;&#160;<b>VECTOR</b> = 8
+&#160;&#160;<b>STRING_ARRAY</b> = 6
+, <b>MATRIX</b> = 7
+, <b>VECTOR</b> = 8
 <br />
  }</td></tr>
 <tr class="memdesc:aa7b6f9404804c7526915782cc0e38945"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ParameterMessageType enumeration contains the possible value types contained in a parameter message.  <a href="namespaceclproto.html#aa7b6f9404804c7526915782cc0e38945">More...</a><br /></td></tr>
@@ -209,11 +218,11 @@ state_representation::proto::JointState&#160;</td><td class="memItemRight" valig
 <tr class="separator:abf7d863ec82b8eab41a5078446652628"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e069b963d40b003f87e9a3d7822df18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6e069b963d40b003f87e9a3d7822df18"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">decode</a> (const std::string &amp;msg)</td></tr>
-<tr class="memdesc:a6e069b963d40b003f87e9a3d7822df18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a serialized binary string from wire format into a control libraries object instance. Throws an exception if the message cannot be decoded into the desired type.  <a href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">More...</a><br /></td></tr>
+<tr class="memdesc:a6e069b963d40b003f87e9a3d7822df18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a serialized binary string from wire format into a control libraries object instance.  <a href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">More...</a><br /></td></tr>
 <tr class="separator:a6e069b963d40b003f87e9a3d7822df18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaad29714d25858042d402581cc0974ba"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aaad29714d25858042d402581cc0974ba"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#aaad29714d25858042d402581cc0974ba">decode</a> (const std::string &amp;msg, T &amp;obj)</td></tr>
-<tr class="memdesc:aaad29714d25858042d402581cc0974ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception safe decoding of a serialized binary string wire format into a control libraries object instance. It modifies the object by reference if the decoding is successful, and leaves it unmodified otherwise.  <a href="namespaceclproto.html#aaad29714d25858042d402581cc0974ba">More...</a><br /></td></tr>
+<tr class="memdesc:aaad29714d25858042d402581cc0974ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception safe decoding of a serialized binary string wire format into a control libraries object instance.  <a href="namespaceclproto.html#aaad29714d25858042d402581cc0974ba">More...</a><br /></td></tr>
 <tr class="separator:aaad29714d25858042d402581cc0974ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab707c8834e0c762b9b8a531df8d373b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#ab707c8834e0c762b9b8a531df8d373b5">pack_fields</a> (const std::vector&lt; std::string &gt; &amp;fields, char *data)</td></tr>
 <tr class="memdesc:ab707c8834e0c762b9b8a531df8d373b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pack an ordered vector of encoded field messages into a single data array.  <a href="namespaceclproto.html#ab707c8834e0c762b9b8a531df8d373b5">More...</a><br /></td></tr>
@@ -221,13 +230,23 @@ state_representation::proto::JointState&#160;</td><td class="memItemRight" valig
 <tr class="memitem:ac7a129b4c8398f6ad220743f766b270b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#ac7a129b4c8398f6ad220743f766b270b">unpack_fields</a> (const char *data)</td></tr>
 <tr class="memdesc:ac7a129b4c8398f6ad220743f766b270b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unpack a data array into an ordered vector of encoded field messages.  <a href="namespaceclproto.html#ac7a129b4c8398f6ad220743f766b270b">More...</a><br /></td></tr>
 <tr class="separator:ac7a129b4c8398f6ad220743f766b270b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e62e7727f117f8953b9fb46ee20318"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a90e62e7727f117f8953b9fb46ee20318">to_json</a> (const std::string &amp;msg)</td></tr>
+<tr class="memdesc:a90e62e7727f117f8953b9fb46ee20318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a serialized binary string from wire format into a JSON formatted state message description.  <a href="namespaceclproto.html#a90e62e7727f117f8953b9fb46ee20318">More...</a><br /></td></tr>
+<tr class="separator:a90e62e7727f117f8953b9fb46ee20318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cf5c7ebe26c3bbefcb83731f49cab31"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1cf5c7ebe26c3bbefcb83731f49cab31"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a1cf5c7ebe26c3bbefcb83731f49cab31">to_json</a> (const T &amp;obj)</td></tr>
+<tr class="memdesc:a1cf5c7ebe26c3bbefcb83731f49cab31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a control libraries object into into a JSON formatted state message description.  <a href="namespaceclproto.html#a1cf5c7ebe26c3bbefcb83731f49cab31">More...</a><br /></td></tr>
+<tr class="separator:a1cf5c7ebe26c3bbefcb83731f49cab31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ff2f5307aed8bb1fa0493c70d3e23b9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#a3ff2f5307aed8bb1fa0493c70d3e23b9">from_json</a> (const std::string &amp;json)</td></tr>
+<tr class="memdesc:a3ff2f5307aed8bb1fa0493c70d3e23b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a JSON formatted state message description into a serialized binary string representation (wire format).  <a href="namespaceclproto.html#a3ff2f5307aed8bb1fa0493c70d3e23b9">More...</a><br /></td></tr>
+<tr class="separator:a3ff2f5307aed8bb1fa0493c70d3e23b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7305dc0680b3b089a504fdae105d4fed"><td class="memItemLeft" align="right" valign="top"><a id="a7305dc0680b3b089a504fdae105d4fed"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a7305dc0680b3b089a504fdae105d4fed"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; State &gt;</b> (const <a class="el" href="classstate__representation_1_1_state.html">State</a> &amp;obj)</td></tr>
 <tr class="separator:a7305dc0680b3b089a504fdae105d4fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec9ad24795c1d714e6ca1b2eeb7534a7"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:aec9ad24795c1d714e6ca1b2eeb7534a7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_state.html">State</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#aec9ad24795c1d714e6ca1b2eeb7534a7">decode</a> (const std::string &amp;msg)</td></tr>
-<tr class="memdesc:aec9ad24795c1d714e6ca1b2eeb7534a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a serialized binary string from wire format into a control libraries object instance. Throws an exception if the message cannot be decoded into the desired type.  <a href="namespaceclproto.html#aec9ad24795c1d714e6ca1b2eeb7534a7">More...</a><br /></td></tr>
+<tr class="memdesc:aec9ad24795c1d714e6ca1b2eeb7534a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a serialized binary string from wire format into a control libraries object instance.  <a href="namespaceclproto.html#aec9ad24795c1d714e6ca1b2eeb7534a7">More...</a><br /></td></tr>
 <tr class="separator:aec9ad24795c1d714e6ca1b2eeb7534a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a849c3497be1b66a206b68c1e9823a326"><td class="memItemLeft" align="right" valign="top"><a id="a849c3497be1b66a206b68c1e9823a326"></a>
 template&lt;&gt; </td></tr>
@@ -321,6 +340,22 @@ template&lt;&gt; </td></tr>
 template&lt;&gt; </td></tr>
 <tr class="memitem:af72bba19475fec89465c93a1a13d6ae0"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_joint_torques.html">JointTorques</a> &amp;obj)</td></tr>
 <tr class="separator:af72bba19475fec89465c93a1a13d6ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memItemLeft" align="right" valign="top"><a id="a9946e207865c4ac1db0c8d93f1cc14d2"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; int &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;obj)</td></tr>
+<tr class="separator:a9946e207865c4ac1db0c8d93f1cc14d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e78056aec834d4abafeff9afc2c0da3"><td class="memItemLeft" align="right" valign="top"><a id="a8e78056aec834d4abafeff9afc2c0da3"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a8e78056aec834d4abafeff9afc2c0da3"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt; &amp;obj)</td></tr>
+<tr class="separator:a8e78056aec834d4abafeff9afc2c0da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08da884166f56cc390dda91499f12124"><td class="memItemLeft" align="right" valign="top"><a id="a08da884166f56cc390dda91499f12124"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a08da884166f56cc390dda91499f12124"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; std::vector&lt; int &gt; &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;obj)</td></tr>
+<tr class="separator:a08da884166f56cc390dda91499f12124"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62006db84ec6d59e68d142186a9d7315"><td class="memItemLeft" align="right" valign="top"><a id="a62006db84ec6d59e68d142186a9d7315"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a62006db84ec6d59e68d142186a9d7315"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (const std::string &amp;msg, <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;obj)</td></tr>
+<tr class="separator:a62006db84ec6d59e68d142186a9d7315"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a543360ff4c23738585a65cacdcb7514f"><td class="memItemLeft" align="right" valign="top"><a id="a543360ff4c23738585a65cacdcb7514f"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a543360ff4c23738585a65cacdcb7514f"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode&lt; Parameter&lt; double &gt; &gt;</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt; &amp;obj)</td></tr>
@@ -395,9 +430,17 @@ Eigen::Vector3d&#160;</td><td class="memItemRight" valign="bottom"><b>decoder</b
 Eigen::Quaterniond&#160;</td><td class="memItemRight" valign="bottom"><b>decoder</b> (const proto::Quaterniond &amp;message)</td></tr>
 <tr class="separator:a1a61f3e20ad37c822022ddcb4a555fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">decoder</a> (const state_representation::proto::Parameter &amp;message)</td></tr>
+<tr class="memitem:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; int &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">decoder</a> (const state_representation::proto::Parameter &amp;message)</td></tr>
 <tr class="memdesc:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoding helper method for the Parameter type.  <a href="namespaceclproto.html#af039cc1af5b7ff68b8112bd35eacd7b2">More...</a><br /></td></tr>
 <tr class="separator:af039cc1af5b7ff68b8112bd35eacd7b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a902302e7bc4397173c44d5eca9393226"><td class="memItemLeft" align="right" valign="top"><a id="a902302e7bc4397173c44d5eca9393226"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:a902302e7bc4397173c44d5eca9393226"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; int &gt; &amp;parameter)</td></tr>
+<tr class="separator:a902302e7bc4397173c44d5eca9393226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memItemLeft" align="right" valign="top"><a id="ae8763b5ab342f16628b3548b1f18e8fd"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; std::vector&lt; int &gt;&gt; &amp;parameter)</td></tr>
+<tr class="separator:ae8763b5ab342f16628b3548b1f18e8fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa466ec18371c6370bbeba7fda7ab5aaa"><td class="memItemLeft" align="right" valign="top"><a id="aa466ec18371c6370bbeba7fda7ab5aaa"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:aa466ec18371c6370bbeba7fda7ab5aaa"><td class="memTemplItemLeft" align="right" valign="top">state_representation::proto::Parameter&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoder</b> (const <a class="el" href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a>&lt; double &gt; &amp;parameter)</td></tr>
@@ -449,7 +492,7 @@ template&lt;&gt; </td></tr>
 <p>The MessageType enumeration contains the possible message types in the clproto. </p>
 <p>The values and order of this enumeration are synchronized with the fields of the protobuf StateMessage type, allowing a one-to-one mapping to the StateMessage type case. </p>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00043">43</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00062">62</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -468,7 +511,7 @@ template&lt;&gt; </td></tr>
 <p>The ParameterMessageType enumeration contains the possible value types contained in a parameter message. </p>
 <p>The values and order of this enumeration are synchronized with the fields of the protobuf ParameterValue type, allowing a one-to-one mapping to the ParameterValue type case. </p>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00072">72</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00091">91</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -498,7 +541,7 @@ template&lt;&gt; </td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The MessageType of the contained type or UNKNOWN </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00033">33</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00038">38</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>
@@ -527,7 +570,7 @@ template&lt;&gt; </td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ParameterMessageType of the contained type or UNKNOWN </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00056">56</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00061">61</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>
@@ -549,10 +592,10 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Decode a serialized binary string from wire format into a control libraries object instance. Throws an exception if the message cannot be decoded into the desired type. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Decode a serialized binary string from wire format into a control libraries object instance. </p>
+<p>Throws an exception if the message cannot be decoded into the desired type. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">The</td><td>desired control libraries object type </td></tr>
+    <tr><td class="paramname">T</td><td>The desired control libraries object type </td></tr>
   </table>
   </dd>
 </dl>
@@ -564,7 +607,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new instance of the control libraries object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00131">131</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00171">171</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>
@@ -586,10 +629,10 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Decode a serialized binary string from wire format into a control libraries object instance. Throws an exception if the message cannot be decoded into the desired type. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Decode a serialized binary string from wire format into a control libraries object instance. </p>
+<p>Throws an exception if the message cannot be decoded into the desired type. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">The</td><td>desired control libraries object type </td></tr>
+    <tr><td class="paramname">T</td><td>The desired control libraries object type </td></tr>
   </table>
   </dd>
 </dl>
@@ -601,7 +644,7 @@ template&lt;&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new instance of the control libraries object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00131">131</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00171">171</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>
@@ -633,8 +676,8 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Exception safe decoding of a serialized binary string wire format into a control libraries object instance. It modifies the object by reference if the decoding is successful, and leaves it unmodified otherwise. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Exception safe decoding of a serialized binary string wire format into a control libraries object instance. </p>
+<p>It modifies the object by reference if the decoding is successful, and leaves it unmodified otherwise. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>The desired control libraries object type </td></tr>
   </table>
@@ -902,7 +945,50 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The encoded RepeatedField protocol message object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="encoders_8h_source.html#l00059">59</a> of file <a class="el" href="encoders_8h_source.html">encoders.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="encoders_8h_source.html#l00060">60</a> of file <a class="el" href="encoders_8h_source.html">encoders.h</a>.</p>
+
+</div>
+</div>
+<a id="a3ff2f5307aed8bb1fa0493c70d3e23b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ff2f5307aed8bb1fa0493c70d3e23b9">&#9670;&nbsp;</a></span>from_json()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string clproto::from_json </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>json</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a JSON formatted state message description into a serialized binary string representation (wire format). </p>
+<p>Convert a JSON formatted state message description into a control libraries object instance.</p>
+<p>Throws an exception if the message cannot be decoded into the desired type. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">json</td><td>The JSON formatted state message description </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The serialized binary string encoding</dd></dl>
+<p>Throws an exception if the message cannot be converted into the desired type. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The desired control libraries object type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">json</td><td>The JSON formatted state message description </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new instance of the control libraries object </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00232">232</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -931,7 +1017,7 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the message can be decoded, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00029">29</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00034">34</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>
@@ -999,7 +1085,73 @@ template&lt;typename FieldT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00067">67</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00070">70</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a90e62e7727f117f8953b9fb46ee20318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e62e7727f117f8953b9fb46ee20318">&#9670;&nbsp;</a></span>to_json() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string clproto::to_json </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a serialized binary string from wire format into a JSON formatted state message description. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>The serialized binary string to decode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The JSON formatted state message description </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00120">120</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a1cf5c7ebe26c3bbefcb83731f49cab31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cf5c7ebe26c3bbefcb83731f49cab31">&#9670;&nbsp;</a></span>to_json() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string clproto::to_json </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a control libraries object into into a JSON formatted state message description. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The provided control libraries object type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td>The control libraries object to encode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The JSON formatted state message description </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="clproto_8h_source.html#l00208">208</a> of file <a class="el" href="clproto_8h_source.html">clproto.h</a>.</p>
 
 </div>
 </div>
@@ -1028,7 +1180,7 @@ template&lt;typename FieldT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An ordered vector of encoded message fields </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00091">91</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="clproto_8cpp_source.html#l00094">94</a> of file <a class="el" href="clproto_8cpp_source.html">clproto.cpp</a>.</p>
 
 </div>
 </div>

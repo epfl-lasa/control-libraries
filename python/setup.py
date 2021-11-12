@@ -5,7 +5,7 @@ from pybind11.setup_helpers import ParallelCompile, naive_recompile
 import warnings
 import os
 
-__version__ = "4.0.0"
+__version__ = "4.1.0"
 __libraries__ = ['state_representation', 'clproto']
 __include_dirs__ = ['include']
 

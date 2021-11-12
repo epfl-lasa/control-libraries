@@ -1,33 +1,42 @@
 # CHANGELOG
 
 Release Versions:
+- [4.1.0](#410)
 - [4.0.0](#400)
 - [3.1.0](#310)
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
+## 4.1.0
 
-- Python bindings for clproto (#204)
+Version 4.1.0 contains a few improvements to the behaviour and usage of the libraries,
+namely to the Python bindings and the `clproto` serialization library.
+
+### Fixes and improvements
+
+**clproto**
 - JSON conversion support for clproto (#205)
 - Support empty state objects in clproto (#207)
 - Add int and int array parameters (#208)
-- Add method to get a joint state by name or index of the joint,
-  and to get the index of the joint by its name (#210)
-- Add possibility to have a ssh server for Python testing (#211)
-- Add Python bindings for Parameter class (#209)
-- Add Python bindings for clproto encode / decode of Parameter class (#214)
-- Improve CartesianState tests in C++ and Python (#213)
 - Add build testing option to clproto install (#216)
-- Add method to set a joint state by name or index of the joint (#217)
-- Add the `set_timestamp` method to the `State` base class (#218)
 - Fix the field size type for clproto pack_fields (#222)
 
-### Pending TODOs for the next release
+**python**
+- Python bindings for clproto (#204)
+- Add Python bindings for Parameter class (#209)
+- Add possibility to have a ssh server for Python testing (#211)
+- Add Python bindings for clproto encode / decode of Parameter class (#214)
 
-- Including a quaternion extension (numpy-quaternion, pyquaternion, ...)
-  for binding the Eigen::Quaternion to a specific object in Python.
+**state_representation**
+- Add method to get a joint state by name or index of the joint,
+  and to get the index of the joint by its name (#210)
+- Improve CartesianState tests in C++ and Python (#213)
+- Add method to set a joint state by name or index of the joint (#217)
+- Add the `set_timestamp` method to the `State` base class (#218)
+
+**general**
+- Add proto Dockerfile to copy protobuf files from (#221)
 
 ## 4.0.0
 

@@ -8,6 +8,14 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+- Fix tag generation for release docs (#225)
+
+### Pending TODOs for the next release
+
+- Including a quaternion extension (numpy-quaternion, pyquaternion, ...)
+for binding the Eigen::Quaternion to a specific object in Python.
+
 ## 4.1.0
 
 Version 4.1.0 contains a few improvements to the behaviour and usage of the libraries,

@@ -6,7 +6,7 @@ ParameterInterface::ParameterInterface(const StateType& type, const std::string&
 
 ParameterInterface::ParameterInterface(const ParameterInterface& parameter) : State(parameter) {}
 
-inline ParameterInterface& ParameterInterface::operator=(const ParameterInterface& state) {
+ParameterInterface& ParameterInterface::operator=(const ParameterInterface& state) {
   State::operator=(state);
   return (*this);
 }

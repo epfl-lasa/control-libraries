@@ -67,3 +67,14 @@ TEST(ParameterTest, Event) {
   ptr_e->set_value(true);
   EXPECT_TRUE(ptr_e->get_value());
 }
+
+TEST(ParameterTest, MakeShared) {
+  auto pose = CartesianPose::Random("A", "B");
+  auto param = make_shared_parameter("name", pose);
+  EXPECT_EQ(param->get_name(), "name");
+  EXPECT_EQ(param->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(param->is_empty(), false);
+  EXPECT_EQ(param->get_value().get_name(), "A");
+  EXPECT_EQ(param->get_value().get_reference_frame(), "B");
+  EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
+}

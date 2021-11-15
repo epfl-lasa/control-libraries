@@ -95,7 +95,7 @@ inline void Parameter<T>::set_value(const T& value) {
 }
 
 template<typename T>
-static std::shared_ptr<Parameter<T>> create_parameter_ptr(const std::string& name, const T& param_value) {
-  return std::make_shared<Parameter<T>>(Parameter<T>(name, param_value));
+static std::shared_ptr<Parameter<T>> make_shared_parameter(const std::string& name, const T& param_value) {
+  return std::make_shared<Parameter<T>>(name, param_value);
 }
 }// namespace state_representation

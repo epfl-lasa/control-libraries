@@ -80,7 +80,7 @@ JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const
 
 template<class S>
 void IDynamicalSystem<S>::assert_parameter_exists(const std::string& name) {
-  if (this->param_map_.find(name) == this->param_map_.end()) {
+  if (this->param_map_.find(name) == this->param_map_.cend()) {
     throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
   }
 }

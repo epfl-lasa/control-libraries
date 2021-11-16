@@ -54,12 +54,6 @@ public:
   virtual void set_base_frame(const S& base_frame);
 
   /**
-   * @brief Get a list of all the parameters of the dynamical system.
-   * @return The list of parameters
-   */
-  [[nodiscard]] virtual std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
-
-  /**
    * @brief Get a parameter of the dynamical system by its name.
    * @tparam T Type of the parameter
    * @param name The name of the parameter
@@ -69,10 +63,22 @@ public:
   T get_parameter(const std::string& name);
 
   /**
+   * @brief Get a list of all the parameters of the dynamical system.
+   * @return The list of parameters
+   */
+  [[nodiscard]] std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+
+  /**
    * @brief Set a parameter of the dynamical system.
    * @param parameter The new parameter
    */
   virtual void set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
+
+  /**
+   * @brief Set parameters of the dynamical list from a list of parameters.
+   * @return The list of parameters
+   */
+  void set_parameters(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters);
 
 protected:
   /**

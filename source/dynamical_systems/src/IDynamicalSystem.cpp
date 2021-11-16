@@ -24,7 +24,7 @@ IDynamicalSystem<CartesianState>::IDynamicalSystem() : base_frame_(CartesianStat
 
 template<class S>
 bool IDynamicalSystem<S>::is_compatible(const S&) const {
-  throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state");
+  throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state.");
 }
 
 template<>
@@ -104,16 +104,35 @@ void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
 }
 
 template<class S>
-std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameters() const {
-  return {};
-}
-
-template<class S>
 template<typename T>
 T IDynamicalSystem<S>::get_parameter(const std::string&) {
-  return nullptr;
+  throw exceptions::NotImplementedException("get_parameter() not implemented.");
 }
 
 template<class S>
-void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>&) {}
+std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameters() const {
+  std::list<std::shared_ptr<ParameterInterface>> param_list;
+  for (const auto& param_it : this->param_map_) {
+    param_list.template emplace_back(param_it.second);
+  }
+  return param_list;
+}
+
+template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<CartesianState>::get_parameters() const;
+template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointState>::get_parameters() const;
+
+template<class S>
+void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>&) {
+  throw exceptions::NotImplementedException("set_parameter() not implemented.");
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>& parameters) {
+  for (const auto& param: parameters) {
+    this->set_parameter(param);
+  }
+}
+
+template void IDynamicalSystem<CartesianState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
+template void IDynamicalSystem<JointState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
 }// namespace dynamical_systems

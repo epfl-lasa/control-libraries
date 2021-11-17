@@ -40,6 +40,14 @@ public:
 
   /**
    * @brief Getter of the value attribute.
+   * @tparam U The expected type of the parameter
+   * @return The value attribute
+   */
+  template<typename U>
+  U get_value();
+
+  /**
+   * @brief Getter of the value attribute.
    * @return The value attribute
    */
   const T& get_value() const;
@@ -68,7 +76,8 @@ public:
 
 template<typename T>
 template<typename U>
-Parameter<T>::Parameter(const Parameter<U>& parameter) : ParameterInterface(parameter), value_(parameter.get_value()) {}
+Parameter<T>::Parameter(const Parameter<U>& parameter) :
+    Parameter<T>(parameter.get_name(), static_cast<T>(parameter.get_value())) {}
 
 template<typename T>
 template<typename U>
@@ -76,6 +85,12 @@ Parameter<T>& Parameter<T>::operator=(const Parameter<U>& parameter) {
   Parameter<T> temp(parameter);
   *this = temp;
   return *this;
+}
+
+template<typename T>
+template<typename U>
+U Parameter<T>::get_value() {
+  return static_cast<U>(this->value_);
 }
 
 template<typename T>

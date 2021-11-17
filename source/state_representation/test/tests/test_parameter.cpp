@@ -12,6 +12,12 @@ TEST(ParameterTest, Conversion) {
   EXPECT_EQ(int_param.get_type(), StateType::PARAMETER_INT);
   int_param.set_value(2);
   EXPECT_EQ(int_param.get_value(), 2);
+  EXPECT_EQ(typeid(int_param.get_value<double>()).name(), typeid(2.0).name());
+  Parameter<double> double_param("double");
+  EXPECT_NO_THROW(double_param = int_param);
+  EXPECT_EQ(double_param.get_type(), StateType::PARAMETER_DOUBLE);
+  EXPECT_EQ(double_param.get_name(), int_param.get_name());
+  EXPECT_EQ(double_param.get_value(), 2.0);
 
   std::vector<int> values{1, 2, 3};
   Parameter<std::vector<int>> int_array_param("test", values);

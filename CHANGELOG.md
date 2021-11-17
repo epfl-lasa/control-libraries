@@ -10,6 +10,7 @@ Release Versions:
 
 ## Upcoming changes (in development)
 - Fix tag generation for release docs (#225)
+- Templated get_value method for Parameter (#228)
 
 ### Pending TODOs for the next release
 

@@ -23,11 +23,11 @@ TEST(ParameterTest, Conversion) {
 
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);
-  EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANSTATE);
 
   std::shared_ptr<Parameter<CartesianState>> test3 =
       std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("test", CartesianPose::Random("test")));
-  EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANSTATE);
 }
 
 TEST(ParameterTest, Event) {

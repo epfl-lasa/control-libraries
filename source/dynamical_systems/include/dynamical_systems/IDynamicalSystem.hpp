@@ -55,12 +55,10 @@ public:
 
   /**
    * @brief Get a parameter of the dynamical system by its name.
-   * @tparam T Type of the parameter
    * @param name The name of the parameter
    * @return The parameter, if it exists
    */
-  template<typename T>
-  T get_parameter(const std::string& name);
+  std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name);
 
   /**
    * @brief Get a list of all the parameters of the dynamical system.
@@ -72,7 +70,7 @@ public:
    * @brief Set a parameter of the dynamical system.
    * @param parameter The new parameter
    */
-  virtual void set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
+  void set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
 
   /**
    * @brief Set parameters of the dynamical list from a list of parameters.

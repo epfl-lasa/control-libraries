@@ -5,8 +5,6 @@
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/geometry/Ellipsoid.hpp"
-#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointState.hpp"
 
 using namespace state_representation;
@@ -104,9 +102,9 @@ void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
 }
 
 template<class S>
-template<typename T>
-T IDynamicalSystem<S>::get_parameter(const std::string&) {
-  throw exceptions::NotImplementedException("get_parameter() not implemented.");
+std::shared_ptr<ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
+  assert_parameter_exists(name);
+  return this->param_map_.at(name);
 }
 
 template<class S>
@@ -123,7 +121,8 @@ template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointSt
 
 template<class S>
 void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>&) {
-  throw exceptions::NotImplementedException("set_parameter() not implemented.");
+  // TODO implement set parameter here, possibly with a virtual validate_parameter method
+  throw exceptions::NotImplementedException("set_parameter() not implemented yet.");
 }
 
 template<class S>

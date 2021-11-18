@@ -10,7 +10,9 @@ Release Versions:
 
 ## Upcoming changes (in development)
 - Fix tag generation for release docs (#225)
+- Add static method to create Parameter pointer (#226)
 - Templated get_value method for Parameter (#228)
+- Create DS interface and DS factory classes (#227)
 
 ### Pending TODOs for the next release
 

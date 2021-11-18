@@ -102,6 +102,7 @@ var menudata={children:[
 {text:"t",url:"functions_func_t.html#index_t"},
 {text:"v",url:"functions_func_v.html#index_v"},
 {text:"z",url:"functions_func_z.html#index_z"}]},
+{text:"Enumerations",url:"functions_enum.html"},
 {text:"Related Functions",url:"functions_rela.html",children:[
 {text:"d",url:"functions_rela.html#index_d"},
 {text:"e",url:"functions_rela.html#index_e"},

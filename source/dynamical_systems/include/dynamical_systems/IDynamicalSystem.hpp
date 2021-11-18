@@ -61,10 +61,16 @@ public:
   std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name);
 
   /**
+   * @brief Get a map of all the <name, parameter> pairs of the dynamical system.
+   * @return The map of parameters
+   */
+  [[nodiscard]] std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+
+  /**
    * @brief Get a list of all the parameters of the dynamical system.
    * @return The list of parameters
    */
-  [[nodiscard]] std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+  [[nodiscard]] std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameter_list() const;
 
   /**
    * @brief Set a parameter of the dynamical system.
@@ -74,9 +80,16 @@ public:
 
   /**
    * @brief Set parameters of the dynamical list from a list of parameters.
-   * @return The list of parameters
+   * @param parameters The list of parameters
    */
   void set_parameters(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters);
+
+  /**
+   * @brief Set parameters of the dynamical system from a map with <name, parameter> pairs.
+   * @param parameters The map of parameters
+   */
+  void
+  set_parameters(const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>& parameters);
 
 protected:
   /**

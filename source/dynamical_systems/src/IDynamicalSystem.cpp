@@ -108,16 +108,26 @@ std::shared_ptr<ParameterInterface> IDynamicalSystem<S>::get_parameter(const std
 }
 
 template<class S>
-std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameters() const {
+std::map<std::string, std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameters() const {
+  return this->param_map_;
+}
+
+template std::map<std::string, std::shared_ptr<ParameterInterface>>
+IDynamicalSystem<CartesianState>::get_parameters() const;
+template std::map<std::string, std::shared_ptr<ParameterInterface>>
+IDynamicalSystem<JointState>::get_parameters() const;
+
+template<class S>
+std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameter_list() const {
   std::list<std::shared_ptr<ParameterInterface>> param_list;
-  for (const auto& param_it : this->param_map_) {
+  for (const auto& param_it: this->param_map_) {
     param_list.template emplace_back(param_it.second);
   }
   return param_list;
 }
 
-template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<CartesianState>::get_parameters() const;
-template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointState>::get_parameters() const;
+template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<CartesianState>::get_parameter_list() const;
+template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointState>::get_parameter_list() const;
 
 template<class S>
 void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>&) {
@@ -134,4 +144,15 @@ void IDynamicalSystem<S>::set_parameters(const std::list<std::shared_ptr<Paramet
 
 template void IDynamicalSystem<CartesianState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
 template void IDynamicalSystem<JointState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>& parameters) {
+  for (const auto& param_it: parameters) {
+    this->assert_parameter_exists(param_it.first);
+    this->set_parameter(param_it.second);
+  }
+}
+
+template void IDynamicalSystem<CartesianState>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>&);
+template void IDynamicalSystem<JointState>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>&);
 }// namespace dynamical_systems

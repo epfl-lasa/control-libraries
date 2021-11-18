@@ -13,7 +13,7 @@ TEST(DSFactoryTest, CreateDS) {
   param_list.emplace_back(make_shared_parameter("test", 1.0));
 
   auto cart_ds = dynamical_systems::DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      dynamical_systems::DynamicalSystemFactory<CartesianState>::NONE
+      dynamical_systems::DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::NONE
   );
   cart_ds->set_base_frame(CartesianState::Identity("A"));
   ASSERT_NO_THROW(auto res = cart_ds->evaluate(CartesianState::Identity("C", "A")));
@@ -22,7 +22,7 @@ TEST(DSFactoryTest, CreateDS) {
   EXPECT_THROW(cart_ds->set_parameters(param_list), dynamical_systems::exceptions::NotImplementedException);
 
   auto joint_ds = dynamical_systems::DynamicalSystemFactory<JointState>::create_dynamical_system(
-      dynamical_systems::DynamicalSystemFactory<JointState>::NONE
+      dynamical_systems::DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::NONE
   );
   joint_ds->set_base_frame(JointState::Zero("robot", 3));
   ASSERT_NO_THROW(auto res = joint_ds->evaluate(JointState::Random("robot", 3)));

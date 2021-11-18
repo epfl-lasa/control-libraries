@@ -15,7 +15,7 @@ public:
   /**
    * @brief Enumeration of the implemented dynamical systems
    */
-  enum DYNAMICAL_SYSTEM {
+  enum class DYNAMICAL_SYSTEM {
     NONE, CIRCULAR, POINT_ATTRACTOR, RING
   };
 

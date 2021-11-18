@@ -12,7 +12,7 @@ std::shared_ptr<IDynamicalSystem<S>>
 DynamicalSystemFactory<S>::create_dynamical_system(DYNAMICAL_SYSTEM type) {
   switch (type) {
     default:
-    case NONE:
+    case DYNAMICAL_SYSTEM::NONE:
       return std::make_shared<DefaultDynamicalSystem<S>>();
   }
 }

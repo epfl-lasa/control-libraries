@@ -67,6 +67,15 @@ public:
   [[nodiscard]] std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
+ * @brief Get a parameter of the dynamical system by its name.
+ * @tparam T Type of the parameter value
+ * @param name The name of the parameter
+ * @return The value of the parameter, if the parameter exists
+ */
+  template<typename T>
+  T get_parameter_value(const std::string& name);
+
+  /**
    * @brief Get a list of all the parameters of the dynamical system.
    * @return The list of parameters
    */
@@ -102,13 +111,6 @@ protected:
   [[nodiscard]] virtual S compute_dynamics(const S& state) const = 0;
 
   /**
-   * @brief Check if a parameter with provided name exists, throw an
-   * exception otherwise.
-   * @param name The name of the parameter
-   */
-  void assert_parameter_exists(const std::string& name);
-
-  /**
    * @brief Check if a parameter with provided name exists and has the
    * expected type, throw an exception otherwise.
    * @param name The name of the parameter
@@ -116,8 +118,16 @@ protected:
    */
   void assert_parameter_valid(const std::string& name, state_representation::StateType state_type);
 
+  /**
+   * @brief Validate and set a parameter of the dynamical system. Internal
+   * function, to be redefined based on the dynamical system, called
+   * by the set_parameter function.
+   * @param parameter The parameter to be validated
+   */
+  virtual void validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) = 0;
+
   std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
-      param_map_; ///> map containing the names and values of all parameters of the dynamical system
+      param_map_; ///< map containing the names and values of all parameters of the dynamical system
 
 private:
   S base_frame_; ///< frame in which the dynamical system is expressed

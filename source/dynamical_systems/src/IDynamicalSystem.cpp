@@ -92,6 +92,9 @@ S IDynamicalSystem<S>::get_base_frame() const {
   return this->base_frame_;
 }
 
+template CartesianState IDynamicalSystem<CartesianState>::get_base_frame() const;
+template JointState IDynamicalSystem<JointState>::get_base_frame() const;
+
 template<class S>
 void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
   this->base_frame_ = base_frame;
@@ -139,6 +142,9 @@ template<class S>
 void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   this->validate_parameter(parameter);
 }
+
+template void IDynamicalSystem<CartesianState>::set_parameter(const std::shared_ptr<ParameterInterface>&);
+template void IDynamicalSystem<JointState>::set_parameter(const std::shared_ptr<ParameterInterface>&);
 
 template<class S>
 void IDynamicalSystem<S>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>& parameters) {

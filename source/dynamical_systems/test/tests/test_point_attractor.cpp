@@ -40,9 +40,7 @@ protected:
 TEST_F(PointAttractorTest, EmptyConstructorCartesianState) {
   // construct empty cartesian state DS
   CartesianPose attractor = CartesianPose::Identity("CAttractor", "A");
-//  auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-//      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-//  );
+
   // base frame and attractor should be empty
   EXPECT_TRUE(ds->get_parameter_value<CartesianPose>("attractor").is_empty());
   EXPECT_TRUE(ds->get_base_frame().is_empty());

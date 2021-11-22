@@ -14,17 +14,18 @@ template<class S>
 class DefaultDynamicalSystem : public IDynamicalSystem<S> {
 public:
   /**
-   * @brief Compute the dynamics of the input state.
-   * @param state The input state
-   * @return The output state
+   * @copydoc IDynamicalSystem::compute_dynamics
    */
   [[nodiscard]] S compute_dynamics(const S& state) const override;
 private:
-  void validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+  /**
+   * @copydoc IDynamicalSystem::validate_and_set_parameter
+   */
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 };
 
 template<class S>
-void DefaultDynamicalSystem<S>::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
+void DefaultDynamicalSystem<S>::validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
   throw exceptions::InvalidParameterException("No parameter to be set on this type of DS.");
 }
 

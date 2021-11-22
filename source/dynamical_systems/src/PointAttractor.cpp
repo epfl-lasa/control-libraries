@@ -16,17 +16,17 @@ namespace dynamical_systems {
 template<>
 PointAttractor<CartesianState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
-gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain", Eigen::MatrixXd::Identity(6, 6))) {
-this->param_map_.insert(std::make_pair("attractor", attractor_));
-this->param_map_.insert(std::make_pair("gain", gain_));
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain", Eigen::MatrixXd::Identity(6, 6))) {
+  this->param_map_.insert(std::make_pair("attractor", attractor_));
+  this->param_map_.insert(std::make_pair("gain", gain_));
 }
 
 template<>
 PointAttractor<JointState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor"))),
-gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
-this->param_map_.insert(std::make_pair("attractor", attractor_));
-this->param_map_.insert(std::make_pair("gain", gain_));
+    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
+  this->param_map_.insert(std::make_pair("attractor", attractor_));
+  this->param_map_.insert(std::make_pair("gain", gain_));
 }
 
 template<class S>
@@ -132,7 +132,7 @@ void PointAttractor<JointState>::set_base_frame(const JointState& base_frame) {
 }
 
 template<>
-void PointAttractor<CartesianState>::validate_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
+void PointAttractor<CartesianState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
     this->set_attractor(std::static_pointer_cast<Parameter<CartesianPose>>(parameter)->get_value());
   } else if (parameter->get_name() == "gain") {
@@ -143,7 +143,7 @@ void PointAttractor<CartesianState>::validate_parameter(const std::shared_ptr<Pa
 }
 
 template<>
-void PointAttractor<JointState>::validate_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
+void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
     this->assert_parameter_valid("attractor", StateType::PARAMETER_JOINTPOSITIONS);
     this->set_attractor(std::static_pointer_cast<Parameter<JointState>>(parameter)->get_value());

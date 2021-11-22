@@ -140,7 +140,7 @@ template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointSt
 
 template<class S>
 void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
-  this->validate_parameter(parameter);
+  this->validate_and_set_parameter(parameter);
 }
 
 template void IDynamicalSystem<CartesianState>::set_parameter(const std::shared_ptr<ParameterInterface>&);

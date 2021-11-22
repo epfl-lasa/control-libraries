@@ -24,18 +24,15 @@ public:
   void set_base_frame(const S& base_frame) override;
 
   /**
-   * @brief Compute the dynamics of the input state.
-   * @param state The input state
-   * @return The output state
+   * @copydoc IDynamicalSystem::compute_dynamics
    */
   [[nodiscard]] S compute_dynamics(const S& state) const override;
 
 private:
   /**
-   * @brief Validate and set a parameter of the dynamical system.
-   * @param parameter The parameter to be validated
+   * @copydoc IDynamicalSystem::validate_and_set_parameter
    */
-  void validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 
   /**
    * @brief Setter of the attractor as a new value

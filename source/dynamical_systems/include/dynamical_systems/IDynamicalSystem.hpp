@@ -119,12 +119,13 @@ protected:
   void assert_parameter_valid(const std::string& name, state_representation::StateType state_type);
 
   /**
-   * @brief Validate and set a parameter of the dynamical system. Internal
-   * function, to be redefined based on the dynamical system, called
-   * by the set_parameter function.
+   * @brief Validate and set a parameter of the dynamical system.
+   * @details Internal function, to be redefined based on the
+   * dynamical system, called by the set_parameter function.
    * @param parameter The parameter to be validated
    */
-  virtual void validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) = 0;
+  virtual void
+  validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) = 0;
 
   std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
       param_map_; ///< map containing the names and values of all parameters of the dynamical system

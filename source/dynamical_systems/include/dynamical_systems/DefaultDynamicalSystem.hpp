@@ -25,7 +25,7 @@ private:
 
 template<class S>
 void DefaultDynamicalSystem<S>::validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
-  throw exceptions::InvalidParameterException("No parameter to be set on this type of D.");
+  throw exceptions::InvalidParameterException("No parameter to be set on this type of DS.");
 }
 
 template<class S>

@@ -36,6 +36,7 @@ private:
    * @param parameter The parameter to be validated
    */
   void validate_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+
   /**
    * @brief Setter of the attractor as a new value
    * @param attractor the new attractor

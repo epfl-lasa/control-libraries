@@ -5,6 +5,7 @@
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointState.hpp"
 
 using namespace state_representation;
@@ -77,82 +78,23 @@ JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const
 }
 
 template<class S>
-void IDynamicalSystem<S>::assert_parameter_exists(const std::string& name) {
-  if (this->param_map_.find(name) == this->param_map_.cend()) {
-    throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
-  }
-}
-
-template<class S>
-void IDynamicalSystem<S>::assert_parameter_valid(const std::string& name, StateType state_type) {
-  this->assert_parameter_exists(name);
-  if (this->param_map_.at(name)->get_type() != state_type) {
-    throw exceptions::InvalidParameterException("Parameter '" + name + "'exists, but has unexpected type.");
-  }
-}
-
-template<class S>
-S IDynamicalSystem<S>::get_base_frame() const {
-  return this->base_frame_;
-}
-
-template<class S>
 void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
   this->base_frame_ = base_frame;
 }
 
 template<class S>
 std::shared_ptr<ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
-  assert_parameter_exists(name);
+  if (this->param_map_.find(name) == this->param_map_.cend()) {
+    throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
+  }
   return this->param_map_.at(name);
 }
 
 template<class S>
-std::map<std::string, std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameters() const {
-  return this->param_map_;
+template<typename T>
+T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
+  return std::static_pointer_cast<Parameter<T>>(this->get_parameter(name))->get_value();
 }
 
-template std::map<std::string, std::shared_ptr<ParameterInterface>>
-IDynamicalSystem<CartesianState>::get_parameters() const;
-template std::map<std::string, std::shared_ptr<ParameterInterface>>
-IDynamicalSystem<JointState>::get_parameters() const;
-
-template<class S>
-std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<S>::get_parameter_list() const {
-  std::list<std::shared_ptr<ParameterInterface>> param_list;
-  for (const auto& param_it: this->param_map_) {
-    param_list.template emplace_back(param_it.second);
-  }
-  return param_list;
-}
-
-template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<CartesianState>::get_parameter_list() const;
-template std::list<std::shared_ptr<ParameterInterface>> IDynamicalSystem<JointState>::get_parameter_list() const;
-
-template<class S>
-void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<ParameterInterface>&) {
-  // TODO implement set parameter here, possibly with a virtual validate_parameter method
-  throw exceptions::NotImplementedException("set_parameter() not implemented yet.");
-}
-
-template<class S>
-void IDynamicalSystem<S>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>& parameters) {
-  for (const auto& param: parameters) {
-    this->set_parameter(param);
-  }
-}
-
-template void IDynamicalSystem<CartesianState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
-template void IDynamicalSystem<JointState>::set_parameters(const std::list<std::shared_ptr<ParameterInterface>>&);
-
-template<class S>
-void IDynamicalSystem<S>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>& parameters) {
-  for (const auto& param_it: parameters) {
-    this->assert_parameter_exists(param_it.first);
-    this->set_parameter(param_it.second);
-  }
-}
-
-template void IDynamicalSystem<CartesianState>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>&);
-template void IDynamicalSystem<JointState>::set_parameters(const std::map<std::string, std::shared_ptr<ParameterInterface>>&);
+template CartesianPose IDynamicalSystem<CartesianState>::get_parameter_value(const std::string&);
 }// namespace dynamical_systems

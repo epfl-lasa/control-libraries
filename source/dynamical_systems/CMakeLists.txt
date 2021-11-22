@@ -11,7 +11,7 @@ set(CORE_SOURCES
   src/DynamicalSystemFactory.cpp
   src/DynamicalSystem.cpp
   src/Circular.cpp
-  src/Linear.cpp
+  src/PointAttractor.cpp
   src/Ring.cpp
 )
 

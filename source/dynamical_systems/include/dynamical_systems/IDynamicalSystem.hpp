@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 
+#include "dynamical_systems/exceptions/InvalidParameterException.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/parameters/ParameterInterface.hpp"
@@ -133,4 +134,57 @@ protected:
 private:
   S base_frame_; ///< frame in which the dynamical system is expressed
 };
+
+template<class S>
+void IDynamicalSystem<S>::assert_parameter_valid(const std::string& name, state_representation::StateType state_type) {
+  if (this->param_map_.at(name)->get_type() != state_type) {
+    throw dynamical_systems::exceptions::InvalidParameterException(
+        "Parameter '" + name + "'exists, but has unexpected type."
+    );
+  }
+}
+
+template<class S>
+S IDynamicalSystem<S>::get_base_frame() const {
+  return this->base_frame_;
+}
+
+template<class S>
+std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
+IDynamicalSystem<S>::get_parameters() const {
+  return this->param_map_;
+}
+
+template<class S>
+std::list<std::shared_ptr<state_representation::ParameterInterface>> IDynamicalSystem<S>::get_parameter_list() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
+  for (const auto& param_it: this->param_map_) {
+    param_list.template emplace_back(param_it.second);
+  }
+  return param_list;
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+  this->validate_and_set_parameter(parameter);
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(
+    const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters
+) {
+  for (const auto& param: parameters) {
+    this->set_parameter(param);
+  }
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(
+    const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>& parameters
+) {
+  for (const auto& param_it: parameters) {
+    this->set_parameter(param_it.second);
+  }
+}
+
 }// namespace dynamical_systems

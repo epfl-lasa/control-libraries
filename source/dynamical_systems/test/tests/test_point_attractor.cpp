@@ -18,6 +18,9 @@ protected:
   void SetUp() override {
     current_pose = CartesianPose("A", 10 * Eigen::Vector3d::Random());
     target_pose = CartesianPose("B", 10 * Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
+    ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+        DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+    );
   }
   void print_current_and_target_pose() {
     std::cout << current_pose << std::endl;
@@ -25,10 +28,7 @@ protected:
     std::cout << abs(current_pose.get_orientation().dot(target_pose.get_orientation())) << std::endl;
   }
 
-  std::shared_ptr<IDynamicalSystem<CartesianState>>
-      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
+  std::shared_ptr<IDynamicalSystem<CartesianState>> ds;
   CartesianPose current_pose;
   CartesianPose target_pose;
   unsigned int nb_steps = 100;
@@ -51,10 +51,9 @@ TEST_F(PointAttractorTest, EmptyConstructorCartesianState) {
   EXPECT_EQ(ds->get_base_frame().get_name(), attractor.get_reference_frame());
   EXPECT_EQ(ds->get_base_frame().get_reference_frame(), attractor.get_reference_frame());
   EXPECT_EQ(ds->get_base_frame().get_transformation_matrix(), Eigen::Matrix4d::Identity());
+}
 
-  ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
+TEST_F(PointAttractorTest, EmptyIsCompatible) {
   CartesianState state1 = CartesianState::Identity("B", "A");
   CartesianState state2("D", "C");
   CartesianState state3("C", "A");
@@ -69,7 +68,7 @@ TEST_F(PointAttractorTest, EmptyConstructorCartesianState) {
   // if no attractor is set, an exception is thrown
   EXPECT_THROW(ds->evaluate(state4), dynamical_systems::exceptions::EmptyAttractorException);
 
-  ds->set_parameter(make_shared_parameter("attractor", attractor));
+  ds->set_parameter(make_shared_parameter("attractor", CartesianPose::Identity("CAttractor", "A")));
   EXPECT_TRUE(ds->is_compatible(state1));
   EXPECT_FALSE(ds->is_compatible(state2));
   EXPECT_TRUE(ds->is_compatible(state3));
@@ -130,7 +129,7 @@ TEST_F(PointAttractorTest, PositionAndOrientation) {
   EXPECT_NEAR(current_pose.dist(target_pose, CartesianStateVariable::ORIENTATION), 0, angular_tol);
 }
 
-TEST(PointAttractorTestFrames, FixedReferenceFrames) {
+TEST_F(PointAttractorTest, FixedReferenceFrames) {
   auto BinA = CartesianState::Identity("B", "A");
   auto CinA = CartesianState::Identity("C", "A");
   auto CinB = CartesianState::Identity("C", "B");
@@ -138,11 +137,6 @@ TEST(PointAttractorTestFrames, FixedReferenceFrames) {
   CinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
   CinB.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
-
-  // initialise the linearDS with attractor at B in reference frame A
-  auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
   ds->set_parameter(make_shared_parameter("attractor", BinA));
 
   // evaluating a current pose B in reference frame A should give zero twist (coincident with attractor)
@@ -161,13 +155,8 @@ TEST(PointAttractorTestFrames, FixedReferenceFrames) {
   EXPECT_THROW(ds->evaluate(CinA.inverse()), state_representation::exceptions::IncompatibleReferenceFramesException);
 }
 
-TEST(PointAttractorTestFrames, UpdateBaseReferenceFrames) {
+TEST_F(PointAttractorTest, UpdateBaseReferenceFrames) {
   auto BinA = CartesianState::Random("B", "A");
-
-  // initialise the linearDS with attractor at B in reference frame A
-  auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
   ds->set_parameter(make_shared_parameter("attractor", BinA));
 
   // the base frame of the default constructed DS should be an identity frame
@@ -206,17 +195,13 @@ TEST(PointAttractorTestFrames, UpdateBaseReferenceFrames) {
                state_representation::exceptions::IncompatibleReferenceFramesException);
 }
 
-TEST(PointAttractorTestFrames, StackedMovingReferenceFrames) {
+TEST_F(PointAttractorTest, StackedMovingReferenceFrames) {
   auto AinWorld = CartesianState::Random("A", "world");
   auto BinA = CartesianState::Random("B", "A");
 
   auto CinA = CartesianState::Identity("C", "A");
   CinA.set_pose(Eigen::Vector3d::Random(), Eigen::Quaterniond::UnitRandom());
 
-  // initialise the linearDS with attractor at B in reference frame A
-  auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
   ds->set_parameter(make_shared_parameter("attractor", BinA));
 
   // evaluate the twist for a fixed state C in reference frame A
@@ -246,16 +231,13 @@ TEST(PointAttractorTestFrames, StackedMovingReferenceFrames) {
 
 }
 
-TEST(PointAttractorTestFrames, UpdateAttractorFrame) {
+TEST_F(PointAttractorTest, UpdateAttractorFrame) {
   CartesianState A, B, C, D;
   A = CartesianState::Random("A", "world");
   B = CartesianState::Random("B", "world");
   C = CartesianState::Random("C", "robot");
   D = CartesianState::Random("D", "robot");
 
-  auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
   ds->set_parameter(make_shared_parameter("attractor", A));
 
   // state being evaluated must match the DS base frame, which is by default the attractor reference frame

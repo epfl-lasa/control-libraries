@@ -15,6 +15,7 @@ Release Versions:
 - Create DS interface and DS factory classes (#227)
 - Refactor Linear DS to PointAttractor DS with factory (#229)
 - Refactor Circular DS with factory (#230)
+- Refactor Ring DS with factory and remove old DS base class (#231)
 
 ### Pending TODOs for the next release
 

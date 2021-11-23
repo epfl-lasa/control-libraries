@@ -5,9 +5,9 @@
 #include <memory>
 
 #include "dynamical_systems/exceptions/InvalidParameterException.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
-#include "state_representation/parameters/ParameterInterface.hpp"
 
 /**
  * @namespace dynamical_systems
@@ -147,6 +147,20 @@ void IDynamicalSystem<S>::assert_parameter_valid(const std::string& name, state_
 template<class S>
 S IDynamicalSystem<S>::get_base_frame() const {
   return this->base_frame_;
+}
+
+template<class S>
+std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
+  if (this->param_map_.find(name) == this->param_map_.cend()) {
+    throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
+  }
+  return this->param_map_.at(name);
+}
+
+template<class S>
+template<typename T>
+T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
+  return std::static_pointer_cast<state_representation::Parameter<T>>(this->get_parameter(name))->get_value();
 }
 
 template<class S>

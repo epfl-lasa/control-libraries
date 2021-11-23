@@ -13,6 +13,8 @@ Release Versions:
 - Add static method to create Parameter pointer (#226)
 - Templated get_value method for Parameter (#228)
 - Create DS interface and DS factory classes (#227)
+- Refactor Linear DS to PointAttractor DS with factory (#229)
+- Refactor Circular DS with factory (#230)
 
 ### Pending TODOs for the next release
 

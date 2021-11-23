@@ -1,11 +1,9 @@
 #include "dynamical_systems/IDynamicalSystem.hpp"
 
 #include "dynamical_systems/exceptions/EmptyBaseFrameException.hpp"
-#include "dynamical_systems/exceptions/InvalidParameterException.hpp"
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/robot/JointState.hpp"
 
 using namespace state_representation;
@@ -81,20 +79,4 @@ template<class S>
 void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
   this->base_frame_ = base_frame;
 }
-
-template<class S>
-std::shared_ptr<ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
-  if (this->param_map_.find(name) == this->param_map_.cend()) {
-    throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
-  }
-  return this->param_map_.at(name);
-}
-
-template<class S>
-template<typename T>
-T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
-  return std::static_pointer_cast<Parameter<T>>(this->get_parameter(name))->get_value();
-}
-
-template CartesianPose IDynamicalSystem<CartesianState>::get_parameter_value(const std::string&);
 }// namespace dynamical_systems

@@ -17,7 +17,7 @@ while getopts 'r' opt; do
 done
 shift "$(( OPTIND - 1 ))"
 
-NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
+NAME=epfl-lasa/control-libraries/source/"${MULTISTAGE_TARGET}"
 TAG="latest"
 
 BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")

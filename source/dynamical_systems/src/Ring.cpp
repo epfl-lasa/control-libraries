@@ -65,11 +65,11 @@ Eigen::Quaterniond Ring::get_rotation_offset() const {
   return this->rotation_offset_->get_value().get_orientation();
 }
 
-void Ring::set_base_frame(const state_representation::CartesianState& base_frame) {
+void Ring::set_base_frame(const CartesianState& base_frame) {
   if (base_frame.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
   }
-  IDynamicalSystem<state_representation::CartesianState>::set_base_frame(base_frame);
+  IDynamicalSystem<CartesianState>::set_base_frame(base_frame);
   // update reference frame of center
   if (!this->center_->get_value().is_empty()) {
     auto center = this->center_->get_value();
@@ -78,30 +78,30 @@ void Ring::set_base_frame(const state_representation::CartesianState& base_frame
   }
 }
 
-void Ring::validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+void Ring::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "center") {
-    this->assert_parameter_valid("center", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->set_center(std::static_pointer_cast<Parameter<CartesianPose>>(parameter)->get_value());
   } else if (parameter->get_name() == "rotation_offset") {
-    this->assert_parameter_valid("rotation_offset", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->rotation_offset_->set_value(std::static_pointer_cast<Parameter<CartesianPose>>(parameter)->get_value());
   } else if (parameter->get_name() == "radius") {
-    this->assert_parameter_valid("radius", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->radius_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "width") {
-    this->assert_parameter_valid("width", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->width_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "speed") {
-    this->assert_parameter_valid("speed", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->speed_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "field_strength") {
-    this->assert_parameter_valid("field_strength", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->field_strength_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "normal_gain") {
-    this->assert_parameter_valid("normal_gain", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->normal_gain_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "angular_gain") {
-    this->assert_parameter_valid("angular_gain", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->angular_gain_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else {
     throw exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");

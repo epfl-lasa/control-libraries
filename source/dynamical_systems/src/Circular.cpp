@@ -59,16 +59,16 @@ void Circular::set_base_frame(const CartesianState& base_frame) {
 
 void Circular::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "limit_cycle") {
-    this->assert_parameter_valid("limit_cycle", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->set_limit_cycle(std::static_pointer_cast<Parameter<Ellipsoid>>(parameter)->get_value());
   } else if (parameter->get_name() == "planar_gain") {
-    this->assert_parameter_valid("planar_gain", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->planar_gain_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "normal_gain") {
-    this->assert_parameter_valid("normal_gain", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->normal_gain_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else if (parameter->get_name() == "circular_velocity") {
-    this->assert_parameter_valid("circular_velocity", parameter->get_type());
+    this->assert_parameter_valid(parameter);
     this->circular_velocity_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else {
     throw exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");

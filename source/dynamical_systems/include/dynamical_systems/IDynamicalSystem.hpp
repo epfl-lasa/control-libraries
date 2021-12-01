@@ -112,12 +112,10 @@ protected:
   [[nodiscard]] virtual S compute_dynamics(const S& state) const = 0;
 
   /**
-   * @brief Check if a parameter with provided name exists and has the
-   * expected type, throw an exception otherwise.
-   * @param name The name of the parameter
-   * @param state_type The type of the parameter
+   * @brief Check if a parameter has the expected type, throw an exception otherwise.
+   * @param parameter The parameter to be validated
    */
-  void assert_parameter_valid(const std::string& name, state_representation::StateType state_type);
+  void assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
 
   /**
    * @brief Validate and set a parameter of the dynamical system.
@@ -136,10 +134,10 @@ private:
 };
 
 template<class S>
-void IDynamicalSystem<S>::assert_parameter_valid(const std::string& name, state_representation::StateType state_type) {
-  if (this->param_map_.at(name)->get_type() != state_type) {
+void IDynamicalSystem<S>::assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+  if (this->param_map_.at(parameter->get_name())->get_type() != parameter->get_type()) {
     throw dynamical_systems::exceptions::InvalidParameterException(
-        "Parameter '" + name + "'exists, but has unexpected type."
+        "Parameter '" + parameter->get_name() + "'exists, but has unexpected type."
     );
   }
 }

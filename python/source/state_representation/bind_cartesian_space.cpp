@@ -19,6 +19,12 @@ void spatial_state(py::module_& m) {
   c.def("set_reference_frame", &SpatialState::set_reference_frame, "Setter of the reference frame.", "reference_frame"_a);
   c.def("is_compatible", &SpatialState::is_compatible, "Check if the state is compatible for operations with the state given as argument.", "state"_a);
 
+  c.def("__copy__", [](const SpatialState &state) {
+    return SpatialState(state);
+  });
+  c.def("__deepcopy__", [](const SpatialState &state, py::dict) {
+    return SpatialState(state);
+  }, "memo"_a);
   c.def("__repr__", [](const SpatialState& state) {
     std::stringstream buffer;
     buffer << state;
@@ -120,6 +126,12 @@ void cartesian_state(py::module_& m) {
 
   c.def("to_list", &CartesianState::to_std_vector, "Return the state as a list");
 
+  c.def("__copy__", [](const CartesianState &state) {
+    return CartesianState(state);
+  });
+  c.def("__deepcopy__", [](const CartesianState &state, py::dict) {
+    return CartesianState(state);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianState& state) {
     std::stringstream buffer;
     buffer << state;
@@ -193,6 +205,12 @@ void cartesian_pose(py::module_& m) {
   c.def("norms", &CartesianPose::norms, "Compute the norms of the state variable specified by the input type (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
   c.def("normalized", &CartesianPose::normalized, "Compute the normalized pose at the state variable given in argument (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
 
+  c.def("__copy__", [](const CartesianPose &pose) {
+    return CartesianPose(pose);
+  });
+  c.def("__deepcopy__", [](const CartesianPose &pose, py::dict) {
+    return CartesianPose(pose);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianPose& pose) {
     std::stringstream buffer;
     buffer << pose;
@@ -260,6 +278,12 @@ void cartesian_twist(py::module_& m) {
   c.def("norms", &CartesianTwist::norms, "Compute the norms of the state variable specified by the input type (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
   c.def("normalized", &CartesianTwist::normalized, "Compute the normalized twist at the state variable given in argument (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
 
+  c.def("__copy__", [](const CartesianTwist &twist) {
+    return CartesianTwist(twist);
+  });
+  c.def("__deepcopy__", [](const CartesianTwist &twist, py::dict) {
+    return CartesianTwist(twist);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianTwist& twist) {
     std::stringstream buffer;
     buffer << twist;
@@ -321,6 +345,12 @@ void cartesian_wrench(py::module_& m) {
   c.def("norms", &CartesianWrench::norms, "Compute the norms of the state variable specified by the input type (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
   c.def("normalized", &CartesianWrench::normalized, "Compute the normalized twist at the state variable given in argument (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
 
+  c.def("__copy__", [](const CartesianWrench &wrench) {
+    return CartesianWrench(wrench);
+  });
+  c.def("__deepcopy__", [](const CartesianWrench &wrench, py::dict) {
+    return CartesianWrench(wrench);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianWrench& wrench) {
     std::stringstream buffer;
     buffer << wrench;

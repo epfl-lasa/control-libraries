@@ -53,6 +53,12 @@ void state(py::module_& m) {
   c.def("is_compatible", &State::is_compatible, "Check if the state is compatible for operations with the state given as argument", "state"_a);
   c.def("initialize", &State::initialize, "Initialize the State to a zero value");
 
+  c.def("__copy__", [](const State &state) {
+    return State(state);
+  });
+  c.def("__deepcopy__", [](const State &state, py::dict) {
+    return State(state);
+  }, "memo"_a);
   c.def("__repr__", [](const State& state) {
     std::stringstream buffer;
     buffer << state;

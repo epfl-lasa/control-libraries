@@ -13,6 +13,7 @@ Release Versions:
 - Add static method to create Parameter pointer (#226)
 - Templated get_value method for Parameter (#228)
 - Create DS interface and DS factory classes (#227)
+- Add support for copy module in Python bindings (#232)
 
 ### Pending TODOs for the next release
 

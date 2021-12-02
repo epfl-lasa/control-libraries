@@ -1,4 +1,5 @@
 import unittest
+import copy
 
 import numpy as np
 from state_representation import Jacobian, CartesianPose, CartesianTwist, CartesianWrench, JointVelocities
@@ -48,6 +49,14 @@ class TestJacobian(unittest.TestCase):
         Jacobian.Random("robot", ["joint_0", "joint_1"], "ee", "robot")
         B = Jacobian.Random("robot", 7, "ee")
         B.copy()
+
+    def test_copy(self):
+        state = Jacobian.Random("robot", 7, "ee")
+        for state_copy in [copy.copy(state), copy.deepcopy(state)]:
+            self.assertEqual(state.get_frame(), state_copy.get_frame())
+            self.assertEqual(state.get_reference_frame(), state_copy.get_reference_frame())
+            self.assertListEqual(state.get_joint_names(), state_copy.get_joint_names())
+            self.assert_np_array_equal(state.data().flatten(), state_copy.data().flatten())
 
     def test_getters(self):
         jac = Jacobian("jacobian", 3, "ee", "robot")

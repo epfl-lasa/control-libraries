@@ -18,6 +18,12 @@ void parameter(py::module_& m) {
   c.def("get_value", &ParameterContainer::get_value, "Getter of the value attribute.");
   c.def("set_value", &ParameterContainer::set_value, "Setter of the value attribute.", py::arg("value"));
 
+  c.def("__copy__", [](const ParameterContainer &parameter) {
+    return ParameterContainer(parameter);
+  });
+  c.def("__deepcopy__", [](const ParameterContainer &parameter, py::dict) {
+    return ParameterContainer(parameter);
+  }, "memo"_a);
   c.def("__repr__", [](const ParameterContainer& parameter) {
     std::stringstream buffer;
     switch (parameter.get_type()) {

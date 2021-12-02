@@ -1,6 +1,7 @@
 import time
 import unittest
 import datetime
+import copy
 
 from state_representation import State, StateType
 
@@ -76,6 +77,10 @@ class TestState(unittest.TestCase):
         state.set_timestamp(datetime.datetime.now().timestamp())
         self.assertFalse(state.is_deprecated(0.1))
 
+    def test_copy(self):
+        state = State(StateType.STATE, "test", False)
+        state2 = copy.copy(state)
+        state3 = copy.deepcopy(state)
 
 if __name__ == '__main__':
     unittest.main()

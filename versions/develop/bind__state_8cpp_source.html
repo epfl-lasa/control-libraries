@@ -125,17 +125,23 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  c.def(<span class="stringliteral">&quot;is_compatible&quot;</span>, &amp;State::is_compatible, <span class="stringliteral">&quot;Check if the state is compatible for operations with the state given as argument&quot;</span>, <span class="stringliteral">&quot;state&quot;</span>_a);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  c.def(<span class="stringliteral">&quot;initialize&quot;</span>, &amp;State::initialize, <span class="stringliteral">&quot;Initialize the State to a zero value&quot;</span>);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>&amp; state) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    std::stringstream buffer;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    buffer &lt;&lt; state;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  });</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">void</span> bind_state(py::module_&amp; m) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  state_type(m);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  state(m);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  c.def(<span class="stringliteral">&quot;__copy__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a> &amp;state) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>(state);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  });</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  c.def(<span class="stringliteral">&quot;__deepcopy__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a> &amp;state, py::dict) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>(state);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  }, <span class="stringliteral">&quot;memo&quot;</span>_a);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_state.html">State</a>&amp; state) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    std::stringstream buffer;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    buffer &lt;&lt; state;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  });</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">void</span> bind_state(py::module_&amp; m) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  state_type(m);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;  state(m);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
 <div class="ttc" id="aclassstate__representation_1_1_state_html"><div class="ttname"><a href="classstate__representation_1_1_state.html">state_representation::State</a></div><div class="ttdoc">Abstract class to represent a state.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8hpp_source.html#l00046">State.hpp:46</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

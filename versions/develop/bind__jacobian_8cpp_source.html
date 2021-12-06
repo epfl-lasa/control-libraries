@@ -144,13 +144,19 @@ $(function() {
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  c.def(<a class="code" href="classstate__representation_1_1_cartesian_pose.html">CartesianPose</a>() * py::self);</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  c.def(Eigen::MatrixXd() * py::self);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a>&amp; jacobian) {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    std::stringstream buffer;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    buffer &lt;&lt; jacobian;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  });</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  c.def(<span class="stringliteral">&quot;__copy__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a> &amp;jacobian) {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a>(jacobian);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  });</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  c.def(<span class="stringliteral">&quot;__deepcopy__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a> &amp;jacobian, py::dict) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a>(jacobian);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }, <span class="stringliteral">&quot;memo&quot;</span>_a);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  c.def(<span class="stringliteral">&quot;__repr__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a>&amp; jacobian) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    std::stringstream buffer;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    buffer &lt;&lt; jacobian;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> buffer.str();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  });</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
 <div class="ttc" id="aclassstate__representation_1_1_cartesian_pose_html"><div class="ttname"><a href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a></div><div class="ttdoc">Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation.</div><div class="ttdef"><b>Definition:</b> <a href="_cartesian_pose_8hpp_source.html#l00015">CartesianPose.hpp:15</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_cartesian_twist_html"><div class="ttname"><a href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a></div><div class="ttdoc">Class to define twist in cartesian space as 3D linear and angular velocity vectors.</div><div class="ttdef"><b>Definition:</b> <a href="_cartesian_twist_8hpp_source.html#l00015">CartesianTwist.hpp:15</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_cartesian_wrench_html"><div class="ttname"><a href="classstate__representation_1_1_cartesian_wrench.html">state_representation::CartesianWrench</a></div><div class="ttdoc">Class to define wrench in cartesian space as 3D force and torque vectors.</div><div class="ttdef"><b>Definition:</b> <a href="_cartesian_wrench_8hpp_source.html#l00014">CartesianWrench.hpp:14</a></div></div>

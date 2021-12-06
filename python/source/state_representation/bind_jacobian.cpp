@@ -72,6 +72,12 @@ void bind_jacobian(py::module_& m) {
   c.def(CartesianPose() * py::self);
   c.def(Eigen::MatrixXd() * py::self);
 
+  c.def("__copy__", [](const Jacobian &jacobian) {
+    return Jacobian(jacobian);
+  });
+  c.def("__deepcopy__", [](const Jacobian &jacobian, py::dict) {
+    return Jacobian(jacobian);
+    }, "memo"_a);
   c.def("__repr__", [](const Jacobian& jacobian) {
     std::stringstream buffer;
     buffer << jacobian;

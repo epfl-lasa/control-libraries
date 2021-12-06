@@ -1,4 +1,5 @@
 import unittest
+import copy
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
@@ -143,6 +144,11 @@ class TestCartesianState(unittest.TestCase):
         self.assertTrue(np.linalg.norm(random.get_twist()) > 0)
         self.assertTrue(np.linalg.norm(random.get_accelerations()) > 0)
         self.assertTrue(np.linalg.norm(random.get_wrench()) > 0)
+
+    def test_copy(self):
+        state = CartesianState().Random("test")
+        for state_copy in [copy.copy(state), copy.deepcopy(state)]:
+            self.assert_name_frame_data_equal(state, state_copy)
 
     def test_copy_constructor(self):
         random = CartesianState().Random("test")

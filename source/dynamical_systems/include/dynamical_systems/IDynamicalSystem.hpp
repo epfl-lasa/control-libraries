@@ -4,9 +4,10 @@
 #include <map>
 #include <memory>
 
+#include "dynamical_systems/exceptions/InvalidParameterException.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
-#include "state_representation/parameters/ParameterInterface.hpp"
 
 /**
  * @namespace dynamical_systems
@@ -67,6 +68,15 @@ public:
   [[nodiscard]] std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
+ * @brief Get a parameter of the dynamical system by its name.
+ * @tparam T Type of the parameter value
+ * @param name The name of the parameter
+ * @return The value of the parameter, if the parameter exists
+ */
+  template<typename T>
+  T get_parameter_value(const std::string& name);
+
+  /**
    * @brief Get a list of all the parameters of the dynamical system.
    * @return The list of parameters
    */
@@ -102,24 +112,91 @@ protected:
   [[nodiscard]] virtual S compute_dynamics(const S& state) const = 0;
 
   /**
-   * @brief Check if a parameter with provided name exists, throw an
-   * exception otherwise.
-   * @param name The name of the parameter
+   * @brief Check if a parameter has the expected type, throw an exception otherwise.
+   * @param parameter The parameter to be validated
    */
-  void assert_parameter_exists(const std::string& name);
+  void assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
 
   /**
-   * @brief Check if a parameter with provided name exists and has the
-   * expected type, throw an exception otherwise.
-   * @param name The name of the parameter
-   * @param state_type The type of the parameter
+   * @brief Validate and set a parameter of the dynamical system.
+   * @details Internal function, to be redefined based on the
+   * dynamical system, called by the set_parameter function.
+   * @param parameter The parameter to be validated
    */
-  void assert_parameter_valid(const std::string& name, state_representation::StateType state_type);
+  virtual void
+  validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) = 0;
 
   std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
-      param_map_; ///> map containing the names and values of all parameters of the dynamical system
+      param_map_; ///< map containing the names and values of all parameters of the dynamical system
 
 private:
   S base_frame_; ///< frame in which the dynamical system is expressed
 };
+
+template<class S>
+void IDynamicalSystem<S>::assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+  if (this->param_map_.at(parameter->get_name())->get_type() != parameter->get_type()) {
+    throw dynamical_systems::exceptions::InvalidParameterException(
+        "Parameter '" + parameter->get_name() + "'exists, but has unexpected type."
+    );
+  }
+}
+
+template<class S>
+S IDynamicalSystem<S>::get_base_frame() const {
+  return this->base_frame_;
+}
+
+template<class S>
+std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
+  if (this->param_map_.find(name) == this->param_map_.cend()) {
+    throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
+  }
+  return this->param_map_.at(name);
+}
+
+template<class S>
+template<typename T>
+T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
+  return std::static_pointer_cast<state_representation::Parameter<T>>(this->get_parameter(name))->get_value();
+}
+
+template<class S>
+std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
+IDynamicalSystem<S>::get_parameters() const {
+  return this->param_map_;
+}
+
+template<class S>
+std::list<std::shared_ptr<state_representation::ParameterInterface>> IDynamicalSystem<S>::get_parameter_list() const {
+  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
+  for (const auto& param_it: this->param_map_) {
+    param_list.template emplace_back(param_it.second);
+  }
+  return param_list;
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+  this->validate_and_set_parameter(parameter);
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(
+    const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters
+) {
+  for (const auto& param: parameters) {
+    this->set_parameter(param);
+  }
+}
+
+template<class S>
+void IDynamicalSystem<S>::set_parameters(
+    const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>& parameters
+) {
+  for (const auto& param_it: parameters) {
+    this->set_parameter(param_it.second);
+  }
+}
+
 }// namespace dynamical_systems

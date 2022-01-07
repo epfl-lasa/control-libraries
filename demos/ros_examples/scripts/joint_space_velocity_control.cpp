@@ -5,7 +5,7 @@
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
 #include <state_representation/robot/JointVelocities.hpp>
-#include <dynamical_systems/Linear.hpp>
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
 #include <robot_model/Model.hpp>
 
 using namespace state_representation;
@@ -71,17 +71,23 @@ public:
 }
 
 void control_loop(RobotInterface& robot, const int& freq) {
-  // set a desired target and a linear ds toward the target
+  // set a desired target and a point attractor ds toward the target
   CartesianPose target(robot.get_robot_frames().back(), robot.get_robot_frames().front());
   target.set_position(.5, .0, .5);
   target.set_orientation(Eigen::Quaterniond(0, 1, 0, 0));
   std::vector<double> gains = {50.0, 50.0, 50.0, 10.0, 10.0, 10.0};
-  Linear<CartesianState> linear_ds(target, gains);
+
+  std::shared_ptr<IDynamicalSystem<CartesianState>>
+      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  ds->set_parameter(make_shared_parameter("attractor", target));
+  ds->set_parameter(make_shared_parameter("gain", gains));
 
   ros::Rate rate(freq);
   while (ros::ok()) {
     if (robot.state_received) {
-      CartesianTwist twist = linear_ds.evaluate(robot.get_eef_pose());
+      CartesianTwist twist = ds->evaluate(robot.get_eef_pose());
       twist.clamp(0.25, 0.5);
       JointVelocities command = robot.inverse_velocity(twist);
       robot.publish(command);

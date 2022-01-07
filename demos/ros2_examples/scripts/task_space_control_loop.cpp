@@ -6,7 +6,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
-#include <dynamical_systems/Linear.hpp>
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
 
 using namespace state_representation;
 using namespace dynamical_systems;
@@ -20,7 +20,7 @@ private:
   std::thread run_thread_; ///< thread object to start the main loop, i.e. the run function, in parallel of the rest
   CartesianPose current_pose_; ///< current pose
   CartesianPose target_; ///< attractor pose
-  std::shared_ptr<Linear < CartesianState>> dynamical_system_ = nullptr; ///< dynamical system to the attractor
+  std::shared_ptr<IDynamicalSystem<CartesianState>> dynamical_system_; ///< dynamical system to the attractor
 
   void send_transform(const CartesianPose& pose, const std::string& pose_name_prefix = "") {
     auto node_handle = this->shared_from_this();
@@ -52,10 +52,12 @@ public:
   }
 
   void init() {
-    // set a desired target and a linear ds toward the target
+    // set a desired target and a point attractor ds toward the target
     this->target_ = CartesianPose::Random("frame");
-    this->dynamical_system_ = std::make_shared<Linear < CartesianState>>
-    (this->target_);
+    this->dynamical_system_ = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+        DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+    );
+    this->dynamical_system_->set_parameter(make_shared_parameter("attractor", this->target_));
     // set a starting pose
     this->current_pose_ = CartesianPose::Random("frame");
     // add the run thread

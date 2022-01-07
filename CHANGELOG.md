@@ -17,7 +17,8 @@ Release Versions:
 - Refactor Circular DS with factory (#230)
 - Refactor Ring DS with factory and remove old DS base class (#231)
 - Add support for copy module in Python bindings (#232)
-- Refactor dynamical systems using factory pattern (#233) 
+- Refactor dynamical systems using factory pattern (#233)
+- Propagate DS refactor to demos (#234)
 
 ### Pending TODOs for the next release
 

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['nosolutiontofitexception_381',['NoSolutionToFitException',['../classstate__representation_1_1exceptions_1_1_no_solution_to_fit_exception.html',1,'state_representation::exceptions']]],
-  ['notimplementedexception_382',['NotImplementedException',['../classcontrollers_1_1exceptions_1_1_not_implemented_exception.html',1,'controllers::exceptions::NotImplementedException'],['../classdynamical__systems_1_1exceptions_1_1_not_implemented_exception.html',1,'dynamical_systems::exceptions::NotImplementedException'],['../classstate__representation_1_1exceptions_1_1_not_implemented_exception.html',1,'state_representation::exceptions::NotImplementedException']]]
+  ['qpinversevelocityparameters_352',['QPInverseVelocityParameters',['../structrobot__model_1_1_q_p_inverse_velocity_parameters.html',1,'robot_model']]]
 ];

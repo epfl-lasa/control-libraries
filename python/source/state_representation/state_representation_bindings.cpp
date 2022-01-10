@@ -17,4 +17,5 @@ PYBIND11_MODULE(state_representation, m) {
   bind_joint_space(m);
   bind_jacobian(m);
   bind_parameters(m);
+  bind_geometry(m);
 }

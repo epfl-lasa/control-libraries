@@ -6,9 +6,12 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/robot/JointState.hpp"
+#include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 
 using namespace state_representation;
@@ -265,4 +268,55 @@ TEST_F(PointAttractorTest, UpdateAttractorFrame) {
   // now the evaluation should also succeed when matching the updated base frame
   EXPECT_THROW(ds->evaluate(B), state_representation::exceptions::IncompatibleReferenceFramesException);
   EXPECT_NO_THROW(ds->evaluate(D));
+}
+
+TEST(JointPointAttractorTest, EmptyConstructor) {
+  auto ds = DynamicalSystemFactory<JointState>::create_dynamical_system(
+      DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  // construct empty cartesian state DS
+  JointState attractor = JointState::Zero("robot", 3);
+
+  // base frame and attractor should be empty
+  EXPECT_TRUE(ds->get_parameter_value<JointState>("attractor").is_empty());
+  EXPECT_TRUE(ds->get_base_frame().is_empty());
+  ds->set_parameter_value("attractor", attractor);
+  EXPECT_FALSE(ds->get_parameter_value<JointState>("attractor").is_empty());
+  EXPECT_TRUE(ds->get_base_frame().is_empty());
+}
+
+TEST(JointPointAttractorTest, EmptyCompatible) {
+  auto ds = DynamicalSystemFactory<JointState>::create_dynamical_system(
+      DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  JointState state1 = JointState::Zero("robot", 3);
+  JointState state2 = JointState("test", 3);
+  JointState state3 = JointState("robot", 4);
+
+  // if no attractor is set, an exception is thrown
+  EXPECT_THROW(ds->evaluate(state2), dynamical_systems::exceptions::EmptyAttractorException);
+  ds->set_parameter_value("attractor", state1);
+
+  EXPECT_THROW(ds->evaluate(state2), state_representation::exceptions::IncompatibleStatesException);
+  EXPECT_THROW(ds->evaluate(state3), state_representation::exceptions::IncompatibleStatesException);
+
+  EXPECT_TRUE(ds->is_compatible(state1));
+  EXPECT_FALSE(ds->is_compatible(state2));
+  EXPECT_FALSE(ds->is_compatible(state3));
+}
+
+TEST(JointPointAttractorTest, Convergence) {
+  auto ds = DynamicalSystemFactory<JointState>::create_dynamical_system(
+      DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  auto attractor = JointState::Random("robot", 3);
+  auto current_state = JointPositions::Random("robot", 3);
+  current_state.set_data(10 * current_state.data());
+
+  ds->set_parameter_value("attractor", attractor);
+  for (unsigned int i = 0; i < 100; ++i) {
+    JointVelocities velocities = ds->evaluate(current_state);
+    current_state += 100ms * velocities;
+  }
+  EXPECT_NEAR(current_state.dist(attractor, JointStateVariable::POSITIONS), 0, 1e-3);
 }

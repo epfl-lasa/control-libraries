@@ -292,6 +292,7 @@ TEST(JointPointAttractorTest, EmptyCompatible) {
   JointState state1 = JointState::Zero("robot", 3);
   JointState state2 = JointState("test", 3);
   JointState state3 = JointState("robot", 4);
+  JointState state4 = JointState("robot", {"1", "2", "3"});
 
   // if no attractor is set, an exception is thrown
   EXPECT_THROW(ds->evaluate(state2), dynamical_systems::exceptions::EmptyAttractorException);
@@ -301,8 +302,9 @@ TEST(JointPointAttractorTest, EmptyCompatible) {
   EXPECT_THROW(ds->evaluate(state3), state_representation::exceptions::IncompatibleStatesException);
 
   EXPECT_TRUE(ds->is_compatible(state1));
-  EXPECT_FALSE(ds->is_compatible(state2));
+  EXPECT_TRUE(ds->is_compatible(state2));
   EXPECT_FALSE(ds->is_compatible(state3));
+  EXPECT_FALSE(ds->is_compatible(state4));
 }
 
 TEST(JointPointAttractorTest, Convergence) {

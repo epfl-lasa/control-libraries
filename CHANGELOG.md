@@ -20,7 +20,8 @@ Release Versions:
 - Refactor dynamical systems using factory pattern (#233)
 - Propagate DS refactor to demos (#234)
 - Add the `set_parameter_value` function in the DS base class (#236)
-- Remove the `set_base_frame` logic for `JoinState` based DS (#236)
+- Remove the `set_base_frame` logic for `JointState` based DS
+  and override `is_compatible` for PointAttractor DS (#236, #239)
 
 ### Pending TODOs for the next release
 

@@ -298,7 +298,7 @@ TEST(JointPointAttractorTest, EmptyCompatible) {
   EXPECT_THROW(ds->evaluate(state2), dynamical_systems::exceptions::EmptyAttractorException);
   ds->set_parameter_value("attractor", state1);
 
-  EXPECT_THROW(ds->evaluate(state2), state_representation::exceptions::IncompatibleStatesException);
+  EXPECT_THROW(ds->evaluate(state2), state_representation::exceptions::EmptyStateException);
   EXPECT_THROW(ds->evaluate(state3), state_representation::exceptions::IncompatibleStatesException);
 
   EXPECT_TRUE(ds->is_compatible(state1));

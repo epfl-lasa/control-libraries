@@ -41,6 +41,9 @@ template bool PointAttractor<CartesianState>::is_compatible(const CartesianState
 template<>
 bool PointAttractor<JointState>::is_compatible(const JointState& state) const {
   auto attractor = this->get_parameter_value<JointPositions>("attractor");
+  if (attractor.is_empty()) {
+    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
+  }
   bool compatible = (attractor.get_size() == state.get_size());
   if (compatible) {
     for (unsigned int i = 0; i < attractor.get_size(); ++i) {
@@ -179,14 +182,6 @@ CartesianState PointAttractor<CartesianState>::compute_dynamics(const CartesianS
 
 template<>
 JointState PointAttractor<JointState>::compute_dynamics(const JointState& state) const {
-  if (this->attractor_->get_value().is_empty()) {
-    throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
-  }
-  if (!this->is_compatible(state)) {
-    throw state_representation::exceptions::IncompatibleStatesException(
-        "The attractor and the provided states are not compatible."
-    );
-  }
   JointVelocities velocities = JointPositions(this->attractor_->get_value()) - JointPositions(state);
   velocities *= this->gain_->get_value();
   return velocities;

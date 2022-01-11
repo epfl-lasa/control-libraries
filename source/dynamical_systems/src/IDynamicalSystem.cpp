@@ -4,6 +4,7 @@
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/robot/JointState.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 
@@ -52,6 +53,14 @@ CartesianState IDynamicalSystem<CartesianState>::evaluate(const CartesianState& 
   }
 }
 
-template JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const;
+template<>
+JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const {
+  if (!this->is_compatible(state)) {
+    throw state_representation::exceptions::IncompatibleStatesException(
+        "The attractor and the provided state are not compatible."
+    );
+  }
+  return this->compute_dynamics(state);
+}
 
 }// namespace dynamical_systems

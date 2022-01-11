@@ -1,5 +1,6 @@
 #include "dynamical_systems/PointAttractor.hpp"
 
+#include "dynamical_systems/exceptions/NotImplementedException.hpp"
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 #include "dynamical_systems/exceptions/InvalidParameterException.hpp"
 #include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
@@ -57,6 +58,11 @@ void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& para
   }
 }
 
+template<class S>
+void PointAttractor<S>::set_attractor(const S&) {
+  throw exceptions::NotImplementedException("set_attractor is not implemented for this type of DS");
+}
+
 template<>
 void PointAttractor<CartesianState>::set_attractor(const CartesianState& attractor) {
   if (attractor.is_empty()) {
@@ -86,21 +92,18 @@ void PointAttractor<JointState>::set_attractor(const JointState& attractor) {
   if (attractor.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(attractor.get_name() + " state is empty");
   }
-  if (this->get_base_frame().is_empty()) {
-    IDynamicalSystem<JointState>::set_base_frame(JointState::Zero(attractor.get_name(), attractor.get_names()));
-  }
-  // validate that the attractor is compatible with the DS reference name
-  if (!this->is_compatible(attractor)) {
-    throw state_representation::exceptions::IncompatibleReferenceFramesException(
-        "The attractor " + attractor.get_name() + " is incompatible with the base frame of the dynamical system "
-            + this->get_base_frame().get_name() + "."
-    );
-  }
   this->attractor_->set_value(attractor);
   if (this->gain_->get_value().size() == 0) {
     this->gain_->set_value(Eigen::MatrixXd::Identity(attractor.get_size(), attractor.get_size()));
   }
 }
+
+template<class S>
+void PointAttractor<S>::set_base_frame(const S& base_frame) {
+  this->IDynamicalSystem<S>::set_base_frame(base_frame);
+}
+
+template void PointAttractor<JointState>::set_base_frame(const JointState& base_frame);
 
 template<>
 void PointAttractor<CartesianState>::set_base_frame(const CartesianState& base_frame) {
@@ -112,21 +115,6 @@ void PointAttractor<CartesianState>::set_base_frame(const CartesianState& base_f
     // update reference frame of attractor
     auto attractor = this->attractor_->get_value();
     attractor.set_reference_frame(base_frame.get_name());
-    this->set_attractor(attractor);
-  }
-}
-
-template<>
-void PointAttractor<JointState>::set_base_frame(const JointState& base_frame) {
-  if (base_frame.is_empty()) {
-    throw state_representation::exceptions::EmptyStateException(base_frame.get_name() + " state is empty");
-  }
-  IDynamicalSystem<JointState>::set_base_frame(base_frame);
-  if (!this->attractor_->get_value().is_empty()) {
-    // update name of attractor
-    auto attractor = this->attractor_->get_value();
-    attractor.set_name(base_frame.get_name());
-    attractor.set_names(base_frame.get_names());
     this->set_attractor(attractor);
   }
 }
@@ -152,6 +140,11 @@ void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_pt
   } else {
     throw exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
   }
+}
+
+template<class S>
+S PointAttractor<S>::compute_dynamics(const S&) const {
+  throw exceptions::NotImplementedException("compute_dynamics is not implemented for this type of DS");
 }
 
 template<>

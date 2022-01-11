@@ -6,10 +6,11 @@ import warnings
 import os
 
 __version__ = "4.1.0"
-__libraries__ = ['state_representation', 'clproto']
+__libraries__ = ['state_representation', 'clproto', 'dynamical_systems']
 __include_dirs__ = ['include']
 
 __install_clproto_module__ = True
+__install_dynamical_systems_module__ = True
 
 # check that eigen and state_representation libraries can be found
 try:
@@ -27,6 +28,9 @@ try:
             if lib == 'clproto':
                 warnings.warn(f'{msg} The clproto module will not be installed.')
                 __install_clproto_module__ = False
+            if lib == 'dynamical_systems':
+                warnings.warn(f'{msg} The dynamical_systems module will not be installed.')
+                __install_dynamical_systems_module__ = False
             else:
                 raise Exception(msg)
 except Exception as e:
@@ -52,6 +56,17 @@ if __install_clproto_module__:
                           cxx_std=17,
                           include_dirs=__include_dirs__,
                           libraries=['state_representation', 'clproto'],
+                          define_macros=[('MODULE_VERSION_INFO', __version__)],
+                          )
+    )
+
+if __install_dynamical_systems_module__:
+    ext_modules.append(
+        Pybind11Extension("dynamical_systems",
+                          sorted(glob("source/dynamical_systems/*.cpp") + glob("source/common/*.cpp")),
+                          cxx_std=17,
+                          include_dirs=__include_dirs__,
+                          libraries=['state_representation', 'dynamical_systems'],
                           define_macros=[('MODULE_VERSION_INFO', __version__)],
                           )
     )

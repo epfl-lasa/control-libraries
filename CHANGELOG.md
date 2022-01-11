@@ -19,6 +19,8 @@ Release Versions:
 - Add support for copy module in Python bindings (#232)
 - Refactor dynamical systems using factory pattern (#233)
 - Propagate DS refactor to demos (#234)
+- Add the `set_parameter_value` function in the DS base class (#236)
+- Remove the `set_base_frame` logic for `JoinState` based DS (#236)
 
 ### Pending TODOs for the next release
 

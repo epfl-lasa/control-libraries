@@ -25,6 +25,7 @@ Release Versions:
 - Add the `set_parameter_value` function in the DS base class (#236)
 - Remove the `set_base_frame` logic for `JointState` based DS
   and override `is_compatible` for PointAttractor DS (#236, #239)
+- Add python bindings for dynamical_systems module (#238)
 
 ### Pending TODOs for the next release
 

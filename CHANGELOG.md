@@ -22,6 +22,8 @@ Release Versions:
 - Avoid exception with the default DS in evaluate (#237)
 - Add empty constructors and python bindings for the 
   Shape and Ellipsoid classes (#235)
+- Add the `set_parameter_value` function in the DS base class (#236)
+- Remove the `set_base_frame` logic for `JoinState` based DS (#236)
 
 ### Pending TODOs for the next release
 

@@ -101,6 +101,15 @@ public:
   void
   set_parameters(const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>& parameters);
 
+  /**
+   * @brief Set a parameter value of the dynamical system found by its name.
+   * @tparam T Type of the parameter value
+   * @param name The name of the parameter
+   * @param value The new value of the parameter
+   */
+  template<typename T>
+  void set_parameter_value(const std::string& name, const T& value);
+
 protected:
   /**
    * @brief Compute the dynamics of the input state. Internal function,
@@ -199,6 +208,13 @@ void IDynamicalSystem<S>::set_parameters(
   for (const auto& param_it: parameters) {
     this->set_parameter(param_it.second);
   }
+}
+
+template<class S>
+template<typename T>
+void IDynamicalSystem<S>::set_parameter_value(const std::string& name, const T& value) {
+  using namespace state_representation;
+  this->validate_and_set_parameter(std::make_shared<Parameter<T>>(Parameter<T>(name, value)));
 }
 
 }// namespace dynamical_systems

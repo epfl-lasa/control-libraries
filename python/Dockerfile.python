@@ -7,6 +7,7 @@ RUN git clone --single-branch --branch $BRANCH https://github.com/epfl-lasa/cont
 RUN bash control-libraries/source/install.sh --auto --no-controllers --no-dynamical-systems --no-robot-model
 RUN bash control-libraries/protocol/install.sh --auto
 
+COPY include control-libraries/python/include
 COPY source control-libraries/python/source
 COPY pyproject.toml setup.py control-libraries/python/
 RUN pip3 install control-libraries/python

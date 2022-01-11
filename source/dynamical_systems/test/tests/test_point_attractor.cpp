@@ -4,10 +4,12 @@
 #include "dynamical_systems/exceptions/EmptyBaseFrameException.hpp"
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
 
+#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
-#include "state_representation/parameters/Parameter.hpp"
-#include "state_representation/space/cartesian/CartesianPose.hpp"
+
 
 using namespace state_representation;
 using namespace dynamical_systems;

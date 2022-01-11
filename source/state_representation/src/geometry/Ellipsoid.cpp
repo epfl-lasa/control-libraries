@@ -2,21 +2,26 @@
 #include "state_representation/exceptions/NoSolutionToFitException.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 
+#include "state_representation/exceptions/EmptyStateException.hpp"
+
 namespace state_representation {
+Ellipsoid::Ellipsoid() : Shape(StateType::GEOMETRY_ELLIPSOID), axis_lengths_({1., 1.}), rotation_angle_(0) {}
+
 Ellipsoid::Ellipsoid(const std::string& name, const std::string& reference_frame) :
-    Shape(StateType::GEOMETRY_ELLIPSOID, name, reference_frame),
-    axis_lengths_({1., 1.}) {
+    Shape(StateType::GEOMETRY_ELLIPSOID, name, reference_frame), axis_lengths_({1., 1.}), rotation_angle_(0) {
   this->set_filled();
 }
 
 Ellipsoid::Ellipsoid(const Ellipsoid& ellipsoid) :
-    Shape(ellipsoid),
-    axis_lengths_(ellipsoid.axis_lengths_) {
+    Shape(ellipsoid), axis_lengths_(ellipsoid.axis_lengths_), rotation_angle_(0) {
   this->set_filled();
 }
 
 const std::list<CartesianPose> Ellipsoid::sample_from_parameterization(unsigned int nb_samples) const {
-  // use a linespace to have a full rotation angle between [0, 2pi]
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Ellipsoid is not set yet.");
+  }
+  // use a linspace to have a full rotation angle between [0, 2pi]
   std::vector<double> alpha = math_tools::linspace(0, 2 * M_PI, nb_samples);
 
   std::list<CartesianPose> samples;
@@ -33,14 +38,14 @@ const std::list<CartesianPose> Ellipsoid::sample_from_parameterization(unsigned 
   return samples;
 }
 
-const Ellipsoid Ellipsoid::from_algebraic_equation(const std::string& name,
-                                                   const std::vector<double>& coefficients,
-                                                   const std::string& reference_frame) {
+const Ellipsoid Ellipsoid::from_algebraic_equation(
+    const std::string& name, const std::vector<double>& coefficients, const std::string& reference_frame
+) {
   // extract all the components from the coefficients vector
   double b2 = coefficients[1] * coefficients[1];
   double delta = b2 - 4 * coefficients[0] * coefficients[2];
 
-  // store intermediate calcualtions
+  // store intermediate calculations
   double tmp1 = coefficients[0] * coefficients[4] * coefficients[4] // AE2
       + coefficients[2] * coefficients[3] * coefficients[3] // CD2
       - coefficients[1] * coefficients[3] * coefficients[4] // BDE
@@ -79,10 +84,10 @@ const Ellipsoid Ellipsoid::from_algebraic_equation(const std::string& name,
   return result;
 }
 
-const Ellipsoid Ellipsoid::fit(const std::string& name,
-                               const std::list<CartesianPose>& points,
-                               const std::string& reference_frame,
-                               double noise_level) {
+const Ellipsoid Ellipsoid::fit(
+    const std::string& name, const std::list<CartesianPose>& points, const std::string& reference_frame,
+    double noise_level
+) {
   // define the constraint matrix
   Eigen::SparseMatrix<double> constraint_matrix(6, 6);
   constraint_matrix.insert(1, 1) = -1;
@@ -103,7 +108,7 @@ const Ellipsoid Ellipsoid::fit(const std::string& name,
   std::normal_distribution<double> dist(0., noise_level);
   do {
     unsigned int i = 0;
-    for (const auto& p : points) {
+    for (const auto& p: points) {
       x_value[i] = p.get_position()(0) + dist(generator);
       y_value[i] = p.get_position()(1) + dist(generator);
       ++i;
@@ -154,12 +159,8 @@ const Ellipsoid Ellipsoid::fit(const std::string& name,
     coefficients[2] = solution(2) * sx2;
     coefficients[3] = -2 * solution(0) * sy2 * kx - solution(1) * sx * sy * ky + solution(3) * sx * sy2;
     coefficients[4] = -solution(1) * sx * sy * kx - 2 * solution(2) * sx2 * ky + solution(4) * sx2 * sy;
-    coefficients[5] = solution(0) * sy2 * kx * kx
-        + solution(1) * sx * sy * kx * ky
-        + solution(2) * sx2 * ky * ky
-        - solution(3) * sx * sy2 * kx
-        - solution(4) * sx2 * sy * ky
-        + solution(5) * sx2 * sy2;
+    coefficients[5] = solution(0) * sy2 * kx * kx + solution(1) * sx * sy * kx * ky + solution(2) * sx2 * ky * ky
+        - solution(3) * sx * sy2 * kx - solution(4) * sx2 * sy * ky + solution(5) * sx2 * sy2;
 
     delta = coefficients[1] * coefficients[1] - 4 * coefficients[0] * coefficients[2];
   } while (delta > 0);
@@ -167,6 +168,9 @@ const Ellipsoid Ellipsoid::fit(const std::string& name,
 }
 
 void Ellipsoid::set_data(const Eigen::VectorXd& data) {
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Ellipsoid is not set yet.");
+  }
   if (data.size() != 6) {
     throw exceptions::IncompatibleSizeException(
         "Input is of incorrect size: expected 6, given " + std::to_string(data.size()));

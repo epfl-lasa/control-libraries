@@ -148,7 +148,7 @@ class TestParameters(unittest.TestCase):
         param1 = sr.Parameter("joint_state", values, sr.StateType.PARAMETER_JOINTSTATE)
         self.joint_equal(param1.get_value(), values)
 
-    def test_param_cartesian_pose(self):
+    def test_param_joint_positions(self):
         param = sr.Parameter("joint_positions", sr.StateType.PARAMETER_JOINTPOSITIONS)
         self.assertTrue(param.is_empty())
         self.assertEqual(param.get_name(), "joint_positions")
@@ -158,6 +158,17 @@ class TestParameters(unittest.TestCase):
         self.joint_equal(param.get_value(), values)
         param1 = sr.Parameter("joint_positions", values, sr.StateType.PARAMETER_JOINTPOSITIONS)
         self.joint_equal(param1.get_value(), values)
+
+    def test_param_ellipsoid(self):
+        param = sr.Parameter("ellipse", sr.StateType.PARAMETER_ELLIPSOID)
+        self.assertTrue(param.is_empty())
+        self.assertEqual(param.get_name(), "ellipse")
+        self.assertEqual(param.get_type(), sr.StateType.PARAMETER_ELLIPSOID)
+        values = sr.Ellipsoid("test")
+        param.set_value(values)
+        self.assertTrue(param.get_value().get_name(), values.get_name())
+        param1 = sr.Parameter("ellipse", values, sr.StateType.PARAMETER_ELLIPSOID)
+        self.assertTrue(param1.get_value().get_name(), values.get_name())
 
     def test_param_matrix(self):
         param = sr.Parameter("matrix", sr.StateType.PARAMETER_MATRIX)

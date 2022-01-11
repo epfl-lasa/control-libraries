@@ -19,6 +19,10 @@ private:
 
 public:
   /**
+   * @brief Empty constructor
+   */
+  Ellipsoid();
+  /**
    * @brief Constructor with name but empty state
    * @param name name of the ellipsoid
    * @param safety_margin the safety_margin (default=0 in all axes)
@@ -166,6 +170,9 @@ inline void Ellipsoid::set_rotation_angle(double rotation_angle) {
 }
 
 inline const std::vector<double> Ellipsoid::to_std_vector() const {
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Ellipsoid is not set yet.");
+  }
   std::vector<double> representation(6);
   // position
   representation[0] = this->get_center_position()(0);
@@ -180,6 +187,9 @@ inline const std::vector<double> Ellipsoid::to_std_vector() const {
 }
 
 inline const CartesianPose Ellipsoid::get_rotation() const {
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Ellipsoid is not set yet.");
+  }
   Eigen::Quaterniond rotation(Eigen::AngleAxisd(this->rotation_angle_, Eigen::Vector3d::UnitZ()));
   return CartesianPose(
       this->get_center_pose().get_name() + "_rotated", Eigen::Vector3d::Zero(), rotation,

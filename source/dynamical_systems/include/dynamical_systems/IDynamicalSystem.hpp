@@ -59,7 +59,7 @@ public:
    * @param name The name of the parameter
    * @return The parameter, if it exists
    */
-  std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name);
+  std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name) const;
 
   /**
    * @brief Get a map of all the <name, parameter> pairs of the dynamical system.
@@ -68,13 +68,13 @@ public:
   [[nodiscard]] std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
- * @brief Get a parameter of the dynamical system by its name.
- * @tparam T Type of the parameter value
- * @param name The name of the parameter
- * @return The value of the parameter, if the parameter exists
- */
+   * @brief Get a parameter of the dynamical system by its name.
+   * @tparam T Type of the parameter value
+   * @param name The name of the parameter
+   * @return The value of the parameter, if the parameter exists
+   */
   template<typename T>
-  T get_parameter_value(const std::string& name);
+  T get_parameter_value(const std::string& name) const;
 
   /**
    * @brief Get a list of all the parameters of the dynamical system.
@@ -148,7 +148,7 @@ S IDynamicalSystem<S>::get_base_frame() const {
 }
 
 template<class S>
-std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
+std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) const {
   if (this->param_map_.find(name) == this->param_map_.cend()) {
     throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
   }
@@ -157,7 +157,7 @@ std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::g
 
 template<class S>
 template<typename T>
-T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
+T IDynamicalSystem<S>::get_parameter_value(const std::string& name) const {
   return std::static_pointer_cast<state_representation::Parameter<T>>(this->get_parameter(name))->get_value();
 }
 

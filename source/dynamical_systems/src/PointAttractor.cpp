@@ -32,6 +32,25 @@ PointAttractor<JointState>::PointAttractor() :
 }
 
 template<class S>
+bool PointAttractor<S>::is_compatible(const S& state) const {
+  return IDynamicalSystem<S>::is_compatible(state);
+}
+
+template bool PointAttractor<CartesianState>::is_compatible(const CartesianState& state) const;
+
+template<>
+bool PointAttractor<JointState>::is_compatible(const JointState& state) const {
+  auto attractor = this->get_parameter_value<JointPositions>("attractor");
+  bool compatible = (attractor.get_size() == state.get_size());
+  if (compatible) {
+    for (unsigned int i = 0; i < attractor.get_size(); ++i) {
+      compatible = (compatible && attractor.get_names()[i] == state.get_names()[i]);
+    }
+  }
+  return compatible;
+}
+
+template<class S>
 void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& parameter, unsigned int expected_size) {
   if (parameter->get_type() == StateType::PARAMETER_DOUBLE) {
     auto gain = std::static_pointer_cast<Parameter<double>>(parameter);
@@ -135,7 +154,7 @@ template<>
 void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
     this->assert_parameter_valid(parameter);
-    this->set_attractor(std::static_pointer_cast<Parameter<JointState>>(parameter)->get_value());
+    this->set_attractor(std::static_pointer_cast<Parameter<JointPositions>>(parameter)->get_value());
   } else if (parameter->get_name() == "gain") {
     this->set_gain(parameter, this->attractor_->get_value().get_size());
   } else {
@@ -163,7 +182,7 @@ JointState PointAttractor<JointState>::compute_dynamics(const JointState& state)
   if (this->attractor_->get_value().is_empty()) {
     throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
   }
-  if (!this->attractor_->is_compatible(state)) {
+  if (!this->is_compatible(state)) {
     throw state_representation::exceptions::IncompatibleStatesException(
         "The attractor and the provided states are not compatible."
     );

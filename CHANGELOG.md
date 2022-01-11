@@ -19,6 +19,7 @@ Release Versions:
 - Add support for copy module in Python bindings (#232)
 - Refactor dynamical systems using factory pattern (#233)
 - Propagate DS refactor to demos (#234)
+- Avoid exception with the default DS in evaluate (#237)
 
 ### Pending TODOs for the next release
 

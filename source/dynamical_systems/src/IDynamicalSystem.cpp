@@ -15,20 +15,21 @@ bool IDynamicalSystem<S>::is_compatible(const S&) const {
   throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state.");
 }
 
-template bool IDynamicalSystem<JointState>::is_compatible(const JointState&) const;
-
 template<>
 bool IDynamicalSystem<CartesianState>::is_compatible(const CartesianState& state) const {
   return !(state.get_reference_frame() != this->get_base_frame().get_name()
       && state.get_reference_frame() != this->get_base_frame().get_reference_frame());
 }
 
+template<>
+bool IDynamicalSystem<JointState>::is_compatible(const JointState&) const {
+  return true;
+}
+
 template<class S>
 S IDynamicalSystem<S>::evaluate(const S& state) const {
   return this->compute_dynamics(state);
 }
-
-template JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const;
 
 template<>
 CartesianState IDynamicalSystem<CartesianState>::evaluate(const CartesianState& state) const {
@@ -50,4 +51,7 @@ CartesianState IDynamicalSystem<CartesianState>::evaluate(const CartesianState& 
     return this->compute_dynamics(state);
   }
 }
+
+template JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const;
+
 }// namespace dynamical_systems

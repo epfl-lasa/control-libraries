@@ -134,10 +134,12 @@ private:
 };
 
 template<class S>
-void IDynamicalSystem<S>::assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+void IDynamicalSystem<S>::assert_parameter_valid(
+    const std::shared_ptr<state_representation::ParameterInterface>& parameter
+) {
   if (this->param_map_.at(parameter->get_name())->get_type() != parameter->get_type()) {
     throw dynamical_systems::exceptions::InvalidParameterException(
-        "Parameter '" + parameter->get_name() + "'exists, but has unexpected type."
+        "Parameter '" + parameter->get_name() + "' exists, but has unexpected type."
     );
   }
 }

@@ -20,8 +20,8 @@ Release Versions:
 - Refactor dynamical systems using factory pattern (#233)
 - Propagate DS refactor to demos (#234)
 - Avoid exception with the default DS in evaluate (#237)
-- Add empty constructors and python bindings 
-  for the Shape and Ellipsoid classes (#235)
+- Add empty constructors and python bindings for the 
+  Shape and Ellipsoid classes (#235)
 
 ### Pending TODOs for the next release
 

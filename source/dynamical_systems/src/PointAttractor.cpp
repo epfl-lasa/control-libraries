@@ -6,6 +6,7 @@
 #include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/robot/JointPositions.hpp"
 #include "state_representation/robot/JointState.hpp"
@@ -161,6 +162,11 @@ template<>
 JointState PointAttractor<JointState>::compute_dynamics(const JointState& state) const {
   if (this->attractor_->get_value().is_empty()) {
     throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
+  }
+  if (!this->attractor_->is_compatible(state)) {
+    throw state_representation::exceptions::IncompatibleStatesException(
+        "The attractor and the provided states are not compatible."
+    );
   }
   JointVelocities velocities = JointPositions(this->attractor_->get_value()) - JointPositions(state);
   velocities *= this->gain_->get_value();

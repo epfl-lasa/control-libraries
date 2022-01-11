@@ -55,11 +55,7 @@ CartesianState IDynamicalSystem<CartesianState>::evaluate(const CartesianState& 
     }
     CartesianState result = this->get_base_frame().inverse() * state;
     result = this->compute_dynamics(result);
-    if (result.is_empty()) {
-      return result;
-    } else {
-      return this->get_base_frame() * result;
-    }
+    return result.is_empty() ? result : this->get_base_frame() * result;
   } else {
     return this->compute_dynamics(state);
   }

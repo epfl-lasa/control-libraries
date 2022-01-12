@@ -275,13 +275,13 @@ TEST(JointPointAttractorTest, EmptyConstructor) {
       DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
   );
   // construct empty cartesian state DS
-  JointState attractor = JointState::Zero("robot", 3);
+  auto attractor = JointPositions::Zero("robot", 3);
 
   // base frame and attractor should be empty
-  EXPECT_TRUE(ds->get_parameter_value<JointState>("attractor").is_empty());
+  EXPECT_TRUE(ds->get_parameter_value<JointPositions>("attractor").is_empty());
   EXPECT_TRUE(ds->get_base_frame().is_empty());
   ds->set_parameter_value("attractor", attractor);
-  EXPECT_FALSE(ds->get_parameter_value<JointState>("attractor").is_empty());
+  EXPECT_FALSE(ds->get_parameter_value<JointPositions>("attractor").is_empty());
   EXPECT_TRUE(ds->get_base_frame().is_empty());
 }
 
@@ -311,7 +311,7 @@ TEST(JointPointAttractorTest, Convergence) {
   auto ds = DynamicalSystemFactory<JointState>::create_dynamical_system(
       DynamicalSystemFactory<JointState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
   );
-  auto attractor = JointState::Random("robot", 3);
+  auto attractor = JointPositions::Random("robot", 3);
   auto current_state = JointPositions::Random("robot", 3);
   current_state.set_data(10 * current_state.data());
 

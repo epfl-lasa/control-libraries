@@ -97,65 +97,53 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a6e2c81a41a725ca1c1ffdda202fdd435">IDynamicalSystem</a> ()=default</td></tr>
 <tr class="memdesc:a6e2c81a41a725ca1c1ffdda202fdd435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor. <br /></td></tr>
 <tr class="separator:a6e2c81a41a725ca1c1ffdda202fdd435"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf69671d227585bc260a4fb3a8a22df7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#adf69671d227585bc260a4fb3a8a22df7">is_compatible</a> (const S &amp;state) const</td></tr>
-<tr class="memdesc:adf69671d227585bc260a4fb3a8a22df7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check compatibility between a state and the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#adf69671d227585bc260a4fb3a8a22df7">More...</a><br /></td></tr>
-<tr class="separator:adf69671d227585bc260a4fb3a8a22df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae547b8e87503fed3a9115ded125c15ed"><td class="memItemLeft" align="right" valign="top">S&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#ae547b8e87503fed3a9115ded125c15ed">evaluate</a> (const S &amp;state) const</td></tr>
-<tr class="memdesc:ae547b8e87503fed3a9115ded125c15ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the value of the dynamical system at a given state.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#ae547b8e87503fed3a9115ded125c15ed">More...</a><br /></td></tr>
-<tr class="separator:ae547b8e87503fed3a9115ded125c15ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41271ce3a5c69a94632840f984bed58e"><td class="memItemLeft" align="right" valign="top">S&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a41271ce3a5c69a94632840f984bed58e">get_base_frame</a> () const</td></tr>
-<tr class="memdesc:a41271ce3a5c69a94632840f984bed58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the base frame of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a41271ce3a5c69a94632840f984bed58e">More...</a><br /></td></tr>
-<tr class="separator:a41271ce3a5c69a94632840f984bed58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8006c7084a31c844443afd815f929c0b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a8006c7084a31c844443afd815f929c0b">set_base_frame</a> (const S &amp;base_frame)</td></tr>
-<tr class="memdesc:a8006c7084a31c844443afd815f929c0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the base frame of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a8006c7084a31c844443afd815f929c0b">More...</a><br /></td></tr>
-<tr class="separator:a8006c7084a31c844443afd815f929c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a500827258ff01d2ef8c2037dfce66a06"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a500827258ff01d2ef8c2037dfce66a06">get_parameter</a> (const std::string &amp;name) const</td></tr>
-<tr class="memdesc:a500827258ff01d2ef8c2037dfce66a06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a parameter of the dynamical system by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a500827258ff01d2ef8c2037dfce66a06">More...</a><br /></td></tr>
-<tr class="separator:a500827258ff01d2ef8c2037dfce66a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67d62245e616446cadc5fdfd4562b92a"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a67d62245e616446cadc5fdfd4562b92a">get_parameters</a> () const</td></tr>
-<tr class="memdesc:a67d62245e616446cadc5fdfd4562b92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a map of all the &lt;name, parameter&gt; pairs of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a67d62245e616446cadc5fdfd4562b92a">More...</a><br /></td></tr>
-<tr class="separator:a67d62245e616446cadc5fdfd4562b92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9a008c670d0367dd5847f4df5511a6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8d9a008c670d0367dd5847f4df5511a6"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a8d9a008c670d0367dd5847f4df5511a6">get_parameter_value</a> (const std::string &amp;name) const</td></tr>
-<tr class="memdesc:a8d9a008c670d0367dd5847f4df5511a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a parameter of the dynamical system by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a8d9a008c670d0367dd5847f4df5511a6">More...</a><br /></td></tr>
-<tr class="separator:a8d9a008c670d0367dd5847f4df5511a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b912fbd6f9b1275b104fbb10bc9d665"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a0b912fbd6f9b1275b104fbb10bc9d665">get_parameter_list</a> () const</td></tr>
-<tr class="memdesc:a0b912fbd6f9b1275b104fbb10bc9d665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of all the parameters of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a0b912fbd6f9b1275b104fbb10bc9d665">More...</a><br /></td></tr>
-<tr class="separator:a0b912fbd6f9b1275b104fbb10bc9d665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa66b4f66de4bd9b7736b49e372cf087a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#aa66b4f66de4bd9b7736b49e372cf087a">set_parameter</a> (const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;parameter)</td></tr>
-<tr class="memdesc:aa66b4f66de4bd9b7736b49e372cf087a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a parameter of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#aa66b4f66de4bd9b7736b49e372cf087a">More...</a><br /></td></tr>
-<tr class="separator:aa66b4f66de4bd9b7736b49e372cf087a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f81da624dcf4bcd083c832fcb5fb956"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a0f81da624dcf4bcd083c832fcb5fb956">set_parameters</a> (const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;parameters)</td></tr>
-<tr class="memdesc:a0f81da624dcf4bcd083c832fcb5fb956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters of the dynamical list from a list of parameters.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a0f81da624dcf4bcd083c832fcb5fb956">More...</a><br /></td></tr>
-<tr class="separator:a0f81da624dcf4bcd083c832fcb5fb956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac23f89e4a3ede050dc63a21cb68e9b57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#ac23f89e4a3ede050dc63a21cb68e9b57">set_parameters</a> (const std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;parameters)</td></tr>
-<tr class="memdesc:ac23f89e4a3ede050dc63a21cb68e9b57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters of the dynamical system from a map with &lt;name, parameter&gt; pairs.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#ac23f89e4a3ede050dc63a21cb68e9b57">More...</a><br /></td></tr>
-<tr class="separator:ac23f89e4a3ede050dc63a21cb68e9b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac2447f26d9f8f5f786f996ccec46319"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aac2447f26d9f8f5f786f996ccec46319"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#aac2447f26d9f8f5f786f996ccec46319">set_parameter_value</a> (const std::string &amp;name, const T &amp;value)</td></tr>
-<tr class="memdesc:aac2447f26d9f8f5f786f996ccec46319"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a parameter value of the dynamical system found by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#aac2447f26d9f8f5f786f996ccec46319">More...</a><br /></td></tr>
-<tr class="separator:aac2447f26d9f8f5f786f996ccec46319"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cc3e91df9bf2a934da9c8dbeca8c978"><td class="memItemLeft" align="right" valign="top"><a id="a0cc3e91df9bf2a934da9c8dbeca8c978"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_compatible</b> (const <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp;state) const</td></tr>
-<tr class="separator:a0cc3e91df9bf2a934da9c8dbeca8c978"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ae876a72c983a6bc1e02f4a5625849"><td class="memItemLeft" align="right" valign="top"><a id="ac8ae876a72c983a6bc1e02f4a5625849"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_compatible</b> (const <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &amp;) const</td></tr>
-<tr class="separator:ac8ae876a72c983a6bc1e02f4a5625849"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa90aa1a4560cebcdf24a0493b5bdcb8"><td class="memItemLeft" align="right" valign="top"><a id="afa90aa1a4560cebcdf24a0493b5bdcb8"></a>
-<a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a>&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &amp;state) const</td></tr>
-<tr class="separator:afa90aa1a4560cebcdf24a0493b5bdcb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa857c8cfcb8397fb78e8b15f56499073"><td class="memItemLeft" align="right" valign="top"><a id="aa857c8cfcb8397fb78e8b15f56499073"></a>
-<a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &amp;state) const</td></tr>
-<tr class="separator:aa857c8cfcb8397fb78e8b15f56499073"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03adb17e4b267fe9f9a8d15d35f23d8d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a03adb17e4b267fe9f9a8d15d35f23d8d">is_compatible</a> (const S &amp;state) const</td></tr>
+<tr class="memdesc:a03adb17e4b267fe9f9a8d15d35f23d8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check compatibility between a state and the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a03adb17e4b267fe9f9a8d15d35f23d8d">More...</a><br /></td></tr>
+<tr class="separator:a03adb17e4b267fe9f9a8d15d35f23d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a201376292929fc5388a08a527d6b281a"><td class="memItemLeft" align="right" valign="top">S&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a201376292929fc5388a08a527d6b281a">evaluate</a> (const S &amp;state) const</td></tr>
+<tr class="memdesc:a201376292929fc5388a08a527d6b281a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the value of the dynamical system at a given state.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a201376292929fc5388a08a527d6b281a">More...</a><br /></td></tr>
+<tr class="separator:a201376292929fc5388a08a527d6b281a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60c160372951d9af1b7cdba5cf47fb07"><td class="memItemLeft" align="right" valign="top">S&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a60c160372951d9af1b7cdba5cf47fb07">get_base_frame</a> () const</td></tr>
+<tr class="memdesc:a60c160372951d9af1b7cdba5cf47fb07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the base frame of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a60c160372951d9af1b7cdba5cf47fb07">More...</a><br /></td></tr>
+<tr class="separator:a60c160372951d9af1b7cdba5cf47fb07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad69ac90444dec624d0bde9711c287ff6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#ad69ac90444dec624d0bde9711c287ff6">set_base_frame</a> (const S &amp;base_frame)</td></tr>
+<tr class="memdesc:ad69ac90444dec624d0bde9711c287ff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the base frame of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#ad69ac90444dec624d0bde9711c287ff6">More...</a><br /></td></tr>
+<tr class="separator:ad69ac90444dec624d0bde9711c287ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8be5cd1d501ad5493fe1a26546876608"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a8be5cd1d501ad5493fe1a26546876608">get_parameter</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:a8be5cd1d501ad5493fe1a26546876608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a parameter of the dynamical system by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a8be5cd1d501ad5493fe1a26546876608">More...</a><br /></td></tr>
+<tr class="separator:a8be5cd1d501ad5493fe1a26546876608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa33b91a845d3aafc30e99ceb376a6f1d"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#aa33b91a845d3aafc30e99ceb376a6f1d">get_parameters</a> () const</td></tr>
+<tr class="memdesc:aa33b91a845d3aafc30e99ceb376a6f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a map of all the &lt;name, parameter&gt; pairs of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#aa33b91a845d3aafc30e99ceb376a6f1d">More...</a><br /></td></tr>
+<tr class="separator:aa33b91a845d3aafc30e99ceb376a6f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ff3b65b35203a7ef2b3c5797a57675"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a03ff3b65b35203a7ef2b3c5797a57675"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a03ff3b65b35203a7ef2b3c5797a57675">get_parameter_value</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:a03ff3b65b35203a7ef2b3c5797a57675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a parameter of the dynamical system by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a03ff3b65b35203a7ef2b3c5797a57675">More...</a><br /></td></tr>
+<tr class="separator:a03ff3b65b35203a7ef2b3c5797a57675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05f371c35a37e7c0ccef7bd3b578c5ea"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a05f371c35a37e7c0ccef7bd3b578c5ea">get_parameter_list</a> () const</td></tr>
+<tr class="memdesc:a05f371c35a37e7c0ccef7bd3b578c5ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of all the parameters of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a05f371c35a37e7c0ccef7bd3b578c5ea">More...</a><br /></td></tr>
+<tr class="separator:a05f371c35a37e7c0ccef7bd3b578c5ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff1a96a99531e8e148c60f17d2ff072d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#aff1a96a99531e8e148c60f17d2ff072d">set_parameter</a> (const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;parameter)</td></tr>
+<tr class="memdesc:aff1a96a99531e8e148c60f17d2ff072d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a parameter of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#aff1a96a99531e8e148c60f17d2ff072d">More...</a><br /></td></tr>
+<tr class="separator:aff1a96a99531e8e148c60f17d2ff072d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517249bf10d2c60cc7bfe9be1225b8ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a517249bf10d2c60cc7bfe9be1225b8ec">set_parameters</a> (const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a517249bf10d2c60cc7bfe9be1225b8ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters of the dynamical list from a list of parameters.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a517249bf10d2c60cc7bfe9be1225b8ec">More...</a><br /></td></tr>
+<tr class="separator:a517249bf10d2c60cc7bfe9be1225b8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e26643061d8215443854903777e9600"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a7e26643061d8215443854903777e9600">set_parameters</a> (const std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a7e26643061d8215443854903777e9600"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set parameters of the dynamical system from a map with &lt;name, parameter&gt; pairs.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a7e26643061d8215443854903777e9600">More...</a><br /></td></tr>
+<tr class="separator:a7e26643061d8215443854903777e9600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51bf5fd6338695de4717843b474d2505"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a51bf5fd6338695de4717843b474d2505"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a51bf5fd6338695de4717843b474d2505">set_parameter_value</a> (const std::string &amp;name, const T &amp;value)</td></tr>
+<tr class="memdesc:a51bf5fd6338695de4717843b474d2505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a parameter value of the dynamical system found by its name.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a51bf5fd6338695de4717843b474d2505">More...</a><br /></td></tr>
+<tr class="separator:a51bf5fd6338695de4717843b474d2505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:acb7e59ea3a3029997692f385865b6d2f"><td class="memItemLeft" align="right" valign="top">virtual S&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#acb7e59ea3a3029997692f385865b6d2f">compute_dynamics</a> (const S &amp;state) const =0</td></tr>
 <tr class="memdesc:acb7e59ea3a3029997692f385865b6d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the dynamics of the input state. Internal function, to be redefined based on the type of dynamical system, called by the evaluate function.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#acb7e59ea3a3029997692f385865b6d2f">More...</a><br /></td></tr>
 <tr class="separator:acb7e59ea3a3029997692f385865b6d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1dc104840904be4698d65e7a931af32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#af1dc104840904be4698d65e7a931af32">assert_parameter_valid</a> (const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;parameter)</td></tr>
-<tr class="memdesc:af1dc104840904be4698d65e7a931af32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a parameter has the expected type, throw an exception otherwise.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#af1dc104840904be4698d65e7a931af32">More...</a><br /></td></tr>
-<tr class="separator:af1dc104840904be4698d65e7a931af32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78372e27968a9c5142a6cbdd66854157"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#a78372e27968a9c5142a6cbdd66854157">assert_parameter_valid</a> (const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;parameter)</td></tr>
+<tr class="memdesc:a78372e27968a9c5142a6cbdd66854157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a parameter has the expected type, throw an exception otherwise.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#a78372e27968a9c5142a6cbdd66854157">More...</a><br /></td></tr>
+<tr class="separator:a78372e27968a9c5142a6cbdd66854157"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabbe2d6aa705f617379e1e5d3f4c3c58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#aabbe2d6aa705f617379e1e5d3f4c3c58">validate_and_set_parameter</a> (const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;parameter)=0</td></tr>
 <tr class="memdesc:aabbe2d6aa705f617379e1e5d3f4c3c58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate and set a parameter of the dynamical system.  <a href="classdynamical__systems_1_1_i_dynamical_system.html#aabbe2d6aa705f617379e1e5d3f4c3c58">More...</a><br /></td></tr>
 <tr class="separator:aabbe2d6aa705f617379e1e5d3f4c3c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,8 +169,8 @@ class dynamical_systems::IDynamicalSystem&lt; S &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="_i_dynamical_system_8hpp_source.html#l00022">22</a> of file <a class="el" href="_i_dynamical_system_8hpp_source.html">IDynamicalSystem.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="af1dc104840904be4698d65e7a931af32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1dc104840904be4698d65e7a931af32">&#9670;&nbsp;</a></span>assert_parameter_valid()</h2>
+<a id="a78372e27968a9c5142a6cbdd66854157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78372e27968a9c5142a6cbdd66854157">&#9670;&nbsp;</a></span>assert_parameter_valid()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -193,7 +181,7 @@ template&lt;class S &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::assert_parameter_valid </td>
+          <td class="memname">void IDynamicalSystem::assert_parameter_valid </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
@@ -258,8 +246,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="ae547b8e87503fed3a9115ded125c15ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae547b8e87503fed3a9115ded125c15ed">&#9670;&nbsp;</a></span>evaluate()</h2>
+<a id="a201376292929fc5388a08a527d6b281a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a201376292929fc5388a08a527d6b281a">&#9670;&nbsp;</a></span>evaluate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,7 +255,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">S <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::evaluate </td>
+          <td class="memname">S IDynamicalSystem::evaluate </td>
           <td>(</td>
           <td class="paramtype">const S &amp;&#160;</td>
           <td class="paramname"><em>state</em></td><td>)</td>
@@ -289,8 +277,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a41271ce3a5c69a94632840f984bed58e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41271ce3a5c69a94632840f984bed58e">&#9670;&nbsp;</a></span>get_base_frame()</h2>
+<a id="a60c160372951d9af1b7cdba5cf47fb07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60c160372951d9af1b7cdba5cf47fb07">&#9670;&nbsp;</a></span>get_base_frame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +286,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">S <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::get_base_frame</td>
+          <td class="memname">S IDynamicalSystem::get_base_frame</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -310,8 +298,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a500827258ff01d2ef8c2037dfce66a06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a500827258ff01d2ef8c2037dfce66a06">&#9670;&nbsp;</a></span>get_parameter()</h2>
+<a id="a8be5cd1d501ad5493fe1a26546876608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8be5cd1d501ad5493fe1a26546876608">&#9670;&nbsp;</a></span>get_parameter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -319,7 +307,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::get_parameter </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; IDynamicalSystem::get_parameter </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -341,8 +329,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a0b912fbd6f9b1275b104fbb10bc9d665"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b912fbd6f9b1275b104fbb10bc9d665">&#9670;&nbsp;</a></span>get_parameter_list()</h2>
+<a id="a05f371c35a37e7c0ccef7bd3b578c5ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05f371c35a37e7c0ccef7bd3b578c5ea">&#9670;&nbsp;</a></span>get_parameter_list()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,7 +338,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::get_parameter_list</td>
+          <td class="memname">std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; IDynamicalSystem::get_parameter_list</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -362,8 +350,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a8d9a008c670d0367dd5847f4df5511a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d9a008c670d0367dd5847f4df5511a6">&#9670;&nbsp;</a></span>get_parameter_value()</h2>
+<a id="a03ff3b65b35203a7ef2b3c5797a57675"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03ff3b65b35203a7ef2b3c5797a57675">&#9670;&nbsp;</a></span>get_parameter_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,7 +361,7 @@ template&lt;class S &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">T <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::get_parameter_value </td>
+          <td class="memname">T IDynamicalSystem::get_parameter_value </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -401,8 +389,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a67d62245e616446cadc5fdfd4562b92a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67d62245e616446cadc5fdfd4562b92a">&#9670;&nbsp;</a></span>get_parameters()</h2>
+<a id="aa33b91a845d3aafc30e99ceb376a6f1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33b91a845d3aafc30e99ceb376a6f1d">&#9670;&nbsp;</a></span>get_parameters()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -410,7 +398,7 @@ template&lt;typename T &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::get_parameters</td>
+          <td class="memname">std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; IDynamicalSystem::get_parameters</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -422,8 +410,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="adf69671d227585bc260a4fb3a8a22df7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf69671d227585bc260a4fb3a8a22df7">&#9670;&nbsp;</a></span>is_compatible()</h2>
+<a id="a03adb17e4b267fe9f9a8d15d35f23d8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03adb17e4b267fe9f9a8d15d35f23d8d">&#9670;&nbsp;</a></span>is_compatible()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +422,7 @@ template&lt;class S &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::is_compatible </td>
+          <td class="memname">bool IDynamicalSystem::is_compatible </td>
           <td>(</td>
           <td class="paramtype">const S &amp;&#160;</td>
           <td class="paramname"><em>state</em></td><td>)</td>
@@ -463,8 +451,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a8006c7084a31c844443afd815f929c0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8006c7084a31c844443afd815f929c0b">&#9670;&nbsp;</a></span>set_base_frame()</h2>
+<a id="ad69ac90444dec624d0bde9711c287ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad69ac90444dec624d0bde9711c287ff6">&#9670;&nbsp;</a></span>set_base_frame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -475,7 +463,7 @@ template&lt;class S &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::set_base_frame </td>
+          <td class="memname">void IDynamicalSystem::set_base_frame </td>
           <td>(</td>
           <td class="paramtype">const S &amp;&#160;</td>
           <td class="paramname"><em>base_frame</em></td><td>)</td>
@@ -503,8 +491,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="aa66b4f66de4bd9b7736b49e372cf087a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa66b4f66de4bd9b7736b49e372cf087a">&#9670;&nbsp;</a></span>set_parameter()</h2>
+<a id="aff1a96a99531e8e148c60f17d2ff072d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1a96a99531e8e148c60f17d2ff072d">&#9670;&nbsp;</a></span>set_parameter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -512,7 +500,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::set_parameter </td>
+          <td class="memname">void IDynamicalSystem::set_parameter </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>parameter</em></td><td>)</td>
@@ -533,8 +521,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="aac2447f26d9f8f5f786f996ccec46319"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac2447f26d9f8f5f786f996ccec46319">&#9670;&nbsp;</a></span>set_parameter_value()</h2>
+<a id="a51bf5fd6338695de4717843b474d2505"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51bf5fd6338695de4717843b474d2505">&#9670;&nbsp;</a></span>set_parameter_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -544,7 +532,7 @@ template&lt;class S &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::set_parameter_value </td>
+          <td class="memname">void IDynamicalSystem::set_parameter_value </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -582,8 +570,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a0f81da624dcf4bcd083c832fcb5fb956"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f81da624dcf4bcd083c832fcb5fb956">&#9670;&nbsp;</a></span>set_parameters() <span class="overload">[1/2]</span></h2>
+<a id="a517249bf10d2c60cc7bfe9be1225b8ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a517249bf10d2c60cc7bfe9be1225b8ec">&#9670;&nbsp;</a></span>set_parameters() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -591,7 +579,7 @@ template&lt;typename T &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::set_parameters </td>
+          <td class="memname">void IDynamicalSystem::set_parameters </td>
           <td>(</td>
           <td class="paramtype">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>parameters</em></td><td>)</td>
@@ -612,8 +600,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="ac23f89e4a3ede050dc63a21cb68e9b57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac23f89e4a3ede050dc63a21cb68e9b57">&#9670;&nbsp;</a></span>set_parameters() <span class="overload">[2/2]</span></h2>
+<a id="a7e26643061d8215443854903777e9600"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e26643061d8215443854903777e9600">&#9670;&nbsp;</a></span>set_parameters() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -621,7 +609,7 @@ template&lt;class S &gt; </div>
 template&lt;class S &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">dynamical_systems::IDynamicalSystem</a>&lt; S &gt;::set_parameters </td>
+          <td class="memname">void IDynamicalSystem::set_parameters </td>
           <td>(</td>
           <td class="paramtype">const std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>parameters</em></td><td>)</td>

@@ -39,8 +39,8 @@ protected:
   void set_test_configurations() {
     // Random test configuration 1:
     state_representation::JointState config1(franka->get_robot_name(), franka->get_joint_frames());
-    config1.set_positions({-1.957518, 1.037530, -1.093933, -1.485144, -1.937432, 2.251972, -1.373487});
-    config1.set_velocities({0.308158, 0.378429, 0.496303, -0.098917, -0.832357, -0.542046, 0.826675});
+    config1.set_positions(std::vector<double>{-1.957518, 1.037530, -1.093933, -1.485144, -1.937432, 2.251972, -1.373487});
+    config1.set_velocities(std::vector<double>{0.308158, 0.378429, 0.496303, -0.098917, -0.832357, -0.542046, 0.826675});
     test_configs.push_back(config1);
 
     // Expected results for configuration 1:
@@ -73,8 +73,8 @@ protected:
 
     // Random test configuration 2:
     state_representation::JointState config2(franka->get_robot_name(), franka->get_joint_frames());
-    config2.set_positions({-2.014330, 1.148700, 0.222179, -0.081404, -2.444304, 1.651397, -2.279290});
-    config2.set_velocities({0.923796, -0.990732, 0.549821, 0.634606, 0.737389, -0.831128, -0.200435});
+    config2.set_positions(std::vector<double>{-2.014330, 1.148700, 0.222179, -0.081404, -2.444304, 1.651397, -2.279290});
+    config2.set_velocities(std::vector<double>{0.923796, -0.990732, 0.549821, 0.634606, 0.737389, -0.831128, -0.200435});
     test_configs.push_back(config2);
 
     // Expected results for configuration 2:
@@ -107,8 +107,8 @@ protected:
 
     // Random test configuration 3:
     state_representation::JointState config3(franka->get_robot_name(), franka->get_joint_frames());
-    config3.set_positions({-1.391455, 1.057921, -0.397429, -0.338036, -1.843569, 0.977037, -2.053960});
-    config3.set_velocities({-0.727863, 0.738584, 0.159409, 0.099720, -0.710090, 0.706062, 0.244110});
+    config3.set_positions(std::vector<double>{-1.391455, 1.057921, -0.397429, -0.338036, -1.843569, 0.977037, -2.053960});
+    config3.set_velocities(std::vector<double>{-0.727863, 0.738584, 0.159409, 0.099720, -0.710090, 0.706062, 0.244110});
     test_configs.push_back(config3);
 
     // Expected results for configuration 3:
@@ -223,27 +223,27 @@ TEST_F(RobotModelKinematicsTest, TestInRange) {
   state_representation::JointTorques joint_torques("robot", franka->get_joint_frames());
   state_representation::JointState joint_state("robot", franka->get_joint_frames());
 
-  joint_positions.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
-  joint_velocities.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  joint_torques.set_torques({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+  joint_positions.set_positions(std::vector<double>{2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
+  joint_velocities.set_velocities(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_torques.set_torques(std::vector<double>{-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
 
-  joint_state.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
-  joint_state.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  joint_state.set_torques({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+  joint_state.set_positions(std::vector<double>{2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
+  joint_state.set_velocities(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_state.set_torques(std::vector<double>{-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
 
   EXPECT_TRUE(franka->in_range(joint_positions));
   EXPECT_TRUE(franka->in_range(joint_velocities));
   EXPECT_TRUE(franka->in_range(joint_torques));
   EXPECT_TRUE(franka->in_range(joint_state));
 
-  joint_positions.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
-  joint_state.set_positions({-0.059943, 1.667088, 1.439900, -1000, -1.164922, 0.948034, 1.292717});
+  joint_positions.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
+  joint_state.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1000, -1.164922, 0.948034, 1.292717});
 
   EXPECT_FALSE(franka->in_range(joint_positions));
   EXPECT_FALSE(franka->in_range(joint_state));
 
-  joint_velocities.set_velocities({-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  joint_torques.set_torques({-0.329909, -0.235174, -1.881858, -922.491807, 0.674615, 0.996670, 0.345810});
+  joint_velocities.set_velocities(std::vector<double>{-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_torques.set_torques(std::vector<double>{-0.329909, -0.235174, -1.881858, -922.491807, 0.674615, 0.996670, 0.345810});
 
   EXPECT_FALSE(franka->in_range(joint_velocities));
   EXPECT_FALSE(franka->in_range(joint_torques));
@@ -255,13 +255,13 @@ TEST_F(RobotModelKinematicsTest, TestClamp) {
   state_representation::JointTorques joint_torques("robot", franka->get_joint_frames());
   state_representation::JointState joint_state("robot", franka->get_joint_frames());
 
-  joint_positions.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
-  joint_velocities.set_velocities({-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  joint_torques.set_torques({-0.329909, -0.235174, -1.881858, -922.491807, 0.674615, 0.996670, 0.345810});
+  joint_positions.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 1000});
+  joint_velocities.set_velocities(std::vector<double>{-0.059943, 31.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_torques.set_torques(std::vector<double>{-0.329909, -0.235174, -1.881858, -922.491807, 0.674615, 0.996670, 0.345810});
 
-  joint_state.set_positions({-0.059943, 1.667088, 1.439900, -1000, -1.164922, 0.948034, 1.292717});
-  joint_state.set_velocities({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  joint_state.set_torques({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+  joint_state.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1000, -1.164922, 0.948034, 1.292717});
+  joint_state.set_velocities(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  joint_state.set_torques(std::vector<double>{-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
 
   EXPECT_FALSE(franka->in_range(joint_positions));
   EXPECT_FALSE(franka->in_range(joint_velocities));
@@ -279,9 +279,9 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
   state_representation::JointState config2("robot", franka->get_joint_frames());
   state_representation::JointState config3("robot", franka->get_joint_frames());
   // Random test configurations
-  config1.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
-  config2.set_positions({2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
-  config3.set_positions({-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
+  config1.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  config2.set_positions(std::vector<double>{2.648782, -0.553976, 0.801067, -2.042097, -1.642935, 2.946476, 1.292717});
+  config3.set_positions(std::vector<double>{-0.329909, -0.235174, -1.881858, -2.491807, 0.674615, 0.996670, 0.345810});
 
   std::vector<state_representation::JointState> test_configs = {config1, config2, config3};
   double tol = 1e-3;
@@ -300,7 +300,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseKinematics) {
 TEST_F(RobotModelKinematicsTest, TestInverseKinematicsIKDoesNotConverge) {
   state_representation::JointState config("robot", franka->get_joint_frames());
   // Random test configuration
-  config.set_positions({-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
+  config.set_positions(std::vector<double>{-0.059943, 1.667088, 1.439900, -1.367141, -1.164922, 0.948034, 2.239983});
   InverseKinematicsParameters param = InverseKinematicsParameters();
   param.max_number_of_iterations = 1;
 

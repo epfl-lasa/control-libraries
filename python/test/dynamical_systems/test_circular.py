@@ -18,7 +18,6 @@ class TestCircular(unittest.TestCase):
         cls.limit_cycle.set_center_pose(cls.center)
         cls.limit_cycle.set_axis_lengths([cls.radius, cls.radius])
 
-    #
     def assert_np_array_equal(self, a: np.array, b: np.array, places=3):
         try:
             np.testing.assert_almost_equal(a, b, decimal=places)

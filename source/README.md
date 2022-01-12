@@ -81,10 +81,12 @@ It can be run with several optional arguments:
 
 ### Manual installation steps
 
-Eigen3 is required for building `state_representation` and all other libraries.
-You can install it with:
+Eigen3 (release [3.4.0](https://gitlab.com/libeigen/eigen/-/releases/3.4.0)) is required for
+building `state_representation` and all other libraries. You can install it with:
 ```shell script
-apt-get install libeigen3-dev
+wget -c https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz -O - | tar -xz
+cd eigen-3.4.0 && mkdir build && cd build && cmake .. && make install
+cd ../.. && rm -r eigen-3.4.0
 ```
 
 Pinocchio is required for building the `robot_model` library. Installing this requires

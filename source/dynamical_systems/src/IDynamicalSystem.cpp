@@ -4,21 +4,13 @@
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
+#include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 
 using namespace state_representation;
 
 namespace dynamical_systems {
-
-template<class S>
-IDynamicalSystem<S>::IDynamicalSystem() = default;
-
-template<>
-IDynamicalSystem<JointState>::IDynamicalSystem() : base_frame_(JointState()) {}
-
-template<>
-IDynamicalSystem<CartesianState>::IDynamicalSystem() : base_frame_(CartesianState()) {}
-
 template<class S>
 bool IDynamicalSystem<S>::is_compatible(const S&) const {
   throw exceptions::NotImplementedException("is_compatible(state) not implemented for this type of state.");
@@ -31,8 +23,8 @@ bool IDynamicalSystem<CartesianState>::is_compatible(const CartesianState& state
 }
 
 template<>
-bool IDynamicalSystem<JointState>::is_compatible(const JointState& state) const {
-  return this->base_frame_.is_compatible(state);
+bool IDynamicalSystem<JointState>::is_compatible(const JointState&) const {
+  return true;
 }
 
 template<class S>
@@ -63,20 +55,12 @@ CartesianState IDynamicalSystem<CartesianState>::evaluate(const CartesianState& 
 
 template<>
 JointState IDynamicalSystem<JointState>::evaluate(const JointState& state) const {
-  if (this->get_base_frame().is_empty()) {
-    throw exceptions::EmptyBaseFrameException("The base frame of the dynamical system is empty.");
-  }
   if (!this->is_compatible(state)) {
-    throw state_representation::exceptions::IncompatibleReferenceFramesException(
-        "The evaluated state " + state.get_name() + " is incompatible with the base frame of the dynamical system "
-            + this->get_base_frame().get_name() + "."
+    throw state_representation::exceptions::IncompatibleStatesException(
+        "The attractor and the provided state are not compatible."
     );
   }
   return this->compute_dynamics(state);
 }
 
-template<class S>
-void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
-  this->base_frame_ = base_frame;
-}
 }// namespace dynamical_systems

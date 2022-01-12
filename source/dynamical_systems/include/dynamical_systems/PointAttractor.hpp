@@ -28,6 +28,11 @@ public:
    */
   [[nodiscard]] S compute_dynamics(const S& state) const override;
 
+  /**
+   * @copydoc IDynamicalSystem::is_compatible
+   */
+  [[nodiscard]] bool is_compatible(const S& state) const override;
+
 private:
   /**
    * @copydoc IDynamicalSystem::validate_and_set_parameter

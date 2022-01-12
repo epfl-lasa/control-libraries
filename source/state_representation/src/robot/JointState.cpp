@@ -204,6 +204,13 @@ void JointState::set_torque(double torque, unsigned int joint_index) {
 }
 
 JointState& JointState::operator+=(const JointState& state) {
+  // sanity check
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
   if (!this->is_compatible(state)) {
     throw IncompatibleStatesException(
         "The two joint states are incompatible, check name, joint names and order or size"
@@ -220,6 +227,13 @@ JointState JointState::operator+(const JointState& state) const {
 }
 
 JointState& JointState::operator-=(const JointState& state) {
+  // sanity check
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  if (state.is_empty()) {
+    throw EmptyStateException(state.get_name() + " state is empty");
+  }
   if (!this->is_compatible(state)) {
     throw IncompatibleStatesException(
         "The two joint states are incompatible, check name, joint names and order or size"
@@ -236,7 +250,9 @@ JointState JointState::operator-(const JointState& state) const {
 }
 
 JointState& JointState::operator*=(double lambda) {
-  if (this->is_empty()) { throw EmptyStateException(this->get_name() + " state is empty"); }
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
   this->set_all_state_variables(lambda * this->get_all_state_variables());
   return (*this);
 }

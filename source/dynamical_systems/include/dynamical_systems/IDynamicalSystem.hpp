@@ -6,8 +6,6 @@
 
 #include "dynamical_systems/exceptions/InvalidParameterException.hpp"
 #include "state_representation/parameters/Parameter.hpp"
-#include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/space/cartesian/CartesianState.hpp"
 
 /**
  * @namespace dynamical_systems
@@ -26,7 +24,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  IDynamicalSystem();
+  IDynamicalSystem() = default;
 
   /**
    * @brief Check compatibility between a state and the dynamical system.
@@ -59,7 +57,7 @@ public:
    * @param name The name of the parameter
    * @return The parameter, if it exists
    */
-  std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name);
+  [[nodiscard]] std::shared_ptr<state_representation::ParameterInterface> get_parameter(const std::string& name) const;
 
   /**
    * @brief Get a map of all the <name, parameter> pairs of the dynamical system.
@@ -68,13 +66,13 @@ public:
   [[nodiscard]] std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
 
   /**
- * @brief Get a parameter of the dynamical system by its name.
- * @tparam T Type of the parameter value
- * @param name The name of the parameter
- * @return The value of the parameter, if the parameter exists
- */
+   * @brief Get a parameter of the dynamical system by its name.
+   * @tparam T Type of the parameter value
+   * @param name The name of the parameter
+   * @return The value of the parameter, if the parameter exists
+   */
   template<typename T>
-  T get_parameter_value(const std::string& name);
+  [[nodiscard]] T get_parameter_value(const std::string& name) const;
 
   /**
    * @brief Get a list of all the parameters of the dynamical system.
@@ -100,6 +98,15 @@ public:
    */
   void
   set_parameters(const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>& parameters);
+
+  /**
+   * @brief Set a parameter value of the dynamical system found by its name.
+   * @tparam T Type of the parameter value
+   * @param name The name of the parameter
+   * @param value The new value of the parameter
+   */
+  template<typename T>
+  void set_parameter_value(const std::string& name, const T& value);
 
 protected:
   /**
@@ -134,10 +141,12 @@ private:
 };
 
 template<class S>
-void IDynamicalSystem<S>::assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
+void IDynamicalSystem<S>::assert_parameter_valid(
+    const std::shared_ptr<state_representation::ParameterInterface>& parameter
+) {
   if (this->param_map_.at(parameter->get_name())->get_type() != parameter->get_type()) {
     throw dynamical_systems::exceptions::InvalidParameterException(
-        "Parameter '" + parameter->get_name() + "'exists, but has unexpected type."
+        "Parameter '" + parameter->get_name() + "' exists, but has unexpected type."
     );
   }
 }
@@ -148,7 +157,12 @@ S IDynamicalSystem<S>::get_base_frame() const {
 }
 
 template<class S>
-std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) {
+void IDynamicalSystem<S>::set_base_frame(const S& base_frame) {
+  this->base_frame_ = base_frame;
+}
+
+template<class S>
+std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::get_parameter(const std::string& name) const {
   if (this->param_map_.find(name) == this->param_map_.cend()) {
     throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
   }
@@ -157,7 +171,7 @@ std::shared_ptr<state_representation::ParameterInterface> IDynamicalSystem<S>::g
 
 template<class S>
 template<typename T>
-T IDynamicalSystem<S>::get_parameter_value(const std::string& name) {
+T IDynamicalSystem<S>::get_parameter_value(const std::string& name) const {
   return std::static_pointer_cast<state_representation::Parameter<T>>(this->get_parameter(name))->get_value();
 }
 
@@ -199,4 +213,10 @@ void IDynamicalSystem<S>::set_parameters(
   }
 }
 
+template<class S>
+template<typename T>
+void IDynamicalSystem<S>::set_parameter_value(const std::string& name, const T& value) {
+  using namespace state_representation;
+  this->validate_and_set_parameter(std::make_shared<Parameter<T>>(Parameter<T>(name, value)));
+}
 }// namespace dynamical_systems

@@ -219,7 +219,9 @@ void joint_velocities(py::module_& m) {
   c.def(py::self / double());
   c.def(py::self / std::chrono::nanoseconds());
   c.def(py::self * std::chrono::nanoseconds());
+
   c.def(double() * py::self);
+  c.def(std::chrono::nanoseconds() * py::self);
   c.def(Eigen::ArrayXd() * py::self);
   c.def(Eigen::MatrixXd() * py::self);
 
@@ -290,7 +292,9 @@ void joint_accelerations(py::module_& m) {
   c.def(py::self /= double());
   c.def(py::self / double());
   c.def(py::self * std::chrono::nanoseconds());
+
   c.def(double() * py::self);
+  c.def(std::chrono::nanoseconds() * py::self);
   c.def(Eigen::ArrayXd() * py::self);
   c.def(Eigen::MatrixXd() * py::self);
 

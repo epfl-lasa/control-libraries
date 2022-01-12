@@ -27,6 +27,7 @@ Release Versions:
   and override `is_compatible` for PointAttractor DS (#236, #239)
 - Add python bindings for dynamical_systems module (#238)
 - Install Eigen manually, version 3.4 (#240)
+- Return a state that has same name as input in PointAttractor (#241)
 
 ### Pending TODOs for the next release
 

@@ -176,13 +176,13 @@ CartesianState PointAttractor<CartesianState>::compute_dynamics(const CartesianS
   }
   CartesianTwist twist = CartesianPose(this->attractor_->get_value()) - CartesianPose(state);
   twist *= this->gain_->get_value();
-  return twist;
+  return CartesianTwist(state.get_name(), twist.get_twist(), this->attractor_->get_value().get_reference_frame());
 }
 
 template<>
 JointState PointAttractor<JointState>::compute_dynamics(const JointState& state) const {
   JointVelocities velocities = JointPositions(this->attractor_->get_value()) - JointPositions(state);
   velocities *= this->gain_->get_value();
-  return velocities;
+  return JointVelocities(state.get_name(), this->attractor_->get_value().get_names(), velocities.get_velocities());
 }
 }// namespace dynamical_systems

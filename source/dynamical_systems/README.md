@@ -7,9 +7,9 @@ functions which map a state to a state derivative.
 * [Base DynamicalSystem](#base-dynamicalsystem)
   * [Base frame](#base-frame)
   * [Reference frames](#reference-frames)
-* [Linear](#linear)
-  * [Configuring the Linear DS](#configuring-the-linear-ds)
-  * [Evaluating the Linear DS](#evaluating-the-linear-ds)
+* [Linear](#point-attractor)
+  * [Configuring the Linear DS](#configuring-the-point-attractor-ds)
+  * [Evaluating the Linear DS](#evaluating-the-point-attractor-ds)
 * [Circular](#circular)
   * [Configuring the Circular DS](#configuring-the-circular-ds)
 * [Ring](#ring)
@@ -17,7 +17,7 @@ functions which map a state to a state derivative.
 
 ## Base DynamicalSystem
 
-The base class DynamicalSystem defines the main public interface pattern which the derived classes follow.
+The base class IDynamicalSystem defines the main public interface pattern which the derived classes follow.
  
 It is templated for any state type, though the intention is to use the **State Representation** library
 (for example, `CartesianState` or `JointState`).
@@ -25,7 +25,7 @@ It is templated for any state type, though the intention is to use the **State R
 The main function is:
 ```c++
 template<class S>
-S DynamicalSystem<S>::evaluate(const S& state) const
+S IDynamicalSystem<S>::evaluate(const S& state) const
 ```
 where `S` is the state representation type.
 The purpose of the evaluate function is to calculate a state derivative from a state.
@@ -48,8 +48,8 @@ For example, `DynamicalSystem<CartesianState>("base")` will create a dynamical s
 expressed in its own frame "base".
 
 The `DynamicalSystem<JointState>` can only be constructed with a `state` to set the base frame. Whilst the term 
-*base frame* makes more sense for a `CartesianState` DS, it rather refers to a specific robot with corresponding name
-and joint names in the case of a `JointState` DS.
+*base frame* makes more sense for a `CartesianState` DS, it rather refers to a specific robot with corresponding 
+joint names in the case of a `JointState` DS.
 
 In most cases, the constructor for the base DynamicalSystem should not be used directly,
 and rather the derived DS classes should construct the base accordingly.
@@ -58,8 +58,8 @@ However, the `set_base_frame()` method remains useful in combination with derive
 
 ### Reference frames
 
-The following section applies to derived DS classes using the `CartesianState` type. The [Linear DS](#linear) 
-will be used as an example.
+The following section applies to derived DS classes using the `CartesianState` type. The 
+[Point Attractor DS](#point-attractor) will be used as an example.
 
 The `evaluate()` function will always return a twist expressed in the same reference frame as the input state,
 provided that the input state is compatible with the DS.
@@ -70,45 +70,48 @@ The input state must be expressed in one of two supported reference frames:
 
 The following snippet illustrates the difference in these two options.
 ```c++
-// create a linear DS with attractor B in frame A
+// create a point attractor DS with attractor B in frame A
 state_representation::CartesianState BinA = state_representation::CartesianState::Identity("B", "A");
-dynamical_systems::Linear<state_representation::CartesianState> linearDS(BinA);
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+);
+ds->set_attractor_value("attractor", BinA);
 
-linearDS.get_attractor().get_name();             // "B"
-linearDS.get_attractor().get_reference_frame();  // "A"
-linearDS.get_base_frame().get_name();            // "A"
-linearDS.get_base_frame().get_reference_frame(); // "A"
+ds->get_parameter_value("attractor").get_name();             // "B"
+ds->get_parameter_value("attractor").get_reference_frame();  // "A"
+ds->get_base_frame().get_name();                             // "A"
+ds->get_base_frame().get_reference_frame();                  // "A"
 
 // evaluate a point C in frame A
 state_representation::CartesianState CinA = state_representation::CartesianState::Random("C", "A");
-auto twist0 = linearDS.evaluate(CinA); // valid, twist is expressed in frame A
+auto twist0 = ds->evaluate(CinA); // valid, twist is expressed in frame A
 
 // set the base from of the DS to be A expressed in the world frame
 state_representation::CartesianState AinWorld = state_representation::CartesianState::Identity("A", "world");
-linearDS.set_base_frame(AinWorld);
+ds->set_base_frame(AinWorld);
 
-linearDS.get_attractor().get_name();             // "B"
-linearDS.get_attractor().get_reference_frame();  // "A"
-linearDS.get_base_frame().get_name();            // "A"
-linearDS.get_base_frame().get_reference_frame(); // "world"
+ds->get_parameter_value("attractor").get_name();             // "B"
+ds->get_parameter_value("attractor").get_reference_frame();  // "A"
+ds->get_base_frame().get_name();                             // "A"
+ds->get_base_frame().get_reference_frame();                  // "world"
 
 // option 1: reference frame of the input is the same as the base frame 
 // -> reference frame of the input: "A"
 // -> DS base frame: "A"
 // -> reference frame of the output: "A"
-auto twist1 = linearDS.evaluate(CinA);
+auto twist1 = ds->evaluate(CinA);
 
 // option 2: reference frame of the input is the same as the base frame 
 // -> reference frame of the input: "world"
 // -> DS base frame reference frame: "world"
 // -> reference frame of the output: "world"
 auto CinWorld = AinWorld * CinA;
-auto twist2 = linearDS.evaluate(CinWorld);
+auto twist2 = ds->evaluate(CinWorld);
 
 // as a note, you can mix and match the approach as necessary.
 // the following is using option 1 with an additional external operation
 // to yield a final result equivalent to option 2.
-auto twist3 =  AinWorld * linearDS.evaluate(CinA);
+auto twist3 =  AinWorld * ds->evaluate(CinA);
 // twist2 === twist3
 ```
 
@@ -131,7 +134,10 @@ state_representation::CartesianState EE("end_effector", "robot");
 state_representation::CartesianState attractor = state_representation::CartesianState::Random("attractor", "task");
 state_representation::CartesianState taskInRobot("task", "robot");
 
-dynamical_systems::Linear<state_representation::CartesianState> linearDS(attractor);
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+);
+ds->set_attractor_value("attractor", attractor);
 
 // control loop
 while (...) {
@@ -148,74 +154,66 @@ while (...) {
   
   // find the twist in the robot reference frame 
   // directly from the end-effector position in the robot reference frame
-  auto twist = linearDS.evaluate(EE);
+  auto twist = ds->evaluate(EE);
   
   // send twist command to controller
   update_controller(twist);
 }
 ```
 
-## Linear
+## Point Attractor
 
-The **Linear** DS can be thought of as a point attractor, with a velocity that is linearly proportional
-to the distance of the current state from the attractor.
-It is currently implemented for the `CartesianState` and `JointState` types.
+The **Point Attractor** DS generates a velocity that is linearly proportional to the distance of the current state 
+from the attractor. It is currently implemented for the `CartesianState` and `JointState` types.
 
 ```c++
-// empty construction results in empty base frame and attractor
-dynamical_systems::Linear<S> emptyDS;
-
-// construction with an attractor and default value for the gain
-state_representation::CartesianState cartesianAttractor = state_representation::CartesianState::Identity("A");
-dynamical_systems::Linear<state_representation::CartesianState> linearDS1(cartesianAttractor);
-
-state_representation::JointState jointAttractor = state_representation::JointState::Zero(6);
-dynamical_systems::Linear<state_representation::JointState> linearDS2(jointAttractor);
+// construction with the DS factory
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+    DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+    );
 ```
 
-### Configuring the Linear DS
+### Configuring the Point Attractor DS
 
-The Linear DS has the following core parameters:
+The Point Attractor DS has the following core parameters:
 - **attractor**; the `CartesianState` or `JointState` type object defining the attractor pose relative to the DS base frame
 - **gain**; the proportional gain acting towards the attractor
 
-Each parameter has corresponding `set_` and `get_` functions.
-
-To change the strength of the attractor, a gain can be passed as the second argument during construction or
-passed to the `set_gain()` member function. The gain defines the proportionality between
-a distance unit and a velocity unit, and is internally stored as a square matrix with a size corresponding
-to the degrees of freedom in the state representation. For example, the `CartesianState` has six degrees of freedom
-(XYZ in linear and angular space), while the `JointState` would have as many degrees of freedom as joints.
+The gain defines the proportionality between a distance unit and a velocity unit, and is internally stored as a 
+square matrix with a size corresponding to the degrees of freedom in the state representation. For example, 
+the `CartesianState` has six degrees of freedom (XYZ in linear and angular space), while the `JointState` would
+have as many degrees of freedom as joints.
 The gain can be defined as a matrix directly, as a diagonal vector of the appropriate
 length, or as a scalar (which sets the value along the diagonal elements of the matrix).
 ```c++
-// set a gain (scalar, vector or matrix during construction)
+// set a gain (scalar, vector or matrix)
 double gain = 10;
-state_representation::CartesianState csA = state_representation::CartesianState::Identity("A");
-dynamical_systems::Linear<state_representation::CartesianState> linear(csA, gain);
-
-// or set / update the gain for the created object
+ds->set_parameter_value("gain", gain);
+// or
 std::vector<double> gains = {1, 2, 3, 4, 5, 6};
-linear.set_gain(gains);
+ds->set_parameter_value("gain", gain);
 
 // update the attractor
 state_representation::CartesianState csB = state_representation::CartesianState::Random("B");
-linear.set_attractor(csB);
+ds->set_parameter_value("attractor", csB);
 ```
 
-### Evaluating the Linear DS
+### Evaluating the Point Attractor DS
 
 To get the velocity from a state, simply call the `evaluate()` function.
 
 ```c++
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+);
 state_representation::CartesianState csA = state_representation::CartesianState::Identity("A");
-dynamical_systems::Linear<state_representation::CartesianState> linear(csA);
+ds->set_parameter_value("attractor", csA);
 
 state_representation::CartesianState csB = state_representation::CartesianState::Random("B");
 // note: the return type of evaluate() is a CartesianState, but
 // it can be directly assigned to a CartesianTwist because the =operator
 // has been defined for that purpose
-state_representation::CartesianTwist twist = linear.evaluate(csB);
+state_representation::CartesianTwist twist = ds->evaluate(csB);
 ```
 
 The returned velocity will always be expressed in the same reference frame as the input state.
@@ -240,25 +238,10 @@ in the constructor, the limit cycle has a constant radius.
 If an elliptical limit cycle is desired, the DS can be constructed directly from an `Ellipsoid` type.
 
 ```c++
-// empty construction results in empty base frame and limit cycle
-dynamical_systems::Circular emptyDS;
-emptyDS.set_limit_cycle(ellipse); // sets a null base frame according to the reference frame of the limit cycle
-
-// construct the circular DS limit cycle using a CartesianState center
-state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
-
-// default constructor (radius = 1)
-dynamical_systems::Circular circularDS1(center);
-
-// constructor with radius
-double radius = 2.0;
-dynamical_systems::Circular circularDS2(center, radius);
-
-// construct the circular DS limit cycle directly using an Ellipsoid type
-state_representation::Ellipsoid ellipse("limit_cycle");
-ellipse.set_center_state(center);
-ellipse.set_axis_lengths({radius, 2 * radius});
-dynamical_systems::Circular ellipticalDS(ellipse);
+// construction with the DS factory
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::CIRCULAR
+);
 ```
 
 ### Configuring the Circular DS
@@ -271,36 +254,21 @@ The Circular DS has the following core parameters:
 - **circular_velocity**; the expected angular orbital velocity around the local origin. 
 Setting this value negative reverses the direction of rotation. [rad/s]
 
-Each parameter has corresponding `set_` and `get_` functions.
-
-The constructor takes additional optional arguments to define the gain and circular velocity.
-The scalar value for the gain sets both the planar and normal gain of the DS. 
-
-Note that the argument for the radius is only present when a `CartesianState` is provided,
-and not when an `Ellipsoid` is provided, as the radii are already parameters of the `Ellipsoid`.
 ```c++
-// construct the circular DS with optional parameters (default values are shown)
-double radius = 1.0;
-double gain = 1.0;
+// update the parameters of the circular DS
+state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
+double radius = 2.0;
+state_representation::Ellipsoid ellipse("limit_cycle");
+ellipse.set_center_state(center);
+ellipse.set_axis_lengths({radius, 2 * radius});
+ds->set_parameter_value("limit_cycle", ellipse);
+
+double planar_gain = 1.0;
+ds->set_parameter_value("planar_gain", planar_gain);
+
 double circular_velocity = M_PI / 2;
-
-// construction with a CartesianState center
-dynamical_systems::Circular circularDS(center, radius, gain, circular_velocity);
-
-// construction with an Ellipsoid ellipse
-dynamical_systems::Circular circularDS(ellipse, gain, circular_velocity);
+ds->set_parameter_value("circular_velocity", circular_velocity);
 ```
-
-In addition, the following helper are defined to configure the limit cycle behaviour.
-
-```c++
-.set_center(CartesianState("center"));  // sets the center position and orientation of the limit cycle
-.set_gain(1.0);                         // sets both planar and normal gain to the gain value
-.set_rotation_angle(0.0);               // sets a rotation offset around the local Z axis
-.set_radius(1.0);                       // sets both elliptical axes to the given radius (forces circle)
-.set_radiuses({1.0, 2.0});              // sets the length of each elliptical axis individually  
-```
-
 
 ## Ring
 
@@ -314,12 +282,10 @@ A clockwise rotation can be achieved by rotating the ring 180 degrees about its 
 It only supports the `CartesianState` type, and always acts in a circular ring. 
 
 ```c++
-// empty construction results in empty base frame and center state
-dynamical_systems::Ring emptyDS;
-
-// construction with center state and default values for parameters
-state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
-dynamical_systems::Ring ringDS(center);
+// construction with the DS factory
+auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::RING
+);
 ```
 
 ### Configuring the Ring DS
@@ -342,12 +308,19 @@ Each parameter has corresponding `set_` and `get_` functions.
 
 The constructor takes additional optional arguments to define the ring DS parameters.
 ```c++
-// construct the ring DS with optional parameters (default values are shown)
+// update the ring DS parameters
+state_representation::CartesianState center = state_representation::CartesianState::Identity("center");
+ds->set_parameter_value("center", center);
 double radius = 1.0;
+ds->set_parameter_value("radius", radius);
 double width = 0.5;
+ds->set_parameter_value("width", width);
 double speed = 1.0;
+ds->set_parameter_value("speed", speed);
 double field_strength = 1.0;
+ds->set_parameter_value("field_strength", field_strength);
 double normal_gain = 1.0;
+ds->set_parameter_value("normal_gain", normal_gain);
 double angular_gain = 1.0;
-dynamical_systems::Ring ringDS(center, radius, width, speed, field_strength, normal_gain, angular_gain);
+ds->set_parameter_value("angular_gain", angular_gain);
 ```

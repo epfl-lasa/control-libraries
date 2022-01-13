@@ -233,9 +233,7 @@ The Circular DS can be constructed with a `CartesianState` state and radius as a
 the state position defines the center of the limit cycle, while the state orientation defines the inclination
 of the limit cycle plane. The radius has a default value of 1.
 
-The internal representation of the limit cycle is a `state_representation::Ellipsoid` type. When a state is used
-in the constructor, the limit cycle has a constant radius.
-If an elliptical limit cycle is desired, the DS can be constructed directly from an `Ellipsoid` type.
+The internal representation of the limit cycle is a `state_representation::Ellipsoid` type. 
 
 ```c++
 // construction with the DS factory

@@ -28,6 +28,7 @@ Release Versions:
 - Add python bindings for dynamical_systems module (#238)
 - Install Eigen manually, version 3.4 (#240)
 - Return a state that has same name as input in PointAttractor (#241)
+- Update README of dynamical systems (#242)
 
 ### Pending TODOs for the next release
 

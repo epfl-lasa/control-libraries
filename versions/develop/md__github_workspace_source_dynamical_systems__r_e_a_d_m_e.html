@@ -74,9 +74,9 @@ $(function() {
 <li><a href="#reference-frames">Reference frames</a></li>
 </ul>
 </li>
-<li><a href="#linear">Linear</a><ul>
-<li><a href="#configuring-the-linear-ds">Configuring the Linear DS</a></li>
-<li><a href="#evaluating-the-linear-ds">Evaluating the Linear DS</a></li>
+<li><a href="#point-attractor">Linear</a><ul>
+<li><a href="#configuring-the-point-attractor-ds">Configuring the Linear DS</a></li>
+<li><a href="#evaluating-the-point-attractor-ds">Evaluating the Linear DS</a></li>
 </ul>
 </li>
 <li><a href="#circular">Circular</a><ul>
@@ -89,66 +89,69 @@ $(function() {
 </li>
 </ul>
 <h1>Base DynamicalSystem</h1>
-<p>The base class DynamicalSystem defines the main public interface pattern which the derived classes follow.</p>
+<p>The base class IDynamicalSystem defines the main public interface pattern which the derived classes follow.</p>
 <p>It is templated for any state type, though the intention is to use the <b>State Representation</b> library (for example, <code>CartesianState</code> or <code>JointState</code>).</p>
 <p>The main function is: </p><div class="fragment"><div class="line"> {c++}</div>
 <div class="line">template&lt;class S&gt;</div>
-<div class="line">S DynamicalSystem&lt;S&gt;::evaluate(const S&amp; state) const</div>
+<div class="line">S IDynamicalSystem&lt;S&gt;::evaluate(const S&amp; state) const</div>
 </div><!-- fragment --><p> where <code>S</code> is the state representation type. The purpose of the evaluate function is to calculate a state derivative from a state. The current implementations support calculating a velocity from a position in either joint space or Cartesian space, though higher derivatives and other space types can be extended in a similar fashion.</p>
 <p>In the case of a <code>CartesianState</code>, only the position and orientation is evaluated, and the returned object updates only the linear and angular velocity properties. In the case of <code>JointState</code>, only the joint position is evaluated, and the returned object contains only the joint velocity.</p>
 <h2>Base frame</h2>
 <p>The <em>DynamicalSystem</em> base class has a private <code>base_frame</code> property, which can be thought of as the DS origin. The functions <code>get_base_frame()</code> and <code>set_base_frame(const S&amp; state)</code> can be used to access or modify this base frame.</p>
 <p>The <code>DynamicalSystem&lt;CartesianState&gt;</code> can be constructed with a <code>state</code> to set the base frame, or with string frame name. In the latter case the base frame is set as a null / identity frame with the specified name. For example, <code>DynamicalSystem&lt;CartesianState&gt;("base")</code> will create a dynamical system with the null base frame "base", expressed in its own frame "base".</p>
-<p>The <code>DynamicalSystem&lt;JointState&gt;</code> can only be constructed with a <code>state</code> to set the base frame. Whilst the term <em>base frame</em> makes more sense for a <code>CartesianState</code> DS, it rather refers to a specific robot with corresponding name and joint names in the case of a <code>JointState</code> DS.</p>
+<p>The <code>DynamicalSystem&lt;JointState&gt;</code> can only be constructed with a <code>state</code> to set the base frame. Whilst the term <em>base frame</em> makes more sense for a <code>CartesianState</code> DS, it rather refers to a specific robot with corresponding joint names in the case of a <code>JointState</code> DS.</p>
 <p>In most cases, the constructor for the base DynamicalSystem should not be used directly, and rather the derived DS classes should construct the base accordingly.</p>
 <p>However, the <code>set_base_frame()</code> method remains useful in combination with derived classes.</p>
 <h2>Reference frames</h2>
-<p>The following section applies to derived DS classes using the <code>CartesianState</code> type. The <a href="#linear">Linear DS</a> will be used as an example.</p>
+<p>The following section applies to derived DS classes using the <code>CartesianState</code> type. The <a href="#point-attractor">Point Attractor DS</a> will be used as an example.</p>
 <p>The <code>evaluate()</code> function will always return a twist expressed in the same reference frame as the input state, provided that the input state is compatible with the DS.</p>
 <p>The input state must be expressed in one of two supported reference frames:</p><ol type="1">
 <li>The reference frame of the input is the DS base frame</li>
 <li>The reference frame of the input matches the reference frame of the DS base frame</li>
 </ol>
 <p>The following snippet illustrates the difference in these two options. </p><div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// create a linear DS with attractor B in frame A</div>
+<div class="line">// create a point attractor DS with attractor B in frame A</div>
 <div class="line">state_representation::CartesianState BinA = state_representation::CartesianState::Identity(&quot;B&quot;, &quot;A&quot;);</div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::CartesianState&gt; linearDS(BinA);</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
+<div class="line">);</div>
+<div class="line">ds-&gt;set_attractor_value(&quot;attractor&quot;, BinA);</div>
 <div class="line"> </div>
-<div class="line">linearDS.get_attractor().get_name();             // &quot;B&quot;</div>
-<div class="line">linearDS.get_attractor().get_reference_frame();  // &quot;A&quot;</div>
-<div class="line">linearDS.get_base_frame().get_name();            // &quot;A&quot;</div>
-<div class="line">linearDS.get_base_frame().get_reference_frame(); // &quot;A&quot;</div>
+<div class="line">ds-&gt;get_parameter_value(&quot;attractor&quot;).get_name();             // &quot;B&quot;</div>
+<div class="line">ds-&gt;get_parameter_value(&quot;attractor&quot;).get_reference_frame();  // &quot;A&quot;</div>
+<div class="line">ds-&gt;get_base_frame().get_name();                             // &quot;A&quot;</div>
+<div class="line">ds-&gt;get_base_frame().get_reference_frame();                  // &quot;A&quot;</div>
 <div class="line"> </div>
 <div class="line">// evaluate a point C in frame A</div>
 <div class="line">state_representation::CartesianState CinA = state_representation::CartesianState::Random(&quot;C&quot;, &quot;A&quot;);</div>
-<div class="line">auto twist0 = linearDS.evaluate(CinA); // valid, twist is expressed in frame A</div>
+<div class="line">auto twist0 = ds-&gt;evaluate(CinA); // valid, twist is expressed in frame A</div>
 <div class="line"> </div>
 <div class="line">// set the base from of the DS to be A expressed in the world frame</div>
 <div class="line">state_representation::CartesianState AinWorld = state_representation::CartesianState::Identity(&quot;A&quot;, &quot;world&quot;);</div>
-<div class="line">linearDS.set_base_frame(AinWorld);</div>
+<div class="line">ds-&gt;set_base_frame(AinWorld);</div>
 <div class="line"> </div>
-<div class="line">linearDS.get_attractor().get_name();             // &quot;B&quot;</div>
-<div class="line">linearDS.get_attractor().get_reference_frame();  // &quot;A&quot;</div>
-<div class="line">linearDS.get_base_frame().get_name();            // &quot;A&quot;</div>
-<div class="line">linearDS.get_base_frame().get_reference_frame(); // &quot;world&quot;</div>
+<div class="line">ds-&gt;get_parameter_value(&quot;attractor&quot;).get_name();             // &quot;B&quot;</div>
+<div class="line">ds-&gt;get_parameter_value(&quot;attractor&quot;).get_reference_frame();  // &quot;A&quot;</div>
+<div class="line">ds-&gt;get_base_frame().get_name();                             // &quot;A&quot;</div>
+<div class="line">ds-&gt;get_base_frame().get_reference_frame();                  // &quot;world&quot;</div>
 <div class="line"> </div>
 <div class="line">// option 1: reference frame of the input is the same as the base frame </div>
 <div class="line">// -&gt; reference frame of the input: &quot;A&quot;</div>
 <div class="line">// -&gt; DS base frame: &quot;A&quot;</div>
 <div class="line">// -&gt; reference frame of the output: &quot;A&quot;</div>
-<div class="line">auto twist1 = linearDS.evaluate(CinA);</div>
+<div class="line">auto twist1 = ds-&gt;evaluate(CinA);</div>
 <div class="line"> </div>
 <div class="line">// option 2: reference frame of the input is the same as the base frame </div>
 <div class="line">// -&gt; reference frame of the input: &quot;world&quot;</div>
 <div class="line">// -&gt; DS base frame reference frame: &quot;world&quot;</div>
 <div class="line">// -&gt; reference frame of the output: &quot;world&quot;</div>
 <div class="line">auto CinWorld = AinWorld * CinA;</div>
-<div class="line">auto twist2 = linearDS.evaluate(CinWorld);</div>
+<div class="line">auto twist2 = ds-&gt;evaluate(CinWorld);</div>
 <div class="line"> </div>
 <div class="line">// as a note, you can mix and match the approach as necessary.</div>
 <div class="line">// the following is using option 1 with an additional external operation</div>
 <div class="line">// to yield a final result equivalent to option 2.</div>
-<div class="line">auto twist3 =  AinWorld * linearDS.evaluate(CinA);</div>
+<div class="line">auto twist3 =  AinWorld * ds-&gt;evaluate(CinA);</div>
 <div class="line">// twist2 === twist3</div>
 </div><!-- fragment --><p>Note that the base frame can have its own velocity or other state properties, which are automatically combined with the DS result with respect to the common reference frame.</p>
 <p>Setting the base frame of the DS has some benefits. In some cases, the state variable to be evaluated is not directly expressed in the frame of the DS. Similarly, the output twist may need to be expressed in a different reference frame.</p>
@@ -158,7 +161,10 @@ $(function() {
 <div class="line">state_representation::CartesianState attractor = state_representation::CartesianState::Random(&quot;attractor&quot;, &quot;task&quot;);</div>
 <div class="line">state_representation::CartesianState taskInRobot(&quot;task&quot;, &quot;robot&quot;);</div>
 <div class="line"> </div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::CartesianState&gt; linearDS(attractor);</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
+<div class="line">);</div>
+<div class="line">ds-&gt;set_attractor_value(&quot;attractor&quot;, attractor);</div>
 <div class="line"> </div>
 <div class="line">// control loop</div>
 <div class="line">while (...) {</div>
@@ -175,80 +181,60 @@ $(function() {
 <div class="line">  </div>
 <div class="line">  // find the twist in the robot reference frame </div>
 <div class="line">  // directly from the end-effector position in the robot reference frame</div>
-<div class="line">  auto twist = linearDS.evaluate(EE);</div>
+<div class="line">  auto twist = ds-&gt;evaluate(EE);</div>
 <div class="line">  </div>
 <div class="line">  // send twist command to controller</div>
 <div class="line">  update_controller(twist);</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1>Linear</h1>
-<p>The <b>Linear</b> DS can be thought of as a point attractor, with a velocity that is linearly proportional to the distance of the current state from the attractor. It is currently implemented for the <code>CartesianState</code> and <code>JointState</code> types.</p>
+</div><!-- fragment --><h1>Point Attractor</h1>
+<p>The <b>Point Attractor</b> DS generates a velocity that is linearly proportional to the distance of the current state from the attractor. It is currently implemented for the <code>CartesianState</code> and <code>JointState</code> types.</p>
 <div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// empty construction results in empty base frame and attractor</div>
-<div class="line">dynamical_systems::Linear&lt;S&gt; emptyDS;</div>
-<div class="line"> </div>
-<div class="line">// construction with an attractor and default value for the gain</div>
-<div class="line">state_representation::CartesianState cartesianAttractor = state_representation::CartesianState::Identity(&quot;A&quot;);</div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::CartesianState&gt; linearDS1(cartesianAttractor);</div>
-<div class="line"> </div>
-<div class="line">state_representation::JointState jointAttractor = state_representation::JointState::Zero(6);</div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::JointState&gt; linearDS2(jointAttractor);</div>
-</div><!-- fragment --><h2>Configuring the Linear DS</h2>
-<p>The Linear DS has the following core parameters:</p><ul>
+<div class="line">// construction with the DS factory</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">    DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
+<div class="line">    );</div>
+</div><!-- fragment --><h2>Configuring the Point Attractor DS</h2>
+<p>The Point Attractor DS has the following core parameters:</p><ul>
 <li><b>attractor</b>; the <code>CartesianState</code> or <code>JointState</code> type object defining the attractor pose relative to the DS base frame</li>
 <li><b>gain</b>; the proportional gain acting towards the attractor</li>
 </ul>
-<p>Each parameter has corresponding <code>set_</code> and <code>get_</code> functions.</p>
-<p>To change the strength of the attractor, a gain can be passed as the second argument during construction or passed to the <code>set_gain()</code> member function. The gain defines the proportionality between a distance unit and a velocity unit, and is internally stored as a square matrix with a size corresponding to the degrees of freedom in the state representation. For example, the <code>CartesianState</code> has six degrees of freedom (XYZ in linear and angular space), while the <code>JointState</code> would have as many degrees of freedom as joints. The gain can be defined as a matrix directly, as a diagonal vector of the appropriate length, or as a scalar (which sets the value along the diagonal elements of the matrix). </p><div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// set a gain (scalar, vector or matrix during construction)</div>
+<p>The gain defines the proportionality between a distance unit and a velocity unit, and is internally stored as a square matrix with a size corresponding to the degrees of freedom in the state representation. For example, the <code>CartesianState</code> has six degrees of freedom (XYZ in linear and angular space), while the <code>JointState</code> would have as many degrees of freedom as joints. The gain can be defined as a matrix directly, as a diagonal vector of the appropriate length, or as a scalar (which sets the value along the diagonal elements of the matrix). </p><div class="fragment"><div class="line"> {c++}</div>
+<div class="line">// set a gain (scalar, vector or matrix)</div>
 <div class="line">double gain = 10;</div>
-<div class="line">state_representation::CartesianState csA = state_representation::CartesianState::Identity(&quot;A&quot;);</div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::CartesianState&gt; linear(csA, gain);</div>
-<div class="line"> </div>
-<div class="line">// or set / update the gain for the created object</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;gain&quot;, gain);</div>
+<div class="line">// or</div>
 <div class="line">std::vector&lt;double&gt; gains = {1, 2, 3, 4, 5, 6};</div>
-<div class="line">linear.set_gain(gains);</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;gain&quot;, gain);</div>
 <div class="line"> </div>
 <div class="line">// update the attractor</div>
 <div class="line">state_representation::CartesianState csB = state_representation::CartesianState::Random(&quot;B&quot;);</div>
-<div class="line">linear.set_attractor(csB);</div>
-</div><!-- fragment --><h2>Evaluating the Linear DS</h2>
+<div class="line">ds-&gt;set_parameter_value(&quot;attractor&quot;, csB);</div>
+</div><!-- fragment --><h2>Evaluating the Point Attractor DS</h2>
 <p>To get the velocity from a state, simply call the <code>evaluate()</code> function.</p>
 <div class="fragment"><div class="line"> {c++}</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
+<div class="line">);</div>
 <div class="line">state_representation::CartesianState csA = state_representation::CartesianState::Identity(&quot;A&quot;);</div>
-<div class="line">dynamical_systems::Linear&lt;state_representation::CartesianState&gt; linear(csA);</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;attractor&quot;, csA);</div>
 <div class="line"> </div>
 <div class="line">state_representation::CartesianState csB = state_representation::CartesianState::Random(&quot;B&quot;);</div>
 <div class="line">// note: the return type of evaluate() is a CartesianState, but</div>
 <div class="line">// it can be directly assigned to a CartesianTwist because the =operator</div>
 <div class="line">// has been defined for that purpose</div>
-<div class="line">state_representation::CartesianTwist twist = linear.evaluate(csB);</div>
+<div class="line">state_representation::CartesianTwist twist = ds-&gt;evaluate(csB);</div>
 </div><!-- fragment --><p>The returned velocity will always be expressed in the same reference frame as the input state.</p>
 <h1>Circular</h1>
 <p>The <b>Circular</b> DS is a limit cycle that rotates around a center point in an elliptical orbit, converging to a desired radius on a plane.</p>
 <p>The direction of the rotation is positive around the local Z axis; this appears as a counter-clockwise rotation when viewed from "above".</p>
 <p>This DS is defined only for the <code>CartesianState</code> type. In addition, it only acts in linear space, determining a linear velocity for a given position. It does not produce any angular velocity.</p>
 <p>The Circular DS can be constructed with a <code>CartesianState</code> state and radius as an argument; the state position defines the center of the limit cycle, while the state orientation defines the inclination of the limit cycle plane. The radius has a default value of 1.</p>
-<p>The internal representation of the limit cycle is a <code><a class="el" href="classstate__representation_1_1_ellipsoid.html">state_representation::Ellipsoid</a></code> type. When a state is used in the constructor, the limit cycle has a constant radius. If an elliptical limit cycle is desired, the DS can be constructed directly from an <code>Ellipsoid</code> type.</p>
+<p>The internal representation of the limit cycle is a <code><a class="el" href="classstate__representation_1_1_ellipsoid.html">state_representation::Ellipsoid</a></code> type.</p>
 <div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// empty construction results in empty base frame and limit cycle</div>
-<div class="line">dynamical_systems::Circular emptyDS;</div>
-<div class="line">emptyDS.set_limit_cycle(ellipse); // sets a null base frame according to the reference frame of the limit cycle</div>
-<div class="line"> </div>
-<div class="line">// construct the circular DS limit cycle using a CartesianState center</div>
-<div class="line">state_representation::CartesianState center = state_representation::CartesianState::Identity(&quot;center&quot;);</div>
-<div class="line"> </div>
-<div class="line">// default constructor (radius = 1)</div>
-<div class="line">dynamical_systems::Circular circularDS1(center);</div>
-<div class="line"> </div>
-<div class="line">// constructor with radius</div>
-<div class="line">double radius = 2.0;</div>
-<div class="line">dynamical_systems::Circular circularDS2(center, radius);</div>
-<div class="line"> </div>
-<div class="line">// construct the circular DS limit cycle directly using an Ellipsoid type</div>
-<div class="line">state_representation::Ellipsoid ellipse(&quot;limit_cycle&quot;);</div>
-<div class="line">ellipse.set_center_state(center);</div>
-<div class="line">ellipse.set_axis_lengths({radius, 2 * radius});</div>
-<div class="line">dynamical_systems::Circular ellipticalDS(ellipse);</div>
+<div class="line">// construction with the DS factory</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::CIRCULAR</div>
+<div class="line">);</div>
 </div><!-- fragment --><h2>Configuring the Circular DS</h2>
 <p>The Circular DS has the following core parameters:</p>
 <ul>
@@ -257,37 +243,29 @@ $(function() {
 <li><b>normal_gain</b>; the proportional gain acting towards the local plane.</li>
 <li><b>circular_velocity</b>; the expected angular orbital velocity around the local origin. Setting this value negative reverses the direction of rotation. [rad/s]</li>
 </ul>
-<p>Each parameter has corresponding <code>set_</code> and <code>get_</code> functions.</p>
-<p>The constructor takes additional optional arguments to define the gain and circular velocity. The scalar value for the gain sets both the planar and normal gain of the DS.</p>
-<p>Note that the argument for the radius is only present when a <code>CartesianState</code> is provided, and not when an <code>Ellipsoid</code> is provided, as the radii are already parameters of the <code>Ellipsoid</code>. </p><div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// construct the circular DS with optional parameters (default values are shown)</div>
-<div class="line">double radius = 1.0;</div>
-<div class="line">double gain = 1.0;</div>
-<div class="line">double circular_velocity = M_PI / 2;</div>
-<div class="line"> </div>
-<div class="line">// construction with a CartesianState center</div>
-<div class="line">dynamical_systems::Circular circularDS(center, radius, gain, circular_velocity);</div>
-<div class="line"> </div>
-<div class="line">// construction with an Ellipsoid ellipse</div>
-<div class="line">dynamical_systems::Circular circularDS(ellipse, gain, circular_velocity);</div>
-</div><!-- fragment --><p>In addition, the following helper are defined to configure the limit cycle behaviour.</p>
 <div class="fragment"><div class="line"> {c++}</div>
-<div class="line">.set_center(CartesianState(&quot;center&quot;));  // sets the center position and orientation of the limit cycle</div>
-<div class="line">.set_gain(1.0);                         // sets both planar and normal gain to the gain value</div>
-<div class="line">.set_rotation_angle(0.0);               // sets a rotation offset around the local Z axis</div>
-<div class="line">.set_radius(1.0);                       // sets both elliptical axes to the given radius (forces circle)</div>
-<div class="line">.set_radiuses({1.0, 2.0});              // sets the length of each elliptical axis individually  </div>
+<div class="line">// update the parameters of the circular DS</div>
+<div class="line">state_representation::CartesianState center = state_representation::CartesianState::Identity(&quot;center&quot;);</div>
+<div class="line">double radius = 2.0;</div>
+<div class="line">state_representation::Ellipsoid ellipse(&quot;limit_cycle&quot;);</div>
+<div class="line">ellipse.set_center_state(center);</div>
+<div class="line">ellipse.set_axis_lengths({radius, 2 * radius});</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;limit_cycle&quot;, ellipse);</div>
+<div class="line"> </div>
+<div class="line">double planar_gain = 1.0;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;planar_gain&quot;, planar_gain);</div>
+<div class="line"> </div>
+<div class="line">double circular_velocity = M_PI / 2;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;circular_velocity&quot;, circular_velocity);</div>
 </div><!-- fragment --><h1>Ring</h1>
 <p>The <b>Ring</b> DS is similar to the <b>Circular</b> DS but is more parameterizable. In brief, the strength of the limit cycle can be configured with a width around the ring radius.</p>
 <p>The direction of the ring orbit is a positive rotation around the local Z axis; this appears as a counter-clockwise rotation when viewed from "above". A clockwise rotation can be achieved by rotating the ring 180 degrees about its local X or Y axis.</p>
 <p>It only supports the <code>CartesianState</code> type, and always acts in a circular ring.</p>
 <div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// empty construction results in empty base frame and center state</div>
-<div class="line">dynamical_systems::Ring emptyDS;</div>
-<div class="line"> </div>
-<div class="line">// construction with center state and default values for parameters</div>
-<div class="line">state_representation::CartesianState center = state_representation::CartesianState::Identity(&quot;center&quot;);</div>
-<div class="line">dynamical_systems::Ring ringDS(center);</div>
+<div class="line">// construction with the DS factory</div>
+<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
+<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::RING</div>
+<div class="line">);</div>
 </div><!-- fragment --><h2>Configuring the Ring DS</h2>
 <p>The Ring DS has the following core parameters:</p>
 <ul>
@@ -302,14 +280,21 @@ $(function() {
 </ul>
 <p>Each parameter has corresponding <code>set_</code> and <code>get_</code> functions.</p>
 <p>The constructor takes additional optional arguments to define the ring DS parameters. </p><div class="fragment"><div class="line"> {c++}</div>
-<div class="line">// construct the ring DS with optional parameters (default values are shown)</div>
+<div class="line">// update the ring DS parameters</div>
+<div class="line">state_representation::CartesianState center = state_representation::CartesianState::Identity(&quot;center&quot;);</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;center&quot;, center);</div>
 <div class="line">double radius = 1.0;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;radius&quot;, radius);</div>
 <div class="line">double width = 0.5;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;width&quot;, width);</div>
 <div class="line">double speed = 1.0;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;speed&quot;, speed);</div>
 <div class="line">double field_strength = 1.0;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;field_strength&quot;, field_strength);</div>
 <div class="line">double normal_gain = 1.0;</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;normal_gain&quot;, normal_gain);</div>
 <div class="line">double angular_gain = 1.0;</div>
-<div class="line">dynamical_systems::Ring ringDS(center, radius, width, speed, field_strength, normal_gain, angular_gain);</div>
+<div class="line">ds-&gt;set_parameter_value(&quot;angular_gain&quot;, angular_gain);</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

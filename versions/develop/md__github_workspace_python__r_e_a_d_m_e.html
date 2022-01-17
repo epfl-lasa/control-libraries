@@ -86,15 +86,19 @@ $(function() {
 <div class="line">pipenv install control-libraries/python</div>
 </div><!-- fragment --><p>Once installed, you can simply import the module with an optional short alias: </p><div class="fragment"><div class="line">#!/usr/bin/env python</div>
 <div class="line">import state_representation as sr</div>
+<div class="line">import dynamical_systems</div>
 <div class="line"> </div>
 <div class="line">print(sr.__version__)</div>
+<div class="line">print(dynamical_systems.__version__)</div>
 <div class="line"> </div>
 <div class="line">A = sr.CartesianState.Random(&quot;A&quot;)</div>
 <div class="line">print(A)</div>
 </div><!-- fragment --><p>Or, directly import specific classes from the module. </p><div class="fragment"><div class="line">#!/usr/bin/env python</div>
 <div class="line">from state_representation import JointState</div>
+<div class="line">from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM</div>
 <div class="line"> </div>
 <div class="line">B = JointState.Random(&quot;B&quot;, 3)</div>
+<div class="line">ds = create_cartesian_ds(DYNAMICAL_SYSTEM.POINT_ATTRACTOR)</div>
 </div><!-- fragment --><p>If the <code>clproto</code> C++ library is installed, the installation steps above will automatically install the <code>clproto</code> Python module which can be used to encode and decode objects into bytes of serialized data. </p><div class="fragment"><div class="line">#!/usr/bin/env python</div>
 <div class="line">from state_representation import JointState</div>
 <div class="line">import clproto</div>
@@ -108,6 +112,7 @@ $(function() {
 <ul>
 <li><code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code>:<ul>
 <li><code>State</code></li>
+<li><code>StateType</code></li>
 <li><code>SpatialState</code></li>
 <li><code>CartesianState</code></li>
 <li><code>CartesianPose</code></li>
@@ -118,6 +123,21 @@ $(function() {
 <li><code>JointVelocities</code></li>
 <li><code>JointTorques</code></li>
 <li><code>Jacobian</code></li>
+<li><code>Shape</code></li>
+<li><code>Ellipsoid</code></li>
+<li><code>Parameter</code></li>
+</ul>
+</li>
+<li><code><a class="el" href="namespacedynamical__systems.html" title="Systems of equations relating state variables to their derivatives.">dynamical_systems</a></code>:<ul>
+<li><code>DYNAMICAL_SYSTEM</code></li>
+<li><code>create_cartesian_ds(type)</code></li>
+<li><code>create_joint_ds(type)</code></li>
+<li><code>CartesianDefaultDS</code></li>
+<li><code>CartesianPointAttractorDS</code></li>
+<li><code>CircularDS</code></li>
+<li><code>RingDS</code></li>
+<li><code>JointDefaultDS</code></li>
+<li><code>JointPointAttractorDS</code></li>
 </ul>
 </li>
 <li><code>clproto</code>:<ul>

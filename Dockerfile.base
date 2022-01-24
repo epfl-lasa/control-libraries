@@ -71,8 +71,6 @@ RUN rm -rf /tmp/*
 
 FROM project-dependencies as ssh-configuration
 
-RUN echo "Set disable_coredump false" >> /etc/sudo.conf
-
 RUN apt-get update && apt-get install -y \
     sudo \
     libssl-dev \

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS build-stage
+FROM ubuntu:20.04 as build-stage
 ARG PROTOBUF_VERSION=3.17.0
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -25,7 +25,7 @@ RUN ./autogen.sh \
     && make \
     && make install
 
-FROM ubuntu:20.04 AS google-dependencies
+FROM ubuntu:20.04 as google-dependencies
 COPY --from=build-stage /usr/local/include/google /usr/local/include/google
 COPY --from=build-stage /usr/local/lib/libproto* /usr/local/lib/
 COPY --from=build-stage /usr/local/bin/protoc /usr/local/bin

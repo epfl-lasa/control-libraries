@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS core-build-dependencies
+FROM ubuntu:20.04 as core-build-dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 
 # install core compilation and access dependencies for building the libraries
@@ -88,7 +88,7 @@ RUN ( \
   ) > /etc/ssh/sshd_config_development \
   && mkdir /run/sshd
 
-ENV USER remote
+ENV USER developer
 ENV HOME /home/${USER}
 
 # create amd configure a new user
@@ -102,8 +102,8 @@ RUN chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_apt
 
 # Configure sshd entrypoint to authorise the new user for ssh access and
 # optionally update UID and GID when invoking the container with the entrypoint script
-#COPY ./config/sshd_entrypoint.sh /sshd_entrypoint.sh
-#RUN chmod 744 /sshd_entrypoint.sh
+COPY ./docker/sshd_entrypoint.sh /sshd_entrypoint.sh
+RUN chmod 744 /sshd_entrypoint.sh
 
 # create the credentials to be able to pull private repos using ssh
 RUN mkdir /root/.ssh/ && ssh-keyscan github.com | tee -a /root/.ssh/known_hosts

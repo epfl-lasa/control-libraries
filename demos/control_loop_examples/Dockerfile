@@ -1,4 +1,4 @@
-FROM control-libraries/source-dependencies as runtime-demonstrations
+FROM epfl-lasa/control-libraries/install
 
 WORKDIR /tmp/
 COPY . ./control_loop_examples
@@ -8,3 +8,5 @@ RUN cmake .. && make -j all && make install
 
 WORKDIR /usr/local/bin
 RUN rm -rf /tmp/demos/
+
+USER developer

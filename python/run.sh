@@ -18,9 +18,9 @@ BUILD_FLAGS=()
 while [[ $# -gt 0 ]]; do
   opt="$1"
   case $opt in
-    -b|--branch) BRANCH=$2; shift 2;;
-    -r|--rebuild) BUILD_FLAGS+=(--no-cache) ; shift ;;
-    -v|--verbose) BUILD_FLAGS+=(--progress=plain) ; shift ;;
+    -b|--branch) BRANCH=$2;shift 2;;
+    -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
+    -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
     -h|--help) echo "${HELP_MESSAGE}" ; exit 0 ;;
     *) echo 'Error in command line parsing' >&2
        echo -e "\n${HELP_MESSAGE}"

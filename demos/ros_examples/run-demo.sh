@@ -1,64 +1,68 @@
 #!/usr/bin/env bash
-# change to false if not using nvidia graphic cards
-USE_NVIDIA_TOOLKIT=false
 
-# Build a docker image to compile the library and run tests
 MULTISTAGE_TARGET="runtime-demonstrations"
+IMAGE_NAME=epfl-lasa/control-libraries/ros-examples
+IMAGE_TAG="${MULTISTAGE_TARGET}"
+GPUS=""
+GENERATE_HOST_NAME=true
 
-REBUILD=0
-while getopts 'r' opt; do
-    case $opt in
-        r) REBUILD=1 ;;
-        *) echo 'Error in command line parsing' >&2
-           exit 1
-    esac
+HELP_MESSAGE="Usage: run-demo.sh [-r] [-v]
+Options:
+  --gpus <gpu_options>            Add GPU access for applications that
+                                  require hardware acceleration (e.g. Gazebo)
+                                  For the list of gpu_options parameters see:
+      >>> https://docs.docker.com/config/containers/resource_constraints
+  -r, --rebuild                   Rebuild the image using the docker
+                                  --no-cache option.
+  -v, --verbose                   Use the verbose option during the building
+                                  process.
+  -h, --help                      Show this help message.
+"
+
+BUILD_FLAGS=()
+while [[ $# -gt 0 ]]; do
+  opt="$1"
+  case $opt in
+    --no-hostname) GENERATE_HOST_NAME=false; shift 1;;
+    --gpus) GPUS=$2; shift 1;;
+    -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
+    -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
+    -h|--help) echo "${HELP_MESSAGE}" ; exit 0 ;;
+    *) echo 'Error in command line parsing' >&2
+       echo -e "\n${HELP_MESSAGE}"
+       exit 1
+  esac
 done
-shift "$(( OPTIND - 1 ))"
 
-PACKAGE_NAME=$(echo "${PWD##*/}" | tr _ -)
-IMAGE_NAME="${PACKAGE_NAME}/$MULTISTAGE_TARGET"
-TAG="latest"
-
-BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
-
-if [[ "$OSTYPE" != "darwin"* ]]; then
-  UID="$(id -u "${USER}")"
-  GID="$(id -g "${USER}")"
-  BUILD_FLAGS+=(--build-arg UID="${UID}")
-  BUILD_FLAGS+=(--build-arg GID="${GID}")
-fi
-BUILD_FLAGS+=(-t "${IMAGE_NAME}:${TAG}")
-
-if [ "$REBUILD" -eq 1 ]; then
-    BUILD_FLAGS+=(--no-cache)
-fi
-
-MULTISTAGE_SOURCE_TARGET="source-dependencies"
-DOCKER_BUILDKIT=1 docker build --target "${MULTISTAGE_SOURCE_TARGET}" \
-  -t "control-libraries/${MULTISTAGE_SOURCE_TARGET}" \
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
+DOCKER_BUILDKIT=1 docker build --target "install" \
+  -t "epfl-lasa/control-libraries/install" \
+  --build-arg "BUILD_TESTING=OFF" \
+  "${BUILD_FLAGS[@]}" \
   -f ../../source/Dockerfile.source ../../source || exit
-DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . || exit
 
-#create a shared volume to store rviz config files
-mkdir -p "rviz"
-docker volume create --driver local \
-    --opt type="none" \
-    --opt device="${PWD}/rviz/" \
-    --opt o="bind" \
-    "${PACKAGE_NAME}_rviz_vol"
+DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . --target "${MULTISTAGE_TARGET}" -t "${IMAGE_NAME}:${IMAGE_TAG}" || exit
 
-[[ ${USE_NVIDIA_TOOLKIT} = true ]] && GPU_FLAG="--gpus all" || GPU_FLAG=""
+RUN_FLAGS=(-u developer)
+if [ -n "${GPUS}" ]; then
+  RUN_FLAGS+=(--gpus "${GPUS}")
+  RUN_FLAGS+=(--env DISPLAY="${DISPLAY}")
+  RUN_FLAGS+=(--env NVIDIA_VISIBLE_DEVICES="${NVIDIA_VISIBLE_DEVICES:-all}")
+  RUN_FLAGS+=(--env NVIDIA_DRIVER_CAPABILITIES="${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics")
+fi
 
-xhost +
-docker run \
-  ${GPU_FLAG} \
-  --privileged \
-  -it \
-  --rm \
-  --net="host" \
-  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-  --volume="${XAUTHORITY}:${XAUTHORITY}" \
-  --volume="${PACKAGE_NAME}_rviz_vol:/home/ros/ros_ws/src/ros_examples/rviz/:rw" \
-  --env XAUTHORITY="${XAUTHORITY}" \
-  --env DISPLAY="${DISPLAY}" \
-  "${IMAGE_NAME}:${TAG}"
+if [[ "${OSTYPE}" == "darwin"* ]]; then
+  RUN_FLAGS+=(-e DISPLAY=host.docker.internal:0)
+else
+  xhost +
+  RUN_FLAGS+=(-e DISPLAY="${DISPLAY}")
+  RUN_FLAGS+=(-e XAUTHORITY="${XAUTHORITY}")
+  RUN_FLAGS+=(-v /tmp/.X11-unix:/tmp/.X11-unix:rw)
+  RUN_FLAGS+=(--device=/dev/dri:/dev/dri)
+fi
+
+docker run -it --rm --net="host" \
+  "${RUN_FLAGS[@]}" \
+  --volume="$(pwd)/rviz:/home/ros/ros_ws/src/ros_examples/rviz/:rw" \
+  --name "${CONTAINER_NAME}" \
+  "${IMAGE_NAME}:${IMAGE_TAG}" /bin/bash

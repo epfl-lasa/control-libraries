@@ -59,8 +59,8 @@ while [ "$#" -gt 0 ]; do
   -b|--branch) BRANCH=$2; shift 2;;
   -k | --key-file) SSH_KEY_FILE=$2; shift 2;;
   -u | --user) USERNAME=$2; shift 2;;
-  -r|--rebuild) BUILD_FLAGS+=(--no-cache) ; shift ;;
-  -v|--verbose) BUILD_FLAGS+=(--progress=plain) ; shift ;;
+  -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
+  -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
   -h | --help) echo "${HELP_MESSAGE}"; exit 0;;
   *)
     echo 'Error in command line parsing' >&2

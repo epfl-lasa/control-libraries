@@ -19,7 +19,7 @@ Running the scripts uses ROS2 commands, e.g. to run the `task_space_control_loop
 ros2 run ros2_examples task_space_control_loop
 ```
 
-You can also directly use the launchfile that starts any requirement for the demo to run correctly:
+You can also directly use the launch file that starts any requirement for the demo to run correctly:
 
 ```console
 ros2 launch ros2_examples task_space_control_loop.py

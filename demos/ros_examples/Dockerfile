@@ -1,4 +1,4 @@
-FROM control-libraries/source-dependencies as ros-dependencies
+FROM epfl-lasa/control-libraries/install as ros-dependencies
 
 # install ROS
 ENV ROS_DISTRO="noetic"
@@ -16,20 +16,7 @@ RUN apt update && apt install -y ros-${ROS_DISTRO}-ros-base \
     sudo \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# create a user with same permissions as the host itself
-ENV USER ros
-ARG UID=1000
-ARG GID=1000
-RUN addgroup --gid ${GID} ${USER}
-RUN adduser --gecos "ROS User" --disabled-password --uid ${UID} --gid ${GID} ${USER}
-RUN usermod -a -G dialout ${USER}
-RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/99_aptget > /dev/null \
-    && chmod 0440 /etc/sudoers.d/99_aptget \
-    && chown root:root /etc/sudoers.d/99_aptget
-
-# change user to the newly created one
-USER ${USER}
-ENV HOME /home/${USER}
+USER developer
 
 # add and build a ros workspace
 ENV ROS_WORKSPACE ${HOME}/ros_ws

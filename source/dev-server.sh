@@ -27,14 +27,11 @@ Options:
   -p, --port <XXXX>        Specify the port to bind for SSH
                            connection.
                            (default: ${SSH_PORT})
-
   -k, --key-file [path]    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
-
   -u, --user <user>        Specify the name of the remote user.
                            (default: ${USERNAME})
-
   -h, --help               Show this help message"
 
 FWD_ARGS=()

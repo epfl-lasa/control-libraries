@@ -12,10 +12,12 @@ BUILD_ROBOT_MODEL="ON"
 HELP_MESSAGE="Usage: build-test.sh [-r] [-v]
 Options:
   -r, --rebuild                   Rebuild the image using the docker
-                                  --no-cache option
+                                  --no-cache option.
   -v, --verbose                   Use the verbose option during the building
-                                  process
+                                  process.
+  -h, --help                      Show this help message.
 "
+
 BUILD_FLAGS=()
 
 while [[ $# -gt 0 ]]; do

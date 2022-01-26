@@ -29,7 +29,7 @@ Options:
   -k, --key-file [path]    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
-  -h, --help               Show this help message"
+  -h, --help               Show this help message."
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -60,7 +60,7 @@ docker pull "${IMAGE_NAME}" || exit 1
 docker container stop "${CONTAINER_NAME}" >/dev/null 2>&1
 docker rm --force "${CONTAINER_NAME}" >/dev/null 2>&1
 
-echo "Starting background container with access port ${SSH_PORT} for user ${USERNAME}"
+echo "Starting background container with access port ${SSH_PORT} for user developer"
 docker run -d --rm --cap-add sys_ptrace \
   --user root \
   --publish 127.0.0.1:"${SSH_PORT}":22 \

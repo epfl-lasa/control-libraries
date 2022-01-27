@@ -29,6 +29,7 @@ Release Versions:
 - Install Eigen manually, version 3.4 (#240)
 - Return a state that has same name as input in PointAttractor (#241)
 - Update README of dynamical systems (#242)
+- Mark the JointState as filled when one index was set (#245)
 
 ### Pending TODOs for the next release
 

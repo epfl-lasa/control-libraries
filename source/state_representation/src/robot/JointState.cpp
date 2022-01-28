@@ -105,11 +105,13 @@ void JointState::set_positions(const std::vector<double>& positions) {
 }
 
 void JointState::set_position(double position, const std::string& joint_name) {
+  this->set_filled();
   this->positions_(this->get_joint_index(joint_name)) = position;
 }
 
 void JointState::set_position(double position, unsigned int joint_index) {
   assert_index_in_range(joint_index, this->get_size());
+  this->set_filled();
   this->positions_(joint_index) = position;
 }
 
@@ -135,11 +137,13 @@ void JointState::set_velocities(const std::vector<double>& velocities) {
 }
 
 void JointState::set_velocity(double velocity, const std::string& joint_name) {
+  this->set_filled();
   this->velocities_(this->get_joint_index(joint_name)) = velocity;
 }
 
 void JointState::set_velocity(double velocity, unsigned int joint_index) {
   assert_index_in_range(joint_index, this->get_size());
+  this->set_filled();
   this->velocities_(joint_index) = velocity;
 }
 
@@ -165,11 +169,13 @@ void JointState::set_accelerations(const std::vector<double>& accelerations) {
 }
 
 void JointState::set_acceleration(double acceleration, const std::string& joint_name) {
+  this->set_filled();
   this->accelerations_(this->get_joint_index(joint_name)) = acceleration;
 }
 
 void JointState::set_acceleration(double acceleration, unsigned int joint_index) {
   assert_index_in_range(joint_index, this->get_size());
+  this->set_filled();
   this->accelerations_(joint_index) = acceleration;
 }
 
@@ -195,11 +201,13 @@ void JointState::set_torques(const std::vector<double>& torques) {
 }
 
 void JointState::set_torque(double torque, const std::string& joint_name) {
+  this->set_filled();
   this->torques_(this->get_joint_index(joint_name)) = torque;
 }
 
 void JointState::set_torque(double torque, unsigned int joint_index) {
   assert_index_in_range(joint_index, this->get_size());
+  this->set_filled();
   this->torques_(joint_index) = torque;
 }
 

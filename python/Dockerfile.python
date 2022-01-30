@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
-FROM ${BASE_IMAGE} AS python-install
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest as python-install
 ARG BRANCH=develop
 
 WORKDIR /source
@@ -13,18 +12,12 @@ COPY pyproject.toml setup.py control-libraries/python/
 RUN pip3 install control-libraries/python
 
 
-FROM python-install AS dev-user
+FROM python-install as build-testing
 
-RUN useradd --create-home --shell /bin/bash dev
-USER dev
-WORKDIR /home/dev
+USER developer
+WORKDIR ${HOME}
 
 COPY test ./test
 RUN python3 -m unittest
 
 CMD ["/bin/bash"]
-
-
-FROM python-install AS remote-user
-
-ENTRYPOINT ["/.ssh_entrypoint.sh"]

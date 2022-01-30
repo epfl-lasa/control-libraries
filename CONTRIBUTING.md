@@ -31,7 +31,7 @@ Step 2: If not already done, [create a remote toolchain in CLion](https://www.je
 using the following credentials:
  - Host: `127.0.0.1`
  - Port: `2222` (or custom specified port)
- - User name: `remote`
+ - User name: `developer`
  - Authentication type: `Key pair`
  
 Step 3: If not already done, [create a CMake profile that uses the remote toolchain](https://www.jetbrains.com/help/clion/remote-projects-support.html#CMakeProfile).

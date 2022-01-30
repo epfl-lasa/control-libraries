@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 AS core-build-dependencies
+FROM ubuntu:20.04 as core-build-dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 
 # install core compilation and access dependencies for building the libraries
@@ -69,19 +69,56 @@ WORKDIR /home
 RUN rm -rf /tmp/*
 
 
-FROM project-dependencies as development-dependencies
+FROM project-dependencies as ssh-configuration
+
+RUN apt-get update && apt-get install -y \
+    sudo \
+    libssl-dev \
+    ssh \
+    iputils-ping \
+    rsync \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure sshd server settings
+RUN ( \
+    echo 'LogLevel DEBUG2'; \
+    echo 'PubkeyAuthentication yes'; \
+    echo 'Subsystem sftp /usr/lib/openssh/sftp-server'; \
+  ) > /etc/ssh/sshd_config_development \
+  && mkdir /run/sshd
+
+ENV USER developer
+ENV HOME /home/${USER}
+
+# create amd configure a new user
+ARG UID=1000
+ARG GID=1000
+RUN addgroup --gid ${GID} ${USER}
+RUN adduser --gecos "Remote User" --uid ${UID} --gid ${GID} ${USER} && yes | passwd ${USER}
+RUN usermod -a -G dialout ${USER}
+RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/99_aptget
+RUN chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_aptget
+
+# Configure sshd entrypoint to authorise the new user for ssh access and
+# optionally update UID and GID when invoking the container with the entrypoint script
+COPY ./docker/sshd_entrypoint.sh /sshd_entrypoint.sh
+RUN chmod 744 /sshd_entrypoint.sh
+
+# create the credentials to be able to pull private repos using ssh
+RUN mkdir /root/.ssh/ && ssh-keyscan github.com | tee -a /root/.ssh/known_hosts
+
+RUN echo "session required pam_limits.so" | tee --append /etc/pam.d/common-session > /dev/null
+
+
+FROM ssh-configuration as development-dependencies
 
 RUN apt-get update && apt-get install -y \
     clang \
-    iputils-ping \
     gdb \
-    libssl-dev \
     python \
     python3-dev \
     python3-pip \
-    rsync \
-    ssh \
-    sudo \
     tar \
     unzip \
     && apt-get clean \

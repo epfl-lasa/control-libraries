@@ -46,17 +46,18 @@ To run this script and visualize the robot, follow the steps below to launch a *
 
 - in a first terminal, run:
     ```bash
-    cd control-libraries/demos/ros_examples
-    bash run-demo.sh # this will build a docker image and spin up a container
-    # inside the container
-    roslaunch ros_examples joint_space_velocity_control.launch robot_name:=franka
-    ```
-- in a second terminal, run:
-    ```bash
     # in a directory of your choice (preferably not in the control-libraries directory)
-    git clone https://github.com/domire8/pybullet_ros.git --branch control-libraries-demo --single-branch
+    git clone https://github.com/domire8/pybullet_ros.git  --depth 1 --branch control-libraries-demo
     cd pybullet_ros/docker
     bash build-run.sh # this will build a docker image and spin up a container
     # inside the container
     roslaunch pybullet_ros franka.launch
+    ```
+
+- in a second terminal, run:
+    ```bash
+    cd control-libraries/demos/ros_examples
+    bash run-demo.sh # this will build a docker image and spin up a container
+    # inside the container
+    roslaunch ros_examples joint_space_velocity_control.launch robot_name:=franka
     ```

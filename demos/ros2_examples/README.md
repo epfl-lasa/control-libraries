@@ -22,7 +22,7 @@ ros2 run ros2_examples task_space_control_loop
 You can also directly use the launch file that starts any requirement for the demo to run correctly:
 
 ```console
-ros2 launch ros2_examples task_space_control_loop.py
+ros2 launch ros2_examples task_space_control_loop.launch.py
 ```
 
 ## `task_space_control_loop`

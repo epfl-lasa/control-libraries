@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=epfl-lasa/control-libraries/python-install
-CONTAINER_NAME=epfl-lasa-control-libraries-python-install-ssh
+IMAGE_NAME=epfl-lasa/control-libraries/python/development
+CONTAINER_NAME=epfl-lasa-control-libraries-python-development-ssh
 
 BRANCH=$(git branch --show-current)
 

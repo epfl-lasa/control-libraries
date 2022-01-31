@@ -60,6 +60,6 @@ fi
 
 docker run -it --rm --net=host \
   "${RUN_FLAGS[@]}" \
-  --volume="$(pwd)/rviz:/home/ros/ros_ws/src/ros_examples/rviz/:rw" \
+  --volume="$(pwd)/rviz:/home/developer/ros_ws/src/ros_examples/rviz/:rw" \
   --name "${CONTAINER_NAME}" \
   "${IMAGE_NAME}:${IMAGE_TAG}" /bin/bash

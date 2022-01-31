@@ -30,6 +30,8 @@ Release Versions:
 - Return a state that has same name as input in PointAttractor (#241)
 - Update README of dynamical systems (#242)
 - Mark the JointState as filled when one index was set (#245)
+- Add user sshd configuration and user 'developer' in base Dockerfile 
+  and update all the Dockerfiles and scripts (#244, #246)
 
 ### Pending TODOs for the next release
 

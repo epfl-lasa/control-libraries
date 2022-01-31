@@ -22,7 +22,7 @@ BUILD_FLAGS=()
 while [[ $# -gt 0 ]]; do
   opt="$1"
   case $opt in
-    --gpus) GPUS=$2; shift 1;;
+    --gpus) GPUS=$2; shift 2;;
     -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
     -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
     -h|--help) echo "${HELP_MESSAGE}" ; exit 0 ;;

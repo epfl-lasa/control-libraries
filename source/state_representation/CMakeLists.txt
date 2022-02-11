@@ -16,7 +16,7 @@ set(CORE_SOURCES
   src/robot/JointVelocities.cpp
   src/robot/JointAccelerations.cpp
   src/robot/JointTorques.cpp
-  src/robot/Jacobian.cpp
+  src/space/Jacobian.cpp
   src/parameters/ParameterInterface.cpp
   src/parameters/Parameter.cpp
   src/parameters/Predicate.cpp

@@ -12,7 +12,7 @@
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
 #include <state_representation/space/cartesian/CartesianWrench.hpp>
-#include <state_representation/robot/Jacobian.hpp>
+#include <state_representation/space/Jacobian.hpp>
 #include <state_representation/robot/JointState.hpp>
 #include <state_representation/robot/JointPositions.hpp>
 #include <state_representation/robot/JointVelocities.hpp>

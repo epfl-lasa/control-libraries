@@ -22,14 +22,14 @@ Ring::Ring() :
   this->center_->get_value().set_empty();
   this->rotation_offset_->set_value(
       CartesianPose("rotation", Eigen::Quaterniond::Identity(), this->center_->get_value().get_name()));
-  this->param_map_.insert(std::make_pair("center", this->center_));
-  this->param_map_.insert(std::make_pair("rotation_offset", this->rotation_offset_));
-  this->param_map_.insert(std::make_pair("radius", this->radius_));
-  this->param_map_.insert(std::make_pair("width", this->width_));
-  this->param_map_.insert(std::make_pair("speed", this->speed_));
-  this->param_map_.insert(std::make_pair("field_strength", this->field_strength_));
-  this->param_map_.insert(std::make_pair("normal_gain", this->normal_gain_));
-  this->param_map_.insert(std::make_pair("angular_gain", this->angular_gain_));
+  this->parameters_.insert(std::make_pair("center", this->center_));
+  this->parameters_.insert(std::make_pair("rotation_offset", this->rotation_offset_));
+  this->parameters_.insert(std::make_pair("radius", this->radius_));
+  this->parameters_.insert(std::make_pair("width", this->width_));
+  this->parameters_.insert(std::make_pair("speed", this->speed_));
+  this->parameters_.insert(std::make_pair("field_strength", this->field_strength_));
+  this->parameters_.insert(std::make_pair("normal_gain", this->normal_gain_));
+  this->parameters_.insert(std::make_pair("angular_gain", this->angular_gain_));
 }
 
 void Ring::set_center(const CartesianPose& center) {

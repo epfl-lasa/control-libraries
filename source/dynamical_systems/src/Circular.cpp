@@ -15,10 +15,10 @@ Circular::Circular() :
     normal_gain_(std::make_shared<Parameter<double>>("normal_gain", 1.0)),
     circular_velocity_(std::make_shared<Parameter<double>>("circular_velocity", M_PI / 2)) {
   this->limit_cycle_->get_value().set_center_state(CartesianState("limit_cycle", "limit_cycle"));
-  this->param_map_.insert(std::make_pair("limit_cycle", this->limit_cycle_));
-  this->param_map_.insert(std::make_pair("planar_gain", this->planar_gain_));
-  this->param_map_.insert(std::make_pair("normal_gain", this->normal_gain_));
-  this->param_map_.insert(std::make_pair("circular_velocity", this->circular_velocity_));
+  this->parameters_.insert(std::make_pair("limit_cycle", this->limit_cycle_));
+  this->parameters_.insert(std::make_pair("planar_gain", this->planar_gain_));
+  this->parameters_.insert(std::make_pair("normal_gain", this->normal_gain_));
+  this->parameters_.insert(std::make_pair("circular_velocity", this->circular_velocity_));
 }
 
 void Circular::set_limit_cycle(Ellipsoid& limit_cycle) {

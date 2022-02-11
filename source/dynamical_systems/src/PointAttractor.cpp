@@ -19,16 +19,16 @@ template<>
 PointAttractor<CartesianState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain", Eigen::MatrixXd::Identity(6, 6))) {
-  this->param_map_.insert(std::make_pair("attractor", attractor_));
-  this->param_map_.insert(std::make_pair("gain", gain_));
+  this->parameters_.insert(std::make_pair("attractor", attractor_));
+  this->parameters_.insert(std::make_pair("gain", gain_));
 }
 
 template<>
 PointAttractor<JointState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor"))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
-  this->param_map_.insert(std::make_pair("attractor", attractor_));
-  this->param_map_.insert(std::make_pair("gain", gain_));
+  this->parameters_.insert(std::make_pair("attractor", attractor_));
+  this->parameters_.insert(std::make_pair("gain", gain_));
 }
 
 template<class S>

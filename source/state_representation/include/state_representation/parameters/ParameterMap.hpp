@@ -90,16 +90,16 @@ protected:
   void assert_parameter_valid(const std::shared_ptr<state_representation::ParameterInterface>& parameter);
 
   std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
-      param_map_; ///< map of parameters by name
+      parameters_; ///< map of parameters by name
 
 };
 
 inline std::shared_ptr<state_representation::ParameterInterface>
 ParameterMap::get_parameter(const std::string& name) const {
-  if (this->param_map_.find(name) == this->param_map_.cend()) {
+  if (this->parameters_.find(name) == this->parameters_.cend()) {
     throw exceptions::InvalidParameterException("Could not find a parameter named '" + name + "'.");
   }
-  return this->param_map_.at(name);
+  return this->parameters_.at(name);
 }
 
 template<typename T>
@@ -109,12 +109,12 @@ inline T ParameterMap::get_parameter_value(const std::string& name) const {
 
 inline std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>
 ParameterMap::get_parameters() const {
-  return this->param_map_;
+  return this->parameters_;
 }
 
 inline std::list<std::shared_ptr<state_representation::ParameterInterface>> ParameterMap::get_parameter_list() const {
   std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
-  for (const auto& param_it: this->param_map_) {
+  for (const auto& param_it: this->parameters_) {
     param_list.template emplace_back(param_it.second);
   }
   return param_list;
@@ -149,7 +149,7 @@ inline void ParameterMap::set_parameter_value(const std::string& name, const T& 
 inline void ParameterMap::assert_parameter_valid(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
-  if (this->param_map_.at(parameter->get_name())->get_type() != parameter->get_type()) {
+  if (this->parameters_.at(parameter->get_name())->get_type() != parameter->get_type()) {
     throw exceptions::InvalidParameterException(
         "Parameter '" + parameter->get_name() + "' exists, but has unexpected type.");
   }
@@ -157,7 +157,7 @@ inline void ParameterMap::assert_parameter_valid(
 
 inline void
 ParameterMap::validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) {
-  this->param_map_[parameter->get_name()] = parameter;
+  this->parameters_[parameter->get_name()] = parameter;
 }
 
 }

@@ -80,6 +80,7 @@ Bindings exist for the following modules, classes and methods:
   - `CartesianState`
   - `CartesianPose`
   - `CartesianTwist`
+  - `CartesianAcceleration`
   - `CartesianWrench`
   - `JointState`
   - `JointPositions`

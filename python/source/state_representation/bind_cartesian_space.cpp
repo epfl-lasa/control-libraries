@@ -302,7 +302,7 @@ void cartesian_acceleration(py::module_& m) {
   c.def(py::init<const CartesianTwist&>(), "Copy constructor from a CartesianTwist by considering that it is equivalent to dividing the twist by 1 second", "twist"_a);
 
   c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration given as a vector.", "name"_a, "linear_acceleration"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear velocity and angular velocity given as vectors.", "name"_a, "linear_acceleration"_a, "angular_acceleration"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration and angular acceleration given as vectors.", "name"_a, "linear_acceleration"_a, "angular_acceleration"_a, "reference"_a=std::string("world"));
   c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianAcceleration from a single 6d acceleration vector", "name"_a, "acceleration"_a, "reference"_a=std::string("world"));
 
   c.def_static("Zero", &CartesianAcceleration::Zero, "Constructor for the zero acceleration", "name"_a, "reference"_a=std::string("world"));

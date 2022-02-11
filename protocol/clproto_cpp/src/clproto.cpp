@@ -382,7 +382,7 @@ bool decode(const std::string& msg, CartesianTwist& obj) {
 }
 
 /* ----------------------
- *     CartesianAcceleration
+ *  CartesianAcceleration
  * ---------------------- */
 template<>
 std::string encode<CartesianAcceleration>(const CartesianAcceleration& obj);

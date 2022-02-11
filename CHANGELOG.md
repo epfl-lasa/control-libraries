@@ -35,7 +35,7 @@ Release Versions:
 - Add ParameterMap base class (#247)
 - Add CartesianAcceleration class in state representation (#248)
 - Relocate Jacobian and JointState family files to the 'space/' directory (#249)
-- Update pybindings and clproto with CartesianAcceleration (#249)
+- Update pybindings and clproto with CartesianAcceleration (#250)
 
 ### Pending TODOs for the next release
 

@@ -76,19 +76,19 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianTwist) {
 }
 
 TEST(CartesianProtoTest, EncodeDecodeCartesianAcceleration) {
-auto send_state = CartesianAcceleration::Random("A", "B");
-std::string msg = clproto::encode(send_state);
-EXPECT_TRUE(clproto::is_valid(msg));
-EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_ACCELERATION_MESSAGE);
+  auto send_state = CartesianAcceleration::Random("A", "B");
+  std::string msg = clproto::encode(send_state);
+  EXPECT_TRUE(clproto::is_valid(msg));
+  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_ACCELERATION_MESSAGE);
 
-CartesianAcceleration recv_state;
-EXPECT_NO_THROW(clproto::decode<CartesianAcceleration>(msg));
-EXPECT_TRUE(clproto::decode(msg, recv_state));
-EXPECT_FALSE(recv_state.is_empty());
+  CartesianAcceleration recv_state;
+  EXPECT_NO_THROW(clproto::decode<CartesianAcceleration>(msg));
+  EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
 
-EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
+  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
+  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
+  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
 }
 
 TEST(CartesianProtoTest, EncodeDecodeCartesianWrench) {
@@ -141,14 +141,14 @@ TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianTwist) {
 }
 
 TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianAcceleration) {
-CartesianAcceleration empty_state;
-EXPECT_TRUE(empty_state.is_empty());
-std::string msg;
-EXPECT_NO_THROW(msg = clproto::encode(empty_state));
+  CartesianAcceleration empty_state;
+  EXPECT_TRUE(empty_state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
 
-CartesianAcceleration recv_state;
-EXPECT_NO_THROW(recv_state = clproto::decode<CartesianAcceleration>(msg));
-EXPECT_TRUE(recv_state.is_empty());
+  CartesianAcceleration recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianAcceleration>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
 }
 
 TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianWrench) {

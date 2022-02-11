@@ -2,10 +2,12 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianAcceleration.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
 
 namespace state_representation {
 class CartesianTwist;
+class CartesianAcceleration;
 class CartesianWrench;
 
 /**
@@ -167,6 +169,13 @@ public:
    * @return the current CartesianPose multiplied by the CartesianTwist given in argument
    */
   CartesianTwist operator*(const CartesianTwist& twist) const;
+
+  /**
+   * @brief Overload the * operator
+   * @param acceleration CartesianAcceleration to multiply with
+   * @return the current CartesianPose multiplied by the CartesianAcceleration given in argument
+   */
+  CartesianAcceleration operator*(const CartesianAcceleration& acceleration) const;
 
   /**
    * @brief Overload the * operator

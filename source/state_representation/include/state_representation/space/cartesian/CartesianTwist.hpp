@@ -2,11 +2,11 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/space/cartesian/CartesianWrench.hpp"
+#include "state_representation/space/cartesian/CartesianAcceleration.hpp"
 
 namespace state_representation {
 class CartesianPose;
-class CartesianWrench;
+class CartesianAcceleration;
 
 /**
  * @class CartesianTwist
@@ -74,6 +74,11 @@ public:
    * @brief Copy constructor from a CartesianPose by considering that it is equivalent to dividing the pose by 1 second
    */
   CartesianTwist(const CartesianPose& pose);
+
+  /**
+   * @brief Copy constructor from a CartesianAcceleration by considering that it is a twist over 1 second
+   */
+  CartesianTwist(const CartesianAcceleration& acceleration);
 
   /**
    * @brief Construct a CartesianTwist from a linear velocity given as a vector.
@@ -189,6 +194,13 @@ public:
    * @return the CartesianPose corresponding to the displacement over the time period
    */
   CartesianPose operator*(const std::chrono::nanoseconds& dt) const;
+
+  /**
+   * @brief Overload the / operator with a time period
+   * @param dt the time period to divide by
+   * @return the corresponding CartesianAcceleration
+   */
+  CartesianAcceleration operator/(const std::chrono::nanoseconds& dt) const;
 
   /**
    * @brief Clamp inplace the magnitude of the twist to the values in argument

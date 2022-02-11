@@ -72,6 +72,10 @@ CartesianTwist CartesianPose::operator*(const CartesianTwist& twist) const {
   return this->CartesianState::operator*(twist);
 }
 
+CartesianAcceleration CartesianPose::operator*(const CartesianAcceleration& acceleration) const {
+  return this->CartesianState::operator*(acceleration);
+}
+
 CartesianWrench CartesianPose::operator*(const CartesianWrench& wrench) const {
   return this->CartesianState::operator*(wrench);
 }

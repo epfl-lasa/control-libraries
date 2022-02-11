@@ -34,7 +34,7 @@ Release Versions:
   and update all the Dockerfiles and scripts (#244, #246)
 - Add ParameterMap base class (#247)
 - Add CartesianAcceleration class in state representation (#248)
-- Relocate Jacobian and JointState family files to the 'space/' directory (#249)
+- Relocate Jacobian and JointState family files to the 'space/' directory (#249, #251)
 - Update pybindings and clproto with CartesianAcceleration (#250)
 
 ### Pending TODOs for the next release

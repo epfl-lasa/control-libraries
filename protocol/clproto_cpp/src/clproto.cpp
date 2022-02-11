@@ -11,6 +11,7 @@
 #include <state_representation/space/cartesian/CartesianState.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
+#include <state_representation/space/cartesian/CartesianAcceleration.hpp>
 #include <state_representation/space/cartesian/CartesianWrench.hpp>
 #include <state_representation/space/Jacobian.hpp>
 #include <state_representation/space/joint/JointState.hpp>
@@ -374,6 +375,52 @@ bool decode(const std::string& msg, CartesianTwist& obj) {
     obj.set_linear_velocity(decoder(twist.linear_velocity()));
     obj.set_angular_velocity(decoder(twist.angular_velocity()));
     obj.set_empty(twist.spatial_state().state().empty());
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+/* ----------------------
+ *     CartesianAcceleration
+ * ---------------------- */
+template<>
+std::string encode<CartesianAcceleration>(const CartesianAcceleration& obj);
+template<>
+CartesianAcceleration decode(const std::string& msg);
+template<>
+bool decode(const std::string& msg, CartesianAcceleration& obj);
+template<>
+std::string encode<CartesianAcceleration>(const CartesianAcceleration& obj) {
+  proto::StateMessage message;
+  auto cartesian_state = encoder(static_cast<CartesianState>(obj));
+  *message.mutable_cartesian_acceleration()->mutable_spatial_state() = cartesian_state.spatial_state();
+  *message.mutable_cartesian_acceleration()->mutable_linear_acceleration() = cartesian_state.linear_acceleration();
+  *message.mutable_cartesian_acceleration()->mutable_angular_acceleration() = cartesian_state.angular_acceleration();
+  return message.SerializeAsString();
+}
+template<>
+CartesianAcceleration decode(const std::string& msg) {
+  CartesianAcceleration obj;
+  if (!decode(msg, obj)) {
+    throw DecodingException("Could not decode the message into a CartesianAcceleration");
+  }
+  return obj;
+}
+template<>
+bool decode(const std::string& msg, CartesianAcceleration& obj) {
+  try {
+    proto::StateMessage message;
+    if (!(message.ParseFromString(msg)
+        && message.message_type_case() == proto::StateMessage::MessageTypeCase::kCartesianAcceleration)) {
+      return false;
+    }
+    auto acceleration = message.cartesian_acceleration();
+    obj.set_name(acceleration.spatial_state().state().name());
+    obj.set_reference_frame(acceleration.spatial_state().reference_frame());
+    obj.set_linear_acceleration(decoder(acceleration.linear_acceleration()));
+    obj.set_angular_acceleration(decoder(acceleration.angular_acceleration()));
+    obj.set_empty(acceleration.spatial_state().state().empty());
     return true;
   } catch (...) {
     return false;

@@ -2,7 +2,7 @@
 
 #include "dynamical_systems/exceptions/NotImplementedException.hpp"
 #include "dynamical_systems/exceptions/EmptyAttractorException.hpp"
-#include "dynamical_systems/exceptions/InvalidParameterException.hpp"
+#include "state_representation/exceptions/InvalidParameterException.hpp"
 #include "dynamical_systems/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
@@ -19,16 +19,16 @@ template<>
 PointAttractor<CartesianState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain", Eigen::MatrixXd::Identity(6, 6))) {
-  this->param_map_.insert(std::make_pair("attractor", attractor_));
-  this->param_map_.insert(std::make_pair("gain", gain_));
+  this->parameters_.insert(std::make_pair("attractor", attractor_));
+  this->parameters_.insert(std::make_pair("gain", gain_));
 }
 
 template<>
 PointAttractor<JointState>::PointAttractor() :
     attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor"))),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
-  this->param_map_.insert(std::make_pair("attractor", attractor_));
-  this->param_map_.insert(std::make_pair("gain", gain_));
+  this->parameters_.insert(std::make_pair("attractor", attractor_));
+  this->parameters_.insert(std::make_pair("gain", gain_));
 }
 
 template<class S>
@@ -77,7 +77,7 @@ void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& para
     }
     this->gain_->set_value(gain->get_value());
   } else {
-    throw exceptions::InvalidParameterException("Parameter 'gain' has incorrect type");
+    throw state_representation::exceptions::InvalidParameterException("Parameter 'gain' has incorrect type");
   }
 }
 
@@ -149,7 +149,7 @@ void PointAttractor<CartesianState>::validate_and_set_parameter(const std::share
   } else if (parameter->get_name() == "gain") {
     this->set_gain(parameter, 6);
   } else {
-    throw exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
+    throw state_representation::exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
   }
 }
 
@@ -160,7 +160,7 @@ void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_pt
   } else if (parameter->get_name() == "gain") {
     this->set_gain(parameter, this->attractor_->get_value().get_size());
   } else {
-    throw exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
+    throw state_representation::exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
   }
 }
 

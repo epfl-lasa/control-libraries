@@ -32,6 +32,7 @@ Release Versions:
 - Mark the JointState as filled when one index was set (#245)
 - Add user sshd configuration and user 'developer' in base Dockerfile 
   and update all the Dockerfiles and scripts (#244, #246)
+- Add ParameterMap base class (#247)
 
 ### Pending TODOs for the next release
 

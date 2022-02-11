@@ -46,7 +46,7 @@ CartesianAcceleration CartesianAcceleration::Zero(const std::string& name, const
 CartesianAcceleration CartesianAcceleration::Random(const std::string& name, const std::string& reference) {
   // separating in the two lines in needed to avoid compilation error due to ambiguous constructor call
   Eigen::Matrix<double, 6, 1> random = Eigen::Matrix<double, 6, 1>::Random();
-  return CartesianTwist(name, random, reference);
+  return CartesianAcceleration(name, random, reference);
 }
 
 CartesianAcceleration& CartesianAcceleration::operator+=(const CartesianAcceleration& acceleration) {

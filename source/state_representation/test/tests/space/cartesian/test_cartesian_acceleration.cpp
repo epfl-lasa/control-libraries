@@ -18,7 +18,7 @@ TEST(CartesianAccelerationTest, RandomAccelerationInitialization) {
   expect_only_acceleration(random);
 }
 
-TEST(CartesianAccelerationTest, CopyTwist) {
+TEST(CartesianAccelerationTest, CopyAcceleration) {
   CartesianAcceleration acc1 = CartesianAcceleration::Random("test");
   CartesianAcceleration acc2(acc1);
   EXPECT_EQ(acc1.get_name(), acc2.get_name());
@@ -65,7 +65,7 @@ TEST(CartesianAccelerationTest, SetData) {
   EXPECT_THROW(ca1.set_data(acc), exceptions::IncompatibleSizeException);
 }
 
-TEST(CartesianAccelerationTest, CartesianTwistToStdVector) {
+TEST(CartesianAccelerationTest, CartesianAccelerationToStdVector) {
   CartesianAcceleration ca = CartesianAcceleration::Random("test");
   std::vector<double> vec_data = ca.to_std_vector();
   EXPECT_EQ(vec_data.size(), 6);
@@ -74,7 +74,7 @@ TEST(CartesianAccelerationTest, CartesianTwistToStdVector) {
   }
 }
 
-TEST(CartesianAccelerationTest, TestVelocityClamping) {
+TEST(CartesianAccelerationTest, TestAccelerationClamping) {
   CartesianAcceleration acc("test", Eigen::Vector3d(1, -2, 3), Eigen::Vector3d(1, 2, -3));
   acc.clamp(1, 0.5);
   EXPECT_LE(acc.get_linear_acceleration().norm(), 1);
@@ -86,7 +86,7 @@ TEST(CartesianAccelerationTest, TestVelocityClamping) {
   }
 }
 
-TEST(CartesianAccelerationTest, TestTwistNorms) {
+TEST(CartesianAccelerationTest, TestAccelerationNorms) {
   std::vector<double> norms;
   double tolerance = 1e-4;
   CartesianState cs = CartesianState::Random("cs");

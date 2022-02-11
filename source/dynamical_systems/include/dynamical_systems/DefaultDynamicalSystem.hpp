@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dynamical_systems/IDynamicalSystem.hpp"
-#include "dynamical_systems/exceptions/InvalidParameterException.hpp"
+#include "state_representation/exceptions/InvalidParameterException.hpp"
 
 namespace dynamical_systems {
 
@@ -25,8 +25,10 @@ private:
 };
 
 template<class S>
-void DefaultDynamicalSystem<S>::validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>&) {
-  throw exceptions::InvalidParameterException("No parameter to be set on this type of DS.");
+void DefaultDynamicalSystem<S>::validate_and_set_parameter(
+    const std::shared_ptr<state_representation::ParameterInterface>&
+) {
+  throw state_representation::exceptions::InvalidParameterException("No parameter to be set on this type of DS.");
 }
 
 template<class S>

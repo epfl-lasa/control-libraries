@@ -2,7 +2,8 @@
 #include <gtest/gtest.h>
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
-#include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/space/cartesian/CartesianAcceleration.hpp"
+#include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/NotImplementedException.hpp"
@@ -434,6 +435,7 @@ TEST(CartesianStateTest, TestOperators) {
   CartesianState state = CartesianState::Random("world");
   CartesianPose pose = CartesianPose::Random("world");
   CartesianTwist twist = CartesianTwist::Random("world");
+  CartesianAcceleration acc = CartesianAcceleration::Random("world");
   CartesianWrench wrench = CartesianWrench::Random("world");
 
   auto r1 = state * state;
@@ -442,47 +444,55 @@ TEST(CartesianStateTest, TestOperators) {
   std::cout << r2 << std::endl;
   auto r3 = state * twist;
   std::cout << r3 << std::endl;
-  auto r10 = state * wrench;
-  std::cout << r10 << std::endl;
-  auto r4 = pose * state;
+  auto r4 = state * acc;
   std::cout << r4 << std::endl;
-  auto r5 = pose * pose;
+  auto r5 = state * wrench;
   std::cout << r5 << std::endl;
-  auto r6 = pose * twist;
+  auto r6 = pose * state;
   std::cout << r6 << std::endl;
-  auto r11 = pose * wrench;
-  std::cout << r11 << std::endl;
-//  auto r7 = twist * state;
-//  std::cout << r7 << std::endl;
-//  auto r8 = twist * pose;
-//  std::cout << r8 << std::endl;
-//  auto r9 = twist * twist;
-//  std::cout << r9 << std::endl;
-//  auto r12 = twist * wrench;
-//  std::cout << r12 << std::endl;
-//  auto r13 = wrench * wrench;
-//  std::cout << r13 << std::endl;
-//  auto r14 = wrench * state;
-//  std::cout << r14 << std::endl;
-//  auto r15 = wrench * pose;
-//  std::cout << r15 << std::endl;
-//  auto r16 = wrench * twist;
-//  std::cout << r16 << std::endl;
+  auto r7 = pose * pose;
+  std::cout << r7 << std::endl;
+  auto r8 = pose * twist;
+  std::cout << r8 << std::endl;
+  auto r9 = pose * acc;
+  std::cout << r9 << std::endl;
+  auto r10 = pose * wrench;
+  std::cout << r10 << std::endl;
 
-  state *= state;
+//  auto r11 = twist * state;
+//  auto r12 = twist * pose;
+//  auto r13 = twist * twist;
+//  auto r14 = twist * acc;
+//  auto r15 = twist * wrench;
+//  auto r16 = wrench * state;
+//  auto r17 = wrench * pose;
+//  auto r18 = wrench * twist;
+//  auto r19 = wrench * acc;
+//  auto r20 = wrench * wrench;
+
+//  state *= state;
 //  state *= pose;
 //  state *= twist;
+//  state *= acc;
 //  state *= wrench;
 //  pose *= state;
-  pose *= pose;
+//  pose *= pose;
 //  pose *= twist;
+//  pose *= acc;
 //  pose *= wrench;
 //  twist *= state;
 //  twist *= pose;
 //  twist *= twist;
+//  twist *= acc;
 //  twist *= wrench;
+//  acc *= state;
+//  acc *= pose;
+//  acc *= twist;
+//  acc *= acc;
+//  acc *= wrench;
 //  wrench *= state;
 //  wrench *= pose;
 //  wrench *= twist;
+//  wrench *= acc;
 //  wrench *= wrench;
 }

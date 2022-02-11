@@ -17,7 +17,7 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'data',
     'set_data',
     'dist',
-    'get_accelerations',
+    'get_acceleration',
     'get_angular_acceleration',
     'get_angular_velocity',
     'get_force',
@@ -43,7 +43,7 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'normalized',
     'norms',
     'reset_timestamp',
-    'set_accelerations',
+    'set_acceleration',
     'set_angular_acceleration',
     'set_angular_velocity',
     'set_empty',
@@ -131,7 +131,7 @@ class TestCartesianState(unittest.TestCase):
         self.assertAlmostEqual(np.linalg.norm(identity.get_orientation()), 1)
         self.assertAlmostEqual(identity.get_orientation()[0], 1)
         self.assertAlmostEqual(np.linalg.norm(identity.get_twist()), 0)
-        self.assertAlmostEqual(np.linalg.norm(identity.get_accelerations()), 0)
+        self.assertAlmostEqual(np.linalg.norm(identity.get_acceleration()), 0)
         self.assertAlmostEqual(np.linalg.norm(identity.get_wrench()), 0)
 
     def test_random_initialization(self):
@@ -142,7 +142,7 @@ class TestCartesianState(unittest.TestCase):
         self.assertAlmostEqual(np.linalg.norm(random.get_orientation()), 1)
         [self.assertTrue(random.get_orientation()[i] != 0) for i in range(4)]
         self.assertTrue(np.linalg.norm(random.get_twist()) > 0)
-        self.assertTrue(np.linalg.norm(random.get_accelerations()) > 0)
+        self.assertTrue(np.linalg.norm(random.get_acceleration()) > 0)
         self.assertTrue(np.linalg.norm(random.get_wrench()) > 0)
 
     def test_copy(self):
@@ -230,9 +230,9 @@ class TestCartesianState(unittest.TestCase):
         angular_acceleration = np.random.rand(3)
         cs.set_angular_acceleration(angular_acceleration)
         assert_array_almost_equal(cs.get_angular_acceleration(), angular_acceleration)
-        accelerations = np.random.rand(6)
-        cs.set_accelerations(accelerations)
-        assert_array_almost_equal(cs.get_accelerations(), accelerations)
+        acceleration = np.random.rand(6)
+        cs.set_acceleration(acceleration)
+        assert_array_almost_equal(cs.get_acceleration(), acceleration)
 
         # wrench
         force = np.random.rand(3)
@@ -273,7 +273,7 @@ class TestCartesianState(unittest.TestCase):
     def test_get_set_data(self):
         cs1 = CartesianState().Identity("test")
         cs2 = CartesianState().Random("test")
-        concatenated_state = np.hstack((cs1.get_pose(), cs1.get_twist(), cs1.get_accelerations(), cs1.get_wrench()))
+        concatenated_state = np.hstack((cs1.get_pose(), cs1.get_twist(), cs1.get_acceleration(), cs1.get_wrench()))
         assert_array_almost_equal(cs1.data(), concatenated_state)
         assert_array_almost_equal(cs1.array(), concatenated_state)
 
@@ -307,8 +307,8 @@ class TestCartesianState(unittest.TestCase):
                              CartesianStateVariable.LINEAR_ACCELERATION, 3)
         self.clamping_helper(state, state.get_angular_acceleration, state.set_angular_acceleration,
                              CartesianStateVariable.ANGULAR_ACCELERATION, 3)
-        self.clamping_helper(state, state.get_accelerations, state.set_accelerations,
-                             CartesianStateVariable.ACCELERATIONS, 6)
+        self.clamping_helper(state, state.get_acceleration, state.set_acceleration,
+                             CartesianStateVariable.ACCELERATION, 6)
         self.clamping_helper(state, state.get_force, state.set_force, CartesianStateVariable.FORCE, 3)
         self.clamping_helper(state, state.get_torque, state.set_torque, CartesianStateVariable.TORQUE, 3)
         self.clamping_helper(state, state.get_wrench, state.set_wrench, CartesianStateVariable.WRENCH, 6)
@@ -369,7 +369,7 @@ class TestCartesianState(unittest.TestCase):
         self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.ORIENTATION), orient_dist)
         self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.POSE), pos_dist + orient_dist)
         self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.TWIST), lin_vel_dist + ang_vel_dist)
-        self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.ACCELERATIONS), lin_acc_dist + ang_acc_dist)
+        self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.ACCELERATION), lin_acc_dist + ang_acc_dist)
         self.assertAlmostEqual(cs1.dist(cs3, CartesianStateVariable.WRENCH), force_dist + torque_dist)
         self.assertAlmostEqual(cs1.dist(cs3), cs3.dist(cs1, CartesianStateVariable.ALL))
 
@@ -386,7 +386,7 @@ class TestCartesianState(unittest.TestCase):
         assert_array_almost_equal(csum.get_position(), cs1.get_position() + cs2.get_position())
         # TODO orientation sum
         assert_array_almost_equal(csum.get_twist(), cs1.get_twist() + cs2.get_twist())
-        assert_array_almost_equal(csum.get_accelerations(), cs1.get_accelerations() + cs2.get_accelerations())
+        assert_array_almost_equal(csum.get_acceleration(), cs1.get_acceleration() + cs2.get_acceleration())
         assert_array_almost_equal(csum.get_wrench(), cs1.get_wrench() + cs2.get_wrench())
 
         cs1 += cs2
@@ -406,7 +406,7 @@ class TestCartesianState(unittest.TestCase):
         assert_array_almost_equal(cdiff.get_position(), cs1.get_position() - cs2.get_position())
         # TODO orientation diff
         assert_array_almost_equal(cdiff.get_twist(), cs1.get_twist() - cs2.get_twist())
-        assert_array_almost_equal(cdiff.get_accelerations(), cs1.get_accelerations() - cs2.get_accelerations())
+        assert_array_almost_equal(cdiff.get_acceleration(), cs1.get_acceleration() - cs2.get_acceleration())
         assert_array_almost_equal(cdiff.get_wrench(), cs1.get_wrench() - cs2.get_wrench())
 
         cs1 -= cs2
@@ -421,7 +421,7 @@ class TestCartesianState(unittest.TestCase):
         assert_array_almost_equal(cscaled.get_position(), scalar * cs.get_position())
         # TODO orientation mult
         assert_array_almost_equal(cscaled.get_twist(), scalar * cs.get_twist())
-        assert_array_almost_equal(cscaled.get_accelerations(), scalar * cs.get_accelerations())
+        assert_array_almost_equal(cscaled.get_acceleration(), scalar * cs.get_acceleration())
         assert_array_almost_equal(cscaled.get_wrench(), scalar * cs.get_wrench())
 
         cs *= scalar
@@ -440,7 +440,7 @@ class TestCartesianState(unittest.TestCase):
         assert_array_almost_equal(cscaled.get_position(), cs.get_position() / scalar)
         # TODO orientation diff
         assert_array_almost_equal(cscaled.get_twist(), cs.get_twist() / scalar)
-        assert_array_almost_equal(cscaled.get_accelerations(), cs.get_accelerations() / scalar)
+        assert_array_almost_equal(cscaled.get_acceleration(), cs.get_acceleration() / scalar)
         assert_array_almost_equal(cscaled.get_wrench(), cs.get_wrench() / scalar)
 
         cs /= scalar

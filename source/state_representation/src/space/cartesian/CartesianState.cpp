@@ -58,7 +58,7 @@ CartesianState& CartesianState::operator*=(double lambda) {
   this->set_orientation(math_tools::exp(w, lambda / 2.));
   // calculate the other vectors normally
   this->set_twist(lambda * this->get_twist());
-  this->set_accelerations(lambda * this->get_accelerations());
+  this->set_acceleration(lambda * this->get_acceleration());
   this->set_wrench(lambda * this->get_wrench());
   return (*this);
 }
@@ -173,8 +173,8 @@ CartesianState& CartesianState::operator+=(const CartesianState& state) {
   this->set_orientation(this->get_orientation() * orientation);
   // operation on twist
   this->set_twist(this->get_twist() + state.get_twist());
-  // operation on accelerations
-  this->set_accelerations(this->get_accelerations() + state.get_accelerations());
+  // operation on acceleration
+  this->set_acceleration(this->get_acceleration() + state.get_acceleration());
   // operation on wrench
   this->set_wrench(this->get_wrench() + state.get_wrench());
   return (*this);
@@ -205,8 +205,8 @@ CartesianState& CartesianState::operator-=(const CartesianState& state) {
   this->set_orientation(this->get_orientation() * orientation.conjugate());
   // operation on twist
   this->set_twist(this->get_twist() - state.get_twist());
-  // operation on accelerations
-  this->set_accelerations(this->get_accelerations() - state.get_accelerations());
+  // operation on acceleration
+  this->set_acceleration(this->get_acceleration() - state.get_acceleration());
   // operation on wrench
   this->set_wrench(this->get_wrench() - state.get_wrench());
   return (*this);
@@ -301,12 +301,12 @@ double CartesianState::dist(const CartesianState& state, const CartesianStateVar
     result += (this->get_angular_velocity() - state.get_angular_velocity()).norm();
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_linear_acceleration() - state.get_linear_acceleration()).norm();
   }
   if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     result += (this->get_angular_acceleration() - state.get_angular_acceleration()).norm();
   }
@@ -341,12 +341,12 @@ std::vector<double> CartesianState::norms(const CartesianStateVariable& state_va
     norms.push_back(this->get_angular_velocity().norm());
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     norms.push_back(this->get_linear_acceleration().norm());
   }
   if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     norms.push_back(this->get_angular_acceleration().norm());
   }
@@ -380,12 +380,12 @@ void CartesianState::normalize(const CartesianStateVariable& state_variable_type
     this->angular_velocity_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::LINEAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     this->linear_acceleration_.normalize();
   }
   if (state_variable_type == CartesianStateVariable::ANGULAR_ACCELERATION
-      || state_variable_type == CartesianStateVariable::ACCELERATIONS
+      || state_variable_type == CartesianStateVariable::ACCELERATION
       || state_variable_type == CartesianStateVariable::ALL) {
     this->angular_acceleration_.normalize();
   }

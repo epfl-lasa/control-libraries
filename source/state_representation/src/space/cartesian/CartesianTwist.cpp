@@ -39,6 +39,9 @@ CartesianTwist::CartesianTwist(const CartesianTwist& twist) :
 
 CartesianTwist::CartesianTwist(const CartesianPose& pose) : CartesianTwist(pose / std::chrono::seconds(1)) {}
 
+CartesianTwist::CartesianTwist(const CartesianAcceleration& acceleration) :
+    CartesianTwist(acceleration * std::chrono::seconds(1)) {}
+
 CartesianTwist CartesianTwist::Zero(const std::string& name, const std::string& reference) {
   return CartesianState::Identity(name, reference);
 }
@@ -117,6 +120,19 @@ CartesianPose CartesianTwist::operator*(const std::chrono::nanoseconds& dt) cons
   }
   displacement.set_orientation(angular_displacement);
   return displacement;
+}
+
+CartesianAcceleration CartesianTwist::operator/(const std::chrono::nanoseconds& dt) const {
+  if (this->is_empty()) {
+    throw EmptyStateException(this->get_name() + " state is empty");
+  }
+  CartesianAcceleration acceleration(this->get_name(), this->get_reference_frame());
+  // convert the period to a double with the second as reference
+  double period = dt.count();
+  period /= 1e9;
+  acceleration.set_linear_acceleration(this->get_linear_velocity() / period);
+  acceleration.set_angular_acceleration(this->get_angular_velocity() / period);
+  return acceleration;
 }
 
 void CartesianTwist::clamp(

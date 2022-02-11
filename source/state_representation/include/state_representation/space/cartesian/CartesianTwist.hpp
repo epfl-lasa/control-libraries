@@ -2,11 +2,11 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/space/cartesian/CartesianWrench.hpp"
+#include "state_representation/space/cartesian/CartesianAcceleration.hpp"
 
 namespace state_representation {
 class CartesianPose;
-class CartesianWrench;
+class CartesianAcceleration;
 
 /**
  * @class CartesianTwist
@@ -25,7 +25,7 @@ public:
   Eigen::Matrix4d get_transformation_matrix() const = delete;
   const Eigen::Vector3d& get_linear_acceleration() const = delete;
   const Eigen::Vector3d& get_angular_acceleration() const = delete;
-  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  Eigen::Matrix<double, 6, 1> get_acceleration() const = delete;
   const Eigen::Vector3d& get_force() const = delete;
   const Eigen::Vector3d& get_torque() const = delete;
   Eigen::Matrix<double, 6, 1> get_wrench() const = delete;
@@ -40,7 +40,7 @@ public:
   void set_pose(const std::vector<double>& pose) = delete;
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
-  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  void set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration) = delete;
   void set_force(const Eigen::Vector3d& force) = delete;
   void set_torque(const Eigen::Vector3d& torque) = delete;
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) = delete;
@@ -74,6 +74,11 @@ public:
    * @brief Copy constructor from a CartesianPose by considering that it is equivalent to dividing the pose by 1 second
    */
   CartesianTwist(const CartesianPose& pose);
+
+  /**
+   * @brief Copy constructor from a CartesianAcceleration by considering that it is a twist over 1 second
+   */
+  CartesianTwist(const CartesianAcceleration& acceleration);
 
   /**
    * @brief Construct a CartesianTwist from a linear velocity given as a vector.
@@ -189,6 +194,13 @@ public:
    * @return the CartesianPose corresponding to the displacement over the time period
    */
   CartesianPose operator*(const std::chrono::nanoseconds& dt) const;
+
+  /**
+   * @brief Overload the / operator with a time period
+   * @param dt the time period to divide by
+   * @return the corresponding CartesianAcceleration
+   */
+  CartesianAcceleration operator/(const std::chrono::nanoseconds& dt) const;
 
   /**
    * @brief Clamp inplace the magnitude of the twist to the values in argument

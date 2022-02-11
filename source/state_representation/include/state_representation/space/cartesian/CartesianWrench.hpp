@@ -27,7 +27,7 @@ public:
   Eigen::Matrix4d get_transformation_matrix() const = delete;
   const Eigen::Vector3d& get_linear_acceleration() const = delete;
   const Eigen::Vector3d& get_angular_acceleration() const = delete;
-  Eigen::Matrix<double, 6, 1> get_accelerations() const = delete;
+  Eigen::Matrix<double, 6, 1> get_acceleration() const = delete;
   void set_position(const Eigen::Vector3d& position) = delete;
   void set_position(const std::vector<double>& position) = delete;
   void set_position(const double& x, const double& y, const double& z) = delete;
@@ -42,7 +42,7 @@ public:
   void set_twist(const Eigen::Matrix<double, 6, 1>& twist) = delete;
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) = delete;
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) = delete;
-  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) = delete;
+  void set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration) = delete;
   CartesianState operator*=(const CartesianState& state) = delete;
   CartesianState operator*(const CartesianState& state) = delete;
   friend CartesianState operator*=(const CartesianState& state, const CartesianWrench& wrench) = delete;

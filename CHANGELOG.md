@@ -33,6 +33,7 @@ Release Versions:
 - Add user sshd configuration and user 'developer' in base Dockerfile 
   and update all the Dockerfiles and scripts (#244, #246)
 - Add ParameterMap base class (#247)
+- Add CartesianAcceleration class in state representation (#248)
 
 ### Pending TODOs for the next release
 

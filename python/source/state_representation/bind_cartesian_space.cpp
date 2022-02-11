@@ -42,7 +42,7 @@ void cartesian_state_variable(py::module_& m) {
       .value("TWIST", CartesianStateVariable::TWIST)
       .value("LINEAR_ACCELERATION", CartesianStateVariable::LINEAR_ACCELERATION)
       .value("ANGULAR_ACCELERATION", CartesianStateVariable::ANGULAR_ACCELERATION)
-      .value("ACCELERATIONS", CartesianStateVariable::ACCELERATIONS)
+      .value("ACCELERATION", CartesianStateVariable::ACCELERATION)
       .value("FORCE", CartesianStateVariable::FORCE)
       .value("TORQUE", CartesianStateVariable::TORQUE)
       .value("WRENCH", CartesianStateVariable::WRENCH)
@@ -71,8 +71,8 @@ void cartesian_state(py::module_& m) {
   c.def("get_twist", &CartesianState::get_twist, "Getter of the 6d twist from linear and angular velocity attributes");
 
   c.def("get_linear_acceleration", &CartesianState::get_linear_acceleration, "Getter of the linear acceleration attribute");
-  c.def("get_angular_acceleration", &CartesianState::get_angular_acceleration, "Getter of the linear acceleration attribute");
-  c.def("get_accelerations", &CartesianState::get_accelerations, "Getter of the 6d accelerations from linear and angular acceleration attributes");
+  c.def("get_angular_acceleration", &CartesianState::get_angular_acceleration, "Getter of the angular acceleration attribute");
+  c.def("get_acceleration", &CartesianState::get_acceleration, "Getter of the 6d acceleration from linear and angular acceleration attributes");
 
   c.def("get_force", &CartesianState::get_force, "Getter of the force attribute");
   c.def("get_torque", &CartesianState::get_torque, "Getter of the torque attribute");
@@ -91,8 +91,8 @@ void cartesian_state(py::module_& m) {
   c.def("set_twist", &CartesianState::set_twist, "Setter of the linear and angular velocities from a 6d twist vector");
 
   c.def("set_linear_acceleration", &CartesianState::set_linear_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_accelerations", &CartesianState::set_accelerations, "Setter of the linear and angular accelerations from a 6d acceleration vector");
+  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the angular acceleration attribute");
+  c.def("set_acceleration", &CartesianState::set_acceleration, "Setter of the linear and angular acceleration from a 6d acceleration vector");
 
   c.def("set_force", &CartesianState::set_force, "Setter of the force attribute");
   c.def("set_torque", &CartesianState::set_torque, "Setter of the torque attribute");
@@ -168,7 +168,7 @@ void cartesian_pose(py::module_& m) {
       "twist",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
       "force",
       "torque",
       "wrench"
@@ -218,7 +218,6 @@ void cartesian_pose(py::module_& m) {
   });
 }
 
-
 void cartesian_twist(py::module_& m) {
   py::class_<CartesianTwist, CartesianState> c(m, "CartesianTwist");
 
@@ -241,7 +240,7 @@ void cartesian_twist(py::module_& m) {
       "pose",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
       "force",
       "torque",
       "wrench"
@@ -316,7 +315,7 @@ void cartesian_wrench(py::module_& m) {
       "twist",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
   };
 
   for (const std::string& attr : deleted_attributes) {

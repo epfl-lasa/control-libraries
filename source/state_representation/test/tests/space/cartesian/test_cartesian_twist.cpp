@@ -8,7 +8,7 @@ static void expect_only_twist(CartesianTwist& twist) {
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_position().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().norm(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_acceleration().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_wrench().norm(), 0);
 }
 
@@ -34,7 +34,7 @@ TEST(CartesianTwistTest, CopyTwist) {
 
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(twist1).set_pose(Eigen::VectorXd::Random(7));
-  static_cast<CartesianState&>(twist1).set_accelerations(Eigen::VectorXd::Random(6));
+  static_cast<CartesianState&>(twist1).set_acceleration(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(twist1).set_wrench(Eigen::VectorXd::Random(6));
   CartesianTwist twist4 = twist1;
   EXPECT_EQ(twist1.data(), twist4.data());
@@ -108,4 +108,25 @@ TEST(CartesianTwistTest, TestTwistNorms) {
   EXPECT_TRUE(twist_norms.size() == 2);
   EXPECT_NEAR(twist_norms[0], ct.get_linear_velocity().norm(), tolerance);
   EXPECT_NEAR(twist_norms[1], ct.get_angular_velocity().norm(), tolerance);
+}
+
+TEST(CartesianTwistTest, TestVelocityToAcceleration) {
+  auto twist = CartesianTwist::Random("test");
+  std::chrono::seconds dt1(1);
+  std::chrono::milliseconds dt2(100);
+  auto res1 = twist / dt1;
+  EXPECT_EQ(res1.get_linear_acceleration(), twist.get_linear_velocity());
+  EXPECT_EQ(res1.get_angular_acceleration(), twist.get_angular_velocity());
+  auto res2 = twist / dt2;
+  EXPECT_TRUE(res2.get_linear_acceleration().isApprox(10 * twist.get_linear_velocity()));
+  EXPECT_TRUE(res2.get_angular_acceleration().isApprox(10 * twist.get_angular_velocity()));
+}
+
+TEST(CartesianTwistTest, TestImplicitConversion) {
+  CartesianAcceleration acc("test");
+  acc.set_linear_acceleration(Eigen::Vector3d(0.1, 0.1, 0.1));
+  acc.set_linear_acceleration(Eigen::Vector3d(M_PI, 0, 0));
+  CartesianTwist twist(acc);
+  EXPECT_EQ(twist.get_linear_velocity(), acc.get_linear_acceleration());
+  EXPECT_EQ(twist.get_angular_velocity(), acc.get_angular_acceleration());
 }

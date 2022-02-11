@@ -109,3 +109,24 @@ TEST(CartesianTwistTest, TestTwistNorms) {
   EXPECT_NEAR(twist_norms[0], ct.get_linear_velocity().norm(), tolerance);
   EXPECT_NEAR(twist_norms[1], ct.get_angular_velocity().norm(), tolerance);
 }
+
+TEST(CartesianTwistTest, TestVelocityToAcceleration) {
+  auto twist = CartesianTwist::Random("test");
+  std::chrono::seconds dt1(1);
+  std::chrono::milliseconds dt2(100);
+  auto res1 = twist / dt1;
+  EXPECT_EQ(res1.get_linear_acceleration(), twist.get_linear_velocity());
+  EXPECT_EQ(res1.get_angular_acceleration(), twist.get_angular_velocity());
+  auto res2 = twist / dt2;
+  EXPECT_TRUE(res2.get_linear_acceleration().isApprox(10 * twist.get_linear_velocity()));
+  EXPECT_TRUE(res2.get_angular_acceleration().isApprox(10 * twist.get_angular_velocity()));
+}
+
+TEST(CartesianTwistTest, TestImplicitConversion) {
+  CartesianAcceleration acc("test");
+  acc.set_linear_acceleration(Eigen::Vector3d(0.1, 0.1, 0.1));
+  acc.set_linear_acceleration(Eigen::Vector3d(M_PI, 0, 0));
+  CartesianTwist twist(acc);
+  EXPECT_EQ(twist.get_linear_velocity(), acc.get_linear_acceleration());
+  EXPECT_EQ(twist.get_angular_velocity(), acc.get_angular_acceleration());
+}

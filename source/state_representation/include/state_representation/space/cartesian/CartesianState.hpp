@@ -20,7 +20,7 @@ enum class CartesianStateVariable {
   TWIST,
   LINEAR_ACCELERATION,
   ANGULAR_ACCELERATION,
-  ACCELERATIONS,
+  ACCELERATION,
   FORCE,
   TORQUE,
   WRENCH,
@@ -62,21 +62,21 @@ private:
   void set_all_state_variables(const Eigen::VectorXd& new_values);
 
   /**
-   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
+   * @brief Set new_value in the provided state_variable (position, velocity, acceleration, force or torque)
    * @param state_variable the state variable to fill
    * @param new_value the new value of the state variable
    */
   void set_state_variable(Eigen::Vector3d& state_variable, const Eigen::Vector3d& new_value);
 
   /**
-   * @brief Set new_value in the provided state_variable (positions, velocities, accelerations or torques)
+   * @brief Set new_value in the provided state_variable (position, velocity, acceleration, force or torque)
    * @param state_variable the state variable to fill
    * @param new_value the new value of the state variable
    */
   void set_state_variable(Eigen::Vector3d& state_variable, const std::vector<double>& new_value);
 
   /**
-   * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
+   * @brief Set new_value in the provided state_variable (twist, acceleration or wrench)
    * @param linear_state_variable the linear part of the state variable to fill
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
@@ -87,7 +87,7 @@ private:
   );
 
   /**
-   * @brief Set new_value in the provided state_variable (twist, accelerations or wrench)
+   * @brief Set new_value in the provided state_variable (twist, acceleration or wrench)
    * @param linear_state_variable the linear part of the state variable to fill
    * @param angular_state_variable the angular part of the state variable to fill
    * @param new_value the new value of the state variable
@@ -217,7 +217,7 @@ public:
   /**
    * @brief Getter of the 6d acceleration from linear and angular acceleration attributes
    */
-  Eigen::Matrix<double, 6, 1> get_accelerations() const;
+  Eigen::Matrix<double, 6, 1> get_acceleration() const;
 
   /**
    * @brief Getter of the force attribute
@@ -315,9 +315,9 @@ public:
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration);
 
   /**
-   * @brief Setter of the linear and angular accelerations from a 6d acceleration vector
+   * @brief Setter of the linear and angular acceleration from a 6d acceleration vector
    */
-  void set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations);
+  void set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration);
 
   /**
    * @brief Setter of the force attribute
@@ -595,10 +595,10 @@ inline const Eigen::Vector3d& CartesianState::get_angular_acceleration() const {
   return this->angular_acceleration_;
 }
 
-inline Eigen::Matrix<double, 6, 1> CartesianState::get_accelerations() const {
-  Eigen::Matrix<double, 6, 1> accelerations;
-  accelerations << this->get_linear_acceleration(), this->get_angular_acceleration();
-  return accelerations;
+inline Eigen::Matrix<double, 6, 1> CartesianState::get_acceleration() const {
+  Eigen::Matrix<double, 6, 1> acceleration;
+  acceleration << this->get_linear_acceleration(), this->get_angular_acceleration();
+  return acceleration;
 }
 
 inline const Eigen::Vector3d& CartesianState::get_force() const {
@@ -641,8 +641,8 @@ inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVa
     case CartesianStateVariable::ANGULAR_ACCELERATION:
       return this->get_angular_acceleration();
 
-    case CartesianStateVariable::ACCELERATIONS:
-      return this->get_accelerations();
+    case CartesianStateVariable::ACCELERATION:
+      return this->get_acceleration();
 
     case CartesianStateVariable::FORCE:
       return this->get_force();
@@ -655,7 +655,7 @@ inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVa
 
     case CartesianStateVariable::ALL:
       Eigen::VectorXd all_fields(25);
-      all_fields << this->get_pose(), this->get_twist(), this->get_accelerations(), this->get_wrench();
+      all_fields << this->get_pose(), this->get_twist(), this->get_acceleration(), this->get_wrench();
       return all_fields;
   }
   // this never goes here but is compulsory to avoid a warning
@@ -669,7 +669,7 @@ inline void CartesianState::set_all_state_variables(const Eigen::VectorXd& new_v
   }
   this->set_pose(new_values.segment(0, 7));
   this->set_twist(new_values.segment(7, 6));
-  this->set_accelerations(new_values.segment(13, 6));
+  this->set_acceleration(new_values.segment(13, 6));
   this->set_wrench(new_values.segment(19, 6));
 }
 
@@ -764,8 +764,8 @@ inline void CartesianState::set_angular_acceleration(const Eigen::Vector3d& angu
   this->set_state_variable(this->angular_acceleration_, angular_acceleration);
 }
 
-inline void CartesianState::set_accelerations(const Eigen::Matrix<double, 6, 1>& accelerations) {
-  this->set_state_variable(this->linear_acceleration_, this->angular_acceleration_, accelerations);
+inline void CartesianState::set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration) {
+  this->set_state_variable(this->linear_acceleration_, this->angular_acceleration_, acceleration);
 }
 
 inline void CartesianState::set_force(const Eigen::Vector3d& force) {
@@ -816,8 +816,8 @@ inline void CartesianState::set_state_variable(
       this->set_angular_acceleration(new_value);
       break;
 
-    case CartesianStateVariable::ACCELERATIONS:
-      this->set_accelerations(new_value);
+    case CartesianStateVariable::ACCELERATION:
+      this->set_acceleration(new_value);
       break;
 
     case CartesianStateVariable::FORCE:
@@ -835,7 +835,7 @@ inline void CartesianState::set_state_variable(
     case CartesianStateVariable::ALL:
       this->set_pose(new_value.segment(0, 7));
       this->set_twist(new_value.segment(7, 6));
-      this->set_accelerations(new_value.segment(13, 6));
+      this->set_acceleration(new_value.segment(13, 6));
       this->set_wrench(new_value.segment(19, 6));
       break;
   }

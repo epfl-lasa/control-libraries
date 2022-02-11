@@ -8,7 +8,7 @@ static void expect_only_twist(CartesianTwist& twist) {
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_position().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().norm(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_orientation().w(), 1);
-  EXPECT_EQ(static_cast<CartesianState&>(twist).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(twist).get_acceleration().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_wrench().norm(), 0);
 }
 
@@ -34,7 +34,7 @@ TEST(CartesianTwistTest, CopyTwist) {
 
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(twist1).set_pose(Eigen::VectorXd::Random(7));
-  static_cast<CartesianState&>(twist1).set_accelerations(Eigen::VectorXd::Random(6));
+  static_cast<CartesianState&>(twist1).set_acceleration(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(twist1).set_wrench(Eigen::VectorXd::Random(6));
   CartesianTwist twist4 = twist1;
   EXPECT_EQ(twist1.data(), twist4.data());

@@ -9,7 +9,7 @@ static void expect_only_wrench(CartesianWrench& wrench) {
   EXPECT_EQ(static_cast<CartesianState&>(wrench).get_orientation().norm(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(wrench).get_orientation().w(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(wrench).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(wrench).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(wrench).get_acceleration().norm(), 0);
 }
 
 TEST(CartesianWrenchTest, RandomWrenchInitialization) {
@@ -35,7 +35,7 @@ TEST(CartesianWrenchTest, CopyWrench) {
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(wrench1).set_pose(Eigen::VectorXd::Random(7));
   static_cast<CartesianState&>(wrench1).set_twist(Eigen::VectorXd::Random(6));
-  static_cast<CartesianState&>(wrench1).set_accelerations(Eigen::VectorXd::Random(6));
+  static_cast<CartesianState&>(wrench1).set_acceleration(Eigen::VectorXd::Random(6));
   CartesianWrench wrench4 = wrench1;
   EXPECT_EQ(wrench1.data(), wrench4.data());
   expect_only_wrench(wrench4);

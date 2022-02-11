@@ -8,8 +8,8 @@
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/robot/JointPositions.hpp"
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointPositions.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 
 using namespace state_representation;
 

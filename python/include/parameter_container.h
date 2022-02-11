@@ -7,7 +7,7 @@
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
-#include <state_representation/robot/JointPositions.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
 
 struct ParameterValues {
   int int_value;

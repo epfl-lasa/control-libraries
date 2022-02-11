@@ -5,7 +5,7 @@
 #include <dynamical_systems/IDynamicalSystem.hpp>
 #include <dynamical_systems/PointAttractor.hpp>
 #include <state_representation/parameters/Parameter.hpp>
-#include <state_representation/robot/JointState.hpp>
+#include <state_representation/space/joint/JointState.hpp>
 
 #include "parameter_container.h"
 #include "py_dynamical_system.h"

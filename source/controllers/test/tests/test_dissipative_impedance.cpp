@@ -1,8 +1,8 @@
 #include "controllers/impedance/Dissipative.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
-#include "state_representation/robot/JointVelocities.hpp"
-#include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/space/joint/JointVelocities.hpp"
+#include "state_representation/space/joint/JointTorques.hpp"
 #include <numeric>
 #include <gtest/gtest.h>
 

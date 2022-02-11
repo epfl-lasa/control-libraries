@@ -1,6 +1,6 @@
 #include "controllers/impedance/Impedance.hpp"
-#include "state_representation/robot/JointState.hpp"
-#include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/space/joint/JointState.hpp"
+#include "state_representation/space/joint/JointTorques.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include <eigen3/Eigen/Core>

@@ -2,7 +2,7 @@
 
 #include <tuple>
 #include <state_representation/State.hpp>
-#include <state_representation/robot/Jacobian.hpp>
+#include <state_representation/space/Jacobian.hpp>
 
 void bind_jacobian(py::module_& m) {
   py::class_<Jacobian, State> c(m, "Jacobian");

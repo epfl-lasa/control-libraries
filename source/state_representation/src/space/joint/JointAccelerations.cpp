@@ -1,4 +1,4 @@
-#include "state_representation/robot/JointAccelerations.hpp"
+#include "state_representation/space/joint/JointAccelerations.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation::exceptions;

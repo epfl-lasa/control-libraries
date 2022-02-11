@@ -5,7 +5,7 @@
 
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 
 using namespace state_representation;

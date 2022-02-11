@@ -1,4 +1,4 @@
-#include "state_representation/robot/Jacobian.hpp"
+#include "state_representation/space/Jacobian.hpp"
 
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"

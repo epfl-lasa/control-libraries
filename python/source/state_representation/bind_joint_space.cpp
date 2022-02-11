@@ -1,10 +1,10 @@
 #include "state_representation_bindings.h"
 
 #include <state_representation/State.hpp>
-#include <state_representation/robot/JointState.hpp>
-#include <state_representation/robot/JointPositions.hpp>
-#include <state_representation/robot/JointVelocities.hpp>
-#include <state_representation/robot/JointTorques.hpp>
+#include <state_representation/space/joint/JointState.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/space/joint/JointVelocities.hpp>
+#include <state_representation/space/joint/JointTorques.hpp>
 
 void joint_state_variable(py::module_& m) {
   py::enum_<JointStateVariable>(m, "JointStateVariable")

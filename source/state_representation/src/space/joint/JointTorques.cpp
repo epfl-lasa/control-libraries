@@ -1,4 +1,4 @@
-#include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/space/joint/JointTorques.hpp"
 
 using namespace state_representation::exceptions;
 

@@ -1,6 +1,6 @@
 #include <fstream>
 #include <gtest/gtest.h>
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 #include "state_representation/exceptions/IncompatibleSizeException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/JointNotFoundException.hpp"

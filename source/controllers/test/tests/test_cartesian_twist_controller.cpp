@@ -3,7 +3,7 @@
 #include "controllers/impedance/CartesianTwistController.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
-#include "state_representation/robot/JointTorques.hpp"
+#include "state_representation/space/joint/JointTorques.hpp"
 
 using namespace controllers::impedance;
 using namespace state_representation;

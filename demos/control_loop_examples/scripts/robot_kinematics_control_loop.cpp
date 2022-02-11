@@ -3,8 +3,8 @@
 #include <utility>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
-#include <state_representation/robot/JointPositions.hpp>
-#include <state_representation/robot/JointVelocities.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/space/joint/JointVelocities.hpp>
 #include "dynamical_systems/DynamicalSystemFactory.hpp"
 #include <robot_model/Model.hpp>
 

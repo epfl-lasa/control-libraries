@@ -10,7 +10,7 @@
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/space/Jacobian.hpp>
-#include <state_representation/robot/JointState.hpp>
+#include <state_representation/space/joint/JointState.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 
 using namespace std::chrono_literals;

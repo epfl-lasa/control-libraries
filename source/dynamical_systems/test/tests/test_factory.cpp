@@ -4,7 +4,7 @@
 #include "state_representation/exceptions/InvalidParameterException.hpp"
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 
 using namespace state_representation;

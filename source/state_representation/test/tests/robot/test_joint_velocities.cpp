@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "state_representation/robot/JointVelocities.hpp"
+#include "state_representation/space/joint/JointVelocities.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
 using namespace state_representation;

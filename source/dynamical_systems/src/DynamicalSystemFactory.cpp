@@ -4,7 +4,7 @@
 #include "dynamical_systems/DefaultDynamicalSystem.hpp"
 #include "dynamical_systems/PointAttractor.hpp"
 #include "dynamical_systems/Ring.hpp"
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 
 using namespace state_representation;
 

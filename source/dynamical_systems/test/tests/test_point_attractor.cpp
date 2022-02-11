@@ -6,8 +6,8 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/robot/JointState.hpp"
-#include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/space/joint/JointState.hpp"
+#include "state_representation/space/joint/JointPositions.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"

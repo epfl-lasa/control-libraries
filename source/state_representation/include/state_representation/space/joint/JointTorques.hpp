@@ -1,6 +1,6 @@
 #pragma once
 
-#include "state_representation/robot/JointState.hpp"
+#include "state_representation/space/joint/JointState.hpp"
 
 namespace state_representation {
 /**

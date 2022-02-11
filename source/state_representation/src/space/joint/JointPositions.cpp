@@ -1,4 +1,4 @@
-#include "state_representation/robot/JointPositions.hpp"
+#include "state_representation/space/joint/JointPositions.hpp"
 
 #include "state_representation/exceptions/EmptyStateException.hpp"
 

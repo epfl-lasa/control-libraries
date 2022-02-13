@@ -5,8 +5,8 @@ import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 from state_representation import State, CartesianState, StateType, CartesianStateVariable
 
-from .test_spatial_state import SPATIAL_STATE_METHOD_EXPECTS
-from ..test_state import STATE_METHOD_EXPECTS
+from ..test_spatial_state import SPATIAL_STATE_METHOD_EXPECTS
+from ...test_state import STATE_METHOD_EXPECTS
 
 CARTESIAN_STATE_METHOD_EXPECTS = [
     'Identity',

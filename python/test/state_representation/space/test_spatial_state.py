@@ -2,7 +2,7 @@ import unittest
 import copy
 
 from state_representation import SpatialState, StateType
-from test.test_state import STATE_METHOD_EXPECTS
+from ..test_state import STATE_METHOD_EXPECTS
 
 SPATIAL_STATE_METHOD_EXPECTS = [
     'get_reference_frame',

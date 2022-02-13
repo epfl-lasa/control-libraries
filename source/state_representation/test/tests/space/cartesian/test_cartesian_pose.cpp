@@ -5,7 +5,6 @@
 using namespace state_representation;
 
 static void expect_only_pose(CartesianPose& pose) {
-  EXPECT_EQ(static_cast<CartesianState&>(pose).get_orientation().norm(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(pose).get_twist().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(pose).get_acceleration().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(pose).get_wrench().norm(), 0);

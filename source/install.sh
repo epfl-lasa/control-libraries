@@ -9,6 +9,7 @@ BUILD_TESTING="OFF"
 INSTALL_DESTINATION="/usr/local"
 AUTO_INSTALL=""
 
+EIGEN_VERSION=3.4.0
 OSQP_TAG=v0.6.2
 OSQP_EIGEN_TAG=v0.6.4
 
@@ -80,10 +81,10 @@ fi
 
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-mkdir -p "${SOURCE_PATH}"/tmp/lib
-cd "${SOURCE_PATH}"/tmp/lib || exit 1
-wget -c https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz -O - | tar -xz
-cd eigen-3.4.0 && mkdir build && cd build && cmake .. && make install
+rm -rf /usr/include/eigen3 && rm -rf /usr/local/include/eigen3
+mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
+wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
+cd "eigen-${EIGEN_VERSION}" && mkdir build && cd build && cmake .. && make install || exit 1
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then

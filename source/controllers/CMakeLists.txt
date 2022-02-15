@@ -1,9 +1,13 @@
 project(controllers)
 
+find_library(robot_model REQUIRED)
+
 get_target_property(STATE_REPRESENTATION_INCLUDE_DIR state_representation INCLUDE_DIRECTORIES)
+get_target_property(ROBOT_MODEL_INCLUDE_DIR robot_model INCLUDE_DIRECTORIES)
 include_directories(
   include
   ${STATE_REPRESENTATION_INCLUDE_DIR}
+  ${ROBOT_MODEL_INCLUDE_DIR}
 )
 
 set(CORE_SOURCES
@@ -11,6 +15,12 @@ set(CORE_SOURCES
   src/impedance/Impedance.cpp
   src/impedance/VelocityImpedance.cpp
   src/impedance/Dissipative.cpp
+  src/ControllerFactory.cpp
+  src/IController.cpp
+  src/impedance/CompliantTwist.cpp
+  src/impedance/NewImpedance.cpp
+  src/impedance/NewVelocityImpedance.cpp
+  src/impedance/NewDissipative.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED
@@ -20,6 +30,7 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
   Eigen3::Eigen
   state_representation
+  robot_model
 )
 
 install(DIRECTORY include/
@@ -42,5 +53,6 @@ if (BUILD_TESTING)
     ${GTEST_LIBRARIES}
     pthread
   )
+  target_compile_definitions(test_controllers PRIVATE TEST_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures/")
   add_test(NAME test_controllers COMMAND test_controllers)
 endif ()

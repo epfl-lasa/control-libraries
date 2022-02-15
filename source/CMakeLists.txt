@@ -39,14 +39,14 @@ endif()
 
 add_subdirectory(state_representation)
 
-if(BUILD_CONTROLLERS)
-  add_subdirectory(controllers)
-endif()
-
 if(BUILD_DYNAMICAL_SYSTEMS)
   add_subdirectory(dynamical_systems)
 endif()
 
-if(BUILD_ROBOT_MODEL)
+if(BUILD_ROBOT_MODEL OR BUILD_CONTROLLERS)
   add_subdirectory(robot_model)
+endif()
+
+if(BUILD_CONTROLLERS)
+  add_subdirectory(controllers)
 endif()

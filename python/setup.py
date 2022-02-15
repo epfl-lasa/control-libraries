@@ -13,7 +13,7 @@ __install_clproto_module__ = True
 __install_dynamical_systems_module__ = True
 __install_robot_model_module__ = True
 
-# check that eigen and state_representation libraries can be found
+# check that necessary libraries can be found
 try:
     eigen_dir = os.popen(
         'cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE').read().strip()
@@ -24,7 +24,6 @@ try:
 
     if __install_robot_model_module__:
         __include_dirs__.append('/usr/local/include/osqp')
-        __include_dirs__.append('/usr/local/include/OsqpEigen')
         __include_dirs__.append('/opt/openrobots/include')
 
     for lib in __libraries__:
@@ -37,6 +36,9 @@ try:
             if lib == 'dynamical_systems':
                 warnings.warn(f'{msg} The dynamical_systems module will not be installed.')
                 __install_dynamical_systems_module__ = False
+            if lib == 'robot_model':
+                warnings.warn(f'{msg} The robot_model module will not be installed.')
+                __install_robot_model_module__ = False
             else:
                 raise Exception(msg)
 except Exception as e:

@@ -81,10 +81,13 @@ fi
 
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-rm -rf /usr/include/eigen3 && rm -rf /usr/local/include/eigen3
-mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
-wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
-cd "eigen-${EIGEN_VERSION}" && mkdir build && cd build && cmake .. && make install || exit 1
+INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
+if [ "${INSTALLED_EIGEN}" != "${EIGEN_VERSION}" ]; then
+  rm -rf /usr/include/eigen3 && rm -rf /usr/local/include/eigen3
+  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
+  wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
+  cd "eigen-${EIGEN_VERSION}" && mkdir build && cd build && cmake .. && make install || exit 1
+fi
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then

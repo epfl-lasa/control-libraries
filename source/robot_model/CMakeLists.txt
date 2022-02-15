@@ -3,7 +3,6 @@ set(LIBRARY_NAME robot_model)
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 find_package(pinocchio REQUIRED)
 find_package(OsqpEigen REQUIRED)
-find_package(osqp REQUIRED)
 
 set(CORE_SOURCES
   src/Model.cpp

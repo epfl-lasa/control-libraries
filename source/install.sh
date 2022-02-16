@@ -82,7 +82,7 @@ fi
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
 INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
-if [ "${INSTALLED_EIGEN}" != "${EIGEN_VERSION}" ]; then
+if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
   rm -rf /usr/include/eigen3 && rm -rf /usr/local/include/eigen3
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1

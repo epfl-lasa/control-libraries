@@ -17,10 +17,11 @@ set(CORE_SOURCES
   src/space/joint/JointAccelerations.cpp
   src/space/joint/JointTorques.cpp
   src/space/Jacobian.cpp
-  src/parameters/ParameterInterface.cpp
-  src/parameters/Parameter.cpp
-  src/parameters/Predicate.cpp
   src/parameters/Event.cpp
+  src/parameters/Parameter.cpp
+  src/parameters/ParameterInterface.cpp
+  src/parameters/ParameterMap.cpp
+  src/parameters/Predicate.cpp
   src/geometry/Shape.cpp
   src/geometry/Ellipsoid.cpp
 )

@@ -39,11 +39,24 @@ public:
   );
 
   /**
-   * @brief Constructor taking gain values as a vector argument
-   * @param gains Eigen 4d vector of gains in the order linear_principle_damping,
-   * linear_orthogonal_damping, angular_stiffness, angular_damping
+   * @brief Compute the force (task space) or torque (joint space) command based on the input state 
+   * of the system as the error between the desired state and the real state.
+   * @param desired_state the desired state to reach
+   * @param feedback_state the real state of the system as read from feedback loop
+   * @return the output command at the input state
    */
-  explicit CompliantTwist(const Eigen::Vector4d& gains);
+  state_representation::CartesianState compute_command(
+      const state_representation::CartesianState& desired_state,
+      const state_representation::CartesianState& feedback_state
+  ) override;
+
+protected:
+
+  /**
+   * @brief Validate and set parameters for controller gains.
+   * @param parameter A parameter interface pointer
+   */
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 
   /**
    * @brief Setter of the linear principle damping
@@ -82,52 +95,6 @@ public:
    * @param angular_damping the new angular damping value
    */
   void set_angular_gains(double angular_stiffness, double angular_damping);
-
-  /**
-   * @brief Setter of the controller gains
-   * @param linear_principle_damping damping along principle eigenvector of linear velocity error
-   * @param linear_orthogonal_damping damping along secondary eigenvectors of linear velocity error
-   * @param angular_stiffness stiffness of angular displacement
-   * @param angular_damping damping of angular velocity error
-   */
-  void set_gains(
-      double linear_principle_damping, double linear_orthogonal_damping, double angular_stiffness,
-      double angular_damping
-  );
-
-  /**
-   * @brief Setter of the controller gains
-   * @param the new gains as a vector of linear principle damping,
-   * linear orthogonal, angular stiffness and angular damping values
-   */
-  void set_gains(const Eigen::Vector4d& gains);
-
-  /**
-   * @brief Getter of the controller gains
-   * @return the new gains as a vector of linear principle damping,
-   * linear orthogonal, angular stiffness and angular damping values
-   */
-  Eigen::Vector4d get_gains() const;
-
-  /**
-   * @brief Compute the force (task space) or torque (joint space) command based on the input state 
-   * of the system as the error between the desired state and the real state.
-   * @param desired_state the desired state to reach
-   * @param feedback_state the real state of the system as read from feedback loop
-   * @return the output command at the input state
-   */
-  state_representation::CartesianState compute_command(
-      const state_representation::CartesianState& desired_state,
-      const state_representation::CartesianState& feedback_state
-  ) override;
-
-protected:
-
-  /**
-   * @brief Validate and set parameters for controller gains.
-   * @param parameter A parameter interface pointer
-   */
-  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 
   std::shared_ptr<state_representation::Parameter<double>>
       linear_principle_damping_; ///< damping along principle eigenvector of linear velocity error

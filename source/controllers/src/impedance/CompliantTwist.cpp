@@ -31,27 +31,6 @@ CompliantTwist::CompliantTwist(
   this->set_parameters(parameters);
 }
 
-CompliantTwist::CompliantTwist(const Eigen::Vector4d& gains) :
-    CompliantTwist(gains(0), gains(1), gains(2), gains(3)) {}
-
-void CompliantTwist::set_gains(
-    double linear_principle_damping, double linear_orthogonal_damping, double angular_stiffness, double angular_damping
-) {
-  set_linear_gains(linear_principle_damping, linear_orthogonal_damping);
-  set_angular_gains(angular_stiffness, angular_damping);
-}
-
-void CompliantTwist::set_gains(const Eigen::Vector4d& gains) {
-  set_linear_gains(gains(0), gains(1));
-  set_angular_gains(gains(2), gains(3));
-}
-
-Eigen::Vector4d CompliantTwist::get_gains() const {
-  return Eigen::Vector4d(
-      linear_principle_damping_->get_value(), linear_orthogonal_damping_->get_value(), angular_stiffness_->get_value(),
-      angular_damping_->get_value());
-}
-
 void CompliantTwist::set_linear_principle_damping(double linear_principle_damping) {
   set_linear_gains(linear_principle_damping, linear_orthogonal_damping_->get_value());
 }

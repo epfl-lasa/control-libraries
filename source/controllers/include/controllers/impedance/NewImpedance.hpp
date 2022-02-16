@@ -118,6 +118,15 @@ Eigen::MatrixXd NewImpedance<S>::gain_matrix_from_parameter(
     }
     Eigen::VectorXd diagonal = Eigen::VectorXd::Map(gain->get_value().data(), this->dimensions_);
     matrix = diagonal.asDiagonal();
+  } else if (parameter->get_type() == state_representation::StateType::PARAMETER_VECTOR) {
+    auto gain = std::static_pointer_cast<state_representation::Parameter<Eigen::VectorXd>>(parameter);
+    if (gain->get_value().size() != this->dimensions_) {
+      throw state_representation::exceptions::IncompatibleSizeException(
+          "The provided diagonal coefficients do not match the dimensionality of the controller ("
+              + std::to_string(this->dimensions_) + ")");
+    }
+    Eigen::VectorXd diagonal = gain->get_value();
+    matrix = diagonal.asDiagonal();
   } else if (parameter->get_type() == state_representation::StateType::PARAMETER_MATRIX) {
     auto gain = std::static_pointer_cast<state_representation::Parameter<Eigen::MatrixXd>>(parameter);
     if (gain->get_value().rows() != this->dimensions_ || gain->get_value().cols() != this->dimensions_) {

@@ -46,35 +46,35 @@ TEST(ControllerFactoryTest, CreateCartesianController) {
   ASSERT_NE(ctrl, nullptr);
   {
     auto parameters = ctrl->get_parameters();
-    EXPECT_EQ(parameters.count("stiffness"), 1);
+    EXPECT_EQ(parameters.count("damping"), 1);
   }
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(), 6 * 6);
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(), 6 * 6);
   EXPECT_NO_THROW(ctrl->compute_command(command_state, feedback_state));
 
   ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::DISSIPATIVE_LINEAR);
   ASSERT_NE(ctrl, nullptr);
   {
     auto parameters = ctrl->get_parameters();
-    EXPECT_EQ(parameters.count("stiffness"), 1);
+    EXPECT_EQ(parameters.count("damping"), 1);
   }
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(), 6 * 6);
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(), 6 * 6);
   EXPECT_NO_THROW(ctrl->compute_command(command_state, feedback_state));
 
   ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::DISSIPATIVE_ANGULAR);
   {
     auto parameters = ctrl->get_parameters();
-    EXPECT_EQ(parameters.count("stiffness"), 1);
+    EXPECT_EQ(parameters.count("damping"), 1);
   }
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(), 6 * 6);
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(), 6 * 6);
   EXPECT_NO_THROW(ctrl->compute_command(command_state, feedback_state));
 
   ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::DISSIPATIVE_DECOUPLED);
   ASSERT_NE(ctrl, nullptr);
   {
     auto parameters = ctrl->get_parameters();
-    EXPECT_EQ(parameters.count("stiffness"), 1);
+    EXPECT_EQ(parameters.count("damping"), 1);
   }
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(), 6 * 6);
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(), 6 * 6);
   EXPECT_NO_THROW(ctrl->compute_command(command_state, feedback_state));
 
   ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::COMPLIANT_TWIST);
@@ -131,9 +131,9 @@ TEST(ControllerFactoryTest, CreateJointController) {
   ASSERT_NE(ctrl, nullptr);
   {
     auto parameters = ctrl->get_parameters();
-    EXPECT_EQ(parameters.count("stiffness"), 1);
+    EXPECT_EQ(parameters.count("damping"), 1);
   }
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(), dim * dim);
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(), dim * dim);
   EXPECT_NO_THROW(ctrl->compute_command(command_state, feedback_state));
 
   EXPECT_THROW(JointControllerFactory::create_controller(CONTROLLER_TYPE::DISSIPATIVE_LINEAR),
@@ -193,16 +193,16 @@ TEST(ControllerFactoryTest, CreateControllerWithRobot) {
 
 TEST(ControllerFactoryTest, CreateControllerWithRobotAndParams) {
   std::list<std::shared_ptr<state_representation::ParameterInterface>> parameters;
-  parameters.emplace_back(make_shared_parameter("stiffness", 5.0));
+  parameters.emplace_back(make_shared_parameter("damping", 5.0));
   auto robot = robot_model::Model("robot", std::string(TEST_FIXTURES) + "panda_arm.urdf");
 
   EXPECT_THROW(JointControllerFactory::create_controller(CONTROLLER_TYPE::NONE, parameters, robot),
                controllers::exceptions::InvalidControllerException);
 
-  auto ctrl = JointControllerFactory::create_controller(CONTROLLER_TYPE::DISSIPATIVE, parameters, robot);
+  auto ctrl = JointControllerFactory::create_controller(CONTROLLER_TYPE::IMPEDANCE, parameters, robot);
   ASSERT_NE(ctrl, nullptr);
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").size(),
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").size(),
             robot.get_number_of_joints() * robot.get_number_of_joints());
 
-  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("stiffness").sum(), 5.0 * robot.get_number_of_joints());
+  EXPECT_EQ(ctrl->get_parameter_value<Eigen::MatrixXd>("damping").sum(), 5.0 * robot.get_number_of_joints());
 }

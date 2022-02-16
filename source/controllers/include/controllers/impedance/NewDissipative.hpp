@@ -59,6 +59,12 @@ public:
 protected:
 
   /**
+   * @brief Validate and set parameter for damping eigenvalues.
+   * @param parameter A parameter interface pointer
+   */
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+
+  /**
    * @brief Orthornormalize the basis matrix given in input wrt the main engenvector
    * @param basis the basis matrix to orthonormalize
    * @param main_eigenvector the main eigenvector used to compute the basis.
@@ -100,10 +106,13 @@ NewDissipative<S>::NewDissipative(const ComputationalSpaceType& computational_sp
             "damping_eigenvalues", Eigen::ArrayXd::Ones(dimensions))),
     computational_space_(computational_space),
     basis_(Eigen::MatrixXd::Random(dimensions, dimensions)) {
-  this->parameters_.erase("damping");
-  this->damping_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
+  this->parameters_.erase("stiffness");
+  this->stiffness_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
   this->parameters_.erase("inertia");
   this->inertia_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
+
+  this->damping_->set_value(Eigen::MatrixXd::Identity(dimensions, dimensions));
+  this->parameters_.insert(std::make_pair("damping_eigenvalues", damping_eigenvalues_));
 }
 
 template<class S>
@@ -113,6 +122,15 @@ NewDissipative<S>::NewDissipative(
 ) :
     NewDissipative<S>(computational_space, dimensions) {
   this->set_parameters(parameters);
+}
+
+template<class S>
+void NewDissipative<S>::validate_and_set_parameter(
+    const std::shared_ptr<state_representation::ParameterInterface>& parameter
+) {
+  if (parameter->get_name() == "damping_eigenvalues") {
+    this->damping_eigenvalues_->set_value(this->gain_matrix_from_parameter(parameter).diagonal());
+  }
 }
 
 template<class S>

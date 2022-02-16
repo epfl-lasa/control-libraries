@@ -20,11 +20,13 @@ The first input argument is always the controller type (defined in `controllers/
 #include "controllers/ControllerFactory.hpp"
 
 using namespace controllers;
+using namespace state_representation;
 
 // create a Cartesian impedance controller
-auto cart_ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::IMPEDANCE);
+std::shared_ptr<IController<CartesianState>> cart_ctrl;
+cart_ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::IMPEDANCE);
 
-// create a compliant Cartesian twist controller
+// create a compliant Cartesian twist controller using "auto" to avoid verbose typing
 auto twist_ctrl = CartesianControllerFactory::create_controller(CONTROLLER_TYPE::COMPLIANT_TWIST);
 ```
 
@@ -90,7 +92,7 @@ methods:
 - `get_parameter_value<T>(name)`
 - `set_parameters(parameters)`
 - `set_parameter(parameter)`
-- `set_parameter_value(parameter, value)`
+- `set_parameter_value(name, value)`
 
 These methods can be used after construction to get or set controller parameters. Refer to the documentation
 on `controllers::IController<>` and `state_representation::ParameterMap` for more information.

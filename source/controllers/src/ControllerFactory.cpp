@@ -8,8 +8,7 @@ namespace controllers {
 
 template<>
 std::shared_ptr<IController<CartesianState>> ControllerFactory<CartesianState>::create_controller(
-    CONTROLLER_TYPE type, const std::list<std::shared_ptr<state_representation::ParameterInterface>>&,
-    unsigned int
+    CONTROLLER_TYPE type, const std::list<std::shared_ptr<ParameterInterface>>&, unsigned int
 ) {
   switch (type) {
     default:
@@ -20,8 +19,7 @@ std::shared_ptr<IController<CartesianState>> ControllerFactory<CartesianState>::
 
 template<>
 std::shared_ptr<IController<JointState>> ControllerFactory<JointState>::create_controller(
-    CONTROLLER_TYPE type, const std::list<std::shared_ptr<state_representation::ParameterInterface>>&,
-    unsigned int
+    CONTROLLER_TYPE type, const std::list<std::shared_ptr<ParameterInterface>>&, unsigned int
 ) {
   switch (type) {
     default:
@@ -32,7 +30,7 @@ std::shared_ptr<IController<JointState>> ControllerFactory<JointState>::create_c
 
 template<>
 std::shared_ptr<IController<CartesianState>> ControllerFactory<CartesianState>::create_controller(
-    CONTROLLER_TYPE type, const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
+    CONTROLLER_TYPE type, const std::list<std::shared_ptr<ParameterInterface>>& parameters,
     const robot_model::Model& robot_model
 ) {
   auto ctrl = ControllerFactory<CartesianState>::create_controller(type, parameters);
@@ -45,7 +43,7 @@ std::shared_ptr<IController<CartesianState>> ControllerFactory<CartesianState>::
 
 template<>
 std::shared_ptr<IController<JointState>> ControllerFactory<JointState>::create_controller(
-    CONTROLLER_TYPE type, const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
+    CONTROLLER_TYPE type, const std::list<std::shared_ptr<ParameterInterface>>& parameters,
     const robot_model::Model& robot_model
 ) {
   auto ctrl = ControllerFactory<JointState>::create_controller(type, parameters, robot_model.get_number_of_joints());

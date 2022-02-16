@@ -36,7 +36,7 @@ Release Versions:
 - Add CartesianAcceleration class in state representation (#248)
 - Relocate Jacobian and JointState family files to the 'space/' directory (#249, #251)
 - Update pybindings and clproto with CartesianAcceleration (#250)
-- Add IController and ControllerFactory (#253)
+- Add IController and ControllerFactory and refactor Controllers (#253, #254)
 
 ### Pending TODOs for the next release
 

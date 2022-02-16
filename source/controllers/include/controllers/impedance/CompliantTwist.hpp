@@ -7,7 +7,7 @@
 
 namespace controllers::impedance {
 /**
- * @class NewCartesianTwistController
+ * @class CompliantTwist
  * @brief A concrete controller class specifically for controlling
  * 6 degree of freedom Cartesian twist with a combination of impedance
  * controllers. The linear velocity is controlled with the Dissipative

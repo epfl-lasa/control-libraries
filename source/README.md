@@ -45,7 +45,7 @@ a robot.
 
 Source: [controllers](./controllers)
 
-Dependencies: `state_representation`
+Dependencies: `state_representation`, `robot_model`
 
 ---
 

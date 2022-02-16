@@ -71,6 +71,13 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+if [ "${BUILD_CONTROLLERS}" == "ON" ] && [ "${BUILD_ROBOT_MODEL}" == "OFF" ]; then
+  echo "The robot model library is required to build the controllers library!"
+  echo "Either disable controller installation with '--no-controllers' or enable"
+  echo "the robot model installation by removing the '--no-robot-model' flag."
+  exit 1
+fi
+
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
 mkdir -p "${SOURCE_PATH}"/tmp/lib

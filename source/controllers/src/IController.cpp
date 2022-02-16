@@ -7,7 +7,7 @@ using namespace state_representation;
 namespace controllers {
 
 template<class S>
-JointState IController<S>::compute_command(const S&, const S&, const state_representation::Jacobian&) {
+JointState IController<S>::compute_command(const S&, const S&, const Jacobian&) {
   throw exceptions::NotImplementedException(
       "Computation of a joint-space command with a Jacobian is not implemented for this controller.");
 }
@@ -21,7 +21,7 @@ JointState IController<S>::compute_command(const S&, const S&, const JointPositi
 template<>
 JointState IController<CartesianState>::compute_command(
     const CartesianState& command_state, const CartesianState& feedback_state,
-    const state_representation::Jacobian& jacobian
+    const Jacobian& jacobian
 ) {
   return jacobian.transpose() * CartesianWrench(this->compute_command(command_state, feedback_state));
 }

@@ -56,37 +56,6 @@ public:
    */
   S compute_command(const S& command_state, const S& feedback_state) override;
 
-  /**
-   * @brief Getter of the damping eigenvalues parameter
-   * @return the eigenvalues as a Vetor6D
-   */
-  Eigen::VectorXd get_damping_eigenvalues() const;
-
-  /**
-   * @brief Getter of the damping eigenvalue corresponding to the specified index
-   * @param index the index of the eigenvalue (number between 0 and 5)
-   * @return the eigenvalue at desired index
-   */
-  double get_damping_eigenvalue(unsigned int index) const;
-
-  /**
-   * @brief Setter of the damping eigenvalues parameter
-   * @param damping_eigenvalues the new values of the eigenvalue as a Vector6D
-   */
-  void set_damping_eigenvalues(const Eigen::VectorXd& damping_eigenvalues);
-
-  /**
-   * @brief Setter of the damping eigenvalue corresponding to the specified index
-   * @param damping_eigenvalue the new value of the eigenvalue
-   * @param index the index of the eigenvalue (number between 0 and 5)
-   */
-  void set_damping_eigenvalue(double damping_eigenvalue, unsigned int index);
-
-  /**
-   * @brief Get the eigenvalues in a diagonal matrix form
-   */
-  Eigen::MatrixXd get_diagonal_eigenvalues() const;
-
 protected:
 
   /**
@@ -147,34 +116,6 @@ NewDissipative<S>::NewDissipative(
 }
 
 template<class S>
-inline Eigen::VectorXd NewDissipative<S>::get_damping_eigenvalues() const {
-  return this->damping_eigenvalues_->get_value();
-}
-
-template<class S>
-inline double NewDissipative<S>::get_damping_eigenvalue(unsigned int index) const {
-  Eigen::VectorXd eigenvalues = this->get_damping_eigenvalues();
-  return eigenvalues(index);
-}
-
-template<class S>
-inline void NewDissipative<S>::set_damping_eigenvalues(const Eigen::VectorXd& damping_eigenvalues) {
-  this->damping_eigenvalues_->set_value(damping_eigenvalues);
-}
-
-template<class S>
-inline void NewDissipative<S>::set_damping_eigenvalue(double damping_eigenvalue, unsigned int index) {
-  Eigen::VectorXd eigenvalues = this->get_damping_eigenvalues();
-  eigenvalues(index) = damping_eigenvalue;
-  this->set_damping_eigenvalues(eigenvalues);
-}
-
-template<class S>
-inline Eigen::MatrixXd NewDissipative<S>::get_diagonal_eigenvalues() const {
-  return this->get_damping_eigenvalues().asDiagonal();
-}
-
-template<class S>
 Eigen::MatrixXd NewDissipative<S>::orthonormalize_basis(
     const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector
 ) {
@@ -203,7 +144,8 @@ S NewDissipative<S>::compute_command(
 template<class S>
 void NewDissipative<S>::compute_damping(const S& desired_velocity) {
   this->basis_ = this->compute_orthonormal_basis(desired_velocity);
-  this->damping_->set_value(this->basis_ * this->get_diagonal_eigenvalues() * this->basis_.transpose());
+  auto diagonal_eigenvalues = this->damping_eigenvalues_->get_value().asDiagonal();
+  this->damping_->set_value(this->basis_ * diagonal_eigenvalues * this->basis_.transpose());
 }
 
 }// namespace controllers

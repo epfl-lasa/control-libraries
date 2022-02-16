@@ -40,42 +40,6 @@ public:
    */
   S compute_command(const S& command_state, const S& feedback_state) override;
 
-  /**
-   * @brief Getter of the damping matrix
-   * @return the damping matrix
-   */
-  [[nodiscard]] const Eigen::MatrixXd& get_damping() const;
-
-  /**
-   * @brief Getter of the stiffness matrix
-   * @return the stiffness matrix
-   */
-  [[nodiscard]] const Eigen::MatrixXd& get_stiffness() const;
-
-  /**
-   * @brief Getter of the inertia matrix
-   * @return the inertia matrix
-   */
-  [[nodiscard]] const Eigen::MatrixXd& get_inertia() const;
-
-  /**
-   * @brief Setter of the damping matrix
-   * @param the new damping matrix
-   */
-  void set_damping(const Eigen::MatrixXd& damping);
-
-  /**
-   * @brief Setter of the stiffness matrix
-   * @param the new stiffness matrix
-   */
-  void set_stiffness(const Eigen::MatrixXd& stiffness);
-
-  /**
-   * @brief Setter of the inertia matrix
-   * @param the new inertia matrix
-   */
-  void set_inertia(const Eigen::MatrixXd& inertia);
-
 protected:
 
   /**
@@ -167,36 +131,6 @@ Eigen::MatrixXd NewImpedance<S>::gain_matrix_from_parameter(
         "Parameter " + parameter->get_name() + " has incorrect type");
   }
   return matrix;
-}
-
-template<class S>
-const Eigen::MatrixXd& NewImpedance<S>::get_damping() const {
-  return this->damping_->get_value();
-}
-
-template<class S>
-const Eigen::MatrixXd& NewImpedance<S>::get_stiffness() const {
-  return this->stiffness_->get_value();
-}
-
-template<class S>
-const Eigen::MatrixXd& NewImpedance<S>::get_inertia() const {
-  return this->inertia_->get_value();
-}
-
-template<class S>
-inline void NewImpedance<S>::set_damping(const Eigen::MatrixXd& damping) {
-  this->damping_->set_value(damping);
-}
-
-template<class S>
-inline void NewImpedance<S>::set_stiffness(const Eigen::MatrixXd& stiffness) {
-  this->stiffness_->set_value(stiffness);
-}
-
-template<class S>
-inline void NewImpedance<S>::set_inertia(const Eigen::MatrixXd& inertia) {
-  this->inertia_->set_value(inertia);
 }
 
 }// namespace controllers

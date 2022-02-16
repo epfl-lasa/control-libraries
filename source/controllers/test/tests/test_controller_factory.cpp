@@ -50,13 +50,14 @@ TEST(ControllerFactoryTest, CreateControllerWithRobot) {
   EXPECT_THROW(CartesianControllerFactory::create_controller(CONTROLLER_TYPE::NONE, robot),
                controllers::exceptions::InvalidControllerException);
 
-  auto joint_ctrl = JointControllerFactory::create_controller(CONTROLLER_TYPE::NONE, robot);
+  EXPECT_THROW(JointControllerFactory::create_controller(CONTROLLER_TYPE::NONE, robot),
+               controllers::exceptions::InvalidControllerException);
 }
 
 TEST(ControllerFactoryTest, CreateControllerWithRobotAndParams) {
   std::list<std::shared_ptr<state_representation::ParameterInterface>> parameters;
   auto robot = robot_model::Model("robot", std::string(TEST_FIXTURES) + "panda_arm.urdf");
 
-  auto ctrl = JointControllerFactory::create_controller(CONTROLLER_TYPE::NONE, parameters, robot);
-  ASSERT_EQ(ctrl, nullptr);
+  EXPECT_THROW(JointControllerFactory::create_controller(CONTROLLER_TYPE::NONE, parameters, robot),
+               controllers::exceptions::InvalidControllerException);
 }

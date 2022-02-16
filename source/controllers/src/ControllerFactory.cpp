@@ -49,6 +49,9 @@ std::shared_ptr<IController<JointState>> ControllerFactory<JointState>::create_c
     const robot_model::Model& robot_model
 ) {
   auto ctrl = ControllerFactory<JointState>::create_controller(type, parameters, robot_model.get_number_of_joints());
+  if (ctrl == nullptr) {
+    throw exceptions::InvalidControllerException("Cannot assign robot model to this controller!");
+  }
   ctrl->set_robot_model(robot_model);
   return ctrl;
 }

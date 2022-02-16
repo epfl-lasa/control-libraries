@@ -6,6 +6,7 @@ var searchData=
   ['ring_3',['Ring',['../classdynamical__systems_1_1_ring.html',1,'dynamical_systems::Ring'],['../classdynamical__systems_1_1_ring.html#af774ca46eb2e282e38c3d23b7d989efc',1,'dynamical_systems::Ring::Ring()']]],
   ['robot_20model_4',['Robot Model',['../md__github_workspace_source_robot_model__r_e_a_d_m_e.html',1,'']]],
   ['robot_5fmodel_5',['robot_model',['../namespacerobot__model.html',1,'']]],
-  ['row_6',['row',['../classstate__representation_1_1_jacobian.html#a194fbadd8ff9de72f5203ee0a8ea9972',1,'state_representation::Jacobian']]],
-  ['rows_7',['rows',['../classstate__representation_1_1_jacobian.html#a4ba289e0a183b4fbeab53566aeb8dfcf',1,'state_representation::Jacobian']]]
+  ['robot_5fmodel_5f_6',['robot_model_',['../classcontrollers_1_1_i_controller.html#aa273f98bc6f770b4b8c6f3c45d0d6cf5',1,'controllers::IController']]],
+  ['row_7',['row',['../classstate__representation_1_1_jacobian.html#a194fbadd8ff9de72f5203ee0a8ea9972',1,'state_representation::Jacobian']]],
+  ['rows_8',['rows',['../classstate__representation_1_1_jacobian.html#a4ba289e0a183b4fbeab53566aeb8dfcf',1,'state_representation::Jacobian']]]
 ];

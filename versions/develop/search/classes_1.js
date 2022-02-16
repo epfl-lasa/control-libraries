@@ -8,5 +8,6 @@ var searchData=
   ['cartesianwrench_5',['CartesianWrench',['../classstate__representation_1_1_cartesian_wrench.html',1,'state_representation']]],
   ['circular_6',['Circular',['../classdynamical__systems_1_1_circular.html',1,'dynamical_systems']]],
   ['controller_7',['Controller',['../classcontrollers_1_1_controller.html',1,'controllers']]],
-  ['controller_3c_20state_5frepresentation_3a_3acartesianstate_20_3e_8',['Controller&lt; state_representation::CartesianState &gt;',['../classcontrollers_1_1_controller.html',1,'controllers']]]
+  ['controller_3c_20state_5frepresentation_3a_3acartesianstate_20_3e_8',['Controller&lt; state_representation::CartesianState &gt;',['../classcontrollers_1_1_controller.html',1,'controllers']]],
+  ['controllerfactory_9',['ControllerFactory',['../classcontrollers_1_1_controller_factory.html',1,'controllers']]]
 ];

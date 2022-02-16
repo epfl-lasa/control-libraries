@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['parametermessagetype_0',['ParameterMessageType',['../namespaceclproto.html#aa7b6f9404804c7526915782cc0e38945',1,'clproto']]]
+  ['messagetype_0',['MessageType',['../namespaceclproto.html#a72ac218baa870e2fd3380b97ad065846',1,'clproto']]]
 ];

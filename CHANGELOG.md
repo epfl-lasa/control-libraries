@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [5.0.0](#500)
 - [4.1.0](#410)
 - [4.0.0](#400)
 - [3.1.0](#310)
@@ -8,40 +9,118 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
-- Fix tag generation for release docs (#225)
-- Add static method to create Parameter pointer (#226)
-- Templated get_value method for Parameter (#228)
+## 5.0.0
+
+Version 5.0.0 refactors the dynamical systems and controllers libraries with a
+factory pattern and parameter interface for easier creation, manipulation and
+substitution of these classes. This major change breaks any implementations using
+dynamical systems or controllers from the prior version.
+
+See the updated documentation for usage guidelines for the new DynamicalSystemsFactory
+and ControllerFactory.
+
+This release also includes substantial improvements to the python bindings, including
+class bindings for the dynamical systems library. Additional fixes and improvements
+have been made throughout the framework.
+
+### Breaking changes
+
+This release contains the following breaking changes:
+- Relocate `Jacobian` and `JointState` family headers
+- Refactor dynamical system classes to use `IDynamicalSystem` base interface
+- Refactor controller classes to use `IController` base interface
+
+**state_representation**
+
+To make joint-space files more structurally consistent with Cartesian-space files,
+the following headers have been relocated.
+- `state_representation/robot/Joint*.hpp` headers are now in `state_representation/space/joint/Joint*.hpp`
+- `state_representation/robot/Jacobian.hpp` header is now in `state_representation/space/Jacobian.hpp`
+
+Any C++ implementations that include the files from a prior version should update the file paths
+in the `#include` directives. The namespaces themselves in C++ and Python are unaffected.
+
+**dynamical_systems**
+
+The previous DS classes inheriting from the concrete `DynamicalSystem` base class have been
+refactored and partially renamed to inherit from the new abstract `IDynamicalSystem` base class.
+
+- `dynamical_systems::Blending` has been removed
+- `dynamical_systems::Circular` has been refactored
+- `dynamical_systems::DynamicalSystem` has been refactored and renamed to `dynamical_systems::IDynamicalSystem`
+- `dynamical_systems::Linear` has been refactored and renamed to `dynamical_systems::PointAttractor`
+- `dynamical_systems::Ring` has been refactored
+- `dynamical_systems::DefaultDynamicalSystem` has been introduced
+
+It is no longer recommended to directly instantiate and use these classes. The new factory method
+`dynamical_systems::DynamicalSystemFactory<S>::create_dynamical_system(type)` should be used instead.
+See the documentation for more information.
+
+**controllers**
+
+The previous controller classes inheriting from the concrete `Controller` base class have been
+refactored and partially renamed to inherit from the new abstract `IController` base class.
+
+- `controllers::Controller` has been refactored and renamed to `controllers::Controller`
+- `controllers::CartesianTwistController` has been refactored and renamed to `controllers::CompliantTwist`
+- `controllers::Dissipative` has been refactored
+- `controllers::Impedance` has been refactored
+- `controllers::VelocityImpedance` has been refactored
+
+It is no longer recommended to directly instantiate and use these classes. The new factory method
+`controllers::ControllerFactory<S>::create_controller(type)` should be used instead.
+See the documentation for more information.
+
+### Features
+
+**state_representation**
+- Add CartesianAcceleration class in state representation (#248)
+
+**dynamical_systems**
 - Create DS interface and DS factory classes (#227)
 - Refactor Linear DS to PointAttractor DS with factory (#229)
 - Refactor Circular DS with factory (#230)
 - Refactor Ring DS with factory and remove old DS base class (#231)
-- Add support for copy module in Python bindings (#232)
 - Refactor dynamical systems using factory pattern (#233)
 - Propagate DS refactor to demos (#234)
 - Avoid exception with the default DS in evaluate (#237)
-- Add empty constructors and python bindings for the 
-  Shape and Ellipsoid classes (#235)
 - Add the `set_parameter_value` function in the DS base class (#236)
 - Remove the `set_base_frame` logic for `JointState` based DS
   and override `is_compatible` for PointAttractor DS (#236, #239)
-- Add python bindings for dynamical_systems module (#238)
-- Install Eigen manually, version 3.4 (#240)
 - Return a state that has same name as input in PointAttractor (#241)
 - Update README of dynamical systems (#242)
-- Mark the JointState as filled when one index was set (#245)
-- Add user sshd configuration and user 'developer' in base Dockerfile 
-  and update all the Dockerfiles and scripts (#244, #246)
-- Add ParameterMap base class (#247)
-- Add CartesianAcceleration class in state representation (#248)
-- Relocate Jacobian and JointState family files to the 'space/' directory (#249, #251)
-- Update pybindings and clproto with CartesianAcceleration (#250)
+
+**controllers**
 - Add IController and ControllerFactory and refactor Controllers (#253, #254, #255)
 
-### Pending TODOs for the next release
+**python**
+- Add python bindings for dynamical_systems module (#238)
 
-- Including a quaternion extension (numpy-quaternion, pyquaternion, ...)
-for binding the Eigen::Quaternion to a specific object in Python.
+**clproto**
+- Update pybindings and clproto with CartesianAcceleration (#250)
+
+### Fixes and improvements
+
+**state_representation**
+- Add static method to create Parameter pointer (#226)
+- Templated get_value method for Parameter (#228)
+- Mark the JointState as filled when one index was set (#245)
+- Add ParameterMap base class (#247)
+- Relocate Jacobian and JointState family files to the 'space/' directory (#249, #251)
+
+**python**
+- Add support for copy module in Python bindings (#232)
+- Add empty constructors and python bindings for the
+  Shape and Ellipsoid classes (#235)
+
+**general**
+- Install Eigen version 3.4 manually (#240)
+
+### Behind the scenes
+
+- Fix tag generation for release docs (#225)
+- Add user sshd configuration and user 'developer' in base Dockerfile
+  and update all the Dockerfiles and scripts (#244, #246)
 
 ## 4.1.0
 

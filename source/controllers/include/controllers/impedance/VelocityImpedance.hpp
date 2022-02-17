@@ -8,40 +8,29 @@ namespace controllers::impedance {
 /**
  * @class VelocityImpedance
  * @brief A velocity impedance is a normal impedance controller
- * that only take a velocity input and integrate it for position error
- * @tparam S the space of the controller either CartesianState or JointState
+ * that only uses velocity input and integrates it for position error
+ * @tparam S the space of the controller (either CartesianState or JointState)
  */
 template<class S>
 class VelocityImpedance : public Impedance<S> {
 public:
-  /**
-   * @brief Constructor initializing all the matrices
-   * @param stiffness the stiffness matrix
-   * @param damping the damping matrix
-   */
-  explicit VelocityImpedance(const Eigen::MatrixXd& stiffness, const Eigen::MatrixXd& damping);
 
   /**
-   * @brief Copy constructor
-   * @param other the controller to copy
+   * @brief Base constructor.
+   * @details This initializes all gain matrices to the identity matrix of the corresponding dimensionality.
+   * @param dimensions The number of dimensions associated with the controller
    */
-  VelocityImpedance(const VelocityImpedance<S>& other);
+  explicit VelocityImpedance(unsigned int dimensions = 6);
 
   /**
-   * @brief Swap the values of the two controllers
-   * @tparam U space of the controller
-   * @param controller1 controller to be swapped with 2
-   * @param controller2 controller to be swapped with 1
+   * @brief Constructor from an initial parameter list
+   * @param parameters A parameter list containing initial gain values
+   * @param dimensions The number of dimensions associated with the controller
    */
-  template<class U>
-  friend void swap(VelocityImpedance<U>& controller1, VelocityImpedance<U>& controller2);
-
-  /**
-   * @param Assignment operator
-   * @param other the controller to copy
-   * @return reference to the controller with values from other
-   */
-  VelocityImpedance<S>& operator=(const VelocityImpedance<S>& other);
+  explicit VelocityImpedance(
+      const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
+      unsigned int dimensions = 6
+  );
 
   /**
    * @brief Compute the force (task space) or torque (joint space) command based on the input state 
@@ -51,40 +40,20 @@ public:
    * @return the output command at the input state
    */
   S compute_command(const S& desired_state, const S& feedback_state) override;
-
-  /**
-   * @brief Compute the command based on the desired state and a feedback state in a non const fashion
-   * To be redefined based on the actual controller implementation.
-   * @param desired_state the desired state of the system.
-   * @param feedback_state the real state of the system as read from feedback loop
-   * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
-   * @return the output command at the input state
-   */
-  state_representation::JointState compute_command(const S& desired_state,
-                                                   const S& feedback_state,
-                                                   const state_representation::Jacobian& jacobian) override;
 };
 
 template<class S>
-VelocityImpedance<S>::VelocityImpedance(const VelocityImpedance<S>& other):
-    Impedance<S>(other) {}
-
-template<class U>
-inline void swap(VelocityImpedance<U>& controller1, VelocityImpedance<U>& controller2) {
-  swap(static_cast<Impedance<U>&>(controller1), static_cast<Impedance<U>&>(controller2));
+VelocityImpedance<S>::VelocityImpedance(unsigned int dimensions) : Impedance<S>(dimensions) {
+  this->parameters_.erase("inertia");
+  this->inertia_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
 }
 
 template<class S>
-inline VelocityImpedance<S>& VelocityImpedance<S>::operator=(const VelocityImpedance<S>& other) {
-  VelocityImpedance<S> tmp(other);
-  swap(*this, tmp);
-  return *this;
+VelocityImpedance<S>::VelocityImpedance(
+    const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters, unsigned int dimensions
+) :
+    VelocityImpedance<S>(dimensions) {
+  this->set_parameters(parameters);
 }
 
-template<class S>
-state_representation::JointState VelocityImpedance<S>::compute_command(const S& desired_state,
-                                                                       const S& feedback_state,
-                                                                       const state_representation::Jacobian& jacobian) {
-  return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
-}
 }// namespace controllers

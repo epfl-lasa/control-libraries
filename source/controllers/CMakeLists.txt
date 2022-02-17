@@ -17,6 +17,10 @@ set(CORE_SOURCES
   src/impedance/Dissipative.cpp
   src/ControllerFactory.cpp
   src/IController.cpp
+  src/impedance/CompliantTwist.cpp
+  src/impedance/NewDissipative.cpp
+  src/impedance/NewImpedance.cpp
+  src/impedance/NewVelocityImpedance.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED

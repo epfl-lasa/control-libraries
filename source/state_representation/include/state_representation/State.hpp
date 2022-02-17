@@ -1,12 +1,15 @@
 #pragma once
 
-#include "state_representation/MathTools.hpp"
 #include <cassert>
 #include <chrono>
+#include <iostream>
+#include <memory>
+#include <typeinfo>
+
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
-#include <iostream>
-#include <typeinfo>
+
+#include "state_representation/MathTools.hpp"
 
 /**
  * @namespace state_representation
@@ -43,13 +46,7 @@ enum class StateType {
  * @class State
  * @brief Abstract class to represent a state
  */
-class State {
-private:
-  StateType type_;                                              ///< type of the State
-  std::string name_;                                            ///< name of the state
-  bool empty_;                                                  ///< indicate if the state is empty
-  std::chrono::time_point<std::chrono::steady_clock> timestamp_;///< time since last modification made to the state
-
+class State : public std::enable_shared_from_this<State> {
 public:
   /**
    * @brief Empty constructor
@@ -180,6 +177,12 @@ public:
    * @return the appended ostream 
    */
   friend std::ostream& operator<<(std::ostream& os, const State& state);
+
+private:
+  StateType type_;                                              ///< type of the State
+  std::string name_;                                            ///< name of the state
+  bool empty_;                                                  ///< indicate if the state is empty
+  std::chrono::time_point<std::chrono::steady_clock> timestamp_;///< time since last modification made to the state
 };
 
 inline void swap(State& state1, State& state2) {

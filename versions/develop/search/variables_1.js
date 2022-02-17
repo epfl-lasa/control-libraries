@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['robot_5fmodel_5f_0',['robot_model_',['../classcontrollers_1_1_i_controller.html#aa273f98bc6f770b4b8c6f3c45d0d6cf5',1,'controllers::IController']]]
+  ['basis_5f_0',['basis_',['../classcontrollers_1_1impedance_1_1_new_dissipative.html#a218c5ae27f2b3e855980727c0c96147c',1,'controllers::impedance::NewDissipative']]]
 ];

@@ -7,7 +7,8 @@ var searchData=
   ['cartesiantwistcontroller_4',['CartesianTwistController',['../classcontrollers_1_1impedance_1_1_cartesian_twist_controller.html',1,'controllers::impedance']]],
   ['cartesianwrench_5',['CartesianWrench',['../classstate__representation_1_1_cartesian_wrench.html',1,'state_representation']]],
   ['circular_6',['Circular',['../classdynamical__systems_1_1_circular.html',1,'dynamical_systems']]],
-  ['controller_7',['Controller',['../classcontrollers_1_1_controller.html',1,'controllers']]],
-  ['controller_3c_20state_5frepresentation_3a_3acartesianstate_20_3e_8',['Controller&lt; state_representation::CartesianState &gt;',['../classcontrollers_1_1_controller.html',1,'controllers']]],
-  ['controllerfactory_9',['ControllerFactory',['../classcontrollers_1_1_controller_factory.html',1,'controllers']]]
+  ['complianttwist_7',['CompliantTwist',['../classcontrollers_1_1impedance_1_1_compliant_twist.html',1,'controllers::impedance']]],
+  ['controller_8',['Controller',['../classcontrollers_1_1_controller.html',1,'controllers']]],
+  ['controller_3c_20state_5frepresentation_3a_3acartesianstate_20_3e_9',['Controller&lt; state_representation::CartesianState &gt;',['../classcontrollers_1_1_controller.html',1,'controllers']]],
+  ['controllerfactory_10',['ControllerFactory',['../classcontrollers_1_1_controller_factory.html',1,'controllers']]]
 ];

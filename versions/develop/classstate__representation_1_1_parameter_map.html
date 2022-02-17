@@ -85,13 +85,21 @@ Inheritance diagram for state_representation::ParameterMap:</div>
  <div class="center">
   <img src="classstate__representation_1_1_parameter_map.png" usemap="#state_5Frepresentation::ParameterMap_map" alt=""/>
   <map id="state_5Frepresentation::ParameterMap_map" name="state_5Frepresentation::ParameterMap_map">
-<area href="classdynamical__systems_1_1_i_dynamical_system.html" alt="dynamical_systems::IDynamicalSystem&lt; state_representation::CartesianState &gt;" shape="rect" coords="232,56,686,80"/>
-<area href="classcontrollers_1_1_i_controller.html" title="Abstract class to define a controller in a desired state type, such as joint or Cartesian spaces." alt="controllers::IController&lt; S &gt;" shape="rect" coords="696,56,1150,80"/>
-<area href="classdynamical__systems_1_1_i_dynamical_system.html" title="Abstract class for a dynamical system." alt="dynamical_systems::IDynamicalSystem&lt; S &gt;" shape="rect" coords="1160,56,1614,80"/>
-<area href="classdynamical__systems_1_1_circular.html" title="Represent a Circular dynamical system to move around an center." alt="dynamical_systems::Circular" shape="rect" coords="0,112,454,136"/>
-<area href="classdynamical__systems_1_1_ring.html" title="Represent a Ring dynamical system limit cycle to move around a radius within a fixed width." alt="dynamical_systems::Ring" shape="rect" coords="464,112,918,136"/>
-<area href="classdynamical__systems_1_1_default_dynamical_system.html" title="A default dynamical system that just returns an empty state." alt="dynamical_systems::DefaultDynamicalSystem&lt; S &gt;" shape="rect" coords="928,112,1382,136"/>
-<area href="classdynamical__systems_1_1_point_attractor.html" title="Represents a dynamical system to move towards an attractor." alt="dynamical_systems::PointAttractor&lt; S &gt;" shape="rect" coords="1392,112,1846,136"/>
+<area href="classcontrollers_1_1_i_controller.html" alt="controllers::IController&lt; state_representation::CartesianState &gt;" shape="rect" coords="513,56,1016,80"/>
+<area href="classdynamical__systems_1_1_i_dynamical_system.html" alt="dynamical_systems::IDynamicalSystem&lt; state_representation::CartesianState &gt;" shape="rect" coords="1539,56,2042,80"/>
+<area href="classcontrollers_1_1_i_controller.html" title="Abstract class to define a controller in a desired state type, such as joint or Cartesian spaces." alt="controllers::IController&lt; S &gt;" shape="rect" coords="2308,56,2811,80"/>
+<area href="classdynamical__systems_1_1_i_dynamical_system.html" title="Abstract class for a dynamical system." alt="dynamical_systems::IDynamicalSystem&lt; S &gt;" shape="rect" coords="3078,56,3581,80"/>
+<area href="classcontrollers_1_1impedance_1_1_new_impedance.html" alt="controllers::impedance::NewImpedance&lt; state_representation::CartesianState &gt;" shape="rect" coords="256,112,759,136"/>
+<area href="classcontrollers_1_1impedance_1_1_compliant_twist.html" title="A concrete controller class specifically for controlling 6 degree of freedom Cartesian twist with a c..." alt="controllers::impedance::CompliantTwist" shape="rect" coords="769,112,1272,136"/>
+<area href="classdynamical__systems_1_1_circular.html" title="Represent a Circular dynamical system to move around an center." alt="dynamical_systems::Circular" shape="rect" coords="1282,112,1785,136"/>
+<area href="classdynamical__systems_1_1_ring.html" title="Represent a Ring dynamical system limit cycle to move around a radius within a fixed width." alt="dynamical_systems::Ring" shape="rect" coords="1795,112,2298,136"/>
+<area href="classcontrollers_1_1impedance_1_1_new_impedance.html" title="Definition of an impedance controller in either joint or task space." alt="controllers::impedance::NewImpedance&lt; S &gt;" shape="rect" coords="2308,112,2811,136"/>
+<area href="classdynamical__systems_1_1_default_dynamical_system.html" title="A default dynamical system that just returns an empty state." alt="dynamical_systems::DefaultDynamicalSystem&lt; S &gt;" shape="rect" coords="2821,112,3324,136"/>
+<area href="classdynamical__systems_1_1_point_attractor.html" title="Represents a dynamical system to move towards an attractor." alt="dynamical_systems::PointAttractor&lt; S &gt;" shape="rect" coords="3334,112,3837,136"/>
+<area href="classcontrollers_1_1impedance_1_1_new_dissipative.html" alt="controllers::impedance::NewDissipative&lt; state_representation::CartesianState &gt;" shape="rect" coords="0,168,503,192"/>
+<area href="classcontrollers_1_1impedance_1_1_new_velocity_impedance.html" alt="controllers::impedance::NewVelocityImpedance&lt; state_representation::CartesianState &gt;" shape="rect" coords="513,168,1016,192"/>
+<area href="classcontrollers_1_1impedance_1_1_new_dissipative.html" title="Definition of a dissipative impedance controller (PassiveDS) in task space." alt="controllers::impedance::NewDissipative&lt; S &gt;" shape="rect" coords="2052,168,2555,192"/>
+<area href="classcontrollers_1_1impedance_1_1_new_velocity_impedance.html" alt="controllers::impedance::NewVelocityImpedance&lt; S &gt;" shape="rect" coords="2565,168,3068,192"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -551,6 +559,8 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
+
+<p>Reimplemented in <a class="el" href="classcontrollers_1_1impedance_1_1_compliant_twist.html#afb8011e61527fb5acdcf8618dcc4e303">controllers::impedance::CompliantTwist</a>, <a class="el" href="classcontrollers_1_1impedance_1_1_new_dissipative.html#afe54c44c1c85f7f17ea0f01a0cff5767">controllers::impedance::NewDissipative&lt; S &gt;</a>, <a class="el" href="classcontrollers_1_1impedance_1_1_new_dissipative.html#afe54c44c1c85f7f17ea0f01a0cff5767">controllers::impedance::NewDissipative&lt; state_representation::CartesianState &gt;</a>, <a class="el" href="classcontrollers_1_1impedance_1_1_new_impedance.html#ad49e4f95741a62e2633e0e95243cb410">controllers::impedance::NewImpedance&lt; S &gt;</a>, and <a class="el" href="classcontrollers_1_1impedance_1_1_new_impedance.html#ad49e4f95741a62e2633e0e95243cb410">controllers::impedance::NewImpedance&lt; state_representation::CartesianState &gt;</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="_parameter_map_8cpp_source.html#l00064">64</a> of file <a class="el" href="_parameter_map_8cpp_source.html">ParameterMap.cpp</a>.</p>
 

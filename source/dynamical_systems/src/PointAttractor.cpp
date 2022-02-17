@@ -8,6 +8,7 @@
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/joint/JointPositions.hpp"
 #include "state_representation/space/joint/JointState.hpp"
 
@@ -17,15 +18,15 @@ namespace dynamical_systems {
 
 template<>
 PointAttractor<CartesianState>::PointAttractor() :
-    attractor_(std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("attractor", CartesianPose()))),
-    gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain", Eigen::MatrixXd::Identity(6, 6))) {
+    attractor_(make_shared_parameter<CartesianState>("attractor", CartesianState())),
+    gain_(make_shared_parameter<Eigen::MatrixXd>("gain", Eigen::MatrixXd::Identity(6, 6))) {
   this->parameters_.insert(std::make_pair("attractor", attractor_));
   this->parameters_.insert(std::make_pair("gain", gain_));
 }
 
 template<>
 PointAttractor<JointState>::PointAttractor() :
-    attractor_(std::make_shared<Parameter<JointState>>(Parameter<JointPositions>("attractor"))),
+    attractor_(make_shared_parameter<JointState>("attractor", JointState())),
     gain_(std::make_shared<Parameter<Eigen::MatrixXd>>("gain")) {
   this->parameters_.insert(std::make_pair("attractor", attractor_));
   this->parameters_.insert(std::make_pair("gain", gain_));
@@ -40,7 +41,7 @@ template bool PointAttractor<CartesianState>::is_compatible(const CartesianState
 
 template<>
 bool PointAttractor<JointState>::is_compatible(const JointState& state) const {
-  auto attractor = this->get_parameter_value<JointPositions>("attractor");
+  auto attractor = this->get_parameter_value<JointState>("attractor");
   if (attractor.is_empty()) {
     throw exceptions::EmptyAttractorException("The attractor of the dynamical system is empty.");
   }
@@ -56,26 +57,24 @@ bool PointAttractor<JointState>::is_compatible(const JointState& state) const {
 template<class S>
 void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& parameter, unsigned int expected_size) {
   if (parameter->get_type() == StateType::PARAMETER_DOUBLE) {
-    auto gain = std::static_pointer_cast<Parameter<double>>(parameter);
-    this->gain_->set_value(gain->get_value() * Eigen::MatrixXd::Identity(expected_size, expected_size));
+    auto gain = parameter->get_parameter_value<double>();
+    this->gain_->set_value(gain * Eigen::MatrixXd::Identity(expected_size, expected_size));
   } else if (parameter->get_type() == StateType::PARAMETER_DOUBLE_ARRAY) {
-    auto gain = std::static_pointer_cast<Parameter<std::vector<double>>>(parameter);
-    if (gain->get_value().size() != expected_size) {
+    auto gain = parameter->get_parameter_value<std::vector<double>>();
+    if (gain.size() != expected_size) {
       throw exceptions::IncompatibleSizeException(
-          "The provided diagonal coefficients do not correspond to the expected size of the attractor"
-      );
+          "The provided diagonal coefficients do not correspond to the expected size of the attractor");
     }
-    Eigen::VectorXd diagonal = Eigen::VectorXd::Map(gain->get_value().data(), expected_size);
+    Eigen::VectorXd diagonal = Eigen::VectorXd::Map(gain.data(), expected_size);
     this->gain_->set_value(diagonal.asDiagonal());
   } else if (parameter->get_type() == StateType::PARAMETER_MATRIX) {
-    auto gain = std::static_pointer_cast<Parameter<Eigen::MatrixXd>>(parameter);
-    if (gain->get_value().rows() != expected_size && gain->get_value().cols() != expected_size) {
+    auto gain = parameter->get_parameter_value<Eigen::MatrixXd>();
+    if (gain.rows() != expected_size && gain.cols() != expected_size) {
       throw exceptions::IncompatibleSizeException(
           "The provided gain matrix do not have the expected size (" + std::to_string(expected_size) + "x"
-              + std::to_string(expected_size) + ")"
-      );
+              + std::to_string(expected_size) + ")");
     }
-    this->gain_->set_value(gain->get_value());
+    this->gain_->set_value(gain);
   } else {
     throw state_representation::exceptions::InvalidParameterException("Parameter 'gain' has incorrect type");
   }
@@ -101,8 +100,7 @@ void PointAttractor<CartesianState>::set_attractor(const CartesianState& attract
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
           "The reference frame of the attractor " + attractor.get_name() + " in frame "
               + attractor.get_reference_frame() + " is incompatible with the base frame of the dynamical system "
-              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + "."
-      );
+              + this->get_base_frame().get_name() + " in frame " + this->get_base_frame().get_reference_frame() + ".");
     }
     this->attractor_->set_value(this->get_base_frame().inverse() * attractor);
   } else {
@@ -145,22 +143,24 @@ void PointAttractor<CartesianState>::set_base_frame(const CartesianState& base_f
 template<>
 void PointAttractor<CartesianState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
-    this->set_attractor(std::static_pointer_cast<Parameter<CartesianPose>>(parameter)->get_value());
+    this->set_attractor(parameter->get_parameter_value<CartesianState>());
   } else if (parameter->get_name() == "gain") {
     this->set_gain(parameter, 6);
   } else {
-    throw state_representation::exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found");
   }
 }
 
 template<>
 void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
-    this->set_attractor(std::static_pointer_cast<Parameter<JointPositions>>(parameter)->get_value());
+    this->set_attractor(parameter->get_parameter_value<JointState>());
   } else if (parameter->get_name() == "gain") {
     this->set_gain(parameter, this->attractor_->get_value().get_size());
   } else {
-    throw state_representation::exceptions::InvalidParameterException("No parameter with name '" + parameter->get_name() + "' found");
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found");
   }
 }
 

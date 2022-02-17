@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "controllers/ControllerFactory.hpp"
-#include "controllers/impedance/NewDissipative.hpp"
+#include "controllers/impedance/Dissipative.hpp"
 
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
 #include "state_representation/space/cartesian/CartesianWrench.hpp"
@@ -12,14 +12,14 @@ using namespace controllers;
 using namespace controllers::impedance;
 using namespace state_representation;
 
-class NewDissipativeWrapper : public NewDissipative<CartesianState> {
+class DissipativeWrapper : public Dissipative<CartesianState> {
 public:
-  NewDissipativeWrapper(const ComputationalSpaceType& computational_space) :
-      NewDissipative<CartesianState>(computational_space) {}
+  DissipativeWrapper(const ComputationalSpaceType& computational_space) :
+      Dissipative<CartesianState>(computational_space) {}
 
   static Eigen::MatrixXd
   wrap_orthonormalize_basis(const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector) {
-    return NewDissipative<CartesianState>::orthonormalize_basis(basis, main_eigenvector);
+    return Dissipative<CartesianState>::orthonormalize_basis(basis, main_eigenvector);
   }
 
   Eigen::MatrixXd wrap_compute_orthonormal_basis(const CartesianState& desired_velocity) {
@@ -38,10 +38,10 @@ protected:
   }
 
   void set_controller_space(const ComputationalSpaceType& computational_space) {
-    controller_ = std::make_shared<NewDissipativeWrapper>(computational_space);
+    controller_ = std::make_shared<DissipativeWrapper>(computational_space);
   }
 
-  std::shared_ptr<NewDissipativeWrapper> controller_;
+  std::shared_ptr<DissipativeWrapper> controller_;
   double tolerance_ = 1e-4;
 };
 

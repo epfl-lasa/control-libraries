@@ -1,4 +1,4 @@
-#include "controllers/impedance/NewVelocityImpedance.hpp"
+#include "controllers/impedance/VelocityImpedance.hpp"
 
 #include "controllers/exceptions/NotImplementedException.hpp"
 #include "state_representation/space/joint/JointState.hpp"
@@ -13,13 +13,13 @@ using namespace state_representation;
 namespace controllers::impedance {
 
 template<class S>
-S NewVelocityImpedance<S>::compute_command(const S&, const S&) {
+S VelocityImpedance<S>::compute_command(const S&, const S&) {
   throw exceptions::NotImplementedException(
       "compute_command(desired_state, feedback_state) not implemented for this input class");
 }
 
 template<>
-CartesianState NewVelocityImpedance<CartesianState>::compute_command(
+CartesianState VelocityImpedance<CartesianState>::compute_command(
     const CartesianState& desired_state, const CartesianState& feedback_state
 ) {
   using namespace std::chrono_literals;
@@ -31,11 +31,11 @@ CartesianState NewVelocityImpedance<CartesianState>::compute_command(
   // only keep velocity feedback
   CartesianTwist feedback_twist(feedback_state);
   // compute the impedance control law normally
-  return this->NewImpedance<CartesianState>::compute_command(integrated_desired_state, feedback_twist);
+  return this->Impedance<CartesianState>::compute_command(integrated_desired_state, feedback_twist);
 }
 
 template<>
-JointState NewVelocityImpedance<JointState>::compute_command(
+JointState VelocityImpedance<JointState>::compute_command(
     const JointState& desired_state, const JointState& feedback_state
 ) {
 
@@ -48,6 +48,6 @@ JointState NewVelocityImpedance<JointState>::compute_command(
   // only keep velocity feedback
   JointVelocities feedback_velocities(feedback_state);
   // compute the impedance control law normally
-  return this->NewImpedance<JointState>::compute_command(integrated_desired_state, feedback_velocities);
+  return this->Impedance<JointState>::compute_command(integrated_desired_state, feedback_velocities);
 }
 }// namespace controllers

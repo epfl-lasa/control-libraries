@@ -1,8 +1,8 @@
 #pragma once
 
 #include "controllers/IController.hpp"
-#include "controllers/impedance/NewDissipative.hpp"
-#include "controllers/impedance/NewVelocityImpedance.hpp"
+#include "controllers/impedance/Dissipative.hpp"
+#include "controllers/impedance/VelocityImpedance.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 
 namespace controllers::impedance {
@@ -103,8 +103,8 @@ protected:
   std::shared_ptr<state_representation::Parameter<double>> angular_stiffness_; ///< stiffness of angular displacement
   std::shared_ptr<state_representation::Parameter<double>> angular_damping_; ///< damping of angular velocity error
 
-  NewDissipative<state_representation::CartesianState> dissipative_ctrl_; ///< controller for linear space
-  NewVelocityImpedance<state_representation::CartesianState> velocity_impedance_ctrl_; ///< controller for angular space
+  Dissipative<state_representation::CartesianState> dissipative_ctrl_; ///< controller for linear space
+  VelocityImpedance<state_representation::CartesianState> velocity_impedance_ctrl_; ///< controller for angular space
 };
 
 }// namespace controllers

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "controllers/impedance/NewImpedance.hpp"
+#include "controllers/impedance/Impedance.hpp"
 #include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include <eigen3/Eigen/Core>
@@ -21,11 +21,11 @@ enum class ComputationalSpaceType {
 };
 
 /**
- * @class NewDissipative
+ * @class Dissipative
  * @brief Definition of a dissipative impedance controller (PassiveDS) in task space
  */
 template<class S>
-class NewDissipative : public NewImpedance<S> {
+class Dissipative : public Impedance<S> {
 
 public:
 
@@ -34,7 +34,7 @@ public:
    * @param computational_space The computational space type
    * @param dimensions The number of dimensions
    */
-  explicit NewDissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions = 6);
+  explicit Dissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions = 6);
 
   /**
    * @brief Constructor from an initial parameter list.
@@ -42,7 +42,7 @@ public:
    * @param computational_space The computational space type
    * @param dimensions The number of dimensions
    */
-  explicit NewDissipative(
+  explicit Dissipative(
       const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
       const ComputationalSpaceType& computational_space, unsigned int dimensions = 6
   );
@@ -99,8 +99,8 @@ protected:
 };
 
 template<class S>
-NewDissipative<S>::NewDissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions) :
-    NewImpedance<S>(dimensions),
+Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions) :
+    Impedance<S>(dimensions),
     damping_eigenvalues_(
         state_representation::make_shared_parameter<Eigen::VectorXd>(
             "damping_eigenvalues", Eigen::ArrayXd::Ones(dimensions))),
@@ -116,16 +116,16 @@ NewDissipative<S>::NewDissipative(const ComputationalSpaceType& computational_sp
 }
 
 template<class S>
-NewDissipative<S>::NewDissipative(
+Dissipative<S>::Dissipative(
     const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
     const ComputationalSpaceType& computational_space, unsigned int dimensions
 ) :
-    NewDissipative<S>(computational_space, dimensions) {
+    Dissipative<S>(computational_space, dimensions) {
   this->set_parameters(parameters);
 }
 
 template<class S>
-void NewDissipative<S>::validate_and_set_parameter(
+void Dissipative<S>::validate_and_set_parameter(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
   if (parameter->get_name() == "damping_eigenvalues") {
@@ -134,7 +134,7 @@ void NewDissipative<S>::validate_and_set_parameter(
 }
 
 template<class S>
-Eigen::MatrixXd NewDissipative<S>::orthonormalize_basis(
+Eigen::MatrixXd Dissipative<S>::orthonormalize_basis(
     const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector
 ) {
   Eigen::MatrixXd orthonormal_basis = basis;
@@ -150,17 +150,17 @@ Eigen::MatrixXd NewDissipative<S>::orthonormalize_basis(
 }
 
 template<class S>
-S NewDissipative<S>::compute_command(
+S Dissipative<S>::compute_command(
     const S& command_state, const S& feedback_state
 ) {
   // compute the damping matrix out of the command_state twist
   this->compute_damping(command_state);
   // apply the impedance control law
-  return this->NewImpedance<S>::compute_command(command_state, feedback_state);
+  return this->Impedance<S>::compute_command(command_state, feedback_state);
 }
 
 template<class S>
-void NewDissipative<S>::compute_damping(const S& desired_velocity) {
+void Dissipative<S>::compute_damping(const S& desired_velocity) {
   this->basis_ = this->compute_orthonormal_basis(desired_velocity);
   auto diagonal_eigenvalues = this->damping_eigenvalues_->get_value().asDiagonal();
   this->damping_->set_value(this->basis_ * diagonal_eigenvalues * this->basis_.transpose());

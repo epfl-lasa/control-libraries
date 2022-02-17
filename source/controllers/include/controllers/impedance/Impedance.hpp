@@ -10,12 +10,12 @@
 namespace controllers::impedance {
 
 /**
- * @class NewImpedance
+ * @class Impedance
  * @brief Definition of an impedance controller in either joint or task space
  * @tparam S the space of the controller (either CartesianState or JointState)
  */
 template<class S>
-class NewImpedance : public IController<S> {
+class Impedance : public IController<S> {
 public:
 
   /**
@@ -23,14 +23,14 @@ public:
    * @details This initializes all gain matrices to the identity matrix of the corresponding dimensionality.
    * @param dimensions The number of dimensions associated with the controller
    */
-  explicit NewImpedance(unsigned int dimensions = 6);
+  explicit Impedance(unsigned int dimensions = 6);
 
   /**
    * @brief Constructor from an initial parameter list
    * @param parameters A parameter list containing initial gain values
    * @param dimensions The number of dimensions associated with the controller
    */
-  explicit NewImpedance(
+  explicit Impedance(
       const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
       unsigned int dimensions = 6
   );
@@ -67,7 +67,7 @@ protected:
 };
 
 template<class S>
-NewImpedance<S>::NewImpedance(unsigned int dimensions) :
+Impedance<S>::Impedance(unsigned int dimensions) :
     stiffness_(
         state_representation::make_shared_parameter<Eigen::MatrixXd>(
             "stiffness", Eigen::MatrixXd::Identity(dimensions, dimensions))), damping_(
@@ -81,15 +81,15 @@ NewImpedance<S>::NewImpedance(unsigned int dimensions) :
 }
 
 template<class S>
-NewImpedance<S>::NewImpedance(
+Impedance<S>::Impedance(
     const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters, unsigned int dimensions
 ) :
-    NewImpedance(dimensions) {
+    Impedance(dimensions) {
   this->set_parameters(parameters);
 }
 
 template<class S>
-void NewImpedance<S>::validate_and_set_parameter(
+void Impedance<S>::validate_and_set_parameter(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
   if (parameter->get_name() == "stiffness") {
@@ -102,7 +102,7 @@ void NewImpedance<S>::validate_and_set_parameter(
 }
 
 template<class S>
-Eigen::MatrixXd NewImpedance<S>::gain_matrix_from_parameter(
+Eigen::MatrixXd Impedance<S>::gain_matrix_from_parameter(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
   Eigen::MatrixXd matrix;

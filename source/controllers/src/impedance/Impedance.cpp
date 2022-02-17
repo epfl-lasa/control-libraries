@@ -1,4 +1,4 @@
-#include "controllers/impedance/NewImpedance.hpp"
+#include "controllers/impedance/Impedance.hpp"
 
 #include "controllers/exceptions/NotImplementedException.hpp"
 #include "state_representation/space/joint/JointState.hpp"
@@ -9,12 +9,12 @@ using namespace state_representation;
 namespace controllers::impedance {
 
 template<class S>
-S NewImpedance<S>::compute_command(const S&, const S&) {
+S Impedance<S>::compute_command(const S&, const S&) {
   throw exceptions::NotImplementedException("compute_command is not implemented for this state variable");
 }
 
 template<>
-CartesianState NewImpedance<CartesianState>::compute_command(
+CartesianState Impedance<CartesianState>::compute_command(
     const CartesianState& command_state, const CartesianState& feedback_state
 ) {
   CartesianState state_error = command_state - feedback_state;
@@ -37,7 +37,7 @@ CartesianState NewImpedance<CartesianState>::compute_command(
 }
 
 template<>
-JointState NewImpedance<JointState>::compute_command(
+JointState Impedance<JointState>::compute_command(
     const JointState& command_state, const JointState& feedback_state
 ) {
   JointState state_error = command_state - feedback_state;

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Control Libraries: controllers library</title>
+<title>Control Libraries: Controllers</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Control Libraries
-   &#160;<span id="projectnumber">3.1.0</span>
+   &#160;<span id="projectnumber">4.1.0</span>
    </div>
   </td>
  </tr>
@@ -63,10 +63,10 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">controllers library </div>  </div>
+<div class="title">Controllers </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>This library introduces a set of controllers to be used in robotic control-loop schemes. Each controller are templated to accepted an input space from <code><a class="el" href="namespacestate__representation.html">state_representation</a></code> and is derived from the <code>Controller</code> base class, e.g.,</p>
+<div class="textblock"><p>This library introduces a set of controllers to be used in robotic control-loop schemes. Each controller is templated to accepted an input space from <code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects. ">state_representation</a></code> and is derived from the <code>Controller</code> base class, e.g.,</p>
 <div class="fragment"><div class="line">Impedance&lt;state_representation::JointState&gt; joint_space_impedance;</div><div class="line">Disspative&lt;state_representation::CartesianState&gt; task_space_dissipative;</div></div><!-- fragment --><p>The main functions of each controllers are the <code>compute_command</code> variations. They implement the main algorithms of the controllers. Depending on the controller, they are used to define a command from some input parameters.</p>
 <div class="fragment"><div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestate__representation.html">state_representation</a>;</div><div class="line"></div><div class="line">Impedance&lt;JointState&gt; joint_space_impedance;</div><div class="line"><a class="code" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> desired_velocities;</div><div class="line"><a class="code" href="classstate__representation_1_1_joint_velocities.html">JointVelocities</a> real_robot_velocities;</div><div class="line"></div><div class="line"><a class="code" href="classstate__representation_1_1_joint_torques.html">JointTorques</a> command = joint_space_impedance.compute_command(desired_velocities,</div><div class="line">                                                             real_robot_velocities)</div></div><!-- fragment --><p>Some <code>compute_command</code> variations allows to transform one space to the other using extra parameters.</p>
 <div class="fragment"><div class="line"><span class="keyword">using namespace </span><a class="code" href="namespacestate__representation.html">state_representation</a>;</div><div class="line"></div><div class="line">Dissipative&lt;CartesianState&gt; task_space_dissipative;</div><div class="line"><a class="code" href="classstate__representation_1_1_cartesian_twist.html">CartesianTwist</a> desired_twist;</div><div class="line"><a class="code" href="classstate__representation_1_1_cartesian_twist.html">CartesianTwist</a> real_eef_twist;</div><div class="line"><a class="code" href="classstate__representation_1_1_jacobian.html">Jacobian</a> robot_jacobian;</div><div class="line"></div><div class="line"><a class="code" href="classstate__representation_1_1_joint_torques.html">JointTorques</a> command = task_space_dissipative.compute_command(desired_twist,</div><div class="line">                                                              real_eef_twist,</div><div class="line">                                                              jacobian)</div></div><!-- fragment --><p>The above formulation is equivalent to:</p>

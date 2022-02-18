@@ -124,6 +124,39 @@ This requires GTest to be installed on your system. You can then use `make test`
 Alternatively, you can include the source code for each library as submodules in your own CMake project,
 using the CMake directive `add_subdirectory(...)` to link it with your project.
 
+## Usage in a cmake project
+
+If you have a target library or executable `my_target`, you can link all required libraries
+and include directories automatically with the following commands in the CMakeLists file:
+
+```cmake
+find_package(control_libraries <VERSION> CONFIG REQUIRED)
+
+target_link_libraries(my_target ${control_libraries_LIBRARIES})
+```
+
+`VERSION` is an optional version number such as `5.0.0`, which should be included for safety. If the installed
+control libraries version has a different major increment (for example, `4.1.0` compared to `5.0.0`), cmake
+will give the according error.
+
+The `CONFIG` flag tells cmake to directly search for a `control_librariesConfig.cmake` file, which is installed
+as part of the package.
+
+The `REQUIRED` flag will give an error if the package is not found, which just prevents build errors from happening
+at later stages.
+
+### robot_model and Pinocchio
+
+If the `robot_model` library is used and `pinocchio` has been installed to a location that is
+not on the default include and link paths, that location must also be provided.
+The default installation of `pinocchio` is at `/opt/openrobots`. For this reason it is normal to add the following
+lines to the CMakeLists file:
+
+```cmake
+list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
+include_directories(/opt/openrobots/include)
+```
+
 ## Troubleshooting
 
 This section lists common problems that might come up when using the `control-libraries` modules.
@@ -136,8 +169,8 @@ When using the `robot_model` module in ROS and trying to `catkin_make` the works
 ```
 In order to avoid this error and successfully `catkin_make` the workspace, make sure that the `CMakeList.txt` of the ROS
 package contains all the necessary directives, i.e. on top of
-```bash
 
+```cmake
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 find_package(Eigen3 REQUIRED)
 find_package(pinocchio REQUIRED)

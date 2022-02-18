@@ -1,0 +1,21 @@
+@PACKAGE_INIT@
+
+set(_control_libraries_supported_components state_representation dynamical_systems robot_model controllers)
+
+foreach(_comp ${control_libraries_FIND_COMPONENTS})
+  if (NOT _comp IN_LIST _control_libraries_supported_components)
+    set_and_check(control_libraries_FOUND False)
+    set_and_check(control_libraries_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
+  endif()
+  include("${CMAKE_CURRENT_LIST_DIR}/control_libraries_${_comp}_targets.cmake")
+endforeach()
+
+set(control_libraries_LIBRARIES "@INSTALL_INTERFACE_LINK_LIBRARIES@")
+
+include(CMakeFindDependencyMacro)
+find_dependency(Eigen3)
+find_dependency(pinocchio)
+find_dependency(OsqpEigen)
+find_dependency(osqp)
+
+check_required_components(control_libraries)

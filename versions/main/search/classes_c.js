@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['qpinversevelocityparameters_373',['QPInverseVelocityParameters',['../structrobot__model_1_1_q_p_inverse_velocity_parameters.html',1,'robot_model']]]
+  ['shape_0',['Shape',['../classstate__representation_1_1_shape.html',1,'state_representation']]],
+  ['spatialstate_1',['SpatialState',['../classstate__representation_1_1_spatial_state.html',1,'state_representation']]],
+  ['state_2',['State',['../classstate__representation_1_1_state.html',1,'state_representation']]]
 ];

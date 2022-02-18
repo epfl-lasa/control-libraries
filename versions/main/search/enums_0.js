@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jointstatevariable_661',['JointStateVariable',['../namespacestate__representation.html#a65e64875cc8437e40b1debd7ae30bcdc',1,'state_representation']]]
+  ['controller_5ftype_0',['CONTROLLER_TYPE',['../namespacecontrollers.html#af696dd3187f13c418a67802a5868cbf9',1,'controllers']]]
 ];

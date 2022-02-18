@@ -3,6 +3,17 @@
 
 using namespace state_representation;
 
+TEST(EllipsoidTest, EmptyConstructor) {
+  Ellipsoid ellipse;
+  EXPECT_TRUE(ellipse.get_name().empty());
+  EXPECT_TRUE(ellipse.get_center_state().is_empty());
+  EXPECT_THROW(ellipse.set_data(Eigen::Vector3d::Zero()), exceptions::EmptyStateException);
+
+  ellipse.set_center_state(CartesianState::Identity("A"));
+  EXPECT_EQ(ellipse.get_name(), "A");
+  EXPECT_FALSE(ellipse.get_center_state().is_empty());
+}
+
 TEST(EllipsoidTest, Sampling) {
   Ellipsoid ellipse("test");
 
@@ -15,7 +26,7 @@ TEST(EllipsoidTest, Sampling) {
     EXPECT_TRUE(abs(d) < 1e-3);
   }
 
-  // change the axis lenghts
+  // change the axis lengths
   ellipse.set_axis_lengths({3., 0.5, 0.});
   points = ellipse.sample_from_parameterization(100);
   for (const auto& p : points) {

@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
-#include <state_representation/robot/Jacobian.hpp>
-#include <state_representation/robot/JointState.hpp>
-#include <state_representation/robot/JointPositions.hpp>
-#include <state_representation/robot/JointVelocities.hpp>
-#include <state_representation/robot/JointAccelerations.hpp>
-#include <state_representation/robot/JointTorques.hpp>
+#include <state_representation/space/Jacobian.hpp>
+#include <state_representation/space/joint/JointState.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/space/joint/JointVelocities.hpp>
+#include <state_representation/space/joint/JointAccelerations.hpp>
+#include <state_representation/space/joint/JointTorques.hpp>
 
 #include "clproto.h"
 

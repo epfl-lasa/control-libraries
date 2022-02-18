@@ -1,10 +1,10 @@
 #include "state_representation_bindings.h"
 
 #include <state_representation/State.hpp>
-#include <state_representation/robot/JointState.hpp>
-#include <state_representation/robot/JointPositions.hpp>
-#include <state_representation/robot/JointVelocities.hpp>
-#include <state_representation/robot/JointTorques.hpp>
+#include <state_representation/space/joint/JointState.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/space/joint/JointVelocities.hpp>
+#include <state_representation/space/joint/JointTorques.hpp>
 
 void joint_state_variable(py::module_& m) {
   py::enum_<JointStateVariable>(m, "JointStateVariable")
@@ -94,6 +94,12 @@ void joint_state(py::module_& m) {
 
   c.def("to_list", &JointState::to_std_vector, "Return the state as a list.");
 
+  c.def("__copy__", [](const JointState &state) {
+    return JointState(state);
+  });
+  c.def("__deepcopy__", [](const JointState &state, py::dict) {
+    return JointState(state);
+  }, "memo"_a);
   c.def("__repr__", [](const JointState& state) {
     std::stringstream buffer;
     buffer << state;
@@ -154,6 +160,12 @@ void joint_positions(py::module_& m) {
   c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&JointPositions::set_data), "Set the positions data from a vector", "data"_a);
   c.def("set_data", py::overload_cast<const std::vector<double>&>(&JointPositions::set_data), "Set the positions data from a list", "data"_a);
 
+  c.def("__copy__", [](const JointPositions &positions) {
+    return JointPositions(positions);
+  });
+  c.def("__deepcopy__", [](const JointPositions &positions, py::dict) {
+    return JointPositions(positions);
+  }, "memo"_a);
   c.def("__repr__", [](const JointPositions& positions) {
     std::stringstream buffer;
     buffer << positions;
@@ -207,7 +219,9 @@ void joint_velocities(py::module_& m) {
   c.def(py::self / double());
   c.def(py::self / std::chrono::nanoseconds());
   c.def(py::self * std::chrono::nanoseconds());
+
   c.def(double() * py::self);
+  c.def(std::chrono::nanoseconds() * py::self);
   c.def(Eigen::ArrayXd() * py::self);
   c.def(Eigen::MatrixXd() * py::self);
 
@@ -221,6 +235,12 @@ void joint_velocities(py::module_& m) {
   c.def("clamp", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointVelocities::clamp), "Clamp inplace the magnitude of the velocity to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
   c.def("clamped", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointVelocities::clamp), "Return the velocity clamped to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
 
+  c.def("__copy__", [](const JointVelocities &velocities) {
+    return JointVelocities(velocities);
+  });
+  c.def("__deepcopy__", [](const JointVelocities &velocities, py::dict) {
+    return JointVelocities(velocities);
+  }, "memo"_a);
   c.def("__repr__", [](const JointVelocities& velocities) {
     std::stringstream buffer;
     buffer << velocities;
@@ -272,7 +292,9 @@ void joint_accelerations(py::module_& m) {
   c.def(py::self /= double());
   c.def(py::self / double());
   c.def(py::self * std::chrono::nanoseconds());
+
   c.def(double() * py::self);
+  c.def(std::chrono::nanoseconds() * py::self);
   c.def(Eigen::ArrayXd() * py::self);
   c.def(Eigen::MatrixXd() * py::self);
 
@@ -286,6 +308,12 @@ void joint_accelerations(py::module_& m) {
   c.def("clamp", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointAccelerations::clamp), "Clamp inplace the magnitude of the accelerations to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
   c.def("clamped", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointAccelerations::clamp), "Return the accelerations clamped to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
 
+  c.def("__copy__", [](const JointAccelerations &accelerations) {
+    return JointAccelerations(accelerations);
+  });
+  c.def("__deepcopy__", [](const JointAccelerations &accelerations, py::dict) {
+    return JointAccelerations(accelerations);
+  }, "memo"_a);
   c.def("__repr__", [](const JointAccelerations& accelerations) {
     std::stringstream buffer;
     buffer << accelerations;
@@ -349,6 +377,12 @@ void joint_torques(py::module_& m) {
   c.def("clamp", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointTorques::clamp), "Clamp inplace the magnitude of the torque to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
   c.def("clamped", py::overload_cast<const Eigen::ArrayXd&, const Eigen::ArrayXd&>(&JointTorques::clamp), "Return the torque clamped to the values in argument", "max_absolute_value_array"_a, "noise_ratio_array"_a);
 
+  c.def("__copy__", [](const JointTorques &torques) {
+    return JointTorques(torques);
+  });
+  c.def("__deepcopy__", [](const JointTorques &torques, py::dict) {
+    return JointTorques(torques);
+  }, "memo"_a);
   c.def("__repr__", [](const JointTorques& torques) {
     std::stringstream buffer;
     buffer << torques;

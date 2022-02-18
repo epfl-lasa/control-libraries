@@ -9,17 +9,19 @@ set(CORE_SOURCES
   src/space/cartesian/CartesianState.cpp
   src/space/cartesian/CartesianPose.cpp
   src/space/cartesian/CartesianTwist.cpp
+  src/space/cartesian/CartesianAcceleration.cpp
   src/space/cartesian/CartesianWrench.cpp
-  src/robot/JointState.cpp
-  src/robot/JointPositions.cpp
-  src/robot/JointVelocities.cpp
-  src/robot/JointAccelerations.cpp
-  src/robot/JointTorques.cpp
-  src/robot/Jacobian.cpp
-  src/parameters/ParameterInterface.cpp
-  src/parameters/Parameter.cpp
-  src/parameters/Predicate.cpp
+  src/space/joint/JointState.cpp
+  src/space/joint/JointPositions.cpp
+  src/space/joint/JointVelocities.cpp
+  src/space/joint/JointAccelerations.cpp
+  src/space/joint/JointTorques.cpp
+  src/space/Jacobian.cpp
   src/parameters/Event.cpp
+  src/parameters/Parameter.cpp
+  src/parameters/ParameterInterface.cpp
+  src/parameters/ParameterMap.cpp
+  src/parameters/Predicate.cpp
   src/geometry/Shape.cpp
   src/geometry/Ellipsoid.cpp
 )

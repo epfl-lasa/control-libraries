@@ -36,8 +36,10 @@ Once installed, you can simply import the module with an optional short alias:
 ```python
 #!/usr/bin/env python
 import state_representation as sr
+import dynamical_systems
 
 print(sr.__version__)
+print(dynamical_systems.__version__)
 
 A = sr.CartesianState.Random("A")
 print(A)
@@ -47,8 +49,10 @@ Or, directly import specific classes from the module.
 ```python
 #!/usr/bin/env python
 from state_representation import JointState
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM
 
 B = JointState.Random("B", 3)
+ds = create_cartesian_ds(DYNAMICAL_SYSTEM.POINT_ATTRACTOR)
 ```
 
 If the `clproto` C++ library is installed, the installation steps above will automatically install the `clproto`
@@ -71,16 +75,31 @@ Bindings exist for the following modules, classes and methods:
 
 - `state_representation`:
   - `State`
+  - `StateType`
   - `SpatialState`
   - `CartesianState`
   - `CartesianPose`
   - `CartesianTwist`
+  - `CartesianAcceleration`
   - `CartesianWrench`
   - `JointState`
   - `JointPositions`
   - `JointVelocities`
   - `JointTorques`
   - `Jacobian`
+  - `Shape`
+  - `Ellipsoid`
+  - `Parameter`
+- `dynamical_systems`:
+  - `DYNAMICAL_SYSTEM`
+  - `create_cartesian_ds(type)`
+  - `create_joint_ds(type)`
+  - `CartesianDefaultDS`
+  - `CartesianPointAttractorDS`
+  - `CircularDS`
+  - `RingDS`
+  - `JointDefaultDS`
+  - `JointPointAttractorDS`
 - `clproto`:
   - `MessageType`
   - `ParameterMessageType`

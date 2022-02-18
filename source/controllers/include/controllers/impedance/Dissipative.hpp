@@ -7,6 +7,7 @@
 #include <eigen3/Eigen/Dense>
 
 namespace controllers::impedance {
+
 /**
  * @enum ComputationalSpaceType
  * @brief Selector of the space in which the controller should be computed
@@ -16,10 +17,7 @@ namespace controllers::impedance {
  * and angular part separately
  */
 enum class ComputationalSpaceType {
-  LINEAR,
-  ANGULAR,
-  DECOUPLED_TWIST,
-  FULL
+  LINEAR, ANGULAR, DECOUPLED_TWIST, FULL
 };
 
 /**
@@ -28,85 +26,43 @@ enum class ComputationalSpaceType {
  */
 template<class S>
 class Dissipative : public Impedance<S> {
-private:
-  ComputationalSpaceType computational_space_;///< the space in which to compute the command vector
-  unsigned int nb_dimensions_;///< the number of dimensions of the input space
-  Eigen::MatrixXd basis_;///< basis matrix used to compute the damping matrix
-  std::shared_ptr<state_representation::Parameter<Eigen::VectorXd>>
-      damping_eigenvalues_;///< coefficient of eigenvalues used in the damping matrix computation
-
-  /**
-   * @brief Constructor with specified computational space and number of dimensions. Both parameters are
-   * mutually exclusive and therefore initialized independently in other constructors
-   */
-  explicit Dissipative(const ComputationalSpaceType& computational_space, unsigned int nb_dimensions);
 
 public:
-  /**
-   * @brief Constructor with specified computational space. Default is DECOUPLED_TWIST
-   * @param computational_space the space in which to compute the command in LINEAR, ANGULAR, DECOUPLED_TWIST or FULL.
-   * Default is DECOUPLED_TWIST
-   */
-  explicit Dissipative(const ComputationalSpaceType& computational_space = ComputationalSpaceType::DECOUPLED_TWIST);
 
   /**
-   * @brief Constructor with specified number of dimensions. Automatically use the full damping matrix.
-   * @param nb_dimensions the number of dimensions of the damping matrix
+   * @brief Base constructor.
+   * @param computational_space The computational space type
+   * @param dimensions The number of dimensions
    */
-  explicit Dissipative(unsigned int nb_dimensions);
+  explicit Dissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions = 6);
 
   /**
-   * @brief Copy constructor
-   * @param other the controller to copy
+   * @brief Constructor from an initial parameter list.
+   * @param parameters A parameter list containing the initial parameters
+   * @param computational_space The computational space type
+   * @param dimensions The number of dimensions
    */
-  Dissipative(const Dissipative<S>& other);
+  explicit Dissipative(
+      const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
+      const ComputationalSpaceType& computational_space, unsigned int dimensions = 6
+  );
 
   /**
-   * @brief Swap the values of the two controllers
-   * @tparam U space of the controller
-   * @param controller1 controller to be swapped with 2
-   * @param controller2 controller to be swapped with 1
+   * @brief Compute the force (task space) or torque (joint space) command based on the input state
+   * of the system as the error between the desired state and the real state.
+   * @param command_state the desired state to reach
+   * @param feedback_state the real state of the system as read from feedback loop
+   * @return the output command at the input state
    */
-  template<class U>
-  friend void swap(Dissipative<U>& controller1, Dissipative<U>& controller2);
+  S compute_command(const S& command_state, const S& feedback_state) override;
+
+protected:
 
   /**
-   * @param Assignment operator
-   * @param other the controller to copy
-   * @return reference to the controller with values from other
+   * @brief Validate and set parameter for damping eigenvalues.
+   * @param parameter A parameter interface pointer
    */
-  Dissipative<S>& operator=(const Dissipative<S>& other);
-
-  /**
-   * @brief Getter of the damping eigenvalues parameter
-   * @return the eigenvalues as a Vetor6D
-   */
-  Eigen::VectorXd get_damping_eigenvalues() const;
-
-  /**
-   * @brief Getter of the damping eigenvalue corresponding to the specified index
-   * @param index the index of the eigenvalue (number between 0 and 5)
-   * @return the eigenvalue at desired index
-   */
-  double get_damping_eigenvalue(unsigned int index) const;
-
-  /**
-   * @brief Setter of the damping eigenvalues parameter
-   * @param damping_eigenvalues the new values of the eigenvalue as a Vector6D
-   */
-  void set_damping_eigenvalues(const Eigen::VectorXd& damping_eigenvalues);
-
-  /**
-   * @brief Setter of the damping eigenvalue corresponding to the specified index
-   * @param damping_eigenvalue the new value of the eigenvalue
-   * @param index the index of the eigenvalue (number between 0 and 5)
-   */
-  void set_damping_eigenvalue(double damping_eigenvalue, unsigned int index);
-
-  /**
-   * @brief Get the eigenvalues in a diagonal matrix form
-   */
-  Eigen::MatrixXd get_diagonal_eigenvalues() const;
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
 
   /**
    * @brief Orthornormalize the basis matrix given in input wrt the main engenvector
@@ -133,109 +89,54 @@ public:
    */
   void compute_damping(const S& desired_velocity);
 
-  /**
-   * @brief Compute the force (task space) or torque (joint space) command based on the input state
-   * of the system as the error between the desired state and the real state.
-   * @param desired_state the desired state to reach
-   * @param feedback_state the real state of the system as read from feedback loop
-   * @return the output command at the input state
-   */
-  S compute_command(const S& desired_state, const S& feedback_state) override;
+  std::shared_ptr<state_representation::Parameter<Eigen::VectorXd>>
+      damping_eigenvalues_; ///< coefficient of eigenvalues used in the damping matrix computation
 
-  /**
-   * @brief Compute the command based on the desired state and a feedback state
-   * To be redefined based on the actual controller implementation.
-   * @param desired_state the desired state of the system.
-   * @param feedback_state the real state of the system as read from feedback loop
-   * @param jacobian the Jacobian matrix of the robot to convert from one state to the other
-   * @return the output command at the input state
-   */
-  state_representation::JointState compute_command(const S& desired_state,
-                                                   const S& feedback_state,
-                                                   const state_representation::Jacobian& jacobian) override;
+  const ComputationalSpaceType computational_space_; ///< the space in which to compute the command vector
 
-  /**
-   * @brief Return a list of all the parameters of the controller
-   * @return the list of parameters
-   */
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> get_parameters() const;
+  Eigen::MatrixXd basis_; ///< basis matrix used to compute the damping matrix
+
 };
 
 template<class S>
-Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int nb_dimensions) :
-    Impedance<S>(Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions),
-                 Eigen::MatrixXd::Identity(nb_dimensions, nb_dimensions),
-                 Eigen::MatrixXd::Zero(nb_dimensions, nb_dimensions)),
+Dissipative<S>::Dissipative(const ComputationalSpaceType& computational_space, unsigned int dimensions) :
+    Impedance<S>(dimensions),
+    damping_eigenvalues_(
+        state_representation::make_shared_parameter<Eigen::VectorXd>(
+            "damping_eigenvalues", Eigen::ArrayXd::Ones(dimensions))),
     computational_space_(computational_space),
-    nb_dimensions_(nb_dimensions),
-    basis_(Eigen::MatrixXd::Random(nb_dimensions, nb_dimensions)),
-    damping_eigenvalues_(std::make_shared<state_representation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
-                                                                                            Eigen::ArrayXd::Ones(nb_dimensions))) {}
+    basis_(Eigen::MatrixXd::Random(dimensions, dimensions)) {
+  this->parameters_.erase("stiffness");
+  this->stiffness_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
+  this->parameters_.erase("inertia");
+  this->inertia_->set_value(Eigen::MatrixXd::Zero(dimensions, dimensions));
 
-template<class S>
-Dissipative<S>::Dissipative(const Dissipative<S>& other):
-    Impedance<S>(other),
-    computational_space_(other.computational_space_),
-    nb_dimensions_(other.nb_dimensions_),
-    basis_(other.basis_),
-    damping_eigenvalues_(std::make_shared<state_representation::Parameter<Eigen::VectorXd>>("damping_eigenvalues",
-                                                                                            other.get_damping_eigenvalues())) {}
-
-template<class U>
-inline void swap(Dissipative<U>& controller1, Dissipative<U>& controller2) {
-  swap(static_cast<Impedance<U>&>(controller1), static_cast<Impedance<U>&>(controller2));
-  std::swap(controller1.computational_space_, controller2.computational_space_);
-  std::swap(controller1.nb_dimensions_, controller2.nb_dimensions_);
-  std::swap(controller1.basis_, controller2.basis_);
-  std::swap(controller1.damping_eigenvalues_, controller2.damping_eigenvalues_);
+  this->damping_->set_value(Eigen::MatrixXd::Identity(dimensions, dimensions));
+  this->parameters_.insert(std::make_pair("damping_eigenvalues", damping_eigenvalues_));
 }
 
 template<class S>
-Dissipative<S>& Dissipative<S>::operator=(const Dissipative<S>& other) {
-  Dissipative<S> tmp(other);
-  swap(*this, tmp);
-  return *this;
+Dissipative<S>::Dissipative(
+    const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters,
+    const ComputationalSpaceType& computational_space, unsigned int dimensions
+) :
+    Dissipative<S>(computational_space, dimensions) {
+  this->set_parameters(parameters);
 }
 
 template<class S>
-inline Eigen::VectorXd Dissipative<S>::get_damping_eigenvalues() const {
-  return this->damping_eigenvalues_->get_value();
+void Dissipative<S>::validate_and_set_parameter(
+    const std::shared_ptr<state_representation::ParameterInterface>& parameter
+) {
+  if (parameter->get_name() == "damping_eigenvalues") {
+    this->damping_eigenvalues_->set_value(this->gain_matrix_from_parameter(parameter).diagonal());
+  }
 }
 
 template<class S>
-inline double Dissipative<S>::get_damping_eigenvalue(unsigned int index) const {
-  Eigen::VectorXd eigenvalues = this->get_damping_eigenvalues();
-  return eigenvalues(index);
-}
-
-template<class S>
-inline void Dissipative<S>::set_damping_eigenvalues(const Eigen::VectorXd& damping_eigenvalues) {
-  this->damping_eigenvalues_->set_value(damping_eigenvalues);
-}
-
-template<class S>
-inline void Dissipative<S>::set_damping_eigenvalue(double damping_eigenvalue, unsigned int index) {
-  Eigen::VectorXd eigenvalues = this->get_damping_eigenvalues();
-  eigenvalues(index) = damping_eigenvalue;
-  this->set_damping_eigenvalues(eigenvalues);
-}
-
-template<class S>
-inline Eigen::MatrixXd Dissipative<S>::get_diagonal_eigenvalues() const {
-  return this->get_damping_eigenvalues().asDiagonal();
-}
-
-template<class S>
-inline std::list<std::shared_ptr<state_representation::ParameterInterface>>
-Dissipative<S>::get_parameters() const {
-  std::list<std::shared_ptr<state_representation::ParameterInterface>> param_list;
-  param_list.push_back(this->damping_eigenvalues_);
-  return param_list;
-}
-
-template<class S>
-Eigen::MatrixXd Dissipative<S>::orthonormalize_basis(const Eigen::MatrixXd& basis,
-                                                     const Eigen::VectorXd& main_eigenvector) {
+Eigen::MatrixXd Dissipative<S>::orthonormalize_basis(
+    const Eigen::MatrixXd& basis, const Eigen::VectorXd& main_eigenvector
+) {
   Eigen::MatrixXd orthonormal_basis = basis;
   uint dim = basis.rows();
   orthonormal_basis.col(0) = main_eigenvector.normalized();
@@ -249,24 +150,20 @@ Eigen::MatrixXd Dissipative<S>::orthonormalize_basis(const Eigen::MatrixXd& basi
 }
 
 template<class S>
-S Dissipative<S>::compute_command(const S& desired_state,
-                                  const S& feedback_state) {
-  // compute the damping matrix out of the desired_state twist
-  this->compute_damping(desired_state);
+S Dissipative<S>::compute_command(
+    const S& command_state, const S& feedback_state
+) {
+  // compute the damping matrix out of the command_state twist
+  this->compute_damping(command_state);
   // apply the impedance control law
-  return this->Impedance<S>::compute_command(desired_state, feedback_state);
+  return this->Impedance<S>::compute_command(command_state, feedback_state);
 }
 
 template<class S>
 void Dissipative<S>::compute_damping(const S& desired_velocity) {
   this->basis_ = this->compute_orthonormal_basis(desired_velocity);
-  this->set_damping(this->basis_ * this->get_diagonal_eigenvalues() * this->basis_.transpose());
+  auto diagonal_eigenvalues = this->damping_eigenvalues_->get_value().asDiagonal();
+  this->damping_->set_value(this->basis_ * diagonal_eigenvalues * this->basis_.transpose());
 }
 
-template<class S>
-state_representation::JointState Dissipative<S>::compute_command(const S& desired_state,
-                                                                 const S& feedback_state,
-                                                                 const state_representation::Jacobian& jacobian) {
-  return this->Impedance<S>::compute_command(desired_state, feedback_state, jacobian);
-}
 }// namespace controllers

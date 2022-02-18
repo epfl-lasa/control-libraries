@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(control-libraries VERSION 4.1.0)
+project(control-libraries VERSION 5.0.0)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)
@@ -39,14 +39,14 @@ endif()
 
 add_subdirectory(state_representation)
 
-if(BUILD_CONTROLLERS)
-  add_subdirectory(controllers)
-endif()
-
 if(BUILD_DYNAMICAL_SYSTEMS)
   add_subdirectory(dynamical_systems)
 endif()
 
-if(BUILD_ROBOT_MODEL)
+if(BUILD_ROBOT_MODEL OR BUILD_CONTROLLERS)
   add_subdirectory(robot_model)
+endif()
+
+if(BUILD_CONTROLLERS)
+  add_subdirectory(controllers)
 endif()

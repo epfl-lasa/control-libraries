@@ -7,9 +7,10 @@ include_directories(
 )
 
 set(CORE_SOURCES
-  src/DynamicalSystem.cpp
+  src/IDynamicalSystem.cpp
+  src/DynamicalSystemFactory.cpp
   src/Circular.cpp
-  src/Linear.cpp
+  src/PointAttractor.cpp
   src/Ring.cpp
 )
 

@@ -2,17 +2,18 @@
 #include <thread>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
-#include <dynamical_systems/Linear.hpp>
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
 
 using namespace state_representation;
 using namespace dynamical_systems;
 using namespace std::chrono_literals;
 
-CartesianPose control_loop_step(const CartesianPose& pose,
-                                const Linear<CartesianState>& ds,
-                                const std::chrono::nanoseconds& dt) {
+CartesianPose control_loop_step(
+    const CartesianPose& pose, const std::shared_ptr<IDynamicalSystem<CartesianState>>& ds,
+    const std::chrono::nanoseconds& dt
+) {
   // get the twist evaluated at current pose
-  CartesianTwist desired_twist = ds.evaluate(pose);
+  CartesianTwist desired_twist = ds->evaluate(pose);
   // integrate the twist and add it to the current pose
   CartesianPose new_pose = dt * desired_twist + pose;
   // print the new pose
@@ -22,15 +23,19 @@ CartesianPose control_loop_step(const CartesianPose& pose,
 }
 
 void control_loop(const std::chrono::nanoseconds& dt, double tolerance) {
-  // set a desired target and a linear ds toward the target
+  // set a desired target and a point attractor ds toward the target
   CartesianPose target = CartesianPose::Random("frame");
-  Linear<CartesianState> linear_ds(target);
+  std::shared_ptr<IDynamicalSystem<CartesianState>>
+      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  ds->set_parameter(make_shared_parameter("attractor", target));
   // set a starting pose
   CartesianPose current_pose = CartesianPose::Random("frame");
   // loop until target is reached
   double distance;
   do {
-    current_pose = control_loop_step(current_pose, linear_ds, dt);
+    current_pose = control_loop_step(current_pose, ds, dt);
     distance = dist(current_pose, target, CartesianStateVariable::POSE);
     std::cout << "distance to attractor: " << std::to_string(distance) << std::endl;
     std::cout << "-----------" << std::endl;

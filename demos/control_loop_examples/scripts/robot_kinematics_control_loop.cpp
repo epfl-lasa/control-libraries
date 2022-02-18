@@ -3,9 +3,9 @@
 #include <utility>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
-#include <state_representation/robot/JointPositions.hpp>
-#include <state_representation/robot/JointVelocities.hpp>
-#include <dynamical_systems/Linear.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/space/joint/JointVelocities.hpp>
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
 #include <robot_model/Model.hpp>
 
 using namespace state_representation;
@@ -38,39 +38,44 @@ public:
     QPInverseVelocityParameters parameters;
     parameters.dt = dt;
     // apply the inverse velocity
-    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(desired_eef_twist,
-                                                                             this->joint_positions,
-                                                                             parameters);
+    JointVelocities desired_joint_velocities = this->robot_.inverse_velocity(
+        desired_eef_twist, this->joint_positions, parameters
+    );
     // integrate the new position
     this->joint_positions = dt * desired_joint_velocities + this->joint_positions;
   }
 };
 
-void control_loop_step(DummyRobotInterface& robot,
-                       const Linear<CartesianState>& ds,
-                       const std::chrono::nanoseconds& dt) {
+void control_loop_step(
+    DummyRobotInterface& robot, const std::shared_ptr<IDynamicalSystem<CartesianState>>& ds,
+    const std::chrono::nanoseconds& dt
+) {
   // read the robot state
   robot.read_robot_state();
   // print the state and eef pose
   std::cout << robot.joint_positions << std::endl;
   std::cout << robot.eef_pose << std::endl;
   // get the twist evaluated at current pose
-  CartesianTwist desired_twist = ds.evaluate(robot.eef_pose);
+  CartesianTwist desired_twist = ds->evaluate(robot.eef_pose);
   // send the desired twist to the robot
   robot.send_control_command(desired_twist, dt);
 }
 
 void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt, double tolerance) {
-  // set a desired target for the robot eef and a linear ds toward the target
+  // set a desired target for the robot eef and a point attractor ds toward the target
   CartesianPose target(robot.eef_pose.get_name(), robot.eef_pose.get_reference_frame());
   target.set_position(.5, .0, .75);
   Eigen::Quaterniond orientation(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitY()));
   target.set_orientation(orientation);
-  Linear<CartesianState> linear_ds(target);
+  std::shared_ptr<IDynamicalSystem<CartesianState>>
+      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
+      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
+  );
+  ds->set_parameter(make_shared_parameter("attractor", target));
 
   double distance;
   do {
-    control_loop_step(robot, linear_ds, dt);
+    control_loop_step(robot, ds, dt);
     distance = dist(robot.eef_pose, target, CartesianStateVariable::POSE);
     std::cout << "distance to attractor: " << std::to_string(distance) << std::endl;
     std::cout << "-----------" << std::endl;
@@ -86,7 +91,6 @@ void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt
 }
 
 int main(int, char**) {
-  std::string robot_name = "franka";
   std::string urdf_path = std::string(SCRIPT_FIXTURES) + "panda_arm.urdf";
   DummyRobotInterface robot("franka", urdf_path);
   auto dt = 100ms;

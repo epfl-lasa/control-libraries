@@ -60,7 +60,7 @@ the encoded fields back into an ordered vector to be decoded.
 ```c++
 #include <clproto.h>
 #include <state_representation/space/cartesian/CartesianState.hpp>
-#include <state_representation/robot/JointState.hpp>
+#include <state_representation/space/joint/JointState.hpp>
 
 using namespace state_representation;
 

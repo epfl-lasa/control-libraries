@@ -1,35 +1,42 @@
 #!/usr/bin/env bash
-# Build a docker image to compile the library and run tests
 
-MULTISTAGE_TARGET="build-testing"
+MULTISTAGE_TARGET="testing"
+IMAGE_NAME=epfl-lasa/control-libraries/source
+IMAGE_TAG="${MULTISTAGE_TARGET}"
+
 BUILD_TESTING="ON"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
 
-REBUILD=0
-while getopts 'r' opt; do
-    case $opt in
-        r) REBUILD=1 ;;
-        *) echo 'Error in command line parsing' >&2
-           exit 1
-    esac
-done
-shift "$(( OPTIND - 1 ))"
+HELP_MESSAGE="Usage: build-test.sh [-r] [-v]
+Options:
+  -r, --rebuild            Rebuild the image using the docker
+                           --no-cache option.
+  -v, --verbose            Use the verbose option during the building
+                           process.
+  -h, --help               Show this help message.
+"
 
-NAME=$(echo "${PWD##*/}" | tr _ -)/$MULTISTAGE_TARGET
-TAG="latest"
+BUILD_FLAGS=()
+while [[ $# -gt 0 ]]; do
+  opt="$1"
+  case $opt in
+    -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
+    -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
+    -h|--help) echo "${HELP_MESSAGE}"; exit 0 ;;
+    *) echo 'Error in command line parsing' >&2
+       echo -e "\n${HELP_MESSAGE}"
+       exit 1
+  esac
+done
 
 BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
 BUILD_FLAGS+=(--build-arg "BUILD_TESTING=${BUILD_TESTING}")
 BUILD_FLAGS+=(--build-arg "BUILD_CONTROLLERS=${BUILD_CONTROLLERS}")
 BUILD_FLAGS+=(--build-arg "BUILD_DYNAMICAL_SYSTEMS=${BUILD_DYNAMICAL_SYSTEMS}")
 BUILD_FLAGS+=(--build-arg "BUILD_ROBOT_MODEL=${BUILD_ROBOT_MODEL}")
-BUILD_FLAGS+=(-t "${NAME}:${TAG}")
-
-if [ "$REBUILD" -eq 1 ]; then
-    BUILD_FLAGS+=(--no-cache)
-fi
+BUILD_FLAGS+=(-t "${IMAGE_NAME}:${IMAGE_TAG}")
 
 docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
 DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.source "${BUILD_FLAGS[@]}"

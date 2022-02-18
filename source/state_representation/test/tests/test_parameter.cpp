@@ -12,6 +12,12 @@ TEST(ParameterTest, Conversion) {
   EXPECT_EQ(int_param.get_type(), StateType::PARAMETER_INT);
   int_param.set_value(2);
   EXPECT_EQ(int_param.get_value(), 2);
+  EXPECT_EQ(typeid(int_param.get_value<double>()).name(), typeid(2.0).name());
+  Parameter<double> double_param("double");
+  EXPECT_NO_THROW(double_param = int_param);
+  EXPECT_EQ(double_param.get_type(), StateType::PARAMETER_DOUBLE);
+  EXPECT_EQ(double_param.get_name(), int_param.get_name());
+  EXPECT_EQ(double_param.get_value(), 2.0);
 
   std::vector<int> values{1, 2, 3};
   Parameter<std::vector<int>> int_array_param("test", values);
@@ -23,11 +29,11 @@ TEST(ParameterTest, Conversion) {
 
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
   Parameter<CartesianState> test2(test1);
-  EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANSTATE);
 
   std::shared_ptr<Parameter<CartesianState>> test3 =
       std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("test", CartesianPose::Random("test")));
-  EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANSTATE);
 }
 
 TEST(ParameterTest, Event) {
@@ -66,4 +72,15 @@ TEST(ParameterTest, Event) {
   ptr_e->set_value(false);
   ptr_e->set_value(true);
   EXPECT_TRUE(ptr_e->get_value());
+}
+
+TEST(ParameterTest, MakeShared) {
+  auto pose = CartesianPose::Random("A", "B");
+  auto param = make_shared_parameter("name", pose);
+  EXPECT_EQ(param->get_name(), "name");
+  EXPECT_EQ(param->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(param->is_empty(), false);
+  EXPECT_EQ(param->get_value().get_name(), "A");
+  EXPECT_EQ(param->get_value().get_reference_frame(), "B");
+  EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
 }

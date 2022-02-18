@@ -3,10 +3,11 @@
 #include "state_representation_bindings.h"
 
 #include <state_representation/State.hpp>
+#include <state_representation/geometry/Ellipsoid.hpp>
 #include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
-#include <state_representation/robot/JointPositions.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
 
 struct ParameterValues {
   int int_value;
@@ -21,6 +22,7 @@ struct ParameterValues {
   CartesianPose cartesian_pose;
   JointState joint_state;
   JointPositions joint_positions;
+  Ellipsoid ellipsoid;
   Eigen::MatrixXd matrix_value;
   Eigen::VectorXd vector_value;
 };
@@ -37,3 +39,7 @@ public:
 
   ParameterValues values;
 };
+
+ParameterContainer parameter_interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter);
+
+std::shared_ptr<ParameterInterface> container_to_parameter_interface_ptr(const ParameterContainer& parameter);

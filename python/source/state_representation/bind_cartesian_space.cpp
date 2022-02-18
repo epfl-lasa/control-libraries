@@ -5,6 +5,7 @@
 #include <state_representation/space/cartesian/CartesianState.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
+#include <state_representation/space/cartesian/CartesianAcceleration.hpp>
 #include <state_representation/space/cartesian/CartesianWrench.hpp>
 
 
@@ -19,6 +20,12 @@ void spatial_state(py::module_& m) {
   c.def("set_reference_frame", &SpatialState::set_reference_frame, "Setter of the reference frame.", "reference_frame"_a);
   c.def("is_compatible", &SpatialState::is_compatible, "Check if the state is compatible for operations with the state given as argument.", "state"_a);
 
+  c.def("__copy__", [](const SpatialState &state) {
+    return SpatialState(state);
+  });
+  c.def("__deepcopy__", [](const SpatialState &state, py::dict) {
+    return SpatialState(state);
+  }, "memo"_a);
   c.def("__repr__", [](const SpatialState& state) {
     std::stringstream buffer;
     buffer << state;
@@ -36,7 +43,7 @@ void cartesian_state_variable(py::module_& m) {
       .value("TWIST", CartesianStateVariable::TWIST)
       .value("LINEAR_ACCELERATION", CartesianStateVariable::LINEAR_ACCELERATION)
       .value("ANGULAR_ACCELERATION", CartesianStateVariable::ANGULAR_ACCELERATION)
-      .value("ACCELERATIONS", CartesianStateVariable::ACCELERATIONS)
+      .value("ACCELERATION", CartesianStateVariable::ACCELERATION)
       .value("FORCE", CartesianStateVariable::FORCE)
       .value("TORQUE", CartesianStateVariable::TORQUE)
       .value("WRENCH", CartesianStateVariable::WRENCH)
@@ -65,8 +72,8 @@ void cartesian_state(py::module_& m) {
   c.def("get_twist", &CartesianState::get_twist, "Getter of the 6d twist from linear and angular velocity attributes");
 
   c.def("get_linear_acceleration", &CartesianState::get_linear_acceleration, "Getter of the linear acceleration attribute");
-  c.def("get_angular_acceleration", &CartesianState::get_angular_acceleration, "Getter of the linear acceleration attribute");
-  c.def("get_accelerations", &CartesianState::get_accelerations, "Getter of the 6d accelerations from linear and angular acceleration attributes");
+  c.def("get_angular_acceleration", &CartesianState::get_angular_acceleration, "Getter of the angular acceleration attribute");
+  c.def("get_acceleration", &CartesianState::get_acceleration, "Getter of the 6d acceleration from linear and angular acceleration attributes");
 
   c.def("get_force", &CartesianState::get_force, "Getter of the force attribute");
   c.def("get_torque", &CartesianState::get_torque, "Getter of the torque attribute");
@@ -85,8 +92,8 @@ void cartesian_state(py::module_& m) {
   c.def("set_twist", &CartesianState::set_twist, "Setter of the linear and angular velocities from a 6d twist vector");
 
   c.def("set_linear_acceleration", &CartesianState::set_linear_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_accelerations", &CartesianState::set_accelerations, "Setter of the linear and angular accelerations from a 6d acceleration vector");
+  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the angular acceleration attribute");
+  c.def("set_acceleration", &CartesianState::set_acceleration, "Setter of the linear and angular acceleration from a 6d acceleration vector");
 
   c.def("set_force", &CartesianState::set_force, "Setter of the force attribute");
   c.def("set_torque", &CartesianState::set_torque, "Setter of the torque attribute");
@@ -120,6 +127,12 @@ void cartesian_state(py::module_& m) {
 
   c.def("to_list", &CartesianState::to_std_vector, "Return the state as a list");
 
+  c.def("__copy__", [](const CartesianState &state) {
+    return CartesianState(state);
+  });
+  c.def("__deepcopy__", [](const CartesianState &state, py::dict) {
+    return CartesianState(state);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianState& state) {
     std::stringstream buffer;
     buffer << state;
@@ -156,7 +169,7 @@ void cartesian_pose(py::module_& m) {
       "twist",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
       "force",
       "torque",
       "wrench"
@@ -193,13 +206,18 @@ void cartesian_pose(py::module_& m) {
   c.def("norms", &CartesianPose::norms, "Compute the norms of the state variable specified by the input type (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
   c.def("normalized", &CartesianPose::normalized, "Compute the normalized pose at the state variable given in argument (default is full pose)", "state_variable_type"_a=CartesianStateVariable::POSE);
 
+  c.def("__copy__", [](const CartesianPose &pose) {
+    return CartesianPose(pose);
+  });
+  c.def("__deepcopy__", [](const CartesianPose &pose, py::dict) {
+    return CartesianPose(pose);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianPose& pose) {
     std::stringstream buffer;
     buffer << pose;
     return buffer.str();
   });
 }
-
 
 void cartesian_twist(py::module_& m) {
   py::class_<CartesianTwist, CartesianState> c(m, "CartesianTwist");
@@ -223,7 +241,7 @@ void cartesian_twist(py::module_& m) {
       "pose",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
       "force",
       "torque",
       "wrench"
@@ -245,6 +263,7 @@ void cartesian_twist(py::module_& m) {
   c.def(py::self / double());
   c.def(py::self *= Eigen::Matrix<double, 6, 6>());
   c.def(py::self * std::chrono::nanoseconds());
+  c.def(py::self / std::chrono::nanoseconds());
 
   c.def(double() * py::self);
   c.def(std::chrono::nanoseconds() * py::self);
@@ -260,6 +279,12 @@ void cartesian_twist(py::module_& m) {
   c.def("norms", &CartesianTwist::norms, "Compute the norms of the state variable specified by the input type (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
   c.def("normalized", &CartesianTwist::normalized, "Compute the normalized twist at the state variable given in argument (default is full twist)", "state_variable_type"_a=CartesianStateVariable::TWIST);
 
+  c.def("__copy__", [](const CartesianTwist &twist) {
+    return CartesianTwist(twist);
+  });
+  c.def("__deepcopy__", [](const CartesianTwist &twist, py::dict) {
+    return CartesianTwist(twist);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianTwist& twist) {
     std::stringstream buffer;
     buffer << twist;
@@ -267,6 +292,77 @@ void cartesian_twist(py::module_& m) {
   });
 }
 
+void cartesian_acceleration(py::module_& m) {
+  py::class_<CartesianAcceleration, CartesianState> c(m, "CartesianAcceleration");
+
+  c.def(py::init(), "Empty constructor");
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const CartesianAcceleration&>(), "Copy constructor", "acceleration"_a);
+  c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
+  c.def(py::init<const CartesianTwist&>(), "Copy constructor from a CartesianTwist by considering that it is equivalent to dividing the twist by 1 second", "twist"_a);
+
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration given as a vector.", "name"_a, "linear_acceleration"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration and angular acceleration given as vectors.", "name"_a, "linear_acceleration"_a, "angular_acceleration"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianAcceleration from a single 6d acceleration vector", "name"_a, "acceleration"_a, "reference"_a=std::string("world"));
+
+  c.def_static("Zero", &CartesianAcceleration::Zero, "Constructor for the zero acceleration", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Random", &CartesianAcceleration::Random, "Constructor for a random acceleration", "name"_a, "reference"_a=std::string("world"));
+
+  std::vector<std::string> deleted_attributes = {
+      "position",
+      "orientation",
+      "pose",
+      "linear_velocity",
+      "angular_velocity",
+      "twist",
+      "force",
+      "torque",
+      "wrench"
+  };
+
+  for (const std::string& attr : deleted_attributes) {
+    c.def(std::string("get_" + attr).c_str(), [](const CartesianAcceleration&) -> void {}, "Deleted method from parent class.");
+    c.def(std::string("set_" + attr).c_str(), [](const CartesianAcceleration& acceleration) -> CartesianAcceleration { return acceleration; }, "Deleted method from parent class.");
+  }
+
+  c.def(py::self += py::self);
+  c.def(py::self + py::self);
+  c.def(py::self -= py::self);
+  c.def(py::self - py::self);
+
+  c.def(py::self *= double());
+  c.def(py::self * double());
+  c.def(py::self /= double());
+  c.def(py::self / double());
+  c.def(py::self *= Eigen::Matrix<double, 6, 6>());
+  c.def(py::self * std::chrono::nanoseconds());
+
+  c.def(double() * py::self);
+  c.def(std::chrono::nanoseconds() * py::self);
+  c.def(Eigen::Matrix<double, 6, 6>() * py::self);
+
+  c.def("clamp", &CartesianAcceleration::clamp, "Clamp inplace the magnitude of the acceleration to the values in argument", "max_linear"_a, "max_angular"_a, "linear_noise_ratio"_a=0, "angular_noise_ratio"_a=0);
+  c.def("clamped", &CartesianAcceleration::clamped, "Return the clamped acceleration", "max_linear"_a, "max_angular"_a, "linear_noise_ratio"_a=0, "angular_noise_ratio"_a=0);
+
+  c.def("copy", &CartesianAcceleration::copy, "Return a copy of the CartesianAcceleration");
+  c.def("data", &CartesianAcceleration::data, "Returns the acceleration data as a vector");
+  c.def("set_data", py::overload_cast<const Eigen::VectorXd&>(&CartesianAcceleration::set_data), "Set the acceleration data from a vector", "data"_a);
+  c.def("set_data", py::overload_cast<const std::vector<double>&>(&CartesianAcceleration::set_data), "Set the acceleration data from a list", "data"_a);
+  c.def("norms", &CartesianAcceleration::norms, "Compute the norms of the state variable specified by the input type (default is full acceleration)", "state_variable_type"_a=CartesianStateVariable::ACCELERATION);
+  c.def("normalized", &CartesianAcceleration::normalized, "Compute the normalized acceleration at the state variable given in argument (default is full acceleration)", "state_variable_type"_a=CartesianStateVariable::ACCELERATION);
+
+  c.def("__copy__", [](const CartesianAcceleration &acceleration) {
+    return CartesianAcceleration(acceleration);
+  });
+  c.def("__deepcopy__", [](const CartesianAcceleration &acceleration, py::dict) {
+    return CartesianAcceleration(acceleration);
+  }, "memo"_a);
+  c.def("__repr__", [](const CartesianAcceleration& acceleration) {
+    std::stringstream buffer;
+    buffer << acceleration;
+    return buffer.str();
+  });
+}
 
 void cartesian_wrench(py::module_& m) {
   py::class_<CartesianWrench, CartesianState> c(m, "CartesianWrench");
@@ -292,7 +388,7 @@ void cartesian_wrench(py::module_& m) {
       "twist",
       "linear_acceleration",
       "angular_acceleration",
-      "accelerations",
+      "acceleration",
   };
 
   for (const std::string& attr : deleted_attributes) {
@@ -321,6 +417,12 @@ void cartesian_wrench(py::module_& m) {
   c.def("norms", &CartesianWrench::norms, "Compute the norms of the state variable specified by the input type (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
   c.def("normalized", &CartesianWrench::normalized, "Compute the normalized twist at the state variable given in argument (default is full wrench)", "state_variable_type"_a=CartesianStateVariable::WRENCH);
 
+  c.def("__copy__", [](const CartesianWrench &wrench) {
+    return CartesianWrench(wrench);
+  });
+  c.def("__deepcopy__", [](const CartesianWrench &wrench, py::dict) {
+    return CartesianWrench(wrench);
+  }, "memo"_a);
   c.def("__repr__", [](const CartesianWrench& wrench) {
     std::stringstream buffer;
     buffer << wrench;
@@ -334,5 +436,6 @@ void bind_cartesian_space(py::module_& m) {
   cartesian_state(m);
   cartesian_pose(m);
   cartesian_twist(m);
+  cartesian_acceleration(m);
   cartesian_wrench(m);
 }

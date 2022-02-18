@@ -3,12 +3,13 @@
 #include "state_representation/parameters/Predicate.hpp"
 
 namespace state_representation {
+
 /**
  * @class Event
  * @brief An event is a predicate with memory. Its purpose is
  * to be true only once and change value only when the underlying
  * predicate has changed from true to false and back to true
- * since last reading
+ * since last reading.
  */
 class Event : public Predicate {
 private:
@@ -16,7 +17,7 @@ private:
 
 public:
   /**
-   * @brief Constructor with name of the predicate and default false value
+   * @brief Constructor with name of the predicate and default false value.
    */
   explicit Event(const std::string& name);
 
@@ -27,24 +28,24 @@ public:
   bool read_value();
 
   /**
-   * @brief Setter of the value attribute
-   * @param the new value attribute
+   * @brief Setter of the value attribute.
+   * @param value The new value attribute
    */
   void set_value(const bool& value) override;
 
   /**
    * @brief Getter of the previous value. Does not
-   * affect the behavior of the event (as opposed to read_value)
+   * affect the behavior of the event (as opposed to read_value).
    */
   bool get_previous_value() const;
 
   /**
-    * @brief Overload the ostream operator for printing
-    * @param os the ostream to happened the string representing the State to
-    * @param predicate the Predicate to print
-    * @return the appended ostream
+    * @brief Overload the ostream operator for printing.
+    * @param os The ostream to append the string representing the Event to
+    * @param predicate The Event to print
+    * @return The appended ostream
      */
-  friend std::ostream& operator<<(std::ostream& os, const Predicate& predicate);
+  friend std::ostream& operator<<(std::ostream& os, const Event& event);
 };
 
 inline bool Event::read_value() {

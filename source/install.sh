@@ -71,14 +71,24 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+if [ "${BUILD_CONTROLLERS}" == "ON" ] && [ "${BUILD_ROBOT_MODEL}" == "OFF" ]; then
+  echo "The robot model library is required to build the controllers library!"
+  echo "Either disable controller installation with '--no-controllers' or enable"
+  echo "the robot model installation by removing the '--no-robot-model' flag."
+  exit 1
+fi
+
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-apt-get update && apt-get install "${AUTO_INSTALL}" libeigen3-dev || exit 1
+mkdir -p "${SOURCE_PATH}"/tmp/lib
+cd "${SOURCE_PATH}"/tmp/lib || exit 1
+wget -c https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz -O - | tar -xz
+cd eigen-3.4.0 && mkdir build && cd build && cmake .. && make install
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   echo ">>> INSTALLING ROBOT MODEL DEPENDENCIES"
-  apt-get install "${AUTO_INSTALL}" lsb-release gnupg2 curl || exit 1
+  apt-get update && apt-get install "${AUTO_INSTALL}" lsb-release gnupg2 curl || exit 1
 
   # install pinocchio
   echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
@@ -93,7 +103,6 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
 
   # install osqp
-  mkdir -p "${SOURCE_PATH}"/tmp/lib
   cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone --recursive https://github.com/oxfordcontrol/osqp
   cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1

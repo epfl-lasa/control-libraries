@@ -116,7 +116,7 @@ i.e. if `wSa` has a `twist` or `acceleration` it will affect the state variables
 Full `CartesianState` can be difficult to handle as they contain all the dynamics of the frame when, sometime,
 you just want to express a `pose` without `twist`, `accelerations` or `wrench`.
 Therefore, extra classes representing only those specific state variables have been defined, `CartesianPose`,
-`CartesianTwist` and `CartesianWrench`.
+`CartesianTwist`, `CartesianAcceleration` and `CartesianWrench`.
 Effectively, they all extend from `CartesianState` hence they can be intertwined as will.
 
 ```cpp

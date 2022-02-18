@@ -1,6 +1,7 @@
 #include "state_representation/parameters/Predicate.hpp"
 
 namespace state_representation {
+
 Predicate::Predicate(const std::string& name) : Parameter<bool>(name, false) {}
 
 Predicate::Predicate(const std::string& name, bool value) : Parameter<bool>(name, value) {}

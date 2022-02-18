@@ -5,9 +5,8 @@
 using namespace state_representation;
 
 static void expect_only_pose(CartesianPose& pose) {
-  EXPECT_EQ(static_cast<CartesianState&>(pose).get_orientation().norm(), 1);
   EXPECT_EQ(static_cast<CartesianState&>(pose).get_twist().norm(), 0);
-  EXPECT_EQ(static_cast<CartesianState&>(pose).get_accelerations().norm(), 0);
+  EXPECT_EQ(static_cast<CartesianState&>(pose).get_acceleration().norm(), 0);
   EXPECT_EQ(static_cast<CartesianState&>(pose).get_wrench().norm(), 0);
 }
 
@@ -61,7 +60,7 @@ TEST(CartesianPoseTest, CopyPose) {
 
   // try to change non pose variables prior to the copy, those should be discarded
   static_cast<CartesianState&>(pose1).set_twist(Eigen::VectorXd::Random(6));
-  static_cast<CartesianState&>(pose1).set_accelerations(Eigen::VectorXd::Random(6));
+  static_cast<CartesianState&>(pose1).set_acceleration(Eigen::VectorXd::Random(6));
   static_cast<CartesianState&>(pose1).set_wrench(Eigen::VectorXd::Random(6));
   CartesianPose pose4 = pose1;
   EXPECT_EQ(pose1.data(), pose4.data());

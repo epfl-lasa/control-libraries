@@ -5,6 +5,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/cartesian/CartesianTwist.hpp"
+#include "state_representation/exceptions/EmptyStateException.hpp"
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 
@@ -17,6 +18,12 @@ private:
   CartesianState center_state_; ///< pose and potentially velocities and accelerations of the shape if moving
 
 public:
+  /**
+   * @brief Constructor with a type
+   * @param type the type of shape as a StateType
+   */
+  explicit Shape(const StateType& type);
+
   /**
    * @brief Constructor with name but empty state
    * @param type the type of shape as a StateType
@@ -94,7 +101,7 @@ public:
 
   /**
     * @brief Overload the ostream operator for printing
-    * @param os the ostream to happend the string representing the Shape to
+    * @param os the ostream to append the string representing the Shape to
     * @param shape the Shape to print
     * @return the appended ostream
      */
@@ -128,11 +135,12 @@ inline const CartesianTwist& Shape::get_center_twist() const {
 }
 
 inline void Shape::set_center_state(const CartesianState& state) {
+  this->set_name(state.get_name());
   this->center_state_ = state;
 }
 
 inline void Shape::set_center_pose(const CartesianPose& pose) {
-  if (this->center_state_.get_reference_frame() != pose.get_reference_frame()) {
+  if (!this->center_state_.is_empty() && this->center_state_.get_reference_frame() != pose.get_reference_frame()) {
     throw exceptions::IncompatibleReferenceFramesException(
         "The shape state and the given pose are not expressed in the same reference frame");
   }
@@ -140,10 +148,16 @@ inline void Shape::set_center_pose(const CartesianPose& pose) {
 }
 
 inline void Shape::set_center_position(const Eigen::Vector3d& position) {
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Shape is not set yet.");
+  }
   this->center_state_.set_position(position);
 }
 
 inline void Shape::set_center_orientation(const Eigen::Quaterniond& orientation) {
+  if (this->get_center_state().is_empty()) {
+    throw exceptions::EmptyStateException("The center state of the Shape is not set yet.");
+  }
   this->center_state_.set_orientation(orientation);
 }
 }

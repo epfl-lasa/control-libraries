@@ -27,9 +27,6 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 find_package(Eigen3 REQUIRED)
-find_package(pinocchio QUIET)
-find_package(OsqpEigen QUIET)
-find_package(osqp QUIET)
 
 if(BUILD_TESTING)
   enable_testing()

@@ -6,7 +6,7 @@
 
 
 void shape(py::module_& m) {
-  py::class_<Shape, State> c(m, "Shape");
+  py::class_<Shape, std::shared_ptr<Shape>, State> c(m, "Shape");
 
   c.def(py::init<const StateType&, const std::string&, const std::string&>(), "Constructor with name but empty state.", "type"_a, "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const Shape&>(), "Copy constructor from another Shape.", "shape"_a);
@@ -36,7 +36,7 @@ void shape(py::module_& m) {
 }
 
 void ellipsoid(py::module_& m) {
-  py::class_<Ellipsoid, Shape> c(m, "Ellipsoid");
+  py::class_<Ellipsoid, std::shared_ptr<Ellipsoid>, Shape> c(m, "Ellipsoid");
 
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name but empty state.", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const Ellipsoid&>(), "Copy constructor from another Ellipsoid.", "ellipsoid"_a);

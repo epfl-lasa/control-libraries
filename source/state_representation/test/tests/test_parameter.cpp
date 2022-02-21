@@ -4,6 +4,7 @@
 #include "state_representation/space/cartesian/CartesianState.hpp"
 
 #include "state_representation/exceptions/InvalidParameterCastException.hpp"
+#include "state_representation/exceptions/InvalidPointerException.hpp"
 
 #include <gtest/gtest.h>
 
@@ -114,19 +115,26 @@ TEST(ParameterTest, ParameterThroughInterface) {
 }
 
 TEST(ParameterTest, ParameterInterfaceBadPointer) {
-  ParameterInterface parameter_interface(
-      StateType::PARAMETER_INT,
-  "name");
-  EXPECT_THROW(parameter_interface.get_parameter<int>(), std::exception); // bad pointer
-  EXPECT_THROW(parameter_interface.get_parameter<int>(true), std::exception); // bad pointer
-  EXPECT_THROW(parameter_interface.get_parameter<int>(false), std::exception); // bad pointer
+  ParameterInterface parameter_interface(StateType::PARAMETER_INT, "name");
+
+  // by default (validate_pointer = true), throw when the ParameterInterface instance is not managed by any pointer
+  EXPECT_THROW(parameter_interface.get_parameter<int>(), exceptions::InvalidPointerException);
+  EXPECT_THROW(parameter_interface.get_parameter<int>(true), exceptions::InvalidPointerException);
+
+  // using validate_pointer = false catches the exception but returns a null pointer
+  EXPECT_NO_THROW(parameter_interface.get_parameter<int>(false));
+  EXPECT_EQ(parameter_interface.get_parameter<int>(false), nullptr);
 }
 
 TEST(ParameterTest, ParameterInterfaceNullCast) {
   auto parameter_interface_ptr = std::make_shared<ParameterInterface>(StateType::PARAMETER_INT, "name");
   std::shared_ptr<Parameter<int>> parameter;
+
+  // by default (validate_pointer = true), throw when the pointer does not address a Parameter instance
   EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(), exceptions::InvalidParameterCastException);
   EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(true), exceptions::InvalidParameterCastException);
+
+  // using validate_pointer = false catches the exception but returns a null pointer
   EXPECT_NO_THROW(parameter = parameter_interface_ptr->get_parameter<int>(false));
   EXPECT_EQ(parameter, nullptr);
 }

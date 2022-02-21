@@ -1,7 +1,5 @@
 set(LIBRARY_NAME controllers)
 
-find_library(robot_model REQUIRED)
-
 set(CORE_SOURCES
   src/ControllerFactory.cpp
   src/IController.cpp

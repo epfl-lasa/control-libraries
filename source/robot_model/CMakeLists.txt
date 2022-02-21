@@ -4,7 +4,6 @@ list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 find_package(pinocchio REQUIRED)
 find_package(OsqpEigen REQUIRED)
 find_package(osqp REQUIRED)
-find_library(state_representation REQUIRED)
 
 set(CORE_SOURCES
   src/Model.cpp

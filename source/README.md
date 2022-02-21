@@ -130,7 +130,7 @@ If you have a target library or executable `my_target`, you can link all require
 and include directories automatically with the following commands in the CMakeLists file:
 
 ```cmake
-find_package(control_libraries <VERSION> CONFIG REQUIRED)
+find_package(control_libraries [VERSION] CONFIG REQUIRED)
 
 target_link_libraries(my_target ${control_libraries_LIBRARIES})
 ```
@@ -140,10 +140,30 @@ control libraries version has a different major increment (for example, `4.1.0` 
 will give the according error.
 
 The `CONFIG` flag tells cmake to directly search for a `control_librariesConfig.cmake` file, which is installed
-as part of the package.
+as part of the package. It is not required but makes the cmake search algorithm slightly more efficient.
 
 The `REQUIRED` flag will give an error if the package is not found, which just prevents build errors from happening
 at later stages.
+
+### Advanced specification
+
+For more fine control in checking required components when importing control libraries, it is possible to
+supply the individual required libraries to the end of the `find_package` directive. This aborts the cmake 
+configuration early if the required component was not found (for example, when the control libraries installation
+selectively disabled the `controllers` library).
+
+Additional `OPTIONAL_COMPONENTS` can also be appended, which will silently check if they are installed without aborting.
+This is generally not needed.
+
+Some examples below:
+
+```cmake
+# ensure that both `dynamical_systems` and `robot_model` are installed and available
+find_package(control_libraries 5.0.0 CONFIG REQUIRED dynamical_systems robot_model)
+
+# ensure that the `controllers` library is available, and also check for dynamical_systems in the background
+find_package(control_libraries 5.0.0 CONFIG REQUIRED controllers OPTIONAL_COMPONENTS dynamical_systems)
+```
 
 ### robot_model and Pinocchio
 
@@ -172,27 +192,8 @@ package contains all the necessary directives, i.e. on top of
 
 ```cmake
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
-find_package(Eigen3 REQUIRED)
-find_package(pinocchio REQUIRED)
-find_package(OsqpEigen REQUIRED)
-find_package(osqp REQUIRED)
-
-find_library(state_representation REQUIRED)
-find_library(dynamical_systems REQUIRED)
-find_library(controllers REQUIRED)
-find_library(robot_model REQUIRED)
-...
-include_directories(
-    ${catkin_INCLUDE_DIRS}
-    ${Eigen3_INCLUDE_DIRS}
-    ${STATE_REPRESENTATION_INCLUDE_DIR}
-    ${DYNAMICAL_SYSTEMS_INCLUDE_DIR}
-    ${ROBOT_MODEL_INCLUDE_DIR}
-    ${CONTROLLERS_INCLUDE_DIR}
-    ${PINOCCHIO_INCLUDE_DIR}
-    ${OsqpEigen_INCLUDE_DIR}
-    /opt/openrobots/include
-)
+include_directories(/opt/openrobots/include)
+find_package(control_libraries REQUIRED)
 ```
 it should also have
 ```bash

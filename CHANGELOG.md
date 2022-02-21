@@ -17,7 +17,6 @@ Release Versions:
 - Improve CI checks for pull requests (#262)
 - Remove previous eigen3 installation (#252)
 
-
 ## 5.0.0
 
 Version 5.0.0 refactors the dynamical systems and controllers libraries with a

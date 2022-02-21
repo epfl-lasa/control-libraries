@@ -26,7 +26,7 @@ set(DEMOS_SCRIPTS
 )
 
 set(FIXTURE_INSTALL_PATH /etc/fixtures/)
-install(DIRECTORY ../test_examples/scripts/fixtures DESTINATION ${FIXTURE_INSTALL_PATH})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures DESTINATION ${FIXTURE_INSTALL_PATH})
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})
   add_executable(${SCRIPT} scripts/${SCRIPT}.cpp)

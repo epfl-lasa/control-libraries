@@ -16,29 +16,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
-find_package(Eigen3 REQUIRED)
-find_package(pinocchio REQUIRED)
-find_package(OsqpEigen REQUIRED)
-find_package(osqp REQUIRED)
+include_directories(/opt/openrobots/include)
 
-find_library(state_representation REQUIRED)
-find_library(dynamical_systems REQUIRED)
-find_library(controllers REQUIRED)
-find_library(robot_model REQUIRED)
+find_package(control_libraries 5.0.0 CONFIG REQUIRED)
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-include_directories(
-    ${Eigen3_INCLUDE_DIRS}
-    ${STATE_REPRESENTATION_INCLUDE_DIR}
-    ${DYNAMICAL_SYSTEMS_INCLUDE_DIR}
-    ${ROBOT_MODEL_INCLUDE_DIR}
-    ${CONTROLLERS_INCLUDE_DIR}
-    ${PINOCCHIO_INCLUDE_DIR}
-    ${OsqpEigen_INCLUDE_DIR}
-    /opt/openrobots/include
-)
 
 set(DEMOS_SCRIPTS
     task_space_control_loop
@@ -50,13 +34,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FI
 foreach(SCRIPT ${DEMOS_SCRIPTS})
     ament_auto_add_executable(${SCRIPT} scripts/${SCRIPT}.cpp)
     target_link_libraries(${SCRIPT}
-        ${PINOCCHIO_LIBRARIES}
-        OsqpEigen::OsqpEigen
-        osqp::osqp
-        state_representation
-        dynamical_systems
-        robot_model
-        controllers
+        ${control_libraries_LIBRARIES}
     )
     target_compile_definitions(${SCRIPT} PRIVATE SCRIPT_FIXTURES="${FIXTURE_INSTALL_PATH}")
 endforeach()

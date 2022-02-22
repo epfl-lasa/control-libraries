@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.2</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.3</span>
    </div>
   </td>
  </tr>
@@ -79,8 +79,8 @@ Inheritance diagram for state_representation::Parameter&lt; T &gt;:</div>
  <div class="center">
   <img src="classstate__representation_1_1_parameter.png" usemap="#state_5Frepresentation::Parameter_3C_20T_20_3E_map" alt=""/>
   <map id="state_5Frepresentation::Parameter_3C_20T_20_3E_map" name="state_5Frepresentation::Parameter_3C_20T_20_3E_map">
-<area href="classstate__representation_1_1_parameter_interface.html" alt="state_representation::ParameterInterface" shape="rect" coords="0,56,240,80"/>
-<area href="classstate__representation_1_1_state.html" title="Abstract class to represent a state." alt="state_representation::State" shape="rect" coords="0,0,240,24"/>
+<area href="classstate__representation_1_1_parameter_interface.html" alt="state_representation::ParameterInterface" shape="rect" coords="0,112,240,136"/>
+<area href="classstate__representation_1_1_state.html" title="Abstract class to represent a state." alt="state_representation::State" shape="rect" coords="0,56,240,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -181,6 +181,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab774d00e0339bf54b7e402926521c128 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_parameter_interface.html#ab774d00e0339bf54b7e402926521c128">operator=</a> (const <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> &amp;state)</td></tr>
 <tr class="memdesc:ab774d00e0339bf54b7e402926521c128 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy assignment operator that has to be defined to the custom assignment operator.  <a href="classstate__representation_1_1_parameter_interface.html#ab774d00e0339bf54b7e402926521c128">More...</a><br /></td></tr>
 <tr class="separator:ab774d00e0339bf54b7e402926521c128 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19bd348b7fd7075991ae6e06ac72c948 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a19bd348b7fd7075991ae6e06ac72c948 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a>&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_parameter_interface.html#a19bd348b7fd7075991ae6e06ac72c948">get_parameter</a> (bool validate_pointer=true)</td></tr>
+<tr class="memdesc:a19bd348b7fd7075991ae6e06ac72c948 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to a derived <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a> instance from a <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> pointer.  <a href="classstate__representation_1_1_parameter_interface.html#a19bd348b7fd7075991ae6e06ac72c948">More...</a><br /></td></tr>
+<tr class="separator:a19bd348b7fd7075991ae6e06ac72c948 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b2ec00c6317ba242326285dc820fb2 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a23b2ec00c6317ba242326285dc820fb2 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_parameter_interface.html#a23b2ec00c6317ba242326285dc820fb2">get_parameter_value</a> ()</td></tr>
+<tr class="memdesc:a23b2ec00c6317ba242326285dc820fb2 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the parameter value of a derived <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a> instance through the <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> pointer.  <a href="classstate__representation_1_1_parameter_interface.html#a23b2ec00c6317ba242326285dc820fb2">More...</a><br /></td></tr>
+<tr class="separator:a23b2ec00c6317ba242326285dc820fb2 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04ba385fd01388f94a90eb162481c477 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a04ba385fd01388f94a90eb162481c477 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_parameter_interface.html#a04ba385fd01388f94a90eb162481c477">set_parameter_value</a> (const T &amp;value)</td></tr>
+<tr class="memdesc:a04ba385fd01388f94a90eb162481c477 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the parameter value of a derived <a class="el" href="classstate__representation_1_1_parameter.html">Parameter</a> instance through the <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> pointer.  <a href="classstate__representation_1_1_parameter_interface.html#a04ba385fd01388f94a90eb162481c477">More...</a><br /></td></tr>
+<tr class="separator:a04ba385fd01388f94a90eb162481c477 inherit pub_methods_classstate__representation_1_1_parameter_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstate__representation_1_1_state"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstate__representation_1_1_state')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classstate__representation_1_1_state.html">state_representation::State</a></td></tr>
 <tr class="memitem:a2b691c7cf63fdcc948f87873081d77f7 inherit pub_methods_classstate__representation_1_1_state"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#a2b691c7cf63fdcc948f87873081d77f7">State</a> ()</td></tr>
 <tr class="memdesc:a2b691c7cf63fdcc948f87873081d77f7 inherit pub_methods_classstate__representation_1_1_state"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor.  <a href="classstate__representation_1_1_state.html#a2b691c7cf63fdcc948f87873081d77f7">More...</a><br /></td></tr>

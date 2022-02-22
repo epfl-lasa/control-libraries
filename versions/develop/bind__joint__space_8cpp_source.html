@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.2</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.3</span>
    </div>
   </td>
  </tr>
@@ -90,7 +90,7 @@ $(function() {
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keywordtype">void</span> joint_state(py::module_&amp; m) {</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  m.def(<span class="stringliteral">&quot;dist&quot;</span>, py::overload_cast&lt;const JointState&amp;, const JointState&amp;, const JointStateVariable&amp;&gt;(&amp;<a class="code hl_function" href="namespacestate__representation.html#a19d515e5b5252641cf0796315baef1f6">state_representation::dist</a>), <span class="stringliteral">&quot;Compute the distance between two JointState.&quot;</span>, <span class="stringliteral">&quot;s1&quot;</span>_a, <span class="stringliteral">&quot;s2&quot;</span>_a, <span class="stringliteral">&quot;state_variable_type&quot;</span>_a=JointStateVariable::ALL);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  py::class_&lt;JointState, State&gt; c(m, <span class="stringliteral">&quot;JointState&quot;</span>);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  py::class_&lt;JointState, std::shared_ptr&lt;JointState&gt;, <a class="code hl_class" href="classstate__representation_1_1_state.html">State</a>&gt; c(m, <span class="stringliteral">&quot;JointState&quot;</span>);</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  c.def(py::init(), <span class="stringliteral">&quot;Empty constructor for a JointState.&quot;</span>);</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  c.def(py::init&lt;const std::string&amp;, unsigned int&gt;(), <span class="stringliteral">&quot;Constructor with name and number of joints provided.&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;nb_joints&quot;</span>_a=0);</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  c.def(py::init&lt;<span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp;&gt;(), <span class="stringliteral">&quot;Constructor with name and list of joint names provided.&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;joint_names&quot;</span>_a);</div>
@@ -179,7 +179,7 @@ $(function() {
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="keywordtype">void</span> joint_positions(py::module_&amp; m) {</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  py::class_&lt;JointPositions, JointState&gt; c(m, <span class="stringliteral">&quot;JointPositions&quot;</span>);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  py::class_&lt;JointPositions, std::shared_ptr&lt;JointPositions&gt;, <a class="code hl_class" href="classstate__representation_1_1_joint_state.html">JointState</a>&gt; c(m, <span class="stringliteral">&quot;JointPositions&quot;</span>);</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  c.def(py::init(), <span class="stringliteral">&quot;Empty constructor&quot;</span>);</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  c.def(py::init&lt;const std::string&amp;, unsigned int&gt;(), <span class="stringliteral">&quot;Constructor with name and number of joints provided&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;nb_joints&quot;</span>_a=0);</div>
@@ -245,7 +245,7 @@ $(function() {
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>}</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="keywordtype">void</span> joint_velocities(py::module_&amp; m) {</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  py::class_&lt;JointVelocities, JointState&gt; c(m, <span class="stringliteral">&quot;JointVelocities&quot;</span>);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  py::class_&lt;JointVelocities, std::shared_ptr&lt;JointVelocities&gt;, <a class="code hl_class" href="classstate__representation_1_1_joint_state.html">JointState</a>&gt; c(m, <span class="stringliteral">&quot;JointVelocities&quot;</span>);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  c.def(py::init(), <span class="stringliteral">&quot;Empty constructor&quot;</span>);</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  c.def(py::init&lt;const std::string&amp;, unsigned int&gt;(), <span class="stringliteral">&quot;Constructor with name and number of joints provided&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;nb_joints&quot;</span>_a=0);</div>
@@ -320,7 +320,7 @@ $(function() {
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>}</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="keywordtype">void</span> joint_accelerations(py::module_&amp; m) {</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  py::class_&lt;JointAccelerations, JointState&gt; c(m, <span class="stringliteral">&quot;JointAccelerations&quot;</span>);</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  py::class_&lt;JointAccelerations, std::shared_ptr&lt;JointAccelerations&gt;, <a class="code hl_class" href="classstate__representation_1_1_joint_state.html">JointState</a>&gt; c(m, <span class="stringliteral">&quot;JointAccelerations&quot;</span>);</div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>  c.def(py::init(), <span class="stringliteral">&quot;Empty constructor&quot;</span>);</div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>  c.def(py::init&lt;const std::string&amp;, unsigned int&gt;(), <span class="stringliteral">&quot;Constructor with name and number of joints provided&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;nb_joints&quot;</span>_a=0);</div>
@@ -393,7 +393,7 @@ $(function() {
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>}</div>
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="keywordtype">void</span> joint_torques(py::module_&amp; m) {</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>  py::class_&lt;JointTorques, JointState&gt; c(m, <span class="stringliteral">&quot;JointTorques&quot;</span>);</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>  py::class_&lt;JointTorques, std::shared_ptr&lt;JointTorques&gt;, <a class="code hl_class" href="classstate__representation_1_1_joint_state.html">JointState</a>&gt; c(m, <span class="stringliteral">&quot;JointTorques&quot;</span>);</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>  c.def(py::init(), <span class="stringliteral">&quot;Empty constructor&quot;</span>);</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>  c.def(py::init&lt;const std::string&amp;, unsigned int&gt;(), <span class="stringliteral">&quot;Constructor with name and number of joints provided&quot;</span>, <span class="stringliteral">&quot;robot_name&quot;</span>_a, <span class="stringliteral">&quot;nb_joints&quot;</span>_a=0);</div>
@@ -474,6 +474,7 @@ $(function() {
 <div class="ttc" id="aclassstate__representation_1_1_joint_state_html"><div class="ttname"><a href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a></div><div class="ttdoc">Class to define a state in joint space.</div><div class="ttdef"><b>Definition:</b> <a href="_joint_state_8hpp_source.html#l00036">JointState.hpp:36</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_joint_torques_html"><div class="ttname"><a href="classstate__representation_1_1_joint_torques.html">state_representation::JointTorques</a></div><div class="ttdoc">Class to define torques of the joints.</div><div class="ttdef"><b>Definition:</b> <a href="_joint_torques_8hpp_source.html#l00010">JointTorques.hpp:10</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_joint_velocities_html"><div class="ttname"><a href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a></div><div class="ttdoc">Class to define velocities of the joints.</div><div class="ttdef"><b>Definition:</b> <a href="_joint_velocities_8hpp_source.html#l00015">JointVelocities.hpp:15</a></div></div>
+<div class="ttc" id="aclassstate__representation_1_1_state_html"><div class="ttname"><a href="classstate__representation_1_1_state.html">state_representation::State</a></div><div class="ttdoc">Abstract class to represent a state.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8hpp_source.html#l00049">State.hpp:49</a></div></div>
 <div class="ttc" id="anamespacestate__representation_html_a19d515e5b5252641cf0796315baef1f6"><div class="ttname"><a href="namespacestate__representation.html#a19d515e5b5252641cf0796315baef1f6">state_representation::dist</a></div><div class="ttdeci">double dist(const CartesianState &amp;s1, const CartesianState &amp;s2, const CartesianStateVariable &amp;state_variable_type=CartesianStateVariable::ALL)</div><div class="ttdoc">compute the distance between two CartesianStates</div><div class="ttdef"><b>Definition:</b> <a href="_cartesian_state_8cpp_source.html#l00451">CartesianState.cpp:451</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -14,7 +14,9 @@ if ("robot_model" IN_LIST control_libraries_LIBRARIES AND NOT control_libraries_
 endif()
 
 foreach(_comp ${control_libraries_FIND_COMPONENTS})
-  if (NOT ${_comp} IN_LIST _control_libraries_supported_components)
+  if (${_comp} IN_LIST _control_libraries_supported_components)
+    set(control_libraries_${_comp}_FOUND True)
+  else()
     set_and_check(control_libraries_FOUND False)
     set_and_check(control_libraries_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
   endif()

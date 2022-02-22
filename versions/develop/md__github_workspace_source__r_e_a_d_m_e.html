@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.3</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.4</span>
    </div>
   </td>
  </tr>
@@ -127,9 +127,14 @@ $(function() {
 <p >The <code>CONFIG</code> flag tells cmake to directly search for a <code>control_librariesConfig.cmake</code> file, which is installed as part of the package. It is not required but makes the cmake search algorithm slightly more efficient.</p>
 <p >The <code>REQUIRED</code> flag will give an error if the package is not found, which just prevents build errors from happening at later stages.</p>
 <h2>Advanced specification</h2>
-<p >For more fine control in checking required components when importing control libraries, it is possible to supply the individual required libraries to the end of the <code>find_package</code> directive. This aborts the cmake configuration early if the required component was not found (for example, when the control libraries installation selectively disabled the <code>controllers</code> library).</p>
+<p >For more fine control in checking required components when importing control libraries, it is possible to supply the individual required libraries to the end of the <code>find_package</code> directive. The default behaviour is to include all installed components.</p>
+<p >If all components are installed but only the <code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code> library is needed for a certain project, then it is a good idea to only find that component. Note however that for components specified at the find_package step, the linked libraries must also be specified from that subset, and not from the <code>${control_libraries_LIBRARIES}</code>variable.</p>
+<div class="fragment"><div class="line"># only find dependencies for the state_representation library</div>
+<div class="line">find_package(control_libraries 5.0.0 CONFIG REQUIRED state_representation)</div>
+<div class="line"> </div>
+<div class="line">target_link_libraries(my_target state_representation)</div>
+</div><!-- fragment --><p >The other usage for listing COMPONENTS during <code>find_package</code> is to confirm that those components are indeed installed, and to abort the cmake configuration early if the required component was not found (for example, when the control libraries installation selectively disabled the <code>controllers</code> library).</p>
 <p >Additional <code>OPTIONAL_COMPONENTS</code> can also be appended, which will silently check if they are installed without aborting. This is generally not needed.</p>
-<p >Some examples below:</p>
 <div class="fragment"><div class="line"># ensure that both `dynamical_systems` and `robot_model` are installed and available</div>
 <div class="line">find_package(control_libraries 5.0.0 CONFIG REQUIRED dynamical_systems robot_model)</div>
 <div class="line"> </div>

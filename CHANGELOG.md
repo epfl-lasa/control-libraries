@@ -13,6 +13,7 @@ Release Versions:
 
 - Incremental versioning (#260)
 - Refactor cmake to export package (#259)
+- ParameterInterface accessors to underlying parameters (#256)
 
 ## 5.0.0
 

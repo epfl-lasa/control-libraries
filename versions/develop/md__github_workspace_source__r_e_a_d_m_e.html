@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.1</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.2</span>
    </div>
   </td>
  </tr>
@@ -118,33 +118,36 @@ $(function() {
 <div class="fragment"><div class="line">cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ROBOT_MODEL=OFF ..</div>
 </div><!-- fragment --><p >To also build the library tests, add the CMake flag <code>-DBUILD_TESTING=ON</code>. This requires GTest to be installed on your system. You can then use <code>make test</code> to run all test targets.</p>
 <p >Alternatively, you can include the source code for each library as submodules in your own CMake project, using the CMake directive <code>add_subdirectory(...)</code> to link it with your project.</p>
-<h1>Troubleshooting</h1>
+<h1>Usage in a cmake project</h1>
+<p >If you have a target library or executable <code>my_target</code>, you can link all required libraries and include directories automatically with the following commands in the CMakeLists file:</p>
+<div class="fragment"><div class="line">find_package(control_libraries [VERSION] CONFIG REQUIRED)</div>
+<div class="line"> </div>
+<div class="line">target_link_libraries(my_target ${control_libraries_LIBRARIES})</div>
+</div><!-- fragment --><p ><code>VERSION</code> is an optional version number such as <code>5.0.0</code>, which should be included for safety. If the installed control libraries version has a different major increment (for example, <code>4.1.0</code> compared to <code>5.0.0</code>), cmake will give the according error.</p>
+<p >The <code>CONFIG</code> flag tells cmake to directly search for a <code>control_librariesConfig.cmake</code> file, which is installed as part of the package. It is not required but makes the cmake search algorithm slightly more efficient.</p>
+<p >The <code>REQUIRED</code> flag will give an error if the package is not found, which just prevents build errors from happening at later stages.</p>
+<h2>Advanced specification</h2>
+<p >For more fine control in checking required components when importing control libraries, it is possible to supply the individual required libraries to the end of the <code>find_package</code> directive. This aborts the cmake configuration early if the required component was not found (for example, when the control libraries installation selectively disabled the <code>controllers</code> library).</p>
+<p >Additional <code>OPTIONAL_COMPONENTS</code> can also be appended, which will silently check if they are installed without aborting. This is generally not needed.</p>
+<p >Some examples below:</p>
+<div class="fragment"><div class="line"># ensure that both `dynamical_systems` and `robot_model` are installed and available</div>
+<div class="line">find_package(control_libraries 5.0.0 CONFIG REQUIRED dynamical_systems robot_model)</div>
+<div class="line"> </div>
+<div class="line"># ensure that the `controllers` library is available, and also check for dynamical_systems in the background</div>
+<div class="line">find_package(control_libraries 5.0.0 CONFIG REQUIRED controllers OPTIONAL_COMPONENTS dynamical_systems)</div>
+</div><!-- fragment --><h2><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a> and Pinocchio</h2>
+<p >If the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> library is used and <code>pinocchio</code> has been installed to a location that is not on the default include and link paths, that location must also be provided. The default installation of <code>pinocchio</code> is at <code>/opt/openrobots</code>. For this reason it is normal to add the following lines to the CMakeLists file:</p>
+<div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
+<div class="line">include_directories(/opt/openrobots/include)</div>
+</div><!-- fragment --><h1>Troubleshooting</h1>
 <p >This section lists common problems that might come up when using the <code>control-libraries</code> modules.</p>
 <h2>Boost container limit compile error in ROS</h2>
 <p >When using the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> module in ROS and trying to <code>catkin_make</code> the workspace, it might produce the following error: </p><div class="fragment"><div class="line">/opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>
 <div class="line">#23 2.389    29 |     # error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>
-</div><!-- fragment --><p> In order to avoid this error and successfully <code>catkin_make</code> the workspace, make sure that the <code>CMakeList.txt</code> of the ROS package contains all the necessary directives, i.e. on top of </p><div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
-<div class="line">find_package(Eigen3 REQUIRED)</div>
-<div class="line">find_package(pinocchio REQUIRED)</div>
-<div class="line">find_package(OsqpEigen REQUIRED)</div>
-<div class="line">find_package(osqp REQUIRED)</div>
-<div class="line"> </div>
-<div class="line">find_library(state_representation REQUIRED)</div>
-<div class="line">find_library(dynamical_systems REQUIRED)</div>
-<div class="line">find_library(controllers REQUIRED)</div>
-<div class="line">find_library(robot_model REQUIRED)</div>
-<div class="line">...</div>
-<div class="line">include_directories(</div>
-<div class="line">    ${catkin_INCLUDE_DIRS}</div>
-<div class="line">    ${Eigen3_INCLUDE_DIRS}</div>
-<div class="line">    ${STATE_REPRESENTATION_INCLUDE_DIR}</div>
-<div class="line">    ${DYNAMICAL_SYSTEMS_INCLUDE_DIR}</div>
-<div class="line">    ${ROBOT_MODEL_INCLUDE_DIR}</div>
-<div class="line">    ${CONTROLLERS_INCLUDE_DIR}</div>
-<div class="line">    ${PINOCCHIO_INCLUDE_DIR}</div>
-<div class="line">    ${OsqpEigen_INCLUDE_DIR}</div>
-<div class="line">    /opt/openrobots/include</div>
-<div class="line">)</div>
+</div><!-- fragment --><p> In order to avoid this error and successfully <code>catkin_make</code> the workspace, make sure that the <code>CMakeList.txt</code> of the ROS package contains all the necessary directives, i.e. on top of</p>
+<div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
+<div class="line">include_directories(/opt/openrobots/include)</div>
+<div class="line">find_package(control_libraries REQUIRED)</div>
 </div><!-- fragment --><p> it should also have </p><div class="fragment"><div class="line">find_package(Boost REQUIRED COMPONENTS system)</div>
 <div class="line">add_compile_definitions(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)</div>
 <div class="line">add_compile_definitions(BOOST_MPL_LIMIT_LIST_SIZE=30)</div>

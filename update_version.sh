@@ -65,10 +65,10 @@ function update_field() {
   local FIELD=$1
   if [ "${DECREMENT}" == true ]; then
     if [ "${FIELD}" -ne "0" ]; then
-      FIELD=$(echo "$FIELD" - 1 | bc)
+      FIELD=$(( FIELD - 1 ))
     fi
   else
-    FIELD=$(echo "$FIELD" + 1 | bc)
+    FIELD=$(( FIELD + 1 ))
   fi
   echo "${FIELD}"
 }
@@ -104,11 +104,25 @@ if [ "${DRY_RUN}" == true ]; then
   exit 0
 fi
 
-sed -i '' "s/${VERSION}/${NEW_VERSION}/g" ./VERSION
-sed -i '' "s/project(control-libraries VERSION ${VERSION})/project(control-libraries VERSION ${NEW_VERSION})/g" ./source/CMakeLists.txt
-sed -i '' "s/__version__ = \"${VERSION}\"/__version__ = \"${NEW_VERSION}\"/g" ./python/setup.py
-sed -i '' "s/project(clproto VERSION ${VERSION})/project(clproto VERSION ${NEW_VERSION})/g" ./protocol/clproto_cpp/CMakeLists.txt
-sed -i '' "s/PROJECT_NUMBER = ${VERSION}/PROJECT_NUMBER = ${NEW_VERSION}/g" ./doxygen/doxygen.conf
+SED_STR_VERSION="s/${VERSION}/${NEW_VERSION}/g"
+SED_STR_SOURCE="s/project(control-libraries VERSION ${VERSION})/project(control-libraries VERSION ${NEW_VERSION})/g"
+SED_STR_PYTHON="s/__version__ = \"${VERSION}\"/__version__ = \"${NEW_VERSION}\"/g"
+SED_STR_CLPROTO="s/project(clproto VERSION ${VERSION})/project(clproto VERSION ${NEW_VERSION})/g"
+SED_STR_DOXYGEN="s/PROJECT_NUMBER = ${VERSION}/PROJECT_NUMBER = ${NEW_VERSION}/g"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' "${SED_STR_VERSION}" ./VERSION
+  sed -i '' "${SED_STR_SOURCE}" ./source/CMakeLists.txt
+  sed -i '' "${SED_STR_PYTHON}" ./python/setup.py
+  sed -i '' "${SED_STR_CLPROTO}" ./protocol/clproto_cpp/CMakeLists.txt
+  sed -i '' "${SED_STR_DOXYGEN}" ./doxygen/doxygen.conf
+else
+  sed -i "${SED_STR_VERSION}" ./VERSION
+  sed -i "${SED_STR_SOURCE}" ./source/CMakeLists.txt
+  sed -i "${SED_STR_PYTHON}" ./python/setup.py
+  sed -i "${SED_STR_CLPROTO}" ./protocol/clproto_cpp/CMakeLists.txt
+  sed -i "${SED_STR_DOXYGEN}" ./doxygen/doxygen.conf
+fi
 
 if [ "${COMMIT}" == true ]; then
   echo "Committing changes to source control"

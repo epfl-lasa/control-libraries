@@ -105,7 +105,7 @@ if [ "${DRY_RUN}" == true ]; then
 fi
 
 SED_STR_VERSION="s/${VERSION}/${NEW_VERSION}/g"
-SED_STR_SOURCE="s/project(control-libraries VERSION ${VERSION})/project(control-libraries VERSION ${NEW_VERSION})/g"
+SED_STR_SOURCE="s/project(control_libraries VERSION ${VERSION})/project(control_libraries VERSION ${NEW_VERSION})/g"
 SED_STR_PYTHON="s/__version__ = \"${VERSION}\"/__version__ = \"${NEW_VERSION}\"/g"
 SED_STR_CLPROTO="s/project(clproto VERSION ${VERSION})/project(clproto VERSION ${NEW_VERSION})/g"
 SED_STR_DOXYGEN="s/PROJECT_NUMBER = ${VERSION}/PROJECT_NUMBER = ${NEW_VERSION}/g"

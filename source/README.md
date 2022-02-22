@@ -148,14 +148,26 @@ at later stages.
 ### Advanced specification
 
 For more fine control in checking required components when importing control libraries, it is possible to
-supply the individual required libraries to the end of the `find_package` directive. This aborts the cmake 
-configuration early if the required component was not found (for example, when the control libraries installation
-selectively disabled the `controllers` library).
+supply the individual required libraries to the end of the `find_package` directive. The default behaviour
+is to include all installed components.
+
+If all components are installed but only the `state_representation` library is needed for a certain project,
+then it is a good idea to only find that component. Note however that for components specified at the find_package step,
+the linked libraries must also be specified from that subset, and not from the `${control_libraries_LIBRARIES}`variable.
+
+```cmake
+# only find dependencies for the state_representation library
+find_package(control_libraries 5.0.0 CONFIG REQUIRED state_representation)
+
+target_link_libraries(my_target state_representation)
+```
+
+The other usage for listing COMPONENTS during `find_package` is to confirm that those components are indeed installed,
+and to abort the cmake configuration early if the required component was not found (for example, when the
+control libraries installation selectively disabled the `controllers` library).
 
 Additional `OPTIONAL_COMPONENTS` can also be appended, which will silently check if they are installed without aborting.
 This is generally not needed.
-
-Some examples below:
 
 ```cmake
 # ensure that both `dynamical_systems` and `robot_model` are installed and available

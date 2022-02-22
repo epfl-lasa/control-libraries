@@ -75,9 +75,10 @@ take several minutes.
 3. Document the header files and public functions with doxygen comments, and update any relevant README.md
    or documentation files with details of changes to the interface.
 4. Update the [changelog](CHANGELOG.md) with your feature / fix / improvement in the "Upcoming changes" section.
-5. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
+5. Update the version number using the [update_version.sh](./update_version.sh) script.
+6. Open a pull request into the `develop` branch. Write a meaningful title and description for the PR to make it
    clear what changes you have made, why you have made them, and how you have tested the changes.
-6. You may merge the pull request into `develop` once you have the sign-off of one other developer and all CI tests pass.
+7. You may merge the pull request into `develop` once you have the sign-off of one other developer and all CI tests pass.
    Always use the "Squash and Merge" option to ensure your changes are contained within a single commit, maintaining
    a linear git history. If unsure, you may request another reviewer to merge it for you.
 
@@ -94,19 +95,17 @@ The `develop` branch is always considered to be a "release candidate" that conta
 code. If, at release time, there are features on `develop` that are considered unfinished or broken,
 they can be marked as `EXPERIMENTAL` to exclude them from compilation.
 
-At the time of release, a release branch should be made from development. In the release branch,
-the project version number should be updated in the following locations:
-- The [top-level CMakeLists](./source/CMakeLists.txt) 
-- The [python bindings setup.py](./python/setup.py)
-- The [clproto bindings CMakeLists](./protocol/clproto_cpp/CMakeLists.txt)
-- The PROJECT_NUMBER in the [doxygen config](./doxygen/doxygen.conf)
+At the time of release, usually when there is minor or major version update,
+a release branch should be made from development.
 
-In addition, the release branch should be used to finalize the [changelog](CHANGELOG.md), which includes
+The release branch should be used to finalize the [changelog](CHANGELOG.md), which includes
 moving all content from the "Upcoming changes (in development)" header under a new header with the corresponding
 release version.
 
 Once the changes specific to the release have been approved, a linear GitFlow strategy is used to
 merge this release branch into `main`, and then additionally squash and rebase the release branch back into `develop`.
+
+The release on `main` should be tagged with the corresponding version as `vX.Y.Z`.
 
 View and join the full discussion surrounding release workflow and strategy here: \
 https://github.com/epfl-lasa/control-libraries/discussions/77

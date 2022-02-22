@@ -9,6 +9,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Incremental versioning (#260)
+
 ## 5.0.0
 
 Version 5.0.0 refactors the dynamical systems and controllers libraries with a

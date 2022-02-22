@@ -2,14 +2,14 @@
 #include "parameter_container.h"
 
 void parameter_interface(py::module_& m) {
-  py::class_<ParameterInterface, State> c(m, "ParameterInterface");
+  py::class_<ParameterInterface, std::shared_ptr<ParameterInterface>, State> c(m, "ParameterInterface");
 
   c.def(py::init<const StateType&, const std::string&>(), "Constructor with parameter name and type of the parameter", "type"_a, "name"_a);
   c.def(py::init<const ParameterInterface&>(), "Copy constructor from another ParameterInterface", "parameter"_a);
 }
 
 void parameter(py::module_& m) {
-  py::class_<ParameterContainer, ParameterInterface> c(m, "Parameter");
+  py::class_<ParameterContainer, std::shared_ptr<ParameterContainer>, ParameterInterface> c(m, "Parameter");
 
   c.def(py::init<const std::string&, const StateType&>(), "Constructor of a parameter with name and type", "name"_a, "type"_a);
   c.def(py::init<const std::string&, const py::object&, const StateType&>(), "Constructor of a parameter with name, value and type", "name"_a, "value"_a, "type"_a);

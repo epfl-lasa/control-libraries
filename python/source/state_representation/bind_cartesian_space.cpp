@@ -10,7 +10,7 @@
 
 
 void spatial_state(py::module_& m) {
-  py::class_<SpatialState, State> c(m, "SpatialState");
+  py::class_<SpatialState, std::shared_ptr<SpatialState>, State> c(m, "SpatialState");
 
   c.def(py::init<const StateType&>(), "Constructor only specifying the type.", "type"_a);
   c.def(py::init<const StateType&, const std::string&, const std::string&, const bool&>(), "Constructor with name and reference frame specification.", "type"_a, "name"_a, "reference_frame"_a=std::string("world"), "empty"_a=true);
@@ -54,7 +54,7 @@ void cartesian_state_variable(py::module_& m) {
 void cartesian_state(py::module_& m) {
   m.def("dist", py::overload_cast<const CartesianState&, const CartesianState&, const CartesianStateVariable&>(&state_representation::dist), "Compute the distance between two CartesianStates", "s1"_a, "s2"_a, "state_variable_type"_a=CartesianStateVariable::ALL);
 
-  py::class_<CartesianState, SpatialState> c(m, "CartesianState");
+  py::class_<CartesianState, std::shared_ptr<CartesianState>, SpatialState> c(m, "CartesianState");
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
   c.def(py::init<const CartesianState&>(), "Copy constructor of a CartesianState", "state"_a);
@@ -141,7 +141,7 @@ void cartesian_state(py::module_& m) {
 }
 
 void cartesian_pose(py::module_& m) {
-  py::class_<CartesianPose, CartesianState> c(m, "CartesianPose");
+  py::class_<CartesianPose, std::shared_ptr<CartesianPose>, CartesianState> c(m, "CartesianPose");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
@@ -220,7 +220,7 @@ void cartesian_pose(py::module_& m) {
 }
 
 void cartesian_twist(py::module_& m) {
-  py::class_<CartesianTwist, CartesianState> c(m, "CartesianTwist");
+  py::class_<CartesianTwist, std::shared_ptr<CartesianTwist>, CartesianState> c(m, "CartesianTwist");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
@@ -293,7 +293,7 @@ void cartesian_twist(py::module_& m) {
 }
 
 void cartesian_acceleration(py::module_& m) {
-  py::class_<CartesianAcceleration, CartesianState> c(m, "CartesianAcceleration");
+  py::class_<CartesianAcceleration, std::shared_ptr<CartesianAcceleration>, CartesianState> c(m, "CartesianAcceleration");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
@@ -365,7 +365,7 @@ void cartesian_acceleration(py::module_& m) {
 }
 
 void cartesian_wrench(py::module_& m) {
-  py::class_<CartesianWrench, CartesianState> c(m, "CartesianWrench");
+  py::class_<CartesianWrench, std::shared_ptr<CartesianWrench>, CartesianState> c(m, "CartesianWrench");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));

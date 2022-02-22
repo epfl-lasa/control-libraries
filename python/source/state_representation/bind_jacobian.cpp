@@ -5,7 +5,7 @@
 #include <state_representation/space/Jacobian.hpp>
 
 void bind_jacobian(py::module_& m) {
-  py::class_<Jacobian, State> c(m, "Jacobian");
+  py::class_<Jacobian, std::shared_ptr<Jacobian>, State> c(m, "Jacobian");
 
   c.def_property_readonly_static("__array_priority__", [](py::object) { return 10000; });
 

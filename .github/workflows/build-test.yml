@@ -22,9 +22,14 @@ jobs:
         if: ${{ github.event.pull_request.base.sha }}
         run: |
           git fetch origin main ${{ github.event.pull_request.base.sha }}
-          DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ./VERSION ./CHANGELOG.md)
-          if ! [ "${DIFF}" ]; then
-            echo "::warning title=Contribution check failed::VERSION and CHANGELOG.md must be updated"
+          VER_DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ./VERSION)
+          if ! [ "${VER_DIFF}" ]; then
+            echo "::warning title=Contribution check failed::VERSION must be updated!"
+            exit 1
+          fi
+          CL_DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ./CHANGELOG.md)
+          if ! [ "${CL_DIFF}" ]; then
+            echo "::warning title=Contribution check failed::CHANGELOG.md must be updated!"
             exit 1
           fi
         shell: bash

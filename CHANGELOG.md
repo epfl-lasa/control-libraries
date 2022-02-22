@@ -12,6 +12,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Incremental versioning (#260)
+- Refactor cmake to export package (#259)
 
 ## 5.0.0
 

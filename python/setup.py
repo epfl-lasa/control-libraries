@@ -5,7 +5,7 @@ from pybind11.setup_helpers import ParallelCompile, naive_recompile
 import warnings
 import os
 
-__version__ = "5.0.1"
+__version__ = "5.0.2"
 __libraries__ = ['state_representation', 'clproto', 'dynamical_systems']
 __include_dirs__ = ['include']
 

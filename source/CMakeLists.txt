@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.15)
 
-project(control-libraries VERSION 5.0.1)
+project(control_libraries VERSION 5.0.2)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)
@@ -23,8 +23,10 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 find_package(Eigen3 REQUIRED)
-include_directories(${Eigen3_INCLUDE_DIRS})
 
 if(BUILD_TESTING)
   enable_testing()
@@ -38,15 +40,57 @@ else()
 endif()
 
 add_subdirectory(state_representation)
+list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES state_representation)
+get_target_property(TARGET_INTERFACE_LINK_LIBRARIES state_representation INTERFACE_LINK_LIBRARIES)
+if(TARGET_INTERFACE_LINK_LIBRARIES)
+  list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
+endif()
 
 if(BUILD_DYNAMICAL_SYSTEMS)
   add_subdirectory(dynamical_systems)
+  list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES dynamical_systems)
+  get_target_property(TARGET_INTERFACE_LINK_LIBRARIES dynamical_systems INTERFACE_LINK_LIBRARIES)
+  if(TARGET_INTERFACE_LINK_LIBRARIES)
+    list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
+  endif()
 endif()
 
 if(BUILD_ROBOT_MODEL OR BUILD_CONTROLLERS)
   add_subdirectory(robot_model)
+  list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES robot_model)
+  get_target_property(TARGET_INTERFACE_LINK_LIBRARIES robot_model INTERFACE_LINK_LIBRARIES)
+  if(TARGET_INTERFACE_LINK_LIBRARIES)
+    list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
+  endif()
 endif()
 
 if(BUILD_CONTROLLERS)
   add_subdirectory(controllers)
+  list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES controllers)
+  get_target_property(TARGET_INTERFACE_LINK_LIBRARIES controllers INTERFACE_LINK_LIBRARIES)
+  if(TARGET_INTERFACE_LINK_LIBRARIES)
+    list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
+  endif()
 endif()
+
+list(REMOVE_DUPLICATES INSTALL_INTERFACE_LINK_LIBRARIES)
+
+# generate the version file for the config file
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION "${PROJECT_VERSION}"
+  COMPATIBILITY SameMajorVersion
+)
+
+# create config file
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+# install config files
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)

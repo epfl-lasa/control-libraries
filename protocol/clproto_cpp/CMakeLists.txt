@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.9)
-project(clproto VERSION 5.0.1)
+project(clproto VERSION 5.0.2)
 
 set(CMAKE_CXX_STANDARD 17)
 
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_library(state_representation REQUIRED)
+find_package(control_libraries ${PROJECT_VERSION} REQUIRED)
 
 if(BUILD_TESTING)
     enable_testing()

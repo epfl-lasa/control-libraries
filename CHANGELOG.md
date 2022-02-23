@@ -14,7 +14,7 @@ Release Versions:
 - Incremental versioning (#260)
 - Refactor cmake to export package (#259, #261)
 - ParameterInterface accessors to underlying parameters (#256)
-- Improve CI checks in pull requests (#262)
+- Improve CI checks for pull requests (#262)
 
 ## 5.0.0
 

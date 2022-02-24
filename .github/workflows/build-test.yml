@@ -11,7 +11,47 @@ on:
 
 # Define the build test jobs for each configuration
 jobs:
+
+  check-contribution:
+    name: Check if changelog and version have been updated
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check contributions
+        if: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch origin main ${{ github.event.pull_request.base.sha }}
+          VER_DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ./VERSION)
+          if ! [ "${VER_DIFF}" ]; then
+            echo "::warning title=Contribution check failed::VERSION must be updated!"
+            exit 1
+          fi
+          CL_DIFF=$(git diff ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ./CHANGELOG.md)
+          if ! [ "${CL_DIFF}" ]; then
+            echo "::warning title=Contribution check failed::CHANGELOG.md must be updated!"
+            exit 1
+          fi
+        shell: bash
+
+  # check if jobs can be skipped
+  check-skippable-changes:
+    name: Check skippable changes
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check_if_skippable.outputs.should_skip }}
+    steps:
+      - id: check_if_skippable
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          cancel_others: 'true'
+          do_not_skip: '["workflow_dispatch"]'
+          paths_ignore: '["**.md"]'
+          skip_after_successful_duplicate: 'true'
+
   build-test-debug:
+    needs: check-skippable-changes
+    if: ${{ needs.check-skippable-changes.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     name: Debug configuration test
     steps:
@@ -25,6 +65,8 @@ jobs:
           configuration: Debug
 
   build-test-release:
+    needs: check-skippable-changes
+    if: ${{ needs.check-skippable-changes.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     name: Release configuration test
     steps:
@@ -38,7 +80,10 @@ jobs:
           configuration: Release
 
   build-test-python:
-    needs: build-test-release
+    needs:
+      - check-skippable-changes
+      - build-test-release
+    if: ${{ needs.check-skippable-changes.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     name: Python bindings test
     steps:
@@ -50,7 +95,10 @@ jobs:
         uses: ./.github/actions/build-test-python
 
   build-test-protocol:
-    needs: build-test-release
+    needs:
+      - check-skippable-changes
+      - build-test-release
+    if: ${{ needs.check-skippable-changes.outputs.skip != 'true' }}
     runs-on: ubuntu-latest
     name: Protocol library test
     steps:

@@ -15,7 +15,7 @@ Release Versions:
 - Refactor cmake to export package (#259, #261)
 - ParameterInterface accessors to underlying parameters (#256)
 - Improve CI checks for pull requests (#262)
-- Remove previous eigen3 installation (#252)
+- Remove previous eigen3 installation (#252, 264)
 
 ## 5.0.0
 

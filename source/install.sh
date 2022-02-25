@@ -110,7 +110,7 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
 
   # install osqp
-  cd "${SOURCE_PATH}"/tmp/lib || exit 1
+  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone --recursive https://github.com/oxfordcontrol/osqp
   cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1
   cmake -G "Unix Makefiles" .. && cmake --build . --target install || exit 1

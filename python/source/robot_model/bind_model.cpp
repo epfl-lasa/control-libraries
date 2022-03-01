@@ -85,17 +85,17 @@ void model(py::module_& m) {
         "Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the QP optimization method", "cartesian_twist"_a, "joint_positions"_a, "parameters"_a, "frame_name"_a = std::string(""));
 
   c.def("print_qp_problem", &Model::print_qp_problem, "Helper function to print the qp problem (for debugging).");
-//  c.def("in_range", py::overload_cast<const JointPositions&>(&Model::in_range),
-//        "Check if the joint positions are inside the limits provided by the model", "joint_positions"_a);
-//  c.def("in_range", py::overload_cast<const JointVelocities&>(&Model::in_range),
-//        "Check if the joint velocities are inside the limits provided by the model", "joint_velocities"_a);
-//  c.def("in_range", py::overload_cast<const JointTorques&>(&Model::in_range),
-//        "Check if the joint torques are inside the limits provided by the model", "joint_torques"_a);
-//  c.def("in_range", py::overload_cast<const JointState&>(&Model::in_range),
-//        "Check if the joint state variables (positions, velocities & torques) are inside the limits provided by the model", "joint_state"_a);
-//   c.def("clamp_in_range", py::overload_cast<const JointState&>(&Model::clamp_in_range),
-//         "Clamp the joint state variables (positions, velocities & torques) according to the limits provided by the model", "joint_state"_a);
-//  c.def("clamp_in_range", &Model::clamp_in_range, "Clamp the joint state variables (positions, velocities & torques) according to the limits provided by the model");
+  c.def("in_range", [](Model& self, const JointPositions& joint_positions) -> bool { return self.in_range(joint_positions); },
+        "Check if the joint positions are inside the limits provided by the model", "joint_positions"_a);
+  c.def("in_range", [](Model& self, const JointVelocities& joint_velocities) -> bool { return self.in_range(joint_velocities); },
+        "Check if the joint velocities are inside the limits provided by the model", "joint_velocities"_a);
+  c.def("in_range", [](Model& self, const JointTorques& joint_torques) -> bool { return self.in_range(joint_torques); },
+        "Check if the joint torques are inside the limits provided by the model", "joint_torques"_a);
+  c.def("in_range", [](Model& self, const JointState& joint_state) -> bool { return self.in_range(joint_state); },
+        "Check if the joint state variables (positions, velocities & torques) are inside the limits provided by the model", "joint_state"_a);
+
+  c.def("clamp_in_range", [](Model& self, const JointState& joint_state) -> JointState { return self.clamp_in_range(joint_state); },
+        "Clamp the joint state variables (positions, velocities & torques) according to the limits provided by the model", "joint_state"_a);
 }
 
 void bind_model(py::module_& m) {

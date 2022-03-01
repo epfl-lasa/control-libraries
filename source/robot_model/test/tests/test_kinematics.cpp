@@ -205,6 +205,7 @@ TEST_F(RobotModelKinematicsTest, TestInverseVelocityConstraints) {
                                                       Eigen::Vector3d::Identity(),
                                                       Eigen::Vector3d::Identity(),
                                                       franka->get_base_frame());
+    std::cout << des_ee_twist << std::endl;
 
     state_representation::JointVelocities joint_velocities = franka->inverse_velocity(des_ee_twist, config, parameters);
 

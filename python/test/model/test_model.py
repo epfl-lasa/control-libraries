@@ -22,6 +22,9 @@ ROBOT_MODEL_METHOD_EXPECTS = [
     'compute_coriolis_matrix',
     'compute_coriolis_torques',
     'compute_gravity_torques',
+    'forward_kinematics',
+    'inverse_kinematics',
+    'forward_velocity',
     'print_qp_problem',
 ]
 

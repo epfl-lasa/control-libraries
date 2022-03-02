@@ -19,8 +19,8 @@ git clone https://github.com/epfl-lasa/control-libraries
 bash control-libraries/source/install.sh
 
 ## install the bindings using the pip installer
-export OSQP_INCLUDE_DIR='/path/to/include/osqp' # default /usr/local/include/osqp
-export OPENROBOTS_INCLUDE_DIR='/opt/openrobots/include' # default /opt/openrobots/include
+export OSQP_INCLUDE_DIR='/path/to/include/osqp'  # default /usr/local/include/osqp
+export OPENROBOTS_INCLUDE_DIR='/path/to/openrobots/include'  # default /opt/openrobots/include
 pip3 install control-libraries/python
 ```
 

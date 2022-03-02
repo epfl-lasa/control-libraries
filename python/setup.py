@@ -1,9 +1,13 @@
-from glob import glob
-from setuptools import setup
-from pybind11.setup_helpers import Pybind11Extension
-from pybind11.setup_helpers import ParallelCompile, naive_recompile
-import warnings
 import os
+import warnings
+from glob import glob
+from pybind11.setup_helpers import ParallelCompile, naive_recompile
+from pybind11.setup_helpers import Pybind11Extension
+from setuptools import setup
+
+# names of the environment variables that define osqp and openrobots include directories
+osqp_path_var = 'OSQP_INCLUDE_DIR'
+openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
 __version__ = "5.0.8"
 __libraries__ = ['state_representation', 'clproto', 'dynamical_systems', 'robot_model']
@@ -23,7 +27,10 @@ try:
         raise Exception('Could not find Eigen3 package!')
 
     if __install_robot_model_module__:
-        __include_dirs__.append('/usr/local/include/osqp')
+        osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
+        __include_dirs__.append(osqp_path)
+        openrobots_path = os.environ[
+            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
         __include_dirs__.append('/opt/openrobots/include')
 
     for lib in __libraries__:

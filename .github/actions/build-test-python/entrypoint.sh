@@ -5,6 +5,9 @@ bash /github/workspace/source/install.sh --auto --no-controllers || exit 1
 bash /github/workspace/protocol/install.sh --auto || exit 1
 
 echo ">>> Building Python bindings..."
+
+export OSQP_INCLUDE_DIR='/usr/local/include/osqp'
+export OPENROBOTS_INCLUDE_DIR='/opt/openrobots/include'
 pip3 install /github/workspace/python || (echo ">>> [ERROR] Build stage failed!" && exit 2) || exit $?
 
 echo ">>> Running all test stages..."

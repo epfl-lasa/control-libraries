@@ -18,8 +18,4 @@ protected:
   [[nodiscard]] S compute_dynamics(const S& state) const override {
     PYBIND11_OVERRIDE_PURE(S, IDynamicalSystem<S>, compute_dynamics, state);
   }
-
-  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override {
-    PYBIND11_OVERRIDE_PURE(void, IDynamicalSystem<S>, validate_and_set_parameter, parameter);
-  }
 };

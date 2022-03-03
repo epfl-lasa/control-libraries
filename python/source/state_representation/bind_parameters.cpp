@@ -154,7 +154,6 @@ void parameter_map(py::module_& m) {
         return param_list;
       } , "Get a list of all the parameters"
   );
-  c.def("get_parameter_list", &ParameterMap::get_parameter_list, "Get a list of all the parameters");
 
   c.def("set_parameter", &ParameterMap::set_parameter, "Set a parameter", "parameter"_a);
   c.def("set_parameters", py::overload_cast<const std::list<std::shared_ptr<state_representation::ParameterInterface>>&>(&ParameterMap::set_parameters), "Set parameters from a list of parameters", "parameters"_a);

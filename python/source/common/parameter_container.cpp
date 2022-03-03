@@ -17,25 +17,25 @@ void ParameterContainer::set_value(const py::object& value) {
       values.int_value = value.cast<int>();
       break;
     case StateType::PARAMETER_INT_ARRAY:
-      values.int_array_value = value.cast < std::vector < int >> ();
+      values.int_array_value = value.cast<std::vector<int>>();
       break;
     case StateType::PARAMETER_DOUBLE:
       values.double_value = value.cast<double>();
       break;
     case StateType::PARAMETER_DOUBLE_ARRAY:
-      values.double_array_value = value.cast < std::vector < double >> ();
+      values.double_array_value = value.cast<std::vector<double>>();
       break;
     case StateType::PARAMETER_BOOL:
       values.bool_value = value.cast<bool>();
       break;
     case StateType::PARAMETER_BOOL_ARRAY:
-      values.bool_array_value = value.cast < std::vector < bool >> ();
+      values.bool_array_value = value.cast<std::vector<bool>>();
       break;
     case StateType::PARAMETER_STRING:
       values.string_value = value.cast<std::string>();
       break;
     case StateType::PARAMETER_STRING_ARRAY:
-      values.string_array_value = value.cast < std::vector < std::string >> ();
+      values.string_array_value = value.cast<std::vector<std::string>>();
       break;
     case StateType::PARAMETER_CARTESIANSTATE:
       values.cartesian_state = value.cast<CartesianState>();

@@ -1,6 +1,18 @@
 #include "state_representation_bindings.h"
 #include "parameter_container.h"
 
+#include <state_representation/parameters/ParameterMap.hpp>
+
+class PyParameterMap : public ParameterMap, public std::enable_shared_from_this<PyParameterMap> {
+public:
+  using ParameterMap::ParameterMap;
+
+protected:
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override {
+    PYBIND11_OVERRIDE(void, ParameterMap, validate_and_set_parameter, parameter);
+  }
+};
+
 void parameter_interface(py::module_& m) {
   py::class_<ParameterInterface, std::shared_ptr<ParameterInterface>, State> c(m, "ParameterInterface");
 
@@ -104,7 +116,59 @@ void parameter(py::module_& m) {
   });
 }
 
+void parameter_map(py::module_& m) {
+  py::class_<ParameterMap, PyParameterMap> c(m, "ParameterMap");
+
+  c.def(py::init(), "Empty constructor");
+  c.def(py::init<const std::list<std::shared_ptr<state_representation::ParameterInterface>>&>(), "Construct the parameter map with an initial list of parameters", "parameters"_a);
+  c.def(py::init<const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>&>(), "Construct the parameter map with an initial map of parameters", "parameters"_a);
+
+
+  // FIXME should those be converted to parameter container or not?
+  c.def(
+      "get_parameter", [](ParameterMap& self, const std::string& name) -> ParameterContainer {
+        return parameter_interface_ptr_to_container(self.get_parameter(name));
+       } , "Get a parameter by its name", "name"_a
+  );
+  c.def(
+      "get_parameters", [](ParameterMap& self) {
+        std::map<std::string, ParameterContainer> param_map;
+        for (const auto& param_it: self.get_parameters()) {
+          param_map.insert(std::pair<std::string, ParameterContainer>(param_it.first, parameter_interface_ptr_to_container(param_it.second)));
+        }
+        return param_map;
+      } , "Get a map of all the <name, parameter> pairs"
+  );
+  c.def(
+      "get_parameter_value", [](ParameterMap& self, const std::string& name) -> py::object {
+        return parameter_interface_ptr_to_container(
+            self.get_parameter(name)).get_value();
+      }, "Get a parameter value by its name", "name"_a
+  );
+  c.def(
+      "get_parameter_list", [](ParameterMap& self) {
+        std::list<ParameterContainer> param_list;
+        for (const auto& param_it: self.get_parameters()) {
+          param_list.emplace_back(parameter_interface_ptr_to_container(param_it.second));
+        }
+        return param_list;
+      } , "Get a list of all the parameters"
+  );
+  c.def("get_parameter_list", &ParameterMap::get_parameter_list, "Get a list of all the parameters");
+
+  c.def("set_parameter", &ParameterMap::set_parameter, "Set a parameter", "parameter"_a);
+  c.def("set_parameters", py::overload_cast<const std::list<std::shared_ptr<state_representation::ParameterInterface>>&>(&ParameterMap::set_parameters), "Set parameters from a list of parameters", "parameters"_a);
+  c.def("set_parameters", py::overload_cast<const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>&>(&ParameterMap::set_parameters), "Set parameters from a map with <name, parameter> pairs", "parameters"_a);
+  c.def(
+      "set_parameter_value", [](ParameterMap& self, const std::string& name, const py::object& value, const StateType& type) -> void {
+        auto param = ParameterContainer(name, value, type);
+        self.set_parameter(container_to_parameter_interface_ptr(param));
+      }, "Set a parameter value by its name", "name"_a, "value"_a, "type"_a
+  );
+}
+
 void bind_parameters(py::module_& m) {
   parameter_interface(m);
   parameter(m);
+  parameter_map(m);
 }

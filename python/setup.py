@@ -1,18 +1,23 @@
-from glob import glob
-from setuptools import setup
-from pybind11.setup_helpers import Pybind11Extension
-from pybind11.setup_helpers import ParallelCompile, naive_recompile
-import warnings
 import os
+import warnings
+from glob import glob
+from pybind11.setup_helpers import ParallelCompile, naive_recompile
+from pybind11.setup_helpers import Pybind11Extension
+from setuptools import setup
 
-__version__ = "5.0.7"
-__libraries__ = ['state_representation', 'clproto', 'dynamical_systems']
+# names of the environment variables that define osqp and openrobots include directories
+osqp_path_var = 'OSQP_INCLUDE_DIR'
+openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
+
+__version__ = "5.0.8"
+__libraries__ = ['state_representation', 'clproto', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
 __install_clproto_module__ = True
 __install_dynamical_systems_module__ = True
+__install_robot_model_module__ = True
 
-# check that eigen and state_representation libraries can be found
+# check that necessary libraries can be found
 try:
     eigen_dir = os.popen(
         'cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE').read().strip()
@@ -20,6 +25,13 @@ try:
         __include_dirs__.append(eigen_dir.lstrip('-I'))
     else:
         raise Exception('Could not find Eigen3 package!')
+
+    if __install_robot_model_module__:
+        osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
+        __include_dirs__.append(osqp_path)
+        openrobots_path = os.environ[
+            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
+        __include_dirs__.append('/opt/openrobots/include')
 
     for lib in __libraries__:
         status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
@@ -31,17 +43,20 @@ try:
             if lib == 'dynamical_systems':
                 warnings.warn(f'{msg} The dynamical_systems module will not be installed.')
                 __install_dynamical_systems_module__ = False
+            if lib == 'robot_model':
+                warnings.warn(f'{msg} The robot_model module will not be installed.')
+                __install_robot_model_module__ = False
             else:
                 raise Exception(msg)
 except Exception as e:
-    msg = f'Error with control library dependencies: {e.args[0]}. Ensure the control libraries are properly installed.'
+    msg = f'Error with control library dependencies: {e.args[0]} Ensure the control libraries are properly installed.'
     warnings.warn(msg)
 
-ParallelCompile("NPY_NUM_BUILD_JOBS", needs_recompile=naive_recompile).install()
+ParallelCompile('NPY_NUM_BUILD_JOBS', needs_recompile=naive_recompile).install()
 
 ext_modules = [
-    Pybind11Extension("state_representation",
-                      sorted(glob("source/state_representation/*.cpp") + glob("source/common/*.cpp")),
+    Pybind11Extension('state_representation',
+                      sorted(glob('source/state_representation/*.cpp') + glob('source/common/*.cpp')),
                       cxx_std=17,
                       include_dirs=__include_dirs__,
                       libraries=['state_representation'],
@@ -51,8 +66,8 @@ ext_modules = [
 
 if __install_clproto_module__:
     ext_modules.append(
-        Pybind11Extension("clproto",
-                          sorted(glob("source/clproto/*.cpp") + glob("source/common/*.cpp")),
+        Pybind11Extension('clproto',
+                          sorted(glob('source/clproto/*.cpp') + glob('source/common/*.cpp')),
                           cxx_std=17,
                           include_dirs=__include_dirs__,
                           libraries=['state_representation', 'clproto'],
@@ -71,16 +86,27 @@ if __install_dynamical_systems_module__:
                           )
     )
 
+if __install_robot_model_module__:
+    ext_modules.append(
+        Pybind11Extension('robot_model',
+                          sorted(glob('source/robot_model/*.cpp')),
+                          cxx_std=17,
+                          include_dirs=__include_dirs__,
+                          libraries=['state_representation', 'robot_model'],
+                          define_macros=[('MODULE_VERSION_INFO', __version__)],
+                          )
+    )
+
 setup(
-    name="control-libraries",
+    name='control-libraries',
     version=__version__,
-    author="Enrico Eberhard",
-    author_email="enrico.eberhard@epfl.ch",
-    url="https://github.com/epfl-lasa/control-libraries",
-    description="Python bindings for the C++ control libraries",
-    long_description="",
+    author='Enrico Eberhard',
+    author_email='enrico.eberhard@epfl.ch',
+    url='https://github.com/epfl-lasa/control-libraries',
+    description='Python bindings for the C++ control libraries',
+    long_description='',
     ext_modules=ext_modules,
-    test_suite="tests",
+    test_suite='tests',
     python_requires='>=3',
     license='GNU GPL v3',
     zip_safe=False,

@@ -2,13 +2,15 @@ FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest as pyth
 ARG BRANCH=develop
 
 WORKDIR /source
-RUN git clone --single-branch --branch $BRANCH https://github.com/epfl-lasa/control-libraries
-RUN bash control-libraries/source/install.sh --auto --no-controllers --no-robot-model
+RUN git clone --depth 1 --branch $BRANCH https://github.com/epfl-lasa/control-libraries
+RUN bash control-libraries/source/install.sh --auto --no-controllers
 RUN bash control-libraries/protocol/install.sh --auto
 
 COPY include control-libraries/python/include
 COPY source control-libraries/python/source
 COPY pyproject.toml setup.py control-libraries/python/
+ENV OSQP_INCLUDE_DIR /usr/local/include/osqp
+ENV OPENROBOTS_INCLUDE_DIR /opt/openrobots/include
 RUN pip3 install control-libraries/python
 
 

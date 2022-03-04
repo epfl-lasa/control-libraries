@@ -113,8 +113,23 @@ void parameter_map(py::module_& m) {
   py::class_<ParameterMap, PyParameterMap> c(m, "ParameterMap");
 
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::list<std::shared_ptr<state_representation::ParameterInterface>>&>(), "Construct the parameter map with an initial list of parameters", "parameters"_a);
-  c.def(py::init<const std::map<std::string, std::shared_ptr<state_representation::ParameterInterface>>&>(), "Construct the parameter map with an initial map of parameters", "parameters"_a);
+  c.def(
+      py::init([](const std::map<std::string, ParameterContainer>& parameters) {
+        auto self = ParameterMap();
+        for (const auto& param_it : parameters) {
+          self.set_parameter(container_to_parameter_interface_ptr(param_it.second));
+        }
+        return self;
+      }), "Construct the parameter map with an initial list of parameters", "parameters"_a
+  );
+  c.def(
+      py::init([](const std::list<ParameterContainer>& parameters) {
+        auto self = ParameterMap();
+        for (const auto& param_it : parameters) {
+          self.set_parameter(container_to_parameter_interface_ptr(param_it));
+        }
+        return self;
+      }), "Construct the parameter map with an initial map of parameters", "parameters"_a);
 
   c.def(
       "get_parameter", [](ParameterMap& self, const std::string& name) -> ParameterContainer {

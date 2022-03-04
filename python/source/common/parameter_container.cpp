@@ -1,5 +1,7 @@
 #include "parameter_container.h"
 
+namespace py_parameter {
+
 ParameterContainer::ParameterContainer(const std::string& name, const StateType& type) :
     ParameterInterface(type, name) {}
 
@@ -101,7 +103,7 @@ py::object ParameterContainer::get_value() {
   }
 }
 
-ParameterContainer parameter_interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter) {
+ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter) {
   switch (parameter->get_type()) {
     case StateType::PARAMETER_INT: {
       auto param = std::static_pointer_cast<Parameter<int>>(parameter);
@@ -184,7 +186,7 @@ ParameterContainer parameter_interface_ptr_to_container(const std::shared_ptr<Pa
   }
 }
 
-std::shared_ptr<ParameterInterface> container_to_parameter_interface_ptr(const ParameterContainer& parameter) {
+std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterContainer& parameter) {
   switch (parameter.get_type()) {
     case StateType::PARAMETER_INT: {
       return std::make_shared<Parameter<int>>(parameter.get_name(), parameter.values.int_value);
@@ -251,3 +253,41 @@ std::shared_ptr<ParameterInterface> container_to_parameter_interface_ptr(const P
       break;
   }
 }
+
+std::map<std::string, ParameterContainer>
+interface_ptr_to_container_map(const std::map<std::string, std::shared_ptr<ParameterInterface>>& parameters) {
+  std::map<std::string, ParameterContainer> parameter_list;
+  for (const auto& param_it: parameters) {
+    parameter_list.insert(
+        std::pair<std::string, ParameterContainer>(param_it.first, interface_ptr_to_container(param_it.second)));
+  }
+  return parameter_list;
+}
+
+std::map<std::string, std::shared_ptr<ParameterInterface>>
+container_to_interface_ptr_map(const std::map<std::string, ParameterContainer>& parameters) {
+  std::map<std::string, std::shared_ptr<ParameterInterface>> parameter_list;
+  for (const auto& param_it: parameters) {
+    parameter_list.insert(std::pair<std::string, std::shared_ptr<ParameterInterface>>(param_it.first, container_to_interface_ptr(param_it.second)));
+  }
+  return parameter_list;
+}
+
+std::list<ParameterContainer>
+interface_ptr_to_container_list(const std::list<std::shared_ptr<ParameterInterface>>& parameters) {
+  std::list<ParameterContainer> parameter_list;
+  for (const auto& param_it: parameters) {
+    parameter_list.emplace_back(interface_ptr_to_container(param_it));
+  }
+  return parameter_list;
+}
+
+std::list<std::shared_ptr<ParameterInterface>>
+container_to_interface_ptr_list(const std::list<ParameterContainer>& parameters) {
+  std::list<std::shared_ptr<ParameterInterface>> parameter_list;
+  for (const auto& param_it: parameters) {
+    parameter_list.emplace_back(container_to_interface_ptr(param_it));
+  }
+  return parameter_list;
+}
+}// namespace py_parameter

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "py_parameter_map.h"
-
 #include <dynamical_systems/IDynamicalSystem.hpp>
+
+#include "py_parameter_map.h"
 
 template<class S>
 class PyDynamicalSystem

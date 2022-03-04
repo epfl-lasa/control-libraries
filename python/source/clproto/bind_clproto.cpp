@@ -20,6 +20,7 @@
 
 using namespace clproto;
 using namespace state_representation;
+using namespace py_parameter;
 
 template<typename T>
 inline py::bytes encode_bytes(const T& object) {

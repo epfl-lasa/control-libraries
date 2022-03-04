@@ -6,6 +6,8 @@
 #include "parameter_container.h"
 #include "py_parameter_map.h"
 
+using namespace py_parameter;
+
 void parameter_interface(py::module_& m) {
   py::class_<ParameterInterface, std::shared_ptr<ParameterInterface>, State> c(m, "ParameterInterface");
 
@@ -115,68 +117,50 @@ void parameter_map(py::module_& m) {
   c.def(py::init(), "Empty constructor");
   c.def(
       py::init([](const std::map<std::string, ParameterContainer>& parameters) {
-        auto self = ParameterMap();
-        for (const auto& param_it : parameters) {
-          self.set_parameter(container_to_parameter_interface_ptr(param_it.second));
-        }
-        return self;
+        auto parameter_map = container_to_interface_ptr_map(parameters);
+        return ParameterMap(parameter_map);
       }), "Construct the parameter map with an initial list of parameters", "parameters"_a
   );
   c.def(
       py::init([](const std::list<ParameterContainer>& parameters) {
-        auto self = ParameterMap();
-        for (const auto& param_it : parameters) {
-          self.set_parameter(container_to_parameter_interface_ptr(param_it));
-        }
-        return self;
+        auto parameter_list = container_to_interface_ptr_list(parameters);
+        return ParameterMap(parameter_list);
       }), "Construct the parameter map with an initial map of parameters", "parameters"_a);
 
   c.def(
       "get_parameter", [](ParameterMap& self, const std::string& name) -> ParameterContainer {
-        return parameter_interface_ptr_to_container(self.get_parameter(name));
+        return interface_ptr_to_container(self.get_parameter(name));
        } , "Get a parameter by its name", "name"_a
   );
   c.def(
       "get_parameters", [](ParameterMap& self) {
-        py::dict dict;
-        for (const auto& param_it : self.get_parameters()) {
-          dict[py::str(param_it.first)] = parameter_interface_ptr_to_container(param_it.second);
-        }
-        return dict;
+        return interface_ptr_to_container_map(self.get_parameters());
       } , "Get a map of all the <name, parameter> pairs"
   );
   c.def(
       "get_parameter_value", [](ParameterMap& self, const std::string& name) -> py::object {
-        return parameter_interface_ptr_to_container(self.get_parameter(name)).get_value();
+        return interface_ptr_to_container(self.get_parameter(name)).get_value();
       }, "Get a parameter value by its name", "name"_a
   );
   c.def(
       "get_parameter_list", [](ParameterMap& self) {
-        py::list list;
-        for (const auto& param_it : self.get_parameters()) {
-          list.append(parameter_interface_ptr_to_container(param_it.second));
-        }
-        return list;
+        return interface_ptr_to_container_list(self.get_parameter_list());
       } , "Get a list of all the parameters"
   );
 
   c.def("set_parameter", [](ParameterMap& self, const ParameterContainer& parameter) {
-    self.set_parameter(container_to_parameter_interface_ptr(parameter));
+    self.set_parameter(container_to_interface_ptr(parameter));
   }, "Set a parameter", "parameter"_a);
   c.def("set_parameters", [](ParameterMap& self, const std::list<ParameterContainer>& parameters) {
-    for (const auto& param_it : parameters) {
-      self.set_parameter(container_to_parameter_interface_ptr(param_it));
-    }
+    self.set_parameters(container_to_interface_ptr_list(parameters));
   }, "Set parameters from a list of parameters", "parameters"_a);
   c.def("set_parameters", [](ParameterMap& self, const std::map<std::string, ParameterContainer>& parameters) {
-    for (const auto& param_it : parameters) {
-      self.set_parameter(container_to_parameter_interface_ptr(param_it.second));
-    }
+    self.set_parameters(container_to_interface_ptr_map(parameters));
   }, "Set parameters from a map with <name, parameter> pairs", "parameters"_a);
   c.def(
       "set_parameter_value", [](ParameterMap& self, const std::string& name, const py::object& value, const StateType& type) -> void {
         auto param = ParameterContainer(name, value, type);
-        self.set_parameter(container_to_parameter_interface_ptr(param));
+        self.set_parameter(container_to_interface_ptr(param));
       }, "Set a parameter value by its name", "name"_a, "value"_a, "type"_a
   );
 }

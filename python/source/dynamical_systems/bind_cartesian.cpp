@@ -6,10 +6,8 @@
 #include <dynamical_systems/IDynamicalSystem.hpp>
 #include <dynamical_systems/PointAttractor.hpp>
 #include <dynamical_systems/Ring.hpp>
-#include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 
-#include "parameter_container.h"
 #include "py_dynamical_system.h"
 
 using namespace state_representation;

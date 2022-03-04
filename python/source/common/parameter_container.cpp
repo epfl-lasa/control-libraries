@@ -105,81 +105,51 @@ py::object ParameterContainer::get_value() {
 
 ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter) {
   switch (parameter->get_type()) {
-    case StateType::PARAMETER_INT: {
-      auto param = std::static_pointer_cast<Parameter<int>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_INT:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<int>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_INT_ARRAY: {
-      auto param = std::static_pointer_cast<Parameter<std::vector<int>>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_INT_ARRAY:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<int>>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_DOUBLE: {
-      auto param = std::static_pointer_cast<Parameter<double>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_DOUBLE:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<double>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_DOUBLE_ARRAY: {
-      auto param = std::static_pointer_cast<Parameter<std::vector<double>>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_DOUBLE_ARRAY:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<double>>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_BOOL: {
-      auto param = std::static_pointer_cast<Parameter<bool>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_BOOL:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<bool>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_BOOL_ARRAY: {
-      auto param = std::static_pointer_cast<Parameter<std::vector<bool>>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_BOOL_ARRAY:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<bool>>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_STRING: {
-      auto param = std::static_pointer_cast<Parameter<std::string>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_STRING:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::string>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_STRING_ARRAY: {
-      auto param = std::static_pointer_cast<Parameter<std::vector<std::string>>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_STRING_ARRAY:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<std::string>>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_CARTESIANSTATE: {
-      auto param = std::static_pointer_cast<Parameter<CartesianState>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_CARTESIANSTATE:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianState>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_CARTESIANPOSE: {
-      auto param = std::static_pointer_cast<Parameter<CartesianPose>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_CARTESIANPOSE:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianPose>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_JOINTSTATE: {
-      auto param = std::static_pointer_cast<Parameter<JointState>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_JOINTSTATE:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<JointState>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_JOINTPOSITIONS: {
-      auto param = std::static_pointer_cast<Parameter<JointPositions>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_JOINTPOSITIONS:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<JointPositions>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_ELLIPSOID: {
-      auto param = std::static_pointer_cast<Parameter<Ellipsoid>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_ELLIPSOID:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Ellipsoid>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_MATRIX: {
-      auto param = std::static_pointer_cast<Parameter<Eigen::MatrixXd>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_MATRIX:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Eigen::MatrixXd>()), parameter->get_type());
       break;
-    }
-    case StateType::PARAMETER_VECTOR: {
-      auto param = std::static_pointer_cast<Parameter<Eigen::VectorXd>>(parameter);
-      return ParameterContainer(param->get_name(), py::cast(param->get_value()), param->get_type());
+    case StateType::PARAMETER_VECTOR:
+      return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Eigen::VectorXd>()), parameter->get_type());
       break;
-    }
     default:
       throw std::invalid_argument("The conversion from this StateType to ParameterContainer is not supported yet.");
       break;
@@ -189,63 +159,63 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
 std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterContainer& parameter) {
   switch (parameter.get_type()) {
     case StateType::PARAMETER_INT: {
-      return std::make_shared<Parameter<int>>(parameter.get_name(), parameter.values.int_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.int_value);
       break;
     }
     case StateType::PARAMETER_INT_ARRAY: {
-      return std::make_shared<Parameter<std::vector<int>>>(parameter.get_name(), parameter.values.int_array_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.int_array_value);
       break;
     }
     case StateType::PARAMETER_DOUBLE: {
-      return std::make_shared<Parameter<double>>(parameter.get_name(), parameter.values.double_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.double_value);
       break;
     }
     case StateType::PARAMETER_DOUBLE_ARRAY: {
-      return std::make_shared<Parameter<std::vector<double>>>(parameter.get_name(), parameter.values.double_array_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.double_array_value);
       break;
     }
     case StateType::PARAMETER_BOOL: {
-      return std::make_shared<Parameter<bool>>(parameter.get_name(), parameter.values.bool_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.bool_value);
       break;
     }
     case StateType::PARAMETER_BOOL_ARRAY: {
-      return std::make_shared<Parameter<std::vector<bool>>>(parameter.get_name(), parameter.values.bool_array_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.bool_array_value);
       break;
     }
     case StateType::PARAMETER_STRING: {
-      return std::make_shared<Parameter<std::string>>(parameter.get_name(), parameter.values.string_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.string_value);
       break;
     }
     case StateType::PARAMETER_STRING_ARRAY: {
-      return std::make_shared<Parameter<std::vector<std::string>>>(parameter.get_name(), parameter.values.string_array_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.string_array_value);
       break;
     }
     case StateType::PARAMETER_CARTESIANSTATE: {
-      return std::make_shared<Parameter<CartesianState>>(parameter.get_name(), parameter.values.cartesian_state);
+      return make_shared_parameter(parameter.get_name(), parameter.values.cartesian_state);
       break;
     }
     case StateType::PARAMETER_CARTESIANPOSE: {
-      return std::make_shared<Parameter<CartesianPose>>(parameter.get_name(), parameter.values.cartesian_pose);
+      return make_shared_parameter(parameter.get_name(), parameter.values.cartesian_pose);
       break;
     }
     case StateType::PARAMETER_JOINTSTATE: {
-      return std::make_shared<Parameter<JointState>>(parameter.get_name(), parameter.values.joint_state);
+      return make_shared_parameter(parameter.get_name(), parameter.values.joint_state);
       break;
     }
     case StateType::PARAMETER_JOINTPOSITIONS: {
-      return std::make_shared<Parameter<JointPositions>>(parameter.get_name(), parameter.values.joint_positions);
+      return make_shared_parameter(parameter.get_name(), parameter.values.joint_positions);
       break;
     }
     case StateType::PARAMETER_ELLIPSOID: {
-      return std::make_shared<Parameter<Ellipsoid>>(parameter.get_name(), parameter.values.ellipsoid);
+      return make_shared_parameter(parameter.get_name(), parameter.values.ellipsoid);
       break;
     }
     case StateType::PARAMETER_MATRIX: {
-      return std::make_shared<Parameter<Eigen::MatrixXd>>(parameter.get_name(), parameter.values.matrix_value);
+      return make_shared_parameter(parameter.get_name(), parameter.values.matrix_value);
       break;
     }
       case StateType::PARAMETER_VECTOR: {
-        return std::make_shared<Parameter<Eigen::VectorXd>>(parameter.get_name(), parameter.values.vector_value);
+        return make_shared_parameter(parameter.get_name(), parameter.values.vector_value);
         break;
       }
     default:

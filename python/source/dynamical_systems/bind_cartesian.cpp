@@ -15,7 +15,7 @@
 using namespace state_representation;
 
 void cartesian(py::module_& m) {
-  py::class_<IDynamicalSystem<CartesianState>, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS");
+  py::class_<IDynamicalSystem<CartesianState>, ParameterMap, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS");
 
   c.def(py::init<>());
 
@@ -23,41 +23,6 @@ void cartesian(py::module_& m) {
   c.def("evaluate", &IDynamicalSystem<CartesianState>::evaluate);
   c.def("get_base_frame", &IDynamicalSystem<CartesianState>::get_base_frame);
   c.def("set_base_frame", &IDynamicalSystem<CartesianState>::set_base_frame);
-
-  c.def("get_parameter", [](IDynamicalSystem<CartesianState>& self, const std::string& name) {
-    return parameter_interface_ptr_to_container(self.get_parameter(name));
-  });
-  c.def("get_parameters", [](IDynamicalSystem<CartesianState>& self) {
-    py::dict dict;
-    for (const auto& param_it : self.get_parameters()) {
-      dict[py::str(param_it.first)] = parameter_interface_ptr_to_container(param_it.second);
-    }
-    return dict;
-  });
-  c.def("get_parameter_value", [](IDynamicalSystem<CartesianState>& self, const std::string& name) {
-    return parameter_interface_ptr_to_container(self.get_parameter(name)).get_value();
-  });
-  c.def("get_parameter_list", [](IDynamicalSystem<CartesianState>& self) {
-    py::list list;
-    for (const auto& param_it : self.get_parameters()) {
-      list.append(parameter_interface_ptr_to_container(param_it.second));
-    }
-    return list;
-  });
-
-  c.def("set_parameter", [](IDynamicalSystem<CartesianState>& self, const ParameterContainer& parameter) {
-    self.set_parameter(container_to_parameter_interface_ptr(parameter));
-  });
-  c.def("set_parameters", [](IDynamicalSystem<CartesianState>& self, const std::vector<ParameterContainer>& parameters) {
-    for (auto param : parameters) {
-      self.set_parameter(container_to_parameter_interface_ptr(param));
-    }
-  });
-  c.def("set_parameters", [](IDynamicalSystem<CartesianState>& self, const std::map<std::string, ParameterContainer>& parameters) {
-    for (const auto& param_it: parameters) {
-      self.set_parameter(container_to_parameter_interface_ptr(param_it.second));
-    }
-  });
 }
 
 void bind_cartesian(py::module_& m) {

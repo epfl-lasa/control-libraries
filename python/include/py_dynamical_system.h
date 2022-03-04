@@ -1,8 +1,12 @@
+#pragma once
+
+#include "py_parameter_map.h"
+
 #include <dynamical_systems/IDynamicalSystem.hpp>
-#include <state_representation/parameters/ParameterInterface.hpp>
 
 template<class S>
-class PyDynamicalSystem : public IDynamicalSystem<S>, public std::enable_shared_from_this<PyDynamicalSystem<S>> {
+class PyDynamicalSystem
+    : public IDynamicalSystem<S>, public PyParameterMap, public std::enable_shared_from_this<PyDynamicalSystem<S>> {
 public:
   using IDynamicalSystem<S>::IDynamicalSystem;
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <state_representation/parameters/ParameterMap.hpp>
-#include <state_representation/parameters/ParameterInterface.hpp>
 
 class PyParameterMap : public ParameterMap, public std::enable_shared_from_this<PyParameterMap> {
 public:

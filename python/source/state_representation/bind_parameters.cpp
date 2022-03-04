@@ -1,4 +1,8 @@
 #include "state_representation_bindings.h"
+
+#include <state_representation/parameters/Parameter.hpp>
+#include <state_representation/parameters/ParameterMap.hpp>
+
 #include "parameter_container.h"
 #include "py_parameter_map.h"
 

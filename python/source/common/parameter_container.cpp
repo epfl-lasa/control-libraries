@@ -107,120 +107,73 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
   switch (parameter->get_type()) {
     case StateType::PARAMETER_INT:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<int>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_INT_ARRAY:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<int>>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_DOUBLE:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<double>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_DOUBLE_ARRAY:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<double>>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_BOOL:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<bool>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_BOOL_ARRAY:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<bool>>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_STRING:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::string>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_STRING_ARRAY:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<std::string>>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_CARTESIANSTATE:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianState>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_CARTESIANPOSE:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianPose>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_JOINTSTATE:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<JointState>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_JOINTPOSITIONS:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<JointPositions>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_ELLIPSOID:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Ellipsoid>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_MATRIX:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Eigen::MatrixXd>()), parameter->get_type());
-      break;
     case StateType::PARAMETER_VECTOR:
       return ParameterContainer(parameter->get_name(), py::cast(parameter->get_parameter_value<Eigen::VectorXd>()), parameter->get_type());
-      break;
     default:
       throw std::invalid_argument("The conversion from this StateType to ParameterContainer is not supported yet.");
-      break;
   }
 }
 
 std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterContainer& parameter) {
   switch (parameter.get_type()) {
-    case StateType::PARAMETER_INT: {
+    case StateType::PARAMETER_INT:
       return make_shared_parameter(parameter.get_name(), parameter.values.int_value);
-      break;
-    }
-    case StateType::PARAMETER_INT_ARRAY: {
+    case StateType::PARAMETER_INT_ARRAY:
       return make_shared_parameter(parameter.get_name(), parameter.values.int_array_value);
-      break;
-    }
-    case StateType::PARAMETER_DOUBLE: {
+    case StateType::PARAMETER_DOUBLE:
       return make_shared_parameter(parameter.get_name(), parameter.values.double_value);
-      break;
-    }
-    case StateType::PARAMETER_DOUBLE_ARRAY: {
+    case StateType::PARAMETER_DOUBLE_ARRAY:
       return make_shared_parameter(parameter.get_name(), parameter.values.double_array_value);
-      break;
-    }
-    case StateType::PARAMETER_BOOL: {
+    case StateType::PARAMETER_BOOL:
       return make_shared_parameter(parameter.get_name(), parameter.values.bool_value);
-      break;
-    }
-    case StateType::PARAMETER_BOOL_ARRAY: {
+    case StateType::PARAMETER_BOOL_ARRAY:
       return make_shared_parameter(parameter.get_name(), parameter.values.bool_array_value);
-      break;
-    }
-    case StateType::PARAMETER_STRING: {
+    case StateType::PARAMETER_STRING:
       return make_shared_parameter(parameter.get_name(), parameter.values.string_value);
-      break;
-    }
-    case StateType::PARAMETER_STRING_ARRAY: {
+    case StateType::PARAMETER_STRING_ARRAY:
       return make_shared_parameter(parameter.get_name(), parameter.values.string_array_value);
-      break;
-    }
-    case StateType::PARAMETER_CARTESIANSTATE: {
+    case StateType::PARAMETER_CARTESIANSTATE:
       return make_shared_parameter(parameter.get_name(), parameter.values.cartesian_state);
-      break;
-    }
-    case StateType::PARAMETER_CARTESIANPOSE: {
+    case StateType::PARAMETER_CARTESIANPOSE:
       return make_shared_parameter(parameter.get_name(), parameter.values.cartesian_pose);
-      break;
-    }
-    case StateType::PARAMETER_JOINTSTATE: {
+    case StateType::PARAMETER_JOINTSTATE:
       return make_shared_parameter(parameter.get_name(), parameter.values.joint_state);
-      break;
-    }
-    case StateType::PARAMETER_JOINTPOSITIONS: {
+    case StateType::PARAMETER_JOINTPOSITIONS:
       return make_shared_parameter(parameter.get_name(), parameter.values.joint_positions);
-      break;
-    }
-    case StateType::PARAMETER_ELLIPSOID: {
+    case StateType::PARAMETER_ELLIPSOID:
       return make_shared_parameter(parameter.get_name(), parameter.values.ellipsoid);
-      break;
-    }
-    case StateType::PARAMETER_MATRIX: {
+    case StateType::PARAMETER_MATRIX:
       return make_shared_parameter(parameter.get_name(), parameter.values.matrix_value);
-      break;
-    }
-      case StateType::PARAMETER_VECTOR: {
+    case StateType::PARAMETER_VECTOR:
         return make_shared_parameter(parameter.get_name(), parameter.values.vector_value);
-        break;
-      }
     default:
       return {};
-      break;
   }
 }
 

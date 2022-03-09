@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
 echo ">>> Installing control libraries..."
-bash /github/workspace/source/install.sh --auto --no-controllers || exit 1
+bash /github/workspace/source/install.sh --auto || exit 1
 bash /github/workspace/protocol/install.sh --auto || exit 1
 
 echo ">>> Building Python bindings..."

@@ -17,6 +17,7 @@ Release Versions:
 - Improve CI checks for pull requests (#262)
 - Remove previous eigen3 installation (#252, 264)
 - Add python bindings for robot model (#263)
+- Bind ParameterMap (#265)
 
 ## 5.0.0
 

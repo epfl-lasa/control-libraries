@@ -5,6 +5,8 @@
 
 #include <dynamical_systems/IDynamicalSystem.hpp>
 
+#include "parameter_container.h"
+
 namespace py = pybind11;
 using namespace pybind11::literals;
 using namespace dynamical_systems;

@@ -4,10 +4,11 @@
 
 #include <state_representation/State.hpp>
 #include <state_representation/geometry/Ellipsoid.hpp>
-#include <state_representation/parameters/ParameterInterface.hpp>
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/joint/JointPositions.hpp>
+
+namespace py_parameter {
 
 struct ParameterValues {
   int int_value;
@@ -40,6 +41,20 @@ public:
   ParameterValues values;
 };
 
-ParameterContainer parameter_interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter);
+ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter);
 
-std::shared_ptr<ParameterInterface> container_to_parameter_interface_ptr(const ParameterContainer& parameter);
+std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterContainer& parameter);
+
+std::map<std::string, ParameterContainer>
+interface_ptr_to_container_map(const std::map<std::string, std::shared_ptr<ParameterInterface>>& parameters);
+
+std::map<std::string, std::shared_ptr<ParameterInterface>>
+container_to_interface_ptr_map(const std::map<std::string, ParameterContainer>& parameters);
+
+std::list<ParameterContainer>
+interface_ptr_to_container_list(const std::list<std::shared_ptr<ParameterInterface>>& parameters);
+
+std::list<std::shared_ptr<ParameterInterface>>
+container_to_interface_ptr_list(const std::list<ParameterContainer>& parameters);
+
+}// namespace py_parameter

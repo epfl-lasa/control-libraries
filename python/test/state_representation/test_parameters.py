@@ -192,6 +192,56 @@ class TestParameters(unittest.TestCase):
         param1 = sr.Parameter("vector", values, sr.StateType.PARAMETER_VECTOR)
         assert_array_equal(param1.get_value(), values)
 
+    def param_map_equal(self, param_dict, param_map):
+        def simple_param_equal(param1, param2):
+            self.assertEqual(param1.get_name(), param2.get_name())
+            self.assertEqual(param1.get_type(), param2.get_type())
+            self.assertEqual(param1.get_value(), param2.get_value())
+
+        for name, param in param_dict.items():
+            p = param_map.get_parameter(name)
+            simple_param_equal(p, param)
+
+            value = param_map.get_parameter_value(name)
+            self.assertEqual(value, param.get_value())
+
+        for n, p in param_map.get_parameters().items():
+            simple_param_equal(p, param_dict[n])
+
+        for p in param_map.get_parameter_list():
+            simple_param_equal(p, param_dict[p.get_name()])
+
+
+    def test_param_map(self):
+        param_dict = {"int": sr.Parameter("int", 1, sr.StateType.PARAMETER_INT),
+                      "double": sr.Parameter("double", 2.2, sr.StateType.PARAMETER_DOUBLE),
+                      "string": sr.Parameter("string", "test", sr.StateType.PARAMETER_STRING)}
+        param_list = [param for name, param in param_dict.items()]
+
+        m = sr.ParameterMap()
+        for name, param in param_dict.items():
+            m.set_parameter(param)
+        self.param_map_equal(param_dict, m)
+
+        m = sr.ParameterMap()
+        for name, param in param_dict.items():
+            m.set_parameter_value(param.get_name(), param.get_value(), param.get_type())
+        self.param_map_equal(param_dict, m)
+
+        m = sr.ParameterMap()
+        m.set_parameters(param_dict)
+        self.param_map_equal(param_dict, m)
+
+        m = sr.ParameterMap()
+        m.set_parameters(param_list)
+        self.param_map_equal(param_dict, m)
+
+        m = sr.ParameterMap(param_dict)
+        self.param_map_equal(param_dict, m)
+
+        m = sr.ParameterMap(param_list)
+        self.param_map_equal(param_dict, m)
+
 
 if __name__ == '__main__':
     unittest.main()

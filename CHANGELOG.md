@@ -19,6 +19,7 @@ Release Versions:
 - Add python bindings for robot model (#263)
 - Bind ParameterMap (#265, #268)
 - Add Docker resources for testing and serving for protocol (#267)
+- Controllers bindings (#266)
 
 ## 5.0.0
 

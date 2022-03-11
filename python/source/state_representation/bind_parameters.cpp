@@ -21,14 +21,15 @@ void parameter(py::module_& m) {
   c.def(py::init<const std::string&, const StateType&>(), "Constructor of a parameter with name and type", "name"_a, "type"_a);
   c.def(py::init<const std::string&, const py::object&, const StateType&>(), "Constructor of a parameter with name, value and type", "name"_a, "value"_a, "type"_a);
   c.def(py::init<const ParameterContainer&>(), "Copy constructor from another Parameter", "parameter"_a);
+  c.def(py::init([](const std::shared_ptr<ParameterInterface>& parameter) { return interface_ptr_to_container(parameter); }), "Constructor from a parameter interface pointer", "parameter"_a);
 
   c.def("get_value", &ParameterContainer::get_value, "Getter of the value attribute.");
   c.def("set_value", &ParameterContainer::set_value, "Setter of the value attribute.", py::arg("value"));
 
-  c.def("__copy__", [](const ParameterContainer &parameter) {
+  c.def("__copy__", [](const ParameterContainer& parameter) {
     return ParameterContainer(parameter);
   });
-  c.def("__deepcopy__", [](const ParameterContainer &parameter, py::dict) {
+  c.def("__deepcopy__", [](const ParameterContainer& parameter, py::dict) {
     return ParameterContainer(parameter);
   }, "memo"_a);
   c.def("__repr__", [](const ParameterContainer& parameter) {

@@ -23,10 +23,10 @@ RUN cmake -DBUILD_TESTING="${BUILD_TESTING}" .. \
 FROM build as testing
 
 RUN CTEST_OUTPUT_ON_FAILURE=1 make test
-RUN rm -rf /tmp/clproto_cpp/
+RUN rm -rf /tmp/protocol/
 
 
 FROM build as install
 
 RUN make install
-RUN rm -rf /tmp/clproto_cpp/
+RUN rm -rf /tmp/protocol/

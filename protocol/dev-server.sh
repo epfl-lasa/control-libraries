@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=ghcr.io/epfl-lasa/control-libraries/protocol-dependencies
+IMAGE_NAME=epfl-lasa/control-libraries/protocol-dependencies
 CONTAINER_NAME=epfl-lasa-control-libraries-protocol-dependencies-ssh
 BRANCH=$(git branch --show-current)
 

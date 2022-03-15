@@ -13,8 +13,8 @@ class TestCompliantTwistController(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctrl = create_cartesian_controller(CONTROLLER_TYPE.COMPLIANT_TWIST)
-        cls.command_twist = sr.CartesianTwist().Identity("test")
-        cls.feedback_twist = sr.CartesianTwist().Identity("test")
+        cls.command_twist = sr.CartesianTwist().Zero("test")
+        cls.feedback_twist = sr.CartesianTwist().Zero("test")
 
     @classmethod
     def set_gains(cls, lpd, lod, ast, ad):

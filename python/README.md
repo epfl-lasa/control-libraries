@@ -92,6 +92,8 @@ Bindings exist for the following modules, classes and methods:
   - `Shape`
   - `Ellipsoid`
   - `Parameter`
+- `controllers`:
+  - 
 - `dynamical_systems`:
   - `DYNAMICAL_SYSTEM`
   - `create_cartesian_ds(type)`
@@ -102,6 +104,8 @@ Bindings exist for the following modules, classes and methods:
   - `RingDS`
   - `JointDefaultDS`
   - `JointPointAttractorDS`
+- `robot_model`:
+  - 
 - `clproto`:
   - `MessageType`
   - `ParameterMessageType`

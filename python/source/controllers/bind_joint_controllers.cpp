@@ -94,26 +94,9 @@ void joint_controller(py::module_& m) {
 void joint_impedance_controllers(py::module_& m) {
   using namespace impedance;
 
-  py::class_<Impedance<JointState>, IController<JointState>> (m, "JointImpedanceController")
-  .def(py::init<unsigned int>(), "Base constructor", "dimensions"_a = int(6))
-  .def(
-      py::init([](const std::list<ParameterContainer>& parameters, unsigned int dimensions = 6) {
-        return Impedance<JointState>(container_to_interface_ptr_list(parameters), dimensions);
-      }), "Constructor from an initial parameter list.", "parameters"_a, "dimensions"_a = int(6));
-
-  py::class_<VelocityImpedance<JointState>, IController<JointState>>(m, "JointVelocityImpedanceController")
-  .def(py::init<unsigned int>(), "Base constructor", "dimensions"_a = int(6))
-  .def(
-      py::init([](const std::list<ParameterContainer>& parameters, unsigned int dimensions = 6) {
-        return VelocityImpedance<JointState>(container_to_interface_ptr_list(parameters), dimensions);
-      }), "Constructor from an initial parameter list.", "parameters"_a, "dimensions"_a = int(6));
-
-  py::class_<Dissipative<JointState>, IController<JointState>>(m, "JointDissipativeController")
-  .def(py::init<const ComputationalSpaceType&, unsigned int>(), "Base constructor", "computational_space"_a, "dimensions"_a = int(6))
-  .def(
-      py::init([](const std::list<ParameterContainer>& parameters, const ComputationalSpaceType& computational_space, unsigned int dimensions = 6) {
-        return Dissipative<JointState>(container_to_interface_ptr_list(parameters), computational_space, dimensions);
-      }), "Constructor from an initial parameter list.", "parameters"_a, "computational_space"_a, "dimensions"_a = int(6));
+  py::class_<Impedance<JointState>, IController<JointState>> (m, "JointImpedanceController");
+  py::class_<VelocityImpedance<JointState>, IController<JointState>>(m, "JointVelocityImpedanceController");
+  py::class_<Dissipative<JointState>, IController<JointState>>(m, "JointDissipativeController");
 }
 
 void bind_joint_controllers(py::module_& m) {

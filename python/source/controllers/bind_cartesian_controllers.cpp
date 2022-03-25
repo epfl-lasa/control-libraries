@@ -111,36 +111,10 @@ void cartesian_controller(py::module_& m) {
 void cartesian_impedance_controllers(py::module_& m) {
   using namespace impedance;
 
-  py::class_<Impedance<CartesianState>, IController<CartesianState>>(m, "CartesianImpedanceController")
-  .def(py::init<>(), "Base constructor")
-  .def(
-     py::init([](const std::list<ParameterContainer>& parameters) {
-       return Impedance<CartesianState>(container_to_interface_ptr_list(parameters));
-     }), "Constructor from an initial parameter list.", "parameters"_a);
-
-  py::class_<VelocityImpedance<CartesianState>, IController<CartesianState>>(m, "CartesianVelocityImpedanceController")
-  .def(py::init<>(), "Base constructor")
-  .def(
-     py::init([](const std::list<ParameterContainer>& parameters) {
-       return VelocityImpedance<CartesianState>(container_to_interface_ptr_list(parameters));
-     }), "Constructor from an initial parameter list.", "parameters"_a);
-
-  py::class_<Dissipative<CartesianState>, IController<CartesianState>>(m, "CartesianDissipativeController")
-  .def(py::init<const ComputationalSpaceType&>(), "Base constructor", "computational_space"_a)
-  .def(
-      py::init([](const std::list<ParameterContainer>& parameters, const ComputationalSpaceType& computational_space) {
-        return Dissipative<CartesianState>(container_to_interface_ptr_list(parameters), computational_space);
-      }), "Constructor from an initial parameter list.", "parameters"_a, "computational_space"_a);
-
-
-  py::class_<CompliantTwist, IController<CartesianState>>(m, "CartesianCompliantTwistController")
-  .def(
-      py::init([](const std::list<ParameterContainer>& parameters) {
-        return CompliantTwist(container_to_interface_ptr_list(parameters));
-      }), "Constructor from an initial parameter list", "parameters"_a)
-  .def(py::init<double, double, double, double>(),
-      "Constructor taking gain parameters as arguments.", "linear_principle_damping"_a, "linear_orthogonal_damping"_a, "angular_stiffness"_a, "angular_damping"_a);
-
+  py::class_<Impedance<CartesianState>, IController<CartesianState>>(m, "CartesianImpedanceController");
+  py::class_<VelocityImpedance<CartesianState>, IController<CartesianState>>(m, "CartesianVelocityImpedanceController");
+  py::class_<Dissipative<CartesianState>, IController<CartesianState>>(m, "CartesianDissipativeController");
+  py::class_<CompliantTwist, IController<CartesianState>>(m, "CartesianCompliantTwistController");
 }
 
 void bind_cartesian_controllers(py::module_& m) {

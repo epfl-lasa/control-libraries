@@ -1,6 +1,7 @@
 import os
 import warnings
 from glob import glob
+
 from pybind11.setup_helpers import ParallelCompile, naive_recompile
 from pybind11.setup_helpers import Pybind11Extension
 from setuptools import setup
@@ -9,11 +10,12 @@ from setuptools import setup
 osqp_path_var = 'OSQP_INCLUDE_DIR'
 openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
-__version__ = "5.0.11"
-__libraries__ = ['state_representation', 'clproto', 'dynamical_systems', 'robot_model']
+__version__ = "5.0.12"
+__libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
 __install_clproto_module__ = True
+__install_controllers_module__ = True
 __install_dynamical_systems_module__ = True
 __install_robot_model_module__ = True
 
@@ -46,8 +48,18 @@ try:
             if lib == 'robot_model':
                 warnings.warn(f'{msg} The robot_model module will not be installed.')
                 __install_robot_model_module__ = False
+            if lib == 'controllers':
+                warnings.warn(f'{msg} The controllers module will not be installed.')
+                __install_controllers_module__ = False
             else:
                 raise Exception(msg)
+
+    if __install_controllers_module__ and not __install_robot_model_module__:
+        warnings.warn(
+            'The robot model module is required to build the controllers module! '
+            'The controllers module will not be installed with the current settings.')
+        __install_controllers_module__ = False
+
 except Exception as e:
     msg = f'Error with control library dependencies: {e.args[0]} Ensure the control libraries are properly installed.'
     warnings.warn(msg)
@@ -93,6 +105,17 @@ if __install_robot_model_module__:
                           cxx_std=17,
                           include_dirs=__include_dirs__,
                           libraries=['state_representation', 'robot_model'],
+                          define_macros=[('MODULE_VERSION_INFO', __version__)],
+                          )
+    )
+
+if __install_controllers_module__:
+    ext_modules.append(
+        Pybind11Extension('controllers',
+                          sorted(glob('source/controllers/*.cpp') + glob("source/common/*.cpp")),
+                          cxx_std=17,
+                          include_dirs=__include_dirs__,
+                          libraries=['state_representation', 'controllers', 'robot_model'],
                           define_macros=[('MODULE_VERSION_INFO', __version__)],
                           )
     )

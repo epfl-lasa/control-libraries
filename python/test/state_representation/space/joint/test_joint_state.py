@@ -2,6 +2,7 @@ import unittest
 import copy
 
 from state_representation import JointState
+import numpy as np
 
 JOINT_STATE_METHOD_EXPECTS = [
     'Random',
@@ -50,8 +51,11 @@ JOINT_STATE_METHOD_EXPECTS = [
 
 
 class TestJointState(unittest.TestCase):
-    def assert_np_array_equal(self, a, b):
-        self.assertListEqual(list(a), list(b))
+    def assert_np_array_equal(self, a: np.array, b: np.array, places=3):
+        try:
+            np.testing.assert_almost_equal(a, b, decimal=places)
+        except AssertionError as e:
+            self.fail(f'{e}')
 
     def test_callable_methods(self):
         methods = [m for m in dir(JointState) if callable(getattr(JointState, m))]

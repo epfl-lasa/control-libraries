@@ -5,8 +5,11 @@ from state_representation import CartesianPose
 import numpy as np
 
 class TestCartesianPose(unittest.TestCase):
-    def assert_np_array_equal(self, a, b):
-        self.assertListEqual(list(a), list(b))
+    def assert_np_array_equal(self, a: np.array, b: np.array, places=5):
+        try:
+            np.testing.assert_almost_equal(a, b, decimal=places)
+        except AssertionError as e:
+            self.fail(f'{e}')
 
     def test_constructors(self):
         CartesianPose("A", "B")

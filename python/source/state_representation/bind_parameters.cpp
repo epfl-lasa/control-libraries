@@ -113,7 +113,7 @@ void parameter(py::module_& m) {
 }
 
 void parameter_map(py::module_& m) {
-  py::class_<ParameterMap, PyParameterMap> c(m, "ParameterMap");
+  py::class_<ParameterMap, std::shared_ptr<ParameterMap>, PyParameterMap> c(m, "ParameterMap");
 
   c.def(py::init(), "Empty constructor");
   c.def(

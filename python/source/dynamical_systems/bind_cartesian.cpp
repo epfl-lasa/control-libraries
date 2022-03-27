@@ -13,7 +13,7 @@
 using namespace state_representation;
 
 void cartesian(py::module_& m) {
-  py::class_<IDynamicalSystem<CartesianState>, ParameterMap, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS");
+  py::class_<IDynamicalSystem<CartesianState>, std::shared_ptr<IDynamicalSystem<CartesianState>>, ParameterMap, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS");
 
   c.def(py::init<>());
 
@@ -25,10 +25,10 @@ void cartesian(py::module_& m) {
 
 void bind_cartesian(py::module_& m) {
   cartesian(m);
-  py::class_<Circular, IDynamicalSystem<CartesianState>>(m, "CartesianCircularDS").def(py::init<>());
-  py::class_<DefaultDynamicalSystem<CartesianState>, IDynamicalSystem<CartesianState>>(m, "CartesianDefaultDS").def(py::init<>());
-  py::class_<PointAttractor<CartesianState>, IDynamicalSystem<CartesianState>>(m, "CartesianPointAttractorDS").def(py::init<>());
-  py::class_<Ring, IDynamicalSystem<CartesianState>>(m, "CartesianRingDS").def(py::init<>());
+  py::class_<Circular, std::shared_ptr<Circular>, IDynamicalSystem<CartesianState>>(m, "CartesianCircularDS").def(py::init<>());
+  py::class_<DefaultDynamicalSystem<CartesianState>, std::shared_ptr<DefaultDynamicalSystem<CartesianState>>, IDynamicalSystem<CartesianState>>(m, "CartesianDefaultDS").def(py::init<>());
+  py::class_<PointAttractor<CartesianState>, std::shared_ptr<PointAttractor<CartesianState>>, IDynamicalSystem<CartesianState>>(m, "CartesianPointAttractorDS").def(py::init<>());
+  py::class_<Ring, std::shared_ptr<Ring>, IDynamicalSystem<CartesianState>>(m, "CartesianRingDS").def(py::init<>());
 
   m.def("create_cartesian_ds", [](DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM type) -> py::object {
     switch (type) {

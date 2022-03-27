@@ -11,7 +11,7 @@
 using namespace state_representation;
 
 void joint(py::module_& m) {
-  py::class_<IDynamicalSystem<JointState>, ParameterMap, PyDynamicalSystem<JointState>> c(m, "IJointDS");
+  py::class_<IDynamicalSystem<JointState>, std::shared_ptr<IDynamicalSystem<JointState>>, ParameterMap, PyDynamicalSystem<JointState>> c(m, "IJointDS");
 
   c.def(py::init<>());
 
@@ -23,8 +23,8 @@ void joint(py::module_& m) {
 
 void bind_joint(py::module_& m) {
   joint(m);
-  py::class_<DefaultDynamicalSystem<JointState>, IDynamicalSystem<JointState>>(m, "JointDefaultDS").def(py::init<>());
-  py::class_<PointAttractor<JointState>, IDynamicalSystem<JointState>>(m, "JointPointAttractorDS").def(py::init<>());
+  py::class_<DefaultDynamicalSystem<JointState>, std::shared_ptr<DefaultDynamicalSystem<JointState>>, IDynamicalSystem<JointState>>(m, "JointDefaultDS").def(py::init<>());
+  py::class_<PointAttractor<JointState>, std::shared_ptr<PointAttractor<JointState>>, IDynamicalSystem<JointState>>(m, "JointPointAttractorDS").def(py::init<>());
 
   m.def("create_joint_ds", [](DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM type) -> py::object {
     switch (type) {

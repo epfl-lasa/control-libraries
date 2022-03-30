@@ -70,55 +70,6 @@ encoded_msg = clproto.encode(B, clproto.MessageType.JOINT_STATE_MESSAGE)
 decoded_object = clproto.decode(encoded_msg)
 ```
 
-## Current status
-
-The Python binding project is currently under development.
-Bindings exist for the following modules, classes and methods:
-
-- `state_representation`:
-  - `State`
-  - `StateType`
-  - `SpatialState`
-  - `CartesianState`
-  - `CartesianPose`
-  - `CartesianTwist`
-  - `CartesianAcceleration`
-  - `CartesianWrench`
-  - `JointState`
-  - `JointPositions`
-  - `JointVelocities`
-  - `JointTorques`
-  - `Jacobian`
-  - `Shape`
-  - `Ellipsoid`
-  - `Parameter`
-- `controllers`:
-  - 
-- `dynamical_systems`:
-  - `DYNAMICAL_SYSTEM`
-  - `create_cartesian_ds(type)`
-  - `create_joint_ds(type)`
-  - `CartesianDefaultDS`
-  - `CartesianPointAttractorDS`
-  - `CircularDS`
-  - `RingDS`
-  - `JointDefaultDS`
-  - `JointPointAttractorDS`
-- `robot_model`:
-  - 
-- `clproto`:
-  - `MessageType`
-  - `ParameterMessageType`
-  - `is_valid(msg)`
-  - `check_message_type(msg)`
-  - `check_parameter_message_type(msg)`
-  - `msg = encode(obj, type)`
-  - `obj = decode(msg)`
-  - `pack_fields(encoded_fields)`
-  - `unpack_fields(packet)`
-  - `json = to_json(msg)`
-  - `msg = from_json(json)`
-
 ## About
 
 [PyBind11](https://PyBind11.readthedocs.io/en/stable/index.html) is used to generate

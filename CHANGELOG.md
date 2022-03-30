@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [5.1.0](#510)
 - [5.0.0](#500)
 - [4.1.0](#410)
 - [4.0.0](#400)
@@ -9,17 +10,28 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
+## 5.1.0
 
-- Incremental versioning (#260)
-- Refactor cmake to export package (#259, #261)
-- ParameterInterface accessors to underlying parameters (#256)
-- Improve CI checks for pull requests (#262)
-- Remove previous eigen3 installation (#252, 264)
+Version 5.1.0 contains a few improvements to the behaviour and usage of the libraries.
+
+### Fixes and improvements
+
+**protocol**
+- Add Docker resources for testing and serving for protocol (#267)
+
+**python**
 - Add python bindings for robot model (#263)
 - Bind ParameterMap (#265, #268)
-- Add Docker resources for testing and serving for protocol (#267)
 - Controllers bindings (#266, #269, #271)
+
+**state_representation**
+- ParameterInterface accessors to underlying parameters (#256)
+
+**general**
+- Incremental versioning (#260)
+- Refactor cmake to export package (#259, #261)
+- Improve CI checks for pull requests (#262)
+- Remove previous eigen3 installation (#252, 264)
 
 ## 5.0.0
 

@@ -12,7 +12,13 @@ Release Versions:
 
 ## 5.1.0
 
-Version 5.1.0 contains a few improvements to the behaviour and usage of the libraries.
+Version 5.1.0 contains a few new features and improvements to the behaviour and usage of the libraries.
+
+### Features
+
+**python**
+- Add python bindings for robot model (#263)
+- Controllers bindings (#266, #269, #271)
 
 ### Fixes and improvements
 
@@ -20,9 +26,7 @@ Version 5.1.0 contains a few improvements to the behaviour and usage of the libr
 - Add Docker resources for testing and serving for protocol (#267)
 
 **python**
-- Add python bindings for robot model (#263)
 - Bind ParameterMap (#265, #268)
-- Controllers bindings (#266, #269, #271)
 
 **state_representation**
 - ParameterInterface accessors to underlying parameters (#256)

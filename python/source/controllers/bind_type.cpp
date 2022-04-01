@@ -1,0 +1,16 @@
+#include "controllers_bindings.h"
+
+#include <controllers/ControllerType.hpp>
+
+void bind_type(py::module_& m) {
+  py::enum_<CONTROLLER_TYPE>(m, "CONTROLLER_TYPE")
+      .value("NONE", CONTROLLER_TYPE::NONE)
+      .value("IMPEDANCE", CONTROLLER_TYPE::IMPEDANCE)
+      .value("VELOCITY_IMPEDANCE", CONTROLLER_TYPE::VELOCITY_IMPEDANCE)
+      .value("DISSIPATIVE", CONTROLLER_TYPE::DISSIPATIVE)
+      .value("DISSIPATIVE_LINEAR", CONTROLLER_TYPE::DISSIPATIVE_LINEAR)
+      .value("DISSIPATIVE_ANGULAR", CONTROLLER_TYPE::DISSIPATIVE_ANGULAR)
+      .value("DISSIPATIVE_DECOUPLED", CONTROLLER_TYPE::DISSIPATIVE_DECOUPLED)
+      .value("COMPLIANT_TWIST", CONTROLLER_TYPE::COMPLIANT_TWIST)
+      .export_values();
+}

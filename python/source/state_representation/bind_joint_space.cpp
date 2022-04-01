@@ -19,7 +19,7 @@ void joint_state_variable(py::module_& m) {
 void joint_state(py::module_& m) {
   m.def("dist", py::overload_cast<const JointState&, const JointState&, const JointStateVariable&>(&state_representation::dist), "Compute the distance between two JointState.", "s1"_a, "s2"_a, "state_variable_type"_a=JointStateVariable::ALL);
 
-  py::class_<JointState, State> c(m, "JointState");
+  py::class_<JointState, std::shared_ptr<JointState>, State> c(m, "JointState");
   c.def(py::init(), "Empty constructor for a JointState.");
   c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided.", "robot_name"_a, "nb_joints"_a=0);
   c.def(py::init<const std::string&, const std::vector<std::string>&>(), "Constructor with name and list of joint names provided.", "robot_name"_a, "joint_names"_a);
@@ -108,7 +108,7 @@ void joint_state(py::module_& m) {
 }
 
 void joint_positions(py::module_& m) {
-  py::class_<JointPositions, JointState> c(m, "JointPositions");
+  py::class_<JointPositions, std::shared_ptr<JointPositions>, JointState> c(m, "JointPositions");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided", "robot_name"_a, "nb_joints"_a=0);
@@ -174,7 +174,7 @@ void joint_positions(py::module_& m) {
 }
 
 void joint_velocities(py::module_& m) {
-  py::class_<JointVelocities, JointState> c(m, "JointVelocities");
+  py::class_<JointVelocities, std::shared_ptr<JointVelocities>, JointState> c(m, "JointVelocities");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided", "robot_name"_a, "nb_joints"_a=0);
@@ -249,7 +249,7 @@ void joint_velocities(py::module_& m) {
 }
 
 void joint_accelerations(py::module_& m) {
-  py::class_<JointAccelerations, JointState> c(m, "JointAccelerations");
+  py::class_<JointAccelerations, std::shared_ptr<JointAccelerations>, JointState> c(m, "JointAccelerations");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided", "robot_name"_a, "nb_joints"_a=0);
@@ -322,7 +322,7 @@ void joint_accelerations(py::module_& m) {
 }
 
 void joint_torques(py::module_& m) {
-  py::class_<JointTorques, JointState> c(m, "JointTorques");
+  py::class_<JointTorques, std::shared_ptr<JointTorques>, JointState> c(m, "JointTorques");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const std::string&, unsigned int>(), "Constructor with name and number of joints provided", "robot_name"_a, "nb_joints"_a=0);

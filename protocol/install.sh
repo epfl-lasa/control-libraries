@@ -66,7 +66,7 @@ function install_state_representation() {
   mkdir -p "${SCRIPT_DIR}"/install
   cd "${SCRIPT_DIR}"/install || exit 1
   CL_INSTALL_SCRIPT="$(dirname "${SCRIPT_DIR}")"/source/install.sh
-  if [ -f "$CL_INSTALL_SCRIPT" ]; then
+  if [ -f "${CL_INSTALL_SCRIPT}" ]; then
     bash "${CL_INSTALL_SCRIPT}" --no-controllers --no-dynamical-systems --no-robot-model "${AUTO_INSTALL}"
   else
     echo ">>> INSTALL SCRIPT NOT FOUND: ${CL_INSTALL_SCRIPT}!"
@@ -129,13 +129,13 @@ while [ "$#" -gt 0 ]; do
     exit 0
     ;;
   -h | --help)
-    echo "$HELP_MESSAGE"
+    echo "${HELP_MESSAGE}"
     exit 0
     ;;
 
   -*)
     echo "Unknown option: $1" >&2
-    echo "$FAIL_MESSAGE"
+    echo "${FAIL_MESSAGE}"
     exit 1
     ;;
   esac
@@ -149,19 +149,19 @@ fi
 echo ">>> GENERATING PROTOBUF BINDINGS"
 make_bindings || exit 1
 
-if [ $BINDINGS_ONLY == true ]; then
+if [ "${BINDINGS_ONLY}" == true ]; then
   echo ">>> DONE!"
   exit 0
 fi
 
 PROTOBUF_INSTALL=$(ldconfig -p | grep libprotobuf)
-if [ -z "$PROTOBUF_INSTALL" ] ]; then
+if [ -z "${PROTOBUF_INSTALL}" ] ]; then
   echo ">>> LIBPROTOBUF NOT FOUND"
   install_protobuf || exit 1
 fi
 
 STATE_REPRESENTATION_INSTALL=$(ldconfig -p | grep libstate_representation)
-if [ -z "$STATE_REPRESENTATION_INSTALL" ]; then
+if [ -z "${STATE_REPRESENTATION_INSTALL}" ]; then
   echo ">>> STATE REPRESENTATION LIBRARY NOT FOUND!"
   install_state_representation
 fi

@@ -9,6 +9,7 @@ BUILD_TESTING="OFF"
 INSTALL_DESTINATION="/usr/local"
 AUTO_INSTALL=""
 
+EIGEN_VERSION=3.4.0
 OSQP_TAG=v0.6.2
 OSQP_EIGEN_TAG=v0.6.4
 
@@ -80,10 +81,16 @@ fi
 
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-mkdir -p "${SOURCE_PATH}"/tmp/lib
-cd "${SOURCE_PATH}"/tmp/lib || exit 1
-wget -c https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz -O - | tar -xz
-cd eigen-3.4.0 && mkdir build && cd build && cmake .. && make install
+INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
+if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
+  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
+  wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
+  cd "eigen-${EIGEN_VERSION}" && mkdir build && cd build && cmake .. && make install || exit 1
+fi
+EIGEN_PATH=$(cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE)
+if [ "${EIGEN_PATH::14}" != "-I/usr/include" ]; then
+  rm -rf /usr/include/eigen3 && ln -s ${EIGEN_PATH:2} /usr/include/eigen3 || exit 1
+fi
 
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
@@ -103,7 +110,7 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
 
   # install osqp
-  cd "${SOURCE_PATH}"/tmp/lib || exit 1
+  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   git clone --recursive https://github.com/oxfordcontrol/osqp
   cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1
   cmake -G "Unix Makefiles" .. && cmake --build . --target install || exit 1

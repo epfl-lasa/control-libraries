@@ -38,6 +38,6 @@ DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.python \
   --tag "${IMAGE_NAME}" || exit 1
 
 docker run -it --rm \
-  --volume "$(pwd)":/source/control-libraries/python \
+  --volume "$(pwd)"/test:/home/developer/test:rw \
   --name "${IMAGE_NAME//[\/.]/-}" \
   "${IMAGE_NAME}"

@@ -31,7 +31,7 @@ void state_type(py::module_& m) {
 }
 
 void state(py::module_& m) {
-  py::class_<State> c(m, "State");
+  py::class_<State, std::shared_ptr<State>> c(m, "State");
 
   c.def(py::init(), "Empty constructor");
   c.def(py::init<const StateType&>(), "Constructor only specifying the type of the state from the StateType enumeration", "type"_a);

@@ -679,7 +679,8 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, 
 
 inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const std::vector<double>& new_value) {
   if (new_value.size() != 3) {
-    throw exceptions::IncompatibleSizeException("Provide a vector of length 3 to set the desired state variable.");
+    throw exceptions::IncompatibleSizeException(
+        "Input vector is of incorrect size: expected 3, given " + std::to_string(new_value.size()));
   }
   this->set_state_variable(state_variable, Eigen::Vector3d::Map(new_value.data(), new_value.size()));
 }
@@ -697,7 +698,8 @@ inline void CartesianState::set_state_variable(
     const std::vector<double>& new_value
 ) {
   if (new_value.size() != 6) {
-    throw exceptions::IncompatibleSizeException("Provide a vector of length 6 to set the desired state variable.");
+    throw exceptions::IncompatibleSizeException(
+        "Input vector is of incorrect size: expected 6, given " + std::to_string(new_value.size()));
   }
   this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
   this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));

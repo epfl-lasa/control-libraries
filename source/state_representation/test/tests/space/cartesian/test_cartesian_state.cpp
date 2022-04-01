@@ -119,6 +119,7 @@ TEST(CartesianStateTest, GetSetFields) {
   }
   cs.set_position(1.1, 2.2, 3.3);
   EXPECT_TRUE(Eigen::Vector3d(1.1, 2.2, 3.3).isApprox(cs.get_position()));
+  EXPECT_THROW(cs.set_position(std::vector<double>{1, 2, 3, 4}), exceptions::IncompatibleSizeException);
 
   // orientation
   Eigen::Vector4d orientation_vec = Eigen::Vector4d::Random().normalized();

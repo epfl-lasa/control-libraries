@@ -652,7 +652,7 @@ inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVa
 
 inline void CartesianState::set_all_state_variables(const Eigen::VectorXd& new_values) {
   if (new_values.size() != 25) {
-    throw state_representation::exceptions::IncompatibleSizeException(
+    throw exceptions::IncompatibleSizeException(
         "Input is of incorrect size: expected 25, given " + std::to_string(new_values.size()));
   }
   this->set_pose(new_values.segment(0, 7));

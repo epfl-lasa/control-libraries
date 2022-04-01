@@ -86,17 +86,6 @@ private:
       const Eigen::Matrix<double, 6, 1>& new_value
   );
 
-  /**
-   * @brief Set new_value in the provided state_variable (twist, acceleration or wrench)
-   * @param linear_state_variable the linear part of the state variable to fill
-   * @param angular_state_variable the angular part of the state variable to fill
-   * @param new_value the new value of the state variable
-   */
-  void set_state_variable(
-      Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
-      const std::vector<double>& new_value
-  );
-
 protected:
   /**
    * @brief Getter of the variable value corresponding to the input
@@ -691,18 +680,6 @@ inline void CartesianState::set_state_variable(
 ) {
   this->set_state_variable(linear_state_variable, new_value.head(3));
   this->set_state_variable(angular_state_variable, new_value.tail(3));
-}
-
-inline void CartesianState::set_state_variable(
-    Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
-    const std::vector<double>& new_value
-) {
-  if (new_value.size() != 6) {
-    throw exceptions::IncompatibleSizeException(
-        "Input vector is of incorrect size: expected 6, given " + std::to_string(new_value.size()));
-  }
-  this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
-  this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));
 }
 
 inline void CartesianState::set_position(const Eigen::Vector3d& position) {

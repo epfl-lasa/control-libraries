@@ -79,13 +79,16 @@ if [ "${BUILD_CONTROLLERS}" == "ON" ] && [ "${BUILD_ROBOT_MODEL}" == "OFF" ]; th
   exit 1
 fi
 
+# cleanup any previous build folders
+rm -rf "${SOURCE_PATH}"/tmp
+
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
 INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
 if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
-  cd "eigen-${EIGEN_VERSION}" && mkdir build && cd build && cmake .. && make install || exit 1
+  cd "eigen-${EIGEN_VERSION}" && mkdir -p build && cd build && cmake .. && make install || exit 1
 fi
 EIGEN_PATH=$(cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE)
 if [ "${EIGEN_PATH::14}" != "-I/usr/include" ]; then

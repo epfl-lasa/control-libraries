@@ -185,6 +185,8 @@ class TestCartesianState(unittest.TestCase):
         [self.assertAlmostEqual(cs.get_position()[i], position[i]) for i in range(3)]
         cs.set_position(1.1, 2.2, 3.3)
         assert_array_equal(np.array([1.1, 2.2, 3.3]), cs.get_position())
+        with self.assertRaises(RuntimeError):
+            cs.set_position([1., 2., 3., 4.])
 
         # orientation
         orientation_vec = np.random.rand(4)

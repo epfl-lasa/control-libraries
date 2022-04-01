@@ -11,7 +11,9 @@ var searchData=
   ['incompatiblestatesexception_8',['IncompatibleStatesException',['../classstate__representation_1_1exceptions_1_1_incompatible_states_exception.html',1,'state_representation::exceptions']]],
   ['invalidcontrollerexception_9',['InvalidControllerException',['../classcontrollers_1_1exceptions_1_1_invalid_controller_exception.html',1,'controllers::exceptions']]],
   ['invalidjointstatesizeexception_10',['InvalidJointStateSizeException',['../classrobot__model_1_1exceptions_1_1_invalid_joint_state_size_exception.html',1,'robot_model::exceptions']]],
-  ['invalidparameterexception_11',['InvalidParameterException',['../classstate__representation_1_1exceptions_1_1_invalid_parameter_exception.html',1,'state_representation::exceptions']]],
-  ['inversekinematicsnotconvergingexception_12',['InverseKinematicsNotConvergingException',['../classrobot__model_1_1exceptions_1_1_inverse_kinematics_not_converging_exception.html',1,'robot_model::exceptions']]],
-  ['inversekinematicsparameters_13',['InverseKinematicsParameters',['../structrobot__model_1_1_inverse_kinematics_parameters.html',1,'robot_model']]]
+  ['invalidparametercastexception_11',['InvalidParameterCastException',['../classstate__representation_1_1exceptions_1_1_invalid_parameter_cast_exception.html',1,'state_representation::exceptions']]],
+  ['invalidparameterexception_12',['InvalidParameterException',['../classstate__representation_1_1exceptions_1_1_invalid_parameter_exception.html',1,'state_representation::exceptions']]],
+  ['invalidpointerexception_13',['InvalidPointerException',['../classstate__representation_1_1exceptions_1_1_invalid_pointer_exception.html',1,'state_representation::exceptions']]],
+  ['inversekinematicsnotconvergingexception_14',['InverseKinematicsNotConvergingException',['../classrobot__model_1_1exceptions_1_1_inverse_kinematics_not_converging_exception.html',1,'robot_model::exceptions']]],
+  ['inversekinematicsparameters_15',['InverseKinematicsParameters',['../structrobot__model_1_1_inverse_kinematics_parameters.html',1,'robot_model']]]
 ];

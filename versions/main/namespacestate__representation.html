@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.1.0</span>
    </div>
   </td>
  </tr>
@@ -64,6 +64,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">state_representation Namespace Reference</div></div>
@@ -141,6 +142,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_trajectory.html">Trajectory</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a0fb60a2580d454491f3361e7ca104dcd"><td class="memItemLeft" align="right" valign="top">typedef std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a0fb60a2580d454491f3361e7ca104dcd">ParameterInterfaceList</a></td></tr>
+<tr class="separator:a0fb60a2580d454491f3361e7ca104dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19423959e457d2370e4f6ca8d13669f7"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a19423959e457d2370e4f6ca8d13669f7">ParameterInterfaceMap</a></td></tr>
+<tr class="separator:a19423959e457d2370e4f6ca8d13669f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -387,7 +395,40 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Core state variables and objects. </p>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a0fb60a2580d454491f3361e7ca104dcd" name="a0fb60a2580d454491f3361e7ca104dcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fb60a2580d454491f3361e7ca104dcd">&#9670;&nbsp;</a></span>ParameterInterfaceList</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::list&lt;std::shared_ptr&lt;<a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a>&gt; &gt; state_representation::ParameterInterfaceList</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_parameter_map_8hpp_source.html#l00012">12</a> of file <a class="el" href="_parameter_map_8hpp_source.html">ParameterMap.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a19423959e457d2370e4f6ca8d13669f7" name="a19423959e457d2370e4f6ca8d13669f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19423959e457d2370e4f6ca8d13669f7">&#9670;&nbsp;</a></span>ParameterInterfaceMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::map&lt;std::string, std::shared_ptr&lt;<a class="el" href="classstate__representation_1_1_parameter_interface.html">ParameterInterface</a>&gt; &gt; state_representation::ParameterInterfaceMap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_parameter_map_8hpp_source.html#l00013">13</a> of file <a class="el" href="_parameter_map_8hpp_source.html">ParameterMap.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a9fe69415f9fe26fa1b1a563b97873686" name="a9fe69415f9fe26fa1b1a563b97873686"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9fe69415f9fe26fa1b1a563b97873686">&#9670;&nbsp;</a></span>CartesianStateVariable</h2>
 
@@ -458,7 +499,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00016">16</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00019">19</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -2750,7 +2791,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00027">27</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00031">31</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
 
 </div>
 </div>
@@ -2975,7 +3016,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00185">185</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00188">188</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

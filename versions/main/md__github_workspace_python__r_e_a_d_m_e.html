@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.0.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.1.0</span>
    </div>
   </td>
  </tr>
@@ -78,6 +78,8 @@ $(function() {
 <div class="line">bash control-libraries/source/install.sh</div>
 <div class="line"> </div>
 <div class="line">## install the bindings using the pip installer</div>
+<div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
+<div class="line">export OPENROBOTS_INCLUDE_DIR=&#39;/path/to/openrobots/include&#39;  # default /opt/openrobots/include</div>
 <div class="line">pip3 install control-libraries/python</div>
 </div><!-- fragment --><p >The example above installs the module to the default dist-packages location. You can see more information about the installed module using <code>pip3 show control-libraries</code>.</p>
 <p >The process also works with Python virtual environments. For example, with <code>pipenv</code>: </p><div class="fragment"><div class="line">## pip3 install pipenv</div>
@@ -108,56 +110,7 @@ $(function() {
 <div class="line">decoded_object = <a class="code hl_function" href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">clproto.decode</a>(encoded_msg)</div>
 <div class="ttc" id="anamespaceclproto_html_a6e069b963d40b003f87e9a3d7822df18"><div class="ttname"><a href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">clproto::decode</a></div><div class="ttdeci">T decode(const std::string &amp;msg)</div><div class="ttdoc">Decode a serialized binary string from wire format into a control libraries object instance.</div></div>
 <div class="ttc" id="anamespaceclproto_html_abf7d863ec82b8eab41a5078446652628"><div class="ttname"><a href="namespaceclproto.html#abf7d863ec82b8eab41a5078446652628">clproto::encode</a></div><div class="ttdeci">std::string encode(const T &amp;obj)</div><div class="ttdoc">Encode a control libraries object into a serialized binary string representation (wire format).</div></div>
-</div><!-- fragment --><h1>Current status</h1>
-<p >The Python binding project is currently under development. Bindings exist for the following modules, classes and methods:</p>
-<ul>
-<li><code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code>:<ul>
-<li><code>State</code></li>
-<li><code>StateType</code></li>
-<li><code>SpatialState</code></li>
-<li><code>CartesianState</code></li>
-<li><code>CartesianPose</code></li>
-<li><code>CartesianTwist</code></li>
-<li><code>CartesianAcceleration</code></li>
-<li><code>CartesianWrench</code></li>
-<li><code>JointState</code></li>
-<li><code>JointPositions</code></li>
-<li><code>JointVelocities</code></li>
-<li><code>JointTorques</code></li>
-<li><code>Jacobian</code></li>
-<li><code>Shape</code></li>
-<li><code>Ellipsoid</code></li>
-<li><code>Parameter</code></li>
-</ul>
-</li>
-<li><code><a class="el" href="namespacedynamical__systems.html" title="Systems of equations relating state variables to their derivatives.">dynamical_systems</a></code>:<ul>
-<li><code>DYNAMICAL_SYSTEM</code></li>
-<li><code>create_cartesian_ds(type)</code></li>
-<li><code>create_joint_ds(type)</code></li>
-<li><code>CartesianDefaultDS</code></li>
-<li><code>CartesianPointAttractorDS</code></li>
-<li><code>CircularDS</code></li>
-<li><code>RingDS</code></li>
-<li><code>JointDefaultDS</code></li>
-<li><code>JointPointAttractorDS</code></li>
-</ul>
-</li>
-<li><code>clproto</code>:<ul>
-<li><code>MessageType</code></li>
-<li><code>ParameterMessageType</code></li>
-<li><code>is_valid(msg)</code></li>
-<li><code>check_message_type(msg)</code></li>
-<li><code>check_parameter_message_type(msg)</code></li>
-<li><code>msg = encode(obj, type)</code></li>
-<li><code>obj = decode(msg)</code></li>
-<li><code>pack_fields(encoded_fields)</code></li>
-<li><code>unpack_fields(packet)</code></li>
-<li><code>json = to_json(msg)</code></li>
-<li><code>msg = from_json(json)</code></li>
-</ul>
-</li>
-</ul>
-<h1>About</h1>
+</div><!-- fragment --><h1>About</h1>
 <p ><a href="https://PyBind11.readthedocs.io/en/stable/index.html">PyBind11</a> is used to generate Python bindings for the classes and functions in control libraries.</p>
 <p >The generated package is named <code>control-libraries</code>, but contains specific modules for importing. These are named the same as the standard modules of control libraries (e.g. <code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code>).</p>
 <p >The contents of the <a href="./source"><code>source</code></a> directory define the bindings between each Python module and the respective C++ library. The source files to bind each module are contained within a subdirectory of the same name.</p>

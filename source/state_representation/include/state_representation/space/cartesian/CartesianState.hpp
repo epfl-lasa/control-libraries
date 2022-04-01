@@ -557,8 +557,7 @@ inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
 inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
   return Eigen::Vector4d(
       this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(),
-      this->get_orientation().z()
-  );
+      this->get_orientation().z());
 }
 
 inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
@@ -679,6 +678,9 @@ inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, 
 }
 
 inline void CartesianState::set_state_variable(Eigen::Vector3d& state_variable, const std::vector<double>& new_value) {
+  if (new_value.size() != 3) {
+    throw exceptions::IncompatibleSizeException("Provide a vector of length 3 to set the desired state variable.");
+  }
   this->set_state_variable(state_variable, Eigen::Vector3d::Map(new_value.data(), new_value.size()));
 }
 
@@ -694,6 +696,9 @@ inline void CartesianState::set_state_variable(
     Eigen::Vector3d& linear_state_variable, Eigen::Vector3d& angular_state_variable,
     const std::vector<double>& new_value
 ) {
+  if (new_value.size() != 6) {
+    throw exceptions::IncompatibleSizeException("Provide a vector of length 6 to set the desired state variable.");
+  }
   this->set_state_variable(linear_state_variable, std::vector<double>(new_value.begin(), new_value.begin() + 3));
   this->set_state_variable(angular_state_variable, std::vector<double>(new_value.begin() + 3, new_value.end()));
 }

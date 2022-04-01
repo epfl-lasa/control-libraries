@@ -10,6 +10,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Throw exception if setting state variable from vector with wrong size (#273)
+
 ## 5.1.0
 
 Version 5.1.0 contains a few new features and improvements to the behaviour and usage of the libraries.

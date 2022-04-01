@@ -13,6 +13,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Throw exception if setting state variable from vector with wrong size (#273)
+- Improve installation script and python installation guide (#274)
 
 ## 5.1.0
 

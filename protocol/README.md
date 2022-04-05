@@ -34,7 +34,7 @@ By supplying the `--auto` flag to this script, it will automatically and recursi
 If Protobuf is not yet installed, this step will take some time.
 ```shell
 git clone https://github.com/epfl-lasa/control-libraries.git
-sudo control-libraries/clproto/install.sh --auto
+sudo control-libraries/protocol/install.sh --auto
 ```
 
 ### Copying protobuf dependencies

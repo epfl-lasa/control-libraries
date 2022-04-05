@@ -15,6 +15,7 @@ Release Versions:
 - Throw exception if setting state variable from vector with wrong size (#273)
 - Improve installation script and python installation guide (#274)
 - Fix path in protocol installation guide (#275)
+- Add force limit parameter to Impedance controller (#276)
 
 ## 5.1.0
 

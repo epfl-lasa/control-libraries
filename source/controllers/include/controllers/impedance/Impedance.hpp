@@ -42,6 +42,8 @@ public:
 
 protected:
 
+  void clamp_force(Eigen::VectorXd& force);
+
   /**
    * @brief Validate and set parameters for damping, stiffness and inertia gain matrices.
    * @param parameter A parameter interface pointer
@@ -62,8 +64,10 @@ protected:
       damping_; ///< damping matrix of the controller associated to velocity
   std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>>
       inertia_; ///< inertia matrix of the controller associated to acceleration
+  std::shared_ptr<state_representation::Parameter<Eigen::VectorXd>>
+      force_limit_; ///< vector of force limits for each degree of freedom
 
-  const unsigned int dimensions_; ///< dimensionality of the control space and associated gain matricess
+  const unsigned int dimensions_; ///< dimensionality of the control space and associated gain matrices
 };
 
 template<class S>
@@ -74,10 +78,13 @@ Impedance<S>::Impedance(unsigned int dimensions) :
     state_representation::make_shared_parameter<Eigen::MatrixXd>(
         "damping", Eigen::MatrixXd::Identity(dimensions, dimensions))), inertia_(
     state_representation::make_shared_parameter<Eigen::MatrixXd>(
-        "inertia", Eigen::MatrixXd::Identity(dimensions, dimensions))), dimensions_(dimensions) {
+        "inertia", Eigen::MatrixXd::Identity(dimensions, dimensions))), force_limit_(
+    state_representation::make_shared_parameter<Eigen::VectorXd>(
+        "force_limit", Eigen::VectorXd::Zero(dimensions))), dimensions_(dimensions) {
   this->parameters_.insert(std::make_pair("stiffness", stiffness_));
   this->parameters_.insert(std::make_pair("damping", damping_));
   this->parameters_.insert(std::make_pair("inertia", inertia_));
+  this->parameters_.insert(std::make_pair("force_limit", inertia_));
 }
 
 template<class S>
@@ -86,6 +93,16 @@ Impedance<S>::Impedance(
 ) :
     Impedance(dimensions) {
   this->set_parameters(parameters);
+}
+
+template<class S>
+void Impedance<S>::clamp_force(Eigen::VectorXd& force) {
+  auto limit = this->force_limit_->get_value();
+  for (std::size_t index = 0; index < this->dimensions_; ++index) {
+    if (limit(index) > 0.0 && abs(force(index)) > limit(index)) {
+      force(index) = force(index) > 0.0 ? limit(index) : -limit(index);
+    }
+  }
 }
 
 template<class S>
@@ -98,6 +115,9 @@ void Impedance<S>::validate_and_set_parameter(
     this->damping_->set_value(this->gain_matrix_from_parameter(parameter));
   } else if (parameter->get_name() == "inertia") {
     this->inertia_->set_value(this->gain_matrix_from_parameter(parameter));
+  } else if (parameter->get_name() == "force_limit") {
+    auto limit_matrix = this->gain_matrix_from_parameter(parameter);
+    this->force_limit_->set_value(limit_matrix.diagonal());
   }
 }
 

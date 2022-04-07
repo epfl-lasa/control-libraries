@@ -14,6 +14,7 @@ TEST(JointTorquesTest, Constructors) {
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d torques = Eigen::Vector2d::Random();
   JointTorques jt1("test", torques);
+  EXPECT_EQ(jt1.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jt1.get_name(), "test");
   EXPECT_FALSE(jt1.is_empty());
   EXPECT_EQ(jt1.get_size(), torques.size());
@@ -23,6 +24,7 @@ TEST(JointTorquesTest, Constructors) {
   EXPECT_EQ(jt1.data(), torques);
 
   JointTorques jt2("test", joint_names, torques);
+  EXPECT_EQ(jt2.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jt2.get_name(), "test");
   EXPECT_FALSE(jt2.is_empty());
   EXPECT_EQ(jt2.get_size(), joint_names.size());
@@ -35,6 +37,7 @@ TEST(JointTorquesTest, Constructors) {
 TEST(JointTorquesTest, StateCopyConstructor) {
   JointState random_state = JointState::Random("test", 3);
   JointTorques copy1(random_state);
+  EXPECT_EQ(copy1.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(random_state.get_name(), copy1.get_name());
   EXPECT_EQ(random_state.get_names(), copy1.get_names());
   EXPECT_EQ(random_state.get_size(), copy1.get_size());
@@ -42,6 +45,7 @@ TEST(JointTorquesTest, StateCopyConstructor) {
   expect_only_torques(copy1);
 
   JointTorques copy2 = random_state;
+  EXPECT_EQ(copy2.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(random_state.get_name(), copy2.get_name());
   EXPECT_EQ(random_state.get_names(), copy2.get_names());
   EXPECT_EQ(random_state.get_size(), copy2.get_size());
@@ -50,19 +54,24 @@ TEST(JointTorquesTest, StateCopyConstructor) {
 
   JointState empty_state;
   JointTorques copy3(empty_state);
+  EXPECT_EQ(copy3.get_type(), StateType::JOINT_TORQUES);
   EXPECT_TRUE(copy3.is_empty());
   JointTorques copy4 = empty_state;
+  EXPECT_EQ(copy4.get_type(), StateType::JOINT_TORQUES);
   EXPECT_TRUE(copy4.is_empty());
   JointTorques copy5 = empty_state.copy();
+  EXPECT_EQ(copy5.get_type(), StateType::JOINT_TORQUES);
   EXPECT_TRUE(copy5.is_empty());
 }
 
 TEST(JointTorquesTest, RandomInitialization) {
   JointTorques random1 = JointTorques::Random("test", 3);
+  EXPECT_EQ(random1.get_type(), StateType::JOINT_TORQUES);
   EXPECT_NE(random1.get_torques().norm(), 0);
   expect_only_torques(random1);
 
   JointTorques random2 = JointTorques::Random("test", std::vector<std::string>{"j0", "j1"});
+  EXPECT_EQ(random2.get_type(), StateType::JOINT_TORQUES);
   EXPECT_NE(random2.get_torques().norm(), 0);
   expect_only_torques(random2);
 }
@@ -112,6 +121,7 @@ TEST(JointTorquesTest, GetSetData) {
 TEST(JointTorquesTest, ScalarMultiplication) {
   JointTorques jt = JointTorques::Random("test", 3);
   JointTorques jscaled = 0.5 * jt;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jscaled.data(), 0.5 * jt.data());
 
   JointTorques empty;
@@ -123,9 +133,11 @@ TEST(JointTorquesTest, MatrixMultiplication) {
   Eigen::MatrixXd gains = Eigen::VectorXd::Random(jt.get_size()).asDiagonal();
 
   JointTorques jscaled = gains * jt;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jscaled.data(), gains * jt.data());
   EXPECT_EQ((jt * gains).data(), jscaled.data());
   jt *= gains;
+  EXPECT_EQ(jt.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jscaled.data(), jt.data());
   JointTorques jscaled2 = jt * gains;
 
@@ -138,9 +150,11 @@ TEST(JointTorquesTest, ArrayMultiplication) {
   Eigen::ArrayXd gains = Eigen::ArrayXd::Random(jt.get_size());
 
   JointTorques jscaled = gains * jt;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jscaled.data(), (gains * jt.array()).matrix());
   EXPECT_EQ((jt * gains).data(), jscaled.data());
   jt *= gains;
+  EXPECT_EQ(jt.get_type(), StateType::JOINT_TORQUES);
   EXPECT_EQ(jscaled.data(), jt.data());
 
   gains = Eigen::ArrayXd::Random(2 * jt.get_size());

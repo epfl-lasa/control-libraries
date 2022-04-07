@@ -5,11 +5,14 @@ using namespace state_representation::exceptions;
 
 namespace state_representation {
 CartesianAcceleration::CartesianAcceleration(const std::string& name, const std::string& reference) :
-    CartesianState(name, reference) {}
+    CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
+}
 
 CartesianAcceleration::CartesianAcceleration(
     const std::string& name, const Eigen::Vector3d& linear_acceleration, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
   this->set_linear_acceleration(linear_acceleration);
 }
 
@@ -17,6 +20,7 @@ CartesianAcceleration::CartesianAcceleration(
     const std::string& name, const Eigen::Vector3d& linear_acceleration, const Eigen::Vector3d& angular_acceleration,
     const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
   this->set_linear_acceleration(linear_acceleration);
   this->set_angular_acceleration(angular_acceleration);
 }
@@ -24,11 +28,13 @@ CartesianAcceleration::CartesianAcceleration(
 CartesianAcceleration::CartesianAcceleration(
     const std::string& name, const Eigen::Matrix<double, 6, 1>& acceleration, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
   this->set_acceleration(acceleration);
 }
 
 CartesianAcceleration::CartesianAcceleration(const CartesianState& state) : CartesianState(state) {
   // set all the state variables to 0 except linear and angular velocities
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
   this->set_zero();
   this->set_acceleration(state.get_acceleration());
   this->set_empty(state.is_empty());

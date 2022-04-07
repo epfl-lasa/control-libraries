@@ -79,7 +79,7 @@ CartesianState CompliantTwist::compute_command(
 void CompliantTwist::validate_and_set_parameter(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
-  if (parameter->get_type() != StateType::PARAMETER_DOUBLE) {
+  if (parameter->get_parameter_type() != ParameterType::DOUBLE) {
     throw state_representation::exceptions::InvalidParameterException(
         "Parameter " + parameter->get_name() + " must be a double");
   }

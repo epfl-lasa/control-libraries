@@ -11,11 +11,17 @@ public:
   /**
    * @brief Empty constructor only specifying the type.
    */
+  SpatialState();
+
+  /**
+   * @brief Empty constructor with a specific state type.
+   * @param type The type of the State
+   */
   explicit SpatialState(const StateType& type);
 
   /**
    * @brief Constructor with name and reference frame specification.
-   * @param type The type of SpatialState (Cartesian or DualQuaternion)
+   * @param type The type of the State
    * @param name The name of the State
    * @param reference_frame The reference frame in which the state is expressed, by default world
    * @param empty Specify if the state is initialized as empty, default true

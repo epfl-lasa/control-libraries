@@ -9,7 +9,7 @@ private:
 
 public:
   /**
-   * @brief Empty constructor only specifying the type.
+   * @brief Empty constructor.
    */
   SpatialState();
 

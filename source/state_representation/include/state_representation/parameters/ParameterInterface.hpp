@@ -23,7 +23,7 @@ public:
   ParameterInterface(const ParameterType& type, const std::string& name);
 
   /**
-   * @brief Constructor with parameter name and type of the parameter.
+   * @brief Constructor for a state parameter with parameter name and state type.
    * @param type The type of the parameter
    * @param name The name of the parameter
    */

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "state_representation/parameters/ParameterType.hpp"
 #include "state_representation/exceptions/InvalidParameterCastException.hpp"
 #include "state_representation/exceptions/InvalidPointerException.hpp"
 #include "state_representation/State.hpp"
@@ -19,13 +20,25 @@ public:
    * @param type The type of the parameter
    * @param name The name of the parameter
    */
-  explicit ParameterInterface(const StateType& type, const std::string& name);
+  ParameterInterface(const ParameterType& type, const std::string& name);
+
+  /**
+   * @brief Constructor with parameter name and type of the parameter.
+   * @param type The type of the parameter
+   * @param name The name of the parameter
+   */
+  ParameterInterface(const StateType& parameter_state_type, const std::string& name);
 
   /**
    * @brief Copy constructor
    * @param parameter The parameter to copy
    */
   ParameterInterface(const ParameterInterface& parameter);
+
+  /**
+   * @brief Default virtual destructor
+   */
+  virtual ~ParameterInterface() = default;
 
   /**
    * @brief Copy assignment operator that has to be defined
@@ -73,6 +86,14 @@ public:
    */
   template<typename T>
   void set_parameter_value(const T& value);
+
+  ParameterType get_parameter_type() const;
+
+  StateType get_parameter_state_type() const;
+
+private:
+  ParameterType parameter_type_;
+  StateType parameter_state_type_;
 };
 
 template<typename T>

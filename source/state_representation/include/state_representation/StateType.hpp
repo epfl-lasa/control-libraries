@@ -11,6 +11,7 @@ namespace state_representation {
  * @brief The class types inheriting from State.
  */
 enum class StateType {
+  NONE,
   STATE,
   SPATIAL_STATE,
   CARTESIAN_STATE,

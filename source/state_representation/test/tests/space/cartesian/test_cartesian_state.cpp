@@ -12,7 +12,7 @@ static void assert_name_empty_frame_equal(
     const CartesianState& state1, const std::string& name, bool empty, const std::string& reference_frame
 ) {
   EXPECT_EQ(state1.get_name(), name);
-  EXPECT_EQ(state1.get_type(), StateType::CARTESIANSTATE);
+  EXPECT_EQ(state1.get_type(), StateType::CARTESIAN_STATE);
   EXPECT_EQ(state1.is_empty(), empty);
   EXPECT_EQ(state1.get_reference_frame(), reference_frame);
 }

@@ -14,7 +14,7 @@ TEST(MessageProtoTest, EncodeDecodeState) {
   EXPECT_TRUE(clproto::is_valid(msg));
   EXPECT_TRUE(clproto::check_message_type(msg) == clproto::STATE_MESSAGE);
 
-  State recv_state(StateType::PARAMETER_MATRIX);
+  State recv_state(StateType::STATE);
   EXPECT_NO_THROW(clproto::decode<State>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
 

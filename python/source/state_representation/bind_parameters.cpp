@@ -4,6 +4,12 @@
 #include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/parameters/ParameterMap.hpp>
 
+#include <state_representation/space/cartesian/CartesianState.hpp>
+#include <state_representation/space/cartesian/CartesianPose.hpp>
+#include <state_representation/space/joint/JointState.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/geometry/Ellipsoid.hpp>
+
 #include "parameter_container.h"
 #include "py_parameter_map.h"
 
@@ -96,8 +102,45 @@ void parameter(py::module_& m) {
         break;
       }
       case ParameterType::STATE: {
-        switch (parameter.get_parameter_state_type()) {
-          // TODO
+        try {
+          switch (parameter.get_parameter_state_type()) {
+            case StateType::CARTESIAN_STATE: {
+              Parameter<CartesianState> param
+                  (parameter.get_name(), *std::dynamic_pointer_cast<CartesianState>(parameter.values.state_pointer));
+              buffer << param;
+              break;
+            }
+            case StateType::CARTESIAN_POSE: {
+              Parameter<CartesianPose> param
+                  (parameter.get_name(), *std::dynamic_pointer_cast<CartesianPose>(parameter.values.state_pointer));
+              buffer << param;
+              break;
+            }
+            case StateType::JOINT_STATE: {
+              Parameter<JointState> param
+                  (parameter.get_name(), *std::dynamic_pointer_cast<JointState>(parameter.values.state_pointer));
+              buffer << param;
+              break;
+            }
+            case StateType::JOINT_POSITIONS: {
+              Parameter<JointPositions> param
+                  (parameter.get_name(), *std::dynamic_pointer_cast<JointPositions>(parameter.values.state_pointer));
+              buffer << param;
+              break;
+            }
+            case StateType::GEOMETRY_ELLIPSOID: {
+              Parameter<Ellipsoid> param
+                  (parameter.get_name(), *std::dynamic_pointer_cast<Ellipsoid>(parameter.values.state_pointer));
+              buffer << param;
+              break;
+            }
+            default:
+              // TODO: handle unsupported parameter state type
+              break;
+          }
+        } catch (const std::exception&) {
+          // TODO: handle exception
+          break;
         }
         break;
       }

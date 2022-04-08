@@ -1,5 +1,11 @@
 #include "parameter_container.h"
 
+#include <state_representation/space/cartesian/CartesianState.hpp>
+#include <state_representation/space/cartesian/CartesianPose.hpp>
+#include <state_representation/space/joint/JointState.hpp>
+#include <state_representation/space/joint/JointPositions.hpp>
+#include <state_representation/geometry/Ellipsoid.hpp>
+
 namespace py_parameter {
 
 ParameterContainer::ParameterContainer(
@@ -43,7 +49,26 @@ void ParameterContainer::set_value(const py::object& value) {
       values.string_array_value = value.cast<std::vector<std::string>>();
       break;
     case ParameterType::STATE:
-      // TODO
+      switch (this->get_parameter_state_type()) {
+        case StateType::CARTESIAN_STATE:
+          values.state_pointer = std::make_shared<CartesianState>(value.cast<CartesianState>());
+          break;
+        case StateType::CARTESIAN_POSE:
+          values.state_pointer = std::make_shared<CartesianPose>(value.cast<CartesianPose>());
+          break;
+        case StateType::JOINT_STATE:
+          values.state_pointer = std::make_shared<JointState>(value.cast<JointState>());
+          break;
+        case StateType::JOINT_POSITIONS:
+          values.state_pointer = std::make_shared<JointPositions>(value.cast<JointPositions>());
+          break;
+        case StateType::GEOMETRY_ELLIPSOID:
+          values.state_pointer = std::make_shared<Ellipsoid>(value.cast<Ellipsoid>());
+          break;
+        default:
+          // TODO: handle unsupported parameter state type
+          break;
+      }
       break;
     case ParameterType::MATRIX:
       values.matrix_value = value.cast<Eigen::MatrixXd>();
@@ -76,7 +101,26 @@ py::object ParameterContainer::get_value() {
     case ParameterType::STRING_ARRAY:
       return py::cast(values.string_array_value);
     case ParameterType::STATE:
-      // TODO
+      try {
+        switch (this->get_parameter_state_type()) {
+          case StateType::CARTESIAN_STATE:
+            return py::cast(*std::dynamic_pointer_cast<CartesianState>(values.state_pointer));
+          case StateType::CARTESIAN_POSE:
+            return py::cast(*std::dynamic_pointer_cast<CartesianPose>(values.state_pointer));
+          case StateType::JOINT_STATE:
+            return py::cast(*std::dynamic_pointer_cast<JointState>(values.state_pointer));
+          case StateType::JOINT_POSITIONS:
+            return py::cast(*std::dynamic_pointer_cast<JointPositions>(values.state_pointer));
+          case StateType::GEOMETRY_ELLIPSOID:
+            return py::cast(*std::dynamic_pointer_cast<Ellipsoid>(values.state_pointer));
+          default:
+            // TODO: handle unsupported parameter state type
+            return py::none();
+        }
+      } catch (const std::exception&) {
+        // TODO: handle exception
+        return py::none();
+      }
       break;
     case ParameterType::MATRIX:
       return py::cast(values.matrix_value);
@@ -95,31 +139,55 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
           parameter->get_name(), py::cast(parameter->get_parameter_value<int>()), ParameterType::INT);
     case ParameterType::INT_ARRAY:
       return ParameterContainer(
-          parameter->get_name(), py::cast(parameter->get_parameter_value < std::vector < int>>()),
+          parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<int>>()),
           ParameterType::INT_ARRAY);
     case ParameterType::DOUBLE:
       return ParameterContainer(
           parameter->get_name(), py::cast(parameter->get_parameter_value<double>()), ParameterType::DOUBLE);
     case ParameterType::DOUBLE_ARRAY:
       return ParameterContainer(
-          parameter->get_name(), py::cast(parameter->get_parameter_value < std::vector < double>>()),
+          parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<double>>()),
           ParameterType::DOUBLE_ARRAY);
     case ParameterType::BOOL:
       return ParameterContainer(
           parameter->get_name(), py::cast(parameter->get_parameter_value<bool>()), ParameterType::BOOL);
     case ParameterType::BOOL_ARRAY:
       return ParameterContainer(
-          parameter->get_name(), py::cast(parameter->get_parameter_value < std::vector < bool>>()),
+          parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<bool>>()),
           ParameterType::BOOL_ARRAY);
     case ParameterType::STRING:
       return ParameterContainer(
           parameter->get_name(), py::cast(parameter->get_parameter_value<std::string>()), ParameterType::STRING);
     case ParameterType::STRING_ARRAY:
       return ParameterContainer(
-          parameter->get_name(), py::cast(parameter->get_parameter_value < std::vector < std::string>>()),
+          parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<std::string>>()),
           ParameterType::STRING_ARRAY);
     case ParameterType::STATE:
-      // TODO
+      switch (parameter->get_parameter_state_type()) {
+        case StateType::CARTESIAN_STATE:
+          return ParameterContainer(
+              parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianState>()), ParameterType::STATE,
+              StateType::CARTESIAN_STATE);
+        case StateType::CARTESIAN_POSE:
+          return ParameterContainer(
+              parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianPose>()), ParameterType::STATE,
+              StateType::CARTESIAN_POSE);
+        case StateType::JOINT_STATE:
+          return ParameterContainer(
+              parameter->get_name(), py::cast(parameter->get_parameter_value<JointState>()), ParameterType::STATE,
+              StateType::JOINT_STATE);
+        case StateType::JOINT_POSITIONS:
+          return ParameterContainer(
+              parameter->get_name(), py::cast(parameter->get_parameter_value<JointPositions>()), ParameterType::STATE,
+              StateType::JOINT_POSITIONS);
+        case StateType::GEOMETRY_ELLIPSOID:
+          return ParameterContainer(
+              parameter->get_name(), py::cast(parameter->get_parameter_value<Ellipsoid>()), ParameterType::STATE,
+              StateType::GEOMETRY_ELLIPSOID);
+        default:
+          // TODO: handle unsupported parameter state type
+          break;
+      }
       break;
     case ParameterType::MATRIX:
       return ParameterContainer(
@@ -152,7 +220,31 @@ std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterCo
     case ParameterType::STRING_ARRAY:
       return make_shared_parameter(parameter.get_name(), parameter.values.string_array_value);
     case ParameterType::STATE:
-      // TODO
+      try {
+        switch (parameter.get_parameter_state_type()) {
+          case StateType::CARTESIAN_STATE:
+            return make_shared_parameter(
+                parameter.get_name(), *std::dynamic_pointer_cast<CartesianState>(parameter.values.state_pointer));
+          case StateType::CARTESIAN_POSE:
+            return make_shared_parameter(
+                parameter.get_name(), *std::dynamic_pointer_cast<CartesianPose>(parameter.values.state_pointer));
+          case StateType::JOINT_STATE:
+            return make_shared_parameter(
+                parameter.get_name(), *std::dynamic_pointer_cast<JointState>(parameter.values.state_pointer));
+          case StateType::JOINT_POSITIONS:
+            return make_shared_parameter(
+                parameter.get_name(), *std::dynamic_pointer_cast<JointPositions>(parameter.values.state_pointer));
+          case StateType::GEOMETRY_ELLIPSOID:
+            return make_shared_parameter(
+                parameter.get_name(), *std::dynamic_pointer_cast<Ellipsoid>(parameter.values.state_pointer));
+          default:
+            // TODO: handle unsupported parameter state type
+            break;
+        }
+      } catch (const std::exception&) {
+        // TODO: handle exception
+        return {};
+      }
       break;
     case ParameterType::MATRIX:
       return make_shared_parameter(parameter.get_name(), parameter.values.matrix_value);

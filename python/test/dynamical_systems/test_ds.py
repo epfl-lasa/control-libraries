@@ -30,7 +30,7 @@ class TestDynamicalSystems(unittest.TestCase):
         self.assertTrue(cart_ds.evaluate(sr.CartesianState.Identity("C", "A")).is_empty())
         self.assertTrue(len(cart_ds.get_parameter_list()) == 0)
 
-        param_list = [sr.Parameter("test", 1.0, sr.StateType.PARAMETER_DOUBLE)]
+        param_list = [sr.Parameter("test", 1.0, sr.ParameterType.DOUBLE)]
         with self.assertRaises(RuntimeError):
             cart_ds.set_parameters(param_list)
 
@@ -58,7 +58,7 @@ class TestDynamicalSystems(unittest.TestCase):
         self.assertTrue(joint_ds.evaluate(sr.JointState.Random("robot", 3)).is_empty())
         self.assertTrue(len(joint_ds.get_parameter_list()) == 0)
 
-        param_list = [sr.Parameter("test", 1.0, sr.StateType.PARAMETER_DOUBLE)]
+        param_list = [sr.Parameter("test", 1.0, sr.ParameterType.DOUBLE)]
         with self.assertRaises(RuntimeError):
             joint_ds.set_parameters(param_list)
 

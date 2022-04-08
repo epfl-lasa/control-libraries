@@ -107,19 +107,19 @@ class TestCartesianState(unittest.TestCase):
         empty1 = CartesianState()
         self.assertTrue(isinstance(empty1, State))
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty1.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty1.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty1, "", True, "world")
         self.assertAlmostEqual(np.linalg.norm(empty1.data()), 1)
 
         empty2 = CartesianState("test")
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty2.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty2.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty2, "test", True, "world")
         self.assertAlmostEqual(np.linalg.norm(empty2.data()), 1)
 
         empty3 = CartesianState("test", "reference")
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty3.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty3.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty3, "test", True, "reference")
         self.assertAlmostEqual(np.linalg.norm(empty3.data()), 1)
 

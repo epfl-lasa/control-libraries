@@ -25,14 +25,19 @@ CartesianState Impedance<CartesianState>::compute_command(
       + this->damping_->get_value().topLeftCorner<3, 3>() * state_error.get_linear_velocity()
       + this->inertia_->get_value().topLeftCorner<3, 3>() * command_state.get_linear_acceleration();
   Eigen::Vector3d commanded_force = position_control + state_error.get_force();
-  command.set_force(commanded_force);
+
   // compute torque (orientation requires special care)
   Eigen::Vector3d orientation_control =
       this->stiffness_->get_value().bottomRightCorner<3, 3>() * state_error.get_orientation().vec()
           + this->damping_->get_value().bottomRightCorner<3, 3>() * state_error.get_angular_velocity()
           + this->inertia_->get_value().bottomRightCorner<3, 3>() * command_state.get_angular_acceleration();
   Eigen::Vector3d commanded_torque = orientation_control + state_error.get_torque();
-  command.set_torque(commanded_torque);
+
+  Eigen::VectorXd wrench(6);
+  wrench << commanded_force, commanded_torque;
+  clamp_force(wrench);
+
+  command.set_wrench(wrench);
   return command;
 }
 
@@ -48,6 +53,7 @@ JointState Impedance<JointState>::compute_command(
       + this->damping_->get_value() * state_error.get_velocities()
       + this->inertia_->get_value() * command_state.get_accelerations();
   Eigen::VectorXd commanded_torques = state_control + state_error.get_torques();
+  clamp_force(commanded_torques);
   command.set_torques(commanded_torques);
   return command;
 }

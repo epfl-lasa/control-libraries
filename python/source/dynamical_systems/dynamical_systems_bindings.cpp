@@ -12,6 +12,8 @@ PYBIND11_MODULE(dynamical_systems, m) {
   m.attr("__version__") = "dev";
   #endif
 
+  py::module_::import("state_representation");
+
   bind_type(m);
   bind_cartesian(m);
   bind_joint(m);

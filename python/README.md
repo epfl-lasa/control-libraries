@@ -12,13 +12,19 @@ Additionally, the installation of the bindings requires the following prerequisi
 - `pip3` >= 10.0.0
 
 The installation itself is then quite straightforward:
-```shell script
+```shell
 git clone https://github.com/epfl-lasa/control-libraries
 
 ## install control-libraries (skip this stage if already done)
-bash control-libraries/source/install.sh
+sudo control-libraries/source/install.sh
 
 ## install the bindings using the pip installer
+pip3 install control-libraries/python
+```
+
+If the installation fails, it may be because of non-default installation directories for some dependencies.
+In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install.
+```shell
 export OSQP_INCLUDE_DIR='/path/to/include/osqp'  # default /usr/local/include/osqp
 export OPENROBOTS_INCLUDE_DIR='/path/to/openrobots/include'  # default /opt/openrobots/include
 pip3 install control-libraries/python

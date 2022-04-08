@@ -11,7 +11,8 @@ using namespace state_representation;
 using namespace py_parameter;
 
 void joint_controller(py::module_& m) {
-  py::class_<IController<JointState>, std::shared_ptr<IController<JointState>>, ParameterMap, PyController<JointState>> c(m, "IJointController");
+  py::object parameter_map = py::module_::import("state_representation").attr("ParameterMap");
+  py::class_<IController<JointState>, std::shared_ptr<IController<JointState>>, PyController<JointState>> c(m, "IJointController", parameter_map);
 
   c.def(
       "compute_command", py::overload_cast<const JointState&, const JointState&>(&IController<JointState>::compute_command),

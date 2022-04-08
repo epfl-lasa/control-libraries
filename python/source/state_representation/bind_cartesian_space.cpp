@@ -12,6 +12,7 @@
 void spatial_state(py::module_& m) {
   py::class_<SpatialState, std::shared_ptr<SpatialState>, State> c(m, "SpatialState");
 
+  c.def(py::init(), "Empty constructor.");
   c.def(py::init<const StateType&>(), "Constructor only specifying the type.", "type"_a);
   c.def(py::init<const StateType&, const std::string&, const std::string&, const bool&>(), "Constructor with name and reference frame specification.", "type"_a, "name"_a, "reference_frame"_a=std::string("world"), "empty"_a=true);
   c.def(py::init<const SpatialState&>(), "Copy constructor from another SpatialState.", "state"_a);

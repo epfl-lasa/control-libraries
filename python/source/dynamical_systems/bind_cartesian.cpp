@@ -13,7 +13,8 @@
 using namespace state_representation;
 
 void cartesian(py::module_& m) {
-  py::class_<IDynamicalSystem<CartesianState>, std::shared_ptr<IDynamicalSystem<CartesianState>>, ParameterMap, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS");
+  py::object parameter_map = py::module_::import("state_representation").attr("ParameterMap");
+  py::class_<IDynamicalSystem<CartesianState>, std::shared_ptr<IDynamicalSystem<CartesianState>>, PyDynamicalSystem<CartesianState>> c(m, "ICartesianDS", parameter_map);
 
   c.def(py::init<>());
 

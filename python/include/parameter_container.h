@@ -19,19 +19,20 @@ struct ParameterValues {
   std::vector<bool> bool_array_value;
   std::string string_value;
   std::vector<std::string> string_array_value;
-  CartesianState cartesian_state;
-  CartesianPose cartesian_pose;
-  JointState joint_state;
-  JointPositions joint_positions;
-  Ellipsoid ellipsoid;
+  std::shared_ptr<State> state_pointer;
   Eigen::MatrixXd matrix_value;
   Eigen::VectorXd vector_value;
 };
 
 class ParameterContainer : public ParameterInterface {
 public:
-  ParameterContainer(const std::string& name, const StateType& type);
-  ParameterContainer(const std::string& name, const py::object& value, const StateType& type);
+  ParameterContainer(
+      const std::string& name, const ParameterType& type, const StateType& parameter_state_type = StateType::NONE
+  );
+  ParameterContainer(
+      const std::string& name, const py::object& value, const ParameterType& type,
+      const StateType& parameter_state_type = StateType::NONE
+  );
   ParameterContainer(const ParameterContainer& parameter);
 
   void set_value(const py::object& value);

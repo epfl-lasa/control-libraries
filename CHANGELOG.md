@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [5.2.0](#520)
 - [5.1.0](#510)
 - [5.0.0](#500)
 - [4.1.0](#410)
@@ -10,12 +11,21 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
+## 5.2.0
 
+Version 5.2.0 contains a few fixes and a new feature for the Impedance controller.
+
+### Features
+
+**controllers**
+- Add force limit parameter to Impedance controller (#276)
+
+### Fixes
+
+**general**
 - Throw exception if setting state variable from vector with wrong size (#273)
 - Improve installation script and python installation guide (#274)
 - Fix path in protocol installation guide (#275)
-- Add force limit parameter to Impedance controller (#276)
 - Fix python bindings import issues (#279)
 
 ## 5.1.0

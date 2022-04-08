@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['velocity_5fimpedance_5fctrl_5f_0',['velocity_impedance_ctrl_',['../classcontrollers_1_1impedance_1_1_compliant_twist.html#a992be571e4d8153e30fcc784277b90af',1,'controllers::impedance::CompliantTwist']]]
+  ['stiffness_5f_0',['stiffness_',['../classcontrollers_1_1impedance_1_1_impedance.html#a4e576ee4fc7c518ad5893e5ab1329793',1,'controllers::impedance::Impedance']]]
 ];

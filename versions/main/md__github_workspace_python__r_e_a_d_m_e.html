@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.0</span>
    </div>
   </td>
  </tr>
@@ -75,10 +75,11 @@ $(function() {
 <p >The installation itself is then quite straightforward: </p><div class="fragment"><div class="line">git clone https://github.com/epfl-lasa/control-libraries</div>
 <div class="line"> </div>
 <div class="line">## install control-libraries (skip this stage if already done)</div>
-<div class="line">bash control-libraries/source/install.sh</div>
+<div class="line">sudo control-libraries/source/install.sh</div>
 <div class="line"> </div>
 <div class="line">## install the bindings using the pip installer</div>
-<div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
+<div class="line">pip3 install control-libraries/python</div>
+</div><!-- fragment --><p >If the installation fails, it may be because of non-default installation directories for some dependencies. In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install. </p><div class="fragment"><div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
 <div class="line">export OPENROBOTS_INCLUDE_DIR=&#39;/path/to/openrobots/include&#39;  # default /opt/openrobots/include</div>
 <div class="line">pip3 install control-libraries/python</div>
 </div><!-- fragment --><p >The example above installs the module to the default dist-packages location. You can see more information about the installed module using <code>pip3 show control-libraries</code>.</p>

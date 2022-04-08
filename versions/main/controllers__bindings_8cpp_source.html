@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.0</span>
    </div>
   </td>
  </tr>
@@ -83,11 +83,13 @@ $(function() {
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  m.attr(<span class="stringliteral">&quot;__version__&quot;</span>) = <span class="stringliteral">&quot;dev&quot;</span>;</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">  #endif</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  bind_type(m);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  bind_computational_space(m);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  bind_cartesian_controllers(m);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  bind_joint_controllers(m);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  py::module_::import(<span class="stringliteral">&quot;state_representation&quot;</span>);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  bind_type(m);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  bind_computational_space(m);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  bind_cartesian_controllers(m);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  bind_joint_controllers(m);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
 <div class="ttc" id="anamespacecontrollers_html"><div class="ttname"><a href="namespacecontrollers.html">controllers</a></div><div class="ttdoc">Systems to determine a command output from measured and desired inputs.</div><div class="ttdef"><b>Definition:</b> <a href="_controller_factory_8hpp_source.html#l00010">ControllerFactory.hpp:10</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -16,18 +16,14 @@ class Parameter;
 class ParameterInterface : public State {
 public:
   /**
-   * @brief Constructor with parameter name and type of the parameter.
-   * @param type The type of the parameter
+   * @brief Constructor with parameter name and type.
    * @param name The name of the parameter
-   */
-  ParameterInterface(const ParameterType& type, const std::string& name);
-
-  /**
-   * @brief Constructor for a state parameter with parameter name and state type.
    * @param type The type of the parameter
-   * @param name The name of the parameter
+   * @param parameter_state_type The state type of the parameter, if applicable
    */
-  ParameterInterface(const StateType& parameter_state_type, const std::string& name);
+  ParameterInterface(
+      const std::string& name, const ParameterType& type, const StateType& parameter_state_type = StateType::NONE
+  );
 
   /**
    * @brief Copy constructor
@@ -77,7 +73,7 @@ public:
   T get_parameter_value();
 
   /**
-   * @brief Set the  parameter value of a derived Parameter instance through the ParameterInterface pointer.
+   * @brief Set the parameter value of a derived Parameter instance through the ParameterInterface pointer.
    * @details This throws an InvalidParameterCastException if the ParameterInterface does not point to
    * a valid Parameter instance or if the specified type does not match the type of the Parameter instance.
    * @see ParameterInterface::get_parameter()
@@ -87,8 +83,18 @@ public:
   template<typename T>
   void set_parameter_value(const T& value);
 
+  /**
+   * @brief Get the parameter type.
+   * @return The type of the underlying parameter
+   */
   ParameterType get_parameter_type() const;
 
+  /**
+   * @brief Get the state type of the parameter.
+   * @details If the parameter type from get_parameter_type() is not ParameterType::STATE,
+   * this will return StateType::NONE.
+   * @return The state type of the underlying parameter
+   */
   StateType get_parameter_state_type() const;
 
 private:

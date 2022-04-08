@@ -130,7 +130,7 @@ TEST(ParameterTest, ParameterThroughInterface) {
 }
 
 TEST(ParameterTest, ParameterInterfaceBadPointer) {
-  ParameterInterface parameter_interface(ParameterType::INT, "name");
+  ParameterInterface parameter_interface("name", ParameterType::INT);
 
   // by default (validate_pointer = true), throw when the ParameterInterface instance is not managed by any pointer
   EXPECT_THROW(parameter_interface.get_parameter<int>(), exceptions::InvalidPointerException);
@@ -142,7 +142,7 @@ TEST(ParameterTest, ParameterInterfaceBadPointer) {
 }
 
 TEST(ParameterTest, ParameterInterfaceNullCast) {
-  auto parameter_interface_ptr = std::make_shared<ParameterInterface>(ParameterType::INT, "name");
+  auto parameter_interface_ptr = std::make_shared<ParameterInterface>("name", ParameterType::INT);
   std::shared_ptr<Parameter<int>> parameter;
 
   // by default (validate_pointer = true), throw when the pointer does not address a Parameter instance

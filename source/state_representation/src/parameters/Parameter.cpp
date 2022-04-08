@@ -8,148 +8,148 @@ namespace state_representation {
 
 template<>
 Parameter<int>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::INT, name) {}
+    ParameterInterface(name, ParameterType::INT) {}
 
 template<>
 Parameter<int>::Parameter(const std::string& name, const int& value) :
-    ParameterInterface(ParameterType::INT, name), value_(value) {
+    ParameterInterface(name, ParameterType::INT), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<std::vector<int>>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::INT_ARRAY, name) {}
+    ParameterInterface(name, ParameterType::INT_ARRAY) {}
 
 template<>
 Parameter<std::vector<int>>::Parameter(const std::string& name, const std::vector<int>& value) :
-    ParameterInterface(ParameterType::INT_ARRAY, name), value_(value) {
+    ParameterInterface(name, ParameterType::INT_ARRAY), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<double>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::DOUBLE, name) {}
+    ParameterInterface(name, ParameterType::DOUBLE) {}
 
 template<>
 Parameter<double>::Parameter(const std::string& name, const double& value) :
-    ParameterInterface(ParameterType::DOUBLE, name), value_(value) {
+    ParameterInterface(name, ParameterType::DOUBLE), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::DOUBLE_ARRAY, name) {}
+    ParameterInterface(name, ParameterType::DOUBLE_ARRAY) {}
 
 template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name, const std::vector<double>& value) :
-    ParameterInterface(ParameterType::DOUBLE_ARRAY, name), value_(value) {
+    ParameterInterface(name, ParameterType::DOUBLE_ARRAY), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<bool>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::BOOL, name) {}
+    ParameterInterface(name, ParameterType::BOOL) {}
 
 template<>
 Parameter<bool>::Parameter(const std::string& name, const bool& value) :
-    ParameterInterface(ParameterType::BOOL, name), value_(value) {
+    ParameterInterface(name, ParameterType::BOOL), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<std::vector<bool>>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::BOOL_ARRAY, name) {
+    ParameterInterface(name, ParameterType::BOOL_ARRAY) {
 }
 
 template<>
 Parameter<std::vector<bool>>::Parameter(const std::string& name, const std::vector<bool>& value) :
-    ParameterInterface(ParameterType::BOOL_ARRAY, name), value_(value) {
+    ParameterInterface(name, ParameterType::BOOL_ARRAY), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<std::string>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::STRING, name) {}
+    ParameterInterface(name, ParameterType::STRING) {}
 
 template<>
 Parameter<std::string>::Parameter(const std::string& name, const std::string& value) :
-    ParameterInterface(ParameterType::STRING, name), value_(value) {
+    ParameterInterface(name, ParameterType::STRING), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::STRING_ARRAY, name) {}
+    ParameterInterface(name, ParameterType::STRING_ARRAY) {}
 
 template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name, const std::vector<std::string>& value) :
-    ParameterInterface(ParameterType::STRING_ARRAY, name), value_(value) {
+    ParameterInterface(name, ParameterType::STRING_ARRAY), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<CartesianState>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::CARTESIAN_STATE, name) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_STATE) {}
 
 template<>
 Parameter<CartesianState>::Parameter(const std::string& name, const CartesianState& value) :
-    ParameterInterface(StateType::CARTESIAN_STATE, name), value_(value) {
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_STATE), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<CartesianPose>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::CARTESIAN_POSE, name) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_POSE) {}
 
 template<>
 Parameter<CartesianPose>::Parameter(const std::string& name, const CartesianPose& value) :
-    ParameterInterface(StateType::CARTESIAN_POSE, name), value_(value) {
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_POSE), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<JointState>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::JOINT_STATE, name) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_STATE) {}
 
 template<>
 Parameter<JointState>::Parameter(const std::string& name, const JointState& value) :
-    ParameterInterface(StateType::JOINT_STATE, name), value_(value) {
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_STATE), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<JointPositions>::Parameter(const std::string& name) :
-    ParameterInterface(StateType::JOINT_POSITIONS, name) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_POSITIONS) {}
 
 template<>
 Parameter<JointPositions>::Parameter(const std::string& name, const JointPositions& value) :
-    ParameterInterface(StateType::JOINT_POSITIONS, name), value_(value) {
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_POSITIONS), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<Ellipsoid>::Parameter(const std::string& name, const Ellipsoid& value) :
-    ParameterInterface(StateType::GEOMETRY_ELLIPSOID, name), value_(value) {
+    ParameterInterface(name, ParameterType::STATE, StateType::GEOMETRY_ELLIPSOID), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::MATRIX, name) {}
+    ParameterInterface(name, ParameterType::MATRIX) {}
 
 template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name, const Eigen::MatrixXd& value) :
-    ParameterInterface(ParameterType::MATRIX, name), value_(value) {
+    ParameterInterface(name, ParameterType::MATRIX), value_(value) {
   this->set_filled();
 }
 
 template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name) :
-    ParameterInterface(ParameterType::VECTOR, name) {}
+    ParameterInterface(name, ParameterType::VECTOR) {}
 
 template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name, const Eigen::VectorXd& value) :
-    ParameterInterface(ParameterType::VECTOR, name), value_(value) {
+    ParameterInterface(name, ParameterType::VECTOR), value_(value) {
   this->set_filled();
 }
 

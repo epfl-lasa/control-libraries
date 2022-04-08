@@ -26,6 +26,11 @@ public:
   explicit Parameter(const std::string& name, const T& value);
 
   /**
+   * @brief Default virtual destructor
+   */
+  virtual ~Parameter() = default;
+
+  /**
    * @brief Copy constructor
    * @param parameter The parameter to copy
    */

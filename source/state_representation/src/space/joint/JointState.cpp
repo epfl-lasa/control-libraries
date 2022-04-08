@@ -13,18 +13,18 @@ static void assert_index_in_range(unsigned int joint_index, unsigned int size) {
   }
 }
 
-JointState::JointState() : State(StateType::JOINTSTATE) {
+JointState::JointState() : State(StateType::JOINT_STATE) {
   this->initialize();
 }
 
 JointState::JointState(const std::string& robot_name, unsigned int nb_joints) :
-    State(StateType::JOINTSTATE, robot_name), names_(nb_joints) {
+    State(StateType::JOINT_STATE, robot_name), names_(nb_joints) {
   this->set_names(nb_joints);
   this->initialize();
 }
 
 JointState::JointState(const std::string& robot_name, const std::vector<std::string>& joint_names) :
-    State(StateType::JOINTSTATE, robot_name), names_(joint_names) {
+    State(StateType::JOINT_STATE, robot_name), names_(joint_names) {
   this->initialize();
 }
 

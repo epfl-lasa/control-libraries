@@ -14,6 +14,7 @@ static void expect_only_acceleration(CartesianAcceleration& acceleration) {
 
 TEST(CartesianAccelerationTest, RandomAccelerationInitialization) {
   CartesianAcceleration random = CartesianAcceleration::Random("test");
+  EXPECT_EQ(random.get_type(), StateType::CARTESIAN_ACCELERATION);
   EXPECT_GT(random.get_acceleration().norm(), 0);
   expect_only_acceleration(random);
 }
@@ -21,12 +22,14 @@ TEST(CartesianAccelerationTest, RandomAccelerationInitialization) {
 TEST(CartesianAccelerationTest, CopyAcceleration) {
   CartesianAcceleration acc1 = CartesianAcceleration::Random("test");
   CartesianAcceleration acc2(acc1);
+  EXPECT_EQ(acc1.get_type(), acc2.get_type());
   EXPECT_EQ(acc1.get_name(), acc2.get_name());
   EXPECT_EQ(acc1.get_reference_frame(), acc2.get_reference_frame());
   EXPECT_EQ(acc1.data(), acc2.data());
   expect_only_acceleration(acc2);
 
   CartesianAcceleration acc3 = acc1;
+  EXPECT_EQ(acc1.get_type(), acc3.get_type());
   EXPECT_EQ(acc1.get_name(), acc3.get_name());
   EXPECT_EQ(acc1.get_reference_frame(), acc3.get_reference_frame());
   EXPECT_EQ(acc1.data(), acc3.data());

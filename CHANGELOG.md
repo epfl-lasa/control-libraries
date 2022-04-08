@@ -16,7 +16,7 @@ Release Versions:
 - Improve installation script and python installation guide (#274)
 - Fix path in protocol installation guide (#275)
 - Add force limit parameter to Impedance controller (#276)
-- Refactor state type (#277)
+- Refactor state type (#277, #278)
 
 ## 5.1.0
 

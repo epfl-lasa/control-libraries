@@ -14,7 +14,8 @@ using namespace state_representation;
 using namespace py_parameter;
 
 void cartesian_controller(py::module_& m) {
-  py::class_<IController<CartesianState>, std::shared_ptr<IController<CartesianState>>, ParameterMap, PyController<CartesianState>> c(m, "ICartesianController");
+  py::object parameter_map = py::module_::import("state_representation").attr("ParameterMap");
+  py::class_<IController<CartesianState>, std::shared_ptr<IController<CartesianState>>, PyController<CartesianState>> c(m, "ICartesianController", parameter_map);
 
   c.def(
       "compute_command", py::overload_cast<const CartesianState&, const CartesianState&>(&IController<CartesianState>::compute_command),

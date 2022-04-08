@@ -12,6 +12,8 @@ PYBIND11_MODULE(controllers, m) {
   m.attr("__version__") = "dev";
   #endif
 
+  py::module_::import("state_representation");
+
   bind_type(m);
   bind_computational_space(m);
   bind_cartesian_controllers(m);

@@ -11,7 +11,8 @@
 using namespace state_representation;
 
 void joint(py::module_& m) {
-  py::class_<IDynamicalSystem<JointState>, std::shared_ptr<IDynamicalSystem<JointState>>, ParameterMap, PyDynamicalSystem<JointState>> c(m, "IJointDS");
+  py::object parameter_map = py::module_::import("state_representation").attr("ParameterMap");
+  py::class_<IDynamicalSystem<JointState>, std::shared_ptr<IDynamicalSystem<JointState>>, PyDynamicalSystem<JointState>> c(m, "IJointDS", parameter_map);
 
   c.def(py::init<>());
 

@@ -13,7 +13,7 @@ using namespace state_representation;
 
 
 TEST(CartesianProtoTest, EncodeDecodeSpatialState) {
-  auto send_state = SpatialState(StateType::PARAMETER_BOOL, "A", "B", false);
+  auto send_state = SpatialState(StateType::SPATIAL_STATE, "A", "B", false);
   std::string msg = clproto::encode(send_state);
   EXPECT_TRUE(clproto::is_valid(msg));
   EXPECT_TRUE(clproto::check_message_type(msg) == clproto::SPATIAL_STATE_MESSAGE);

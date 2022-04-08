@@ -1,6 +1,10 @@
 #include "state_representation/space/SpatialState.hpp"
 
 namespace state_representation {
+
+SpatialState::SpatialState() :
+    State(StateType::SPATIAL_STATE), reference_frame_("world") {}
+
 SpatialState::SpatialState(const StateType& type) :
     State(type), reference_frame_("world") {}
 

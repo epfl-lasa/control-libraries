@@ -14,6 +14,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Fix if else conditions in setup.py to correctly install modules (#285)
+- Refactor state type (#277)
 
 ## 5.2.0
 

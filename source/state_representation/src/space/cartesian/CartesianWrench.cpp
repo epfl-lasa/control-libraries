@@ -4,16 +4,20 @@ using namespace state_representation::exceptions;
 
 namespace state_representation {
 CartesianWrench::CartesianWrench(const std::string& name, const std::string& reference) :
-    CartesianState(name, reference) {}
+    CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_WRENCH);
+}
 
 CartesianWrench::CartesianWrench(const std::string& name, const Eigen::Vector3d& force, const std::string& reference) :
     CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_WRENCH);
   this->set_force(force);
 }
 
 CartesianWrench::CartesianWrench(
     const std::string& name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_WRENCH);
   this->set_force(force);
   this->set_torque(torque);
 }
@@ -21,11 +25,13 @@ CartesianWrench::CartesianWrench(
 CartesianWrench::CartesianWrench(
     const std::string& name, const Eigen::Matrix<double, 6, 1>& wrench, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_WRENCH);
   this->set_wrench(wrench);
 }
 
 CartesianWrench::CartesianWrench(const CartesianState& state) : CartesianState(state) {
   // set all the state variables to 0 except force and torque
+  this->set_type(StateType::CARTESIAN_WRENCH);
   this->set_zero();
   this->set_wrench(state.get_wrench());
   this->set_empty(state.is_empty());

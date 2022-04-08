@@ -4,7 +4,7 @@
 #include "state_representation/exceptions/IncompatibleStatesException.hpp"
 
 namespace state_representation {
-Jacobian::Jacobian() : State(StateType::JACOBIANMATRIX) {
+Jacobian::Jacobian() : State(StateType::JACOBIAN) {
   this->State::initialize();
 }
 
@@ -12,7 +12,7 @@ Jacobian::Jacobian(const std::string& robot_name,
                    unsigned int nb_joints,
                    const std::string& frame,
                    const std::string& reference_frame) :
-    State(StateType::JACOBIANMATRIX, robot_name),
+    State(StateType::JACOBIAN, robot_name),
     joint_names_(nb_joints),
     frame_(frame),
     reference_frame_(reference_frame),
@@ -26,7 +26,7 @@ Jacobian::Jacobian(const std::string& robot_name,
                    const std::vector<std::string>& joint_names,
                    const std::string& frame,
                    const std::string& reference_frame) :
-    State(StateType::JACOBIANMATRIX, robot_name),
+    State(StateType::JACOBIAN, robot_name),
     joint_names_(joint_names),
     frame_(frame),
     reference_frame_(reference_frame),
@@ -88,7 +88,7 @@ Jacobian Jacobian::Random(const std::string& robot_name,
 bool Jacobian::is_compatible(const State& state) const {
   bool compatible = false;
   switch (state.get_type()) {
-    case StateType::JACOBIANMATRIX:
+    case StateType::JACOBIAN:
       // compatibility is assured through the vector of joint names
       compatible = (this->get_name() == state.get_name())
           && (this->cols_ == dynamic_cast<const Jacobian&>(state).get_joint_names().size());
@@ -101,7 +101,11 @@ bool Jacobian::is_compatible(const State& state) const {
             && (this->frame_ == dynamic_cast<const Jacobian&>(state).get_frame())));
       }
       break;
-    case StateType::JOINTSTATE:
+    case StateType::JOINT_STATE:
+    case StateType::JOINT_POSITIONS:
+    case StateType::JOINT_VELOCITIES:
+    case StateType::JOINT_ACCELERATIONS:
+    case StateType::JOINT_TORQUES:
       // compatibility is assured through the vector of joint names
       compatible = (this->get_name() == state.get_name())
           && (this->cols_ == dynamic_cast<const JointState&>(state).get_size());
@@ -111,7 +115,11 @@ bool Jacobian::is_compatible(const State& state) const {
         }
       }
       break;
-    case StateType::CARTESIANSTATE:
+    case StateType::CARTESIAN_STATE:
+    case StateType::CARTESIAN_POSE:
+    case StateType::CARTESIAN_TWIST:
+    case StateType::CARTESIAN_ACCELERATION:
+    case StateType::CARTESIAN_WRENCH:
       // compatibility is assured through the reference frame and the name of the frame
       compatible = (this->reference_frame_ == dynamic_cast<const CartesianState&>(state).get_reference_frame())
           && (this->frame_ == dynamic_cast<const CartesianState&>(state).get_name());

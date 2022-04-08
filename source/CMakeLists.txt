@@ -39,6 +39,10 @@ else()
   find_package(GTest QUIET)
 endif()
 
+if(EXPERIMENTAL_FEATURES)
+  add_compile_definitions(EXPERIMENTAL_FEATURES)
+endif()
+
 add_subdirectory(state_representation)
 list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES state_representation)
 get_target_property(TARGET_INTERFACE_LINK_LIBRARIES state_representation INTERFACE_LINK_LIBRARIES)

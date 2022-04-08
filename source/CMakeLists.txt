@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(control_libraries VERSION 5.1.4)
+project(control_libraries VERSION 5.1.5)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)
@@ -37,6 +37,10 @@ if(BUILD_TESTING)
   endif (APPLE)
 else()
   find_package(GTest QUIET)
+endif()
+
+if(EXPERIMENTAL_FEATURES)
+  add_compile_definitions(EXPERIMENTAL_FEATURES)
 endif()
 
 add_subdirectory(state_representation)

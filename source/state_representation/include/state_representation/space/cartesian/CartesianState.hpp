@@ -109,8 +109,8 @@ public:
 
   /**
    * @brief Constructor with name and reference frame provided
-   * @brief name the name of the state
-   * @brief reference the name of the reference frame
+   * @param name the name of the state
+   * @param reference the name of the reference frame
    */
   explicit CartesianState(const std::string& name, const std::string& reference = "world");
 

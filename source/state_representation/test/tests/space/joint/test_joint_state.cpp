@@ -10,13 +10,14 @@ using namespace state_representation;
 
 TEST(JointStateTest, Constructors) {
   JointState empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(empty.get_name(), "");
-  EXPECT_EQ(empty.get_type(), StateType::JOINTSTATE);
   EXPECT_TRUE(empty.is_empty());
   EXPECT_EQ(empty.get_size(), 0);
   EXPECT_EQ(empty.data().norm(), 0);
 
   JointState js1("test", 3);
+  EXPECT_EQ(js1.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(js1.get_name(), "test");
   EXPECT_TRUE(js1.is_empty());
   EXPECT_EQ(js1.get_size(), 3);
@@ -27,6 +28,7 @@ TEST(JointStateTest, Constructors) {
 
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   JointState js2("test", joint_names);
+  EXPECT_EQ(js2.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(js2.get_name(), "test");
   EXPECT_TRUE(js2.is_empty());
   EXPECT_EQ(js2.get_size(), joint_names.size());
@@ -38,22 +40,26 @@ TEST(JointStateTest, Constructors) {
 
 TEST(JointStateTest, ZeroInitialization) {
   JointState zero = JointState::Zero("test", 3);
+  EXPECT_EQ(zero.get_type(), StateType::JOINT_STATE);
   EXPECT_FALSE(zero.is_empty());
   EXPECT_EQ(zero.data().norm(), 0);
 
   JointState zero2 = JointState::Zero("test", std::vector<std::string>{"j0", "j1"});
+  EXPECT_EQ(zero2.get_type(), StateType::JOINT_STATE);
   EXPECT_FALSE(zero2.is_empty());
   EXPECT_EQ(zero2.data().norm(), 0);
 }
 
 TEST(JointStateTest, RandomStateInitialization) {
   JointState random = JointState::Random("test", 3);
+  EXPECT_EQ(random.get_type(), StateType::JOINT_STATE);
   EXPECT_NE(random.get_positions().norm(), 0);
   EXPECT_NE(random.get_velocities().norm(), 0);
   EXPECT_NE(random.get_accelerations().norm(), 0);
   EXPECT_NE(random.get_torques().norm(), 0);
 
   JointState random2 = JointState::Random("test", std::vector<std::string>{"j0", "j1"});
+  EXPECT_EQ(random2.get_type(), StateType::JOINT_STATE);
   EXPECT_NE(random2.get_positions().norm(), 0);
   EXPECT_NE(random2.get_velocities().norm(), 0);
   EXPECT_NE(random2.get_accelerations().norm(), 0);
@@ -63,18 +69,21 @@ TEST(JointStateTest, RandomStateInitialization) {
 TEST(JointStateTest, CopyConstructor) {
   JointState random = JointState::Random("test", 3);
   JointState copy1(random);
+  EXPECT_EQ(copy1.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(random.get_name(), copy1.get_name());
   EXPECT_EQ(random.get_names(), copy1.get_names());
   EXPECT_EQ(random.get_size(), copy1.get_size());
   EXPECT_EQ(random.data(), copy1.data());
 
   JointState copy2 = random;
+  EXPECT_EQ(copy2.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(random.get_name(), copy2.get_name());
   EXPECT_EQ(random.get_names(), copy2.get_names());
   EXPECT_EQ(random.get_size(), copy2.get_size());
   EXPECT_EQ(random.data(), copy2.data());
 
   JointState copy3 = random.copy();
+  EXPECT_EQ(copy3.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(random.get_name(), copy3.get_name());
   EXPECT_EQ(random.get_names(), copy3.get_names());
   EXPECT_EQ(random.get_size(), copy3.get_size());
@@ -82,10 +91,13 @@ TEST(JointStateTest, CopyConstructor) {
 
   JointState empty;
   JointState copy4(empty);
+  EXPECT_EQ(copy4.get_type(), StateType::JOINT_STATE);
   EXPECT_TRUE(copy4.is_empty());
   JointState copy5 = empty;
+  EXPECT_EQ(copy5.get_type(), StateType::JOINT_STATE);
   EXPECT_TRUE(copy5.is_empty());
   JointState copy6 = empty.copy();
+  EXPECT_EQ(copy6.get_type(), StateType::JOINT_STATE);
   EXPECT_TRUE(copy6.is_empty());
 }
 
@@ -152,9 +164,11 @@ TEST(JointStateTest, GetSetFields) {
   EXPECT_THROW(js.set_torques(Eigen::VectorXd::Zero(7)), exceptions::IncompatibleSizeException);
 
   js.set_zero();
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(js.data().norm(), 0);
   EXPECT_EQ(js.is_empty(), false);
   js.set_empty();
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(js.is_empty(), true);
 }
 
@@ -213,6 +227,7 @@ TEST(JointStateTest, SetZero) {
 
   JointState random2 = JointState::Random("test", 3);
   random2.set_zero();
+  EXPECT_EQ(random2.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(random2.data().norm(), 0);
 }
 
@@ -327,8 +342,10 @@ TEST(JointStateTest, Addition) {
   JointState js3 = JointState::Random("test", 4);
   EXPECT_THROW(js1 + js3, exceptions::IncompatibleStatesException);
   JointState jsum = js1 + js2;
+  EXPECT_EQ(jsum.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jsum.data(), js1.data() + js2.data());
   js2 += js1;
+  EXPECT_EQ(js2.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jsum.data(), js2.data());
 }
 
@@ -338,17 +355,21 @@ TEST(JointStateTest, Subtraction) {
   JointState js3 = JointState::Random("test", 4);
   EXPECT_THROW(js1 - js3, exceptions::IncompatibleStatesException);
   JointState jdiff = js1 - js2;
+  EXPECT_EQ(jdiff.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jdiff.data(), js1.data() - js2.data());
   js1 -= js2;
+  EXPECT_EQ(js1.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jdiff.data(), js1.data());
 }
 
 TEST(JointStateTest, ScalarMultiplication) {
   JointState js = JointState::Random("test", 3);
   JointState jscaled = 0.5 * js;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), 0.5 * js.data());
   EXPECT_EQ((js * 0.5).data(), jscaled.data());
   js *= 0.5;
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), js.data());
 
   JointState empty;
@@ -358,8 +379,10 @@ TEST(JointStateTest, ScalarMultiplication) {
 TEST(JointStateTest, ScalarDivision) {
   JointState js = JointState::Random("test", 3);
   JointState jscaled = js / 0.5;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), js.data() / 0.5);
   js /= 0.5;
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), js.data());
 
   JointState empty;
@@ -371,9 +394,11 @@ TEST(JointStateTest, MatrixMultiplication) {
   Eigen::MatrixXd gains = Eigen::VectorXd::Random(4 * js.get_size()).asDiagonal();
 
   JointState jscaled = gains * js;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), gains * js.data());
   EXPECT_EQ((js * gains).data(), jscaled.data());
   js *= gains;
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), js.data());
   JointState jscaled2 = js * gains;
 
@@ -386,9 +411,11 @@ TEST(JointStateTest, ArrayMultiplication) {
   Eigen::ArrayXd gains = Eigen::ArrayXd::Random(4 * js.get_size());
 
   JointState jscaled = gains * js;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), (gains * js.array()).matrix());
   EXPECT_EQ((js * gains).data(), jscaled.data());
   js *= gains;
+  EXPECT_EQ(js.get_type(), StateType::JOINT_STATE);
   EXPECT_EQ(jscaled.data(), js.data());
 
   gains = Eigen::ArrayXd::Random(js.get_size());

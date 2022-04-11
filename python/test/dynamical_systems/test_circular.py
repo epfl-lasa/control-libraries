@@ -29,7 +29,7 @@ class TestCircular(unittest.TestCase):
         self.assertTrue(ds.get_parameter_value("limit_cycle").get_center_state().is_empty())
         self.assertTrue(ds.get_base_frame().is_empty())
 
-        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.StateType.PARAMETER_ELLIPSOID))
+        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.ParameterType.STATE, sr.StateType.GEOMETRY_ELLIPSOID))
         self.assertFalse(ds.get_parameter_value("limit_cycle").get_center_state().is_empty())
         self.assertFalse(ds.get_base_frame().is_empty())
 
@@ -55,7 +55,7 @@ class TestCircular(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             ds.evaluate(state4)
 
-        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.StateType.PARAMETER_ELLIPSOID))
+        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.ParameterType.STATE, sr.StateType.GEOMETRY_ELLIPSOID))
         self.assertTrue(ds.is_compatible(state1))
         self.assertFalse(ds.is_compatible(state2))
         self.assertTrue(ds.is_compatible(state3))
@@ -64,7 +64,7 @@ class TestCircular(unittest.TestCase):
     def test_points_on_radius_random_center(self):
         ds = CartesianCircularDS()
         self.limit_cycle.set_center_position(np.random.rand(3, 1))
-        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.StateType.PARAMETER_ELLIPSOID))
+        ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.ParameterType.STATE, sr.StateType.GEOMETRY_ELLIPSOID))
 
         current_pose = sr.CartesianPose("A", 10 * np.random.rand(3, 1))
         for i in range(self.nb_steps):

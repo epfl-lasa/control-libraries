@@ -13,7 +13,7 @@ class TestDissipativeImpedance(unittest.TestCase):
 
         eigenvalues = ctrl.get_parameter_value("damping_eigenvalues")
         eigenvalues[0] = 10
-        ctrl.set_parameter_value("damping_eigenvalues", eigenvalues, sr.StateType.PARAMETER_VECTOR)
+        ctrl.set_parameter_value("damping_eigenvalues", eigenvalues, sr.ParameterType.VECTOR)
 
         desired_twist = sr.CartesianTwist("test", [1, 0, 0])
         feedback_twist = sr.CartesianTwist("test", [1, 1, 0])

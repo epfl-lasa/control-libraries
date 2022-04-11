@@ -18,10 +18,10 @@ class TestCompliantTwistController(unittest.TestCase):
 
     @classmethod
     def set_gains(cls, lpd, lod, ast, ad):
-        cls.ctrl.set_parameter_value("linear_principle_damping", lpd, sr.StateType.PARAMETER_DOUBLE)
-        cls.ctrl.set_parameter_value("linear_orthogonal_damping", lod, sr.StateType.PARAMETER_DOUBLE)
-        cls.ctrl.set_parameter_value("angular_stiffness", ast, sr.StateType.PARAMETER_DOUBLE)
-        cls.ctrl.set_parameter_value("angular_damping", ad, sr.StateType.PARAMETER_DOUBLE)
+        cls.ctrl.set_parameter_value("linear_principle_damping", lpd, sr.ParameterType.DOUBLE)
+        cls.ctrl.set_parameter_value("linear_orthogonal_damping", lod, sr.ParameterType.DOUBLE)
+        cls.ctrl.set_parameter_value("angular_stiffness", ast, sr.ParameterType.DOUBLE)
+        cls.ctrl.set_parameter_value("angular_damping", ad, sr.ParameterType.DOUBLE)
 
     # FIXME this line sometimes fails with github actions
     # def test_cartesian_wrench(self):
@@ -50,22 +50,22 @@ class TestCompliantTwistController(unittest.TestCase):
             if param.get_name() == "linear_principle_damping":
                 self.assertTrue(abs(param.get_value() - 1) < 1e-5)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("linear_principle_damping") - 1) < 1e-5)
-                self.ctrl.set_parameter_value("linear_principle_damping", 11, sr.StateType.PARAMETER_DOUBLE)
+                self.ctrl.set_parameter_value("linear_principle_damping", 11, sr.ParameterType.DOUBLE)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("linear_principle_damping") - 11) < 1e-5)
             if param.get_name() == "linear_orthogonal_damping":
                 self.assertTrue(abs(param.get_value() - 2) < 1e-5)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("linear_orthogonal_damping") - 2) < 1e-5)
-                self.ctrl.set_parameter_value("linear_orthogonal_damping", 12, sr.StateType.PARAMETER_DOUBLE)
+                self.ctrl.set_parameter_value("linear_orthogonal_damping", 12, sr.ParameterType.DOUBLE)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("linear_orthogonal_damping") - 12) < 1e-5)
             if param.get_name() == "angular_stiffness":
                 self.assertTrue(abs(param.get_value() - 3) < 1e-5)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("angular_stiffness") - 3) < 1e-5)
-                self.ctrl.set_parameter_value("angular_stiffness", 13, sr.StateType.PARAMETER_DOUBLE)
+                self.ctrl.set_parameter_value("angular_stiffness", 13, sr.ParameterType.DOUBLE)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("angular_stiffness") - 13) < 1e-5)
             if param.get_name() == "angular_damping":
                 self.assertTrue(abs(param.get_value() - 4) < 1e-5)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("angular_damping") - 4) < 1e-5)
-                self.ctrl.set_parameter_value("angular_damping", 14, sr.StateType.PARAMETER_DOUBLE)
+                self.ctrl.set_parameter_value("angular_damping", 14, sr.ParameterType.DOUBLE)
                 self.assertTrue(abs(self.ctrl.get_parameter_value("angular_damping") - 14) < 1e-5)
 
 

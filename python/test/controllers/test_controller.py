@@ -109,9 +109,9 @@ class TestControllers(unittest.TestCase):
         self.assertRaises(RuntimeError, create_joint_controller, CONTROLLER_TYPE.COMPLIANT_TWIST)
 
     def test_controller_with_params(self):
-        param_list = [sr.Parameter("damping", 0.0, sr.StateType.PARAMETER_DOUBLE),
-                      sr.Parameter("stiffness", 5.0, sr.StateType.PARAMETER_DOUBLE),
-                      sr.Parameter("inertia", 10.0, sr.StateType.PARAMETER_DOUBLE)]
+        param_list = [sr.Parameter("damping", 0.0, sr.ParameterType.DOUBLE),
+                      sr.Parameter("stiffness", 5.0, sr.ParameterType.DOUBLE),
+                      sr.Parameter("inertia", 10.0, sr.ParameterType.DOUBLE)]
 
         ctrl = create_cartesian_controller(CONTROLLER_TYPE.IMPEDANCE, param_list)
         self.assertFalse(ctrl is None)
@@ -150,7 +150,7 @@ class TestControllers(unittest.TestCase):
                          robot.get_number_of_joints() * robot.get_number_of_joints())
 
     def test_controller_with_robot_and_params(self):
-        parameters = [sr.Parameter("damping", 5.0, sr.StateType.PARAMETER_DOUBLE)]
+        parameters = [sr.Parameter("damping", 5.0, sr.ParameterType.DOUBLE)]
         robot = Model("robot", os.path.join(os.path.dirname(os.path.realpath(__file__)), "panda_arm.urdf"))
 
         self.assertRaises(RuntimeError, create_joint_controller, CONTROLLER_TYPE.NONE, parameters, robot)

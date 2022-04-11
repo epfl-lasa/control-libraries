@@ -149,47 +149,47 @@ class TestClprotoParameters(unittest.TestCase):
             self.assertEqual(obj1.get_value(), obj2.get_value())
 
     def test_encode_decode_param_int(self):
-        obj1 = sr.Parameter("int", 1, sr.StateType.PARAMETER_INT)
+        obj1 = sr.Parameter("int", 1, sr.ParameterType.INT)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.INT)
 
     def test_encode_decode_param_int_array(self):
-        obj1 = sr.Parameter("int", [1, 2, 3], sr.StateType.PARAMETER_INT_ARRAY)
+        obj1 = sr.Parameter("int", [1, 2, 3], sr.ParameterType.INT_ARRAY)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.INT_ARRAY)
 
     def test_encode_decode_param_double(self):
-        obj1 = sr.Parameter("double", 1.1, sr.StateType.PARAMETER_DOUBLE)
+        obj1 = sr.Parameter("double", 1.1, sr.ParameterType.DOUBLE)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.DOUBLE)
 
     def test_encode_decode_param_double_array(self):
-        obj1 = sr.Parameter("double", [1.1, 2.2, 3.3], sr.StateType.PARAMETER_DOUBLE_ARRAY)
+        obj1 = sr.Parameter("double", [1.1, 2.2, 3.3], sr.ParameterType.DOUBLE_ARRAY)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.DOUBLE_ARRAY)
 
     def test_encode_decode_param_bool(self):
-        obj1 = sr.Parameter("bool", True, sr.StateType.PARAMETER_BOOL)
+        obj1 = sr.Parameter("bool", True, sr.ParameterType.BOOL)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.BOOL)
 
     def test_encode_decode_param_bool_array(self):
-        obj1 = sr.Parameter("bool", [True, False, True], sr.StateType.PARAMETER_BOOL_ARRAY)
+        obj1 = sr.Parameter("bool", [True, False, True], sr.ParameterType.BOOL_ARRAY)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.BOOL_ARRAY)
 
     def test_encode_decode_param_string(self):
-        obj1 = sr.Parameter("string", "test", sr.StateType.PARAMETER_STRING)
+        obj1 = sr.Parameter("string", "test", sr.ParameterType.STRING)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.STRING)
 
     def test_encode_decode_param_string_array(self):
-        obj1 = sr.Parameter("string", ["1", "2", "3"], sr.StateType.PARAMETER_STRING_ARRAY)
+        obj1 = sr.Parameter("string", ["1", "2", "3"], sr.ParameterType.STRING_ARRAY)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.STRING_ARRAY)
 
     def test_encode_decode_param_vector(self):
-        obj1 = sr.Parameter("vector", np.random.rand(3), sr.StateType.PARAMETER_VECTOR)
+        obj1 = sr.Parameter("vector", np.random.rand(3), sr.ParameterType.VECTOR)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.VECTOR)
 
     def test_encode_decode_param_matrix(self):
-        obj1 = sr.Parameter("matrix", np.random.rand(3, 2), sr.StateType.PARAMETER_MATRIX)
+        obj1 = sr.Parameter("matrix", np.random.rand(3, 2), sr.ParameterType.MATRIX)
         self.param_encode_decode_tester(obj1, clproto.ParameterMessageType.MATRIX)
 
     def test_encode_decode_param_invalid(self):
-        obj = sr.Parameter("cartesian_state", sr.StateType.PARAMETER_CARTESIANSTATE)
+        obj = sr.Parameter("cartesian_state", sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE)
         self.assertRaises(ValueError, clproto.encode, obj, clproto.MessageType.PARAMETER_MESSAGE)
 
 if __name__ == '__main__':

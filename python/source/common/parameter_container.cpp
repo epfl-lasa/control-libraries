@@ -77,9 +77,8 @@ void ParameterContainer::set_value(const py::object& value) {
       values.vector_value = value.cast<Eigen::VectorXd>();
       break;
     default:
-      break;
+      throw std::invalid_argument("The ParameterType of parameter " + this->get_name() + " is invalid.");
   }
-  throw std::invalid_argument("The ParameterType of parameter " + this->get_name() + " is invalid.");
 }
 
 py::object ParameterContainer::get_value() {
@@ -187,7 +186,6 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
           default:
             throw std::invalid_argument(
                 "The StateType contained by parameter " + parameter->get_name() + " is unsupported.");
-            break;
         }
       } catch (const std::exception&) {
         throw std::runtime_error("The ParameterType of parameter " + parameter->get_name() + " is invalid.");

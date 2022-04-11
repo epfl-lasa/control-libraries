@@ -135,11 +135,11 @@ void parameter(py::module_& m) {
               break;
             }
             default:
-              // TODO: handle unsupported parameter state type
+              buffer << "Parameter " << parameter.get_name() << " contains an unsupported state type" << std::endl;
               break;
           }
         } catch (const std::exception&) {
-          // TODO: handle exception
+          buffer << "Parameter " << parameter.get_name() << " is invalid" << std::endl;
           break;
         }
         break;

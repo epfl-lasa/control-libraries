@@ -66,7 +66,7 @@ void ParameterContainer::set_value(const py::object& value) {
           values.state_pointer = std::make_shared<Ellipsoid>(value.cast<Ellipsoid>());
           break;
         default:
-          // TODO: handle unsupported parameter state type
+          throw std::invalid_argument("The StateType contained by parameter " + this->get_name() + " is unsupported.");
           break;
       }
       break;
@@ -77,9 +77,9 @@ void ParameterContainer::set_value(const py::object& value) {
       values.vector_value = value.cast<Eigen::VectorXd>();
       break;
     default:
-      throw std::invalid_argument("The ParameterType is invalid.");
       break;
   }
+  throw std::invalid_argument("The ParameterType of parameter " + this->get_name() + " is invalid.");
 }
 
 py::object ParameterContainer::get_value() {
@@ -114,12 +114,11 @@ py::object ParameterContainer::get_value() {
           case StateType::GEOMETRY_ELLIPSOID:
             return py::cast(*std::dynamic_pointer_cast<Ellipsoid>(values.state_pointer));
           default:
-            // TODO: handle unsupported parameter state type
-            return py::none();
+            throw std::invalid_argument(
+                "The StateType contained by parameter " + this->get_name() + " is unsupported.");
         }
       } catch (const std::exception&) {
-        // TODO: handle exception
-        return py::none();
+        throw std::runtime_error("The ParameterType of parameter " + this->get_name() + " is invalid.");
       }
       break;
     case ParameterType::MATRIX:
@@ -129,7 +128,7 @@ py::object ParameterContainer::get_value() {
     default:
       break;
   }
-  return py::none();
+  throw std::invalid_argument("Could not get the value of parameter " + this->get_name());
 }
 
 ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInterface>& parameter) {
@@ -163,30 +162,35 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
           parameter->get_name(), py::cast(parameter->get_parameter_value<std::vector<std::string>>()),
           ParameterType::STRING_ARRAY);
     case ParameterType::STATE:
-      switch (parameter->get_parameter_state_type()) {
-        case StateType::CARTESIAN_STATE:
-          return ParameterContainer(
-              parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianState>()), ParameterType::STATE,
-              StateType::CARTESIAN_STATE);
-        case StateType::CARTESIAN_POSE:
-          return ParameterContainer(
-              parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianPose>()), ParameterType::STATE,
-              StateType::CARTESIAN_POSE);
-        case StateType::JOINT_STATE:
-          return ParameterContainer(
-              parameter->get_name(), py::cast(parameter->get_parameter_value<JointState>()), ParameterType::STATE,
-              StateType::JOINT_STATE);
-        case StateType::JOINT_POSITIONS:
-          return ParameterContainer(
-              parameter->get_name(), py::cast(parameter->get_parameter_value<JointPositions>()), ParameterType::STATE,
-              StateType::JOINT_POSITIONS);
-        case StateType::GEOMETRY_ELLIPSOID:
-          return ParameterContainer(
-              parameter->get_name(), py::cast(parameter->get_parameter_value<Ellipsoid>()), ParameterType::STATE,
-              StateType::GEOMETRY_ELLIPSOID);
-        default:
-          // TODO: handle unsupported parameter state type
-          break;
+      try {
+        switch (parameter->get_parameter_state_type()) {
+          case StateType::CARTESIAN_STATE:
+            return ParameterContainer(
+                parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianState>()), ParameterType::STATE,
+                StateType::CARTESIAN_STATE);
+          case StateType::CARTESIAN_POSE:
+            return ParameterContainer(
+                parameter->get_name(), py::cast(parameter->get_parameter_value<CartesianPose>()), ParameterType::STATE,
+                StateType::CARTESIAN_POSE);
+          case StateType::JOINT_STATE:
+            return ParameterContainer(
+                parameter->get_name(), py::cast(parameter->get_parameter_value<JointState>()), ParameterType::STATE,
+                StateType::JOINT_STATE);
+          case StateType::JOINT_POSITIONS:
+            return ParameterContainer(
+                parameter->get_name(), py::cast(parameter->get_parameter_value<JointPositions>()), ParameterType::STATE,
+                StateType::JOINT_POSITIONS);
+          case StateType::GEOMETRY_ELLIPSOID:
+            return ParameterContainer(
+                parameter->get_name(), py::cast(parameter->get_parameter_value<Ellipsoid>()), ParameterType::STATE,
+                StateType::GEOMETRY_ELLIPSOID);
+          default:
+            throw std::invalid_argument(
+                "The StateType contained by parameter " + parameter->get_name() + " is unsupported.");
+            break;
+        }
+      } catch (const std::exception&) {
+        throw std::runtime_error("The ParameterType of parameter " + parameter->get_name() + " is invalid.");
       }
       break;
     case ParameterType::MATRIX:
@@ -198,7 +202,7 @@ ParameterContainer interface_ptr_to_container(const std::shared_ptr<ParameterInt
     default:
       break;
   }
-  throw std::invalid_argument("The conversion from this ParameterType to ParameterContainer is not supported.");
+  throw std::invalid_argument("The conversion from this Parameter to a ParameterContainer is not supported.");
 }
 
 std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterContainer& parameter) {
@@ -238,12 +242,11 @@ std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterCo
             return make_shared_parameter(
                 parameter.get_name(), *std::dynamic_pointer_cast<Ellipsoid>(parameter.values.state_pointer));
           default:
-            // TODO: handle unsupported parameter state type
-            break;
+            throw std::invalid_argument(
+                "The StateType contained by parameter " + parameter.get_name() + " is unsupported.");
         }
       } catch (const std::exception&) {
-        // TODO: handle exception
-        return {};
+        throw std::runtime_error("The ParameterType of parameter " + parameter->get_name() + " is invalid.");
       }
       break;
     case ParameterType::MATRIX:
@@ -253,7 +256,7 @@ std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterCo
     default:
       break;
   }
-  return {};
+  throw std::invalid_argument("The conversion from this ParameterContainer to a Parameter is not supported.");
 }
 
 std::map<std::string, ParameterContainer>

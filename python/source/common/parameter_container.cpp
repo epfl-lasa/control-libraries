@@ -246,7 +246,7 @@ std::shared_ptr<ParameterInterface> container_to_interface_ptr(const ParameterCo
                 "The StateType contained by parameter " + parameter.get_name() + " is unsupported.");
         }
       } catch (const std::exception&) {
-        throw std::runtime_error("The ParameterType of parameter " + parameter->get_name() + " is invalid.");
+        throw std::runtime_error("The ParameterType of parameter " + parameter.get_name() + " is invalid.");
       }
       break;
     case ParameterType::MATRIX:

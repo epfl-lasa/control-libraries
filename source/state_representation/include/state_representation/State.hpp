@@ -186,4 +186,9 @@ inline bool State::is_deprecated(const std::chrono::duration<int64_t, DurationT>
   return ((std::chrono::steady_clock::now() - this->timestamp_) > time_delay);
 }
 
+template<typename T>
+std::shared_ptr<State> make_shared_state(const T& state) {
+  return std::make_shared<T>(state);
+}
+
 }// namespace state_representation

@@ -16,6 +16,7 @@ Release Versions:
 - Fix if else conditions in setup.py to correctly install modules (#285)
 - Refactor state type (#277, #278, #280, #284)
 - Refactor dynamical systems factory (#288)
+- Use pyquaternion in bindings (#283)
 
 ## 5.2.0
 

@@ -11,6 +11,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Fix if else conditions in setup.py to correctly install modules (#285)
+
 ## 5.2.0
 
 Version 5.2.0 contains a few fixes and a new feature for the Impedance controller.

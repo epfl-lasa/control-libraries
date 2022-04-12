@@ -10,6 +10,12 @@
 
 using namespace state_representation;
 
+TEST(ParameterTest, CopyConstructor) {
+  Parameter<int> int_param("test", 1);
+  ParameterInterface int_param_interface(int_param);
+  EXPECT_EQ(int_param_interface.get_parameter_type(), int_param.get_parameter_type());
+}
+
 TEST(ParameterTest, Conversion) {
   Parameter<int> int_param("test");
   EXPECT_TRUE(int_param.is_empty());

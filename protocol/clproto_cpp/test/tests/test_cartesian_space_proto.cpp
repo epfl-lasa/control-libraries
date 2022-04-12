@@ -38,6 +38,7 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianState) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
@@ -54,6 +55,7 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianPose) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
@@ -70,6 +72,7 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianTwist) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
@@ -86,6 +89,7 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianAcceleration) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
@@ -102,6 +106,7 @@ TEST(CartesianProtoTest, EncodeDecodeCartesianWrench) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
   EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);

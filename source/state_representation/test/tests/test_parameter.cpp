@@ -117,6 +117,7 @@ TEST(ParameterTest, ParameterThroughInterface) {
   EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
 
   auto param_value = param_interface->get_parameter_value<CartesianPose>();
+  EXPECT_EQ(param_value.get_type(), StateType::CARTESIAN_POSE);
   EXPECT_EQ(param_value.get_name(), "A");
   EXPECT_EQ(param_value.get_reference_frame(), "B");
   EXPECT_TRUE(param_value.data().isApprox(pose.data()));

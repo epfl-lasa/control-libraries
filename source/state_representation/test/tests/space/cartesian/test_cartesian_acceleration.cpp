@@ -12,6 +12,11 @@ static void expect_only_acceleration(CartesianAcceleration& acceleration) {
   EXPECT_EQ(static_cast<CartesianState&>(acceleration).get_wrench().norm(), 0);
 }
 
+TEST(CartesianAccelerationTest, EmptyConstructor) {
+  CartesianAcceleration empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_ACCELERATION);
+}
+
 TEST(CartesianAccelerationTest, RandomAccelerationInitialization) {
   CartesianAcceleration random = CartesianAcceleration::Random("test");
   EXPECT_EQ(random.get_type(), StateType::CARTESIAN_ACCELERATION);

@@ -4,6 +4,10 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
+CartesianAcceleration::CartesianAcceleration() {
+  this->set_type(StateType::CARTESIAN_ACCELERATION);
+}
+
 CartesianAcceleration::CartesianAcceleration(const std::string& name, const std::string& reference) :
     CartesianState(name, reference) {
   this->set_type(StateType::CARTESIAN_ACCELERATION);

@@ -11,6 +11,9 @@ static void expect_only_velocities(JointVelocities& vel) {
 }
 
 TEST(JointVelocitiesTest, Constructors) {
+  JointVelocities empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_VELOCITIES);
+
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d velocities = Eigen::Vector2d::Random();
   JointVelocities jv1("test", velocities);

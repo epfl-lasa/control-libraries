@@ -45,6 +45,7 @@ void test_clamping(
 
 TEST(CartesianStateTest, Constructors) {
   CartesianState empty1;
+  EXPECT_EQ(empty1.get_type(), StateType::CARTESIAN_STATE);
   assert_name_empty_frame_equal(empty1, "", true, "world");
   EXPECT_FLOAT_EQ(empty1.data().norm(), 1);
 

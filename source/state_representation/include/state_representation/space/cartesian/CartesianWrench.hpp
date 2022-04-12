@@ -50,7 +50,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  explicit CartesianWrench() = default;
+  explicit CartesianWrench();
 
   /**
     * @brief Constructor with name and reference frame provided

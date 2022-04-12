@@ -42,7 +42,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  explicit JointVelocities() = default;
+  explicit JointVelocities();
 
   /**
    * @brief Constructor with name and number of joints provided

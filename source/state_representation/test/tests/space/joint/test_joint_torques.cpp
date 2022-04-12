@@ -11,6 +11,9 @@ static void expect_only_torques(JointTorques& tor) {
 }
 
 TEST(JointTorquesTest, Constructors) {
+  JointTorques empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_TORQUES);
+
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d torques = Eigen::Vector2d::Random();
   JointTorques jt1("test", torques);

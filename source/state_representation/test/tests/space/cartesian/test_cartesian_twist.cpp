@@ -12,6 +12,11 @@ static void expect_only_twist(CartesianTwist& twist) {
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_wrench().norm(), 0);
 }
 
+TEST(CartesianTwistTest, EmptyConstructor) {
+  CartesianTwist empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_TWIST);
+}
+
 TEST(CartesianTwistTest, RandomTwistInitialization) {
   CartesianTwist random = CartesianTwist::Random("test");
   EXPECT_EQ(random.get_type(), StateType::CARTESIAN_TWIST);

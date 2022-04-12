@@ -11,6 +11,9 @@ static void expect_only_accelerations(JointAccelerations& acc) {
 }
 
 TEST(JointAccelerationsTest, Constructors) {
+  JointAccelerations empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_ACCELERATIONS);
+
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d accelerations = Eigen::Vector2d::Random();
   JointAccelerations ja1("test", accelerations);

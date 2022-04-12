@@ -22,6 +22,7 @@ TEST(JointProtoTest, EncodeDecodeJacobian) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_frame().c_str(), recv_state.get_frame().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
@@ -46,6 +47,7 @@ TEST(JointProtoTest, EncodeDecodeJointState) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
   for (std::size_t ind = 0; ind < send_state.get_size(); ++ind) {
@@ -65,6 +67,7 @@ TEST(JointProtoTest, EncodeDecodeJointPositions) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
   for (std::size_t ind = 0; ind < send_state.get_size(); ++ind) {
@@ -84,6 +87,7 @@ TEST(JointProtoTest, EncodeDecodeJointVelocities) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
   for (std::size_t ind = 0; ind < send_state.get_size(); ++ind) {
@@ -103,6 +107,7 @@ TEST(JointProtoTest, EncodeDecodeJointAccelerations) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
   for (std::size_t ind = 0; ind < send_state.get_size(); ++ind) {
@@ -122,6 +127,7 @@ TEST(JointProtoTest, EncodeDecodeJointTorques) {
   EXPECT_TRUE(clproto::decode(msg, recv_state));
   EXPECT_FALSE(recv_state.is_empty());
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   ASSERT_EQ(send_state.get_size(), recv_state.get_size());
   for (std::size_t ind = 0; ind < send_state.get_size(); ++ind) {

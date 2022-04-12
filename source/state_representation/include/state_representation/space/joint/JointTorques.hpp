@@ -37,7 +37,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  explicit JointTorques() = default;
+  explicit JointTorques();
 
   /**
    * @brief Constructor with name and number of joints provided

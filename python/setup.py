@@ -131,6 +131,9 @@ setup(
     ext_modules=ext_modules,
     test_suite='tests',
     python_requires='>=3',
+    install_requires=[
+        'pyquaternion>=0.9.9'
+    ],
     license='GNU GPL v3',
     zip_safe=False,
 )

@@ -51,7 +51,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  explicit CartesianTwist() = default;
+  explicit CartesianTwist();
 
   /**
    * @brief Constructor with name and reference frame provided

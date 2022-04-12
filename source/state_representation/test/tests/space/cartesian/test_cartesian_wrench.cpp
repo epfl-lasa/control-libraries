@@ -12,6 +12,11 @@ static void expect_only_wrench(CartesianWrench& wrench) {
   EXPECT_EQ(static_cast<CartesianState&>(wrench).get_acceleration().norm(), 0);
 }
 
+TEST(CartesianWrenchTest, EmptyConstructor) {
+  CartesianWrench empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_WRENCH);
+}
+
 TEST(CartesianWrenchTest, RandomWrenchInitialization) {
   CartesianWrench random = CartesianWrench::Random("test");
   EXPECT_EQ(random.get_type(), StateType::CARTESIAN_WRENCH);

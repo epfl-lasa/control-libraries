@@ -34,6 +34,11 @@ protected:
   double tol = 1e-5;
 };
 
+TEST(CartesianPoseTest, EmptyConstructor) {
+  CartesianPose empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_POSE);
+}
+
 TEST(CartesianPoseTest, RandomPoseInitialization) {
   CartesianPose random = CartesianPose::Random("test");
   EXPECT_EQ(random.get_type(), StateType::CARTESIAN_POSE);

@@ -49,7 +49,7 @@ public:
   /**
    * @brief Empty constructor
    */
-  explicit CartesianAcceleration() = default;
+  explicit CartesianAcceleration();
 
   /**
    * @brief Constructor with name and reference frame provided

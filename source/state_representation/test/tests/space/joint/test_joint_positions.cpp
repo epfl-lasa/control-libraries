@@ -11,6 +11,9 @@ static void expect_only_positions(JointPositions& pos) {
 }
 
 TEST(JointPositionsTest, Constructors) {
+  JointPositions empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_POSITIONS);
+
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d positions = Eigen::Vector2d::Random();
   JointPositions jp1("test", positions);

@@ -4,6 +4,10 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
+CartesianTwist::CartesianTwist() {
+  this->set_type(StateType::CARTESIAN_TWIST);
+}
+
 CartesianTwist::CartesianTwist(const std::string& name, const std::string& reference) :
     CartesianState(name, reference) {
   this->set_type(StateType::CARTESIAN_TWIST);

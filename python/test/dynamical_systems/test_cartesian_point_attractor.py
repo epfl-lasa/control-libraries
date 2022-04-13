@@ -2,7 +2,7 @@ import numpy as np
 import state_representation as sr
 import unittest
 from datetime import timedelta
-from dynamical_systems import CartesianPointAttractorDS
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE
 
 
 class TestCartesianPointAttractor(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestCartesianPointAttractor(unittest.TestCase):
             self.fail(f'{e}')
 
     def test_empty_constructor(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         attractor = sr.CartesianState.Identity("CAttractor", "A")
 
         self.assertTrue(ds.get_parameter_value("attractor").is_empty())
@@ -27,7 +27,7 @@ class TestCartesianPointAttractor(unittest.TestCase):
         self.assert_np_array_equal(ds.get_base_frame().get_transformation_matrix(), np.eye(4))
 
     def test_is_compatible(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         state1 = sr.CartesianState.Identity("B", "A")
         state2 = sr.CartesianState.Identity("D", "C")
         state3 = sr.CartesianState.Identity("C", "A")
@@ -52,7 +52,7 @@ class TestCartesianPointAttractor(unittest.TestCase):
         self.assertTrue(ds.is_compatible(state4))
 
     def test_pose(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         target = sr.CartesianPose.Random("B")
         ds.set_parameter(sr.Parameter("attractor", target, sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
 
@@ -69,7 +69,7 @@ class TestCartesianPointAttractor(unittest.TestCase):
         BinA = sr.CartesianState.Random("B", "A")
         CinA = sr.CartesianState(sr.CartesianPose.Random("C", "A"))
 
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         ds.set_parameter(sr.Parameter("attractor", BinA, sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
 
         twist = sr.CartesianTwist(ds.evaluate(CinA))

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.1</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.2</span>
    </div>
   </td>
  </tr>
@@ -152,6 +152,24 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a4b51a0b8d02f4eed5d7523f9508ae35f"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#a4b51a0b8d02f4eed5d7523f9508ae35f">ParameterType</a> { <br />
+&#160;&#160;<b>BOOL</b>
+, <b>BOOL_ARRAY</b>
+, <b>INT</b>
+, <b>INT_ARRAY</b>
+, <br />
+&#160;&#160;<b>DOUBLE</b>
+, <b>DOUBLE_ARRAY</b>
+, <b>STRING</b>
+, <b>STRING_ARRAY</b>
+, <br />
+&#160;&#160;<b>STATE</b>
+, <b>VECTOR</b>
+, <b>MATRIX</b>
+<br />
+ }</td></tr>
+<tr class="memdesc:a4b51a0b8d02f4eed5d7523f9508ae35f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parameter value types.  <a href="namespacestate__representation.html#a4b51a0b8d02f4eed5d7523f9508ae35f">More...</a><br /></td></tr>
+<tr class="separator:a4b51a0b8d02f4eed5d7523f9508ae35f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fe69415f9fe26fa1b1a563b97873686"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><b>CartesianStateVariable</b> { <br />
 &#160;&#160;<b>POSITION</b>
 , <b>ORIENTATION</b>
@@ -183,37 +201,32 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a65e64875cc8437e40b1debd7ae30bcdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing all the fields (positions, velocities, accelerations and torques) of the JointState.  <a href="namespacestate__representation.html#a65e64875cc8437e40b1debd7ae30bcdc">More...</a><br /></td></tr>
 <tr class="separator:a65e64875cc8437e40b1debd7ae30bcdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><b>StateType</b> { <br />
-&#160;&#160;<b>STATE</b>
-, <b>CARTESIANSTATE</b>
-, <b>DUALQUATERNIONSTATE</b>
-, <b>JOINTSTATE</b>
+<tr class="memitem:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestate__representation.html#ab8356a8dcadd21825f50bc1fd41a9e87">StateType</a> { <br />
+&#160;&#160;<b>NONE</b>
+, <b>STATE</b>
+, <b>SPATIAL_STATE</b>
+, <b>CARTESIAN_STATE</b>
 , <br />
-&#160;&#160;<b>JACOBIANMATRIX</b>
-, <b>TRAJECTORY</b>
+&#160;&#160;<b>CARTESIAN_POSE</b>
+, <b>CARTESIAN_TWIST</b>
+, <b>CARTESIAN_ACCELERATION</b>
+, <b>CARTESIAN_WRENCH</b>
+, <br />
+&#160;&#160;<b>JOINT_STATE</b>
+, <b>JOINT_POSITIONS</b>
+, <b>JOINT_VELOCITIES</b>
+, <b>JOINT_ACCELERATIONS</b>
+, <br />
+&#160;&#160;<b>JOINT_TORQUES</b>
+, <b>JACOBIAN</b>
+, <b>PARAMETER</b>
 , <b>GEOMETRY_SHAPE</b>
-, <b>GEOMETRY_ELLIPSOID</b>
 , <br />
-&#160;&#160;<b>PARAMETER_DOUBLE</b>
-, <b>PARAMETER_DOUBLE_ARRAY</b>
-, <b>PARAMETER_BOOL</b>
-, <b>PARAMETER_BOOL_ARRAY</b>
-, <br />
-&#160;&#160;<b>PARAMETER_STRING</b>
-, <b>PARAMETER_STRING_ARRAY</b>
-, <b>PARAMETER_CARTESIANSTATE</b>
-, <b>PARAMETER_CARTESIANPOSE</b>
-, <br />
-&#160;&#160;<b>PARAMETER_JOINTSTATE</b>
-, <b>PARAMETER_JOINTPOSITIONS</b>
-, <b>PARAMETER_ELLIPSOID</b>
-, <b>PARAMETER_MATRIX</b>
-, <br />
-&#160;&#160;<b>PARAMETER_VECTOR</b>
-, <b>PARAMETER_INT</b>
-, <b>PARAMETER_INT_ARRAY</b>
+&#160;&#160;<b>GEOMETRY_ELLIPSOID</b>
+, <b>TRAJECTORY</b>
 <br />
  }</td></tr>
+<tr class="memdesc:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="mdescLeft">&#160;</td><td class="mdescRight">The class types inheriting from State.  <a href="namespacestate__representation.html#ab8356a8dcadd21825f50bc1fd41a9e87">More...</a><br /></td></tr>
 <tr class="separator:ab8356a8dcadd21825f50bc1fd41a9e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -479,6 +492,32 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 
 </div>
 </div>
+<a id="a4b51a0b8d02f4eed5d7523f9508ae35f" name="a4b51a0b8d02f4eed5d7523f9508ae35f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b51a0b8d02f4eed5d7523f9508ae35f">&#9670;&nbsp;</a></span>ParameterType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacestate__representation.html#a4b51a0b8d02f4eed5d7523f9508ae35f">state_representation::ParameterType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The parameter value types. </p>
+
+<p class="definition">Definition at line <a class="el" href="_parameter_type_8hpp_source.html#l00009">9</a> of file <a class="el" href="_parameter_type_8hpp_source.html">ParameterType.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ab8356a8dcadd21825f50bc1fd41a9e87" name="ab8356a8dcadd21825f50bc1fd41a9e87"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8356a8dcadd21825f50bc1fd41a9e87">&#9670;&nbsp;</a></span>StateType</h2>
 
@@ -489,7 +528,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum class state_representation::StateType</td>
+          <td class="memname">enum class <a class="el" href="namespacestate__representation.html#ab8356a8dcadd21825f50bc1fd41a9e87">state_representation::StateType</a></td>
         </tr>
       </table>
   </td>
@@ -499,7 +538,9 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00019">19</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p>The class types inheriting from <a class="el" href="classstate__representation_1_1_state.html" title="Abstract class to represent a state.">State</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="_state_type_8hpp_source.html#l00013">13</a> of file <a class="el" href="_state_type_8hpp_source.html">StateType.hpp</a>.</p>
 
 </div>
 </div>
@@ -686,7 +727,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_jacobian.html" title="Class to define a robot Jacobian matrix.">Jacobian</a> expressed in the new reference frame </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00280">280</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00288">288</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
 
 </div>
 </div>
@@ -723,7 +764,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_acceleration.html" title="Class to define acceleration in cartesian space as 3D linear and angular acceleration vectors.">CartesianAcceleration</a> provided multiplied by the state </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00173">173</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00183">183</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
 
 </div>
 </div>
@@ -760,7 +801,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_pose.html" title="Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation.">CartesianPose</a> provided multiplied by the state </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00186">186</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00197">197</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
 
 </div>
 </div>
@@ -797,7 +838,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_twist.html" title="Class to define twist in cartesian space as 3D linear and angular velocity vectors.">CartesianTwist</a> provided multiplied by the state </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00195">195</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00205">205</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
 
 </div>
 </div>
@@ -834,7 +875,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_wrench.html" title="Class to define wrench in cartesian space as 3D force and torque vectors.">CartesianWrench</a> provided multiplied by the state </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00139">139</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00149">149</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
 
 </div>
 </div>
@@ -871,7 +912,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00185">185</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00195">195</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
 
 </div>
 </div>
@@ -908,7 +949,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00184">184</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00195">195</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
 
 </div>
 </div>
@@ -982,7 +1023,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_torques.html" title="Class to define torques of the joints.">JointTorques</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00163">163</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00174">174</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +1060,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00198">198</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00209">209</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
 
 </div>
 </div>
@@ -1056,7 +1097,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_acceleration.html" title="Class to define acceleration in cartesian space as 3D linear and angular acceleration vectors.">CartesianAcceleration</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00181">181</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00191">191</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
 
 </div>
 </div>
@@ -1093,7 +1134,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_twist.html" title="Class to define twist in cartesian space as 3D linear and angular velocity vectors.">CartesianTwist</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00203">203</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00213">213</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
 
 </div>
 </div>
@@ -1130,7 +1171,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00191">191</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00201">201</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
 
 </div>
 </div>
@@ -1167,7 +1208,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00190">190</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00201">201</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
 
 </div>
 </div>
@@ -1241,7 +1282,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_torques.html" title="Class to define torques of the joints.">JointTorques</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00169">169</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00180">180</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
 
 </div>
 </div>
@@ -1278,7 +1319,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00204">204</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00215">215</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
 
 </div>
 </div>
@@ -1316,7 +1357,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the matrix multiplied by the jacobian matrix </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00310">310</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00318">318</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
 
 </div>
 </div>
@@ -1390,7 +1431,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_twist.html" title="Class to define twist in cartesian space as 3D linear and angular velocity vectors.">CartesianTwist</a> corresponding to the velocity over the time period </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00187">187</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00197">197</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
 
 </div>
 </div>
@@ -1427,7 +1468,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_pose.html" title="Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation.">CartesianPose</a> corresponding to the displacement over the time period </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00209">209</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00219">219</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
 
 </div>
 </div>
@@ -1464,7 +1505,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> corresponding to the velocities over the time period </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00197">197</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00207">207</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
 
 </div>
 </div>
@@ -1501,7 +1542,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> corresponding to the displacement over the time period </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00210">210</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00221">221</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
 
 </div>
 </div>
@@ -1538,7 +1579,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_acceleration.html" title="Class to define acceleration in cartesian space as 3D linear and angular acceleration vectors.">CartesianAcceleration</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00177">177</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00187">187</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
 
 </div>
 </div>
@@ -1575,7 +1616,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_pose.html" title="Class to define CartesianPose in cartesian space as 3D position and quaternion based orientation.">CartesianPose</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00190">190</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00201">201</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
 
 </div>
 </div>
@@ -1649,7 +1690,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_twist.html" title="Class to define twist in cartesian space as 3D linear and angular velocity vectors.">CartesianTwist</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00199">199</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00209">209</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
 
 </div>
 </div>
@@ -1686,7 +1727,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_cartesian_wrench.html" title="Class to define wrench in cartesian space as 3D force and torque vectors.">CartesianWrench</a> provided multiplied by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00143">143</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00153">153</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
 
 </div>
 </div>
@@ -1723,7 +1764,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_accelerations.html" title="Class to define accelerations of the joints.">JointAccelerations</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00179">179</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00189">189</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
 
 </div>
 </div>
@@ -1760,7 +1801,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_positions.html" title="Class to define a positions of the joints.">JointPositions</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00178">178</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00189">189</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
 
 </div>
 </div>
@@ -1834,7 +1875,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_torques.html" title="Class to define torques of the joints.">JointTorques</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00157">157</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00168">168</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
 
 </div>
 </div>
@@ -1871,7 +1912,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classstate__representation_1_1_joint_velocities.html" title="Class to define velocities of the joints.">JointVelocities</a> provided multiply by lambda </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00192">192</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00203">203</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
 
 </div>
 </div>
@@ -1909,7 +1950,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00157">157</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_acceleration_8cpp_source.html#l00167">167</a> of file <a class="el" href="_cartesian_acceleration_8cpp_source.html">CartesianAcceleration.cpp</a>.</p>
 
 </div>
 </div>
@@ -1947,7 +1988,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00165">165</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_pose_8cpp_source.html#l00176">176</a> of file <a class="el" href="_cartesian_pose_8cpp_source.html">CartesianPose.cpp</a>.</p>
 
 </div>
 </div>
@@ -2023,7 +2064,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00180">180</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_twist_8cpp_source.html#l00190">190</a> of file <a class="el" href="_cartesian_twist_8cpp_source.html">CartesianTwist.cpp</a>.</p>
 
 </div>
 </div>
@@ -2061,7 +2102,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00123">123</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_cartesian_wrench_8cpp_source.html#l00133">133</a> of file <a class="el" href="_cartesian_wrench_8cpp_source.html">CartesianWrench.cpp</a>.</p>
 
 </div>
 </div>
@@ -2289,7 +2330,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00255">255</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_jacobian_8cpp_source.html#l00263">263</a> of file <a class="el" href="_jacobian_8cpp_source.html">Jacobian.cpp</a>.</p>
 
 </div>
 </div>
@@ -2327,7 +2368,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00164">164</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_accelerations_8cpp_source.html#l00174">174</a> of file <a class="el" href="_joint_accelerations_8cpp_source.html">JointAccelerations.cpp</a>.</p>
 
 </div>
 </div>
@@ -2365,7 +2406,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00163">163</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_positions_8cpp_source.html#l00174">174</a> of file <a class="el" href="_joint_positions_8cpp_source.html">JointPositions.cpp</a>.</p>
 
 </div>
 </div>
@@ -2441,7 +2482,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00142">142</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_torques_8cpp_source.html#l00153">153</a> of file <a class="el" href="_joint_torques_8cpp_source.html">JointTorques.cpp</a>.</p>
 
 </div>
 </div>
@@ -2479,7 +2520,7 @@ template std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00177">177</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_joint_velocities_8cpp_source.html#l00188">188</a> of file <a class="el" href="_joint_velocities_8cpp_source.html">JointVelocities.cpp</a>.</p>
 
 </div>
 </div>
@@ -2511,7 +2552,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00206">206</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00207">207</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
 
 </div>
 </div>
@@ -2543,7 +2584,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00192">192</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00193">193</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
 
 </div>
 </div>
@@ -2575,7 +2616,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00178">178</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00179">179</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
 
 </div>
 </div>
@@ -2607,7 +2648,7 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00220">220</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00221">221</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
 
 </div>
 </div>
@@ -2639,7 +2680,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00156">156</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_parameter_8cpp_source.html#l00157">157</a> of file <a class="el" href="_parameter_8cpp_source.html">Parameter.cpp</a>.</p>
 
 </div>
 </div>
@@ -2753,7 +2794,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_spatial_state_8cpp_source.html#l00013">13</a> of file <a class="el" href="_spatial_state_8cpp_source.html">SpatialState.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_spatial_state_8cpp_source.html#l00017">17</a> of file <a class="el" href="_spatial_state_8cpp_source.html">SpatialState.cpp</a>.</p>
 
 </div>
 </div>
@@ -2791,7 +2832,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the appended ostream </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00031">31</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00077">77</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
 
 </div>
 </div>
@@ -2971,7 +3012,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_spatial_state_8hpp_source.html#l00074">74</a> of file <a class="el" href="_spatial_state_8hpp_source.html">SpatialState.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_spatial_state_8hpp_source.html#l00080">80</a> of file <a class="el" href="_spatial_state_8hpp_source.html">SpatialState.hpp</a>.</p>
 
 </div>
 </div>
@@ -3016,7 +3057,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00188">188</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00171">171</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,15 +1,14 @@
 #include "dynamical_systems_bindings.h"
 
-#include <dynamical_systems/DynamicalSystemFactory.hpp>
-#include <state_representation/space/cartesian/CartesianState.hpp>
+#include <dynamical_systems/DynamicalSystemType.hpp>
 
 using namespace state_representation;
 
-void bind_type(py::module_& m) {
-  py::enum_<DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM>(m, "DYNAMICAL_SYSTEM")
-      .value("NONE", DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::NONE)
-      .value("CIRCULAR", DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::CIRCULAR)
-      .value("POINT_ATTRACTOR", DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR)
-      .value("RING", DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::RING)
+void bind_ds_type(py::module_& m) {
+  py::enum_<DYNAMICAL_SYSTEM_TYPE>(m, "DYNAMICAL_SYSTEM_TYPE")
+      .value("NONE", DYNAMICAL_SYSTEM_TYPE::NONE)
+      .value("CIRCULAR", DYNAMICAL_SYSTEM_TYPE::CIRCULAR)
+      .value("POINT_ATTRACTOR", DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR)
+      .value("RING", DYNAMICAL_SYSTEM_TYPE::RING)
       .export_values();
 }

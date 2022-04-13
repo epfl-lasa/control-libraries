@@ -11,6 +11,51 @@
 
 using namespace state_representation;
 
+template<typename T>
+static void test_cart_state_equal(const T& send_state, const T& recv_state) {
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
+  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
+  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
+  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
+}
+
+template<typename T>
+static void test_encode_decode_cartesian(const T& send_state, clproto::MessageType type) {
+  std::string msg = clproto::encode(send_state);
+  EXPECT_TRUE(clproto::is_valid(msg));
+  EXPECT_EQ(clproto::check_message_type(msg), type);
+
+  T recv_state;
+  EXPECT_NO_THROW(clproto::decode<T>(msg));
+  EXPECT_TRUE(clproto::decode(msg, recv_state));
+  EXPECT_FALSE(recv_state.is_empty());
+
+  test_cart_state_equal(send_state, recv_state);
+
+  auto send_state_ptr = make_shared_state(send_state);
+  msg = clproto::encode(send_state_ptr);
+  EXPECT_TRUE(clproto::is_valid(msg));
+  EXPECT_EQ(clproto::check_message_type(msg), type);
+
+  T recv_state_2;
+  auto recv_state_ptr = make_shared_state(recv_state_2);
+  EXPECT_NO_THROW(clproto::decode<std::shared_ptr<State>>(msg));
+  EXPECT_TRUE(clproto::decode(msg, recv_state_ptr));
+
+  recv_state_2 = *std::dynamic_pointer_cast<T>(recv_state_ptr);
+  test_cart_state_equal(send_state, recv_state_2);
+}
+
+template<typename T>
+static void test_encode_decode_empty_cartesian(const T& state) {
+  EXPECT_TRUE(state.is_empty());
+  std::string msg;
+  EXPECT_NO_THROW(msg = clproto::encode(state));
+
+  T recv_state;
+  EXPECT_NO_THROW(recv_state = clproto::decode<T>(msg));
+  EXPECT_TRUE(recv_state.is_empty());
+}
 
 TEST(CartesianProtoTest, EncodeDecodeSpatialState) {
   auto send_state = SpatialState(StateType::SPATIAL_STATE, "A", "B", false);
@@ -18,151 +63,44 @@ TEST(CartesianProtoTest, EncodeDecodeSpatialState) {
   EXPECT_TRUE(clproto::is_valid(msg));
   EXPECT_TRUE(clproto::check_message_type(msg) == clproto::SPATIAL_STATE_MESSAGE);
 
-  SpatialState recv_state(StateType::STATE);
+  SpatialState recv_state(StateType::SPATIAL_STATE);
   EXPECT_NO_THROW(clproto::decode<SpatialState>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
 
+  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
   EXPECT_EQ(send_state.is_empty(), recv_state.is_empty());
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-}
 
-TEST(CartesianProtoTest, EncodeDecodeCartesianState) {
-  auto send_state = CartesianState::Random("A", "B");
-  std::string msg = clproto::encode(send_state);
+  std::shared_ptr<State> send_state_ptr = std::make_shared<SpatialState>(send_state);
+  msg = clproto::encode(send_state_ptr);
   EXPECT_TRUE(clproto::is_valid(msg));
-  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_STATE_MESSAGE);
+  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::SPATIAL_STATE_MESSAGE);
 
-  CartesianState recv_state;
-  EXPECT_NO_THROW(clproto::decode<CartesianState>(msg));
-  EXPECT_TRUE(clproto::decode(msg, recv_state));
-  EXPECT_FALSE(recv_state.is_empty());
+  SpatialState recv_state_2(StateType::SPATIAL_STATE);
+  auto recv_state_ptr = make_shared_state(recv_state_2);
+  EXPECT_NO_THROW(clproto::decode<std::shared_ptr<State>>(msg));
+  EXPECT_TRUE(clproto::decode(msg, recv_state_ptr));
 
-  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
-  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
+  recv_state_2 = *std::dynamic_pointer_cast<SpatialState>(recv_state_ptr);
+  EXPECT_EQ(send_state.get_type(), recv_state_2.get_type());
+  EXPECT_EQ(send_state.is_empty(), recv_state_2.is_empty());
+  EXPECT_STREQ(send_state.get_name().c_str(), recv_state_2.get_name().c_str());
+  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state_2.get_reference_frame().c_str());
 }
 
-TEST(CartesianProtoTest, EncodeDecodeCartesianPose) {
-  auto send_state = CartesianPose::Random("A", "B");
-  std::string msg = clproto::encode(send_state);
-  EXPECT_TRUE(clproto::is_valid(msg));
-  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_POSE_MESSAGE);
-
-  CartesianPose recv_state;
-  EXPECT_NO_THROW(clproto::decode<CartesianPose>(msg));
-  EXPECT_TRUE(clproto::decode(msg, recv_state));
-  EXPECT_FALSE(recv_state.is_empty());
-
-  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
-  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
+TEST(CartesianProtoTest, EncodeDecodeRandomCartesian) {
+  test_encode_decode_cartesian(CartesianState::Random("A", "B"), clproto::CARTESIAN_STATE_MESSAGE);
+  test_encode_decode_cartesian(CartesianPose::Random("A", "B"), clproto::CARTESIAN_POSE_MESSAGE);
+  test_encode_decode_cartesian(CartesianTwist::Random("A", "B"), clproto::CARTESIAN_TWIST_MESSAGE);
+  test_encode_decode_cartesian(CartesianAcceleration::Random("A", "B"), clproto::CARTESIAN_ACCELERATION_MESSAGE);
+  test_encode_decode_cartesian(CartesianWrench::Random("A", "B"), clproto::CARTESIAN_WRENCH_MESSAGE);
 }
 
-TEST(CartesianProtoTest, EncodeDecodeCartesianTwist) {
-  auto send_state = CartesianTwist::Random("A", "B");
-  std::string msg = clproto::encode(send_state);
-  EXPECT_TRUE(clproto::is_valid(msg));
-  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_TWIST_MESSAGE);
-
-  CartesianTwist recv_state;
-  EXPECT_NO_THROW(clproto::decode<CartesianTwist>(msg));
-  EXPECT_TRUE(clproto::decode(msg, recv_state));
-  EXPECT_FALSE(recv_state.is_empty());
-
-  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
-  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
-}
-
-TEST(CartesianProtoTest, EncodeDecodeCartesianAcceleration) {
-  auto send_state = CartesianAcceleration::Random("A", "B");
-  std::string msg = clproto::encode(send_state);
-  EXPECT_TRUE(clproto::is_valid(msg));
-  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_ACCELERATION_MESSAGE);
-
-  CartesianAcceleration recv_state;
-  EXPECT_NO_THROW(clproto::decode<CartesianAcceleration>(msg));
-  EXPECT_TRUE(clproto::decode(msg, recv_state));
-  EXPECT_FALSE(recv_state.is_empty());
-
-  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
-  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
-}
-
-TEST(CartesianProtoTest, EncodeDecodeCartesianWrench) {
-  auto send_state = CartesianWrench::Random("A", "B");
-  std::string msg = clproto::encode(send_state);
-  EXPECT_TRUE(clproto::is_valid(msg));
-  EXPECT_TRUE(clproto::check_message_type(msg) == clproto::CARTESIAN_WRENCH_MESSAGE);
-
-  CartesianWrench recv_state;
-  EXPECT_NO_THROW(clproto::decode<CartesianWrench>(msg));
-  EXPECT_TRUE(clproto::decode(msg, recv_state));
-  EXPECT_FALSE(recv_state.is_empty());
-
-  EXPECT_EQ(send_state.get_type(), recv_state.get_type());
-  EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
-  EXPECT_STREQ(send_state.get_reference_frame().c_str(), recv_state.get_reference_frame().c_str());
-  EXPECT_NEAR(send_state.dist(recv_state), 0, 1e-5);
-}
-
-TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianState) {
-  CartesianState empty_state;
-  EXPECT_TRUE(empty_state.is_empty());
-  std::string msg;
-  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
-
-  CartesianState recv_state;
-  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianState>(msg));
-  EXPECT_TRUE(recv_state.is_empty());
-}
-
-TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianPose) {
-  CartesianPose empty_state;
-  EXPECT_TRUE(empty_state.is_empty());
-  std::string msg;
-  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
-
-  CartesianPose recv_state;
-  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianPose>(msg));
-  EXPECT_TRUE(recv_state.is_empty());
-}
-
-TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianTwist) {
-  CartesianTwist empty_state;
-  EXPECT_TRUE(empty_state.is_empty());
-  std::string msg;
-  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
-
-  CartesianTwist recv_state;
-  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianTwist>(msg));
-  EXPECT_TRUE(recv_state.is_empty());
-}
-
-TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianAcceleration) {
-  CartesianAcceleration empty_state;
-  EXPECT_TRUE(empty_state.is_empty());
-  std::string msg;
-  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
-
-  CartesianAcceleration recv_state;
-  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianAcceleration>(msg));
-  EXPECT_TRUE(recv_state.is_empty());
-}
-
-TEST(CartesianProtoTest, EncodeDecodeEmptyCartesianWrench) {
-  CartesianWrench empty_state;
-  EXPECT_TRUE(empty_state.is_empty());
-  std::string msg;
-  EXPECT_NO_THROW(msg = clproto::encode(empty_state));
-
-  CartesianWrench recv_state;
-  EXPECT_NO_THROW(recv_state = clproto::decode<CartesianWrench>(msg));
-  EXPECT_TRUE(recv_state.is_empty());
+TEST(CartesianProtoTest, EncodeDecodeEmptyCartesian) {
+  test_encode_decode_empty_cartesian(CartesianState());
+  test_encode_decode_empty_cartesian(CartesianPose());
+  test_encode_decode_empty_cartesian(CartesianTwist());
+  test_encode_decode_empty_cartesian(CartesianAcceleration());
+  test_encode_decode_empty_cartesian(CartesianWrench());
 }

@@ -17,6 +17,7 @@ Release Versions:
 - Refactor state type (#277, #278, #280, #284)
 - Refactor dynamical systems factory (#288)
 - Use pyquaternion in bindings (#283)
+- Add encode/decode options for shared pointer of State (#287)
 
 ## 5.2.0
 

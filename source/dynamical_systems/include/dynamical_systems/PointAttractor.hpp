@@ -19,6 +19,12 @@ public:
   PointAttractor();
 
   /**
+   * @brief Constructor from an initial parameter list
+   * @param parameters A parameter list containing initial attractor and gain values
+   */
+  explicit PointAttractor(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters);
+
+  /**
    * @copydoc IDynamicalSystem::set_base_frame
    */
   void set_base_frame(const S& base_frame) override;
@@ -54,4 +60,12 @@ private:
   std::shared_ptr<state_representation::Parameter<S>> attractor_; ///< attractor of the dynamical system in the space
   std::shared_ptr<state_representation::Parameter<Eigen::MatrixXd>> gain_; ///< gain associate to the system
 };
+
+template<class S>
+PointAttractor<S>::PointAttractor(
+    const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters
+) : PointAttractor<S>() {
+  this->set_parameters(parameters);
+}
+
 }// namespace dynamical_systems

@@ -2,7 +2,7 @@
 
 #include <controllers/ControllerType.hpp>
 
-void bind_type(py::module_& m) {
+void bind_controller_type(py::module_& m) {
   py::enum_<CONTROLLER_TYPE>(m, "CONTROLLER_TYPE")
       .value("NONE", CONTROLLER_TYPE::NONE)
       .value("IMPEDANCE", CONTROLLER_TYPE::IMPEDANCE)

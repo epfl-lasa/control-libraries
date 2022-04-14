@@ -1,12 +1,12 @@
 import state_representation as sr
 import unittest
 from datetime import timedelta
-from dynamical_systems import JointPointAttractorDS
+from dynamical_systems import create_joint_ds, DYNAMICAL_SYSTEM_TYPE
 
 
 class TestJointPointAttractor(unittest.TestCase):
-    def test_empty_constructor(self):
-        ds = JointPointAttractorDS()
+    def test_constructor(self):
+        ds = create_joint_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         attractor = sr.JointState.Zero("robot", 3)
 
         self.assertTrue(ds.get_parameter_value("attractor").is_empty())
@@ -14,8 +14,12 @@ class TestJointPointAttractor(unittest.TestCase):
         ds.set_parameter(sr.Parameter("attractor", attractor, sr.ParameterType.STATE, sr.StateType.JOINT_STATE))
         self.assertFalse(ds.get_parameter_value("attractor").is_empty())
 
+        parameters = [sr.Parameter("attractor", attractor, sr.ParameterType.STATE, sr.StateType.JOINT_STATE)]
+        ds = create_joint_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR, parameters)
+        self.assertFalse(ds.get_parameter_value("attractor").is_empty())
+
     def test_convergence(self):
-        ds = JointPointAttractorDS()
+        ds = create_joint_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         attractor = sr.JointPositions.Random("robot", 3)
         ds.set_parameter(sr.Parameter("attractor", attractor, sr.ParameterType.STATE, sr.StateType.JOINT_STATE))
 

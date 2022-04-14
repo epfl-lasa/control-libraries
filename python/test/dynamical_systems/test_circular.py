@@ -2,7 +2,7 @@ import numpy as np
 import state_representation as sr
 import unittest
 from datetime import timedelta
-from dynamical_systems import CartesianCircularDS
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE
 
 
 class TestCircular(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestCircular(unittest.TestCase):
             self.fail(f'{e}')
 
     def test_empty_constructor(self):
-        ds = CartesianCircularDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.CIRCULAR)
         self.assertTrue(ds.get_parameter_value("limit_cycle").get_center_state().is_empty())
         self.assertTrue(ds.get_base_frame().is_empty())
 
@@ -38,7 +38,7 @@ class TestCircular(unittest.TestCase):
         self.assert_np_array_equal(ds.get_base_frame().get_transformation_matrix(), np.eye(4))
 
     def test_is_compatible(self):
-        ds = CartesianCircularDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.CIRCULAR)
         state1 = sr.CartesianState.Identity("world", "A")
         state2 = sr.CartesianState("D", "C")
         state3 = sr.CartesianState("C", "A")
@@ -62,7 +62,7 @@ class TestCircular(unittest.TestCase):
         self.assertTrue(ds.is_compatible(state4))
 
     def test_points_on_radius_random_center(self):
-        ds = CartesianCircularDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.CIRCULAR)
         self.limit_cycle.set_center_position(np.random.rand(3, 1))
         ds.set_parameter(sr.Parameter("limit_cycle", self.limit_cycle, sr.ParameterType.STATE, sr.StateType.GEOMETRY_ELLIPSOID))
 

@@ -6,7 +6,6 @@
 
 #include "state_representation/space/cartesian/CartesianState.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/parameters/Parameter.hpp"
 #include "state_representation/exceptions/IncompatibleReferenceFramesException.hpp"
 #include "state_representation/exceptions/EmptyStateException.hpp"
 
@@ -17,9 +16,7 @@ using namespace std::literals::chrono_literals;
 class RingDSTest : public ::testing::Test {
 protected:
   RingDSTest() {
-    ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-        DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::RING
-    );
+    ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::RING);
     center = CartesianPose::Identity("A");
     current_pose = CartesianPose("B", radius * Eigen::Vector3d::Random());
   }

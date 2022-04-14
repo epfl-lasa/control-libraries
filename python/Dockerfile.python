@@ -6,6 +6,7 @@ RUN git clone --depth 1 --branch $BRANCH https://github.com/epfl-lasa/control-li
 RUN bash control-libraries/source/install.sh --auto
 RUN bash control-libraries/protocol/install.sh --auto
 
+RUN rm -rf control-libraries/python/include control-libraries/python/source
 COPY include control-libraries/python/include
 COPY source control-libraries/python/source
 COPY pyproject.toml setup.py control-libraries/python/

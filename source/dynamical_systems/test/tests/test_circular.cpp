@@ -16,9 +16,7 @@ using namespace std::literals::chrono_literals;
 class CircularDSTest : public testing::Test {
 protected:
   void SetUp() override {
-    ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-        DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::CIRCULAR
-    );
+    ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::CIRCULAR);
     current_pose = CartesianPose("A", 10 * Eigen::Vector3d::Random());
     center = CartesianPose::Identity("B");
     limit_cycle.set_center_pose(center);

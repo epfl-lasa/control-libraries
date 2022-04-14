@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.2</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.3</span>
    </div>
   </td>
  </tr>
@@ -93,6 +93,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa6f0879ef85ec83a45465b48b733459d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_circular.html#aa6f0879ef85ec83a45465b48b733459d">Circular</a> ()</td></tr>
 <tr class="memdesc:aa6f0879ef85ec83a45465b48b733459d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empty constructor.  <a href="classdynamical__systems_1_1_circular.html#aa6f0879ef85ec83a45465b48b733459d">More...</a><br /></td></tr>
 <tr class="separator:aa6f0879ef85ec83a45465b48b733459d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ad1b0b9170c381226c573a040170654"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_circular.html#a5ad1b0b9170c381226c573a040170654">Circular</a> (const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a5ad1b0b9170c381226c573a040170654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from an initial parameter list.  <a href="classdynamical__systems_1_1_circular.html#a5ad1b0b9170c381226c573a040170654">More...</a><br /></td></tr>
+<tr class="separator:a5ad1b0b9170c381226c573a040170654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a022f7cb771e266a1964db7b8bcf16210"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_circular.html#a022f7cb771e266a1964db7b8bcf16210">set_base_frame</a> (const <a class="el" href="classstate__representation_1_1_cartesian_state.html">state_representation::CartesianState</a> &amp;base_frame) override</td></tr>
 <tr class="memdesc:a022f7cb771e266a1964db7b8bcf16210"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a parameter.  <a href="classdynamical__systems_1_1_circular.html#a022f7cb771e266a1964db7b8bcf16210">More...</a><br /></td></tr>
 <tr class="separator:a022f7cb771e266a1964db7b8bcf16210"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,7 +180,7 @@ Additional Inherited Members</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="_circular_8hpp_source.html#l00013">13</a> of file <a class="el" href="_circular_8hpp_source.html">Circular.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa6f0879ef85ec83a45465b48b733459d" name="aa6f0879ef85ec83a45465b48b733459d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6f0879ef85ec83a45465b48b733459d">&#9670;&nbsp;</a></span>Circular()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6f0879ef85ec83a45465b48b733459d">&#9670;&nbsp;</a></span>Circular() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,6 +197,42 @@ Additional Inherited Members</h2></td></tr>
 <p>Empty constructor. </p>
 
 <p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00012">12</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5ad1b0b9170c381226c573a040170654" name="a5ad1b0b9170c381226c573a040170654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ad1b0b9170c381226c573a040170654">&#9670;&nbsp;</a></span>Circular() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">dynamical_systems::Circular::Circular </td>
+          <td>(</td>
+          <td class="paramtype">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor from an initial parameter list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameters</td><td>A parameter list containing initial parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00024">24</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
 
 </div>
 </div>
@@ -233,7 +272,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html#acb7e59ea3a3029997692f385865b6d2f">dynamical_systems::IDynamicalSystem&lt; state_representation::CartesianState &gt;</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00078">78</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00085">85</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
 
 </div>
 </div>
@@ -269,7 +308,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00046">46</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_circular_8cpp_source.html#l00052">52</a> of file <a class="el" href="_circular_8cpp_source.html">Circular.cpp</a>.</p>
 
 </div>
 </div>

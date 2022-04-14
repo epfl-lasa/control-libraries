@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.2</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.3</span>
    </div>
   </td>
  </tr>
@@ -67,7 +67,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classdynamical__systems_1_1_dynamical_system_factory-members.html">List of all members</a>  </div>
@@ -80,28 +79,21 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="_dynamical_system_factory_8hpp_source.html">DynamicalSystemFactory.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a3b93513a15ada4cc251ee03749d30d73"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a> { <b>NONE</b>
-, <b>CIRCULAR</b>
-, <b>POINT_ATTRACTOR</b>
-, <b>RING</b>
- }</td></tr>
-<tr class="memdesc:a3b93513a15ada4cc251ee03749d30d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of the implemented dynamical systems.  <a href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">More...</a><br /></td></tr>
-<tr class="separator:a3b93513a15ada4cc251ee03749d30d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a632a9441dd60f93e0515d96dea0bfa45"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a632a9441dd60f93e0515d96dea0bfa45">create_dynamical_system</a> (<a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a> type)</td></tr>
-<tr class="separator:a632a9441dd60f93e0515d96dea0bfa45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2c2d672d848ad91382ab798d6dc4d25"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#aa2c2d672d848ad91382ab798d6dc4d25">create_dynamical_system</a> (<a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a> type)</td></tr>
-<tr class="separator:aa2c2d672d848ad91382ab798d6dc4d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7b650d3cb143c1a8d59f2b5c0aade51"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#ac7b650d3cb143c1a8d59f2b5c0aade51">create_dynamical_system</a> (<a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a> type, const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;parameters)</td></tr>
+<tr class="separator:ac7b650d3cb143c1a8d59f2b5c0aade51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2426c5f996fb8a9b7af7137cca0c7d5b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a2426c5f996fb8a9b7af7137cca0c7d5b">create_dynamical_system</a> (<a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a> type, const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;parameters)</td></tr>
+<tr class="separator:a2426c5f996fb8a9b7af7137cca0c7d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3b6f1184a037e1baaf24ed0cde98212"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#ad3b6f1184a037e1baaf24ed0cde98212">create_dynamical_system</a> (<a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a> type)</td></tr>
-<tr class="memdesc:ad3b6f1184a037e1baaf24ed0cde98212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a dynamical system of the desired type.  <a href="classdynamical__systems_1_1_dynamical_system_factory.html#ad3b6f1184a037e1baaf24ed0cde98212">More...</a><br /></td></tr>
-<tr class="separator:ad3b6f1184a037e1baaf24ed0cde98212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a8fb98e80926892def88448dcd0fd70"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a2a8fb98e80926892def88448dcd0fd70">create_dynamical_system</a> (<a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a> type)</td></tr>
+<tr class="memdesc:a2a8fb98e80926892def88448dcd0fd70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a dynamical system of the desired type.  <a href="classdynamical__systems_1_1_dynamical_system_factory.html#a2a8fb98e80926892def88448dcd0fd70">More...</a><br /></td></tr>
+<tr class="separator:a2a8fb98e80926892def88448dcd0fd70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aa9fe688dbc48e31cd18358a38a0bea"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a4aa9fe688dbc48e31cd18358a38a0bea">create_dynamical_system</a> (<a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a> type, const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a4aa9fe688dbc48e31cd18358a38a0bea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a dynamical system of the desired type with initial parameters.  <a href="classdynamical__systems_1_1_dynamical_system_factory.html#a4aa9fe688dbc48e31cd18358a38a0bea">More...</a><br /></td></tr>
+<tr class="separator:a4aa9fe688dbc48e31cd18358a38a0bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;class S&gt;<br />
@@ -113,10 +105,10 @@ class dynamical_systems::DynamicalSystemFactory&lt; S &gt;</div><p >Factory to c
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8hpp_source.html#l00013">13</a> of file <a class="el" href="_dynamical_system_factory_8hpp_source.html">DynamicalSystemFactory.hpp</a>.</p>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a3b93513a15ada4cc251ee03749d30d73" name="a3b93513a15ada4cc251ee03749d30d73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b93513a15ada4cc251ee03749d30d73">&#9670;&nbsp;</a></span>DYNAMICAL_SYSTEM</h2>
+<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8hpp_source.html#l00017">17</a> of file <a class="el" href="_dynamical_system_factory_8hpp_source.html">DynamicalSystemFactory.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2a8fb98e80926892def88448dcd0fd70" name="a2a8fb98e80926892def88448dcd0fd70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a8fb98e80926892def88448dcd0fd70">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -127,38 +119,9 @@ template&lt;class S &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum class <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">dynamical_systems::DynamicalSystemFactory::DYNAMICAL_SYSTEM</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enumeration of the implemented dynamical systems. </p>
-
-<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8hpp_source.html#l00018">18</a> of file <a class="el" href="_dynamical_system_factory_8hpp_source.html">DynamicalSystemFactory.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad3b6f1184a037e1baaf24ed0cde98212" name="ad3b6f1184a037e1baaf24ed0cde98212"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3b6f1184a037e1baaf24ed0cde98212">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class S &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt; <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html">dynamical_systems::DynamicalSystemFactory</a>&lt; S &gt;::create_dynamical_system </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt; <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html">dynamical_systems::DynamicalSystemFactory</a>&lt; S &gt;::create_dynamical_system </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a>&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
           <td></td>
         </tr>
@@ -173,7 +136,57 @@ template&lt;class S &gt; </div>
 <p>Create a dynamical system of the desired type. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">type</td><td>Underlying state type of the dynamical system </td></tr>
+    <tr><td class="paramname">type</td><td>The type of dynamical system </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The shared pointer to the dynamical system </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8hpp_source.html#l00038">38</a> of file <a class="el" href="_dynamical_system_factory_8hpp_source.html">DynamicalSystemFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4aa9fe688dbc48e31cd18358a38a0bea" name="a4aa9fe688dbc48e31cd18358a38a0bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4aa9fe688dbc48e31cd18358a38a0bea">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class S &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; S &gt; &gt; <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html">dynamical_systems::DynamicalSystemFactory</a>&lt; S &gt;::create_dynamical_system </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a dynamical system of the desired type with initial parameters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The type of dynamical system </td></tr>
+    <tr><td class="paramname">parameters</td><td>A list of parameters to set on the dynamical system </td></tr>
   </table>
   </dd>
 </dl>
@@ -181,8 +194,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="a632a9441dd60f93e0515d96dea0bfa45" name="a632a9441dd60f93e0515d96dea0bfa45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a632a9441dd60f93e0515d96dea0bfa45">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[2/3]</span></h2>
+<a id="ac7b650d3cb143c1a8d59f2b5c0aade51" name="ac7b650d3cb143c1a8d59f2b5c0aade51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7b650d3cb143c1a8d59f2b5c0aade51">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,9 +203,19 @@ template&lt;class S &gt; </div>
         <tr>
           <td class="memname">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &gt; &gt; <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html">dynamical_systems::DynamicalSystemFactory</a>&lt; <a class="el" href="classstate__representation_1_1_cartesian_state.html">CartesianState</a> &gt;::create_dynamical_system </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -201,8 +224,8 @@ template&lt;class S &gt; </div>
 
 </div>
 </div>
-<a id="aa2c2d672d848ad91382ab798d6dc4d25" name="aa2c2d672d848ad91382ab798d6dc4d25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2c2d672d848ad91382ab798d6dc4d25">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[3/3]</span></h2>
+<a id="a2426c5f996fb8a9b7af7137cca0c7d5b" name="a2426c5f996fb8a9b7af7137cca0c7d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2426c5f996fb8a9b7af7137cca0c7d5b">&#9670;&nbsp;</a></span>create_dynamical_system() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,14 +233,24 @@ template&lt;class S &gt; </div>
         <tr>
           <td class="memname">std::shared_ptr&lt; <a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html">IDynamicalSystem</a>&lt; <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &gt; &gt; <a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html">dynamical_systems::DynamicalSystemFactory</a>&lt; <a class="el" href="classstate__representation_1_1_joint_state.html">JointState</a> &gt;::create_dynamical_system </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classdynamical__systems_1_1_dynamical_system_factory.html#a3b93513a15ada4cc251ee03749d30d73">DYNAMICAL_SYSTEM</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacedynamical__systems.html#aa0f7f4452a8fa920c8feae633b786f55">DYNAMICAL_SYSTEM_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::list&lt; std::shared_ptr&lt; <a class="el" href="classstate__representation_1_1_parameter_interface.html">state_representation::ParameterInterface</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8cpp_source.html#l00031">31</a> of file <a class="el" href="_dynamical_system_factory_8cpp_source.html">DynamicalSystemFactory.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_dynamical_system_factory_8cpp_source.html#l00032">32</a> of file <a class="el" href="_dynamical_system_factory_8cpp_source.html">DynamicalSystemFactory.cpp</a>.</p>
 
 </div>
 </div>

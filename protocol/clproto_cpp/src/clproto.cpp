@@ -1010,7 +1010,6 @@ bool decode(const std::string& msg, Parameter<Eigen::MatrixXd>& obj) {
   return decode_parameter(msg, obj);
 }
 
-// Generic template code for future types:
 /*-----------------------
  * STD::SHARED_PTR<STATE>
  * ---------------------- */

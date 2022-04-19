@@ -7,7 +7,7 @@ BRANCH=$(git branch --show-current)
 SSH_PORT=2244
 SSH_KEY_FILE="${HOME}/.ssh/id_rsa.pub"
 
-HELP_MESSAGE="Usage: ./dev-server.sh [-b <branch>] [-p <port>] [-k <file>]
+HELP_MESSAGE="Usage: ./dev-server.sh [-b <branch>] [-p <port>] [-k <file>] [-r]
 
 Build and run a docker container as an SSH toolchain server for remote development.
 
@@ -32,13 +32,16 @@ Options:
   -k, --key-file [path]    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
+  -r, --rebuild            Rebuild the image with the --no-cache option.
   -h, --help               Show this help message."
 
+BUILD_FLAGS=()
 while [ "$#" -gt 0 ]; do
   case "$1" in
   -p|--port) SSH_PORT=$2; shift 2;;
   -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
   -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
+  -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift 1;;
   *) echo 'Error in command line parsing' >&2
      echo -e "\n${HELP_MESSAGE}"
      exit 1

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.4</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.5</span>
    </div>
   </td>
  </tr>
@@ -160,7 +160,12 @@ $(function() {
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  <span class="keywordflow">return</span> ((std::chrono::steady_clock::now() - this-&gt;timestamp_) &gt; time_delay);</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>}</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>}<span class="comment">// namespace state_representation</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>std::shared_ptr&lt;State&gt; make_shared_state(<span class="keyword">const</span> T&amp; state) {</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>  <span class="keywordflow">return</span> std::make_shared&lt;T&gt;(state);</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>}</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>}<span class="comment">// namespace state_representation</span></div>
 <div class="ttc" id="aclassstate__representation_1_1_state_html"><div class="ttname"><a href="classstate__representation_1_1_state.html">state_representation::State</a></div><div class="ttdoc">Abstract class to represent a state.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8hpp_source.html#l00025">State.hpp:25</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_state_html_a001cb2b235481442ca4d904b39b8f0d2"><div class="ttname"><a href="classstate__representation_1_1_state.html#a001cb2b235481442ca4d904b39b8f0d2">state_representation::State::reset_timestamp</a></div><div class="ttdeci">void reset_timestamp()</div><div class="ttdoc">Reset the timestamp attribute to now.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8cpp_source.html#l00044">State.cpp:44</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_state_html_a04fcec9e30d2008f5968e4898c614edf"><div class="ttname"><a href="classstate__representation_1_1_state.html#a04fcec9e30d2008f5968e4898c614edf">state_representation::State::is_deprecated</a></div><div class="ttdeci">bool is_deprecated(const std::chrono::duration&lt; int64_t, DurationT &gt; &amp;time_delay)</div><div class="ttdoc">Check if the state is deprecated given a certain time delay.</div><div class="ttdef"><b>Definition:</b> <a href="_state_8hpp_source.html#l00185">State.hpp:185</a></div></div>

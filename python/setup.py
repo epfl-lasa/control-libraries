@@ -10,7 +10,7 @@ from setuptools import setup
 osqp_path_var = 'OSQP_INCLUDE_DIR'
 openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
-__version__ = "5.2.3"
+__version__ = "5.2.4"
 __libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
@@ -131,6 +131,9 @@ setup(
     ext_modules=ext_modules,
     test_suite='tests',
     python_requires='>=3',
+    install_requires=[
+        'pyquaternion>=0.9.9'
+    ],
     license='GNU GPL v3',
     zip_safe=False,
 )

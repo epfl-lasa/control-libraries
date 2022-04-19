@@ -59,7 +59,7 @@ public:
    * if downcasting failed and validate_pointer was set to false.
    */
   template<typename T>
-  std::shared_ptr<Parameter<T>> get_parameter(bool validate_pointer = true);
+  std::shared_ptr<Parameter<T>> get_parameter(bool validate_pointer = true) const;
 
   /**
    * @brief Get the parameter value of a derived Parameter instance through the ParameterInterface pointer.
@@ -70,7 +70,7 @@ public:
    * @return The value contained in the underlying Parameter instance
    */
   template<typename T>
-  T get_parameter_value();
+  T get_parameter_value() const;
 
   /**
    * @brief Set the parameter value of a derived Parameter instance through the ParameterInterface pointer.
@@ -103,10 +103,10 @@ private:
 };
 
 template<typename T>
-inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool validate_pointer) {
+inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool validate_pointer) const {
   std::shared_ptr<Parameter<T>> parameter_ptr;
   try {
-    parameter_ptr = std::dynamic_pointer_cast<Parameter<T>>(shared_from_this());
+    parameter_ptr = std::dynamic_pointer_cast<Parameter<T>>(std::const_pointer_cast<State>(shared_from_this()));
   } catch (const std::exception&) {
     if (validate_pointer) {
       throw exceptions::InvalidPointerException(
@@ -123,7 +123,7 @@ inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool vali
 }
 
 template<typename T>
-inline T ParameterInterface::get_parameter_value() {
+inline T ParameterInterface::get_parameter_value() const {
   return get_parameter<T>(true)->get_value();
 }
 

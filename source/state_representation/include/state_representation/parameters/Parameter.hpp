@@ -49,7 +49,7 @@ public:
    * @return The value attribute
    */
   template<typename U>
-  U get_value();
+  U get_value() const;
 
   /**
    * @brief Getter of the value attribute.
@@ -94,7 +94,7 @@ Parameter<T>& Parameter<T>::operator=(const Parameter<U>& parameter) {
 
 template<typename T>
 template<typename U>
-U Parameter<T>::get_value() {
+U Parameter<T>::get_value() const {
   return static_cast<U>(this->value_);
 }
 

@@ -18,6 +18,7 @@ Release Versions:
 - Refactor dynamical systems factory (#288)
 - Use pyquaternion in bindings (#283)
 - Add encode/decode options for shared pointer of State (#287)
+- Mark Parameter getters as const (#289)
 
 ## 5.2.0
 

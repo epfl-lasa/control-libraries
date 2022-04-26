@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.6</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.7</span>
    </div>
   </td>
  </tr>
@@ -163,10 +163,14 @@ $(function() {
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    this-&gt;<a class="code hl_function" href="classcontrollers_1_1impedance_1_1_compliant_twist.html#a74fff30abdf6b3a81ef8674900e86b24">set_angular_stiffness</a>(value);</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (parameter-&gt;get_name() == <span class="stringliteral">&quot;angular_damping&quot;</span>) {</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    this-&gt;<a class="code hl_function" href="classcontrollers_1_1impedance_1_1_compliant_twist.html#ae0d222ff390595ce4e2a08bcbb490e7a">set_angular_damping</a>(value);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  }</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>}</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>}</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordflow">throw</span> <a class="code hl_class" href="classstate__representation_1_1exceptions_1_1_invalid_parameter_exception.html">state_representation::exceptions::InvalidParameterException</a>(</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="stringliteral">&quot;No parameter with name &#39;&quot;</span> + parameter-&gt;get_name() + <span class="stringliteral">&quot;&#39; found&quot;</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    );</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  }</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>}</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>}</div>
 <div class="ttc" id="aclasscontrollers_1_1impedance_1_1_compliant_twist_html"><div class="ttname"><a href="classcontrollers_1_1impedance_1_1_compliant_twist.html">controllers::impedance::CompliantTwist</a></div><div class="ttdoc">A concrete controller class specifically for controlling 6 degree of freedom Cartesian twist with a c...</div><div class="ttdef"><b>Definition:</b> <a href="_compliant_twist_8hpp_source.html#l00017">CompliantTwist.hpp:17</a></div></div>
 <div class="ttc" id="aclasscontrollers_1_1impedance_1_1_compliant_twist_html_a0d0a7735ca56f9c4435612ae06cf6bb9"><div class="ttname"><a href="classcontrollers_1_1impedance_1_1_compliant_twist.html#a0d0a7735ca56f9c4435612ae06cf6bb9">controllers::impedance::CompliantTwist::angular_stiffness_</a></div><div class="ttdeci">std::shared_ptr&lt; state_representation::Parameter&lt; double &gt; &gt; angular_stiffness_</div><div class="ttdoc">stiffness of angular displacement</div><div class="ttdef"><b>Definition:</b> <a href="_compliant_twist_8hpp_source.html#l00103">CompliantTwist.hpp:103</a></div></div>
 <div class="ttc" id="aclasscontrollers_1_1impedance_1_1_compliant_twist_html_a24a4dfb212c9c9415be004cd06169d8f"><div class="ttname"><a href="classcontrollers_1_1impedance_1_1_compliant_twist.html#a24a4dfb212c9c9415be004cd06169d8f">controllers::impedance::CompliantTwist::set_linear_orthogonal_damping</a></div><div class="ttdeci">void set_linear_orthogonal_damping(double linear_orthogonal_damping)</div><div class="ttdoc">Setter of the linear orthogonal damping.</div><div class="ttdef"><b>Definition:</b> <a href="_compliant_twist_8cpp_source.html#l00038">CompliantTwist.cpp:38</a></div></div>

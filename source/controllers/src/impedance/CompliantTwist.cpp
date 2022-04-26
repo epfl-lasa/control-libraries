@@ -92,6 +92,10 @@ void CompliantTwist::validate_and_set_parameter(
     this->set_angular_stiffness(value);
   } else if (parameter->get_name() == "angular_damping") {
     this->set_angular_damping(value);
+  } else {
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
   }
 }
 

@@ -118,6 +118,10 @@ void Impedance<S>::validate_and_set_parameter(
   } else if (parameter->get_name() == "force_limit") {
     auto limit_matrix = this->gain_matrix_from_parameter(parameter);
     this->force_limit_->set_value(limit_matrix.diagonal());
+  } else {
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
   }
 }
 

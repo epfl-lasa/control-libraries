@@ -52,8 +52,12 @@ void ParameterMap::assert_parameter_valid(const std::shared_ptr<ParameterInterfa
   }
 }
 
-void
-ParameterMap::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
+void ParameterMap::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
+  if (this->parameters_.find(parameter->get_name()) == this->parameters_.end()) {
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
+  }
   this->parameters_[parameter->get_name()] = parameter;
 }
 

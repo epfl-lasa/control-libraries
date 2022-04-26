@@ -52,9 +52,8 @@ void ParameterMap::assert_parameter_valid(const std::shared_ptr<ParameterInterfa
   }
 }
 
-void
-ParameterMap::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
-  this->parameters_[parameter->get_name()] = parameter;
+void ParameterMap::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
+  this->parameters_.insert_or_assign(parameter->get_name(), parameter);
 }
 
 }

@@ -267,8 +267,8 @@ void CartesianState::set_wrench(const std::vector<double>& wrench) {
   if (wrench.size() != 6) {
     throw exceptions::IncompatibleSizeException("The input vector is not of size 6 required for wrench");
   }
-  this->set_linear_acceleration(std::vector<double>(wrench.begin(), wrench.begin() + 3));
-  this->set_angular_acceleration(std::vector<double>(wrench.begin() + 3, wrench.end()));
+  this->set_force(std::vector<double>(wrench.begin(), wrench.begin() + 3));
+  this->set_torque(std::vector<double>(wrench.begin() + 3, wrench.end()));
 }
 
 CartesianState& CartesianState::operator*=(double lambda) {

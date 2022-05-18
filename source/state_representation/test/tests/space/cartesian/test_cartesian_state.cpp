@@ -104,6 +104,8 @@ TEST(CartesianStateTest, CopyConstructor) {
 
 TEST(CartesianStateTest, GetSetFields) {
   CartesianState cs("test");
+  static Eigen::Vector3d data;
+  static std::vector<double> std_data(3);
 
   // name
   cs.set_name("robot");
@@ -113,10 +115,10 @@ TEST(CartesianStateTest, GetSetFields) {
   EXPECT_EQ(cs.get_reference_frame(), "base");
 
   // position
-  std::vector<double> position{1, 2, 3};
-  cs.set_position(position);
-  for (std::size_t i = 0; i < position.size(); ++i) {
-    EXPECT_FLOAT_EQ(cs.get_position()(i), position.at(i));
+  std_data = {1, 2, 3};
+  cs.set_position(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_position()(i), std_data.at(i));
   }
   cs.set_position(1.1, 2.2, 3.3);
   EXPECT_TRUE(Eigen::Vector3d(1.1, 2.2, 3.3).isApprox(cs.get_position()));
@@ -133,7 +135,7 @@ TEST(CartesianStateTest, GetSetFields) {
       orientation{random_orientation.w(), random_orientation.x(), random_orientation.y(), random_orientation.z()};
   cs.set_orientation(orientation);
   EXPECT_TRUE(random_orientation.coeffs().isApprox(cs.get_orientation().coeffs()));
-  EXPECT_THROW(cs.set_orientation(position), exceptions::IncompatibleSizeException);
+  EXPECT_THROW(cs.set_orientation(std_data), exceptions::IncompatibleSizeException);
 
   auto matrix = cs.get_transformation_matrix();
   Eigen::Vector3d trans = matrix.topRightCorner<3, 1>();
@@ -146,38 +148,116 @@ TEST(CartesianStateTest, GetSetFields) {
   // pose
   EXPECT_THROW(cs.set_pose(std::vector<double>(8)), exceptions::IncompatibleSizeException);
 
+  // linear velocity
+  data = Eigen::Vector3d::Random();
+  cs.set_linear_velocity(data);
+  EXPECT_TRUE(cs.get_linear_velocity().isApprox(data));
+  std_data = {2, 3, 4};
+  cs.set_linear_velocity(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_linear_velocity()(i), std_data.at(i));
+  }
+  cs.set_linear_velocity(2.1, 3.2, 4.3);
+  EXPECT_TRUE(Eigen::Vector3d(2.1, 3.2, 4.3).isApprox(cs.get_linear_velocity()));
+  EXPECT_THROW(cs.set_linear_velocity(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
+  // angular velocity
+  data = Eigen::Vector3d::Random();
+  cs.set_angular_velocity(data);
+  EXPECT_TRUE(cs.get_angular_velocity().isApprox(data));
+  std_data = {3, 4, 5};
+  cs.set_angular_velocity(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_angular_velocity()(i), std_data.at(i));
+  }
+  cs.set_angular_velocity(3.1, 4.2, 5.3);
+  EXPECT_TRUE(Eigen::Vector3d(3.1, 4.2, 5.3).isApprox(cs.get_angular_velocity()));
+  EXPECT_THROW(cs.set_angular_velocity(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
   // twist
-  Eigen::Vector3d linear_velocity = Eigen::Vector3d::Random();
-  cs.set_linear_velocity(linear_velocity);
-  EXPECT_TRUE(cs.get_linear_velocity().isApprox(linear_velocity));
-  Eigen::Vector3d angular_velocity = Eigen::Vector3d::Random();
-  cs.set_angular_velocity(angular_velocity);
-  EXPECT_TRUE(cs.get_angular_velocity().isApprox(angular_velocity));
-  Eigen::VectorXd twist = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd twist_eigen = Eigen::VectorXd::Random(6);
+  cs.set_twist(twist_eigen);
+  EXPECT_TRUE(cs.get_twist().isApprox(twist_eigen));
+  std::vector<double> twist{4, 5, 6, 7, 8, 9};
   cs.set_twist(twist);
-  EXPECT_TRUE(cs.get_twist().isApprox(twist));
+  for (std::size_t i = 0; i < twist.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_twist()(i), twist.at(i));
+  }
+  EXPECT_THROW(cs.set_twist(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
+  // linear acceleration
+  data = Eigen::Vector3d::Random();
+  cs.set_linear_acceleration(data);
+  EXPECT_TRUE(cs.get_linear_acceleration().isApprox(data));
+  std_data = {5, 6, 7};
+  cs.set_linear_acceleration(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_linear_acceleration()(i), std_data.at(i));
+  }
+  cs.set_linear_acceleration(5.1, 6.2, 7.3);
+  EXPECT_TRUE(Eigen::Vector3d(5.1, 6.2, 7.3).isApprox(cs.get_linear_acceleration()));
+  EXPECT_THROW(cs.set_linear_acceleration(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
+  // angular acceleration
+  data = Eigen::Vector3d::Random();
+  cs.set_angular_acceleration(data);
+  EXPECT_TRUE(cs.get_angular_acceleration().isApprox(data));
+  std_data = {6, 7, 8};
+  cs.set_angular_acceleration(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_angular_acceleration()(i), std_data.at(i));
+  }
+  cs.set_angular_acceleration(6.1, 7.2, 8.3);
+  EXPECT_TRUE(Eigen::Vector3d(6.1, 7.2, 8.3).isApprox(cs.get_angular_acceleration()));
+  EXPECT_THROW(cs.set_angular_acceleration(std::vector<double>(4)), exceptions::IncompatibleSizeException);
 
   // acceleration
-  Eigen::Vector3d linear_acceleration = Eigen::Vector3d::Random();
-  cs.set_linear_acceleration(linear_acceleration);
-  EXPECT_TRUE(cs.get_linear_acceleration().isApprox(linear_acceleration));
-  Eigen::Vector3d angular_acceleration = Eigen::Vector3d::Random();
-  cs.set_angular_acceleration(angular_acceleration);
-  EXPECT_TRUE(cs.get_angular_acceleration().isApprox(angular_acceleration));
-  Eigen::VectorXd accerlerations = Eigen::VectorXd::Random(6);
-  cs.set_acceleration(accerlerations);
-  EXPECT_TRUE(cs.get_acceleration().isApprox(accerlerations));
+  Eigen::VectorXd acceleration_eigen = Eigen::VectorXd::Random(6);
+  cs.set_acceleration(acceleration_eigen);
+  EXPECT_TRUE(cs.get_acceleration().isApprox(acceleration_eigen));
+  std::vector<double> acceleration{7, 8, 9, 10, 11, 12};
+  cs.set_acceleration(acceleration);
+  for (std::size_t i = 0; i < acceleration.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_acceleration()(i), acceleration.at(i));
+  }
+  EXPECT_THROW(cs.set_acceleration(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
+  // force
+  data = Eigen::Vector3d::Random();
+  cs.set_force(data);
+  EXPECT_TRUE(cs.get_force().isApprox(data));
+  std_data = {8, 9, 10};
+  cs.set_force(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_force()(i), std_data.at(i));
+  }
+  cs.set_force(8.1, 9.2, 10.3);
+  EXPECT_TRUE(Eigen::Vector3d(8.1, 9.2, 10.3).isApprox(cs.get_force()));
+  EXPECT_THROW(cs.set_force(std::vector<double>(4)), exceptions::IncompatibleSizeException);
+
+  // torque
+  data = Eigen::Vector3d::Random();
+  cs.set_torque(data);
+  EXPECT_TRUE(cs.get_torque().isApprox(data));
+  std_data = {9, 10, 11};
+  cs.set_torque(std_data);
+  for (std::size_t i = 0; i < std_data.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_torque()(i), std_data.at(i));
+  }
+  cs.set_torque(9.1, 10.2, 11.3);
+  EXPECT_TRUE(Eigen::Vector3d(9.1, 10.2, 11.3).isApprox(cs.get_torque()));
+  EXPECT_THROW(cs.set_torque(std::vector<double>(4)), exceptions::IncompatibleSizeException);
 
   // wrench
-  Eigen::Vector3d force = Eigen::Vector3d::Random();
-  cs.set_force(force);
-  EXPECT_TRUE(cs.get_force().isApprox(force));
-  Eigen::Vector3d torque = Eigen::Vector3d::Random();
-  cs.set_torque(torque);
-  EXPECT_TRUE(cs.get_torque().isApprox(torque));
-  Eigen::VectorXd wrench = Eigen::VectorXd::Random(6);
+  Eigen::VectorXd wrench_eigen = Eigen::VectorXd::Random(6);
+  cs.set_wrench(wrench_eigen);
+  EXPECT_TRUE(cs.get_wrench().isApprox(wrench_eigen));
+  std::vector<double> wrench{10, 11, 12, 13, 14, 15};
   cs.set_wrench(wrench);
-  EXPECT_TRUE(cs.get_wrench().isApprox(wrench));
+  for (std::size_t i = 0; i < wrench.size(); ++i) {
+    EXPECT_FLOAT_EQ(cs.get_wrench()(i), wrench.at(i));
+  }
+  EXPECT_THROW(cs.set_wrench(std::vector<double>(4)), exceptions::IncompatibleSizeException);
 
   cs.set_zero();
   EXPECT_FLOAT_EQ(cs.data().norm(), 1);

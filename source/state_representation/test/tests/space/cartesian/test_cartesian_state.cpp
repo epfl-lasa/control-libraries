@@ -135,6 +135,9 @@ TEST(CartesianStateTest, GetSetFields) {
       orientation{random_orientation.w(), random_orientation.x(), random_orientation.y(), random_orientation.z()};
   cs.set_orientation(orientation);
   EXPECT_TRUE(random_orientation.coeffs().isApprox(cs.get_orientation().coeffs()));
+  random_orientation = Eigen::Quaterniond::UnitRandom();
+  cs.set_orientation(random_orientation.w(), random_orientation.x(), random_orientation.y(), random_orientation.z());
+  EXPECT_TRUE(random_orientation.coeffs().isApprox(cs.get_orientation().coeffs()));
   EXPECT_THROW(cs.set_orientation(std_data), exceptions::IncompatibleSizeException);
 
   auto matrix = cs.get_transformation_matrix();

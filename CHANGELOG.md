@@ -20,6 +20,7 @@ Release Versions:
 - Add encode/decode options for shared pointer of State (#287)
 - Mark Parameter getters as const (#289)
 - Throw exception upon parameter validation in controllers (#290)
+- Add CartesianState attribute setters from std vector and coefficients (291)
 
 ## 5.2.0
 

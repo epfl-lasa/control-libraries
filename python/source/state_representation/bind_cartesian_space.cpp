@@ -100,20 +100,35 @@ void cartesian_state(py::module_& m) {
                                   "Supported types are: pyquaternion.Quaternion, numpy.array, list");
     }
   }, "Setter of the orientation attribute from a pyquaternion.Quaternion, numpy.array(w, x, y, z), or list(w, x, y, z)");
-  c.def("set_pose", py::overload_cast<const Eigen::Matrix<double, 7, 1>&>(&CartesianState::set_pose), "Setter of the pose from a 7d vector of position and orientation coefficients (x, y, z, qw, qx, qy, qz");
-  c.def("set_pose", py::overload_cast<const std::vector<double>&>(&CartesianState::set_pose), "Setter of the pose from a 7d list of position and orientation coefficients (x, y, z, qw, qx, qy, qz");
+  c.def("set_pose", py::overload_cast<const Eigen::Matrix<double, 7, 1>&>(&CartesianState::set_pose), "Setter of the pose from a 7d vector of position and orientation coefficients (x, y, z, qw, qx, qy, qz)");
+  c.def("set_pose", py::overload_cast<const std::vector<double>&>(&CartesianState::set_pose), "Setter of the pose from a 7d list of position and orientation coefficients (x, y, z, qw, qx, qy, qz)");
 
-  c.def("set_linear_velocity", &CartesianState::set_linear_velocity, "Setter of the linear velocity attribute");
-  c.def("set_angular_velocity", &CartesianState::set_angular_velocity, "Setter of the angular velocity attribute");
-  c.def("set_twist", &CartesianState::set_twist, "Setter of the linear and angular velocities from a 6d twist vector");
+  c.def("set_linear_velocity", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity attribute");
+  c.def("set_linear_velocity", py::overload_cast<const std::vector<double>&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity from a list");
+  c.def("set_linear_velocity", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_angular_velocity", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity attribute");
+  c.def("set_angular_velocity", py::overload_cast<const std::vector<double>&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity from a list");
+  c.def("set_angular_velocity", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_twist", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_twist), "Setter of the linear and angular velocities from a 6d twist vector");
+  c.def("set_twist", py::overload_cast<const std::vector<double>&>(&CartesianState::set_twist), "Setter of the linear and angular velocities from a list");
 
-  c.def("set_linear_acceleration", &CartesianState::set_linear_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the angular acceleration attribute");
-  c.def("set_acceleration", &CartesianState::set_acceleration, "Setter of the linear and angular acceleration from a 6d acceleration vector");
+  c.def("set_linear_acceleration", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration attribute");
+  c.def("set_linear_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration from a list");
+  c.def("set_linear_acceleration", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_angular_acceleration", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration attribute");
+  c.def("set_angular_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration from a list");
+  c.def("set_angular_acceleration", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_acceleration", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_acceleration), "Setter of the linear and angular accelerations from a 6d acceleration vector");
+  c.def("set_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_acceleration), "Setter of the linear and angular accelerations from a list");
 
-  c.def("set_force", &CartesianState::set_force, "Setter of the force attribute");
-  c.def("set_torque", &CartesianState::set_torque, "Setter of the torque attribute");
-  c.def("set_wrench", &CartesianState::set_wrench, "Setter of the force and torque from a 6d wrench vector");
+  c.def("set_force", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_force), "Setter of the force attribute");
+  c.def("set_force", py::overload_cast<const std::vector<double>&>(&CartesianState::set_force), "Setter of the force from a list");
+  c.def("set_force", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_force), "Setter of the force from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_torque", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_torque), "Setter of the torque attribute");
+  c.def("set_torque", py::overload_cast<const std::vector<double>&>(&CartesianState::set_torque), "Setter of the torque from a list");
+  c.def("set_torque", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_torque), "Setter of the torque from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_wrench", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_wrench), "Setter of the force and torque from a 6d wrench vector");
+  c.def("set_wrench", py::overload_cast<const std::vector<double>&>(&CartesianState::set_wrench), "Setter of the force and torque velocities from a list");
 
   c.def("set_zero", &CartesianState::set_zero, "Set the CartesianState to a zero value");
   c.def("clamp_state_variable", &CartesianState::clamp_state_variable, "Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force)", "max_value"_a, "state_variable_type"_a, "noise_ratio"_a=double(0));

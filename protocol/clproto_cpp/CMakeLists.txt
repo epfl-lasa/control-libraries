@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(clproto VERSION 5.2.7)
+project(clproto VERSION 5.2.8)
 
 set(CMAKE_CXX_STANDARD 17)
 

@@ -19,7 +19,8 @@ endif()
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-find_package(Protobuf REQUIRED)
+include(FindProtobuf)
+find_package(Protobuf 3.17 REQUIRED)
 find_package(control_libraries ${PROJECT_VERSION} REQUIRED COMPONENTS state_representation)
 
 if(BUILD_TESTING)

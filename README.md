@@ -12,7 +12,7 @@
         </td>
     </tr>
     <tr>
-        <td width="25%"><a href="https://github.com/epfl-lasa/control-libraries/tree/develop">Development</a></td>
+        <td width="25%"><a href="https://github.com/epfl-lasa/control-libraries/tree/develop">Develop</a></td>
         <td width="75%"><img src="https://github.com/epfl-lasa/control-libraries/actions/workflows/build-test.yml/badge.svg?branch=develop"></td>
     </tr>
 </table>
@@ -21,18 +21,24 @@
 A set of libraries to facilitate the creation of full control loop algorithms,
 including trajectory planning, kinematics, dynamics and control.
 
-Documentation is available at <a href="https://epfl-lasa.github.io/control-libraries/versions/main/">epfl-lasa.github.io/control-libraries</a>
+Documentation is available at <a href="https://epfl-lasa.github.io/control-libraries/versions/">epfl-lasa.github.io/control-libraries</a>.
 
 ## Core libraries
 
-For the implementation, installation and documentation of the core libraries, see the
-<a href="https://github.com/epfl-lasa/control-libraries/tree/main/source">source</a> folder.
+For the implementation, installation and documentation of the core libraries, see the [source](./source) folder.
+
+## Protocol
+
+There is a module that defines the protocol for sending and receiving messages containing control libraries
+data across any network, based on the Google Protocol Buffer. For its implementation, installation and
+documentation, see the [protocol](./protocol) folder.
 
 ## Python bindings
 
-There exist Python bindings for core control library modules. See the <a href="https://github.com/epfl-lasa/control-libraries/tree/main/python">python</a>
-folder for installation instructions and currently supported libraries.
+There exist Python bindings for the control library modules and the protocol module. See the [python](./python)</a>
+folder for installation instructions.
 
 ## Demos
 
-For examples and demos in plain C++, ROS, and ROS2, refer to the <a href="https://github.com/epfl-lasa/control-libraries/tree/main/demos">demos</a> folder.
+For examples and demos in C++ and Python, refer to the [demos](./demos) folder.
+TODO link ros demos repo

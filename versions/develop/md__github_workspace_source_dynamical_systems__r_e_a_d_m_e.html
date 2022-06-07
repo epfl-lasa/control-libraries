@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.10</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.11</span>
    </div>
   </td>
  </tr>
@@ -66,14 +66,22 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p >This library provides a set of classes to represent <b>Dynamical Systems</b>: functions which map a state to a state derivative.</p>
+<p >All controllers have a common interface inheriting from the <code>IDynamicalSystem&lt;S&gt;</code> class, which is templated to operate in a particular space <code>S</code>, namely Cartesian or joint space.</p>
 <h1>Table of contents:</h1>
 <ul>
-<li><a href="#base-dynamicalsystem">Base DynamicalSystem</a><ul>
+<li><a href="#constructing-a-dynamical-system">Constructing a dynamical system</a></li>
+<li><a href="#using-a-dynamical-system">Using a dynamical system</a><ul>
+<li><a href="#parameters">Parameters</a></li>
+<li><a href="#evaluate">Evaluate</a></li>
+</ul>
+</li>
+<li><a href="#developing-a-new-dynamical-system">Developing a new dynamical system</a></li>
+<li><a href="#about">About</a><ul>
 <li><a href="#base-frame">Base frame</a></li>
 <li><a href="#reference-frames">Reference frames</a></li>
 </ul>
 </li>
-<li><a href="#point-attractor">Linear</a><ul>
+<li><a href="#point-attractor">Point attractor</a><ul>
 <li><a href="#configuring-the-point-attractor-ds">Configuring the Linear DS</a></li>
 <li><a href="#evaluating-the-point-attractor-ds">Evaluating the Linear DS</a></li>
 </ul>
@@ -87,23 +95,145 @@ $(function() {
 </ul>
 </li>
 </ul>
-<h1>Base DynamicalSystem</h1>
-<p >The base class IDynamicalSystem defines the main public interface pattern which the derived classes follow.</p>
-<p >It is templated for any state type, though the intention is to use the <b>State Representation</b> library (for example, <code>CartesianState</code> or <code>JointState</code>).</p>
-<p >The main function is: </p><div class="fragment"><div class="line"> {c++}</div>
-<div class="line">template&lt;class S&gt;</div>
-<div class="line">S IDynamicalSystem&lt;S&gt;::evaluate(const S&amp; state) const</div>
-</div><!-- fragment --><p> where <code>S</code> is the state representation type. The purpose of the evaluate function is to calculate a state derivative from a state. The current implementations support calculating a velocity from a position in either joint space or Cartesian space, though higher derivatives and other space types can be extended in a similar fashion.</p>
-<p >In the case of a <code>CartesianState</code>, only the position and orientation is evaluated, and the returned object updates only the linear and angular velocity properties. In the case of <code>JointState</code>, only the joint position is evaluated, and the returned object contains only the joint velocity.</p>
+<h1>Constructing a dynamical system</h1>
+<p >The <code>DynamicalSystemFactory&lt;S&gt;</code> provides construction helpers for dynamical systems using a factory pattern. Specific dynamical systems are created and injected into a common <code>shared_ptr&lt;IDynamicalSystem&lt;S&gt;&gt;</code>.</p>
+<p >The <code>CartesianDynamicalSystemFactory</code> and <code>JointDynamicalSystemFactory</code> are shortcuts for the Cartesian and joint space dynamical system factories.</p>
+<p >The factory provides a static function <code>create_dynamical_system</code>, which can take a number of inputs. The first input argument is always the controller type (defined in <code><a class="el" href="_dynamical_system_type_8hpp_source.html">dynamical_systems/DynamicalSystemType.hpp</a></code>).</p>
+<div class="fragment"><div class="line"> {c++}</div>
+<div class="line">#include &quot;dynamical_systems/DynamicalSystemFactory.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace dynamical_systems;</div>
+<div class="line">using namespace state_representation;</div>
+<div class="line"> </div>
+<div class="line">// create a Cartesian dynamical system</div>
+<div class="line">std::shared_ptr&lt;IDynamicalSystem&lt;CartesianState&gt;&gt; cart_ds;</div>
+<div class="line">cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
+<div class="line"> </div>
+<div class="line">// create a Cartesian dynamical system using &quot;auto&quot; to avoid verbose typing</div>
+<div class="line">auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
+</div><!-- fragment --><p >Initial dynamical system parameters can be passed to <code>create_dynamical_system</code> as a list. See the next section for more details on parameter configuration.</p>
+<div class="fragment"><div class="line"> {c++}</div>
+<div class="line">#include &quot;dynamical_systems/DynamicalSystemFactory.hpp&quot;</div>
+<div class="line">#include &quot;state_representation/parameters/Parameter.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace dynamical_systems;</div>
+<div class="line">using namespace state_representation;</div>
+<div class="line"> </div>
+<div class="line">std::list&lt;std::shared_ptr&lt;ParameterInterface&gt;&gt; parameters;</div>
+<div class="line">parameters.emplace_back(make_shared_parameter(&quot;attractor&quot;, CartesianPose::Random(&quot;target&quot;)));</div>
+<div class="line">parameters.emplace_back(make_shared_parameter(&quot;gain&quot;, 5.0));</div>
+<div class="line"> </div>
+<div class="line">auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR, parameters);</div>
+</div><!-- fragment --><h1>Using a dynamical system</h1>
+<p >The dynamical system factory returns a base class pointer <code>shared_ptr&lt;IDynamicalSystem&lt;S&gt;&gt;</code> for the chosen state type <code>S</code>, pointing to an instance of a specific derived dynamical system. This allows all dynamical systems to share the same consistent interface for usage and configuration.</p>
+<h2>Parameters</h2>
+<p >Dynamical systems support custom parametrization through the base interface using <code><a class="el" href="classstate__representation_1_1_parameter_map.html" title="A wrapper class to contain a map of Parameter pointers by name and provide robust access methods.">state_representation::ParameterMap</a></code> methods:</p>
+<ul>
+<li><code>get_parameters()</code></li>
+<li><code>get_parameter(name)</code></li>
+<li><code>get_parameter_value&lt;T&gt;(name)</code></li>
+<li><code>set_parameters(parameters)</code></li>
+<li><code>set_parameter(parameter)</code></li>
+<li><code>set_parameter_value(name, value)</code></li>
+</ul>
+<p >These methods can be used after construction to get or set dynamical system parameters. Refer to the documentation on <code><a class="el" href="classdynamical__systems_1_1_i_dynamical_system.html" title="Abstract class for a dynamical system.">dynamical_systems::IDynamicalSystem</a>&lt;S&gt;</code> and <code><a class="el" href="classstate__representation_1_1_parameter_map.html" title="A wrapper class to contain a map of Parameter pointers by name and provide robust access methods.">state_representation::ParameterMap</a></code> for more information.</p>
+<h2>Evaluate</h2>
+<p >The main purpose of each dynamical system is the <code>evaluate</code> function, which calculates the state derivative from the current state. For example, the point attractor dynamical system takes the difference between the current pose and the desired pose and multiplies it by a linear gain to compute the desired twist.</p>
+<div class="fragment"><div class="line"> {c++}</div>
+<div class="line">#include &quot;dynamical_systems/DynamicalSystemFactory.hpp&quot;</div>
+<div class="line">#include &quot;state_representation/space/cartesian/CartesianPose.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace dynamical_systems;</div>
+<div class="line"> </div>
+<div class="line">std::list&lt;std::shared_ptr&lt;ParameterInterface&gt;&gt; parameters;</div>
+<div class="line">parameters.emplace_back(make_shared_parameter(&quot;attractor&quot;, CartesianPose::Random(&quot;target&quot;)));</div>
+<div class="line">parameters.emplace_back(make_shared_parameter(&quot;gain&quot;, 5.0));</div>
+<div class="line"> </div>
+<div class="line">auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR, parameters);</div>
+<div class="line">auto current_state = CartesianPose::Random(&quot;state&quot;);</div>
+<div class="line"> </div>
+<div class="line">// compute the twist</div>
+<div class="line">auto desired_twist = cart_ds-&gt;evaluate(current_state);</div>
+</div><!-- fragment --><h1>Developing a new dynamical system</h1>
+<p >To implement a new dynamical system, you need to create a class that derives from the <code>IDynamicalSystem</code> base class or any derived dynamical system such as <code>PointAttractor</code>. This class can be templated to accept different input spaces (e.g. <code>CartesianState</code> or <code>JointState</code>) or specify the desired input state.</p>
+<p >The derived dynamical system should override <code>compute_dynamics</code> to produce some custom behaviour. in addition, if the dynamical system has any parameters, you should:</p><ul>
+<li>Add parameter pointers as class properties</li>
+<li>Initialize and declare parameters in the constructor</li>
+<li>Override the <code>is_compatible</code> method, if necessary</li>
+<li>Override the protected <code>validate_and_set_parameter</code> method</li>
+</ul>
+<div class="fragment"><div class="line"> {c++}</div>
+<div class="line">// MyCartesianDS.hpp</div>
+<div class="line">#include &quot;dynamical_systems/IDynamicalSystem.hpp&quot;</div>
+<div class="line">#include &quot;state_representation/space/cartesian/CartesianState.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">class MyCartesianDS : public dynamical_systems::IDynamicalSystem&lt;state_representation::CartesianState&gt; {</div>
+<div class="line">public:</div>
+<div class="line">  // initialize and declare parameters</div>
+<div class="line">  MyCartesianDS();</div>
+<div class="line"> </div>
+<div class="line">protected:</div>
+<div class="line">  // override this method to implement custom logic</div>
+<div class="line">  state_representation::CartesianState compute_dynamics(</div>
+<div class="line">      const state_representation::CartesianState&amp; state</div>
+<div class="line">  ) const override;</div>
+<div class="line">  </div>
+<div class="line">  // override this method to update dynamical system configurations when a parameter is modified</div>
+<div class="line">  void validate_and_set_parameter(const std::shared_ptr&lt;state_representation::ParameterInterface&gt;&amp; parameter) override;</div>
+<div class="line">  </div>
+<div class="line">  // add any additional parameters as class properties</div>
+<div class="line">  std::shared_ptr&lt;state_representation::Parameter&lt;int&gt;&gt; foo_;</div>
+<div class="line">  std::shared_ptr&lt;state_representation::Parameter&lt;double&gt;&gt; bar_;</div>
+<div class="line">};</div>
+</div><!-- fragment --><div class="fragment"><div class="line"> {c++}</div>
+<div class="line">// MyCartesianDS.cpp</div>
+<div class="line">#include &quot;MyCartesianDS.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">#include &quot;state_representation/exceptions/InvalidParameterException.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace state_representation;</div>
+<div class="line"> </div>
+<div class="line">namespace dynamical_systems {</div>
+<div class="line"> </div>
+<div class="line">// initialize parameters</div>
+<div class="line">MyCartesianDS::MyCartesianDS() :</div>
+<div class="line">    foo_(make_shared_parameter&lt;int&gt;(1)),</div>
+<div class="line">    bar_(make_shared_parameter&lt;double&gt;(2.0)) {</div>
+<div class="line">  // &quot;declare&quot; parameters by inserting them into the parameter list with an associated name</div>
+<div class="line">  this-&gt;parameters_.insert(std::make_pair(&quot;foo&quot;, foo_));</div>
+<div class="line">  this-&gt;parameters_.insert(std::make_pair(&quot;bar&quot;, bar_));</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">// implement the command logic</div>
+<div class="line">CartesianState MyCartesianDS::compute_dynamics(const CartesianState&amp; state) const {</div>
+<div class="line">    CartesianState twist = ...;</div>
+<div class="line">    return twist;</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">// implement parameter validation</div>
+<div class="line">void MyCartesianController::validate_and_set_parameter(</div>
+<div class="line">    const std::shared_ptr&lt;state_representation::ParameterInterface&gt;&amp; parameter</div>
+<div class="line">) {</div>
+<div class="line">  if (parameter-&gt;get_name() == &quot;foo&quot;) {</div>
+<div class="line">    auto value = std::static_pointer_cast&lt;state_representation::Parameter&lt;int&gt;&gt;(parameter);</div>
+<div class="line">    // if a parameter value is not supported by the dynamical system, throw an InvalidParameterException</div>
+<div class="line">    if (value &lt; 0 || value &gt; 10) {</div>
+<div class="line">      throw exceptions::InvalidParameterException(&quot;Parameter foo must be in range [0 - 10]&quot;);</div>
+<div class="line">    }</div>
+<div class="line">    this-&gt;foo_-&gt;set_value(value);</div>
+<div class="line">  } else if (parameter-&gt;get_name() == &quot;bar&quot;) {</div>
+<div class="line">    this-&gt;bar_-&gt;set_value(std::static_pointer_cast&lt;state_representation::Parameter&lt;double&gt;&gt;(parameter));</div>
+<div class="line">  }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">}</div>
+</div><!-- fragment --><h1>About</h1>
 <h2>Base frame</h2>
-<p >The <em>DynamicalSystem</em> base class has a private <code>base_frame</code> property, which can be thought of as the DS origin. The functions <code>get_base_frame()</code> and <code>set_base_frame(const S&amp; state)</code> can be used to access or modify this base frame.</p>
-<p >The <code>DynamicalSystem&lt;CartesianState&gt;</code> can be constructed with a <code>state</code> to set the base frame, or with string frame name. In the latter case the base frame is set as a null / identity frame with the specified name. For example, <code>DynamicalSystem&lt;CartesianState&gt;("base")</code> will create a dynamical system with the null base frame "base", expressed in its own frame "base".</p>
-<p >The <code>DynamicalSystem&lt;JointState&gt;</code> can only be constructed with a <code>state</code> to set the base frame. Whilst the term <em>base frame</em> makes more sense for a <code>CartesianState</code> DS, it rather refers to a specific robot with corresponding joint names in the case of a <code>JointState</code> DS.</p>
-<p >In most cases, the constructor for the base DynamicalSystem should not be used directly, and rather the derived DS classes should construct the base accordingly.</p>
-<p >However, the <code>set_base_frame()</code> method remains useful in combination with derived classes.</p>
+<p >The <code>IDynamicalSystem</code> base class has a private <code>base_frame</code> property, which can be thought of as the DS origin. The functions <code>get_base_frame()</code> and <code>set_base_frame(const S&amp; state)</code> can be used to access or modify this base frame.</p>
+<p >Whilst the term <em>base frame</em> makes more sense for a <code>CartesianState</code> DS, it rather refers to a specific robot with corresponding joint names in the case of a <code>JointState</code> DS.</p>
 <h2>Reference frames</h2>
 <p >The following section applies to derived DS classes using the <code>CartesianState</code> type. The <a href="#point-attractor">Point Attractor DS</a> will be used as an example.</p>
-<p >The <code>evaluate()</code> function will always return a twist expressed in the same reference frame as the input state, provided that the input state is compatible with the DS.</p>
+<p >The <code>evaluate</code> function will always return a twist expressed in the same reference frame as the input state, provided that the input state is compatible with the DS.</p>
 <p >The input state must be expressed in one of two supported reference frames:</p><ol type="1">
 <li>The reference frame of the input is the DS base frame</li>
 <li>The reference frame of the input matches the reference frame of the DS base frame</li>
@@ -111,9 +241,7 @@ $(function() {
 <p >The following snippet illustrates the difference in these two options. </p><div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// create a point attractor DS with attractor B in frame A</div>
 <div class="line">state_representation::CartesianState BinA = state_representation::CartesianState::Identity(&quot;B&quot;, &quot;A&quot;);</div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
-<div class="line">);</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
 <div class="line">ds-&gt;set_attractor_value(&quot;attractor&quot;, BinA);</div>
 <div class="line"> </div>
 <div class="line">ds-&gt;get_parameter_value(&quot;attractor&quot;).get_name();             // &quot;B&quot;</div>
@@ -160,9 +288,7 @@ $(function() {
 <div class="line">state_representation::CartesianState attractor = state_representation::CartesianState::Random(&quot;attractor&quot;, &quot;task&quot;);</div>
 <div class="line">state_representation::CartesianState taskInRobot(&quot;task&quot;, &quot;robot&quot;);</div>
 <div class="line"> </div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
-<div class="line">);</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
 <div class="line">ds-&gt;set_attractor_value(&quot;attractor&quot;, attractor);</div>
 <div class="line"> </div>
 <div class="line">// control loop</div>
@@ -189,9 +315,7 @@ $(function() {
 <p >The <b>Point Attractor</b> DS generates a velocity that is linearly proportional to the distance of the current state from the attractor. It is currently implemented for the <code>CartesianState</code> and <code>JointState</code> types.</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// construction with the DS factory</div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">    DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
-<div class="line">    );</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
 </div><!-- fragment --><h2>Configuring the Point Attractor DS</h2>
 <p >The Point Attractor DS has the following core parameters:</p><ul>
 <li><b>attractor</b>; the <code>CartesianState</code> or <code>JointState</code> type object defining the attractor pose relative to the DS base frame</li>
@@ -211,9 +335,7 @@ $(function() {
 </div><!-- fragment --><h2>Evaluating the Point Attractor DS</h2>
 <p >To get the velocity from a state, simply call the <code>evaluate()</code> function.</p>
 <div class="fragment"><div class="line"> {c++}</div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::POINT_ATTRACTOR</div>
-<div class="line">);</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);</div>
 <div class="line">state_representation::CartesianState csA = state_representation::CartesianState::Identity(&quot;A&quot;);</div>
 <div class="line">ds-&gt;set_parameter_value(&quot;attractor&quot;, csA);</div>
 <div class="line"> </div>
@@ -231,9 +353,7 @@ $(function() {
 <p >The internal representation of the limit cycle is a <code><a class="el" href="classstate__representation_1_1_ellipsoid.html">state_representation::Ellipsoid</a></code> type.</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// construction with the DS factory</div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::CIRCULAR</div>
-<div class="line">);</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::CIRCULAR);</div>
 </div><!-- fragment --><h2>Configuring the Circular DS</h2>
 <p >The Circular DS has the following core parameters:</p>
 <ul>
@@ -262,9 +382,7 @@ $(function() {
 <p >It only supports the <code>CartesianState</code> type, and always acts in a circular ring.</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// construction with the DS factory</div>
-<div class="line">auto ds = DynamicalSystemFactory&lt;CartesianState&gt;::create_dynamical_system(</div>
-<div class="line">DynamicalSystemFactory&lt;CartesianState&gt;::DYNAMICAL_SYSTEM::RING</div>
-<div class="line">);</div>
+<div class="line">auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::RING);</div>
 </div><!-- fragment --><h2>Configuring the Ring DS</h2>
 <p >The Ring DS has the following core parameters:</p>
 <ul>

@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.10</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.11</span>
    </div>
   </td>
  </tr>
@@ -77,6 +77,9 @@ $(function() {
 <div class="line">## install control-libraries (skip this stage if already done)</div>
 <div class="line">sudo control-libraries/source/install.sh</div>
 <div class="line"> </div>
+<div class="line">## install protocol (skip this stage if already done or not desired)</div>
+<div class="line">sudo control-libraries/protocol/install.sh</div>
+<div class="line"> </div>
 <div class="line">## install the bindings using the pip installer</div>
 <div class="line">pip3 install control-libraries/python</div>
 </div><!-- fragment --><p >If the installation fails, it may be because of non-default installation directories for some dependencies. In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install. </p><div class="fragment"><div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
@@ -93,19 +96,19 @@ $(function() {
 <div class="line">print(sr.__version__)</div>
 <div class="line">print(dynamical_systems.__version__)</div>
 <div class="line"> </div>
-<div class="line">A = sr.CartesianState.Random(<span class="stringliteral">&quot;A&quot;</span>)</div>
+<div class="line">A = sr.CartesianState().Random(<span class="stringliteral">&quot;A&quot;</span>)</div>
 <div class="line">print(A)</div>
 </div><!-- fragment --><p >Or, directly import specific classes from the module. </p><div class="fragment"><div class="line"><span class="comment">#!/usr/bin/env python</span></div>
 <div class="line"><span class="keyword">from</span> state_representation <span class="keyword">import</span> JointState</div>
-<div class="line"><span class="keyword">from</span> dynamical_systems <span class="keyword">import</span> create_cartesian_ds, DYNAMICAL_SYSTEM</div>
+<div class="line"><span class="keyword">from</span> dynamical_systems <span class="keyword">import</span> create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE</div>
 <div class="line"> </div>
-<div class="line">B = JointState.Random(<span class="stringliteral">&quot;B&quot;</span>, 3)</div>
-<div class="line">ds = create_cartesian_ds(DYNAMICAL_SYSTEM.POINT_ATTRACTOR)</div>
+<div class="line">B = JointState().Random(<span class="stringliteral">&quot;B&quot;</span>, 3)</div>
+<div class="line">ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)</div>
 </div><!-- fragment --><p >If the <code>clproto</code> C++ library is installed, the installation steps above will automatically install the <code>clproto</code> Python module which can be used to encode and decode objects into bytes of serialized data. </p><div class="fragment"><div class="line"><span class="comment">#!/usr/bin/env python</span></div>
 <div class="line"><span class="keyword">from</span> state_representation <span class="keyword">import</span> JointState</div>
 <div class="line"><span class="keyword">import</span> clproto</div>
 <div class="line"> </div>
-<div class="line">B = JointState.Random(<span class="stringliteral">&quot;B&quot;</span>, 3)</div>
+<div class="line">B = JointState().Random(<span class="stringliteral">&quot;B&quot;</span>, 3)</div>
 <div class="line">encoded_msg = <a class="code hl_function" href="namespaceclproto.html#abf7d863ec82b8eab41a5078446652628">clproto.encode</a>(B, clproto.MessageType.JOINT_STATE_MESSAGE)</div>
 <div class="line"> </div>
 <div class="line">decoded_object = <a class="code hl_function" href="namespaceclproto.html#a6e069b963d40b003f87e9a3d7822df18">clproto.decode</a>(encoded_msg)</div>

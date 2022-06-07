@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.10</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;5.2.11</span>
    </div>
   </td>
  </tr>
@@ -66,7 +66,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><code><a class="el" href="namespacestate__representation.html" title="Core state variables and objects.">state_representation</a></code></h1>
-<p >This library provides a set of classes to represent <b>states</b> in <b>Cartesian</b> or <b>joint</b> spaces. The classes define and combine variables such as position, velocity, acceleration and force into a consistent internal representation used across the other libraries.</p>
+<p >This library provides a set of classes to represent <b>states</b> in <b>Cartesian</b> or <b>joint</b> space. The classes define and combine variables such as position, velocity, acceleration and force into a consistent internal representation used across the other libraries.</p>
 <p >Source: <a href="./state_representation">state_representation</a></p>
 <p >Dependencies: <a href="https://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen3</a></p>
 <hr  />
@@ -144,20 +144,7 @@ $(function() {
 <p >If the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> library is used and <code>pinocchio</code> has been installed to a location that is not on the default include and link paths, that location must also be provided. The default installation of <code>pinocchio</code> is at <code>/opt/openrobots</code>. For this reason it is normal to add the following lines to the CMakeLists file:</p>
 <div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
 <div class="line">include_directories(/opt/openrobots/include)</div>
-</div><!-- fragment --><h1>Troubleshooting</h1>
-<p >This section lists common problems that might come up when using the <code>control-libraries</code> modules.</p>
-<h2>Boost container limit compile error in ROS</h2>
-<p >When using the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> module in ROS and trying to <code>catkin_make</code> the workspace, it might produce the following error: </p><div class="fragment"><div class="line">/opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>
-<div class="line">#23 2.389    29 |     # error &quot;BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE&quot;</div>
-</div><!-- fragment --><p> In order to avoid this error and successfully <code>catkin_make</code> the workspace, make sure that the <code>CMakeList.txt</code> of the ROS package contains all the necessary directives, i.e. on top of</p>
-<div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
-<div class="line">include_directories(/opt/openrobots/include)</div>
-<div class="line">find_package(control_libraries REQUIRED)</div>
-</div><!-- fragment --><p> it should also have </p><div class="fragment"><div class="line">find_package(Boost REQUIRED COMPONENTS system)</div>
-<div class="line">add_compile_definitions(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)</div>
-<div class="line">add_compile_definitions(BOOST_MPL_LIMIT_LIST_SIZE=30)</div>
-</div><!-- fragment --><p> For a comprehensive example, please check the <a href="../demos/ros_examples/CMakeLists.txt"><code>CMakeLists.txt</code> of the ROS demos</a>. </p>
-</div></div><!-- contents -->
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

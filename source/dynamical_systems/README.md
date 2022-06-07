@@ -3,11 +3,19 @@
 This library provides a set of classes to represent **Dynamical Systems**: 
 functions which map a state to a state derivative.
 
+All controllers have a common interface inheriting from the `IDynamicalSystem<S>` class, which is templated to operate
+in a particular space `S`, namely Cartesian or joint space.
+
 ## Table of contents:
-* [Base DynamicalSystem](#base-dynamicalsystem)
+* [Constructing a dynamical system](#constructing-a-dynamical-system)
+* [Using a dynamical system](#using-a-dynamical-system)
+  * [Parameters](#parameters)
+  * [Evaluate](#evaluate)
+* [Developing a new dynamical system](#developing-a-new-dynamical-system)
+* [About](#about)
   * [Base frame](#base-frame)
   * [Reference frames](#reference-frames)
-* [Linear](#point-attractor)
+* [Point attractor](#point-attractor)
   * [Configuring the Linear DS](#configuring-the-point-attractor-ds)
   * [Evaluating the Linear DS](#evaluating-the-point-attractor-ds)
 * [Circular](#circular)
@@ -15,53 +23,191 @@ functions which map a state to a state derivative.
 * [Ring](#ring)
   * [Configuring the Ring DS](#configuring-the-ring-ds)
 
-## Base DynamicalSystem
+## Constructing a dynamical system
 
-The base class IDynamicalSystem defines the main public interface pattern which the derived classes follow.
- 
-It is templated for any state type, though the intention is to use the **State Representation** library
-(for example, `CartesianState` or `JointState`).
+The `DynamicalSystemFactory<S>` provides construction helpers for dynamical systems using a factory pattern. Specific
+dynamical systems are created and injected into a common `shared_ptr<IDynamicalSystem<S>>`.
 
-The main function is:
+The `CartesianDynamicalSystemFactory` and `JointDynamicalSystemFactory` are shortcuts for the Cartesian and
+joint space dynamical system factories.
+
+The factory provides a static function `create_dynamical_system`, which can take a number of inputs. The first input
+argument is always the controller type (defined in `dynamical_systems/DynamicalSystemType.hpp`).
+
 ```c++
-template<class S>
-S IDynamicalSystem<S>::evaluate(const S& state) const
-```
-where `S` is the state representation type.
-The purpose of the evaluate function is to calculate a state derivative from a state.
-The current implementations support calculating a velocity from a position in either joint space or Cartesian space,
-though higher derivatives and other space types can be extended in a similar fashion.
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
 
-In the case of a `CartesianState`, only the position and orientation is evaluated, and the returned object
-updates only the linear and angular velocity properties.
-In the case of `JointState`, only the joint position is evaluated, and the returned object contains only the
-joint velocity.
+using namespace dynamical_systems;
+using namespace state_representation;
+
+// create a Cartesian dynamical system
+std::shared_ptr<IDynamicalSystem<CartesianState>> cart_ds;
+cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
+
+// create a Cartesian dynamical system using "auto" to avoid verbose typing
+auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
+```
+
+Initial dynamical system parameters can be passed to `create_dynamical_system` as a list. See the next section for more
+details on parameter configuration.
+
+```c++
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
+#include "state_representation/parameters/Parameter.hpp"
+
+using namespace dynamical_systems;
+using namespace state_representation;
+
+std::list<std::shared_ptr<ParameterInterface>> parameters;
+parameters.emplace_back(make_shared_parameter("attractor", CartesianPose::Random("target")));
+parameters.emplace_back(make_shared_parameter("gain", 5.0));
+
+auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR, parameters);
+```
+
+## Using a dynamical system
+
+The dynamical system factory returns a base class pointer `shared_ptr<IDynamicalSystem<S>>` for the chosen state type
+`S`, pointing to an instance of a specific derived dynamical system. This allows all dynamical systems to share the same
+consistent interface for usage and configuration.
+
+### Parameters
+
+Dynamical systems support custom parametrization through the base interface using `state_representation::ParameterMap`
+methods:
+
+- `get_parameters()`
+- `get_parameter(name)`
+- `get_parameter_value<T>(name)`
+- `set_parameters(parameters)`
+- `set_parameter(parameter)`
+- `set_parameter_value(name, value)`
+
+These methods can be used after construction to get or set dynamical system parameters. Refer to the documentation
+on `dynamical_systems::IDynamicalSystem<S>` and `state_representation::ParameterMap` for more
+information.
+
+### Evaluate
+
+The main purpose of each dynamical system is the `evaluate` function, which calculates the state derivative from the
+current state. For example, the point attractor dynamical system takes the difference between the current pose and
+the desired pose and multiplies it by a linear gain to compute the desired twist.
+
+```c++
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+
+using namespace dynamical_systems;
+
+std::list<std::shared_ptr<ParameterInterface>> parameters;
+parameters.emplace_back(make_shared_parameter("attractor", CartesianPose::Random("target")));
+parameters.emplace_back(make_shared_parameter("gain", 5.0));
+
+auto cart_ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR, parameters);
+auto current_state = CartesianPose::Random("state");
+
+// compute the twist
+auto desired_twist = cart_ds->evaluate(current_state);
+```
+
+## Developing a new dynamical system
+
+To implement a new dynamical system, you need to create a class that derives from the `IDynamicalSystem` base class or
+any derived dynamical system such as `PointAttractor`. This class can be templated to accept different input spaces
+(e.g. `CartesianState` or `JointState`) or specify the desired input state.
+
+The derived dynamical system should override `compute_dynamics` to produce some custom behaviour. in addition, if the dynamical
+system has any parameters, you should:
+- Add parameter pointers as class properties
+- Initialize and declare parameters in the constructor
+- Override the `is_compatible` method, if necessary
+- Override the protected `validate_and_set_parameter` method
+
+```c++
+// MyCartesianDS.hpp
+#include "dynamical_systems/IDynamicalSystem.hpp"
+#include "state_representation/space/cartesian/CartesianState.hpp"
+
+class MyCartesianDS : public dynamical_systems::IDynamicalSystem<state_representation::CartesianState> {
+public:
+  // initialize and declare parameters
+  MyCartesianDS();
+
+protected:
+  // override this method to implement custom logic
+  state_representation::CartesianState compute_dynamics(
+      const state_representation::CartesianState& state
+  ) const override;
+  
+  // override this method to update dynamical system configurations when a parameter is modified
+  void validate_and_set_parameter(const std::shared_ptr<state_representation::ParameterInterface>& parameter) override;
+  
+  // add any additional parameters as class properties
+  std::shared_ptr<state_representation::Parameter<int>> foo_;
+  std::shared_ptr<state_representation::Parameter<double>> bar_;
+};
+```
+
+```c++
+// MyCartesianDS.cpp
+#include "MyCartesianDS.hpp"
+
+#include "state_representation/exceptions/InvalidParameterException.hpp"
+
+using namespace state_representation;
+
+namespace dynamical_systems {
+
+// initialize parameters
+MyCartesianDS::MyCartesianDS() :
+    foo_(make_shared_parameter<int>(1)),
+    bar_(make_shared_parameter<double>(2.0)) {
+  // "declare" parameters by inserting them into the parameter list with an associated name
+  this->parameters_.insert(std::make_pair("foo", foo_));
+  this->parameters_.insert(std::make_pair("bar", bar_));
+}
+
+// implement the command logic
+CartesianState MyCartesianDS::compute_dynamics(const CartesianState& state) const {
+    CartesianState twist = ...;
+    return twist;
+}
+
+// implement parameter validation
+void MyCartesianController::validate_and_set_parameter(
+    const std::shared_ptr<state_representation::ParameterInterface>& parameter
+) {
+  if (parameter->get_name() == "foo") {
+    auto value = std::static_pointer_cast<state_representation::Parameter<int>>(parameter);
+    // if a parameter value is not supported by the dynamical system, throw an InvalidParameterException
+    if (value < 0 || value > 10) {
+      throw exceptions::InvalidParameterException("Parameter foo must be in range [0 - 10]");
+    }
+    this->foo_->set_value(value);
+  } else if (parameter->get_name() == "bar") {
+    this->bar_->set_value(std::static_pointer_cast<state_representation::Parameter<double>>(parameter));
+  }
+}
+
+}
+```
+
+## About
 
 ### Base frame
 
-The *DynamicalSystem* base class has a private `base_frame` property, which can be thought of as the DS origin. 
+The `IDynamicalSystem` base class has a private `base_frame` property, which can be thought of as the DS origin. 
 The functions `get_base_frame()` and `set_base_frame(const S& state)` can be used to access or modify this base frame.
 
-The `DynamicalSystem<CartesianState>` can be constructed with a `state` to set the base frame, or with string frame name. In 
-the latter case the base frame is set as a null / identity frame with the specified name.
-For example, `DynamicalSystem<CartesianState>("base")` will create a dynamical system with the null base frame "base",
-expressed in its own frame "base".
-
-The `DynamicalSystem<JointState>` can only be constructed with a `state` to set the base frame. Whilst the term 
-*base frame* makes more sense for a `CartesianState` DS, it rather refers to a specific robot with corresponding 
+Whilst the term *base frame* makes more sense for a `CartesianState` DS, it rather refers to a specific robot with corresponding 
 joint names in the case of a `JointState` DS.
-
-In most cases, the constructor for the base DynamicalSystem should not be used directly,
-and rather the derived DS classes should construct the base accordingly.
-
-However, the `set_base_frame()` method remains useful in combination with derived classes.
 
 ### Reference frames
 
 The following section applies to derived DS classes using the `CartesianState` type. The 
 [Point Attractor DS](#point-attractor) will be used as an example.
 
-The `evaluate()` function will always return a twist expressed in the same reference frame as the input state,
+The `evaluate` function will always return a twist expressed in the same reference frame as the input state,
 provided that the input state is compatible with the DS.
 
 The input state must be expressed in one of two supported reference frames:
@@ -72,9 +218,7 @@ The following snippet illustrates the difference in these two options.
 ```c++
 // create a point attractor DS with attractor B in frame A
 state_representation::CartesianState BinA = state_representation::CartesianState::Identity("B", "A");
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-);
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
 ds->set_attractor_value("attractor", BinA);
 
 ds->get_parameter_value("attractor").get_name();             // "B"
@@ -134,9 +278,7 @@ state_representation::CartesianState EE("end_effector", "robot");
 state_representation::CartesianState attractor = state_representation::CartesianState::Random("attractor", "task");
 state_representation::CartesianState taskInRobot("task", "robot");
 
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-);
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
 ds->set_attractor_value("attractor", attractor);
 
 // control loop
@@ -168,9 +310,7 @@ from the attractor. It is currently implemented for the `CartesianState` and `Jo
 
 ```c++
 // construction with the DS factory
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-    DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-    );
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
 ```
 
 ### Configuring the Point Attractor DS
@@ -203,9 +343,7 @@ ds->set_parameter_value("attractor", csB);
 To get the velocity from a state, simply call the `evaluate()` function.
 
 ```c++
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-);
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
 state_representation::CartesianState csA = state_representation::CartesianState::Identity("A");
 ds->set_parameter_value("attractor", csA);
 
@@ -237,9 +375,7 @@ The internal representation of the limit cycle is a `state_representation::Ellip
 
 ```c++
 // construction with the DS factory
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::CIRCULAR
-);
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::CIRCULAR);
 ```
 
 ### Configuring the Circular DS
@@ -281,9 +417,7 @@ It only supports the `CartesianState` type, and always acts in a circular ring.
 
 ```c++
 // construction with the DS factory
-auto ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::RING
-);
+auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::RING);
 ```
 
 ### Configuring the Ring DS

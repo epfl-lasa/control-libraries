@@ -3,7 +3,14 @@
 This library introduces a set of controllers to be used in robotic control-loop schemes. 
 
 All controllers have a common interface inheriting from the `IController<S>` class, which is templated to 
-operate in a particular space `S`, namely joint space or Cartesian space.
+operate in a particular space `S`, namely Cartesian or joint space.
+
+## Table of contents
+* [Constructing a controller](#constructing-a-controller)
+* [Using a controller](#using-a-controller)
+  * [Parameters](#parameters)
+  * [Compute command](#compute-command)
+* [Developing a new controller](#developing-a-new-controller)
 
 ## Constructing a controller
 
@@ -201,7 +208,7 @@ protected:
 // MyCartesianController.cpp
 #include "MyCartesianController.hpp"
 
-#include "controllers/exceptions/InvalidParameterException.hpp"
+#include "state_representation/exceptions/InvalidParameterException.hpp"
 
 using namespace state_representation;
 

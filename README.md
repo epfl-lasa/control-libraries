@@ -42,3 +42,9 @@ folder for installation instructions.
 
 For examples and demos in C++ and Python, refer to the [demos](./demos) folder.
 TODO link ros demos repo
+
+## External resources
+
+- C++ remote development in CLion [here](https://github.com/eeberhard/docker-clion-cpp-env)
+- ROS and ROS2 demos using control libraries [here](https://github.com/domire8/control-libraries-ros-demos)
+- ROS and ROS2 control libraries images [here](https://github.com/aica-technology/docker-images)

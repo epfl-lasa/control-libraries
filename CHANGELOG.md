@@ -23,6 +23,7 @@ Release Versions:
 - Add CartesianState attribute setters from std vector and coefficients (#291)
 - Add CMake config for clproto (#292)
 - Update and extend demos with Python examples and migrate ROS demos away (#293)
+- Update documentation (#294)
 
 ## 5.2.0
 

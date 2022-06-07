@@ -22,6 +22,7 @@ Release Versions:
 - Throw exception upon parameter validation in controllers (#290)
 - Add CartesianState attribute setters from std vector and coefficients (#291)
 - Add CMake config for clproto (#292)
+- Update and extend demos with Python examples and migrate ROS demos away (#293)
 
 ## 5.2.0
 

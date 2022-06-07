@@ -1,12 +1,16 @@
-FROM epfl-lasa/control-libraries/source:install
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies
 
-WORKDIR /tmp/
-COPY . ./control_loop_examples
+WORKDIR /tmp
+ARG CONTROL_LIBRARIES_BRANCH=develop
+RUN git clone -b ${CONTROL_LIBRARIES_BRANCH} --depth 1 https://github.com/epfl-lasa/control-libraries.git
+RUN cd control-libraries/source && ./install.sh --auto
+RUN cd control-libraries/protocol && ./install.sh --auto
+RUN pip3 install control-libraries/python
 
-WORKDIR /tmp/control_loop_examples/build
-RUN cmake .. && make -j all && make install
-
-WORKDIR /usr/local/bin
-RUN rm -rf /tmp/demos/
+RUN rm -rf /tmp/*
 
 USER developer
+WORKDIR ${HOME}/control_loop_examples
+COPY ./ ./
+
+RUN mkdir build && cd build && cmake .. && sudo make -j all && sudo make install

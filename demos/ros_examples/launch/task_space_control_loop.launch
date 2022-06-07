@@ -1,4 +1,0 @@
-<launch>
-    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find ros_examples)/rviz/config_file.rviz"/>
-    <node type="task_space_control_loop" name="task_space_control_loop" pkg="ros_examples"/>
-</launch>

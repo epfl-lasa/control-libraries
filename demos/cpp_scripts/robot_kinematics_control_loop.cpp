@@ -1,16 +1,16 @@
 #include <chrono>
 #include <thread>
 #include <utility>
+#include "dynamical_systems/DynamicalSystemFactory.hpp"
+#include <robot_model/Model.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
 #include <state_representation/space/joint/JointPositions.hpp>
 #include <state_representation/space/joint/JointVelocities.hpp>
-#include "dynamical_systems/DynamicalSystemFactory.hpp"
-#include <robot_model/Model.hpp>
 
-using namespace state_representation;
 using namespace dynamical_systems;
 using namespace robot_model;
+using namespace state_representation;
 using namespace std::chrono_literals;
 
 namespace {
@@ -67,10 +67,7 @@ void control_loop(DummyRobotInterface& robot, const std::chrono::nanoseconds& dt
   target.set_position(.5, .0, .75);
   Eigen::Quaterniond orientation(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitY()));
   target.set_orientation(orientation);
-  std::shared_ptr<IDynamicalSystem<CartesianState>>
-      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
+  auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
   ds->set_parameter(make_shared_parameter("attractor", target));
 
   double distance;

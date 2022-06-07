@@ -1,11 +1,11 @@
 #include <chrono>
 #include <thread>
+#include <dynamical_systems/DynamicalSystemFactory.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 #include <state_representation/space/cartesian/CartesianTwist.hpp>
-#include "dynamical_systems/DynamicalSystemFactory.hpp"
 
-using namespace state_representation;
 using namespace dynamical_systems;
+using namespace state_representation;
 using namespace std::chrono_literals;
 
 CartesianPose control_loop_step(
@@ -25,10 +25,7 @@ CartesianPose control_loop_step(
 void control_loop(const std::chrono::nanoseconds& dt, double tolerance) {
   // set a desired target and a point attractor ds toward the target
   CartesianPose target = CartesianPose::Random("frame");
-  std::shared_ptr<IDynamicalSystem<CartesianState>>
-      ds = DynamicalSystemFactory<CartesianState>::create_dynamical_system(
-      DynamicalSystemFactory<CartesianState>::DYNAMICAL_SYSTEM::POINT_ATTRACTOR
-  );
+  auto ds = CartesianDynamicalSystemFactory::create_dynamical_system(DYNAMICAL_SYSTEM_TYPE::POINT_ATTRACTOR);
   ds->set_parameter(make_shared_parameter("attractor", target));
   // set a starting pose
   CartesianPose current_pose = CartesianPose::Random("frame");

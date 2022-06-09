@@ -14,7 +14,7 @@ PYBIND11_MODULE(dynamical_systems, m) {
 
   py::module_::import("state_representation");
 
-  bind_type(m);
-  bind_cartesian(m);
-  bind_joint(m);
+  bind_ds_type(m);
+  bind_cartesian_ds(m);
+  bind_joint_ds(m);
 }

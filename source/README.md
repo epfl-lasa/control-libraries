@@ -2,7 +2,7 @@
 
 ## `state_representation`
 
-This library provides a set of classes to represent **states** in **Cartesian** or **joint** spaces.
+This library provides a set of classes to represent **states** in **Cartesian** or **joint** space.
 The classes define and combine variables such as position, velocity, acceleration and force into
 a consistent internal representation used across the other libraries.
 
@@ -188,29 +188,3 @@ lines to the CMakeLists file:
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 include_directories(/opt/openrobots/include)
 ```
-
-## Troubleshooting
-
-This section lists common problems that might come up when using the `control-libraries` modules.
-
-### Boost container limit compile error in ROS
-When using the `robot_model` module in ROS and trying to `catkin_make` the workspace, it might produce the following error:
-```bash
-/opt/openrobots/include/pinocchio/container/boost-container-limits.hpp:29:7: error: #error "BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE"
-#23 2.389    29 |     # error "BOOST_MPL_LIMIT_LIST_SIZE value is lower than the value of PINOCCHIO_BOOST_MPL_LIMIT_CONTAINER_SIZE"
-```
-In order to avoid this error and successfully `catkin_make` the workspace, make sure that the `CMakeList.txt` of the ROS
-package contains all the necessary directives, i.e. on top of
-
-```cmake
-list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
-include_directories(/opt/openrobots/include)
-find_package(control_libraries REQUIRED)
-```
-it should also have
-```bash
-find_package(Boost REQUIRED COMPONENTS system)
-add_compile_definitions(BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS)
-add_compile_definitions(BOOST_MPL_LIMIT_LIST_SIZE=30)
-```
-For a comprehensive example, please check the [`CMakeLists.txt` of the ROS demos](../demos/ros_examples/CMakeLists.txt).

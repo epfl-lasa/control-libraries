@@ -4,12 +4,19 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
+CartesianTwist::CartesianTwist() {
+  this->set_type(StateType::CARTESIAN_TWIST);
+}
+
 CartesianTwist::CartesianTwist(const std::string& name, const std::string& reference) :
-    CartesianState(name, reference) {}
+    CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_TWIST);
+}
 
 CartesianTwist::CartesianTwist(
     const std::string& name, const Eigen::Vector3d& linear_velocity, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_TWIST);
   this->set_linear_velocity(linear_velocity);
 }
 
@@ -17,6 +24,7 @@ CartesianTwist::CartesianTwist(
     const std::string& name, const Eigen::Vector3d& linear_velocity, const Eigen::Vector3d& angular_velocity,
     const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_TWIST);
   this->set_linear_velocity(linear_velocity);
   this->set_angular_velocity(angular_velocity);
 }
@@ -24,11 +32,13 @@ CartesianTwist::CartesianTwist(
 CartesianTwist::CartesianTwist(
     const std::string& name, const Eigen::Matrix<double, 6, 1>& twist, const std::string& reference
 ) : CartesianState(name, reference) {
+  this->set_type(StateType::CARTESIAN_TWIST);
   this->set_twist(twist);
 }
 
 CartesianTwist::CartesianTwist(const CartesianState& state) : CartesianState(state) {
   // set all the state variables to 0 except linear and angular velocities
+  this->set_type(StateType::CARTESIAN_TWIST);
   this->set_zero();
   this->set_twist(state.get_twist());
   this->set_empty(state.is_empty());

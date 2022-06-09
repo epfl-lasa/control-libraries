@@ -38,6 +38,7 @@ TEST(EllipsoidTest, Sampling) {
 }
 
 TEST(EllipsoidTest, EllipsoidFitting) {
+  GTEST_SKIP() << "Skipping Ellipsoid fit test to reduce computational burden";
   Ellipsoid ellipse("test");
 
   // sample from the parameterization

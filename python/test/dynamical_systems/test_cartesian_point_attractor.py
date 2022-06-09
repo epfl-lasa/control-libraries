@@ -2,7 +2,7 @@ import numpy as np
 import state_representation as sr
 import unittest
 from datetime import timedelta
-from dynamical_systems import CartesianPointAttractorDS
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE
 
 
 class TestCartesianPointAttractor(unittest.TestCase):
@@ -14,12 +14,12 @@ class TestCartesianPointAttractor(unittest.TestCase):
             self.fail(f'{e}')
 
     def test_empty_constructor(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         attractor = sr.CartesianState.Identity("CAttractor", "A")
 
         self.assertTrue(ds.get_parameter_value("attractor").is_empty())
         self.assertTrue(ds.get_base_frame().is_empty())
-        ds.set_parameter(sr.Parameter("attractor", attractor, sr.StateType.PARAMETER_CARTESIANSTATE))
+        ds.set_parameter(sr.Parameter("attractor", attractor, sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
         self.assertFalse(ds.get_parameter_value("attractor").is_empty())
         self.assertFalse(ds.get_base_frame().is_empty())
         self.assertEqual(ds.get_base_frame().get_name(), attractor.get_reference_frame())
@@ -27,7 +27,7 @@ class TestCartesianPointAttractor(unittest.TestCase):
         self.assert_np_array_equal(ds.get_base_frame().get_transformation_matrix(), np.eye(4))
 
     def test_is_compatible(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         state1 = sr.CartesianState.Identity("B", "A")
         state2 = sr.CartesianState.Identity("D", "C")
         state3 = sr.CartesianState.Identity("C", "A")
@@ -45,16 +45,16 @@ class TestCartesianPointAttractor(unittest.TestCase):
             ds.evaluate(state4)
 
         ds.set_parameter(sr.Parameter("attractor", sr.CartesianState.Identity("CAttractor", "A"),
-                                      sr.StateType.PARAMETER_CARTESIANSTATE))
+                                      sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
         self.assertTrue(ds.is_compatible(state1))
         self.assertFalse(ds.is_compatible(state2))
         self.assertTrue(ds.is_compatible(state3))
         self.assertTrue(ds.is_compatible(state4))
 
     def test_pose(self):
-        ds = CartesianPointAttractorDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
         target = sr.CartesianPose.Random("B")
-        ds.set_parameter(sr.Parameter("attractor", target, sr.StateType.PARAMETER_CARTESIANSTATE))
+        ds.set_parameter(sr.Parameter("attractor", target, sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
 
         current_pose = sr.CartesianPose.Identity("B")
         for i in range(100):
@@ -69,8 +69,8 @@ class TestCartesianPointAttractor(unittest.TestCase):
         BinA = sr.CartesianState.Random("B", "A")
         CinA = sr.CartesianState(sr.CartesianPose.Random("C", "A"))
 
-        ds = CartesianPointAttractorDS()
-        ds.set_parameter(sr.Parameter("attractor", BinA, sr.StateType.PARAMETER_CARTESIANSTATE))
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
+        ds.set_parameter(sr.Parameter("attractor", BinA, sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE))
 
         twist = sr.CartesianTwist(ds.evaluate(CinA))
 

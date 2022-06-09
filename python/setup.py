@@ -10,7 +10,7 @@ from setuptools import setup
 osqp_path_var = 'OSQP_INCLUDE_DIR'
 openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
-__version__ = "5.2.0"
+__version__ = "6.0.0"
 __libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
@@ -28,13 +28,6 @@ try:
     else:
         raise Exception('Could not find Eigen3 package!')
 
-    if __install_robot_model_module__:
-        osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
-        __include_dirs__.append(osqp_path)
-        openrobots_path = os.environ[
-            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
-        __include_dirs__.append('/opt/openrobots/include')
-
     for lib in __libraries__:
         status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
         if len(status) == 0:
@@ -42,17 +35,24 @@ try:
             if lib == 'clproto':
                 warnings.warn(f'{msg} The clproto module will not be installed.')
                 __install_clproto_module__ = False
-            if lib == 'dynamical_systems':
+            elif lib == 'dynamical_systems':
                 warnings.warn(f'{msg} The dynamical_systems module will not be installed.')
                 __install_dynamical_systems_module__ = False
-            if lib == 'robot_model':
+            elif lib == 'robot_model':
                 warnings.warn(f'{msg} The robot_model module will not be installed.')
                 __install_robot_model_module__ = False
-            if lib == 'controllers':
+            elif lib == 'controllers':
                 warnings.warn(f'{msg} The controllers module will not be installed.')
                 __install_controllers_module__ = False
             else:
                 raise Exception(msg)
+
+    if __install_robot_model_module__:
+        osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
+        __include_dirs__.append(osqp_path)
+        openrobots_path = os.environ[
+            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
+        __include_dirs__.append('/opt/openrobots/include')
 
     if __install_controllers_module__ and not __install_robot_model_module__:
         warnings.warn(
@@ -131,6 +131,9 @@ setup(
     ext_modules=ext_modules,
     test_suite='tests',
     python_requires='>=3',
+    install_requires=[
+        'pyquaternion>=0.9.9'
+    ],
     license='GNU GPL v3',
     zip_safe=False,
 )

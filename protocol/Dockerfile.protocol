@@ -16,8 +16,7 @@ FROM dependencies as build
 ARG BUILD_TESTING=ON
 
 WORKDIR /tmp/protocol/clproto_cpp/build
-RUN cmake -DBUILD_TESTING="${BUILD_TESTING}" .. \
-  && make -j all
+RUN cmake -DBUILD_TESTING="${BUILD_TESTING}" .. && make -j all
 
 
 FROM build as testing

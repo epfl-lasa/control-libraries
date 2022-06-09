@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "state_representation/parameters/ParameterType.hpp"
 #include "state_representation/exceptions/InvalidParameterCastException.hpp"
 #include "state_representation/exceptions/InvalidPointerException.hpp"
 #include "state_representation/State.hpp"
@@ -15,17 +16,25 @@ class Parameter;
 class ParameterInterface : public State {
 public:
   /**
-   * @brief Constructor with parameter name and type of the parameter.
-   * @param type The type of the parameter
+   * @brief Constructor with parameter name and type.
    * @param name The name of the parameter
+   * @param type The type of the parameter
+   * @param parameter_state_type The state type of the parameter, if applicable
    */
-  explicit ParameterInterface(const StateType& type, const std::string& name);
+  ParameterInterface(
+      const std::string& name, const ParameterType& type, const StateType& parameter_state_type = StateType::NONE
+  );
 
   /**
    * @brief Copy constructor
    * @param parameter The parameter to copy
    */
   ParameterInterface(const ParameterInterface& parameter);
+
+  /**
+   * @brief Default virtual destructor
+   */
+  virtual ~ParameterInterface() = default;
 
   /**
    * @brief Copy assignment operator that has to be defined
@@ -50,7 +59,7 @@ public:
    * if downcasting failed and validate_pointer was set to false.
    */
   template<typename T>
-  std::shared_ptr<Parameter<T>> get_parameter(bool validate_pointer = true);
+  std::shared_ptr<Parameter<T>> get_parameter(bool validate_pointer = true) const;
 
   /**
    * @brief Get the parameter value of a derived Parameter instance through the ParameterInterface pointer.
@@ -61,10 +70,10 @@ public:
    * @return The value contained in the underlying Parameter instance
    */
   template<typename T>
-  T get_parameter_value();
+  T get_parameter_value() const;
 
   /**
-   * @brief Set the  parameter value of a derived Parameter instance through the ParameterInterface pointer.
+   * @brief Set the parameter value of a derived Parameter instance through the ParameterInterface pointer.
    * @details This throws an InvalidParameterCastException if the ParameterInterface does not point to
    * a valid Parameter instance or if the specified type does not match the type of the Parameter instance.
    * @see ParameterInterface::get_parameter()
@@ -73,13 +82,31 @@ public:
    */
   template<typename T>
   void set_parameter_value(const T& value);
+
+  /**
+   * @brief Get the parameter type.
+   * @return The type of the underlying parameter
+   */
+  ParameterType get_parameter_type() const;
+
+  /**
+   * @brief Get the state type of the parameter.
+   * @details If the parameter type from get_parameter_type() is not ParameterType::STATE,
+   * this will return StateType::NONE.
+   * @return The state type of the underlying parameter
+   */
+  StateType get_parameter_state_type() const;
+
+private:
+  ParameterType parameter_type_;
+  StateType parameter_state_type_;
 };
 
 template<typename T>
-inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool validate_pointer) {
+inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool validate_pointer) const {
   std::shared_ptr<Parameter<T>> parameter_ptr;
   try {
-    parameter_ptr = std::dynamic_pointer_cast<Parameter<T>>(shared_from_this());
+    parameter_ptr = std::dynamic_pointer_cast<Parameter<T>>(std::const_pointer_cast<State>(shared_from_this()));
   } catch (const std::exception&) {
     if (validate_pointer) {
       throw exceptions::InvalidPointerException(
@@ -96,7 +123,7 @@ inline std::shared_ptr<Parameter<T>> ParameterInterface::get_parameter(bool vali
 }
 
 template<typename T>
-inline T ParameterInterface::get_parameter_value() {
+inline T ParameterInterface::get_parameter_value() const {
   return get_parameter<T>(true)->get_value();
 }
 

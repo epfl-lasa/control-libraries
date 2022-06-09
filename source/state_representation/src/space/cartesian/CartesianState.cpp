@@ -6,12 +6,12 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
-CartesianState::CartesianState() : SpatialState(StateType::CARTESIANSTATE) {
+CartesianState::CartesianState() : SpatialState(StateType::CARTESIAN_STATE) {
   this->initialize();
 }
 
-CartesianState::CartesianState(const std::string& robot_name, const std::string& reference) :
-    SpatialState(StateType::CARTESIANSTATE, robot_name, reference) {
+CartesianState::CartesianState(const std::string& name, const std::string& reference) :
+    SpatialState(StateType::CARTESIAN_STATE, name, reference) {
   this->initialize();
 }
 
@@ -43,6 +43,232 @@ CartesianState CartesianState::Random(const std::string& name, const std::string
   // set all the state variables to random
   random.set_state_variable(Eigen::VectorXd::Random(25), CartesianStateVariable::ALL);
   return random;
+}
+
+const Eigen::Vector3d& CartesianState::get_position() const {
+  return this->position_;
+}
+
+const Eigen::Quaterniond& CartesianState::get_orientation() const {
+  return this->orientation_;
+}
+
+Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
+  return Eigen::Vector4d(
+      this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(),
+      this->get_orientation().z());
+}
+
+Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
+  Eigen::Matrix<double, 7, 1> pose;
+  pose << this->get_position(), this->get_orientation_coefficients();
+  return pose;
+}
+
+Eigen::Matrix4d CartesianState::get_transformation_matrix() const {
+  Eigen::Matrix4d pose;
+  pose << this->orientation_.toRotationMatrix(), this->position_, 0., 0., 0., 1;
+  return pose;
+}
+
+const Eigen::Vector3d& CartesianState::get_linear_velocity() const {
+  return this->linear_velocity_;
+}
+
+const Eigen::Vector3d& CartesianState::get_angular_velocity() const {
+  return this->angular_velocity_;
+}
+
+Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
+  Eigen::Matrix<double, 6, 1> twist;
+  twist << this->get_linear_velocity(), this->get_angular_velocity();
+  return twist;
+}
+
+const Eigen::Vector3d& CartesianState::get_linear_acceleration() const {
+  return this->linear_acceleration_;
+}
+
+const Eigen::Vector3d& CartesianState::get_angular_acceleration() const {
+  return this->angular_acceleration_;
+}
+
+Eigen::Matrix<double, 6, 1> CartesianState::get_acceleration() const {
+  Eigen::Matrix<double, 6, 1> acceleration;
+  acceleration << this->get_linear_acceleration(), this->get_angular_acceleration();
+  return acceleration;
+}
+
+const Eigen::Vector3d& CartesianState::get_force() const {
+  return this->force_;
+}
+
+const Eigen::Vector3d& CartesianState::get_torque() const {
+  return this->torque_;
+}
+
+Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
+  Eigen::Matrix<double, 6, 1> wrench;
+  wrench << this->get_force(), this->get_torque();
+  return wrench;
+}
+
+void CartesianState::set_position(const Eigen::Vector3d& position) {
+  this->set_state_variable(this->position_, position);
+}
+
+void CartesianState::set_position(const std::vector<double>& position) {
+  this->set_state_variable(this->position_, position);
+}
+
+void CartesianState::set_position(const double& x, const double& y, const double& z) {
+  this->set_position(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_orientation(const Eigen::Quaterniond& orientation) {
+  this->set_filled();
+  this->orientation_ = orientation.normalized();
+}
+
+void CartesianState::set_orientation(const Eigen::Vector4d& orientation) {
+  this->set_orientation(Eigen::Quaterniond(orientation(0), orientation(1), orientation(2), orientation(3)));
+}
+
+void CartesianState::set_orientation(const std::vector<double>& orientation) {
+  if (orientation.size() != 4) {
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
+  }
+  this->set_orientation(Eigen::Vector4d::Map(orientation.data(), orientation.size()));
+}
+
+void CartesianState::set_orientation(const double& w, const double& x, const double& y, const double& z) {
+  this->set_orientation(Eigen::Vector4d(w, x, y, z));
+}
+
+void CartesianState::set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) {
+  this->set_position(position);
+  this->set_orientation(orientation);
+}
+
+void CartesianState::set_pose(const Eigen::Matrix<double, 7, 1>& pose) {
+  this->set_position(pose.head(3));
+  this->set_orientation(pose.tail(4));
+}
+
+void CartesianState::set_pose(const std::vector<double>& pose) {
+  if (pose.size() != 7) {
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
+  }
+  this->set_position(std::vector<double>(pose.begin(), pose.begin() + 3));
+  this->set_orientation(std::vector<double>(pose.begin() + 3, pose.end()));
+}
+
+void CartesianState::set_linear_velocity(const Eigen::Vector3d& linear_velocity) {
+  this->set_state_variable(this->linear_velocity_, linear_velocity);
+}
+
+void CartesianState::set_linear_velocity(const std::vector<double>& linear_velocity) {
+  this->set_state_variable(this->linear_velocity_, linear_velocity);
+}
+
+void CartesianState::set_linear_velocity(const double& x, const double& y, const double& z) {
+  this->set_linear_velocity(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_angular_velocity(const Eigen::Vector3d& angular_velocity) {
+  this->set_state_variable(this->angular_velocity_, angular_velocity);
+}
+
+void CartesianState::set_angular_velocity(const std::vector<double>& angular_velocity) {
+  this->set_state_variable(this->angular_velocity_, angular_velocity);
+}
+
+void CartesianState::set_angular_velocity(const double& x, const double& y, const double& z) {
+  this->set_angular_velocity(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_twist(const Eigen::Matrix<double, 6, 1>& twist) {
+  this->set_state_variable(this->linear_velocity_, this->angular_velocity_, twist);
+}
+
+void CartesianState::set_twist(const std::vector<double>& twist) {
+  if (twist.size() != 6) {
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 6 required for twist");
+  }
+  this->set_linear_velocity(std::vector<double>(twist.begin(), twist.begin() + 3));
+  this->set_angular_velocity(std::vector<double>(twist.begin() + 3, twist.end()));
+}
+
+void CartesianState::set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) {
+  this->set_state_variable(this->linear_acceleration_, linear_acceleration);
+}
+
+void CartesianState::set_linear_acceleration(const std::vector<double>& linear_acceleration) {
+  this->set_state_variable(this->linear_acceleration_, linear_acceleration);
+}
+
+void CartesianState::set_linear_acceleration(const double& x, const double& y, const double& z) {
+  this->set_linear_acceleration(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) {
+  this->set_state_variable(this->angular_acceleration_, angular_acceleration);
+}
+
+void CartesianState::set_angular_acceleration(const std::vector<double>& angular_acceleration) {
+  this->set_state_variable(this->angular_acceleration_, angular_acceleration);
+}
+
+void CartesianState::set_angular_acceleration(const double& x, const double& y, const double& z) {
+  this->set_angular_acceleration(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration) {
+  this->set_state_variable(this->linear_acceleration_, this->angular_acceleration_, acceleration);
+}
+
+void CartesianState::set_acceleration(const std::vector<double>& acceleration) {
+  if (acceleration.size() != 6) {
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 6 required for acceleration");
+  }
+  this->set_linear_acceleration(std::vector<double>(acceleration.begin(), acceleration.begin() + 3));
+  this->set_angular_acceleration(std::vector<double>(acceleration.begin() + 3, acceleration.end()));
+}
+
+void CartesianState::set_force(const Eigen::Vector3d& force) {
+  this->set_state_variable(this->force_, force);
+}
+
+void CartesianState::set_force(const std::vector<double>& force) {
+  this->set_state_variable(this->force_, force);
+}
+
+void CartesianState::set_force(const double& x, const double& y, const double& z) {
+  this->set_force(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_torque(const Eigen::Vector3d& torque) {
+  this->set_state_variable(this->torque_, torque);
+}
+
+void CartesianState::set_torque(const std::vector<double>& torque) {
+  this->set_state_variable(this->torque_, torque);
+}
+
+void CartesianState::set_torque(const double& x, const double& y, const double& z) {
+  this->set_torque(Eigen::Vector3d(x, y, z));
+}
+
+void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) {
+  this->set_state_variable(this->force_, this->torque_, wrench);
+}
+
+void CartesianState::set_wrench(const std::vector<double>& wrench) {
+  if (wrench.size() != 6) {
+    throw exceptions::IncompatibleSizeException("The input vector is not of size 6 required for wrench");
+  }
+  this->set_force(std::vector<double>(wrench.begin(), wrench.begin() + 3));
+  this->set_torque(std::vector<double>(wrench.begin() + 3, wrench.end()));
 }
 
 CartesianState& CartesianState::operator*=(double lambda) {
@@ -125,8 +351,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   Eigen::Vector3d f_alpha_b = this->get_angular_acceleration();
   // intermediate variables for b_S_c
   Eigen::Vector3d b_P_c = state.get_position();
-  Eigen::Quaterniond b_R_c = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                        : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond b_R_c =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   Eigen::Vector3d b_v_c = state.get_linear_velocity();
   Eigen::Vector3d b_omega_c = state.get_angular_velocity();
   Eigen::Vector3d b_a_c = state.get_linear_acceleration();
@@ -138,10 +365,9 @@ CartesianState& CartesianState::operator*=(const CartesianState& state) {
   this->set_linear_velocity(f_v_b + f_R_b * b_v_c + f_omega_b.cross(f_R_b * b_P_c));
   this->set_angular_velocity(f_omega_b + f_R_b * b_omega_c);
   // acceleration
-  this->set_linear_acceleration(f_a_b + f_R_b * b_a_c
-                                + f_alpha_b.cross(f_R_b * b_P_c)
-                                + 2 * f_omega_b.cross(f_R_b * b_v_c)
-                                + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
+  this->set_linear_acceleration(
+      f_a_b + f_R_b * b_a_c + f_alpha_b.cross(f_R_b * b_P_c) + 2 * f_omega_b.cross(f_R_b * b_v_c)
+          + f_omega_b.cross(f_omega_b.cross(f_R_b * b_P_c)));
   this->set_angular_acceleration(f_alpha_b + f_R_b * b_alpha_c + f_omega_b.cross(f_R_b * b_omega_c));
   // wrench
   //TODO
@@ -168,8 +394,9 @@ CartesianState& CartesianState::operator+=(const CartesianState& state) {
   // operation on pose
   this->set_position(this->get_position() + state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation);
   // operation on twist
   this->set_twist(this->get_twist() + state.get_twist());
@@ -200,8 +427,9 @@ CartesianState& CartesianState::operator-=(const CartesianState& state) {
   // operation on pose
   this->set_position(this->get_position() - state.get_position());
   // specific operation on quaternion using Hamilton product
-  Eigen::Quaterniond orientation = (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation()
-                                                                                              : Eigen::Quaterniond(-state.get_orientation().coeffs());
+  Eigen::Quaterniond orientation =
+      (this->get_orientation().dot(state.get_orientation()) > 0) ? state.get_orientation() : Eigen::Quaterniond(
+          -state.get_orientation().coeffs());
   this->set_orientation(this->get_orientation() * orientation.conjugate());
   // operation on twist
   this->set_twist(this->get_twist() - state.get_twist());

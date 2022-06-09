@@ -118,6 +118,10 @@ void Impedance<S>::validate_and_set_parameter(
   } else if (parameter->get_name() == "force_limit") {
     auto limit_matrix = this->gain_matrix_from_parameter(parameter);
     this->force_limit_->set_value(limit_matrix.diagonal());
+  } else {
+    throw state_representation::exceptions::InvalidParameterException(
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
   }
 }
 
@@ -126,10 +130,10 @@ Eigen::MatrixXd Impedance<S>::gain_matrix_from_parameter(
     const std::shared_ptr<state_representation::ParameterInterface>& parameter
 ) {
   Eigen::MatrixXd matrix;
-  if (parameter->get_type() == state_representation::StateType::PARAMETER_DOUBLE) {
+  if (parameter->get_parameter_type() == state_representation::ParameterType::DOUBLE) {
     auto gain = std::static_pointer_cast<state_representation::Parameter<double>>(parameter);
     matrix = gain->get_value() * Eigen::MatrixXd::Identity(this->dimensions_, this->dimensions_);
-  } else if (parameter->get_type() == state_representation::StateType::PARAMETER_DOUBLE_ARRAY) {
+  } else if (parameter->get_parameter_type() == state_representation::ParameterType::DOUBLE_ARRAY) {
     auto gain = std::static_pointer_cast<state_representation::Parameter<std::vector<double>>>(parameter);
     if (gain->get_value().size() != this->dimensions_) {
       throw state_representation::exceptions::IncompatibleSizeException(
@@ -138,7 +142,7 @@ Eigen::MatrixXd Impedance<S>::gain_matrix_from_parameter(
     }
     Eigen::VectorXd diagonal = Eigen::VectorXd::Map(gain->get_value().data(), this->dimensions_);
     matrix = diagonal.asDiagonal();
-  } else if (parameter->get_type() == state_representation::StateType::PARAMETER_VECTOR) {
+  } else if (parameter->get_parameter_type() == state_representation::ParameterType::VECTOR) {
     auto gain = std::static_pointer_cast<state_representation::Parameter<Eigen::VectorXd>>(parameter);
     if (gain->get_value().size() != this->dimensions_) {
       throw state_representation::exceptions::IncompatibleSizeException(
@@ -147,7 +151,7 @@ Eigen::MatrixXd Impedance<S>::gain_matrix_from_parameter(
     }
     Eigen::VectorXd diagonal = gain->get_value();
     matrix = diagonal.asDiagonal();
-  } else if (parameter->get_type() == state_representation::StateType::PARAMETER_MATRIX) {
+  } else if (parameter->get_parameter_type() == state_representation::ParameterType::MATRIX) {
     auto gain = std::static_pointer_cast<state_representation::Parameter<Eigen::MatrixXd>>(parameter);
     if (gain->get_value().rows() != this->dimensions_ || gain->get_value().cols() != this->dimensions_) {
       auto dim = std::to_string(this->dimensions_);

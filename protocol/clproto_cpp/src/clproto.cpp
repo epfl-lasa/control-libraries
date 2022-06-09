@@ -7,6 +7,7 @@
 #include "clproto/decoders.h"
 
 #include <state_representation/State.hpp>
+#include <state_representation/parameters/Parameter.hpp>
 #include <state_representation/space/SpatialState.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
@@ -19,8 +20,6 @@
 #include <state_representation/space/joint/JointVelocities.hpp>
 #include <state_representation/space/joint/JointAccelerations.hpp>
 #include <state_representation/space/joint/JointTorques.hpp>
-#include <state_representation/geometry/Shape.hpp>
-#include <state_representation/geometry/Ellipsoid.hpp>
 
 #include "state_representation/state_message.pb.h"
 
@@ -1009,6 +1008,279 @@ Parameter<Eigen::MatrixXd> decode(const std::string& msg) {
 template<>
 bool decode(const std::string& msg, Parameter<Eigen::MatrixXd>& obj) {
   return decode_parameter(msg, obj);
+}
+
+/*-----------------------
+ * STD::SHARED_PTR<STATE>
+ * ---------------------- */
+template<> std::string encode<std::shared_ptr<State>>(const std::shared_ptr<State>& obj);
+template<> std::shared_ptr<State> decode(const std::string& msg);
+template<> bool decode(const std::string& msg, std::shared_ptr<State>& obj);
+template<> std::string encode<std::shared_ptr<State>>(const std::shared_ptr<State>& obj) {
+  std::string message;
+  switch (obj->get_type()) {
+    case StateType::STATE:
+      message = encode<State>(*obj);
+      break;
+    case StateType::SPATIAL_STATE:
+      message = encode<SpatialState>(*std::dynamic_pointer_cast<SpatialState>(obj));
+      break;
+    case StateType::CARTESIAN_STATE:
+      message = encode<CartesianState>(*std::dynamic_pointer_cast<CartesianState>(obj));
+      break;
+    case StateType::CARTESIAN_POSE:
+      message = encode<CartesianPose>(*std::dynamic_pointer_cast<CartesianPose>(obj));
+      break;
+    case StateType::CARTESIAN_TWIST:
+      message = encode<CartesianTwist>(*std::dynamic_pointer_cast<CartesianTwist>(obj));
+      break;
+    case StateType::CARTESIAN_ACCELERATION:
+      message = encode<CartesianAcceleration>(*std::dynamic_pointer_cast<CartesianAcceleration>(obj));
+      break;
+    case StateType::CARTESIAN_WRENCH:
+      message = encode<CartesianWrench>(*std::dynamic_pointer_cast<CartesianWrench>(obj));
+      break;
+    case StateType::JOINT_STATE:
+      message = encode<JointState>(*std::dynamic_pointer_cast<JointState>(obj));
+      break;
+    case StateType::JOINT_POSITIONS:
+      message = encode<JointPositions>(*std::dynamic_pointer_cast<JointPositions>(obj));
+      break;
+    case StateType::JOINT_VELOCITIES:
+      message = encode<JointVelocities>(*std::dynamic_pointer_cast<JointVelocities>(obj));
+      break;
+    case StateType::JOINT_ACCELERATIONS:
+      message = encode<JointAccelerations>(*std::dynamic_pointer_cast<JointAccelerations>(obj));
+      break;
+    case StateType::JOINT_TORQUES:
+      message = encode<JointTorques>(*std::dynamic_pointer_cast<JointTorques>(obj));
+      break;
+    case StateType::JACOBIAN:
+      message = encode<Jacobian>(*std::dynamic_pointer_cast<Jacobian>(obj));
+      break;
+    case StateType::PARAMETER: {
+      auto param_ptr = std::dynamic_pointer_cast<ParameterInterface>(obj);
+      switch (param_ptr->get_parameter_type()) {
+        case ParameterType::BOOL:
+          message = encode<Parameter<bool>>(*std::dynamic_pointer_cast<Parameter<bool>>(param_ptr));
+          break;
+        case ParameterType::BOOL_ARRAY:
+          message = encode<Parameter<std::vector<bool>>>(*std::dynamic_pointer_cast<Parameter<std::vector<bool>>>(param_ptr));
+          break;
+        case ParameterType::INT:
+          message = encode<Parameter<int>>(*std::dynamic_pointer_cast<Parameter<int>>(param_ptr));
+          break;
+        case ParameterType::INT_ARRAY:
+          message = encode<Parameter<std::vector<int>>>(*std::dynamic_pointer_cast<Parameter<std::vector<int>>>(param_ptr));
+          break;
+        case ParameterType::DOUBLE:
+          message = encode<Parameter<double>>(*std::dynamic_pointer_cast<Parameter<double>>(param_ptr));
+          break;
+        case ParameterType::DOUBLE_ARRAY:
+          message = encode<Parameter<std::vector<double>>>(*std::dynamic_pointer_cast<Parameter<std::vector<double>>>(param_ptr));
+          break;
+        case ParameterType::STRING:
+          message = encode<Parameter<std::string>>(*std::dynamic_pointer_cast<Parameter<std::string>>(param_ptr));
+          break;
+        case ParameterType::STRING_ARRAY:
+          message = encode<Parameter<std::vector<std::string>>>(*std::dynamic_pointer_cast<Parameter<std::vector<std::string>>>(param_ptr));
+          break;
+        case ParameterType::VECTOR:
+          message = encode<Parameter<Eigen::VectorXd>>(*std::dynamic_pointer_cast<Parameter<Eigen::VectorXd>>(param_ptr));
+          break;
+        case ParameterType::MATRIX:
+          message = encode<Parameter<Eigen::MatrixXd>>(*std::dynamic_pointer_cast<Parameter<Eigen::MatrixXd>>(param_ptr));
+          break;
+        default:
+          throw std::invalid_argument("The ParameterType contained by parameter " + param_ptr->get_name() + " is unsupported.");
+          break;
+      }
+      break;
+    }
+    default:
+      throw std::invalid_argument("The StateType contained by state " + obj->get_name() + " is unsupported.");
+      break;
+  }
+  return message;
+}
+template<> std::shared_ptr<State> decode(const std::string& msg) {
+  std::shared_ptr<State> obj;
+  switch (check_message_type(msg)) {
+    case MessageType::STATE_MESSAGE:
+      obj = make_shared_state(State());
+      break;
+    case MessageType::SPATIAL_STATE_MESSAGE:
+      obj = make_shared_state(SpatialState());
+      break;
+    case MessageType::CARTESIAN_STATE_MESSAGE:
+      obj = make_shared_state(CartesianState());
+      break;
+    case MessageType::CARTESIAN_POSE_MESSAGE:
+      obj = make_shared_state(CartesianPose());
+      break;
+    case MessageType::CARTESIAN_TWIST_MESSAGE:
+      obj = make_shared_state(CartesianTwist());
+      break;
+    case MessageType::CARTESIAN_ACCELERATION_MESSAGE:
+      obj = make_shared_state(CartesianAcceleration());
+      break;
+    case MessageType::CARTESIAN_WRENCH_MESSAGE:
+      obj = make_shared_state(CartesianWrench());
+      break;
+    case MessageType::JOINT_STATE_MESSAGE:
+      obj = make_shared_state(JointState());
+      break;
+    case MessageType::JOINT_POSITIONS_MESSAGE:
+      obj = make_shared_state(JointPositions());
+      break;
+    case MessageType::JOINT_VELOCITIES_MESSAGE:
+      obj = make_shared_state(JointVelocities());
+      break;
+    case MessageType::JOINT_ACCELERATIONS_MESSAGE:
+      obj = make_shared_state(JointAccelerations());
+      break;
+    case MessageType::JOINT_TORQUES_MESSAGE:
+      obj = make_shared_state(JointTorques());
+      break;
+    case MessageType::JACOBIAN_MESSAGE:
+      obj = make_shared_state(Jacobian());
+      break;
+    case MessageType::PARAMETER_MESSAGE: {
+      switch (check_parameter_message_type(msg)) {
+        case ParameterMessageType::BOOL:
+          obj = make_shared_state(Parameter<bool>(""));
+          break;
+        case ParameterMessageType::BOOL_ARRAY:
+          obj = make_shared_state(Parameter<std::vector<bool>>(""));
+          break;
+        case ParameterMessageType::INT:
+          obj = make_shared_state(Parameter<int>(""));
+          break;
+        case ParameterMessageType::INT_ARRAY:
+          obj = make_shared_state(Parameter<std::vector<int>>(""));
+          break;
+        case ParameterMessageType::DOUBLE:
+          obj = make_shared_state(Parameter<double>(""));
+          break;
+        case ParameterMessageType::DOUBLE_ARRAY:
+          obj = make_shared_state(Parameter<std::vector<double>>(""));
+          break;
+        case ParameterMessageType::STRING:
+          obj = make_shared_state(Parameter<std::string>(""));
+          break;
+        case ParameterMessageType::STRING_ARRAY:
+          obj = make_shared_state(Parameter<std::vector<std::string>>(""));
+          break;
+        case ParameterMessageType::VECTOR:
+          obj = make_shared_state(Parameter<Eigen::VectorXd>(""));
+          break;
+        case ParameterMessageType::MATRIX:
+          obj = make_shared_state(Parameter<Eigen::MatrixXd>(""));
+          break;
+        default:
+          throw std::invalid_argument("The ParameterMessageType contained by this message is unsupported.");
+          break;
+      }
+      break;
+    }
+    default:
+      throw std::invalid_argument("The MessageType contained by this message is unsupported.");
+      break;
+  }
+  if (!decode(msg, obj)) {
+    throw DecodingException("Could not decode the message into a std::shared_ptr<State>");
+  }
+  return obj;
+}
+template<> bool decode(const std::string& msg, std::shared_ptr<State>& obj) {
+  try {
+    switch (obj->get_type()) {
+      case StateType::STATE:
+        obj = make_shared_state(decode<State>(msg));
+        break;
+      case StateType::SPATIAL_STATE:
+        obj = make_shared_state(decode<SpatialState>(msg));
+        break;
+      case StateType::CARTESIAN_STATE:
+        obj = make_shared_state(decode<CartesianState>(msg));
+        break;
+      case StateType::CARTESIAN_POSE:
+        obj = make_shared_state(decode<CartesianPose>(msg));
+        break;
+      case StateType::CARTESIAN_TWIST:
+        obj = make_shared_state(decode<CartesianTwist>(msg));
+        break;
+      case StateType::CARTESIAN_ACCELERATION:
+        obj = make_shared_state(decode<CartesianAcceleration>(msg));
+        break;
+      case StateType::CARTESIAN_WRENCH:
+        obj = make_shared_state(decode<CartesianWrench>(msg));
+        break;
+      case StateType::JOINT_STATE:
+        obj = make_shared_state(decode<JointState>(msg));
+        break;
+      case StateType::JOINT_POSITIONS:
+        obj = make_shared_state(decode<JointPositions>(msg));
+        break;
+      case StateType::JOINT_VELOCITIES:
+        obj = make_shared_state(decode<JointVelocities>(msg));
+        break;
+      case StateType::JOINT_ACCELERATIONS:
+        obj = make_shared_state(decode<JointAccelerations>(msg));
+        break;
+      case StateType::JOINT_TORQUES:
+        obj = make_shared_state(decode<JointTorques>(msg));
+        break;
+      case StateType::JACOBIAN:
+        obj = make_shared_state(decode<Jacobian>(msg));
+        break;
+      case StateType::PARAMETER: {
+        auto param_ptr = std::dynamic_pointer_cast<ParameterInterface>(obj);
+        switch (param_ptr->get_parameter_type()) {
+          case ParameterType::BOOL:
+            obj = make_shared_state(decode<Parameter<bool>>(msg));
+            break;
+          case ParameterType::BOOL_ARRAY:
+            obj = make_shared_state(decode<Parameter<std::vector<bool>>>(msg));
+            break;
+          case ParameterType::INT:
+            obj = make_shared_state(decode<Parameter<int>>(msg));
+            break;
+          case ParameterType::INT_ARRAY:
+            obj = make_shared_state(decode<Parameter<std::vector<int>>>(msg));
+            break;
+          case ParameterType::DOUBLE:
+            obj = make_shared_state(decode<Parameter<double>>(msg));
+            break;
+          case ParameterType::DOUBLE_ARRAY:
+            obj = make_shared_state(decode<Parameter<std::vector<double>>>(msg));
+            break;
+          case ParameterType::STRING:
+            obj = make_shared_state(decode<Parameter<std::string>>(msg));
+            break;
+          case ParameterType::STRING_ARRAY:
+            obj = make_shared_state(decode<Parameter<std::vector<std::string>>>(msg));
+            break;
+          case ParameterType::VECTOR:
+            obj = make_shared_state(decode<Parameter<Eigen::VectorXd>>(msg));
+            break;
+          case ParameterType::MATRIX:
+            obj = make_shared_state(decode<Parameter<Eigen::MatrixXd>>(msg));
+            break;
+          default:
+            throw std::invalid_argument("The ParameterType contained by parameter " + param_ptr->get_name() + " is unsupported.");
+            break;
+        }
+        break;
+      }
+      default:
+        throw std::invalid_argument("The StateType contained by state " + obj->get_name() + " is unsupported.");
+        break;
+    }
+    return true;
+  } catch (...) {
+    return false;
+  }
 }
 
 // Generic template code for future types:

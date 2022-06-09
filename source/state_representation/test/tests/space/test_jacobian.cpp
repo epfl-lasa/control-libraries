@@ -7,6 +7,7 @@ using namespace state_representation::exceptions;
 
 TEST(JacobianTest, TestCreate) {
   Jacobian jac("robot", 7, "test");
+  EXPECT_EQ(jac.get_type(), StateType::JACOBIAN);
   EXPECT_EQ(jac.rows(), 6);
   EXPECT_EQ(jac.cols(), 7);
   EXPECT_TRUE(jac.is_empty());
@@ -22,6 +23,7 @@ TEST(JacobianTest, TestCreate) {
 
 TEST(JacobianTest, TestCreateWithVectorOfJoints) {
   Jacobian jac("robot", std::vector<std::string>{"j1", "j2"}, "test", "test_ref");
+  EXPECT_EQ(jac.get_type(), StateType::JACOBIAN);
   EXPECT_EQ(jac.get_joint_names().at(0), "j1");
   EXPECT_EQ(jac.get_joint_names().at(1), "j2");
   EXPECT_EQ(jac.get_reference_frame(), "test_ref");
@@ -45,6 +47,7 @@ TEST(JacobianTest, TestSetData) {
 
 TEST(JacobianTest, TestRandomCreate) {
   Jacobian jac = Jacobian::Random("robot", 7, "test");
+  EXPECT_EQ(jac.get_type(), StateType::JACOBIAN);
   EXPECT_FALSE(jac.is_empty());
   for (std::size_t i = 0; i < jac.cols(); ++i) {
     EXPECT_GT(jac.col(i).norm(), 0);
@@ -54,6 +57,7 @@ TEST(JacobianTest, TestRandomCreate) {
 TEST(JacobianTest, TestTranspose) {
   Jacobian jac = Jacobian::Random("robot", 7, "test");
   Jacobian jact = jac.transpose();
+  EXPECT_EQ(jact.get_type(), StateType::JACOBIAN);
 
   EXPECT_EQ(jact.rows(), 7);
   EXPECT_EQ(jact.cols(), 6);

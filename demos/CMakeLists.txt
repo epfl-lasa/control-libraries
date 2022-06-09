@@ -26,13 +26,10 @@ set(DEMOS_SCRIPTS
 )
 
 set(FIXTURE_INSTALL_PATH /etc/fixtures/)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/fixtures/ DESTINATION ${FIXTURE_INSTALL_PATH})
 
 foreach(SCRIPT ${DEMOS_SCRIPTS})
-  add_executable(${SCRIPT} scripts/${SCRIPT}.cpp)
+  add_executable(${SCRIPT} cpp_scripts/${SCRIPT}.cpp)
   target_link_libraries(${SCRIPT} ${control_libraries_LIBRARIES})
   target_compile_definitions(${SCRIPT} PRIVATE SCRIPT_FIXTURES="${FIXTURE_INSTALL_PATH}")
-  install(TARGETS ${SCRIPT}
-    RUNTIME DESTINATION bin
-  )
 endforeach()

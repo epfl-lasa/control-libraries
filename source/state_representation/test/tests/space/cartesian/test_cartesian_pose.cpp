@@ -34,8 +34,14 @@ protected:
   double tol = 1e-5;
 };
 
+TEST(CartesianPoseTest, EmptyConstructor) {
+  CartesianPose empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_POSE);
+}
+
 TEST(CartesianPoseTest, RandomPoseInitialization) {
   CartesianPose random = CartesianPose::Random("test");
+  EXPECT_EQ(random.get_type(), StateType::CARTESIAN_POSE);
   EXPECT_NE(random.get_position().norm(), 0);
   EXPECT_NE(random.get_orientation().w(), 0);
   EXPECT_NE(random.get_orientation().x(), 0);
@@ -47,12 +53,14 @@ TEST(CartesianPoseTest, RandomPoseInitialization) {
 TEST(CartesianPoseTest, CopyPose) {
   CartesianPose pose1 = CartesianPose::Random("test");
   CartesianPose pose2(pose1);
+  EXPECT_EQ(pose1.get_type(), pose2.get_type());
   EXPECT_EQ(pose1.get_name(), pose2.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose2.get_reference_frame());
   EXPECT_EQ(pose1.data(), pose2.data());
   expect_only_pose(pose2);
 
   CartesianPose pose3 = pose1;
+  EXPECT_EQ(pose1.get_type(), pose3.get_type());
   EXPECT_EQ(pose1.get_name(), pose3.get_name());
   EXPECT_EQ(pose1.get_reference_frame(), pose3.get_reference_frame());
   EXPECT_EQ(pose1.data(), pose3.data());
@@ -152,6 +160,7 @@ TEST(CartesianPoseTest, MultiplyPoseAndState) {
   CartesianState s = CartesianPose::Random("test2", "test");
   CartesianState res = p * s;
   CartesianPose res2 = p * static_cast<CartesianPose>(s);
+  EXPECT_EQ(res2.get_type(), StateType::CARTESIAN_POSE);
   expect_near(res.get_position(), res2.get_position());
   EXPECT_GT(abs(res.get_orientation().dot(res2.get_orientation())), 1 - 1e-5);
 }
@@ -162,6 +171,7 @@ TEST_F(CartesianPoseTestClass, TestAddTwoPoses) {
   Eigen::Quaterniond rot2(0, 1, 0, 0);
   tf2 = CartesianPose("t1", pos2, rot2);
   auto tf3 = tf1 + tf2;
+  EXPECT_EQ(tf3.get_type(), StateType::CARTESIAN_POSE);
   Eigen::Vector3d pos_truth(1, 0, 0);
   Eigen::Quaterniond rot_truth(0, -1, 0, 0);
   expect_near(tf3.get_position(), pos_truth);
@@ -173,18 +183,22 @@ TEST_F(CartesianPoseTestClass, TestPoseToVelocity) {
   std::chrono::seconds dt1(1);
   std::chrono::milliseconds dt2(100);
   auto res1 = tf1 / dt1;
+  EXPECT_EQ(res1.get_type(), StateType::CARTESIAN_TWIST);
   EXPECT_EQ(res1.get_linear_velocity(), tf1.get_position());
   EXPECT_EQ(res1.get_angular_velocity(), Eigen::Vector3d(M_PI, 0, 0));
   auto res2 = tf1 / dt2;
+  EXPECT_EQ(res2.get_type(), StateType::CARTESIAN_TWIST);
   EXPECT_EQ(res2.get_linear_velocity(), 10 * tf1.get_position());
   EXPECT_EQ(res2.get_angular_velocity(), 10 * Eigen::Vector3d(M_PI, 0, 0));
 }
 
 TEST_F(CartesianPoseTestClass, TestImplicitConversion) {
   CartesianTwist vel("t1");
+  EXPECT_EQ(vel.get_type(), StateType::CARTESIAN_TWIST);
   vel.set_linear_velocity(Eigen::Vector3d(0.1, 0.1, 0.1));
   vel.set_angular_velocity(Eigen::Vector3d(M_PI, 0, 0));
   tf1 += vel;
+  EXPECT_EQ(tf1.get_type(), StateType::CARTESIAN_POSE);
   Eigen::Vector3d pos_truth(1.1, 2.1, 3.1);
   Eigen::Quaterniond rot_truth(0, 1, 0, 0);
   EXPECT_EQ(tf1.get_position(), pos_truth);

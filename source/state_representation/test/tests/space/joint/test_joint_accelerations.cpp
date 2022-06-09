@@ -11,9 +11,13 @@ static void expect_only_accelerations(JointAccelerations& acc) {
 }
 
 TEST(JointAccelerationsTest, Constructors) {
+  JointAccelerations empty;
+  EXPECT_EQ(empty.get_type(), StateType::JOINT_ACCELERATIONS);
+
   std::vector<std::string> joint_names{"joint_10", "joint_20"};
   Eigen::Vector2d accelerations = Eigen::Vector2d::Random();
   JointAccelerations ja1("test", accelerations);
+  EXPECT_EQ(ja1.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(ja1.get_name(), "test");
   EXPECT_FALSE(ja1.is_empty());
   EXPECT_EQ(ja1.get_size(), accelerations.size());
@@ -23,6 +27,7 @@ TEST(JointAccelerationsTest, Constructors) {
   EXPECT_EQ(ja1.data(), accelerations);
 
   JointAccelerations ja2("test", joint_names, accelerations);
+  EXPECT_EQ(ja2.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(ja2.get_name(), "test");
   EXPECT_FALSE(ja2.is_empty());
   EXPECT_EQ(ja2.get_size(), joint_names.size());
@@ -34,7 +39,9 @@ TEST(JointAccelerationsTest, Constructors) {
 
 TEST(JointAccelerationsTest, StateCopyConstructor) {
   JointState random_state = JointState::Random("test", 3);
+  EXPECT_EQ(random_state.get_type(), StateType::JOINT_STATE);
   JointAccelerations copy1(random_state);
+  EXPECT_EQ(copy1.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(random_state.get_name(), copy1.get_name());
   EXPECT_EQ(random_state.get_names(), copy1.get_names());
   EXPECT_EQ(random_state.get_size(), copy1.get_size());
@@ -42,6 +49,7 @@ TEST(JointAccelerationsTest, StateCopyConstructor) {
   expect_only_accelerations(copy1);
 
   JointAccelerations copy2 = random_state;
+  EXPECT_EQ(copy2.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(random_state.get_name(), copy2.get_name());
   EXPECT_EQ(random_state.get_names(), copy2.get_names());
   EXPECT_EQ(random_state.get_size(), copy2.get_size());
@@ -50,16 +58,21 @@ TEST(JointAccelerationsTest, StateCopyConstructor) {
 
   JointState empty_state;
   JointAccelerations copy3(empty_state);
+  EXPECT_EQ(copy3.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_TRUE(copy3.is_empty());
   JointAccelerations copy4 = empty_state;
+  EXPECT_EQ(copy4.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_TRUE(copy4.is_empty());
   JointAccelerations copy5 = empty_state.copy();
+  EXPECT_EQ(copy5.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_TRUE(copy5.is_empty());
 }
 
 TEST(JointAccelerationsTest, VelocitiesCopyConstructor) {
   JointVelocities random_velocities = JointVelocities::Random("test", 3);
+  EXPECT_EQ(random_velocities.get_type(), StateType::JOINT_VELOCITIES);
   JointAccelerations copy1(random_velocities);
+  EXPECT_EQ(copy1.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(random_velocities.get_name(), copy1.get_name());
   EXPECT_EQ(random_velocities.get_names(), copy1.get_names());
   EXPECT_EQ(random_velocities.get_size(), copy1.get_size());
@@ -67,6 +80,7 @@ TEST(JointAccelerationsTest, VelocitiesCopyConstructor) {
   expect_only_accelerations(copy1);
 
   JointAccelerations copy2 = random_velocities;
+  EXPECT_EQ(copy2.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(random_velocities.get_name(), copy1.get_name());
   EXPECT_EQ(random_velocities.get_names(), copy1.get_names());
   EXPECT_EQ(random_velocities.get_size(), copy1.get_size());
@@ -80,10 +94,12 @@ TEST(JointAccelerationsTest, VelocitiesCopyConstructor) {
 
 TEST(JointAccelerationsTest, RandomInitialization) {
   JointAccelerations random1 = JointAccelerations::Random("test", 3);
+  EXPECT_EQ(random1.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_NE(random1.get_accelerations().norm(), 0);
   expect_only_accelerations(random1);
 
   JointAccelerations random2 = JointAccelerations::Random("test", std::vector<std::string>{"j0", "j1"});
+  EXPECT_EQ(random2.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_NE(random2.get_accelerations().norm(), 0);
   expect_only_accelerations(random2);
 }
@@ -107,6 +123,7 @@ TEST(JointAccelerationsTest, Clamping) {
   EXPECT_EQ(ja2.data(), accelerations);
   ja2.clamp(3 * Eigen::ArrayXd::Ones(ja2.get_size()), 0.5 * Eigen::ArrayXd::Ones(ja2.get_size()));
   EXPECT_EQ(ja2.data(), result);
+  EXPECT_EQ(ja2.get_type(), StateType::JOINT_ACCELERATIONS);
 }
 
 TEST(JointAccelerationsTest, GetSetData) {
@@ -128,11 +145,13 @@ TEST(JointAccelerationsTest, GetSetData) {
     EXPECT_EQ(state_vec.at(i), ja1.data()(i));
   }
   EXPECT_THROW(ja1.set_data(Eigen::Vector2d::Zero()), exceptions::IncompatibleSizeException);
+  EXPECT_EQ(ja1.get_type(), StateType::JOINT_ACCELERATIONS);
 }
 
 TEST(JointAccelerationsTest, ScalarMultiplication) {
   JointAccelerations ja = JointAccelerations::Random("test", 3);
   JointAccelerations jscaled = 0.5 * ja;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(jscaled.data(), 0.5 * ja.data());
 
   JointAccelerations empty;
@@ -144,9 +163,11 @@ TEST(JointAccelerationsTest, MatrixMultiplication) {
   Eigen::MatrixXd gains = Eigen::VectorXd::Random(ja.get_size()).asDiagonal();
 
   JointAccelerations jscaled = gains * ja;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(jscaled.data(), gains * ja.data());
   EXPECT_EQ((ja * gains).data(), jscaled.data());
   ja *= gains;
+  EXPECT_EQ(ja.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(jscaled.data(), ja.data());
   JointAccelerations jscaled2 = ja * gains;
 
@@ -159,9 +180,11 @@ TEST(JointAccelerationsTest, ArrayMultiplication) {
   Eigen::ArrayXd gains = Eigen::ArrayXd::Random(ja.get_size());
 
   JointAccelerations jscaled = gains * ja;
+  EXPECT_EQ(jscaled.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(jscaled.data(), (gains * ja.array()).matrix());
   EXPECT_EQ((ja * gains).data(), jscaled.data());
   ja *= gains;
+  EXPECT_EQ(ja.get_type(), StateType::JOINT_ACCELERATIONS);
   EXPECT_EQ(jscaled.data(), ja.data());
 
   gains = Eigen::ArrayXd::Random(2 * ja.get_size());
@@ -172,8 +195,10 @@ TEST(JointAccelerationsTest, ChronoMultiplication) {
   JointAccelerations ja = JointAccelerations::Random("test", 3);
   auto time = std::chrono::seconds(2);
   JointVelocities jv1 = ja * time;
+  EXPECT_EQ(jv1.get_type(), StateType::JOINT_VELOCITIES);
   EXPECT_EQ(jv1.get_velocities(), ja.get_accelerations() * time.count());
   JointVelocities jv2 = time * ja;
+  EXPECT_EQ(jv2.get_type(), StateType::JOINT_VELOCITIES);
   EXPECT_EQ(jv2.get_velocities(), ja.get_accelerations() * time.count());
 
   JointAccelerations empty;

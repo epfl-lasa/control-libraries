@@ -21,6 +21,11 @@ Circular::Circular() :
   this->parameters_.insert(std::make_pair("circular_velocity", this->circular_velocity_));
 }
 
+Circular::Circular(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters) :
+    Circular() {
+  this->set_parameters(parameters);
+}
+
 void Circular::set_limit_cycle(Ellipsoid& limit_cycle) {
   const auto& center = limit_cycle.get_center_state();
   if (center.is_empty()) {
@@ -36,7 +41,8 @@ void Circular::set_limit_cycle(Ellipsoid& limit_cycle) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
           "The reference frame of the center " + center.get_name() + " in frame " + center.get_reference_frame()
               + " is incompatible with the base frame of the dynamical system " + this->get_base_frame().get_name()
-              + " in frame " + this->get_base_frame().get_reference_frame() + ".");
+              + " in frame " + this->get_base_frame().get_reference_frame() + "."
+      );
     }
     limit_cycle.set_center_state(this->get_base_frame().inverse() * center);
   }
@@ -71,7 +77,8 @@ void Circular::validate_and_set_parameter(const std::shared_ptr<ParameterInterfa
     this->circular_velocity_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else {
     throw state_representation::exceptions::InvalidParameterException(
-        "No parameter with name '" + parameter->get_name() + "' found");
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
   }
 }
 

@@ -12,8 +12,14 @@ static void expect_only_twist(CartesianTwist& twist) {
   EXPECT_EQ(static_cast<CartesianState&>(twist).get_wrench().norm(), 0);
 }
 
+TEST(CartesianTwistTest, EmptyConstructor) {
+  CartesianTwist empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_TWIST);
+}
+
 TEST(CartesianTwistTest, RandomTwistInitialization) {
   CartesianTwist random = CartesianTwist::Random("test");
+  EXPECT_EQ(random.get_type(), StateType::CARTESIAN_TWIST);
   EXPECT_GT(random.get_twist().norm(), 0);
   expect_only_twist(random);
 }
@@ -21,12 +27,14 @@ TEST(CartesianTwistTest, RandomTwistInitialization) {
 TEST(CartesianTwistTest, CopyTwist) {
   CartesianTwist twist1 = CartesianTwist::Random("test");
   CartesianTwist twist2(twist1);
+  EXPECT_EQ(twist1.get_type(), twist2.get_type());
   EXPECT_EQ(twist1.get_name(), twist2.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist2.get_reference_frame());
   EXPECT_EQ(twist1.data(), twist2.data());
   expect_only_twist(twist2);
 
   CartesianTwist twist3 = twist1;
+  EXPECT_EQ(twist1.get_type(), twist3.get_type());
   EXPECT_EQ(twist1.get_name(), twist3.get_name());
   EXPECT_EQ(twist1.get_reference_frame(), twist3.get_reference_frame());
   EXPECT_EQ(twist1.data(), twist3.data());
@@ -115,9 +123,11 @@ TEST(CartesianTwistTest, TestVelocityToAcceleration) {
   std::chrono::seconds dt1(1);
   std::chrono::milliseconds dt2(100);
   auto res1 = twist / dt1;
+  EXPECT_EQ(res1.get_type(), StateType::CARTESIAN_ACCELERATION);
   EXPECT_EQ(res1.get_linear_acceleration(), twist.get_linear_velocity());
   EXPECT_EQ(res1.get_angular_acceleration(), twist.get_angular_velocity());
   auto res2 = twist / dt2;
+  EXPECT_EQ(res2.get_type(), StateType::CARTESIAN_ACCELERATION);
   EXPECT_TRUE(res2.get_linear_acceleration().isApprox(10 * twist.get_linear_velocity()));
   EXPECT_TRUE(res2.get_angular_acceleration().isApprox(10 * twist.get_angular_velocity()));
 }
@@ -127,6 +137,7 @@ TEST(CartesianTwistTest, TestImplicitConversion) {
   acc.set_linear_acceleration(Eigen::Vector3d(0.1, 0.1, 0.1));
   acc.set_linear_acceleration(Eigen::Vector3d(M_PI, 0, 0));
   CartesianTwist twist(acc);
+  EXPECT_EQ(twist.get_type(), StateType::CARTESIAN_TWIST);
   EXPECT_EQ(twist.get_linear_velocity(), acc.get_linear_acceleration());
   EXPECT_EQ(twist.get_angular_velocity(), acc.get_angular_acceleration());
 }

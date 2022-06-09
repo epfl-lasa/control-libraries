@@ -4,25 +4,35 @@
 using namespace state_representation::exceptions;
 
 namespace state_representation {
+JointAccelerations::JointAccelerations() {
+  this->set_type(StateType::JOINT_ACCELERATIONS);
+}
+
 JointAccelerations::JointAccelerations(const std::string& robot_name, unsigned int nb_joints) :
-    JointState(robot_name, nb_joints) {}
+    JointState(robot_name, nb_joints) {
+  this->set_type(StateType::JOINT_ACCELERATIONS);
+}
 
 JointAccelerations::JointAccelerations(const std::string& robot_name, const Eigen::VectorXd& accelerations) :
     JointState(robot_name, accelerations.size()) {
+  this->set_type(StateType::JOINT_ACCELERATIONS);
   this->set_accelerations(accelerations);
 }
 
 JointAccelerations::JointAccelerations(const std::string& robot_name, const std::vector<std::string>& joint_names) :
-    JointState(robot_name, joint_names) {}
+    JointState(robot_name, joint_names) {
+  this->set_type(StateType::JOINT_ACCELERATIONS);}
 
 JointAccelerations::JointAccelerations(const std::string& robot_name,
                                        const std::vector<std::string>& joint_names,
                                        const Eigen::VectorXd& accelerations) : JointState(robot_name, joint_names) {
+  this->set_type(StateType::JOINT_ACCELERATIONS);
   this->set_accelerations(accelerations);
 }
 
 JointAccelerations::JointAccelerations(const JointState& state) : JointState(state) {
   // set all the state variables to 0 except accelerations
+  this->set_type(StateType::JOINT_ACCELERATIONS);
   this->set_zero();
   this->set_accelerations(state.get_accelerations());
   this->set_empty(state.is_empty());

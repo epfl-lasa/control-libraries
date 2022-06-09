@@ -12,8 +12,14 @@ static void expect_only_wrench(CartesianWrench& wrench) {
   EXPECT_EQ(static_cast<CartesianState&>(wrench).get_acceleration().norm(), 0);
 }
 
+TEST(CartesianWrenchTest, EmptyConstructor) {
+  CartesianWrench empty;
+  EXPECT_EQ(empty.get_type(), StateType::CARTESIAN_WRENCH);
+}
+
 TEST(CartesianWrenchTest, RandomWrenchInitialization) {
   CartesianWrench random = CartesianWrench::Random("test");
+  EXPECT_EQ(random.get_type(), StateType::CARTESIAN_WRENCH);
   EXPECT_NE(random.get_wrench().norm(), 0);
   expect_only_wrench(random);
 }
@@ -21,12 +27,14 @@ TEST(CartesianWrenchTest, RandomWrenchInitialization) {
 TEST(CartesianWrenchTest, CopyWrench) {
   CartesianWrench wrench1 = CartesianWrench::Random("test");
   CartesianWrench wrench2(wrench1);
+  EXPECT_EQ(wrench1.get_type(), wrench2.get_type());
   EXPECT_EQ(wrench1.get_name(), wrench2.get_name());
   EXPECT_EQ(wrench1.get_reference_frame(), wrench2.get_reference_frame());
   EXPECT_EQ(wrench1.data(), wrench2.data());
   expect_only_wrench(wrench2);
 
   CartesianWrench wrench3 = wrench1;
+  EXPECT_EQ(wrench1.get_type(), wrench3.get_type());
   EXPECT_EQ(wrench1.get_name(), wrench3.get_name());
   EXPECT_EQ(wrench1.get_reference_frame(), wrench3.get_reference_frame());
   EXPECT_EQ(wrench1.data(), wrench3.data());

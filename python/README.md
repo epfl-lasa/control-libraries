@@ -18,6 +18,9 @@ git clone https://github.com/epfl-lasa/control-libraries
 ## install control-libraries (skip this stage if already done)
 sudo control-libraries/source/install.sh
 
+## install protocol (skip this stage if already done or not desired)
+sudo control-libraries/protocol/install.sh
+
 ## install the bindings using the pip installer
 pip3 install control-libraries/python
 ```
@@ -49,7 +52,7 @@ import dynamical_systems
 print(sr.__version__)
 print(dynamical_systems.__version__)
 
-A = sr.CartesianState.Random("A")
+A = sr.CartesianState().Random("A")
 print(A)
 ```
 
@@ -57,10 +60,10 @@ Or, directly import specific classes from the module.
 ```python
 #!/usr/bin/env python
 from state_representation import JointState
-from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE
 
-B = JointState.Random("B", 3)
-ds = create_cartesian_ds(DYNAMICAL_SYSTEM.POINT_ATTRACTOR)
+B = JointState().Random("B", 3)
+ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.POINT_ATTRACTOR)
 ```
 
 If the `clproto` C++ library is installed, the installation steps above will automatically install the `clproto`
@@ -70,7 +73,7 @@ Python module which can be used to encode and decode objects into bytes of seria
 from state_representation import JointState
 import clproto
 
-B = JointState.Random("B", 3)
+B = JointState().Random("B", 3)
 encoded_msg = clproto.encode(B, clproto.MessageType.JOINT_STATE_MESSAGE)
 
 decoded_object = clproto.decode(encoded_msg)

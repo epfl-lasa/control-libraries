@@ -3,7 +3,7 @@ import numpy as np
 import state_representation as sr
 import unittest
 from datetime import timedelta
-from dynamical_systems import CartesianRingDS
+from dynamical_systems import create_cartesian_ds, DYNAMICAL_SYSTEM_TYPE
 
 
 class TestRing(unittest.TestCase):
@@ -25,11 +25,11 @@ class TestRing(unittest.TestCase):
             self.fail(f'{e}')
 
     def test_empty_constructor(self):
-        ds = CartesianRingDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.RING)
         center = sr.CartesianPose.Identity("CAttractor", "A")
 
         self.assertTrue(ds.get_parameter_value("center").is_empty())
-        ds.set_parameter(sr.Parameter("center", center, sr.StateType.PARAMETER_CARTESIANPOSE))
+        ds.set_parameter(sr.Parameter("center", center, sr.ParameterType.STATE, sr.StateType.CARTESIAN_POSE))
         self.assertFalse(ds.get_parameter_value("center").is_empty())
 
         self.assertFalse(ds.get_base_frame().is_empty())
@@ -38,7 +38,7 @@ class TestRing(unittest.TestCase):
         self.assert_np_array_equal(ds.get_base_frame().get_transformation_matrix(), np.eye(4))
 
     def test_is_compatible(self):
-        ds = CartesianRingDS()
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.RING)
         center = sr.CartesianPose.Identity("CAttractor", "A")
         state1 = sr.CartesianState.Identity("B", "A")
         state2 = sr.CartesianState.Identity("D", "C")
@@ -56,18 +56,18 @@ class TestRing(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             ds.evaluate(state4)
 
-        ds.set_parameter(sr.Parameter("center", center, sr.StateType.PARAMETER_CARTESIANPOSE))
+        ds.set_parameter(sr.Parameter("center", center, sr.ParameterType.STATE, sr.StateType.CARTESIAN_POSE))
         self.assertTrue(ds.is_compatible(state1))
         self.assertFalse(ds.is_compatible(state2))
         self.assertTrue(ds.is_compatible(state3))
         self.assertTrue(ds.is_compatible(state4))
 
     def test_points_on_radius(self):
-        ds = CartesianRingDS()
-        ds.set_parameter(sr.Parameter("center", self.center, sr.StateType.PARAMETER_CARTESIANPOSE))
-        ds.set_parameter(sr.Parameter("radius", self.radius, sr.StateType.PARAMETER_DOUBLE))
-        ds.set_parameter(sr.Parameter("width", self.width, sr.StateType.PARAMETER_DOUBLE))
-        ds.set_parameter(sr.Parameter("speed", self.speed, sr.StateType.PARAMETER_DOUBLE))
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.RING)
+        ds.set_parameter(sr.Parameter("center", self.center, sr.ParameterType.STATE, sr.StateType.CARTESIAN_POSE))
+        ds.set_parameter(sr.Parameter("radius", self.radius, sr.ParameterType.DOUBLE))
+        ds.set_parameter(sr.Parameter("width", self.width, sr.ParameterType.DOUBLE))
+        ds.set_parameter(sr.Parameter("speed", self.speed, sr.ParameterType.DOUBLE))
 
         current_pose = copy.deepcopy(self.center)
         twist = sr.CartesianTwist(ds.evaluate(current_pose))
@@ -99,9 +99,9 @@ class TestRing(unittest.TestCase):
 
     def test_convergence_on_radius_random_center(self):
         center = sr.CartesianPose.Random("A")
-        ds = CartesianRingDS()
-        ds.set_parameter(sr.Parameter("center", center, sr.StateType.PARAMETER_CARTESIANPOSE))
-        ds.set_parameter(sr.Parameter("radius", self.radius, sr.StateType.PARAMETER_DOUBLE))
+        ds = create_cartesian_ds(DYNAMICAL_SYSTEM_TYPE.RING)
+        ds.set_parameter(sr.Parameter("center", center, sr.ParameterType.STATE, sr.StateType.CARTESIAN_POSE))
+        ds.set_parameter(sr.Parameter("radius", self.radius, sr.ParameterType.DOUBLE))
 
         current_pose = sr.CartesianPose("B", self.radius * np.random.rand(3, 1))
         for i in range(self.nb_steps):

@@ -10,34 +10,51 @@
 
 using namespace state_representation;
 
+TEST(ParameterTest, CopyConstructor) {
+  Parameter<int> int_param("test", 1);
+  ParameterInterface int_param_interface(int_param);
+  EXPECT_EQ(int_param_interface.get_parameter_type(), int_param.get_parameter_type());
+}
+
 TEST(ParameterTest, Conversion) {
   Parameter<int> int_param("test");
   EXPECT_TRUE(int_param.is_empty());
-  EXPECT_EQ(int_param.get_type(), StateType::PARAMETER_INT);
+  EXPECT_EQ(int_param.get_type(), StateType::PARAMETER);
+  EXPECT_EQ(int_param.get_parameter_type(), ParameterType::INT);
+  EXPECT_EQ(int_param.get_parameter_state_type(), StateType::NONE);
   int_param.set_value(2);
   EXPECT_EQ(int_param.get_value(), 2);
   EXPECT_EQ(typeid(int_param.get_value<double>()).name(), typeid(2.0).name());
   Parameter<double> double_param("double");
   EXPECT_NO_THROW(double_param = int_param);
-  EXPECT_EQ(double_param.get_type(), StateType::PARAMETER_DOUBLE);
+  EXPECT_EQ(double_param.get_type(), StateType::PARAMETER);
+  EXPECT_EQ(double_param.get_parameter_type(), ParameterType::DOUBLE);
+  EXPECT_EQ(double_param.get_parameter_state_type(), StateType::NONE);
   EXPECT_EQ(double_param.get_name(), int_param.get_name());
   EXPECT_EQ(double_param.get_value(), 2.0);
 
   std::vector<int> values{1, 2, 3};
   Parameter<std::vector<int>> int_array_param("test", values);
   EXPECT_FALSE(int_array_param.is_empty());
-  EXPECT_EQ(int_array_param.get_type(), StateType::PARAMETER_INT_ARRAY);
+  EXPECT_EQ(int_array_param.get_type(), StateType::PARAMETER);
+  EXPECT_EQ(int_array_param.get_parameter_type(), ParameterType::INT_ARRAY);
+  EXPECT_EQ(int_array_param.get_parameter_state_type(), StateType::NONE);
   for (std::size_t i = 0; i < values.size(); ++i) {
     EXPECT_EQ(int_array_param.get_value().at(i), values.at(i));
   }
 
   Parameter<CartesianPose> test1("test", CartesianPose::Random("test"));
+  EXPECT_EQ(test1.get_parameter_state_type(), StateType::CARTESIAN_POSE);
   Parameter<CartesianState> test2(test1);
-  EXPECT_EQ(test2.get_type(), StateType::PARAMETER_CARTESIANSTATE);
+  EXPECT_EQ(test2.get_type(), StateType::PARAMETER);
+  EXPECT_EQ(test2.get_parameter_type(), ParameterType::STATE);
+  EXPECT_EQ(test2.get_parameter_state_type(), StateType::CARTESIAN_STATE);
 
   std::shared_ptr<Parameter<CartesianState>> test3 =
       std::make_shared<Parameter<CartesianState>>(Parameter<CartesianPose>("test", CartesianPose::Random("test")));
-  EXPECT_EQ(test3->get_type(), StateType::PARAMETER_CARTESIANSTATE);
+  EXPECT_EQ(test3->get_type(), StateType::PARAMETER);
+  EXPECT_EQ(test3->get_parameter_type(), ParameterType::STATE);
+  EXPECT_EQ(test3->get_parameter_state_type(), StateType::CARTESIAN_STATE);
 }
 
 TEST(ParameterTest, Event) {
@@ -82,7 +99,9 @@ TEST(ParameterTest, MakeShared) {
   auto pose = CartesianPose::Random("A", "B");
   auto param = make_shared_parameter("name", pose);
   EXPECT_EQ(param->get_name(), "name");
-  EXPECT_EQ(param->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(param->get_type(), StateType::PARAMETER);
+  EXPECT_EQ(param->get_parameter_type(), ParameterType::STATE);
+  EXPECT_EQ(param->get_parameter_state_type(), StateType::CARTESIAN_POSE);
   EXPECT_EQ(param->is_empty(), false);
   EXPECT_EQ(param->get_value().get_name(), "A");
   EXPECT_EQ(param->get_value().get_reference_frame(), "B");
@@ -95,13 +114,16 @@ TEST(ParameterTest, ParameterThroughInterface) {
 
   auto param = param_interface->get_parameter<CartesianPose>();
   EXPECT_EQ(param->get_name(), "name");
-  EXPECT_EQ(param->get_type(), StateType::PARAMETER_CARTESIANPOSE);
+  EXPECT_EQ(param->get_type(), StateType::PARAMETER);
+  EXPECT_EQ(param->get_parameter_type(), ParameterType::STATE);
+  EXPECT_EQ(param->get_parameter_state_type(), StateType::CARTESIAN_POSE);
   EXPECT_EQ(param->is_empty(), false);
   EXPECT_EQ(param->get_value().get_name(), "A");
   EXPECT_EQ(param->get_value().get_reference_frame(), "B");
   EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
 
   auto param_value = param_interface->get_parameter_value<CartesianPose>();
+  EXPECT_EQ(param_value.get_type(), StateType::CARTESIAN_POSE);
   EXPECT_EQ(param_value.get_name(), "A");
   EXPECT_EQ(param_value.get_reference_frame(), "B");
   EXPECT_TRUE(param_value.data().isApprox(pose.data()));
@@ -115,7 +137,7 @@ TEST(ParameterTest, ParameterThroughInterface) {
 }
 
 TEST(ParameterTest, ParameterInterfaceBadPointer) {
-  ParameterInterface parameter_interface(StateType::PARAMETER_INT, "name");
+  ParameterInterface parameter_interface("name", ParameterType::INT);
 
   // by default (validate_pointer = true), throw when the ParameterInterface instance is not managed by any pointer
   EXPECT_THROW(parameter_interface.get_parameter<int>(), exceptions::InvalidPointerException);
@@ -127,7 +149,7 @@ TEST(ParameterTest, ParameterInterfaceBadPointer) {
 }
 
 TEST(ParameterTest, ParameterInterfaceNullCast) {
-  auto parameter_interface_ptr = std::make_shared<ParameterInterface>(StateType::PARAMETER_INT, "name");
+  auto parameter_interface_ptr = std::make_shared<ParameterInterface>("name", ParameterType::INT);
   std::shared_ptr<Parameter<int>> parameter;
 
   // by default (validate_pointer = true), throw when the pointer does not address a Parameter instance

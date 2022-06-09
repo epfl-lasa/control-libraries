@@ -12,6 +12,7 @@
 void spatial_state(py::module_& m) {
   py::class_<SpatialState, std::shared_ptr<SpatialState>, State> c(m, "SpatialState");
 
+  c.def(py::init(), "Empty constructor.");
   c.def(py::init<const StateType&>(), "Constructor only specifying the type.", "type"_a);
   c.def(py::init<const StateType&, const std::string&, const std::string&, const bool&>(), "Constructor with name and reference frame specification.", "type"_a, "name"_a, "reference_frame"_a=std::string("world"), "empty"_a=true);
   c.def(py::init<const SpatialState&>(), "Copy constructor from another SpatialState.", "state"_a);
@@ -63,7 +64,11 @@ void cartesian_state(py::module_& m) {
   c.def_static("Random", &CartesianState::Random, "Constructor for a random state", "name"_a, "reference"_a=std::string("world"));
 
   c.def("get_position", &CartesianState::get_position, "Getter of the position attribute");
-  c.def("get_orientation", &CartesianState::get_orientation_coefficients, "Getter of the orientation attribute as quaternion coefficients (w, x, y, z)");
+  c.def("get_orientation", [](const CartesianState &state) -> py::object {
+    py::object PyQuaternion = py::module_::import("pyquaternion").attr("Quaternion");
+    return PyQuaternion(state.get_orientation_coefficients());;
+  }, "Getter of the orientation attribute as pyquaternion object");
+  c.def("get_orientation_coefficients", &CartesianState::get_orientation_coefficients, "Getter of the orientation attribute as quaternion coefficients (w, x, y, z)");
   c.def("get_pose", &CartesianState::get_pose, "Getter of a 7d pose vector from position and orientation coefficients");
   c.def("get_transformation_matrix", &CartesianState::get_transformation_matrix, "Getter of a 4x4 transformation matrix of the pose");
 
@@ -82,22 +87,48 @@ void cartesian_state(py::module_& m) {
   c.def("set_position", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_position), "Setter of the position");
   c.def("set_position", py::overload_cast<const std::vector<double>&>(&CartesianState::set_position), "Setter of the position from a list");
   c.def("set_position", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_position), "Setter of the position from three scalar coordinates", "x"_a, "y"_a, "z"_a);
-  c.def("set_orientation", py::overload_cast<const Eigen::Vector4d&>(&CartesianState::set_orientation), "Setter of the orientation from a 4d vector of quaternion coeffiecients (w, x, y, z)");
-  c.def("set_orientation", py::overload_cast<const std::vector<double>&>(&CartesianState::set_orientation), "Setter of the orientation from a 4d list of quaternion coeffiecients (w, x, y, z)");
-  c.def("set_pose", py::overload_cast<const Eigen::Matrix<double, 7, 1>&>(&CartesianState::set_pose), "Setter of the pose from a 7d vector of position and orientation coefficients (x, y, z, qw, qx, qy, qz");
-  c.def("set_pose", py::overload_cast<const std::vector<double>&>(&CartesianState::set_pose), "Setter of the pose from a 7d list of position and orientation coefficients (x, y, z, qw, qx, qy, qz");
+  c.def("set_orientation", [](CartesianState &state, const py::object& quaternion) {
+    py::object PyQuaternion = py::module_::import("pyquaternion").attr("Quaternion");
+    if (py::isinstance<py::list>(quaternion)) {
+      state.set_orientation(py::cast<std::vector<double>>(quaternion));
+    } else if (py::isinstance<py::array>(quaternion)) {
+      state.set_orientation(py::cast<Eigen::Vector4d>(quaternion));
+    } else if (py::isinstance(quaternion, PyQuaternion)) {
+      state.set_orientation(py::cast<Eigen::Vector4d>(quaternion.attr("elements")));
+    } else {
+      throw std::invalid_argument("Type of input argument quaternion is not supported. "
+                                  "Supported types are: pyquaternion.Quaternion, numpy.array, list");
+    }
+  }, "Setter of the orientation attribute from a pyquaternion.Quaternion, numpy.array(w, x, y, z), or list(w, x, y, z)");
+  c.def("set_pose", py::overload_cast<const Eigen::Matrix<double, 7, 1>&>(&CartesianState::set_pose), "Setter of the pose from a 7d vector of position and orientation coefficients (x, y, z, qw, qx, qy, qz)");
+  c.def("set_pose", py::overload_cast<const std::vector<double>&>(&CartesianState::set_pose), "Setter of the pose from a 7d list of position and orientation coefficients (x, y, z, qw, qx, qy, qz)");
 
-  c.def("set_linear_velocity", &CartesianState::set_linear_velocity, "Setter of the linear velocity attribute");
-  c.def("set_angular_velocity", &CartesianState::set_angular_velocity, "Setter of the angular velocity attribute");
-  c.def("set_twist", &CartesianState::set_twist, "Setter of the linear and angular velocities from a 6d twist vector");
+  c.def("set_linear_velocity", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity attribute");
+  c.def("set_linear_velocity", py::overload_cast<const std::vector<double>&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity from a list");
+  c.def("set_linear_velocity", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_linear_velocity), "Setter of the linear velocity from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_angular_velocity", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity attribute");
+  c.def("set_angular_velocity", py::overload_cast<const std::vector<double>&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity from a list");
+  c.def("set_angular_velocity", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_angular_velocity), "Setter of the angular velocity from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_twist", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_twist), "Setter of the linear and angular velocities from a 6d twist vector");
+  c.def("set_twist", py::overload_cast<const std::vector<double>&>(&CartesianState::set_twist), "Setter of the linear and angular velocities from a list");
 
-  c.def("set_linear_acceleration", &CartesianState::set_linear_acceleration, "Setter of the linear acceleration attribute");
-  c.def("set_angular_acceleration", &CartesianState::set_angular_acceleration, "Setter of the angular acceleration attribute");
-  c.def("set_acceleration", &CartesianState::set_acceleration, "Setter of the linear and angular acceleration from a 6d acceleration vector");
+  c.def("set_linear_acceleration", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration attribute");
+  c.def("set_linear_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration from a list");
+  c.def("set_linear_acceleration", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_linear_acceleration), "Setter of the linear acceleration from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_angular_acceleration", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration attribute");
+  c.def("set_angular_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration from a list");
+  c.def("set_angular_acceleration", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_angular_acceleration), "Setter of the angular acceleration from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_acceleration", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_acceleration), "Setter of the linear and angular accelerations from a 6d acceleration vector");
+  c.def("set_acceleration", py::overload_cast<const std::vector<double>&>(&CartesianState::set_acceleration), "Setter of the linear and angular accelerations from a list");
 
-  c.def("set_force", &CartesianState::set_force, "Setter of the force attribute");
-  c.def("set_torque", &CartesianState::set_torque, "Setter of the torque attribute");
-  c.def("set_wrench", &CartesianState::set_wrench, "Setter of the force and torque from a 6d wrench vector");
+  c.def("set_force", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_force), "Setter of the force attribute");
+  c.def("set_force", py::overload_cast<const std::vector<double>&>(&CartesianState::set_force), "Setter of the force from a list");
+  c.def("set_force", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_force), "Setter of the force from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_torque", py::overload_cast<const Eigen::Vector3d&>(&CartesianState::set_torque), "Setter of the torque attribute");
+  c.def("set_torque", py::overload_cast<const std::vector<double>&>(&CartesianState::set_torque), "Setter of the torque from a list");
+  c.def("set_torque", py::overload_cast<const double&, const double&, const double&>(&CartesianState::set_torque), "Setter of the torque from three scalar coordinates", "x"_a, "y"_a, "z"_a);
+  c.def("set_wrench", py::overload_cast<const Eigen::Matrix<double, 6, 1>&>(&CartesianState::set_wrench), "Setter of the force and torque from a 6d wrench vector");
+  c.def("set_wrench", py::overload_cast<const std::vector<double>&>(&CartesianState::set_wrench), "Setter of the force and torque velocities from a list");
 
   c.def("set_zero", &CartesianState::set_zero, "Set the CartesianState to a zero value");
   c.def("clamp_state_variable", &CartesianState::clamp_state_variable, "Clamp inplace the magnitude of the a specific state variable (velocity, acceleration or force)", "max_value"_a, "state_variable_type"_a, "noise_ratio"_a=double(0));
@@ -251,6 +282,7 @@ void cartesian_twist(py::module_& m) {
     c.def(std::string("get_" + attr).c_str(), [](const CartesianTwist&) -> void {}, "Deleted method from parent class.");
     c.def(std::string("set_" + attr).c_str(), [](const CartesianTwist& twist) -> CartesianTwist { return twist; }, "Deleted method from parent class.");
   }
+  c.def(std::string("get_orientation_coefficients").c_str(), [](const CartesianTwist&) -> void {}, "Deleted method from parent class.");
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);
@@ -324,6 +356,7 @@ void cartesian_acceleration(py::module_& m) {
     c.def(std::string("get_" + attr).c_str(), [](const CartesianAcceleration&) -> void {}, "Deleted method from parent class.");
     c.def(std::string("set_" + attr).c_str(), [](const CartesianAcceleration& acceleration) -> CartesianAcceleration { return acceleration; }, "Deleted method from parent class.");
   }
+  c.def(std::string("get_orientation_coefficients").c_str(), [](const CartesianAcceleration&) -> void {}, "Deleted method from parent class.");
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);
@@ -395,6 +428,7 @@ void cartesian_wrench(py::module_& m) {
     c.def(std::string("get_" + attr).c_str(), [](const CartesianWrench&) -> void {}, "Deleted method from parent class.");
     c.def(std::string("set_" + attr).c_str(), [](const CartesianWrench& wrench) -> CartesianWrench { return wrench; }, "Deleted method from parent class.");
   }
+  c.def(std::string("get_orientation_coefficients").c_str(), [](const CartesianWrench&) -> void {}, "Deleted method from parent class.");
 
   c.def(py::self += py::self);
   c.def(py::self + py::self);

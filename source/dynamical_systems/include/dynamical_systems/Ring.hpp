@@ -21,6 +21,12 @@ public:
   Ring();
 
   /**
+   * @brief Constructor from an initial parameter list
+   * @param parameters A parameter list containing initial parameters
+   */
+  explicit Ring(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters);
+
+  /**
    * @copydoc IDynamicalSystem::set_parameter
    */
   void set_base_frame(const state_representation::CartesianState& base_frame) override;

@@ -1,6 +1,0 @@
-# Adding all the necessary ros sourcing
-echo "" >> ~/.bashrc
-echo "## ROS" >> ~/.bashrc
-echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
-echo "source ${ROS_WORKSPACE}/devel/setup.bash" >> ~/.bashrc
-echo "source ${ROS_WORKSPACE}/install/setup.bash" >> ~/.bashrc

@@ -32,6 +32,10 @@ Ring::Ring() :
   this->parameters_.insert(std::make_pair("angular_gain", this->angular_gain_));
 }
 
+Ring::Ring(const std::list<std::shared_ptr<state_representation::ParameterInterface>>& parameters) : Ring() {
+  this->set_parameters(parameters);
+}
+
 void Ring::set_center(const CartesianPose& center) {
   if (center.is_empty()) {
     throw state_representation::exceptions::EmptyStateException(center.get_name() + " state is empty");
@@ -46,7 +50,8 @@ void Ring::set_center(const CartesianPose& center) {
       throw state_representation::exceptions::IncompatibleReferenceFramesException(
           "The reference frame of the center " + center.get_name() + " in frame " + center.get_reference_frame()
               + " is incompatible with the base frame of the dynamical system " + this->get_base_frame().get_name()
-              + " in frame " + this->get_base_frame().get_reference_frame() + ".");
+              + " in frame " + this->get_base_frame().get_reference_frame() + "."
+      );
     }
     this->center_->set_value(this->get_base_frame().inverse() * center);
   } else {
@@ -104,7 +109,8 @@ void Ring::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>&
     this->angular_gain_->set_value(std::static_pointer_cast<Parameter<double>>(parameter)->get_value());
   } else {
     throw state_representation::exceptions::InvalidParameterException(
-        "No parameter with name '" + parameter->get_name() + "' found");
+        "No parameter with name '" + parameter->get_name() + "' found"
+    );
   }
 }
 
@@ -212,7 +218,8 @@ CartesianState Ring::compute_dynamics(const CartesianState& state) const {
   twist.set_linear_velocity(this->calculate_local_linear_velocity(pose, local_field_strength));
   twist.set_angular_velocity(
       this->calculate_local_angular_velocity(
-          pose, twist.get_linear_velocity(), local_field_strength));
+          pose, twist.get_linear_velocity(), local_field_strength
+      ));
 
   // transform the twist back to the base reference frame
   return CartesianState(this->center_->get_value()) * twist;

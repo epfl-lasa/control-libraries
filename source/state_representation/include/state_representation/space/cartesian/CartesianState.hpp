@@ -109,8 +109,8 @@ public:
 
   /**
    * @brief Constructor with name and reference frame provided
-   * @brief name the name of the state
-   * @brief reference the name of the reference frame
+   * @param name the name of the state
+   * @param reference the name of the reference frame
    */
   explicit CartesianState(const std::string& name, const std::string& reference = "world");
 
@@ -258,6 +258,11 @@ public:
   void set_orientation(const std::vector<double>& orientation);
 
   /**
+   * @brief Setter of the orientation from four scalar coefficients (w, x, y, z)
+   */
+  void set_orientation(const double& w, const double& x, const double& y, const double& z);
+
+  /**
    * @brief Setter of the pose from both position and orientation
    * @param position the position
    * @param orientation the orientation
@@ -284,9 +289,29 @@ public:
   void set_linear_velocity(const Eigen::Vector3d& linear_velocity);
 
   /**
+   * @brief Setter of the linear velocity from a std vector
+   */
+  void set_linear_velocity(const std::vector<double>& linear_velocity);
+
+  /**
+   * @brief Setter of the linear velocity from three scalar coordinates
+   */
+  void set_linear_velocity(const double& x, const double& y, const double& z);
+
+  /**
    * @brief Setter of the angular velocity attribute
    */
   void set_angular_velocity(const Eigen::Vector3d& angular_velocity);
+
+  /**
+   * @brief Setter of the angular velocity from a std vector
+   */
+  void set_angular_velocity(const std::vector<double>& angular_velocity);
+
+  /**
+   * @brief Setter of the angular velocity from three scalar coordinates
+   */
+  void set_angular_velocity(const double& x, const double& y, const double& z);
 
   /**
    * @brief Setter of the linear and angular velocities from a 6d twist vector
@@ -294,9 +319,24 @@ public:
   void set_twist(const Eigen::Matrix<double, 6, 1>& twist);
 
   /**
+   * @brief Setter of the linear and angular velocities from a std vector
+   */
+  void set_twist(const std::vector<double>& twist);
+
+  /**
    * @brief Setter of the linear acceleration attribute
    */
   void set_linear_acceleration(const Eigen::Vector3d& linear_acceleration);
+
+  /**
+   * @brief Setter of the linear acceleration from a std vector
+   */
+  void set_linear_acceleration(const std::vector<double>& linear_acceleration);
+
+  /**
+   * @brief Setter of the linear acceleration from three scalar coordinates
+   */
+  void set_linear_acceleration(const double& x, const double& y, const double& z);
 
   /**
    * @brief Setter of the angular velocity attribute
@@ -304,9 +344,24 @@ public:
   void set_angular_acceleration(const Eigen::Vector3d& angular_acceleration);
 
   /**
+   * @brief Setter of the angular acceleration from a std vector
+   */
+  void set_angular_acceleration(const std::vector<double>& angular_acceleration);
+
+  /**
+   * @brief Setter of the angular acceleration from three scalar coordinates
+   */
+  void set_angular_acceleration(const double& x, const double& y, const double& z);
+
+  /**
    * @brief Setter of the linear and angular acceleration from a 6d acceleration vector
    */
   void set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration);
+
+  /**
+   * @brief Setter of the linear and angular acceleration from a std vector
+   */
+  void set_acceleration(const std::vector<double>& acceleration);
 
   /**
    * @brief Setter of the force attribute
@@ -314,14 +369,39 @@ public:
   void set_force(const Eigen::Vector3d& force);
 
   /**
-   * @brief Setter of the force attribute
+   * @brief Setter of the force from a std vector
+   */
+  void set_force(const std::vector<double>& force);
+
+  /**
+   * @brief Setter of the force from three scalar coordinates
+   */
+  void set_force(const double& x, const double& y, const double& z);
+
+  /**
+   * @brief Setter of the torque attribute
    */
   void set_torque(const Eigen::Vector3d& torque);
+
+  /**
+   * @brief Setter of the torque from a std vector
+   */
+  void set_torque(const std::vector<double>& torque);
+
+  /**
+   * @brief Setter of the torque from three scalar coordinates
+   */
+  void set_torque(const double& x, const double& y, const double& z);
 
   /**
    * @brief Setter of the force and torque from a 6d wrench vector
    */
   void set_wrench(const Eigen::Matrix<double, 6, 1>& wrench);
+
+  /**
+   * @brief Setter of the force and torque from a std vector
+   */
+  void set_wrench(const std::vector<double>& wrench);
 
   /**
    * @brief Initialize the CartesianState to a zero value
@@ -535,74 +615,6 @@ inline CartesianState& CartesianState::operator=(const CartesianState& state) {
   return *this;
 }
 
-inline const Eigen::Vector3d& CartesianState::get_position() const {
-  return this->position_;
-}
-
-inline const Eigen::Quaterniond& CartesianState::get_orientation() const {
-  return this->orientation_;
-}
-
-inline Eigen::Vector4d CartesianState::get_orientation_coefficients() const {
-  return Eigen::Vector4d(
-      this->get_orientation().w(), this->get_orientation().x(), this->get_orientation().y(),
-      this->get_orientation().z());
-}
-
-inline Eigen::Matrix<double, 7, 1> CartesianState::get_pose() const {
-  Eigen::Matrix<double, 7, 1> pose;
-  pose << this->get_position(), this->get_orientation_coefficients();
-  return pose;
-}
-
-inline Eigen::Matrix4d CartesianState::get_transformation_matrix() const {
-  Eigen::Matrix4d pose;
-  pose << this->orientation_.toRotationMatrix(), this->position_, 0., 0., 0., 1;
-  return pose;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_linear_velocity() const {
-  return this->linear_velocity_;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_angular_velocity() const {
-  return this->angular_velocity_;
-}
-
-inline Eigen::Matrix<double, 6, 1> CartesianState::get_twist() const {
-  Eigen::Matrix<double, 6, 1> twist;
-  twist << this->get_linear_velocity(), this->get_angular_velocity();
-  return twist;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_linear_acceleration() const {
-  return this->linear_acceleration_;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_angular_acceleration() const {
-  return this->angular_acceleration_;
-}
-
-inline Eigen::Matrix<double, 6, 1> CartesianState::get_acceleration() const {
-  Eigen::Matrix<double, 6, 1> acceleration;
-  acceleration << this->get_linear_acceleration(), this->get_angular_acceleration();
-  return acceleration;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_force() const {
-  return this->force_;
-}
-
-inline const Eigen::Vector3d& CartesianState::get_torque() const {
-  return this->torque_;
-}
-
-inline Eigen::Matrix<double, 6, 1> CartesianState::get_wrench() const {
-  Eigen::Matrix<double, 6, 1> wrench;
-  wrench << this->get_force(), this->get_torque();
-  return wrench;
-}
-
 inline Eigen::VectorXd CartesianState::get_state_variable(const CartesianStateVariable& state_variable_type) const {
   switch (state_variable_type) {
     case CartesianStateVariable::POSITION:
@@ -680,88 +692,6 @@ inline void CartesianState::set_state_variable(
 ) {
   this->set_state_variable(linear_state_variable, new_value.head(3));
   this->set_state_variable(angular_state_variable, new_value.tail(3));
-}
-
-inline void CartesianState::set_position(const Eigen::Vector3d& position) {
-  this->set_state_variable(this->position_, position);
-}
-
-inline void CartesianState::set_position(const std::vector<double>& position) {
-  this->set_state_variable(this->position_, position);
-}
-
-inline void CartesianState::set_position(const double& x, const double& y, const double& z) {
-  this->set_position(Eigen::Vector3d(x, y, z));
-}
-
-inline void CartesianState::set_orientation(const Eigen::Quaterniond& orientation) {
-  this->set_filled();
-  this->orientation_ = orientation.normalized();
-}
-
-inline void CartesianState::set_orientation(const Eigen::Vector4d& orientation) {
-  this->set_orientation(Eigen::Quaterniond(orientation(0), orientation(1), orientation(2), orientation(3)));
-}
-
-inline void CartesianState::set_orientation(const std::vector<double>& orientation) {
-  if (orientation.size() != 4) {
-    throw exceptions::IncompatibleSizeException("The input vector is not of size 4 required for orientation");
-  }
-  this->set_orientation(Eigen::Vector4d::Map(orientation.data(), orientation.size()));
-}
-
-inline void CartesianState::set_pose(const Eigen::Vector3d& position, const Eigen::Quaterniond& orientation) {
-  this->set_position(position);
-  this->set_orientation(orientation);
-}
-
-inline void CartesianState::set_pose(const Eigen::Matrix<double, 7, 1>& pose) {
-  this->set_position(pose.head(3));
-  this->set_orientation(pose.tail(4));
-}
-
-inline void CartesianState::set_pose(const std::vector<double>& pose) {
-  if (pose.size() != 7) {
-    throw exceptions::IncompatibleSizeException("The input vector is not of size 7 required for pose");
-  }
-  this->set_position(std::vector<double>(pose.begin(), pose.begin() + 3));
-  this->set_orientation(std::vector<double>(pose.begin() + 3, pose.end()));
-}
-
-inline void CartesianState::set_linear_velocity(const Eigen::Vector3d& linear_velocity) {
-  this->set_state_variable(this->linear_velocity_, linear_velocity);
-}
-
-inline void CartesianState::set_angular_velocity(const Eigen::Vector3d& angular_velocity) {
-  this->set_state_variable(this->angular_velocity_, angular_velocity);
-}
-
-inline void CartesianState::set_twist(const Eigen::Matrix<double, 6, 1>& twist) {
-  this->set_state_variable(this->linear_velocity_, this->angular_velocity_, twist);
-}
-
-inline void CartesianState::set_linear_acceleration(const Eigen::Vector3d& linear_acceleration) {
-  this->set_state_variable(this->linear_acceleration_, linear_acceleration);
-}
-
-inline void CartesianState::set_angular_acceleration(const Eigen::Vector3d& angular_acceleration) {
-  this->set_state_variable(this->angular_acceleration_, angular_acceleration);
-}
-
-inline void CartesianState::set_acceleration(const Eigen::Matrix<double, 6, 1>& acceleration) {
-  this->set_state_variable(this->linear_acceleration_, this->angular_acceleration_, acceleration);
-}
-
-inline void CartesianState::set_force(const Eigen::Vector3d& force) {
-  this->set_state_variable(this->force_, force);
-}
-
-inline void CartesianState::set_torque(const Eigen::Vector3d& torque) {
-  this->set_state_variable(this->torque_, torque);
-}
-
-inline void CartesianState::set_wrench(const Eigen::Matrix<double, 6, 1>& wrench) {
-  this->set_state_variable(this->force_, this->torque_, wrench);
 }
 
 inline void CartesianState::set_state_variable(

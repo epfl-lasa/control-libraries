@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [6.0.0](#600)
 - [5.2.0](#520)
 - [5.1.0](#510)
 - [5.0.0](#500)
@@ -10,6 +11,65 @@ Release Versions:
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 6.0.0
+
+Version 6.0.0 refactors the StateType enum in state representation to be more descriptive and widely useful as well as 
+the dynamical systems factory for easier creation of these classes. This major change breaks implementations using
+StateType enums explicitly (e.g. for parameters) and dynamical systems from the prior version.
+
+See the updated documentation for usage guidelines for the DynamicalSystemsFactory.
+
+This release also includes a few new features, fixes and improvements as well as updated documentation in 
+all parts of the control libraries.
+
+### Breaking changes
+
+This release contains the following breaking changes:
+- Refactor `StateType` enum and `ParameterType` enum (#277, #278, #280, #284)
+- Relocate the `DYNAMICAL_SYSTEM_TYPE` enum to the general `dynamical_systems` namespace (#288)
+
+**state_representation**
+
+To make the `StateType` enum more descriptive and useful, individual spatial state types have been added
+and the `ParameterType` moved to a separate enum. This change helps with the translation of parameters and
+encoded states in downstream projects by allowing for greater introspection of data types from this enum.
+
+Any implementations that use `StateType` from a prior version to create parameters or compare state types should be
+updated.
+
+**dynamical_systems**
+
+The previous `DYNAMICAL_SYSTEM` enum has been removed from the dynamical system factory class and put directly in the
+general `dynamical_systems` namespace and renamed to `DYNAMICAL_SYSTEM_TYPE` to shorten the creation and to have the
+same structure as the controllers factory. 
+
+Any implementations that use the previous enum have to be updated. See the documentation for more information.
+
+### Features
+
+**state_representation**
+- Add CartesianState attribute setters from std vector and coefficients (#291)
+
+**python**
+- Use pyquaternion in bindings (#283)
+
+**protocol**
+- Add encode/decode options for shared pointer of State (#287)
+- Add CMake config for clproto (#292)
+
+### Fixes and improvements
+
+**state_representation**
+- Mark Parameter getters as const (#289)
+- Throw exception upon parameter validation in controllers (#290)
+
+**python**
+- Fix if else conditions in setup.py to correctly install modules (#285)
+
+**general**
+- Update and extend demos with Python examples and migrate ROS demos away (#293)
+- Update documentation (#294)
 
 ## 5.2.0
 

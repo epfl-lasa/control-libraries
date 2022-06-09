@@ -2,6 +2,7 @@ import unittest
 import copy
 
 import numpy as np
+from pyquaternion.quaternion import Quaternion
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 from state_representation import State, CartesianState, StateType, CartesianStateVariable
 
@@ -25,6 +26,7 @@ CARTESIAN_STATE_METHOD_EXPECTS = [
     'get_linear_velocity',
     'get_name',
     'get_orientation',
+    'get_orientation_coefficients',
     'get_pose',
     'get_position',
     'get_reference_frame',
@@ -107,19 +109,19 @@ class TestCartesianState(unittest.TestCase):
         empty1 = CartesianState()
         self.assertTrue(isinstance(empty1, State))
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty1.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty1.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty1, "", True, "world")
         self.assertAlmostEqual(np.linalg.norm(empty1.data()), 1)
 
         empty2 = CartesianState("test")
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty2.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty2.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty2, "test", True, "world")
         self.assertAlmostEqual(np.linalg.norm(empty2.data()), 1)
 
         empty3 = CartesianState("test", "reference")
         self.assertEqual(type(empty1), CartesianState)
-        self.assertEqual(empty3.get_type(), StateType.CARTESIANSTATE)
+        self.assertEqual(empty3.get_type(), StateType.CARTESIAN_STATE)
         self.assert_name_empty_frame_equal(empty3, "test", True, "reference")
         self.assertAlmostEqual(np.linalg.norm(empty3.data()), 1)
 
@@ -128,7 +130,7 @@ class TestCartesianState(unittest.TestCase):
         self.assertTrue(isinstance(identity, State))
         self.assertFalse(identity.is_empty())
         self.assertAlmostEqual(np.linalg.norm(identity.get_position()), 0)
-        self.assertAlmostEqual(np.linalg.norm(identity.get_orientation()), 1)
+        self.assertAlmostEqual(identity.get_orientation().norm, 1)
         self.assertAlmostEqual(identity.get_orientation()[0], 1)
         self.assertAlmostEqual(np.linalg.norm(identity.get_twist()), 0)
         self.assertAlmostEqual(np.linalg.norm(identity.get_acceleration()), 0)
@@ -139,7 +141,7 @@ class TestCartesianState(unittest.TestCase):
         self.assertTrue(isinstance(random, State))
         self.assertFalse(random.is_empty())
         self.assertTrue(np.linalg.norm(random.get_position()) > 0)
-        self.assertAlmostEqual(np.linalg.norm(random.get_orientation()), 1)
+        self.assertAlmostEqual(random.get_orientation().norm, 1)
         [self.assertTrue(random.get_orientation()[i] != 0) for i in range(4)]
         self.assertTrue(np.linalg.norm(random.get_twist()) > 0)
         self.assertTrue(np.linalg.norm(random.get_acceleration()) > 0)
@@ -188,14 +190,20 @@ class TestCartesianState(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             cs.set_position([1., 2., 3., 4.])
 
-        # orientation
+        # orientation coefficients
         orientation_vec = np.random.rand(4)
         orientation_vec = orientation_vec / np.linalg.norm(orientation_vec)
         cs.set_orientation(orientation_vec)
         [self.assertAlmostEqual(cs.get_orientation()[i], orientation_vec[i]) for i in range(4)]
-        # TODO what is an Eigen::Quaternion in Python ?
         with self.assertRaises(RuntimeError):
-            cs.set_orientation(position)
+            cs.set_orientation(orientation_vec[:3])
+
+        # orientation quaternion
+        quaternion = Quaternion.random()
+        cs.set_orientation(quaternion)
+        assert_array_almost_equal(cs.get_orientation().elements, quaternion.elements)
+        with self.assertRaises(ValueError):
+            cs.set_orientation(dict())
 
         matrix = cs.get_transformation_matrix()
         trans = matrix[:3, 3]
@@ -320,7 +328,7 @@ class TestCartesianState(unittest.TestCase):
         norms = cs.norms()
         self.assertEqual(len(norms), 8)
         self.assertAlmostEqual(norms[0], np.linalg.norm(cs.get_position()))
-        self.assertAlmostEqual(norms[1], np.linalg.norm(cs.get_orientation()))
+        self.assertAlmostEqual(norms[1], cs.get_orientation().norm)
         self.assertAlmostEqual(norms[2], np.linalg.norm(cs.get_linear_velocity()))
         self.assertAlmostEqual(norms[3], np.linalg.norm(cs.get_angular_velocity()))
         self.assertAlmostEqual(norms[4], np.linalg.norm(cs.get_linear_acceleration()))

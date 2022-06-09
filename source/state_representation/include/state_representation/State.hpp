@@ -9,6 +9,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
+#include "state_representation/StateType.hpp"
 #include "state_representation/MathTools.hpp"
 
 /**
@@ -16,31 +17,6 @@
  * @brief Core state variables and objects
  */
 namespace state_representation {
-enum class StateType {
-  STATE,
-  CARTESIANSTATE,
-  DUALQUATERNIONSTATE,
-  JOINTSTATE,
-  JACOBIANMATRIX,
-  TRAJECTORY,
-  GEOMETRY_SHAPE,
-  GEOMETRY_ELLIPSOID,
-  PARAMETER_DOUBLE,
-  PARAMETER_DOUBLE_ARRAY,
-  PARAMETER_BOOL,
-  PARAMETER_BOOL_ARRAY,
-  PARAMETER_STRING,
-  PARAMETER_STRING_ARRAY,
-  PARAMETER_CARTESIANSTATE,
-  PARAMETER_CARTESIANPOSE,
-  PARAMETER_JOINTSTATE,
-  PARAMETER_JOINTPOSITIONS,
-  PARAMETER_ELLIPSOID,
-  PARAMETER_MATRIX,
-  PARAMETER_VECTOR,
-  PARAMETER_INT,
-  PARAMETER_INT_ARRAY
-};
 
 /**
  * @class State
@@ -178,6 +154,13 @@ public:
    */
   friend std::ostream& operator<<(std::ostream& os, const State& state);
 
+protected:
+  /**
+   * @brief Override the state type
+   * @param type the type of the state to set
+   */
+  void set_type(const StateType& type);
+
 private:
   StateType type_;                                              ///< type of the State
   std::string name_;                                            ///< name of the state
@@ -198,54 +181,14 @@ inline State& State::operator=(const State& state) {
   return *this;
 }
 
-inline const StateType& State::get_type() const {
-  return this->type_;
-}
-
-inline bool State::is_empty() const {
-  return this->empty_;
-}
-
-inline void State::set_empty(bool empty) {
-  this->empty_ = empty;
-}
-
-inline void State::set_filled() {
-  this->empty_ = false;
-  this->reset_timestamp();
-}
-
-inline const std::chrono::time_point<std::chrono::steady_clock>& State::get_timestamp() const {
-  return this->timestamp_;
-}
-
-inline void State::set_timestamp(const std::chrono::time_point<std::chrono::steady_clock>& timepoint) {
-  this->timestamp_ = timepoint;
-}
-
-inline void State::reset_timestamp() {
-  this->timestamp_ = std::chrono::steady_clock::now();
-}
-
 template<typename DurationT>
 inline bool State::is_deprecated(const std::chrono::duration<int64_t, DurationT>& time_delay) {
   return ((std::chrono::steady_clock::now() - this->timestamp_) > time_delay);
 }
 
-inline const std::string& State::get_name() const {
-  return this->name_;
+template<typename T>
+std::shared_ptr<State> make_shared_state(const T& state) {
+  return std::make_shared<T>(state);
 }
 
-inline void State::set_name(const std::string& name) {
-  this->name_ = name;
-}
-
-inline bool State::is_compatible(const State& state) const {
-  bool compatible = (this->name_ == state.name_);
-  return compatible;
-}
-
-inline void State::initialize() {
-  this->empty_ = true;
-}
 }// namespace state_representation

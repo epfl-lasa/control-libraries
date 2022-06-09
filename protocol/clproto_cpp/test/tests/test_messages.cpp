@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <state_representation/State.hpp>
+#include <state_representation/geometry/Ellipsoid.hpp>
 #include <state_representation/space/cartesian/CartesianState.hpp>
 #include <state_representation/space/cartesian/CartesianPose.hpp>
 
@@ -14,7 +15,7 @@ TEST(MessageProtoTest, EncodeDecodeState) {
   EXPECT_TRUE(clproto::is_valid(msg));
   EXPECT_TRUE(clproto::check_message_type(msg) == clproto::STATE_MESSAGE);
 
-  State recv_state(StateType::PARAMETER_MATRIX);
+  State recv_state(StateType::STATE);
   EXPECT_NO_THROW(clproto::decode<State>(msg));
   EXPECT_TRUE(clproto::decode(msg, recv_state));
 
@@ -23,6 +24,19 @@ TEST(MessageProtoTest, EncodeDecodeState) {
   EXPECT_STREQ(send_state.get_name().c_str(), recv_state.get_name().c_str());
   EXPECT_EQ(send_state.get_timestamp().time_since_epoch().count(),
             recv_state.get_timestamp().time_since_epoch().count());
+}
+
+TEST(MessageProtoTest, EncodeDecodeInvalidState) {
+  auto send_state = Ellipsoid("ellipsoid");
+  auto send_state_ptr = make_shared_state(send_state);
+  EXPECT_THROW(clproto::encode(send_state_ptr), std::invalid_argument);
+
+  auto send_state_2 = State(StateType::STATE, "A", false);
+  std::string msg = clproto::encode(send_state_2);
+
+  Ellipsoid recv_state;
+  auto recv_state_ptr = make_shared_state(recv_state);
+  EXPECT_FALSE(clproto::decode(msg, recv_state_ptr));
 }
 
 TEST(MessageProtoTest, DecodeInvalidString) {

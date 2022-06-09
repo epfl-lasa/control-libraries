@@ -56,10 +56,10 @@ bool PointAttractor<JointState>::is_compatible(const JointState& state) const {
 
 template<class S>
 void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& parameter, unsigned int expected_size) {
-  if (parameter->get_type() == StateType::PARAMETER_DOUBLE) {
+  if (parameter->get_parameter_type() == ParameterType::DOUBLE) {
     auto gain = parameter->get_parameter_value<double>();
     this->gain_->set_value(gain * Eigen::MatrixXd::Identity(expected_size, expected_size));
-  } else if (parameter->get_type() == StateType::PARAMETER_DOUBLE_ARRAY) {
+  } else if (parameter->get_parameter_type() == ParameterType::DOUBLE_ARRAY) {
     auto gain = parameter->get_parameter_value<std::vector<double>>();
     if (gain.size() != expected_size) {
       throw exceptions::IncompatibleSizeException(
@@ -67,7 +67,7 @@ void PointAttractor<S>::set_gain(const std::shared_ptr<ParameterInterface>& para
     }
     Eigen::VectorXd diagonal = Eigen::VectorXd::Map(gain.data(), expected_size);
     this->gain_->set_value(diagonal.asDiagonal());
-  } else if (parameter->get_type() == StateType::PARAMETER_MATRIX) {
+  } else if (parameter->get_parameter_type() == ParameterType::MATRIX) {
     auto gain = parameter->get_parameter_value<Eigen::MatrixXd>();
     if (gain.rows() != expected_size && gain.cols() != expected_size) {
       throw exceptions::IncompatibleSizeException(
@@ -143,9 +143,9 @@ void PointAttractor<CartesianState>::set_base_frame(const CartesianState& base_f
 template<>
 void PointAttractor<CartesianState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
-    if (parameter->get_type() == StateType::PARAMETER_CARTESIANSTATE) {
+    if (parameter->get_parameter_state_type() == StateType::CARTESIAN_STATE) {
       this->set_attractor(parameter->get_parameter_value<CartesianState>());
-    } else if (parameter->get_type() == StateType::PARAMETER_CARTESIANPOSE) {
+    } else if (parameter->get_parameter_state_type() == StateType::CARTESIAN_POSE) {
       this->set_attractor(parameter->get_parameter_value<CartesianPose>());
     }
   } else if (parameter->get_name() == "gain") {
@@ -159,9 +159,9 @@ void PointAttractor<CartesianState>::validate_and_set_parameter(const std::share
 template<>
 void PointAttractor<JointState>::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   if (parameter->get_name() == "attractor") {
-    if (parameter->get_type() == StateType::PARAMETER_JOINTSTATE) {
+    if (parameter->get_parameter_state_type() == StateType::JOINT_STATE) {
     this->set_attractor(parameter->get_parameter_value<JointState>());
-  } else if (parameter->get_type() == StateType::PARAMETER_JOINTPOSITIONS) {
+  } else if (parameter->get_parameter_state_type() == StateType::JOINT_POSITIONS) {
     this->set_attractor(parameter->get_parameter_value<JointPositions>());
   }
   } else if (parameter->get_name() == "gain") {

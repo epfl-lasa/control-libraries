@@ -22,7 +22,6 @@ RUN cmake -DBUILD_TESTING="${BUILD_TESTING}" .. && make -j all
 FROM build as testing
 
 RUN CTEST_OUTPUT_ON_FAILURE=1 make test
-RUN rm -rf /tmp/protocol/
 
 
 FROM build as install

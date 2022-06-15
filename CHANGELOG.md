@@ -12,6 +12,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Extend clproto tests (#297)
+
 ## 6.0.0
 
 Version 6.0.0 refactors the StateType enum in state representation to be more descriptive and widely useful as well as 

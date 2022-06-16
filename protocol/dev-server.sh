@@ -29,7 +29,7 @@ Options:
   -p, --port <XXXX>        Specify the port to bind for SSH
                            connection.
                            (default: ${SSH_PORT})
-  -k, --key-file [path]    Specify the path of the RSA
+  -k, --key-file <path>    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
   -r, --rebuild            Rebuild the image with the --no-cache option.
@@ -38,6 +38,7 @@ Options:
 BUILD_FLAGS=()
 while [ "$#" -gt 0 ]; do
   case "$1" in
+  -b|--branch) BRANCH=$2; shift 2;;
   -p|--port) SSH_PORT=$2; shift 2;;
   -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
   -h|--help) echo "${HELP_MESSAGE}"; exit 0;;

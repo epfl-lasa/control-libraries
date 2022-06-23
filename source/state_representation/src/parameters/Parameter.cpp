@@ -128,6 +128,11 @@ Parameter<JointPositions>::Parameter(const std::string& name, const JointPositio
 }
 
 template<>
+Parameter<Ellipsoid>::Parameter(const std::string& name) :
+    ParameterInterface(name, ParameterType::STATE, StateType::GEOMETRY_ELLIPSOID), value_() {
+}
+
+template<>
 Parameter<Ellipsoid>::Parameter(const std::string& name, const Ellipsoid& value) :
     ParameterInterface(name, ParameterType::STATE, StateType::GEOMETRY_ELLIPSOID), value_(value) {
   this->set_filled();

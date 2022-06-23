@@ -15,6 +15,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Extend clproto tests (#297)
+- Set default values of empty Parameters correctly (#298)
 
 ## 6.0.0
 

@@ -28,7 +28,6 @@ ParameterContainer::ParameterContainer(
       case StateType::GEOMETRY_ELLIPSOID:
         values.state_pointer = std::make_shared<Ellipsoid>();
         break;
-      }
       default:
         throw std::invalid_argument("The desired StateType for parameter " + this->get_name() + " is not supported.");
         break;

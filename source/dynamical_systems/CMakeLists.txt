@@ -1,7 +1,5 @@
 set(LIBRARY_NAME dynamical_systems)
 
-find_library(state_representation REQUIRED)
-
 set(CORE_SOURCES
   src/IDynamicalSystem.cpp
   src/DynamicalSystemFactory.cpp

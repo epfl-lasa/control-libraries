@@ -8,7 +8,7 @@ namespace state_representation {
 
 template<>
 Parameter<int>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::INT) {}
+    ParameterInterface(name, ParameterType::INT), value_() {}
 
 template<>
 Parameter<int>::Parameter(const std::string& name, const int& value) :
@@ -18,7 +18,7 @@ Parameter<int>::Parameter(const std::string& name, const int& value) :
 
 template<>
 Parameter<std::vector<int>>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::INT_ARRAY) {}
+    ParameterInterface(name, ParameterType::INT_ARRAY), value_() {}
 
 template<>
 Parameter<std::vector<int>>::Parameter(const std::string& name, const std::vector<int>& value) :
@@ -28,7 +28,7 @@ Parameter<std::vector<int>>::Parameter(const std::string& name, const std::vecto
 
 template<>
 Parameter<double>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::DOUBLE) {}
+    ParameterInterface(name, ParameterType::DOUBLE), value_() {}
 
 template<>
 Parameter<double>::Parameter(const std::string& name, const double& value) :
@@ -38,7 +38,7 @@ Parameter<double>::Parameter(const std::string& name, const double& value) :
 
 template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::DOUBLE_ARRAY) {}
+    ParameterInterface(name, ParameterType::DOUBLE_ARRAY), value_() {}
 
 template<>
 Parameter<std::vector<double>>::Parameter(const std::string& name, const std::vector<double>& value) :
@@ -48,7 +48,7 @@ Parameter<std::vector<double>>::Parameter(const std::string& name, const std::ve
 
 template<>
 Parameter<bool>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::BOOL) {}
+    ParameterInterface(name, ParameterType::BOOL), value_() {}
 
 template<>
 Parameter<bool>::Parameter(const std::string& name, const bool& value) :
@@ -58,7 +58,7 @@ Parameter<bool>::Parameter(const std::string& name, const bool& value) :
 
 template<>
 Parameter<std::vector<bool>>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::BOOL_ARRAY) {
+    ParameterInterface(name, ParameterType::BOOL_ARRAY), value_() {
 }
 
 template<>
@@ -69,7 +69,7 @@ Parameter<std::vector<bool>>::Parameter(const std::string& name, const std::vect
 
 template<>
 Parameter<std::string>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STRING) {}
+    ParameterInterface(name, ParameterType::STRING), value_() {}
 
 template<>
 Parameter<std::string>::Parameter(const std::string& name, const std::string& value) :
@@ -79,7 +79,7 @@ Parameter<std::string>::Parameter(const std::string& name, const std::string& va
 
 template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STRING_ARRAY) {}
+    ParameterInterface(name, ParameterType::STRING_ARRAY), value_() {}
 
 template<>
 Parameter<std::vector<std::string>>::Parameter(const std::string& name, const std::vector<std::string>& value) :
@@ -89,7 +89,7 @@ Parameter<std::vector<std::string>>::Parameter(const std::string& name, const st
 
 template<>
 Parameter<CartesianState>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_STATE) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_STATE), value_() {}
 
 template<>
 Parameter<CartesianState>::Parameter(const std::string& name, const CartesianState& value) :
@@ -99,7 +99,7 @@ Parameter<CartesianState>::Parameter(const std::string& name, const CartesianSta
 
 template<>
 Parameter<CartesianPose>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_POSE) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::CARTESIAN_POSE), value_() {}
 
 template<>
 Parameter<CartesianPose>::Parameter(const std::string& name, const CartesianPose& value) :
@@ -109,7 +109,7 @@ Parameter<CartesianPose>::Parameter(const std::string& name, const CartesianPose
 
 template<>
 Parameter<JointState>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_STATE) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_STATE), value_() {}
 
 template<>
 Parameter<JointState>::Parameter(const std::string& name, const JointState& value) :
@@ -119,12 +119,17 @@ Parameter<JointState>::Parameter(const std::string& name, const JointState& valu
 
 template<>
 Parameter<JointPositions>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_POSITIONS) {}
+    ParameterInterface(name, ParameterType::STATE, StateType::JOINT_POSITIONS), value_() {}
 
 template<>
 Parameter<JointPositions>::Parameter(const std::string& name, const JointPositions& value) :
     ParameterInterface(name, ParameterType::STATE, StateType::JOINT_POSITIONS), value_(value) {
   this->set_filled();
+}
+
+template<>
+Parameter<Ellipsoid>::Parameter(const std::string& name) :
+    ParameterInterface(name, ParameterType::STATE, StateType::GEOMETRY_ELLIPSOID), value_() {
 }
 
 template<>
@@ -135,7 +140,7 @@ Parameter<Ellipsoid>::Parameter(const std::string& name, const Ellipsoid& value)
 
 template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::MATRIX) {}
+    ParameterInterface(name, ParameterType::MATRIX), value_() {}
 
 template<>
 Parameter<Eigen::MatrixXd>::Parameter(const std::string& name, const Eigen::MatrixXd& value) :
@@ -145,7 +150,7 @@ Parameter<Eigen::MatrixXd>::Parameter(const std::string& name, const Eigen::Matr
 
 template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name) :
-    ParameterInterface(name, ParameterType::VECTOR) {}
+    ParameterInterface(name, ParameterType::VECTOR), value_() {}
 
 template<>
 Parameter<Eigen::VectorXd>::Parameter(const std::string& name, const Eigen::VectorXd& value) :

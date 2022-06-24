@@ -49,6 +49,11 @@ public:
   State(const State& state);
 
   /**
+   * @brief Virtual destructor
+   */
+  virtual ~State() = default;
+
+  /**
    * @brief Swap the values of the two States
    * @param state1 State to be swapped with 2
    * @param state2 State to be swapped with 1

@@ -13,9 +13,7 @@ Ellipsoid::Ellipsoid(const std::string& name, const std::string& reference_frame
 }
 
 Ellipsoid::Ellipsoid(const Ellipsoid& ellipsoid) :
-    Shape(ellipsoid), axis_lengths_(ellipsoid.axis_lengths_), rotation_angle_(0) {
-  this->set_filled();
-}
+    Shape(ellipsoid), axis_lengths_(ellipsoid.axis_lengths_), rotation_angle_(0) {}
 
 const std::list<CartesianPose> Ellipsoid::sample_from_parameterization(unsigned int nb_samples) const {
   if (this->get_center_state().is_empty()) {
@@ -185,11 +183,15 @@ void Ellipsoid::set_data(const std::vector<double>& data) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Ellipsoid& ellipsoid) {
-  os << "Ellipsoid " << ellipsoid.get_name() << " of dimensions [";
-  os << ellipsoid.get_axis_length(0) << ", ";
-  os << ellipsoid.get_axis_length(1) << "]";
-  os << " with state:" << std::endl;
-  os << ellipsoid.get_center_state();
+  if (ellipsoid.is_empty()) {
+    os << "Empty Ellipsoid";
+  } else {
+    os << "Ellipsoid " << ellipsoid.get_name() << " of dimensions [";
+    os << ellipsoid.get_axis_length(0) << ", ";
+    os << ellipsoid.get_axis_length(1) << "]";
+    os << " with state:" << std::endl;
+    os << ellipsoid.get_center_state();
+  }
   return os;
 }
 }

@@ -10,8 +10,12 @@ Shape::Shape(const StateType& type, const std::string& name, const std::string& 
 Shape::Shape(const Shape& shape) : State(shape), center_state_(shape.center_state_) {}
 
 std::ostream& operator<<(std::ostream& os, const Shape& shape) {
-  os << "Shape " << shape.get_name() << " with state:" << std::endl;
-  os << shape.get_center_state();
+  if (shape.is_empty()) {
+    os << "Empty Shape";
+  } else {
+    os << "Shape " << shape.get_name() << " with state:" << std::endl;
+    os << shape.get_center_state();
+  }
   return os;
 }
 }

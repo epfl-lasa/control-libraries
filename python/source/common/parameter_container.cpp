@@ -10,7 +10,30 @@ namespace py_parameter {
 
 ParameterContainer::ParameterContainer(
     const std::string& name, const ParameterType& type, const StateType& parameter_state_type
-) : ParameterInterface(name, type, parameter_state_type) {}
+) : ParameterInterface(name, type, parameter_state_type) {
+  if (type == ParameterType::STATE) {
+    switch (parameter_state_type) {
+      case StateType::CARTESIAN_STATE:
+        values.state_pointer = std::make_shared<CartesianState>();
+        break;
+      case StateType::CARTESIAN_POSE:
+        values.state_pointer = std::make_shared<CartesianPose>();
+        break;
+      case StateType::JOINT_STATE:
+        values.state_pointer = std::make_shared<JointState>();
+        break;
+      case StateType::JOINT_POSITIONS:
+        values.state_pointer = std::make_shared<JointPositions>();
+        break;
+      case StateType::GEOMETRY_ELLIPSOID:
+        values.state_pointer = std::make_shared<Ellipsoid>();
+        break;
+      default:
+        throw std::invalid_argument("The desired StateType for parameter " + this->get_name() + " is not supported.");
+        break;
+    }
+  }
+}
 
 ParameterContainer::ParameterContainer(
     const std::string& name, const py::object& value, const ParameterType& type, const StateType& parameter_state_type

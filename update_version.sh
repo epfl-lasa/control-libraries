@@ -129,6 +129,7 @@ fi
 
 if [ "${COMMIT}" == true ]; then
   echo "Committing changes to source control"
-  git add VERSION ./source/CMakeLists.txt ./python/setup.py ./protocol/clproto_cpp/CMakeLists.txt ./doxygen/doxygen.conf
+  git add VERSION ./source/CMakeLists.txt ./python/setup.py \
+      ./protocol/clproto_cpp/CMakeLists.txt ./doxygen/doxygen.conf ./demos/CMakeLists.txt
   git commit -m "${VERSION} -> ${NEW_VERSION}"
 fi

@@ -16,6 +16,7 @@ Release Versions:
 
 - Extend clproto tests (#297)
 - Set default values of empty Parameters correctly (#298)
+- Remove CMake error preventing build on 22.04 and minor improvements (#299)
 
 ## 6.0.0
 

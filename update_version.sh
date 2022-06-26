@@ -109,6 +109,7 @@ SED_STR_SOURCE="s/project(control_libraries VERSION ${VERSION})/project(control_
 SED_STR_PYTHON="s/__version__ = \"${VERSION}\"/__version__ = \"${NEW_VERSION}\"/g"
 SED_STR_CLPROTO="s/project(clproto VERSION ${VERSION})/project(clproto VERSION ${NEW_VERSION})/g"
 SED_STR_DOXYGEN="s/PROJECT_NUMBER = ${VERSION}/PROJECT_NUMBER = ${NEW_VERSION}/g"
+SED_STR_DEMOS="s/control_libraries ${VERSION}/control_libraries ${NEW_VERSION}/g"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   sed -i '' "${SED_STR_VERSION}" ./VERSION
@@ -116,16 +117,19 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sed -i '' "${SED_STR_PYTHON}" ./python/setup.py
   sed -i '' "${SED_STR_CLPROTO}" ./protocol/clproto_cpp/CMakeLists.txt
   sed -i '' "${SED_STR_DOXYGEN}" ./doxygen/doxygen.conf
+  sed -i '' "${SED_STR_DEMOS}" ./demos/CMakeLists.txt
 else
   sed -i "${SED_STR_VERSION}" ./VERSION
   sed -i "${SED_STR_SOURCE}" ./source/CMakeLists.txt
   sed -i "${SED_STR_PYTHON}" ./python/setup.py
   sed -i "${SED_STR_CLPROTO}" ./protocol/clproto_cpp/CMakeLists.txt
   sed -i "${SED_STR_DOXYGEN}" ./doxygen/doxygen.conf
+  sed -i "${SED_STR_DEMOS}" ./demos/CMakeLists.txt
 fi
 
 if [ "${COMMIT}" == true ]; then
   echo "Committing changes to source control"
-  git add VERSION ./source/CMakeLists.txt ./python/setup.py ./protocol/clproto_cpp/CMakeLists.txt ./doxygen/doxygen.conf
+  git add VERSION ./source/CMakeLists.txt ./python/setup.py \
+      ./protocol/clproto_cpp/CMakeLists.txt ./doxygen/doxygen.conf ./demos/CMakeLists.txt
   git commit -m "${VERSION} -> ${NEW_VERSION}"
 fi

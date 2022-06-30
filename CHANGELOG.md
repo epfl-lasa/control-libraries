@@ -17,6 +17,7 @@ Release Versions:
 - Extend clproto tests (#297)
 - Set default values of empty Parameters correctly (#298)
 - Remove CMake error preventing build on 22.04 and minor improvements (#299)
+- Set Python parameter filled on set_value (#300)
 
 ## 6.0.0
 

@@ -102,6 +102,7 @@ void ParameterContainer::set_value(const py::object& value) {
     default:
       throw std::invalid_argument("The ParameterType of parameter " + this->get_name() + " is invalid.");
   }
+  this->set_filled();
 }
 
 py::object ParameterContainer::get_value() {

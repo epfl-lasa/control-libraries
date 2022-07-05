@@ -122,7 +122,7 @@ static std::shared_ptr<Parameter<T>> make_shared_parameter(const std::string& na
   return std::make_shared<Parameter<T>>(name, param_value);
 }
 
-static std::shared_ptr<ParameterInterface> make_shared_parameter_interface(
+[[maybe_unused]] static std::shared_ptr<ParameterInterface> make_shared_parameter_interface(
     const std::string& name, const ParameterType& type, const StateType& parameter_state_type = StateType::NONE
 ) {
   switch (type) {

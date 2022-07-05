@@ -18,6 +18,7 @@ Release Versions:
 - Set default values of empty Parameters correctly (#298)
 - Remove CMake error preventing build on 22.04 and minor improvements (#299)
 - Set Python parameter filled on set_value (#300)
+- Add non-templated helper function to create shared ParameterInterface (#301)
 
 ## 6.0.0
 

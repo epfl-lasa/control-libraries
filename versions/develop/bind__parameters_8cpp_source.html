@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.5</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.6</span>
    </div>
   </td>
  </tr>
@@ -284,14 +284,15 @@ $(function() {
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        self.<a class="code hl_function" href="classstate__representation_1_1_parameter_map.html#af9c75cf1d9cbc4fb527df0dda617ed56">set_parameter</a>(container_to_interface_ptr(param));</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>      }, <span class="stringliteral">&quot;Set a parameter value by its name&quot;</span>, <span class="stringliteral">&quot;name&quot;</span>_a, <span class="stringliteral">&quot;value&quot;</span>_a, <span class="stringliteral">&quot;type&quot;</span>_a, <span class="stringliteral">&quot;parameter_state_type&quot;</span>_a=StateType::NONE</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>  );</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>}</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="keywordtype">void</span> bind_parameters(py::module_&amp; m) {</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  parameter_type(m);</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>  parameter_interface(m);</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>  parameter(m);</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>  parameter_map(m);</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>}</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>  c.def(<span class="stringliteral">&quot;remove_parameter&quot;</span>, &amp;ParameterMap::remove_parameter, <span class="stringliteral">&quot;Remove a parameter from the parameter map.&quot;</span>, <span class="stringliteral">&quot;name&quot;</span>_a);</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>}</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="keywordtype">void</span> bind_parameters(py::module_&amp; m) {</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>  parameter_type(m);</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>  parameter_interface(m);</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>  parameter(m);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>  parameter_map(m);</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>}</div>
 <div class="ttc" id="aclass_py_parameter_map_html"><div class="ttname"><a href="class_py_parameter_map.html">PyParameterMap</a></div><div class="ttdef"><b>Definition:</b> <a href="py__parameter__map_8h_source.html#l00005">py_parameter_map.h:5</a></div></div>
 <div class="ttc" id="aclasspy__parameter_1_1_parameter_container_html"><div class="ttname"><a href="classpy__parameter_1_1_parameter_container.html">py_parameter::ParameterContainer</a></div><div class="ttdef"><b>Definition:</b> <a href="parameter__container_8h_source.html#l00025">parameter_container.h:25</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_parameter_html"><div class="ttname"><a href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a></div><div class="ttdef"><b>Definition:</b> <a href="_parameter_8hpp_source.html#l00013">Parameter.hpp:13</a></div></div>

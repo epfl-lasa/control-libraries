@@ -1,6 +1,7 @@
 #include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/parameters/Event.hpp"
 #include "state_representation/parameters/Parameter.hpp"
+#include "state_representation/parameters/ParameterMap.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
 #include "state_representation/space/joint/JointPositions.hpp"
 
@@ -329,6 +330,20 @@ TYPED_TEST_P(ParameterTest, ParameterInterfaceWrongTypeCast) {
                    exceptions::InvalidParameterCastException);
     }
   }
+}
+
+TEST(ParameterTest, ParameterMap) {
+  auto map = ParameterMap();
+  map.set_parameter(make_shared_parameter("int", 1));
+  int value;
+  EXPECT_NO_THROW(value = map.get_parameter_value<int>("int"));
+  EXPECT_EQ(1, value);
+  map.set_parameter_value<int>("int", 2);
+  EXPECT_NO_THROW(value = map.get_parameter("int")->get_parameter_value<int>());
+  EXPECT_EQ(2, value);
+  map.remove_parameter("int");
+  EXPECT_THROW(map.remove_parameter("int"), exceptions::InvalidParameterException);
+  EXPECT_THROW(value = map.get_parameter_value<int>("int"), exceptions::InvalidParameterException);
 }
 
 REGISTER_TYPED_TEST_SUITE_P(ParameterTest, Construction, MakeShared, ParameterThroughInterface,

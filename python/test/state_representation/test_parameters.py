@@ -313,6 +313,12 @@ class TestParameters(unittest.TestCase):
         m = sr.ParameterMap(param_list)
         self.param_map_equal(param_dict, m)
 
+        m.remove_parameter("int")
+        with self.assertRaises(RuntimeError):
+            m.remove_parameter("int")
+        with self.assertRaises(RuntimeError):
+            m.get_parameter("int")
+
 
 if __name__ == '__main__':
     unittest.main()

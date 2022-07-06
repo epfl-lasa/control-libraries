@@ -154,6 +154,8 @@ static std::shared_ptr<Parameter<T>> make_shared_parameter(const std::string& na
           return std::make_shared<Parameter<JointPositions>>(name);
         case StateType::GEOMETRY_ELLIPSOID:
           return std::make_shared<Parameter<Ellipsoid>>(name);
+        case StateType::NONE:
+          throw exceptions::InvalidParameterException("No StateType provided.");
         default:
           throw exceptions::InvalidParameterException("This StateType is not supported for parameters.");
       }

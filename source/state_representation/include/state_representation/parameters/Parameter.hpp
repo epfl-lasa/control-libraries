@@ -3,6 +3,9 @@
 #include <memory>
 
 #include "state_representation/parameters/ParameterInterface.hpp"
+#include "state_representation/geometry/Ellipsoid.hpp"
+#include "state_representation/space/cartesian/CartesianPose.hpp"
+#include "state_representation/space/joint/JointPositions.hpp"
 
 namespace state_representation {
 
@@ -117,5 +120,50 @@ inline void Parameter<T>::set_value(const T& value) {
 template<typename T>
 static std::shared_ptr<Parameter<T>> make_shared_parameter(const std::string& name, const T& param_value) {
   return std::make_shared<Parameter<T>>(name, param_value);
+}
+
+[[maybe_unused]] static std::shared_ptr<ParameterInterface> make_shared_parameter_interface(
+    const std::string& name, const ParameterType& type, const StateType& parameter_state_type = StateType::NONE
+) {
+  switch (type) {
+    case ParameterType::BOOL:
+      return std::make_shared<Parameter<bool>>(name);
+    case ParameterType::BOOL_ARRAY:
+      return std::make_shared<Parameter<std::vector<bool>>>(name);
+    case ParameterType::INT:
+      return std::make_shared<Parameter<int>>(name);
+    case ParameterType::INT_ARRAY:
+      return std::make_shared<Parameter<std::vector<int>>>(name);
+    case ParameterType::DOUBLE:
+      return std::make_shared<Parameter<double>>(name);
+    case ParameterType::DOUBLE_ARRAY:
+      return std::make_shared<Parameter<std::vector<double>>>(name);
+    case ParameterType::STRING:
+      return std::make_shared<Parameter<std::string>>(name);
+    case ParameterType::STRING_ARRAY:
+      return std::make_shared<Parameter<std::vector<std::string>>>(name);
+    case ParameterType::STATE: {
+      switch (parameter_state_type) {
+        case StateType::CARTESIAN_STATE:
+          return std::make_shared<Parameter<CartesianState>>(name);
+        case StateType::CARTESIAN_POSE:
+          return std::make_shared<Parameter<CartesianPose>>(name);
+        case StateType::JOINT_STATE:
+          return std::make_shared<Parameter<JointState>>(name);
+        case StateType::JOINT_POSITIONS:
+          return std::make_shared<Parameter<JointPositions>>(name);
+        case StateType::GEOMETRY_ELLIPSOID:
+          return std::make_shared<Parameter<Ellipsoid>>(name);
+        case StateType::NONE:
+          throw exceptions::InvalidParameterException("No StateType provided.");
+        default:
+          throw exceptions::InvalidParameterException("This StateType is not supported for parameters.");
+      }
+    }
+    case ParameterType::VECTOR:
+      return std::make_shared<Parameter<Eigen::VectorXd>>(name);
+    case ParameterType::MATRIX:
+      return std::make_shared<Parameter<Eigen::MatrixXd>>(name);
+  }
 }
 }// namespace state_representation

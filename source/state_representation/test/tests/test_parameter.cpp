@@ -227,6 +227,12 @@ TEST(ParameterTest, Event) {
 
 TYPED_TEST_P(ParameterTest, MakeShared) {
   for (auto const& test_case: this->test_cases_) {
+    auto param_interface = make_shared_parameter_interface("test", std::get<1>(test_case), std::get<2>(test_case));
+    EXPECT_EQ(param_interface->get_name(), "test");
+    EXPECT_EQ(param_interface->get_type(), StateType::PARAMETER);
+    EXPECT_TRUE(param_interface->is_empty());
+    EXPECT_EQ(param_interface->get_parameter_type(), std::get<1>(test_case));
+    EXPECT_EQ(param_interface->get_parameter_state_type(), std::get<2>(test_case));
     auto param = make_shared_parameter("test", std::get<0>(test_case));
     EXPECT_EQ(param->get_name(), "test");
     EXPECT_EQ(param->get_type(), StateType::PARAMETER);

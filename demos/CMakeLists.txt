@@ -18,7 +18,7 @@ endif()
 list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
 include_directories(/opt/openrobots/include)
 
-find_package(control_libraries 6.0.4 CONFIG REQUIRED)
+find_package(control_libraries 6.0.5 CONFIG REQUIRED)
 
 set(DEMOS_SCRIPTS
   task_space_control_loop

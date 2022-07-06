@@ -1,9 +1,5 @@
 #include "state_representation/parameters/Parameter.hpp"
 
-#include "state_representation/geometry/Ellipsoid.hpp"
-#include "state_representation/space/joint/JointPositions.hpp"
-#include "state_representation/space/cartesian/CartesianPose.hpp"
-
 namespace state_representation {
 
 template<>

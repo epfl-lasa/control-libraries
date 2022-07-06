@@ -91,6 +91,13 @@ public:
   template<typename T>
   void set_parameter_value(const std::string& name, const T& value);
 
+  /**
+   * @brief Remove a parameter from the parameter map.
+   * @param name The name of the parameter that should be removed
+   * @raise InvalidParameterException if the parameter does not exist
+   */
+  void remove_parameter(const std::string& name);
+
 protected:
 
   /**

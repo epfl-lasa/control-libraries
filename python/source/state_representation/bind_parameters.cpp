@@ -213,6 +213,7 @@ void parameter_map(py::module_& m) {
         self.set_parameter(container_to_interface_ptr(param));
       }, "Set a parameter value by its name", "name"_a, "value"_a, "type"_a, "parameter_state_type"_a=StateType::NONE
   );
+  c.def("remove_parameter", &ParameterMap::remove_parameter, "Remove a parameter from the parameter map.", "name"_a);
 }
 
 void bind_parameters(py::module_& m) {

@@ -48,12 +48,20 @@ void ParameterMap::set_parameters(const ParameterInterfaceMap& parameters) {
 void ParameterMap::assert_parameter_valid(const std::shared_ptr<ParameterInterface>& parameter) {
   if (this->parameters_.at(parameter->get_name())->get_type() != parameter->get_type()) {
     throw exceptions::InvalidParameterException(
-        "Parameter '" + parameter->get_name() + "' exists, but has unexpected type.");
+        "Parameter '" + parameter->get_name() + "' exists, but has unexpected type."
+    );
   }
 }
 
 void ParameterMap::validate_and_set_parameter(const std::shared_ptr<ParameterInterface>& parameter) {
   this->parameters_.insert_or_assign(parameter->get_name(), parameter);
+}
+
+void ParameterMap::remove_parameter(const std::string& name) {
+  if (!this->parameters_.count(name)) {
+    throw exceptions::InvalidParameterException("Parameter '" + name + "' could not be found in the parameter map.");
+  }
+  this->parameters_.erase(name);
 }
 
 }

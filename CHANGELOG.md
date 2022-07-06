@@ -19,6 +19,7 @@ Release Versions:
 - Remove CMake error preventing build on 22.04 and minor improvements (#299)
 - Set Python parameter filled on set_value (#300)
 - Add non-templated helper function to create shared ParameterInterface (#301)
+- Add remove_parameter to ParameterMap (#302)
 
 ## 6.0.0
 

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.6</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.7</span>
    </div>
   </td>
  </tr>
@@ -171,6 +171,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~State</b> ()=defa
 <tr class="memitem:ab5c9438a6d681eb4c03550bb66d6606a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#ab5c9438a6d681eb4c03550bb66d6606a">set_data</a> (const Eigen::MatrixXd &amp;data)</td></tr>
 <tr class="memdesc:ab5c9438a6d681eb4c03550bb66d6606a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the data of the state from an Eigen matrix.  <a href="classstate__representation_1_1_state.html#ab5c9438a6d681eb4c03550bb66d6606a">More...</a><br /></td></tr>
 <tr class="separator:ab5c9438a6d681eb4c03550bb66d6606a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae57571375a38e9663d51ce6f9d9ad1ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstate__representation_1_1_state.html#ae57571375a38e9663d51ce6f9d9ad1ce">operator bool</a> () const noexcept</td></tr>
+<tr class="memdesc:ae57571375a38e9663d51ce6f9d9ad1ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean operator for the truthiness of a state.  <a href="classstate__representation_1_1_state.html#ae57571375a38e9663d51ce6f9d9ad1ce">More...</a><br /></td></tr>
+<tr class="separator:ae57571375a38e9663d51ce6f9d9ad1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -501,7 +504,7 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00190">190</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00196">196</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -523,6 +526,36 @@ template&lt;typename DurationT &gt; </div>
 <p>Getter of the empty attribute. </p>
 
 <p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00023">23</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae57571375a38e9663d51ce6f9d9ad1ce" name="ae57571375a38e9663d51ce6f9d9ad1ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae57571375a38e9663d51ce6f9d9ad1ce">&#9670;&nbsp;</a></span>operator bool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">state_representation::State::operator bool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Boolean operator for the truthiness of a state. </p>
+<dl class="section return"><dt>Returns</dt><dd>False if the state is empty, true otherwise </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00085">85</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
 
 </div>
 </div>
@@ -559,7 +592,7 @@ template&lt;typename DurationT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>reference to the current state with new values </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00183">183</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00189">189</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>
@@ -837,7 +870,7 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00085">85</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8cpp_source.html#l00089">89</a> of file <a class="el" href="_state_8cpp_source.html">State.cpp</a>.</p>
 
 </div>
 </div>
@@ -933,7 +966,7 @@ template&lt;typename DurationT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00176">176</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_state_8hpp_source.html#l00182">182</a> of file <a class="el" href="_state_8hpp_source.html">State.hpp</a>.</p>
 
 </div>
 </div>

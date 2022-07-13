@@ -82,6 +82,10 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
   return os;
 }
 
+State::operator bool() const noexcept {
+  return !this->empty_;
+}
+
 void State::set_type(const StateType& type) {
   this->type_ = type;
 }

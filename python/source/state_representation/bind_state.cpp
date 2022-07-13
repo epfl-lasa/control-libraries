@@ -60,6 +60,9 @@ void state(py::module_& m) {
     buffer << state;
     return buffer.str();
   });
+  c.def("__bool__", [](const State& state) {
+    return bool(state);
+  }, py::is_operator());
 }
 
 void bind_state(py::module_& m) {

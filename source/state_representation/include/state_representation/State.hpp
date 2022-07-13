@@ -159,6 +159,12 @@ public:
    */
   friend std::ostream& operator<<(std::ostream& os, const State& state);
 
+  /**
+   * @brief Boolean operator for the truthiness of a state
+   * @return False if the state is empty, true otherwise
+   */
+  explicit operator bool() const noexcept;
+
 protected:
   /**
    * @brief Override the state type

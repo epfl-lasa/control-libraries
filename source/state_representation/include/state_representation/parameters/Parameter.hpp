@@ -164,6 +164,8 @@ static std::shared_ptr<Parameter<T>> make_shared_parameter(const std::string& na
       return std::make_shared<Parameter<Eigen::VectorXd>>(name);
     case ParameterType::MATRIX:
       return std::make_shared<Parameter<Eigen::MatrixXd>>(name);
+    default:
+      throw exceptions::InvalidParameterException("This StateType is not supported for parameters.");
   }
 }
 }// namespace state_representation

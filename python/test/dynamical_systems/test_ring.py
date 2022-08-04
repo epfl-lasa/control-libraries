@@ -16,7 +16,7 @@ class TestRing(unittest.TestCase):
         cls.speed = 1.0
         cls.nb_steps = 1000
         cls.dt = timedelta(milliseconds=10)
-        cls.tol = 1e-3
+        cls.tol = 1e-2
 
     def assert_np_array_equal(self, a: np.array, b: np.array, places=3):
         try:

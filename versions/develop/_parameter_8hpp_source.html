@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.7</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.0.8</span>
    </div>
   </td>
  </tr>
@@ -193,9 +193,11 @@ $(function() {
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>      <span class="keywordflow">return</span> std::make_shared&lt;Parameter&lt;Eigen::VectorXd&gt;&gt;(name);</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordflow">case</span> ParameterType::MATRIX:</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>      <span class="keywordflow">return</span> std::make_shared&lt;Parameter&lt;Eigen::MatrixXd&gt;&gt;(name);</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  }</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>}</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>}<span class="comment">// namespace state_representation</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>      <span class="keywordflow">throw</span> exceptions::InvalidParameterException(<span class="stringliteral">&quot;This StateType is not supported for parameters.&quot;</span>);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  }</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>}</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>}<span class="comment">// namespace state_representation</span></div>
 <div class="ttc" id="aclassstate__representation_1_1_parameter_html"><div class="ttname"><a href="classstate__representation_1_1_parameter.html">state_representation::Parameter</a></div><div class="ttdef"><b>Definition:</b> <a href="_parameter_8hpp_source.html#l00013">Parameter.hpp:13</a></div></div>
 <div class="ttc" id="aclassstate__representation_1_1_parameter_html_a405a2df1441d0a068e073cef8ae0ab71"><div class="ttname"><a href="classstate__representation_1_1_parameter.html#a405a2df1441d0a068e073cef8ae0ab71">state_representation::Parameter::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const Parameter&lt; U &gt; &amp;parameter)</div><div class="ttdoc">Overload the ostream operator for printing.</div></div>
 <div class="ttc" id="aclassstate__representation_1_1_parameter_html_a41653abb56102337cd2ebed326c52f37"><div class="ttname"><a href="classstate__representation_1_1_parameter.html#a41653abb56102337cd2ebed326c52f37">state_representation::Parameter::Parameter</a></div><div class="ttdeci">Parameter(const std::string &amp;name, const T &amp;value)</div><div class="ttdoc">Constructor with a name and a value.</div></div>

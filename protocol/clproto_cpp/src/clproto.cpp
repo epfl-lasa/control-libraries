@@ -1013,6 +1013,15 @@ bool decode(const std::string& msg, Parameter<Eigen::MatrixXd>& obj) {
 /*-----------------------
  * STD::SHARED_PTR<STATE>
  * ---------------------- */
+template<typename T>
+std::shared_ptr<T> safe_dynamic_pointer_cast(const std::shared_ptr<State>& state) {
+  auto new_state = std::dynamic_pointer_cast<T>(state);
+  if (new_state == nullptr) {
+    throw std::invalid_argument("Dynamic pointer casting of state failed.");
+  }
+  return new_state;
+}
+
 template<> std::string encode<std::shared_ptr<State>>(const std::shared_ptr<State>& obj);
 template<> std::shared_ptr<State> decode(const std::string& msg);
 template<> bool decode(const std::string& msg, std::shared_ptr<State>& obj);
@@ -1023,73 +1032,73 @@ template<> std::string encode<std::shared_ptr<State>>(const std::shared_ptr<Stat
       message = encode<State>(*obj);
       break;
     case StateType::SPATIAL_STATE:
-      message = encode<SpatialState>(*std::dynamic_pointer_cast<SpatialState>(obj));
+      message = encode<SpatialState>(*safe_dynamic_pointer_cast<SpatialState>(obj));
       break;
     case StateType::CARTESIAN_STATE:
-      message = encode<CartesianState>(*std::dynamic_pointer_cast<CartesianState>(obj));
+      message = encode<CartesianState>(*safe_dynamic_pointer_cast<CartesianState>(obj));
       break;
     case StateType::CARTESIAN_POSE:
-      message = encode<CartesianPose>(*std::dynamic_pointer_cast<CartesianPose>(obj));
+      message = encode<CartesianPose>(*safe_dynamic_pointer_cast<CartesianPose>(obj));
       break;
     case StateType::CARTESIAN_TWIST:
-      message = encode<CartesianTwist>(*std::dynamic_pointer_cast<CartesianTwist>(obj));
+      message = encode<CartesianTwist>(*safe_dynamic_pointer_cast<CartesianTwist>(obj));
       break;
     case StateType::CARTESIAN_ACCELERATION:
-      message = encode<CartesianAcceleration>(*std::dynamic_pointer_cast<CartesianAcceleration>(obj));
+      message = encode<CartesianAcceleration>(*safe_dynamic_pointer_cast<CartesianAcceleration>(obj));
       break;
     case StateType::CARTESIAN_WRENCH:
-      message = encode<CartesianWrench>(*std::dynamic_pointer_cast<CartesianWrench>(obj));
+      message = encode<CartesianWrench>(*safe_dynamic_pointer_cast<CartesianWrench>(obj));
       break;
     case StateType::JOINT_STATE:
-      message = encode<JointState>(*std::dynamic_pointer_cast<JointState>(obj));
+      message = encode<JointState>(*safe_dynamic_pointer_cast<JointState>(obj));
       break;
     case StateType::JOINT_POSITIONS:
-      message = encode<JointPositions>(*std::dynamic_pointer_cast<JointPositions>(obj));
+      message = encode<JointPositions>(*safe_dynamic_pointer_cast<JointPositions>(obj));
       break;
     case StateType::JOINT_VELOCITIES:
-      message = encode<JointVelocities>(*std::dynamic_pointer_cast<JointVelocities>(obj));
+      message = encode<JointVelocities>(*safe_dynamic_pointer_cast<JointVelocities>(obj));
       break;
     case StateType::JOINT_ACCELERATIONS:
-      message = encode<JointAccelerations>(*std::dynamic_pointer_cast<JointAccelerations>(obj));
+      message = encode<JointAccelerations>(*safe_dynamic_pointer_cast<JointAccelerations>(obj));
       break;
     case StateType::JOINT_TORQUES:
-      message = encode<JointTorques>(*std::dynamic_pointer_cast<JointTorques>(obj));
+      message = encode<JointTorques>(*safe_dynamic_pointer_cast<JointTorques>(obj));
       break;
     case StateType::JACOBIAN:
-      message = encode<Jacobian>(*std::dynamic_pointer_cast<Jacobian>(obj));
+      message = encode<Jacobian>(*safe_dynamic_pointer_cast<Jacobian>(obj));
       break;
     case StateType::PARAMETER: {
-      auto param_ptr = std::dynamic_pointer_cast<ParameterInterface>(obj);
+      auto param_ptr = safe_dynamic_pointer_cast<ParameterInterface>(obj);
       switch (param_ptr->get_parameter_type()) {
         case ParameterType::BOOL:
-          message = encode<Parameter<bool>>(*std::dynamic_pointer_cast<Parameter<bool>>(param_ptr));
+          message = encode<Parameter<bool>>(*safe_dynamic_pointer_cast<Parameter<bool>>(param_ptr));
           break;
         case ParameterType::BOOL_ARRAY:
-          message = encode<Parameter<std::vector<bool>>>(*std::dynamic_pointer_cast<Parameter<std::vector<bool>>>(param_ptr));
+          message = encode<Parameter<std::vector<bool>>>(*safe_dynamic_pointer_cast<Parameter<std::vector<bool>>>(param_ptr));
           break;
         case ParameterType::INT:
-          message = encode<Parameter<int>>(*std::dynamic_pointer_cast<Parameter<int>>(param_ptr));
+          message = encode<Parameter<int>>(*safe_dynamic_pointer_cast<Parameter<int>>(param_ptr));
           break;
         case ParameterType::INT_ARRAY:
-          message = encode<Parameter<std::vector<int>>>(*std::dynamic_pointer_cast<Parameter<std::vector<int>>>(param_ptr));
+          message = encode<Parameter<std::vector<int>>>(*safe_dynamic_pointer_cast<Parameter<std::vector<int>>>(param_ptr));
           break;
         case ParameterType::DOUBLE:
-          message = encode<Parameter<double>>(*std::dynamic_pointer_cast<Parameter<double>>(param_ptr));
+          message = encode<Parameter<double>>(*safe_dynamic_pointer_cast<Parameter<double>>(param_ptr));
           break;
         case ParameterType::DOUBLE_ARRAY:
-          message = encode<Parameter<std::vector<double>>>(*std::dynamic_pointer_cast<Parameter<std::vector<double>>>(param_ptr));
+          message = encode<Parameter<std::vector<double>>>(*safe_dynamic_pointer_cast<Parameter<std::vector<double>>>(param_ptr));
           break;
         case ParameterType::STRING:
-          message = encode<Parameter<std::string>>(*std::dynamic_pointer_cast<Parameter<std::string>>(param_ptr));
+          message = encode<Parameter<std::string>>(*safe_dynamic_pointer_cast<Parameter<std::string>>(param_ptr));
           break;
         case ParameterType::STRING_ARRAY:
-          message = encode<Parameter<std::vector<std::string>>>(*std::dynamic_pointer_cast<Parameter<std::vector<std::string>>>(param_ptr));
+          message = encode<Parameter<std::vector<std::string>>>(*safe_dynamic_pointer_cast<Parameter<std::vector<std::string>>>(param_ptr));
           break;
         case ParameterType::VECTOR:
-          message = encode<Parameter<Eigen::VectorXd>>(*std::dynamic_pointer_cast<Parameter<Eigen::VectorXd>>(param_ptr));
+          message = encode<Parameter<Eigen::VectorXd>>(*safe_dynamic_pointer_cast<Parameter<Eigen::VectorXd>>(param_ptr));
           break;
         case ParameterType::MATRIX:
-          message = encode<Parameter<Eigen::MatrixXd>>(*std::dynamic_pointer_cast<Parameter<Eigen::MatrixXd>>(param_ptr));
+          message = encode<Parameter<Eigen::MatrixXd>>(*safe_dynamic_pointer_cast<Parameter<Eigen::MatrixXd>>(param_ptr));
           break;
         default:
           throw std::invalid_argument("The ParameterType contained by parameter " + param_ptr->get_name() + " is unsupported.");
@@ -1235,7 +1244,7 @@ template<> bool decode(const std::string& msg, std::shared_ptr<State>& obj) {
         obj = make_shared_state(decode<Jacobian>(msg));
         break;
       case StateType::PARAMETER: {
-        auto param_ptr = std::dynamic_pointer_cast<ParameterInterface>(obj);
+        auto param_ptr = safe_dynamic_pointer_cast<ParameterInterface>(obj);
         switch (param_ptr->get_parameter_type()) {
           case ParameterType::BOOL:
             obj = make_shared_state(decode<Parameter<bool>>(msg));

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(control_libraries VERSION 6.0.7)
+project(control_libraries VERSION 6.0.8)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)

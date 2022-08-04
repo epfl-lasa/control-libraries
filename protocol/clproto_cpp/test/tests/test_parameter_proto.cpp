@@ -56,7 +56,12 @@ static void test_encode_decode_empty_parameter(const T& state) {
   EXPECT_TRUE(recv_state.is_empty());
 }
 
-TEST(ParameterProtoTest, EncodeDecodeParameterInt) {
+TEST(ParameterProtoTest, EncodeParameterInterface) {
+  auto send_state_ptr = make_shared_state(ParameterInterface("name", ParameterType::BOOL));
+  EXPECT_THROW(std::string msg = clproto::encode(send_state_ptr), std::invalid_argument);
+}
+
+TEST(ParameterProtoTest, EncodeDecodeParameter) {
   test_encode_decode_parameter(
       Parameter<int>("A", 1), clproto::MessageType::PARAMETER_MESSAGE, clproto::ParameterMessageType::INT
   );

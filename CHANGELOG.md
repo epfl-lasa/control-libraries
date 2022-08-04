@@ -21,6 +21,7 @@ Release Versions:
 - Add non-templated helper function to create shared ParameterInterface (#301)
 - Add remove_parameter to ParameterMap (#302)
 - Support truthiness in State objects with bool operator (#303)
+- Avoid segfaults in clproto encoding (#304)
 
 ## 6.0.0
 

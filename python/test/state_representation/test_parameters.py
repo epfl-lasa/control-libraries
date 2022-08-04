@@ -206,7 +206,6 @@ class TestParameters(unittest.TestCase):
         self.assertEqual(param.get_name(), "joint_positions")
         self.assertEqual(param.get_parameter_type(), sr.ParameterType.STATE)
         self.assertEqual(param.get_parameter_state_type(), sr.StateType.JOINT_POSITIONS)
-        print(param.get_value())
         self.assertTrue(param.get_value().is_empty())
         self.assertEqual(param.get_value().get_type(), sr.StateType.JOINT_POSITIONS)
         values = sr.JointPositions.Random("test", 3)

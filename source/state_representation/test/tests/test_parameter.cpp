@@ -135,6 +135,7 @@ TYPED_TEST_P(ParameterTest, Construction) {
     EXPECT_EQ(param.get_parameter_type(), std::get<1>(test_case));
     EXPECT_EQ(param.get_parameter_state_type(), std::get<2>(test_case));
     EXPECT_TRUE(param.is_empty());
+    EXPECT_FALSE(param);
     expect_values_equal(param.get_value(), TypeParam());
     ParameterInterface param_interface(param);
     EXPECT_EQ(param_interface.get_name(), param.get_name());
@@ -143,6 +144,7 @@ TYPED_TEST_P(ParameterTest, Construction) {
     EXPECT_EQ(param_interface.get_parameter_state_type(), param.get_parameter_state_type());
     param.set_value(std::get<0>(test_case));
     EXPECT_FALSE(param.is_empty());
+    EXPECT_TRUE(param);
     expect_values_equal(param.get_value(), std::get<0>(test_case));
   }
 }
@@ -232,12 +234,14 @@ TYPED_TEST_P(ParameterTest, MakeShared) {
     EXPECT_EQ(param_interface->get_name(), "test");
     EXPECT_EQ(param_interface->get_type(), StateType::PARAMETER);
     EXPECT_TRUE(param_interface->is_empty());
+    EXPECT_FALSE(*param_interface);
     EXPECT_EQ(param_interface->get_parameter_type(), std::get<1>(test_case));
     EXPECT_EQ(param_interface->get_parameter_state_type(), std::get<2>(test_case));
     auto param = make_shared_parameter("test", std::get<0>(test_case));
     EXPECT_EQ(param->get_name(), "test");
     EXPECT_EQ(param->get_type(), StateType::PARAMETER);
     EXPECT_FALSE(param->is_empty());
+    EXPECT_TRUE(*param);
     EXPECT_EQ(param->get_parameter_type(), std::get<1>(test_case));
     EXPECT_EQ(param->get_parameter_state_type(), std::get<2>(test_case));
     expect_values_equal(param->get_value(), std::get<0>(test_case));
@@ -364,4 +368,4 @@ using ParameterTestTypes = testing::Types<bool,
                                           Ellipsoid,
                                           Eigen::VectorXd,
                                           Eigen::MatrixXd>;
-INSTANTIATE_TYPED_TEST_SUITE_P(TestPrefix, ParameterTest, ParameterTestTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(, ParameterTest, ParameterTestTypes);

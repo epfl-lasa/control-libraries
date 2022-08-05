@@ -34,7 +34,6 @@ the implementation of state_representation Parameters.
 - Set Python parameter filled on set_value (#300)
 - Avoid segfaults in clproto encoding (#304)
 
-
 ## 6.0.0
 
 Version 6.0.0 refactors the StateType enum in state representation to be more descriptive and widely useful as well as 

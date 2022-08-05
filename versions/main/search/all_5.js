@@ -7,5 +7,5 @@ var searchData=
   ['forward_5fvelocity_4',['forward_velocity',['../classrobot__model_1_1_model.html#a7a19d5cf5dd7fe63b3abc806ef210d65',1,'robot_model::Model::forward_velocity(const state_representation::JointState &amp;joint_state, const std::vector&lt; std::string &gt; &amp;frame_names)'],['../classrobot__model_1_1_model.html#a9614db7b188428c17f08de2e122b15d4',1,'robot_model::Model::forward_velocity(const state_representation::JointState &amp;joint_state, const std::string &amp;frame_name=&quot;&quot;)']]],
   ['framenotfoundexception_5',['FrameNotFoundException',['../classrobot__model_1_1exceptions_1_1_frame_not_found_exception.html',1,'robot_model::exceptions']]],
   ['from_5falgebraic_5fequation_6',['from_algebraic_equation',['../classstate__representation_1_1_ellipsoid.html#a63159ff4d9105fccafeebd891087eae3',1,'state_representation::Ellipsoid']]],
-  ['from_5fjson_7',['from_json',['../namespaceclproto.html#a3ff2f5307aed8bb1fa0493c70d3e23b9',1,'clproto']]]
+  ['from_5fjson_7',['from_json',['../namespaceclproto.html#a3ff2f5307aed8bb1fa0493c70d3e23b9',1,'clproto::from_json(const std::string &amp;json)'],['../namespaceclproto.html#a6b09281449f6fce9514911b2598c4a0a',1,'clproto::from_json(const std::string &amp;json)']]]
 ];

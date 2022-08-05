@@ -25,7 +25,7 @@ the implementation of state_representation Parameters.
 - Add remove_parameter to ParameterMap (#302)
 - Support truthiness in State objects with bool operator (#303)
 
-### Fixes
+### Fixes and improvements
 
 **general**
 - Extend clproto tests (#297)

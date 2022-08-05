@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [6.1.0](#610)
 - [6.0.0](#600)
 - [5.2.0](#520)
 - [5.1.0](#510)
@@ -12,16 +13,27 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
-## Upcoming changes (in development)
+## 6.1.0
 
+Version 6.1.0 contains a few small new features as well as several fixes, mainly in
+the implementation of state_representation Parameters.
+
+### Features
+
+**state_representation**
+- Add non-templated helper function to create shared ParameterInterface (#301)
+- Add remove_parameter to ParameterMap (#302)
+- Support truthiness in State objects with bool operator (#303)
+
+### Fixes
+
+**general**
 - Extend clproto tests (#297)
 - Set default values of empty Parameters correctly (#298)
 - Remove CMake error preventing build on 22.04 and minor improvements (#299)
 - Set Python parameter filled on set_value (#300)
-- Add non-templated helper function to create shared ParameterInterface (#301)
-- Add remove_parameter to ParameterMap (#302)
-- Support truthiness in State objects with bool operator (#303)
 - Avoid segfaults in clproto encoding (#304)
+
 
 ## 6.0.0
 

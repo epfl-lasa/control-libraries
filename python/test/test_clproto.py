@@ -5,6 +5,7 @@ import clproto
 import numpy as np
 from numpy.testing import assert_array_equal
 
+
 class TestClprotoPackUnpack(unittest.TestCase):
     def test_pack_unpack(self):
         objects = [sr.CartesianState.Random("A", "B"), sr.JointState.Random("robot", ["j1", "j2", "j3"])]
@@ -28,6 +29,7 @@ class TestClprotoPackUnpack(unittest.TestCase):
         self.assertListEqual(objects[1].get_names(), decoded_objects[1].get_names())
         self.assertAlmostEqual(sr.dist(objects[1], decoded_objects[1]), 0)
 
+
 class TestClprotoJSON(unittest.TestCase):
     def test_to_from_json(self):
         reference_object = sr.CartesianState.Random("A", "B")
@@ -44,6 +46,29 @@ class TestClprotoJSON(unittest.TestCase):
         self.assertEqual(reference_object.get_reference_frame(), decoded_object.get_reference_frame())
         self.assertAlmostEqual(sr.dist(reference_object, decoded_object), 0)
 
+    def test_string_comparison(self):
+        msg = clproto.encode(sr.CartesianPose("A", 1.0, 0.5, 3.0, "B"), clproto.MessageType.CARTESIAN_POSE_MESSAGE)
+        json = clproto.to_json(msg)
+        json = json[:json.find(",\"timestamp")] + json[json.find("},\"referenceFrame"):]
+        self.assertEqual(json, "{\"cartesianPose\":{\"spatialState\":{\"state\":{\"name\":\"A\",\"type\":"
+                               "\"CARTESIAN_POSE\"},\"referenceFrame\":\"B\"},\"position\":{\"x\":1,\"y\":0.5,"
+                               "\"z\":3},\"orientation\":{\"w\":1,\"vec\":{}}}}")
+
+        joint_state = sr.JointState("robot", 3)
+        joint_state.set_velocities([0.3, 0.1, 0.6])
+        msg = clproto.encode(joint_state, clproto.MessageType.JOINT_STATE_MESSAGE)
+        json = clproto.to_json(msg)
+        json = json[:json.find(",\"timestamp")] + json[json.find("},\"jointNames"):]
+        self.assertEqual(json, "{\"jointState\":{\"state\":{\"name\":\"robot\",\"type\":\"JOINT_STATE\"},"
+                               "\"jointNames\":[\"joint0\",\"joint1\",\"joint2\"],\"positions\":[0,0,0],"
+                               "\"velocities\":[0.3,0.1,0.6],\"accelerations\":[0,0,0],\"torques\":[0,0,0]}}")
+
+        msg = clproto.encode(sr.Jacobian("robot", 3, "test"), clproto.MessageType.JACOBIAN_MESSAGE)
+        json = clproto.to_json(msg)
+        json = json[:json.find(",\"timestamp")] + json[-3:]
+        self.assertEqual(json, "{\"jacobian\":{\"state\":{\"name\":\"robot\",\"type\":\"JACOBIAN\",\"empty\":true}}}")
+
+
 class TestClprotoState(unittest.TestCase):
     def state_class_assertions(self, reference_object, message_type):
         object_type = type(reference_object)
@@ -59,7 +84,9 @@ class TestClprotoState(unittest.TestCase):
         self.state_class_assertions(sr.State(sr.StateType.STATE, "A"), clproto.MessageType.STATE_MESSAGE)
 
     def test_encode_decode_spatial_state(self):
-        self.state_class_assertions(sr.SpatialState(sr.StateType.STATE, "A", "B"), clproto.MessageType.SPATIAL_STATE_MESSAGE)
+        self.state_class_assertions(sr.SpatialState(sr.StateType.STATE, "A", "B"),
+                                    clproto.MessageType.SPATIAL_STATE_MESSAGE)
+
 
 class TestClprotoCartesian(unittest.TestCase):
     def cartesian_class_assertions(self, reference_object, message_type):
@@ -83,7 +110,9 @@ class TestClprotoCartesian(unittest.TestCase):
         self.cartesian_class_assertions(sr.CartesianTwist.Random("A", "B"), clproto.MessageType.CARTESIAN_TWIST_MESSAGE)
 
     def test_encode_decode_cartesian_wrench(self):
-        self.cartesian_class_assertions(sr.CartesianWrench.Random("A", "B"), clproto.MessageType.CARTESIAN_WRENCH_MESSAGE)
+        self.cartesian_class_assertions(sr.CartesianWrench.Random("A", "B"),
+                                        clproto.MessageType.CARTESIAN_WRENCH_MESSAGE)
+
 
 class TestClprotoJoint(unittest.TestCase):
     def joint_class_assertions(self, reference_object, message_type):
@@ -98,19 +127,25 @@ class TestClprotoJoint(unittest.TestCase):
         self.assertAlmostEqual(sr.dist(reference_object, decoded_object), 0)
 
     def test_encode_decode_joint_state(self):
-        self.joint_class_assertions(sr.JointState.Random("robot", ["j1", "j2", "j3"]), clproto.MessageType.JOINT_STATE_MESSAGE)
+        self.joint_class_assertions(sr.JointState.Random("robot", ["j1", "j2", "j3"]),
+                                    clproto.MessageType.JOINT_STATE_MESSAGE)
 
     def test_encode_decode_joint_positions(self):
-        self.joint_class_assertions(sr.JointPositions.Random("robot", ["j1", "j2", "j3"]), clproto.MessageType.JOINT_POSITIONS_MESSAGE)
+        self.joint_class_assertions(sr.JointPositions.Random("robot", ["j1", "j2", "j3"]),
+                                    clproto.MessageType.JOINT_POSITIONS_MESSAGE)
 
     def test_encode_decode_joint_velocities(self):
-        self.joint_class_assertions(sr.JointVelocities.Random("robot", ["j1", "j2", "j3"]), clproto.MessageType.JOINT_VELOCITIES_MESSAGE)
+        self.joint_class_assertions(sr.JointVelocities.Random("robot", ["j1", "j2", "j3"]),
+                                    clproto.MessageType.JOINT_VELOCITIES_MESSAGE)
 
     def test_encode_decode_joint_accelerations(self):
-        self.joint_class_assertions(sr.JointAccelerations.Random("robot", ["j1", "j2", "j3"]), clproto.MessageType.JOINT_ACCELERATIONS_MESSAGE)
+        self.joint_class_assertions(sr.JointAccelerations.Random("robot", ["j1", "j2", "j3"]),
+                                    clproto.MessageType.JOINT_ACCELERATIONS_MESSAGE)
 
     def test_encode_decode_joint_torques(self):
-        self.joint_class_assertions(sr.JointTorques.Random("robot", ["j1", "j2", "j3"]), clproto.MessageType.JOINT_TORQUES_MESSAGE)
+        self.joint_class_assertions(sr.JointTorques.Random("robot", ["j1", "j2", "j3"]),
+                                    clproto.MessageType.JOINT_TORQUES_MESSAGE)
+
 
 class TestClprotoJacobian(unittest.TestCase):
     def test_encode_decode_jacobian(self):
@@ -127,6 +162,7 @@ class TestClprotoJacobian(unittest.TestCase):
         self.assertEqual(obj1.rows(), obj2.rows())
         self.assertEqual(obj1.cols(), obj2.cols())
         [self.assertAlmostEqual(x, y) for x, y in zip(obj1.data().flatten(), obj2.data().flatten())]
+
 
 class TestClprotoParameters(unittest.TestCase):
     def param_encode_decode_tester(self, obj1, message_type):
@@ -191,6 +227,7 @@ class TestClprotoParameters(unittest.TestCase):
     def test_encode_decode_param_invalid(self):
         obj = sr.Parameter("cartesian_state", sr.ParameterType.STATE, sr.StateType.CARTESIAN_STATE)
         self.assertRaises(ValueError, clproto.encode, obj, clproto.MessageType.PARAMETER_MESSAGE)
+
 
 if __name__ == '__main__':
     unittest.main()

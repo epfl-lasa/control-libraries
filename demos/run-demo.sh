@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "Using control libraries branch ${BRANCH}"
-BUILD_FLAGS+=(--build-arg CONTROL_LIBRARIES_BRANCH="${BRANCH}")
+BUILD_FLAGS+=(--build-arg BRANCH="${BRANCH}")
 
 docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
 DOCKER_BUILDKIT=1 docker build "${BUILD_FLAGS[@]}" . -t "${IMAGE_NAME}:${IMAGE_TAG}" || exit 1

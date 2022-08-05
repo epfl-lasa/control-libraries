@@ -9,17 +9,17 @@
 namespace py_parameter {
 
 struct ParameterValues {
-  int int_value;
-  std::vector<int> int_array_value;
-  double double_value;
-  std::vector<double> double_array_value;
-  bool bool_value;
-  std::vector<bool> bool_array_value;
-  std::string string_value;
-  std::vector<std::string> string_array_value;
+  int int_value = int();
+  std::vector<int> int_array_value = std::vector<int>();
+  double double_value = double();
+  std::vector<double> double_array_value = std::vector<double>();
+  bool bool_value = bool();
+  std::vector<bool> bool_array_value= std::vector<bool>();
+  std::string string_value = std::string();
+  std::vector<std::string> string_array_value = std::vector<std::string>();
   std::shared_ptr<State> state_pointer;
-  Eigen::MatrixXd matrix_value;
-  Eigen::VectorXd vector_value;
+  Eigen::MatrixXd matrix_value = Eigen::MatrixXd();
+  Eigen::VectorXd vector_value = Eigen::VectorXd();
 };
 
 class ParameterContainer : public ParameterInterface {

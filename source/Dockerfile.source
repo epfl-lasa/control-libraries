@@ -1,4 +1,4 @@
-FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies as build
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest as build
 ARG BUILD_TESTING=ON
 ARG BUILD_CONTROLLERS=ON
 ARG BUILD_DYNAMICAL_SYSTEMS=ON

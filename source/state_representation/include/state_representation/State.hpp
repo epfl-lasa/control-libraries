@@ -49,6 +49,11 @@ public:
   State(const State& state);
 
   /**
+   * @brief Virtual destructor
+   */
+  virtual ~State() = default;
+
+  /**
    * @brief Swap the values of the two States
    * @param state1 State to be swapped with 2
    * @param state2 State to be swapped with 1
@@ -153,6 +158,12 @@ public:
    * @return the appended ostream 
    */
   friend std::ostream& operator<<(std::ostream& os, const State& state);
+
+  /**
+   * @brief Boolean operator for the truthiness of a state
+   * @return False if the state is empty, true otherwise
+   */
+  explicit operator bool() const noexcept;
 
 protected:
   /**

@@ -1,7 +1,9 @@
+#include "state_representation/geometry/Ellipsoid.hpp"
 #include "state_representation/parameters/Event.hpp"
 #include "state_representation/parameters/Parameter.hpp"
+#include "state_representation/parameters/ParameterMap.hpp"
 #include "state_representation/space/cartesian/CartesianPose.hpp"
-#include "state_representation/space/cartesian/CartesianState.hpp"
+#include "state_representation/space/joint/JointPositions.hpp"
 
 #include "state_representation/exceptions/InvalidParameterCastException.hpp"
 #include "state_representation/exceptions/InvalidPointerException.hpp"
@@ -10,10 +12,141 @@
 
 using namespace state_representation;
 
-TEST(ParameterTest, CopyConstructor) {
-  Parameter<int> int_param("test", 1);
-  ParameterInterface int_param_interface(int_param);
-  EXPECT_EQ(int_param_interface.get_parameter_type(), int_param.get_parameter_type());
+template<typename T> using ParamT = std::vector<std::tuple<T, ParameterType, StateType>>;
+
+static std::tuple<ParamT<bool>,
+                  ParamT<std::vector<bool>>,
+                  ParamT<int>,
+                  ParamT<std::vector<int>>,
+                  ParamT<double>,
+                  ParamT<std::vector<double>>,
+                  ParamT<std::string>,
+                  ParamT<std::vector<std::string>>,
+                  ParamT<CartesianState>,
+                  ParamT<CartesianPose>,
+                  ParamT<JointState>,
+                  ParamT<JointPositions>,
+                  ParamT<Ellipsoid>,
+                  ParamT<Eigen::VectorXd>,
+                  ParamT<Eigen::MatrixXd>>
+    parameter_test_cases{{std::make_tuple(false, ParameterType::BOOL, StateType::NONE)}, {
+    std::make_tuple(std::vector<bool>({true, false, true}), ParameterType::BOOL_ARRAY, StateType::NONE)
+}, {std::make_tuple(1, ParameterType::INT, StateType::NONE)}, {
+                             std::make_tuple(std::vector<int>({1, 2, 3}), ParameterType::INT_ARRAY, StateType::NONE)
+                         }, {std::make_tuple(1.0, ParameterType::DOUBLE, StateType::NONE)}, {
+                             std::make_tuple(
+                                 std::vector<double>({1.0, 2.0, 3.0}), ParameterType::DOUBLE_ARRAY, StateType::NONE
+                             )
+                         }, {
+                             std::make_tuple("test", ParameterType::STRING, StateType::NONE)
+                         }, {
+                             std::make_tuple(
+                                 std::vector<std::string>({"1", "2", "3"}), ParameterType::STRING_ARRAY, StateType::NONE
+                             )
+                         }, {
+                             std::make_tuple(
+                                 CartesianState::Random("test", "base"), ParameterType::STATE,
+                                 StateType::CARTESIAN_STATE
+                             )
+                         }, {
+                             std::make_tuple(
+                                 CartesianPose::Random("test", "base"), ParameterType::STATE, StateType::CARTESIAN_POSE
+                             )
+                         }, {
+                             std::make_tuple(
+                                 JointState::Random("test", 3), ParameterType::STATE, StateType::JOINT_STATE
+                             )
+                         }, {
+                             std::make_tuple(
+                                 JointPositions::Random("test", 3), ParameterType::STATE, StateType::JOINT_POSITIONS
+                             )
+                         }, {
+                             std::make_tuple(Ellipsoid("test"), ParameterType::STATE, StateType::GEOMETRY_ELLIPSOID)
+                         }, {
+                             std::make_tuple(Eigen::VectorXd::Random(2), ParameterType::VECTOR, StateType::NONE)
+                         }, {
+                             std::make_tuple(Eigen::MatrixXd::Random(2, 2), ParameterType::MATRIX, StateType::NONE)
+                         }};
+
+template<typename T>
+void expect_values_equal(const T& value_1, const T& value_2) {
+  EXPECT_EQ(value_1, value_2);
+}
+
+template<>
+void expect_values_equal(const CartesianState& value_1, const CartesianState& value_2) {
+  EXPECT_EQ(value_1.get_name(), value_2.get_name());
+  EXPECT_EQ(value_1.get_reference_frame(), value_2.get_reference_frame());
+  EXPECT_TRUE(value_1.data().isApprox(value_2.data()));
+}
+
+template<>
+void expect_values_equal(const CartesianPose& value_1, const CartesianPose& value_2) {
+  EXPECT_EQ(value_1.get_name(), value_2.get_name());
+  EXPECT_EQ(value_1.get_reference_frame(), value_2.get_reference_frame());
+  EXPECT_TRUE(value_1.data().isApprox(value_2.data()));
+}
+
+template<>
+void expect_values_equal(const JointState& value_1, const JointState& value_2) {
+  EXPECT_EQ(value_1.get_name(), value_2.get_name());
+  ASSERT_EQ(value_1.get_size(), value_2.get_size());
+  for (std::size_t i = 0; i < value_1.get_size(); ++i) {
+    EXPECT_EQ(value_1.get_names().at(i), value_2.get_names().at(i));
+  }
+  EXPECT_TRUE(value_1.data().isApprox(value_2.data()));
+}
+
+template<>
+void expect_values_equal(const JointPositions& value_1, const JointPositions& value_2) {
+  EXPECT_EQ(value_1.get_name(), value_2.get_name());
+  ASSERT_EQ(value_1.get_size(), value_2.get_size());
+  for (std::size_t i = 0; i < value_1.get_size(); ++i) {
+    EXPECT_EQ(value_1.get_names().at(i), value_2.get_names().at(i));
+  }
+  EXPECT_TRUE(value_1.data().isApprox(value_2.data()));
+}
+
+template<>
+void expect_values_equal(const Ellipsoid& value_1, const Ellipsoid& value_2) {
+  EXPECT_EQ(value_1.get_name(), value_2.get_name());
+  ASSERT_EQ(value_1.get_axis_lengths().size(), value_2.get_axis_lengths().size());
+  for (std::size_t i = 0; i < value_1.get_axis_lengths().size(); ++i) {
+    EXPECT_EQ(value_1.get_axis_length(i), value_1.get_axis_length(i));
+  }
+  EXPECT_EQ(value_1.get_center_pose().get_name(), value_2.get_center_pose().get_name());
+  EXPECT_EQ(value_1.get_center_pose().get_reference_frame(), value_2.get_center_pose().get_reference_frame());
+  EXPECT_TRUE(value_1.get_center_pose().data().isApprox(value_2.get_center_pose().data()));
+}
+
+template<typename T>
+class ParameterTest : public testing::Test {
+public:
+  ParameterTest() : test_cases_{std::get<ParamT<T>>(parameter_test_cases)} {}
+protected:
+  ParamT<T> test_cases_;
+};
+TYPED_TEST_SUITE_P(ParameterTest);
+
+TYPED_TEST_P(ParameterTest, Construction) {
+  for (auto const& test_case: this->test_cases_) {
+    Parameter<TypeParam> param("test");
+    EXPECT_EQ(param.get_name(), "test");
+    EXPECT_EQ(param.get_parameter_type(), std::get<1>(test_case));
+    EXPECT_EQ(param.get_parameter_state_type(), std::get<2>(test_case));
+    EXPECT_TRUE(param.is_empty());
+    EXPECT_FALSE(param);
+    expect_values_equal(param.get_value(), TypeParam());
+    ParameterInterface param_interface(param);
+    EXPECT_EQ(param_interface.get_name(), param.get_name());
+    EXPECT_EQ(param_interface.get_type(), StateType::PARAMETER);
+    EXPECT_EQ(param_interface.get_parameter_type(), param.get_parameter_type());
+    EXPECT_EQ(param_interface.get_parameter_state_type(), param.get_parameter_state_type());
+    param.set_value(std::get<0>(test_case));
+    EXPECT_FALSE(param.is_empty());
+    EXPECT_TRUE(param);
+    expect_values_equal(param.get_value(), std::get<0>(test_case));
+  }
 }
 
 TEST(ParameterTest, Conversion) {
@@ -95,88 +228,144 @@ TEST(ParameterTest, Event) {
   EXPECT_TRUE(ptr_e->get_value());
 }
 
-TEST(ParameterTest, MakeShared) {
-  auto pose = CartesianPose::Random("A", "B");
-  auto param = make_shared_parameter("name", pose);
-  EXPECT_EQ(param->get_name(), "name");
-  EXPECT_EQ(param->get_type(), StateType::PARAMETER);
-  EXPECT_EQ(param->get_parameter_type(), ParameterType::STATE);
-  EXPECT_EQ(param->get_parameter_state_type(), StateType::CARTESIAN_POSE);
-  EXPECT_EQ(param->is_empty(), false);
-  EXPECT_EQ(param->get_value().get_name(), "A");
-  EXPECT_EQ(param->get_value().get_reference_frame(), "B");
-  EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
+TYPED_TEST_P(ParameterTest, MakeShared) {
+  for (auto const& test_case: this->test_cases_) {
+    auto param_interface = make_shared_parameter_interface("test", std::get<1>(test_case), std::get<2>(test_case));
+    EXPECT_EQ(param_interface->get_name(), "test");
+    EXPECT_EQ(param_interface->get_type(), StateType::PARAMETER);
+    EXPECT_TRUE(param_interface->is_empty());
+    EXPECT_FALSE(*param_interface);
+    EXPECT_EQ(param_interface->get_parameter_type(), std::get<1>(test_case));
+    EXPECT_EQ(param_interface->get_parameter_state_type(), std::get<2>(test_case));
+    auto param = make_shared_parameter("test", std::get<0>(test_case));
+    EXPECT_EQ(param->get_name(), "test");
+    EXPECT_EQ(param->get_type(), StateType::PARAMETER);
+    EXPECT_FALSE(param->is_empty());
+    EXPECT_TRUE(*param);
+    EXPECT_EQ(param->get_parameter_type(), std::get<1>(test_case));
+    EXPECT_EQ(param->get_parameter_state_type(), std::get<2>(test_case));
+    expect_values_equal(param->get_value(), std::get<0>(test_case));
+  }
 }
 
-TEST(ParameterTest, ParameterThroughInterface) {
-  auto pose = CartesianPose::Random("A", "B");
-  std::shared_ptr<ParameterInterface> param_interface = make_shared_parameter("name", pose);
+TYPED_TEST_P(ParameterTest, ParameterThroughInterface) {
+  for (auto const& test_case: this->test_cases_) {
+    std::shared_ptr<ParameterInterface> param_interface = make_shared_parameter("test", std::get<0>(test_case));
 
-  auto param = param_interface->get_parameter<CartesianPose>();
-  EXPECT_EQ(param->get_name(), "name");
-  EXPECT_EQ(param->get_type(), StateType::PARAMETER);
-  EXPECT_EQ(param->get_parameter_type(), ParameterType::STATE);
-  EXPECT_EQ(param->get_parameter_state_type(), StateType::CARTESIAN_POSE);
-  EXPECT_EQ(param->is_empty(), false);
-  EXPECT_EQ(param->get_value().get_name(), "A");
-  EXPECT_EQ(param->get_value().get_reference_frame(), "B");
-  EXPECT_TRUE(param->get_value().data().isApprox(pose.data()));
+    auto param = param_interface->get_parameter<TypeParam>();
+    EXPECT_EQ(param->get_name(), "test");
+    EXPECT_EQ(param->get_type(), StateType::PARAMETER);
+    EXPECT_FALSE(param->is_empty());
+    EXPECT_EQ(param->get_parameter_type(), std::get<1>(test_case));
+    EXPECT_EQ(param->get_parameter_state_type(), std::get<2>(test_case));
+    expect_values_equal(param->get_value(), std::get<0>(test_case));
 
-  auto param_value = param_interface->get_parameter_value<CartesianPose>();
-  EXPECT_EQ(param_value.get_type(), StateType::CARTESIAN_POSE);
-  EXPECT_EQ(param_value.get_name(), "A");
-  EXPECT_EQ(param_value.get_reference_frame(), "B");
-  EXPECT_TRUE(param_value.data().isApprox(pose.data()));
+    auto param_value = param_interface->get_parameter_value<TypeParam>();
+    expect_values_equal(param_value, std::get<0>(test_case));
 
-  auto pose2 = CartesianPose::Random("C", "D");
-  param_interface->set_parameter_value(pose2);
-  param_value = param_interface->get_parameter_value<CartesianPose>();
-  EXPECT_EQ(param_value.get_name(), "C");
-  EXPECT_EQ(param_value.get_reference_frame(), "D");
-  EXPECT_TRUE(param_value.data().isApprox(pose2.data()));
+    param_interface->set_parameter_value(TypeParam());
+    param_value = param_interface->get_parameter_value<TypeParam>();
+    expect_values_equal(param_value, TypeParam());
+  }
 }
 
-TEST(ParameterTest, ParameterInterfaceBadPointer) {
-  ParameterInterface parameter_interface("name", ParameterType::INT);
+TYPED_TEST_P(ParameterTest, ParameterInterfaceBadPointer) {
+  for (auto const& test_case: this->test_cases_) {
+    ParameterInterface parameter_interface("test", std::get<1>(test_case));
 
-  // by default (validate_pointer = true), throw when the ParameterInterface instance is not managed by any pointer
-  EXPECT_THROW(parameter_interface.get_parameter<int>(), exceptions::InvalidPointerException);
-  EXPECT_THROW(parameter_interface.get_parameter<int>(true), exceptions::InvalidPointerException);
+    // by default (validate_pointer = true), throw when the ParameterInterface instance is not managed by any pointer
+    EXPECT_THROW(parameter_interface.get_parameter<TypeParam>(), exceptions::InvalidPointerException);
+    EXPECT_THROW(parameter_interface.get_parameter<TypeParam>(true), exceptions::InvalidPointerException);
 
-  // using validate_pointer = false catches the exception but returns a null pointer
-  EXPECT_NO_THROW(parameter_interface.get_parameter<int>(false));
-  EXPECT_EQ(parameter_interface.get_parameter<int>(false), nullptr);
+    // using validate_pointer = false catches the exception but returns a null pointer
+    EXPECT_NO_THROW(parameter_interface.get_parameter<TypeParam>(false));
+    EXPECT_EQ(parameter_interface.get_parameter<TypeParam>(false), nullptr);
+  }
 }
 
-TEST(ParameterTest, ParameterInterfaceNullCast) {
-  auto parameter_interface_ptr = std::make_shared<ParameterInterface>("name", ParameterType::INT);
-  std::shared_ptr<Parameter<int>> parameter;
+TYPED_TEST_P(ParameterTest, ParameterInterfaceNullCast) {
+  for (auto const& test_case: this->test_cases_) {
+    auto parameter_interface_ptr = std::make_shared<ParameterInterface>("test", std::get<1>(test_case));
+    std::shared_ptr<Parameter<TypeParam>> parameter;
 
-  // by default (validate_pointer = true), throw when the pointer does not address a Parameter instance
-  EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(), exceptions::InvalidParameterCastException);
-  EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(true), exceptions::InvalidParameterCastException);
+    // by default (validate_pointer = true), throw when the pointer does not address a Parameter instance
+    EXPECT_THROW(parameter_interface_ptr->template get_parameter<TypeParam>(),
+                 exceptions::InvalidParameterCastException);
+    EXPECT_THROW(parameter_interface_ptr->template get_parameter<TypeParam>(true),
+                 exceptions::InvalidParameterCastException);
 
-  // using validate_pointer = false catches the exception but returns a null pointer
-  EXPECT_NO_THROW(parameter = parameter_interface_ptr->get_parameter<int>(false));
-  EXPECT_EQ(parameter, nullptr);
+    // using validate_pointer = false catches the exception but returns a null pointer
+    EXPECT_NO_THROW(parameter = parameter_interface_ptr->template get_parameter<TypeParam>(false));
+    EXPECT_EQ(parameter, nullptr);
+  }
 }
 
-TEST(ParameterTest, ParameterInterfaceWrongTypeCast) {
-  std::shared_ptr<ParameterInterface> parameter_interface_ptr = make_shared_parameter<int>("name", 1);
+TYPED_TEST_P(ParameterTest, ParameterInterfaceWrongTypeCast) {
+  for (auto const& test_case: this->test_cases_) {
+    std::shared_ptr<ParameterInterface>
+        parameter_interface_ptr = make_shared_parameter<TypeParam>("test", std::get<0>(test_case));
 
-  std::shared_ptr<Parameter<int>> parameter_int;
-  EXPECT_NO_THROW(parameter_int = parameter_interface_ptr->get_parameter<int>());
-  EXPECT_NO_THROW(parameter_interface_ptr->get_parameter<int>(true));
-  EXPECT_NO_THROW(parameter_interface_ptr->get_parameter<int>(false));
-  EXPECT_NE(parameter_int, nullptr);
-  EXPECT_EQ(parameter_int->get_value(), 1);
+    std::shared_ptr<Parameter<TypeParam>> parameter;
+    EXPECT_NO_THROW(parameter = parameter_interface_ptr->get_parameter<TypeParam>());
+    EXPECT_NO_THROW(parameter_interface_ptr->get_parameter<TypeParam>(true));
+    EXPECT_NO_THROW(parameter_interface_ptr->get_parameter<TypeParam>(false));
+    EXPECT_NE(parameter, nullptr);
+    expect_values_equal(parameter->get_value(), std::get<0>(test_case));
 
-  std::shared_ptr<Parameter<std::string>> parameter_string;
-  EXPECT_THROW(parameter_interface_ptr->get_parameter<std::string>(), exceptions::InvalidParameterCastException);
-  EXPECT_THROW(parameter_interface_ptr->get_parameter<std::string>(true), exceptions::InvalidParameterCastException);
-  EXPECT_NO_THROW(parameter_string = parameter_interface_ptr->get_parameter<std::string>(false));
-  EXPECT_EQ(parameter_string, nullptr);
+    if (std::get<1>(test_case) == ParameterType::STRING) {
+      std::shared_ptr<Parameter<int>> parameter_int;
+      EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(), exceptions::InvalidParameterCastException);
+      EXPECT_THROW(parameter_interface_ptr->get_parameter<int>(true), exceptions::InvalidParameterCastException);
+      EXPECT_NO_THROW(parameter_int = parameter_interface_ptr->get_parameter<int>(false));
+      EXPECT_EQ(parameter_int, nullptr);
 
-  EXPECT_NO_THROW(parameter_interface_ptr->get_parameter_value<int>());
-  EXPECT_THROW(parameter_interface_ptr->get_parameter_value<std::string>(), exceptions::InvalidParameterCastException);
+      EXPECT_NO_THROW(parameter_interface_ptr->get_parameter_value<TypeParam>());
+      EXPECT_THROW(parameter_interface_ptr->get_parameter_value<int>(), exceptions::InvalidParameterCastException);
+    } else {
+      std::shared_ptr<Parameter<std::string>> parameter_string;
+      EXPECT_THROW(parameter_interface_ptr->get_parameter<std::string>(), exceptions::InvalidParameterCastException);
+      EXPECT_THROW(parameter_interface_ptr->get_parameter<std::string>(true),
+                   exceptions::InvalidParameterCastException);
+      EXPECT_NO_THROW(parameter_string = parameter_interface_ptr->get_parameter<std::string>(false));
+      EXPECT_EQ(parameter_string, nullptr);
+
+      EXPECT_NO_THROW(parameter_interface_ptr->get_parameter_value<TypeParam>());
+      EXPECT_THROW(parameter_interface_ptr->get_parameter_value<std::string>(),
+                   exceptions::InvalidParameterCastException);
+    }
+  }
 }
+
+TEST(ParameterTest, ParameterMap) {
+  auto map = ParameterMap();
+  map.set_parameter(make_shared_parameter("int", 1));
+  int value;
+  EXPECT_NO_THROW(value = map.get_parameter_value<int>("int"));
+  EXPECT_EQ(1, value);
+  map.set_parameter_value<int>("int", 2);
+  EXPECT_NO_THROW(value = map.get_parameter("int")->get_parameter_value<int>());
+  EXPECT_EQ(2, value);
+  map.remove_parameter("int");
+  EXPECT_THROW(map.remove_parameter("int"), exceptions::InvalidParameterException);
+  EXPECT_THROW(value = map.get_parameter_value<int>("int"), exceptions::InvalidParameterException);
+}
+
+REGISTER_TYPED_TEST_SUITE_P(ParameterTest, Construction, MakeShared, ParameterThroughInterface,
+                            ParameterInterfaceBadPointer, ParameterInterfaceNullCast, ParameterInterfaceWrongTypeCast);
+
+using ParameterTestTypes = testing::Types<bool,
+                                          std::vector<bool>,
+                                          int,
+                                          std::vector<int>,
+                                          double,
+                                          std::vector<double>,
+                                          std::string,
+                                          std::vector<std::string>,
+                                          CartesianState,
+                                          CartesianPose,
+                                          JointPositions,
+                                          JointState,
+                                          Ellipsoid,
+                                          Eigen::VectorXd,
+                                          Eigen::MatrixXd>;
+INSTANTIATE_TYPED_TEST_SUITE_P(, ParameterTest, ParameterTestTypes);

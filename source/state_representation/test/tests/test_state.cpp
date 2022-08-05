@@ -69,3 +69,13 @@ TEST(StateTest, Swap) {
   EXPECT_EQ(state2.get_name(), "cartesian");
   EXPECT_TRUE(state2.is_empty());
 }
+
+TEST(StateTest, Truthiness) {
+  State empty;
+  EXPECT_TRUE(empty.is_empty());
+  EXPECT_FALSE(empty);
+
+  empty.set_filled();
+  EXPECT_FALSE(empty.is_empty());
+  EXPECT_TRUE(empty);
+}

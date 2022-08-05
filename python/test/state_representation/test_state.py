@@ -82,5 +82,14 @@ class TestState(unittest.TestCase):
         state2 = copy.copy(state)
         state3 = copy.deepcopy(state)
 
+    def test_truthiness(self):
+        state = State()
+        self.assertTrue(state.is_empty())
+        self.assertFalse(state)
+
+        state.set_filled()
+        self.assertFalse(state.is_empty())
+        self.assertTrue(state)
+
 if __name__ == '__main__':
     unittest.main()

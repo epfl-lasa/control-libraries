@@ -10,8 +10,9 @@ INSTALL_DESTINATION="/usr/local"
 AUTO_INSTALL=""
 
 EIGEN_VERSION=3.4.0
-OSQP_TAG=v0.6.2
-OSQP_EIGEN_TAG=v0.6.4
+OSQP_TAG=0.6.2
+OSQP_EIGEN_TAG=0.6.4
+PINOCCHIO_TAG=2.6.9
 
 FAIL_MESSAGE="The provided input arguments are not valid.
 Run the script with the '--help' argument."
@@ -86,6 +87,7 @@ rm -rf "${SOURCE_PATH}"/tmp
 echo ">>> INSTALLING BASE DEPENDENCIES"
 INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
 if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
+  echo ">>> INSTALLING EIGEN"
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
   cd "eigen-${EIGEN_VERSION}" && mkdir -p build && cd build && cmake .. && make install || exit 1
@@ -98,32 +100,28 @@ fi
 # install module-specific dependencies
 if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   echo ">>> INSTALLING ROBOT MODEL DEPENDENCIES"
-  apt-get update && apt-get install "${AUTO_INSTALL}" lsb-release gnupg2 curl || exit 1
+  apt-get update && apt-get install "${AUTO_INSTALL}" libboost-all-dev liburdfdom-dev || exit 1
 
-  # install pinocchio
-  echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
-    | tee /etc/apt/sources.list.d/robotpkg.list
-  curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
+  INSTALLED_PINOCCHIO=$(pkg-config --modversion pinocchio)
+  if [ "${INSTALLED_PINOCCHIO}" != "${PINOCCHIO_TAG}" ]; then
+    mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
 
-  apt-get update && apt-get install "${AUTO_INSTALL}" robotpkg-pinocchio || exit 1
+    echo ">>> INSTALLING OSQP [1/3]"
+    git clone --depth 1 -b v${OSQP_TAG} --recursive https://github.com/oxfordcontrol/osqp \
+        && cd osqp && mkdir build && cd build && cmake -G "Unix Makefiles" .. && cmake --build . --target install \
+        && cd ../.. && rm -r osqp || exit 1
 
-  export PATH=/opt/openrobots/bin:$PATH
-  export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
-  export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-  export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
+    echo ">>> INSTALLING OSQP_EIGEN [2/3]"
+    git clone --depth 1 -b v${OSQP_EIGEN_TAG} https://github.com/robotology/osqp-eigen.git \
+        && cd osqp-eigen && mkdir build && cd build && cmake .. && make -j && make install \
+        && cd ../.. && rm -r osqp-eigen || exit 1
 
-  # install osqp
-  mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
-  git clone --recursive https://github.com/oxfordcontrol/osqp
-  cd "${SOURCE_PATH}"/tmp/lib/osqp/ && git checkout "${OSQP_TAG}" && mkdir -p build && cd build || exit 1
-  cmake -G "Unix Makefiles" .. && cmake --build . --target install || exit 1
-  # install osqp eigen wrapper
-  cd "${SOURCE_PATH}"/tmp/lib || exit 1
-  git clone https://github.com/robotology/osqp-eigen.git
-  cd "${SOURCE_PATH}"/tmp/lib/osqp-eigen && git checkout "${OSQP_EIGEN_TAG}" && mkdir -p build && cd build || exit 1
-  cmake .. && make -j && make install || exit 1
-
-  ln -s /opt/openrobots/lib/libpinocchio.so* "${INSTALL_DESTINATION}"/lib/
+    echo ">>> INSTALLING PINOCCHIO [3/3]"
+    git clone --depth 1 -b v${PINOCCHIO_TAG} --recursive https://github.com/stack-of-tasks/pinocchio \
+        && cd pinocchio && mkdir build && cd build \
+        && cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_PYTHON_INTERFACE=OFF \
+        && make -j1 && make install && cd ../.. && rm -r pinocchio || exit 1
+  fi
   ldconfig
 fi
 

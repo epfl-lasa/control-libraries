@@ -368,4 +368,4 @@ using ParameterTestTypes = testing::Types<bool,
                                           Ellipsoid,
                                           Eigen::VectorXd,
                                           Eigen::MatrixXd>;
-INSTANTIATE_TYPED_TEST_SUITE_P(, ParameterTest, ParameterTestTypes);
+INSTANTIATE_TYPED_TEST_SUITE_P(Type, ParameterTest, ParameterTestTypes);

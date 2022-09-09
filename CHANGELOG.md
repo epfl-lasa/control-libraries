@@ -13,6 +13,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Refactor frame_name parameters (#309)
+
 ## 6.1.0
 
 Version 6.1.0 contains a few small new features as well as several fixes, mainly in

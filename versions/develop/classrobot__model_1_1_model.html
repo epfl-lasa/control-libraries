@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.1</span>
    </div>
   </td>
  </tr>
@@ -121,12 +121,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4d7604f19f3c50440e30c47380935f3"><td class="memItemLeft" align="right" valign="top">const pinocchio::Model &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#ae4d7604f19f3c50440e30c47380935f3">get_pinocchio_model</a> () const</td></tr>
 <tr class="memdesc:ae4d7604f19f3c50440e30c47380935f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter of the pinocchio model.  <a href="classrobot__model_1_1_model.html#ae4d7604f19f3c50440e30c47380935f3">More...</a><br /></td></tr>
 <tr class="separator:ae4d7604f19f3c50440e30c47380935f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af061da26c01b5c810f742e104002e814"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_jacobian.html">state_representation::Jacobian</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#af061da26c01b5c810f742e104002e814">compute_jacobian</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:af061da26c01b5c810f742e104002e814"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Jacobian from a given joint state at the frame given in parameter.  <a href="classrobot__model_1_1_model.html#af061da26c01b5c810f742e104002e814">More...</a><br /></td></tr>
-<tr class="separator:af061da26c01b5c810f742e104002e814"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa257286ca601547fe58da58b3c655e6"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#afa257286ca601547fe58da58b3c655e6">compute_jacobian_time_derivative</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a> &amp;joint_velocities, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:afa257286ca601547fe58da58b3c655e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter.  <a href="classrobot__model_1_1_model.html#afa257286ca601547fe58da58b3c655e6">More...</a><br /></td></tr>
-<tr class="separator:afa257286ca601547fe58da58b3c655e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdfc7a62372ca971219344ef71ff8861"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_jacobian.html">state_representation::Jacobian</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#afdfc7a62372ca971219344ef71ff8861">compute_jacobian</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:afdfc7a62372ca971219344ef71ff8861"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Jacobian from a given joint state at the frame given in parameter.  <a href="classrobot__model_1_1_model.html#afdfc7a62372ca971219344ef71ff8861">More...</a><br /></td></tr>
+<tr class="separator:afdfc7a62372ca971219344ef71ff8861"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a379c64abd1c871daeac11046e2d409cc"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a379c64abd1c871daeac11046e2d409cc">compute_jacobian_time_derivative</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a> &amp;joint_velocities, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:a379c64abd1c871daeac11046e2d409cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter.  <a href="classrobot__model_1_1_model.html#a379c64abd1c871daeac11046e2d409cc">More...</a><br /></td></tr>
+<tr class="separator:a379c64abd1c871daeac11046e2d409cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a807d0aa40937a244ef2e330753b6cd57"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a807d0aa40937a244ef2e330753b6cd57">compute_inertia_matrix</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions)</td></tr>
 <tr class="memdesc:a807d0aa40937a244ef2e330753b6cd57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Inertia matrix from a given joint positions.  <a href="classrobot__model_1_1_model.html#a807d0aa40937a244ef2e330753b6cd57">More...</a><br /></td></tr>
 <tr class="separator:a807d0aa40937a244ef2e330753b6cd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,36 +142,36 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4729c84c4ec7f3b92398fa195401e720"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_torques.html">state_representation::JointTorques</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a4729c84c4ec7f3b92398fa195401e720">compute_gravity_torques</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions)</td></tr>
 <tr class="memdesc:a4729c84c4ec7f3b92398fa195401e720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the gravity torques.  <a href="classrobot__model_1_1_model.html#a4729c84c4ec7f3b92398fa195401e720">More...</a><br /></td></tr>
 <tr class="separator:a4729c84c4ec7f3b92398fa195401e720"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3331f4126e1f3cb5971569a7b2b7fed1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a3331f4126e1f3cb5971569a7b2b7fed1">forward_kinematics</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::vector&lt; std::string &gt; &amp;frame_names)</td></tr>
-<tr class="memdesc:a3331f4126e1f3cb5971569a7b2b7fed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward kinematics, i.e. the pose of certain frames from the joint positions.  <a href="classrobot__model_1_1_model.html#a3331f4126e1f3cb5971569a7b2b7fed1">More...</a><br /></td></tr>
-<tr class="separator:a3331f4126e1f3cb5971569a7b2b7fed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ca1ff68dad998a2a01302b70676334d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a9ca1ff68dad998a2a01302b70676334d">forward_kinematics</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a9ca1ff68dad998a2a01302b70676334d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward kinematics, i.e. the pose of the frame from the joint positions.  <a href="classrobot__model_1_1_model.html#a9ca1ff68dad998a2a01302b70676334d">More...</a><br /></td></tr>
-<tr class="separator:a9ca1ff68dad998a2a01302b70676334d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac67df539133aae67c2a3ababef780713"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#ac67df539133aae67c2a3ababef780713">inverse_kinematics</a> (const <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &amp;cartesian_pose, const <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a> &amp;parameters=<a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a>(), const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:ac67df539133aae67c2a3ababef780713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector in an iterative manner.  <a href="classrobot__model_1_1_model.html#ac67df539133aae67c2a3ababef780713">More...</a><br /></td></tr>
-<tr class="separator:ac67df539133aae67c2a3ababef780713"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac1b6dd26823a70f1a710aa8ca39fe96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#aac1b6dd26823a70f1a710aa8ca39fe96">inverse_kinematics</a> (const <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &amp;cartesian_pose, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a> &amp;parameters=<a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a>(), const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:aac1b6dd26823a70f1a710aa8ca39fe96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector.  <a href="classrobot__model_1_1_model.html#aac1b6dd26823a70f1a710aa8ca39fe96">More...</a><br /></td></tr>
-<tr class="separator:aac1b6dd26823a70f1a710aa8ca39fe96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a19d5cf5dd7fe63b3abc806ef210d65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a7a19d5cf5dd7fe63b3abc806ef210d65">forward_velocity</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> &amp;joint_state, const std::vector&lt; std::string &gt; &amp;frame_names)</td></tr>
-<tr class="memdesc:a7a19d5cf5dd7fe63b3abc806ef210d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint states.  <a href="classrobot__model_1_1_model.html#a7a19d5cf5dd7fe63b3abc806ef210d65">More...</a><br /></td></tr>
-<tr class="separator:a7a19d5cf5dd7fe63b3abc806ef210d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9614db7b188428c17f08de2e122b15d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a9614db7b188428c17f08de2e122b15d4">forward_velocity</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> &amp;joint_state, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a9614db7b188428c17f08de2e122b15d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities.  <a href="classrobot__model_1_1_model.html#a9614db7b188428c17f08de2e122b15d4">More...</a><br /></td></tr>
-<tr class="separator:a9614db7b188428c17f08de2e122b15d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c12469422ae9ee596e87685bb158906"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a7c12469422ae9ee596e87685bb158906">inverse_velocity</a> (const std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt; &amp;cartesian_twists, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::vector&lt; std::string &gt; &amp;frame_names)</td></tr>
-<tr class="memdesc:a7c12469422ae9ee596e87685bb158906"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the Jacobian.  <a href="classrobot__model_1_1_model.html#a7c12469422ae9ee596e87685bb158906">More...</a><br /></td></tr>
-<tr class="separator:a7c12469422ae9ee596e87685bb158906"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03aae409c772f72dfa6e6eec2b89c816"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a03aae409c772f72dfa6e6eec2b89c816">inverse_velocity</a> (const <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &amp;cartesian_twist, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a03aae409c772f72dfa6e6eec2b89c816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the Jacobian.  <a href="classrobot__model_1_1_model.html#a03aae409c772f72dfa6e6eec2b89c816">More...</a><br /></td></tr>
-<tr class="separator:a03aae409c772f72dfa6e6eec2b89c816"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc3aca86ff5f2a1ebfae3900dbd7007"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#abdc3aca86ff5f2a1ebfae3900dbd7007">inverse_velocity</a> (const std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt; &amp;cartesian_twists, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html">QPInverseVelocityParameters</a> &amp;parameters, const std::vector&lt; std::string &gt; &amp;frame_names)</td></tr>
-<tr class="memdesc:abdc3aca86ff5f2a1ebfae3900dbd7007"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the QP optimization method.  <a href="classrobot__model_1_1_model.html#abdc3aca86ff5f2a1ebfae3900dbd7007">More...</a><br /></td></tr>
-<tr class="separator:abdc3aca86ff5f2a1ebfae3900dbd7007"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca03c47212cfd2f34799cb00de3854b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#aca03c47212cfd2f34799cb00de3854b7">inverse_velocity</a> (const <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &amp;cartesian_twist, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html">QPInverseVelocityParameters</a> &amp;parameters, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:aca03c47212cfd2f34799cb00de3854b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the QP optimization method.  <a href="classrobot__model_1_1_model.html#aca03c47212cfd2f34799cb00de3854b7">More...</a><br /></td></tr>
-<tr class="separator:aca03c47212cfd2f34799cb00de3854b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7068c9b96ec92e05a84db8f8a8d18727"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a7068c9b96ec92e05a84db8f8a8d18727">forward_kinematics</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::vector&lt; std::string &gt; &amp;frames)</td></tr>
+<tr class="memdesc:a7068c9b96ec92e05a84db8f8a8d18727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward kinematics, i.e. the pose of certain frames from the joint positions.  <a href="classrobot__model_1_1_model.html#a7068c9b96ec92e05a84db8f8a8d18727">More...</a><br /></td></tr>
+<tr class="separator:a7068c9b96ec92e05a84db8f8a8d18727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa414a2ebd82d88f908cc12809f429d01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#aa414a2ebd82d88f908cc12809f429d01">forward_kinematics</a> (const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:aa414a2ebd82d88f908cc12809f429d01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward kinematics, i.e. the pose of the frame from the joint positions.  <a href="classrobot__model_1_1_model.html#aa414a2ebd82d88f908cc12809f429d01">More...</a><br /></td></tr>
+<tr class="separator:aa414a2ebd82d88f908cc12809f429d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf8e5dd783f5058fb494c70c9a20a044"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#aaf8e5dd783f5058fb494c70c9a20a044">inverse_kinematics</a> (const <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &amp;cartesian_pose, const <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a> &amp;parameters=<a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a>(), const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:aaf8e5dd783f5058fb494c70c9a20a044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector in an iterative manner.  <a href="classrobot__model_1_1_model.html#aaf8e5dd783f5058fb494c70c9a20a044">More...</a><br /></td></tr>
+<tr class="separator:aaf8e5dd783f5058fb494c70c9a20a044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33ab7c9c3ff3ef3aa5761fa9ec279a38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a33ab7c9c3ff3ef3aa5761fa9ec279a38">inverse_kinematics</a> (const <a class="el" href="classstate__representation_1_1_cartesian_pose.html">state_representation::CartesianPose</a> &amp;cartesian_pose, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a> &amp;parameters=<a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html">InverseKinematicsParameters</a>(), const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:a33ab7c9c3ff3ef3aa5761fa9ec279a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector.  <a href="classrobot__model_1_1_model.html#a33ab7c9c3ff3ef3aa5761fa9ec279a38">More...</a><br /></td></tr>
+<tr class="separator:a33ab7c9c3ff3ef3aa5761fa9ec279a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a132b746c1d53e12c143e9dcdbd5383c1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a132b746c1d53e12c143e9dcdbd5383c1">forward_velocity</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> &amp;joint_state, const std::vector&lt; std::string &gt; &amp;frames)</td></tr>
+<tr class="memdesc:a132b746c1d53e12c143e9dcdbd5383c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint states.  <a href="classrobot__model_1_1_model.html#a132b746c1d53e12c143e9dcdbd5383c1">More...</a><br /></td></tr>
+<tr class="separator:a132b746c1d53e12c143e9dcdbd5383c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad503164e00769d138c2dd79da7629146"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#ad503164e00769d138c2dd79da7629146">forward_velocity</a> (const <a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a> &amp;joint_state, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:ad503164e00769d138c2dd79da7629146"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities.  <a href="classrobot__model_1_1_model.html#ad503164e00769d138c2dd79da7629146">More...</a><br /></td></tr>
+<tr class="separator:ad503164e00769d138c2dd79da7629146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3938692368fec87675df3618894ce727"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a3938692368fec87675df3618894ce727">inverse_velocity</a> (const std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt; &amp;cartesian_twists, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::vector&lt; std::string &gt; &amp;frames)</td></tr>
+<tr class="memdesc:a3938692368fec87675df3618894ce727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the Jacobian.  <a href="classrobot__model_1_1_model.html#a3938692368fec87675df3618894ce727">More...</a><br /></td></tr>
+<tr class="separator:a3938692368fec87675df3618894ce727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8468ad56ba9f61728d4ee8b1dbcec062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#a8468ad56ba9f61728d4ee8b1dbcec062">inverse_velocity</a> (const <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &amp;cartesian_twist, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:a8468ad56ba9f61728d4ee8b1dbcec062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the Jacobian.  <a href="classrobot__model_1_1_model.html#a8468ad56ba9f61728d4ee8b1dbcec062">More...</a><br /></td></tr>
+<tr class="separator:a8468ad56ba9f61728d4ee8b1dbcec062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd2cbe8d24babd551301528d562ddb98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#acd2cbe8d24babd551301528d562ddb98">inverse_velocity</a> (const std::vector&lt; <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &gt; &amp;cartesian_twists, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html">QPInverseVelocityParameters</a> &amp;parameters, const std::vector&lt; std::string &gt; &amp;frames)</td></tr>
+<tr class="memdesc:acd2cbe8d24babd551301528d562ddb98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the QP optimization method.  <a href="classrobot__model_1_1_model.html#acd2cbe8d24babd551301528d562ddb98">More...</a><br /></td></tr>
+<tr class="separator:acd2cbe8d24babd551301528d562ddb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af80ee1fc45c72ff6db09bfe108c83c64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_velocities.html">state_representation::JointVelocities</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#af80ee1fc45c72ff6db09bfe108c83c64">inverse_velocity</a> (const <a class="el" href="classstate__representation_1_1_cartesian_twist.html">state_representation::CartesianTwist</a> &amp;cartesian_twist, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html">QPInverseVelocityParameters</a> &amp;parameters, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:af80ee1fc45c72ff6db09bfe108c83c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the QP optimization method.  <a href="classrobot__model_1_1_model.html#af80ee1fc45c72ff6db09bfe108c83c64">More...</a><br /></td></tr>
+<tr class="separator:af80ee1fc45c72ff6db09bfe108c83c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1747bf9c8962023dc9949a05b93b979"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrobot__model_1_1_model.html#ae1747bf9c8962023dc9949a05b93b979">print_qp_problem</a> ()</td></tr>
 <tr class="memdesc:ae1747bf9c8962023dc9949a05b93b979"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to print the qp_problem (for debugging)  <a href="classrobot__model_1_1_model.html#ae1747bf9c8962023dc9949a05b93b979">More...</a><br /></td></tr>
 <tr class="separator:ae1747bf9c8962023dc9949a05b93b979"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -451,8 +451,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="af061da26c01b5c810f742e104002e814" name="af061da26c01b5c810f742e104002e814"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af061da26c01b5c810f742e104002e814">&#9670;&nbsp;</a></span>compute_jacobian()</h2>
+<a id="afdfc7a62372ca971219344ef71ff8861" name="afdfc7a62372ca971219344ef71ff8861"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdfc7a62372ca971219344ef71ff8861">&#9670;&nbsp;</a></span>compute_jacobian()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -467,7 +467,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -481,7 +481,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">joint_positions</td><td>containing the joint positions of the robot </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to compute the Jacobian, if empty computed for the last frame </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to compute the Jacobian, if empty computed for the last frame </td></tr>
   </table>
   </dd>
 </dl>
@@ -491,8 +491,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="afa257286ca601547fe58da58b3c655e6" name="afa257286ca601547fe58da58b3c655e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa257286ca601547fe58da58b3c655e6">&#9670;&nbsp;</a></span>compute_jacobian_time_derivative()</h2>
+<a id="a379c64abd1c871daeac11046e2d409cc" name="a379c64abd1c871daeac11046e2d409cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a379c64abd1c871daeac11046e2d409cc">&#9670;&nbsp;</a></span>compute_jacobian_time_derivative()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -513,7 +513,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -528,7 +528,7 @@ Friends</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">joint_positions</td><td>containing the joint positions of the robot </td></tr>
     <tr><td class="paramname">joint_velocities</td><td>containing the joint positions of the robot </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to compute the Jacobian, if empty computed for the last frame </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to compute the Jacobian, if empty computed for the last frame </td></tr>
   </table>
   </dd>
 </dl>
@@ -586,8 +586,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a9ca1ff68dad998a2a01302b70676334d" name="a9ca1ff68dad998a2a01302b70676334d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ca1ff68dad998a2a01302b70676334d">&#9670;&nbsp;</a></span>forward_kinematics() <span class="overload">[1/2]</span></h2>
+<a id="aa414a2ebd82d88f908cc12809f429d01" name="aa414a2ebd82d88f908cc12809f429d01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa414a2ebd82d88f908cc12809f429d01">&#9670;&nbsp;</a></span>forward_kinematics() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -602,7 +602,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -616,7 +616,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">joint_positions</td><td>the joint state of the robot </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to extract the pose </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to extract the pose </td></tr>
   </table>
   </dd>
 </dl>
@@ -626,8 +626,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a3331f4126e1f3cb5971569a7b2b7fed1" name="a3331f4126e1f3cb5971569a7b2b7fed1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3331f4126e1f3cb5971569a7b2b7fed1">&#9670;&nbsp;</a></span>forward_kinematics() <span class="overload">[2/2]</span></h2>
+<a id="a7068c9b96ec92e05a84db8f8a8d18727" name="a7068c9b96ec92e05a84db8f8a8d18727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7068c9b96ec92e05a84db8f8a8d18727">&#9670;&nbsp;</a></span>forward_kinematics() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -642,7 +642,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>frame_names</em>&#160;</td>
+          <td class="paramname"><em>frames</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -656,7 +656,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">joint_positions</td><td>the joint state of the robot </td></tr>
-    <tr><td class="paramname">frame_names</td><td>names of the frames at which to extract the poses </td></tr>
+    <tr><td class="paramname">frames</td><td>names of the frames at which to extract the poses </td></tr>
   </table>
   </dd>
 </dl>
@@ -666,8 +666,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a9614db7b188428c17f08de2e122b15d4" name="a9614db7b188428c17f08de2e122b15d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9614db7b188428c17f08de2e122b15d4">&#9670;&nbsp;</a></span>forward_velocity() <span class="overload">[1/2]</span></h2>
+<a id="ad503164e00769d138c2dd79da7629146" name="ad503164e00769d138c2dd79da7629146"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad503164e00769d138c2dd79da7629146">&#9670;&nbsp;</a></span>forward_velocity() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -682,7 +682,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -696,7 +696,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">joint_state</td><td>the joint state of the robot with positions to compute the Jacobian and velocities for the twist </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to compute the twist </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to compute the twist </td></tr>
   </table>
   </dd>
 </dl>
@@ -706,8 +706,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a7a19d5cf5dd7fe63b3abc806ef210d65" name="a7a19d5cf5dd7fe63b3abc806ef210d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a19d5cf5dd7fe63b3abc806ef210d65">&#9670;&nbsp;</a></span>forward_velocity() <span class="overload">[2/2]</span></h2>
+<a id="a132b746c1d53e12c143e9dcdbd5383c1" name="a132b746c1d53e12c143e9dcdbd5383c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a132b746c1d53e12c143e9dcdbd5383c1">&#9670;&nbsp;</a></span>forward_velocity() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -722,7 +722,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>frame_names</em>&#160;</td>
+          <td class="paramname"><em>frames</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -736,7 +736,7 @@ Friends</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">joint_state</td><td>the joint state of the robot with positions to compute the Jacobian and velocities for the twist </td></tr>
-    <tr><td class="paramname">frame_names</td><td>name of the frames at which to compute the twist </td></tr>
+    <tr><td class="paramname">frames</td><td>name of the frames at which to compute the twist </td></tr>
   </table>
   </dd>
 </dl>
@@ -1102,8 +1102,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac67df539133aae67c2a3ababef780713" name="ac67df539133aae67c2a3ababef780713"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac67df539133aae67c2a3ababef780713">&#9670;&nbsp;</a></span>inverse_kinematics() <span class="overload">[1/2]</span></h2>
+<a id="aaf8e5dd783f5058fb494c70c9a20a044" name="aaf8e5dd783f5058fb494c70c9a20a044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf8e5dd783f5058fb494c70c9a20a044">&#9670;&nbsp;</a></span>inverse_kinematics() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1124,7 +1124,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1139,7 +1139,7 @@ Friends</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">cartesian_pose</td><td>containing the desired pose of the end-effector </td></tr>
     <tr><td class="paramname">parameters</td><td>parameters of the inverse kinematics algorithm (default is default values of the <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html" title="parameters for the inverse kinematics function">InverseKinematicsParameters</a> structure) </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to extract the pose </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to extract the pose </td></tr>
   </table>
   </dd>
 </dl>
@@ -1149,8 +1149,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aac1b6dd26823a70f1a710aa8ca39fe96" name="aac1b6dd26823a70f1a710aa8ca39fe96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac1b6dd26823a70f1a710aa8ca39fe96">&#9670;&nbsp;</a></span>inverse_kinematics() <span class="overload">[2/2]</span></h2>
+<a id="a33ab7c9c3ff3ef3aa5761fa9ec279a38" name="a33ab7c9c3ff3ef3aa5761fa9ec279a38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33ab7c9c3ff3ef3aa5761fa9ec279a38">&#9670;&nbsp;</a></span>inverse_kinematics() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1177,7 +1177,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1193,7 +1193,7 @@ Friends</h2></td></tr>
     <tr><td class="paramname">cartesian_pose</td><td>containing the desired pose of the end-effector </td></tr>
     <tr><td class="paramname">joint_positions</td><td>current state of the robot containing the generalized position </td></tr>
     <tr><td class="paramname">parameters</td><td>parameters of the inverse kinematics algorithm (default is default values of the <a class="el" href="structrobot__model_1_1_inverse_kinematics_parameters.html" title="parameters for the inverse kinematics function">InverseKinematicsParameters</a> structure) </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to extract the pose </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to extract the pose </td></tr>
   </table>
   </dd>
 </dl>
@@ -1203,8 +1203,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aca03c47212cfd2f34799cb00de3854b7" name="aca03c47212cfd2f34799cb00de3854b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca03c47212cfd2f34799cb00de3854b7">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[1/4]</span></h2>
+<a id="af80ee1fc45c72ff6db09bfe108c83c64" name="af80ee1fc45c72ff6db09bfe108c83c64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af80ee1fc45c72ff6db09bfe108c83c64">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1231,7 +1231,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1248,7 +1248,7 @@ Friends</h2></td></tr>
     <tr><td class="paramname">joint_positions</td><td>current joint positions, used to compute the Jacobian matrix </td></tr>
     <tr><td class="paramname">joint_positions</td><td>current joint positions, used to compute the Jacobian matrix </td></tr>
     <tr><td class="paramname">parameters</td><td>parameters of the inverse velocity kinematics algorithm (default is default values of the <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html" title="parameters for the inverse velocity kinematics function">QPInverseVelocityParameters</a> structure) </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to compute the twist </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to compute the twist </td></tr>
   </table>
   </dd>
 </dl>
@@ -1258,8 +1258,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a03aae409c772f72dfa6e6eec2b89c816" name="a03aae409c772f72dfa6e6eec2b89c816"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03aae409c772f72dfa6e6eec2b89c816">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[2/4]</span></h2>
+<a id="a8468ad56ba9f61728d4ee8b1dbcec062" name="a8468ad56ba9f61728d4ee8b1dbcec062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8468ad56ba9f61728d4ee8b1dbcec062">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1280,7 +1280,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1295,7 +1295,7 @@ Friends</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">cartesian_twist</td><td>containing the twist of the end-effector </td></tr>
     <tr><td class="paramname">joint_positions</td><td>current joint positions, used to compute the Jacobian matrix </td></tr>
-    <tr><td class="paramname">frame_name</td><td>name of the frame at which to compute the twist </td></tr>
+    <tr><td class="paramname">frame</td><td>name of the frame at which to compute the twist </td></tr>
     <tr><td class="paramname">parameters</td><td>parameters of the inverse velocity kinematics algorithm (default is default values of the <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html" title="parameters for the inverse velocity kinematics function">QPInverseVelocityParameters</a> structure) </td></tr>
   </table>
   </dd>
@@ -1306,8 +1306,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="abdc3aca86ff5f2a1ebfae3900dbd7007" name="abdc3aca86ff5f2a1ebfae3900dbd7007"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdc3aca86ff5f2a1ebfae3900dbd7007">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[3/4]</span></h2>
+<a id="acd2cbe8d24babd551301528d562ddb98" name="acd2cbe8d24babd551301528d562ddb98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd2cbe8d24babd551301528d562ddb98">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1334,7 +1334,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>frame_names</em>&#160;</td>
+          <td class="paramname"><em>frames</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1350,7 +1350,7 @@ Friends</h2></td></tr>
     <tr><td class="paramname">cartesian_twists</td><td>vector of twist </td></tr>
     <tr><td class="paramname">joint_positions</td><td>current joint positions, used to compute the jacobian matrix </td></tr>
     <tr><td class="paramname">parameters</td><td>parameters of the inverse velocity kinematics algorithm (default is default values of the <a class="el" href="structrobot__model_1_1_q_p_inverse_velocity_parameters.html" title="parameters for the inverse velocity kinematics function">QPInverseVelocityParameters</a> structure) </td></tr>
-    <tr><td class="paramname">frame_names</td><td>names of the frames at which to compute the twists </td></tr>
+    <tr><td class="paramname">frames</td><td>names of the frames at which to compute the twists </td></tr>
   </table>
   </dd>
 </dl>
@@ -1360,8 +1360,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a7c12469422ae9ee596e87685bb158906" name="a7c12469422ae9ee596e87685bb158906"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c12469422ae9ee596e87685bb158906">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[4/4]</span></h2>
+<a id="a3938692368fec87675df3618894ce727" name="a3938692368fec87675df3618894ce727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3938692368fec87675df3618894ce727">&#9670;&nbsp;</a></span>inverse_velocity() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1382,7 +1382,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>frame_names</em>&#160;</td>
+          <td class="paramname"><em>frames</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1397,7 +1397,7 @@ Friends</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">cartesian_twists</td><td>vector of twist </td></tr>
     <tr><td class="paramname">joint_positions</td><td>current joint positions, used to compute the Jacobian matrix </td></tr>
-    <tr><td class="paramname">frame_names</td><td>names of the frames at which to compute the twists </td></tr>
+    <tr><td class="paramname">frames</td><td>names of the frames at which to compute the twists </td></tr>
   </table>
   </dd>
 </dl>

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.1</span>
    </div>
   </td>
  </tr>
@@ -122,9 +122,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~IController</b> (
 <tr class="memitem:a417469026896af1536b3a94165507f11 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#a417469026896af1536b3a94165507f11">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_jacobian.html">state_representation::Jacobian</a> &amp;jacobian)</td></tr>
 <tr class="memdesc:a417469026896af1536b3a94165507f11 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space.  <a href="classcontrollers_1_1_i_controller.html#a417469026896af1536b3a94165507f11">More...</a><br /></td></tr>
 <tr class="separator:a417469026896af1536b3a94165507f11 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d55babf98020f022a314e30786f622e inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#a8d55babf98020f022a314e30786f622e">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a8d55babf98020f022a314e30786f622e inherit pub_methods_classcontrollers_1_1_i_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space from command and feedback states in task space.  <a href="classcontrollers_1_1_i_controller.html#a8d55babf98020f022a314e30786f622e">More...</a><br /></td></tr>
-<tr class="separator:a8d55babf98020f022a314e30786f622e inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab886be5e8615e8fa8b29a192427fd789 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#ab886be5e8615e8fa8b29a192427fd789">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:ab886be5e8615e8fa8b29a192427fd789 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space from command and feedback states in task space.  <a href="classcontrollers_1_1_i_controller.html#ab886be5e8615e8fa8b29a192427fd789">More...</a><br /></td></tr>
+<tr class="separator:ab886be5e8615e8fa8b29a192427fd789 inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee57c2540d18b8611e7428acf4f61dbf inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classrobot__model_1_1_model.html">robot_model::Model</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#aee57c2540d18b8611e7428acf4f61dbf">get_robot_model</a> ()</td></tr>
 <tr class="memdesc:aee57c2540d18b8611e7428acf4f61dbf inherit pub_methods_classcontrollers_1_1_i_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the robot model associated with the controller.  <a href="classcontrollers_1_1_i_controller.html#aee57c2540d18b8611e7428acf4f61dbf">More...</a><br /></td></tr>
 <tr class="separator:aee57c2540d18b8611e7428acf4f61dbf inherit pub_methods_classcontrollers_1_1_i_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -445,12 +445,12 @@ template&lt;class S &gt; </div>
 <p>Compute the command output based on the commanded state and a feedback state To be redefined based on the actual controller implementation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">command_state</td><td>the input state to the controller </td></tr>
-    <tr><td class="paramname">feedback_state</td><td>the current state of the system given as feedback </td></tr>
+    <tr><td class="paramname">command_state</td><td>The input state to the controller </td></tr>
+    <tr><td class="paramname">feedback_state</td><td>The current state of the system given as feedback </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the output command at the input state </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The output command in the same state space as the input </dd></dl>
 
 <p>Implements <a class="el" href="classcontrollers_1_1_i_controller.html#a6789e40bf5972e234893159cadfa2d22">controllers::IController&lt; S &gt;</a>.</p>
 

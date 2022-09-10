@@ -25,7 +25,7 @@ void cartesian_controller(py::module_& m) {
       "Compute the command output in joint space from command and feedback states in task space.", "command_state"_a, "feedback_state"_a, "jacobian"_a);
   c.def(
       "compute_command", py::overload_cast<const CartesianState&, const CartesianState&, const JointPositions&, const std::string&>(&IController<CartesianState>::compute_command),
-      "Compute the command output in joint space from command and feedback states in task space.", "command_state"_a, "feedback_state"_a, "joint_positions"_a, "frame_name"_a = std::string(""));
+      "Compute the command output in joint space from command and feedback states in task space.", "command_state"_a, "feedback_state"_a, "joint_positions"_a, "frame"_a = std::string(""));
 
   c.def("get_robot_model", &IController<CartesianState>::get_robot_model, "Get the robot model associated with the controller.");
   c.def("set_robot_model", &IController<CartesianState>::set_robot_model, "Set the robot model associated with the controller.", "robot_model"_a);

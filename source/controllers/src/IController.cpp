@@ -29,14 +29,14 @@ JointState IController<CartesianState>::compute_command(
 template<>
 JointState IController<CartesianState>::compute_command(
     const CartesianState& command_state, const CartesianState& feedback_state, const JointPositions& joint_positions,
-    const std::string& frame_name
+    const std::string& frame
 ) {
   if (this->robot_model_ == nullptr) {
     throw exceptions::NoRobotModelException(
         "A robot model is required to convert the control command from Cartesian to joint space");
   }
 
-  auto jacobian = this->robot_model_->compute_jacobian(joint_positions, frame_name);
+  auto jacobian = this->robot_model_->compute_jacobian(joint_positions, frame);
   return this->compute_command(command_state, feedback_state, jacobian);
 }
 

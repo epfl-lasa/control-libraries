@@ -35,7 +35,7 @@ RUN mkdir gtest_build && cd gtest_build && cmake /usr/src/gtest && make -j \
 RUN rm -rf /tmp/* && ldconfig
 
 
-FROM google-dependencies as robot-model-dependencies
+FROM core-build-dependencies as robot-model-dependencies
 
 RUN apt-get update && apt-get install -y \
     libboost-all-dev \
@@ -82,6 +82,14 @@ RUN apt-get update && apt-get install -y \
 
 # install python requirements
 RUN pip3 install numpy setuptools pybind11
+
+# install google dependencies
+COPY --from=google-dependencies /usr/include/gtest /usr/include/gtest
+COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/bin/protoc /usr/local/bin
+RUN ldconfig
 
 
 FROM development-dependencies as ssh-configuration

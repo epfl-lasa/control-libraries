@@ -22,6 +22,7 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
 
   build-publish-development-dependencies:
+    needs: build-publish-proto-dependencies
     runs-on: ubuntu-latest
     name: Build and publish development dependencies image
     steps:

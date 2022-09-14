@@ -85,7 +85,13 @@ rm -rf "${SOURCE_PATH}"/tmp
 
 # install base dependencies
 echo ">>> INSTALLING BASE DEPENDENCIES"
-INSTALLED_EIGEN=$(pkg-config --modversion eigen3)
+
+if [ -z $(which pkg-config) ]; then
+  echo ">>> INSTALLING pkg-config tool"
+  apt-get update && apt-get install "${AUTO_INSTALL}" pkg-config || exit 1
+fi
+
+INSTALLED_EIGEN=$(pkg-config --modversion eigen3) || exit 0
 if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
   echo ">>> INSTALLING EIGEN"
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1

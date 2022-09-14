@@ -10,12 +10,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     g++ \
     gcc \
-    gnupg2 \
-    make \
     git \
-    wget \
+    gnupg2 \
     libtool \
     lsb-release \
+    make \
+    pkg-config \
+    wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

@@ -8,7 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   build-publish-proto-dependencies:
     runs-on: ubuntu-latest
     name: Build and publish proto dependencies image
@@ -16,19 +15,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Build image
-        run: |
-          docker build . --file ./Dockerfile.proto  --tag proto-dependencies
-
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        run: |
-          IMAGE_NAME=${{ github.repository }}/proto-dependencies:latest
-          IMAGE_NAME=${IMAGE_NAME/_/-}
-          docker tag proto-dependencies ghcr.io/${IMAGE_NAME}
-          docker push ghcr.io/${IMAGE_NAME}
+      - name: Build and Push
+        uses: ./.github/actions/build-push
+        with:
+          image: "Protocol dependencies"
+          secret: ${{ secrets.GITHUB_TOKEN }}
 
   build-publish-development-dependencies:
     needs: build-publish-proto-dependencies
@@ -38,16 +29,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Build image
-        run: |
-          docker build . --file ./Dockerfile.base  --tag development-dependencies
-
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        run: |
-          IMAGE_NAME=${{ github.repository }}/development-dependencies:latest
-          IMAGE_NAME=${IMAGE_NAME/_/-}
-          docker tag development-dependencies ghcr.io/${IMAGE_NAME}
-          docker push ghcr.io/${IMAGE_NAME}
+      - name: Build and Push
+        uses: ./.github/actions/build-push
+        with:
+          image: "Development dependencies"
+          secret: ${{ secrets.GITHUB_TOKEN }}

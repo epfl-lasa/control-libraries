@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IMAGE_NAME=ghcr.io/epfl-lasa/control-libraries/development-dependencies
-CONTAINER_NAME=epfl-lasa-control-libraries-development-dependencies-ssh
+CONTAINER_NAME=control-libraries-development-dependencies-ssh
 
 SSH_PORT=2222
 SSH_KEY_FILE="${HOME}/.ssh/id_rsa.pub"

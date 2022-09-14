@@ -16,6 +16,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Refactor frame_name parameters (#309)
+- Support ARM64 (#310)
 
 ## 6.1.0
 

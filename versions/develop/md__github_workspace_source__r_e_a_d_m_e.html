@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.2</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.3</span>
    </div>
   </td>
  </tr>
@@ -140,10 +140,6 @@ $(function() {
 <div class="line"> </div>
 <div class="line"># ensure that the `controllers` library is available, and also check for dynamical_systems in the background</div>
 <div class="line">find_package(control_libraries 5.0.0 CONFIG REQUIRED controllers OPTIONAL_COMPONENTS dynamical_systems)</div>
-</div><!-- fragment --><h2><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a> and Pinocchio</h2>
-<p >If the <code><a class="el" href="namespacerobot__model.html" title="Robot kinematics and dynamics.">robot_model</a></code> library is used and <code>pinocchio</code> has been installed to a location that is not on the default include and link paths, that location must also be provided. The default installation of <code>pinocchio</code> is at <code>/opt/openrobots</code>. For this reason it is normal to add the following lines to the CMakeLists file:</p>
-<div class="fragment"><div class="line">list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)</div>
-<div class="line">include_directories(/opt/openrobots/include)</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

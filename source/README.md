@@ -176,15 +176,3 @@ find_package(control_libraries 5.0.0 CONFIG REQUIRED dynamical_systems robot_mod
 # ensure that the `controllers` library is available, and also check for dynamical_systems in the background
 find_package(control_libraries 5.0.0 CONFIG REQUIRED controllers OPTIONAL_COMPONENTS dynamical_systems)
 ```
-
-### robot_model and Pinocchio
-
-If the `robot_model` library is used and `pinocchio` has been installed to a location that is
-not on the default include and link paths, that location must also be provided.
-The default installation of `pinocchio` is at `/opt/openrobots`. For this reason it is normal to add the following
-lines to the CMakeLists file:
-
-```cmake
-list(APPEND CMAKE_PREFIX_PATH /opt/openrobots)
-include_directories(/opt/openrobots/include)
-```

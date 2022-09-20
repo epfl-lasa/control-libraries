@@ -8,9 +8,8 @@ from setuptools import setup
 
 # names of the environment variables that define osqp and openrobots include directories
 osqp_path_var = 'OSQP_INCLUDE_DIR'
-openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
-__version__ = "6.1.2"
+__version__ = "6.1.3"
 __libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
@@ -50,9 +49,6 @@ try:
     if __install_robot_model_module__:
         osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
         __include_dirs__.append(osqp_path)
-        openrobots_path = os.environ[
-            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
-        __include_dirs__.append('/opt/openrobots/include')
 
     if __install_controllers_module__ and not __install_robot_model_module__:
         warnings.warn(

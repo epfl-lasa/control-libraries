@@ -17,6 +17,7 @@ Release Versions:
 
 - Refactor frame_name parameters (#309)
 - Support ARM64 (#310)
+- Remove openrobots directives (#312)
 
 ## 6.1.0
 

@@ -26,7 +26,7 @@ pip3 install control-libraries/python
 ```
 
 If the installation fails, it may be because of non-default installation directories for some dependencies.
-In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install.
+In this case, the include path for OSQP can be set through environment variables before the pip install.
 ```shell
 export OSQP_INCLUDE_DIR='/path/to/include/osqp'  # default /usr/local/include/osqp
 pip3 install control-libraries/python

@@ -8,7 +8,6 @@ from setuptools import setup
 
 # names of the environment variables that define osqp and openrobots include directories
 osqp_path_var = 'OSQP_INCLUDE_DIR'
-openrobots_path_var = 'OPENROBOTS_INCLUDE_DIR'
 
 __version__ = "6.1.2"
 __libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']

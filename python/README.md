@@ -29,7 +29,6 @@ If the installation fails, it may be because of non-default installation directo
 In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install.
 ```shell
 export OSQP_INCLUDE_DIR='/path/to/include/osqp'  # default /usr/local/include/osqp
-export OPENROBOTS_INCLUDE_DIR='/path/to/openrobots/include'  # default /opt/openrobots/include
 pip3 install control-libraries/python
 ```
 

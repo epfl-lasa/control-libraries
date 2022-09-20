@@ -50,9 +50,6 @@ try:
     if __install_robot_model_module__:
         osqp_path = os.environ[osqp_path_var] if osqp_path_var in os.environ.keys() else '/usr/local/include/osqp'
         __include_dirs__.append(osqp_path)
-        openrobots_path = os.environ[
-            openrobots_path_var] if openrobots_path_var in os.environ.keys() else '/opt/openrobots/include'
-        __include_dirs__.append('/opt/openrobots/include')
 
     if __install_controllers_module__ and not __install_robot_model_module__:
         warnings.warn(

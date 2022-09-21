@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [6.2.0](#620)
 - [6.1.0](#610)
 - [6.0.0](#600)
 - [5.2.0](#520)
@@ -12,6 +13,34 @@ Release Versions:
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 6.2.0
+
+Version 6.2.0 contains minor changes to the Python bindings and robot model installation dependencies.
+
+### Features and improvements
+
+- Refactor frame_name parameters (#309)
+- Support ARM64 (#310)
+- Remove openrobots directives (#312)
+
+An inconsistency in nomenclature was resolved; see [issue #308](https://github.com/epfl-lasa/control-libraries/issues/308)
+and [PR #309](https://github.com/epfl-lasa/control-libraries/pull/309) for more details.
+
+Behind the scenes, the docker images for
+[development dependencies](https://github.com/orgs/epfl-lasa/packages/container/package/control-libraries%2Fdevelopment-dependencies)
+and [proto dependencies](https://github.com/epfl-lasa/control-libraries/pkgs/container/control-libraries%2Fproto-dependencies)
+are now built for multiple architectures: `linux/amd64` and `linux/arm64`.
+
+At the time of release, no pre-built arm64 binaries existed for Pinocchio, a dependency of the **robot_model** library.
+For this reason, the installation script is revised to install Pinocchio from source, which has the side effect of
+simplifying the CMake configuration; the path inclusion of `/opt/openrobots` is no longer required.
+
+### Upgrade notes
+
+The core C++ API is unchanged, and therefore this release is not marked by a major version change. However, some
+unintended usages of the Python bindings may be affected as noted in issue #308. Additionally, it may be necessary
+to redo the installation steps for the revised dependencies if using the robot model library on a local installation.
 
 ## 6.1.0
 

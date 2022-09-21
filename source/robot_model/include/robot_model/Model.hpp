@@ -64,7 +64,7 @@ private:
   // @format:off
   std::shared_ptr<state_representation::Parameter<std::string>> robot_name_;///< name of the robot
   std::shared_ptr<state_representation::Parameter<std::string>> urdf_path_; ///< path to the urdf file
-  std::vector<std::string> frame_names_;                                    ///< name of the frames
+  std::vector<std::string> frames_;                                         ///< name of the frames
   pinocchio::Model robot_model_;                                            ///< the robot model with pinocchio
   pinocchio::Data robot_data_;                                              ///< the robot data with pinocchio
   OsqpEigen::Solver solver_;                                                ///< osqp solver for the quadratic programming based inverse kinematics
@@ -86,17 +86,17 @@ private:
 
   /**
    * @brief Check if frames exist in robot model and return its ids
-   * @param frame_names containing the frame names to check
+   * @param frames containing the frame names to check
    * @return the ids of the frames
    */
-  std::vector<unsigned int> get_frame_ids(const std::vector<std::string>& frame_names);
+  std::vector<unsigned int> get_frame_ids(const std::vector<std::string>& frames);
 
   /**
    * @brief Check if a frame exist in robot model and return its id
-   * @param frame_name containing the frame name to check
+   * @param frame containing the frame name to check
    * @return the id of the frame if it exists
    */
-  unsigned int get_frame_id(const std::string& frame_name);
+  unsigned int get_frame_id(const std::string& frame);
 
   /**
    * @brief Compute the Jacobian from given joint positions at the frame in parameter
@@ -179,11 +179,11 @@ private:
    * @brief Check the arguments of the inverse_velocity function and throw exceptions if they are not correct
    * @param cartesian_twists vector of twist
    * @param joint_positions current joint positions, used to compute the Jacobian matrix
-   * @param frame_names names of the frames at which to compute the twists
+   * @param frames names of the frames at which to compute the twists
    */
   void check_inverse_velocity_arguments(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                                         const state_representation::JointPositions& joint_positions,
-                                        const std::vector<std::string>& frame_names);
+                                        const std::vector<std::string>& frames);
 
 public:
   /**
@@ -283,22 +283,22 @@ public:
   /**
    * @brief Compute the Jacobian from a given joint state at the frame given in parameter
    * @param joint_positions containing the joint positions of the robot
-   * @param frame_name name of the frame at which to compute the Jacobian, if empty computed for the last frame
+   * @param frame name of the frame at which to compute the Jacobian, if empty computed for the last frame
    * @return the Jacobian matrix
    */
   state_representation::Jacobian compute_jacobian(const state_representation::JointPositions& joint_positions,
-                                                  const std::string& frame_name = "");
+                                                  const std::string& frame = "");
 
   /**
    * @brief Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter
    * @param joint_positions containing the joint positions of the robot
    * @param joint_velocities containing the joint positions of the robot
-   * @param frame_name name of the frame at which to compute the Jacobian, if empty computed for the last frame
+   * @param frame name of the frame at which to compute the Jacobian, if empty computed for the last frame
    * @return the time derivative of Jacobian matrix
    */
   Eigen::MatrixXd compute_jacobian_time_derivative(const state_representation::JointPositions& joint_positions,
                                                    const state_representation::JointVelocities& joint_velocities,
-                                                   const std::string& frame_name = "");
+                                                   const std::string& frame = "");
 
   /**
    * @brief Compute the Inertia matrix from a given joint positions
@@ -340,32 +340,32 @@ public:
   /**
    * @brief Compute the forward kinematics, i.e. the pose of certain frames from the joint positions
    * @param joint_positions the joint state of the robot
-   * @param frame_names names of the frames at which to extract the poses
+   * @param frames names of the frames at which to extract the poses
    * @return the pose of desired frames
    */
   std::vector<state_representation::CartesianPose> forward_kinematics(const state_representation::JointPositions& joint_positions,
-                                                                      const std::vector<std::string>& frame_names);
+                                                                      const std::vector<std::string>& frames);
 
   /**
    * @brief Compute the forward kinematics, i.e. the pose of the frame from the joint positions
    * @param joint_positions the joint state of the robot
-   * @param frame_name name of the frame at which to extract the pose
+   * @param frame name of the frame at which to extract the pose
    * @return the pose of the desired frame
    */
   state_representation::CartesianPose forward_kinematics(const state_representation::JointPositions& joint_positions,
-                                                         const std::string& frame_name = "");
+                                                         const std::string& frame = "");
 
   /**
    * @brief Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector in an iterative manner
    * @param cartesian_pose containing the desired pose of the end-effector
    * @param parameters parameters of the inverse kinematics algorithm (default is default values of the
    * InverseKinematicsParameters structure)
-   * @param frame_name name of the frame at which to extract the pose
+   * @param frame name of the frame at which to extract the pose
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                                                           const InverseKinematicsParameters& parameters = InverseKinematicsParameters(),
-                                                          const std::string& frame_name = "");
+                                                          const std::string& frame = "");
 
   /**
    * @brief Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector
@@ -373,57 +373,57 @@ public:
    * @param joint_positions current state of the robot containing the generalized position
    * @param parameters parameters of the inverse kinematics algorithm (default is default values of the
    * InverseKinematicsParameters structure)
-   * @param frame_name name of the frame at which to extract the pose
+   * @param frame name of the frame at which to extract the pose
    * @return the joint positions of the robot
    */
   state_representation::JointPositions inverse_kinematics(const state_representation::CartesianPose& cartesian_pose,
                                                           const state_representation::JointPositions& joint_positions,
                                                           const InverseKinematicsParameters& parameters = InverseKinematicsParameters(),
-                                                          const std::string& frame_name = "");
+                                                          const std::string& frame = "");
 
   /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint states
    * @param joint_state the joint state of the robot with positions to compute the Jacobian and velocities for the twist
-   * @param frame_names name of the frames at which to compute the twist
+   * @param frames name of the frames at which to compute the twist
    * @return the twists of the frames in parameter
    */
   std::vector<state_representation::CartesianTwist> forward_velocity(const state_representation::JointState& joint_state,
-                                                                     const std::vector<std::string>& frame_names);
+                                                                     const std::vector<std::string>& frames);
 
   /**
    * @brief Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities
    * @param joint_state the joint state of the robot with positions to compute the Jacobian and velocities for the twist
-   * @param frame_name name of the frame at which to compute the twist
+   * @param frame name of the frame at which to compute the twist
    * @return the twist of the frame in parameter
    */
   state_representation::CartesianTwist forward_velocity(const state_representation::JointState& joint_state,
-                                                        const std::string& frame_name = "");
+                                                        const std::string& frame = "");
 
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter
    * using the Jacobian
    * @param cartesian_twists vector of twist
    * @param joint_positions current joint positions, used to compute the Jacobian matrix
-   * @param frame_names names of the frames at which to compute the twists
+   * @param frames names of the frames at which to compute the twists
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                                                          const state_representation::JointPositions& joint_positions,
-                                                         const std::vector<std::string>& frame_names);
+                                                         const std::vector<std::string>& frames);
 
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the
    * Jacobian
    * @param cartesian_twist containing the twist of the end-effector
    * @param joint_positions current joint positions, used to compute the Jacobian matrix
-   * @param frame_name name of the frame at which to compute the twist
+   * @param frame name of the frame at which to compute the twist
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
    * QPInverseVelocityParameters structure)
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
                                                          const state_representation::JointPositions& joint_positions,
-                                                         const std::string& frame_name = "");
+                                                         const std::string& frame = "");
 
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter
@@ -432,13 +432,13 @@ public:
    * @param joint_positions current joint positions, used to compute the jacobian matrix
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
    * QPInverseVelocityParameters structure)
-   * @param frame_names names of the frames at which to compute the twists
+   * @param frames names of the frames at which to compute the twists
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_velocity(const std::vector<state_representation::CartesianTwist>& cartesian_twists,
                                                          const state_representation::JointPositions& joint_positions,
                                                          const QPInverseVelocityParameters& parameters,
-                                                         const std::vector<std::string>& frame_names);
+                                                         const std::vector<std::string>& frames);
 
   /**
    * @brief Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the
@@ -448,13 +448,13 @@ public:
    * @param joint_positions current joint positions, used to compute the Jacobian matrix
    * @param parameters parameters of the inverse velocity kinematics algorithm (default is default values of the
    * QPInverseVelocityParameters structure)
-   * @param frame_name name of the frame at which to compute the twist
+   * @param frame name of the frame at which to compute the twist
    * @return the joint velocities of the robot
    */
   state_representation::JointVelocities inverse_velocity(const state_representation::CartesianTwist& cartesian_twist,
                                                          const state_representation::JointPositions& joint_positions,
                                                          const QPInverseVelocityParameters& parameters,
-                                                         const std::string& frame_name = "");
+                                                         const std::string& frame = "");
 
   /**
    * @brief Helper function to print the qp_problem (for debugging)
@@ -537,11 +537,11 @@ inline std::vector<std::string> Model::get_joint_frames() const {
 }
 
 inline const std::string& Model::get_base_frame() const {
-  return this->frame_names_.front();
+  return this->frames_.front();
 }
 
 inline std::vector<std::string> Model::get_frames() const {
-  return this->frame_names_;
+  return this->frames_;
 }
 
 inline Eigen::Vector3d Model::get_gravity_vector() const {

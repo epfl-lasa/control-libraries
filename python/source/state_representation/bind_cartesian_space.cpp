@@ -57,11 +57,11 @@ void cartesian_state(py::module_& m) {
 
   py::class_<CartesianState, std::shared_ptr<CartesianState>, SpatialState> c(m, "CartesianState");
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const CartesianState&>(), "Copy constructor of a CartesianState", "state"_a);
 
-  c.def_static("Identity", &CartesianState::Identity, "Constructor for the identity CartesianState (identity pose and 0 for the rest)", "name"_a, "reference"_a=std::string("world"));
-  c.def_static("Random", &CartesianState::Random, "Constructor for a random state", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Identity", &CartesianState::Identity, "Constructor for the identity CartesianState (identity pose and 0 for the rest)", "name"_a, "reference_frame"_a=std::string("world"));
+  c.def_static("Random", &CartesianState::Random, "Constructor for a random state", "name"_a, "reference_frame"_a=std::string("world"));
 
   c.def("get_position", &CartesianState::get_position, "Getter of the position attribute");
   c.def("get_orientation", [](const CartesianState &state) -> py::object {
@@ -175,24 +175,24 @@ void cartesian_pose(py::module_& m) {
   py::class_<CartesianPose, std::shared_ptr<CartesianPose>, CartesianState> c(m, "CartesianPose");
 
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const CartesianPose&>(), "Copy constructor of a CartesianPose", "pose"_a);
   c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
   c.def(py::init<const CartesianTwist&>(), "Copy constructor from a CartesianTwist by considering that it is a displacement over 1 second", "twist"_a);
 
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Constructor of a CartesianPose from a position given as a vector of coordinates", "name"_a, "position"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, double, double, double, const std::string&>(), "Constructor of a CartesianPose from a position given as three scalar coordinates", "name"_a, "x"_a, "y"_a, "z"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Constructor of a CartesianPose from a position given as a vector of coordinates", "name"_a, "position"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, double, double, double, const std::string&>(), "Constructor of a CartesianPose from a position given as three scalar coordinates", "name"_a, "x"_a, "y"_a, "z"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init([](const std::string& name, const Eigen::Vector4d& orientation, const std::string& reference) {
     Eigen::Quaterniond q(orientation(0), orientation(1), orientation(2), orientation(3));
     return new CartesianPose(name, q, reference);
-  }), "Constructor of a CartesianPose from a quaternion", "name"_a, "orientation"_a, "reference"_a=std::string("world"));
+  }), "Constructor of a CartesianPose from a quaternion", "name"_a, "orientation"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init([](const std::string& name, const Eigen::Vector3d& position, const Eigen::Vector4d& orientation, const std::string& reference) {
     Eigen::Quaterniond q(orientation(0), orientation(1), orientation(2), orientation(3));
     return new CartesianPose(name, position, q, reference);
-  }), "Constructor of a CartesianPose from a position given as a vector of coordinates and a quaternion", "name"_a, "position"_a, "orientation"_a, "reference"_a=std::string("world"));
+  }), "Constructor of a CartesianPose from a position given as a vector of coordinates and a quaternion", "name"_a, "position"_a, "orientation"_a, "reference_frame"_a=std::string("world"));
 
-  c.def_static("Identity", &CartesianPose::Identity, "Constructor for the identity pose", "name"_a, "reference"_a=std::string("world"));
-  c.def_static("Random", &CartesianPose::Random, "Constructor for a random pose", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Identity", &CartesianPose::Identity, "Constructor for the identity pose", "name"_a, "reference_frame"_a=std::string("world"));
+  c.def_static("Random", &CartesianPose::Random, "Constructor for a random pose", "name"_a, "reference_frame"_a=std::string("world"));
 
   std::vector<std::string> deleted_attributes = {
       "linear_velocity",
@@ -254,17 +254,17 @@ void cartesian_twist(py::module_& m) {
   py::class_<CartesianTwist, std::shared_ptr<CartesianTwist>, CartesianState> c(m, "CartesianTwist");
 
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const CartesianTwist&>(), "Copy constructor", "twist"_a);
   c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
   c.def(py::init<const CartesianPose&>(), "Copy constructor from a CartesianPose by considering that it is equivalent to dividing the pose by 1 second", "pose"_a);
 
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianTwist from a linear velocity given as a vector.", "name"_a, "linear_velocity"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianTwist from a linear velocity and angular velocity given as vectors.", "name"_a, "linear_velocity"_a, "angular_velocity"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianTwist from a single 6d twist vector", "name"_a, "twist"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianTwist from a linear velocity given as a vector.", "name"_a, "linear_velocity"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianTwist from a linear velocity and angular velocity given as vectors.", "name"_a, "linear_velocity"_a, "angular_velocity"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianTwist from a single 6d twist vector", "name"_a, "twist"_a, "reference_frame"_a=std::string("world"));
 
-  c.def_static("Zero", &CartesianTwist::Zero, "Constructor for the zero twist", "name"_a, "reference"_a=std::string("world"));
-  c.def_static("Random", &CartesianTwist::Random, "Constructor for a random twist", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Zero", &CartesianTwist::Zero, "Constructor for the zero twist", "name"_a, "reference_frame"_a=std::string("world"));
+  c.def_static("Random", &CartesianTwist::Random, "Constructor for a random twist", "name"_a, "reference_frame"_a=std::string("world"));
 
   std::vector<std::string> deleted_attributes = {
       "position",
@@ -328,17 +328,17 @@ void cartesian_acceleration(py::module_& m) {
   py::class_<CartesianAcceleration, std::shared_ptr<CartesianAcceleration>, CartesianState> c(m, "CartesianAcceleration");
 
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const CartesianAcceleration&>(), "Copy constructor", "acceleration"_a);
   c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
   c.def(py::init<const CartesianTwist&>(), "Copy constructor from a CartesianTwist by considering that it is equivalent to dividing the twist by 1 second", "twist"_a);
 
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration given as a vector.", "name"_a, "linear_acceleration"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration and angular acceleration given as vectors.", "name"_a, "linear_acceleration"_a, "angular_acceleration"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianAcceleration from a single 6d acceleration vector", "name"_a, "acceleration"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration given as a vector.", "name"_a, "linear_acceleration"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianAcceleration from a linear acceleration and angular acceleration given as vectors.", "name"_a, "linear_acceleration"_a, "angular_acceleration"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianAcceleration from a single 6d acceleration vector", "name"_a, "acceleration"_a, "reference_frame"_a=std::string("world"));
 
-  c.def_static("Zero", &CartesianAcceleration::Zero, "Constructor for the zero acceleration", "name"_a, "reference"_a=std::string("world"));
-  c.def_static("Random", &CartesianAcceleration::Random, "Constructor for a random acceleration", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Zero", &CartesianAcceleration::Zero, "Constructor for the zero acceleration", "name"_a, "reference_frame"_a=std::string("world"));
+  c.def_static("Random", &CartesianAcceleration::Random, "Constructor for a random acceleration", "name"_a, "reference_frame"_a=std::string("world"));
 
   std::vector<std::string> deleted_attributes = {
       "position",
@@ -401,16 +401,16 @@ void cartesian_wrench(py::module_& m) {
   py::class_<CartesianWrench, std::shared_ptr<CartesianWrench>, CartesianState> c(m, "CartesianWrench");
 
   c.def(py::init(), "Empty constructor");
-  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const std::string&>(), "Constructor with name and reference frame provided", "name"_a, "reference_frame"_a=std::string("world"));
   c.def(py::init<const CartesianWrench&>(), "Copy constructor", "twist"_a);
   c.def(py::init<const CartesianState&>(), "Copy constructor from a CartesianState", "state"_a);
 
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianWrench from a force given as a vector.", "name"_a, "force"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianWrench from a force and torque given as vectors.", "name"_a, "force"_a, "torque"_a, "reference"_a=std::string("world"));
-  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianTwist from a single 6d wrench vector", "name"_a, "wrench"_a, "reference"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianWrench from a force given as a vector.", "name"_a, "force"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Vector3d&, const Eigen::Vector3d&, const std::string&>(), "Construct a CartesianWrench from a force and torque given as vectors.", "name"_a, "force"_a, "torque"_a, "reference_frame"_a=std::string("world"));
+  c.def(py::init<const std::string&, const Eigen::Matrix<double, 6, 1>&, const std::string&>(), "Construct a CartesianTwist from a single 6d wrench vector", "name"_a, "wrench"_a, "reference_frame"_a=std::string("world"));
 
-  c.def_static("Zero", &CartesianWrench::Zero, "Constructor for the zero wrench", "name"_a, "reference"_a=std::string("world"));
-  c.def_static("Random", &CartesianWrench::Random, "Constructor for a random wrench", "name"_a, "reference"_a=std::string("world"));
+  c.def_static("Zero", &CartesianWrench::Zero, "Constructor for the zero wrench", "name"_a, "reference_frame"_a=std::string("world"));
+  c.def_static("Random", &CartesianWrench::Random, "Constructor for a random wrench", "name"_a, "reference_frame"_a=std::string("world"));
 
   std::vector<std::string> deleted_attributes = {
       "position",

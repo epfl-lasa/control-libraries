@@ -46,10 +46,10 @@ void model(py::module_& m) {
 
   c.def(
       "compute_jacobian", py::overload_cast<const JointPositions&, const std::string&>(&Model::compute_jacobian),
-      "Compute the Jacobian from a given joint state at the frame given in parameter.", "joint_positions"_a, "frame_name"_a = std::string(""));
+      "Compute the Jacobian from a given joint state at the frame given in parameter.", "joint_positions"_a, "frame"_a = std::string(""));
   c.def(
       "compute_jacobian_time_derivative", py::overload_cast<const JointPositions&, const JointVelocities&, const std::string&>(&Model::compute_jacobian_time_derivative),
-      "Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter.", "joint_positions"_a, "joint_velocities"_a, "frame_name"_a = std::string(""));
+      "Compute the time derivative of the Jacobian from given joint positions and velocities at the frame in parameter.", "joint_positions"_a, "joint_velocities"_a, "frame"_a = std::string(""));
   c.def("compute_inertia_matrix", py::overload_cast<const JointPositions&>(&Model::compute_inertia_matrix), "Compute the Inertia matrix from given joint positions.", "joint_positions"_a);
   c.def(
       "compute_inertia_torques", py::overload_cast<const JointState&>(&Model::compute_inertia_torques),
@@ -61,28 +61,28 @@ void model(py::module_& m) {
   c.def("compute_gravity_torques", py::overload_cast<const JointPositions&>(&Model::compute_gravity_torques), "Compute the gravity torques.", "joint_positions"_a);
 
   c.def("forward_kinematics", py::overload_cast<const JointPositions&, const std::vector<std::string>&>(&Model::forward_kinematics),
-        "Compute the forward kinematics, i.e. the pose of certain frames from the joint positions", "joint_positions"_a, "frame_names"_a);
+        "Compute the forward kinematics, i.e. the pose of certain frames from the joint positions", "joint_positions"_a, "frames"_a);
   c.def("forward_kinematics", py::overload_cast<const JointPositions&, const std::string&>(&Model::forward_kinematics),
-      "Compute the forward kinematics, i.e. the pose of the frame from the joint positions", "joint_positions"_a, "frame_name"_a = std::string(""));
+      "Compute the forward kinematics, i.e. the pose of the frame from the joint positions", "joint_positions"_a, "frame"_a = std::string(""));
 
   c.def("inverse_kinematics", py::overload_cast<const CartesianPose&, const InverseKinematicsParameters&, const std::string&>(&Model::inverse_kinematics),
-        "Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector in an iterative manner", "cartesian_pose"_a, "parameters"_a = InverseKinematicsParameters(), "frame_name"_a = std::string(""));
+        "Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector in an iterative manner", "cartesian_pose"_a, "parameters"_a = InverseKinematicsParameters(), "frame"_a = std::string(""));
   c.def("inverse_kinematics", py::overload_cast<const CartesianPose&, const JointPositions&, const InverseKinematicsParameters&, const std::string&>(&Model::inverse_kinematics),
-        " Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector", "cartesian_pose"_a, "joint_positions"_a, "parameters"_a = InverseKinematicsParameters(), "frame_name"_a = std::string(""));
+        " Compute the inverse kinematics, i.e. joint positions from the pose of the end-effector", "cartesian_pose"_a, "joint_positions"_a, "parameters"_a = InverseKinematicsParameters(), "frame"_a = std::string(""));
 
   c.def("forward_velocity", py::overload_cast<const JointState&, const std::vector<std::string>&>(&Model::forward_velocity),
-        "Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint states", "joint_state"_a, "frame_names"_a);
+        "Compute the forward velocity kinematics, i.e. the twist of certain frames from the joint states", "joint_state"_a, "frames"_a);
   c.def("forward_velocity", py::overload_cast<const JointState&, const std::string&>(&Model::forward_velocity),
-        "Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities", "joint_state"_a, "frame_name"_a = std::string(""));
+        "Compute the forward velocity kinematics, i.e. the twist of the end-effector from the joint velocities", "joint_state"_a, "frame"_a = std::string(""));
 
   c.def("inverse_velocity", py::overload_cast<const std::vector<CartesianTwist>&, const JointPositions&, const std::vector<std::string>&>(&Model::inverse_velocity),
-        "Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter the Jacobian", "cartesian_twists"_a, "joint_positions"_a, "frame_names"_a);
+        "Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter the Jacobian", "cartesian_twists"_a, "joint_positions"_a, "frames"_a);
   c.def("inverse_velocity", py::overload_cast<const CartesianTwist&, const JointPositions&, const std::string&>(&Model::inverse_velocity),
-        "Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the Jacobian", "cartesian_twist"_a, "joint_positions"_a, "frame_name"_a = std::string(""));
+        "Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the Jacobian", "cartesian_twist"_a, "joint_positions"_a, "frame"_a = std::string(""));
   c.def("inverse_velocity", py::overload_cast<const std::vector<CartesianTwist>&, const JointPositions&, const QPInverseVelocityParameters&, const std::vector<std::string>&>(&Model::inverse_velocity),
-        "Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the QP optimization method", "cartesian_twists"_a, "joint_positions"_a, "parameters"_a, "frame_names"_a);
+        "Compute the inverse velocity kinematics, i.e. joint velocities from the velocities of the frames in parameter using the QP optimization method", "cartesian_twists"_a, "joint_positions"_a, "parameters"_a, "frames"_a);
   c.def("inverse_velocity", py::overload_cast<const CartesianTwist&, const JointPositions&, const QPInverseVelocityParameters&, const std::string&>(&Model::inverse_velocity),
-        "Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the QP optimization method", "cartesian_twist"_a, "joint_positions"_a, "parameters"_a, "frame_name"_a = std::string(""));
+        "Compute the inverse velocity kinematics, i.e. joint velocities from the twist of the end-effector using the QP optimization method", "cartesian_twist"_a, "joint_positions"_a, "parameters"_a, "frame"_a = std::string(""));
 
   c.def("print_qp_problem", &Model::print_qp_problem, "Helper function to print the qp problem (for debugging).");
   c.def("in_range", [](Model& self, const JointPositions& joint_positions) -> bool { return self.in_range(joint_positions); },

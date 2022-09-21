@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.2.0</span>
    </div>
   </td>
  </tr>
@@ -107,9 +107,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~IController</b> (
 <tr class="memitem:a417469026896af1536b3a94165507f11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#a417469026896af1536b3a94165507f11">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_jacobian.html">state_representation::Jacobian</a> &amp;jacobian)</td></tr>
 <tr class="memdesc:a417469026896af1536b3a94165507f11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space.  <a href="classcontrollers_1_1_i_controller.html#a417469026896af1536b3a94165507f11">More...</a><br /></td></tr>
 <tr class="separator:a417469026896af1536b3a94165507f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d55babf98020f022a314e30786f622e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#a8d55babf98020f022a314e30786f622e">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a8d55babf98020f022a314e30786f622e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space from command and feedback states in task space.  <a href="classcontrollers_1_1_i_controller.html#a8d55babf98020f022a314e30786f622e">More...</a><br /></td></tr>
-<tr class="separator:a8d55babf98020f022a314e30786f622e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab886be5e8615e8fa8b29a192427fd789"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstate__representation_1_1_joint_state.html">state_representation::JointState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#ab886be5e8615e8fa8b29a192427fd789">compute_command</a> (const S &amp;command_state, const S &amp;feedback_state, const <a class="el" href="classstate__representation_1_1_joint_positions.html">state_representation::JointPositions</a> &amp;joint_positions, const std::string &amp;frame=&quot;&quot;)</td></tr>
+<tr class="memdesc:ab886be5e8615e8fa8b29a192427fd789"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the command output in joint space from command and feedback states in task space.  <a href="classcontrollers_1_1_i_controller.html#ab886be5e8615e8fa8b29a192427fd789">More...</a><br /></td></tr>
+<tr class="separator:ab886be5e8615e8fa8b29a192427fd789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee57c2540d18b8611e7428acf4f61dbf"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classrobot__model_1_1_model.html">robot_model::Model</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontrollers_1_1_i_controller.html#aee57c2540d18b8611e7428acf4f61dbf">get_robot_model</a> ()</td></tr>
 <tr class="memdesc:aee57c2540d18b8611e7428acf4f61dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the robot model associated with the controller.  <a href="classcontrollers_1_1_i_controller.html#aee57c2540d18b8611e7428acf4f61dbf">More...</a><br /></td></tr>
 <tr class="separator:aee57c2540d18b8611e7428acf4f61dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,7 +182,7 @@ Additional Inherited Members</h2></td></tr>
 class controllers::IController&lt; S &gt;</div><p >Abstract class to define a controller in a desired state type, such as joint or Cartesian spaces. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">S</td><td>the state type of the controller </td></tr>
+    <tr><td class="paramname">S</td><td>The state type of the controller </td></tr>
   </table>
   </dd>
 </dl>
@@ -228,12 +228,12 @@ template&lt;class S &gt; </div>
 <p>Compute the command output based on the commanded state and a feedback state To be redefined based on the actual controller implementation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">command_state</td><td>the input state to the controller </td></tr>
-    <tr><td class="paramname">feedback_state</td><td>the current state of the system given as feedback </td></tr>
+    <tr><td class="paramname">command_state</td><td>The input state to the controller </td></tr>
+    <tr><td class="paramname">feedback_state</td><td>The current state of the system given as feedback </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the output command at the input state </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The output command in the same state space as the input </dd></dl>
 
 <p>Implemented in <a class="el" href="classcontrollers_1_1impedance_1_1_dissipative.html#ae0e6383c928ad4327600061538493bf0">controllers::impedance::Dissipative&lt; S &gt;</a>, <a class="el" href="classcontrollers_1_1impedance_1_1_impedance.html#abeb3fafcadd0dbd8ce6f8f230a72507e">controllers::impedance::Impedance&lt; S &gt;</a>, <a class="el" href="classcontrollers_1_1impedance_1_1_velocity_impedance.html#a4ce57795ed95c8462cd4eb77b83676ee">controllers::impedance::VelocityImpedance&lt; S &gt;</a>, and <a class="el" href="classcontrollers_1_1impedance_1_1_compliant_twist.html#ace25731e4319fda22f4172d5936c7127">controllers::impedance::CompliantTwist</a>.</p>
 
@@ -276,20 +276,20 @@ template&lt;class S &gt; </div>
 <p>Compute the command output in joint space. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">command_state</td><td></td></tr>
-    <tr><td class="paramname">feedback_state</td><td></td></tr>
-    <tr><td class="paramname">jacobian</td><td>the Jacobian matrix relating Cartesian forces to joint space </td></tr>
+    <tr><td class="paramname">command_state</td><td>The input state to the controller </td></tr>
+    <tr><td class="paramname">feedback_state</td><td>The current state of the system given as feedback </td></tr>
+    <tr><td class="paramname">jacobian</td><td>The Jacobian matrix relating Cartesian forces to joint space </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The output command in joint space </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_i_controller_8cpp_source.html#l00010">10</a> of file <a class="el" href="_i_controller_8cpp_source.html">IController.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a8d55babf98020f022a314e30786f622e" name="a8d55babf98020f022a314e30786f622e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d55babf98020f022a314e30786f622e">&#9670;&nbsp;</a></span>compute_command() <span class="overload">[3/3]</span></h2>
+<a id="ab886be5e8615e8fa8b29a192427fd789" name="ab886be5e8615e8fa8b29a192427fd789"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab886be5e8615e8fa8b29a192427fd789">&#9670;&nbsp;</a></span>compute_command() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,7 +318,7 @@ template&lt;class S &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>frame_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>frame</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -331,14 +331,14 @@ template&lt;class S &gt; </div>
 <p>Compute the command output in joint space from command and feedback states in task space. </p>
 <p >This method requires the controller to have an associated robot model to compute the Jacobian. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">command_state</td><td></td></tr>
-    <tr><td class="paramname">feedback_state</td><td></td></tr>
+    <tr><td class="paramname">command_state</td><td>The input state to the controller </td></tr>
+    <tr><td class="paramname">feedback_state</td><td>The current state of the system given as feedback </td></tr>
     <tr><td class="paramname">joint_positions</td><td>The current joint positions, which are required for computing the Jacobian </td></tr>
-    <tr><td class="paramname">frame_name</td><td></td></tr>
+    <tr><td class="paramname">frame</td><td>The name of the robot frame at which to compute the Jacobian </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The output command in joint space </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_i_controller_8cpp_source.html#l00016">16</a> of file <a class="el" href="_i_controller_8cpp_source.html">IController.cpp</a>.</p>
 

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.1.0</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.2.0</span>
    </div>
   </td>
  </tr>
@@ -82,8 +82,7 @@ $(function() {
 <div class="line"> </div>
 <div class="line">## install the bindings using the pip installer</div>
 <div class="line">pip3 install control-libraries/python</div>
-</div><!-- fragment --><p >If the installation fails, it may be because of non-default installation directories for some dependencies. In this case, the include path for OSQP and OpenRobots can be set through environment variables before the pip install. </p><div class="fragment"><div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
-<div class="line">export OPENROBOTS_INCLUDE_DIR=&#39;/path/to/openrobots/include&#39;  # default /opt/openrobots/include</div>
+</div><!-- fragment --><p >If the installation fails, it may be because of non-default installation directories for some dependencies. In this case, the include path for OSQP can be set through environment variables before the pip install. </p><div class="fragment"><div class="line">export OSQP_INCLUDE_DIR=&#39;/path/to/include/osqp&#39;  # default /usr/local/include/osqp</div>
 <div class="line">pip3 install control-libraries/python</div>
 </div><!-- fragment --><p >The example above installs the module to the default dist-packages location. You can see more information about the installed module using <code>pip3 show control-libraries</code>.</p>
 <p >The process also works with Python virtual environments. For example, with <code>pipenv</code>: </p><div class="fragment"><div class="line">## pip3 install pipenv</div>

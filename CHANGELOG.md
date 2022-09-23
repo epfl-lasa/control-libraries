@@ -16,7 +16,7 @@ Release Versions:
 
 ## Upcoming changes (in development)
 
-- Build and push both 20.04 and 22.04 images (#314)
+- Build and push both 20.04 and 22.04 images (#314, #315)
 
 ## 6.2.0
 

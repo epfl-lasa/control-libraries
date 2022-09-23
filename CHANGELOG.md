@@ -14,6 +14,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Build and push both 20.04 and 22.04 images (#314)
+
 ## 6.2.0
 
 Version 6.2.0 contains minor changes to the Python bindings and robot model installation dependencies.

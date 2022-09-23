@@ -91,23 +91,23 @@ COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib/
 
 
 FROM development-dependencies as proto-dependencies-20.04
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:20.04 /usr/local/include/google /usr/local/include/google
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:20.04 /usr/local/lib/libproto* /usr/local/lib/
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:20.04 /usr/local/bin/protoc /usr/local/bin
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig
 
 
 FROM development-dependencies as proto-dependencies-22.04
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:22.04 /usr/local/include/google /usr/local/include/google
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:22.04 /usr/local/lib/libproto* /usr/local/lib/
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:22.04 /usr/local/bin/protoc /usr/local/bin
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig
 
 
 FROM development-dependencies as proto-dependencies-latest
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:latest /usr/local/include/google /usr/local/include/google
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:latest /usr/local/lib/libproto* /usr/local/lib/
-COPY --from=ghcr.io/domire8/control-libraries/proto-dependencies:latest /usr/local/bin/protoc /usr/local/bin
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig
 
 

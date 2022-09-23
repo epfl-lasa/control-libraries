@@ -45,12 +45,12 @@ runs:
         if [ "${{ inputs.base_tag }}" == "22.04" ]; then
           docker buildx build --file ${DOCKERFILE} \
             --build-arg BASE_TAG=${{ inputs.base_tag }} \
-            --platform=linux/arm64, linux/amd64 \
+            --platform=linux/arm64,linux/amd64 \
             --push -t ghcr.io/${IMAGE_NAME}:22.04 -t ghcr.io/${IMAGE_NAME}:latest .
         else
           docker buildx build --file ${DOCKERFILE} \
             --build-arg BASE_TAG=${{ inputs.base_tag }} \
-            --platform=linux/arm64, linux/amd64 \
+            --platform=linux/arm64,linux/amd64 \
             --push -t ghcr.io/${IMAGE_NAME}:20.04 .
         fi
       shell: bash

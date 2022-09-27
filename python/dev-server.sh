@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=epfl-lasa/control-libraries/python/development
-CONTAINER_NAME=epfl-lasa-control-libraries-python-development-ssh
+BASE_TAG="latest"
 
+CONTAINER_NAME=epfl-lasa-control-libraries-python-development-ssh
 BRANCH=$(git branch --show-current)
 
 SSH_PORT=2233
 SSH_KEY_FILE="${HOME}/.ssh/id_rsa.pub"
 
-HELP_MESSAGE="Usage: ./dev-server.sh [-p <port>] [-k <file>] [-r] [-v]
+HELP_MESSAGE="Usage: ./dev-server.sh [-b <branch>] [-p <port>] [-k <file>] [--base-tag <base-tag>] [-r] [-v]
 
 Build and run a docker container as an SSH toolchain server for remote development.
 
@@ -33,6 +33,8 @@ Options:
   -k, --key-file [path]    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
+  --base-tag <base-tag>    Tag of the development image.
+                           (default: ${BASE_TAG})
   -r, --rebuild            Rebuild the image using the docker
                            --no-cache option.
   -v, --verbose            Use the verbose option during the building
@@ -45,6 +47,7 @@ while [ "$#" -gt 0 ]; do
   -p|--port) SSH_PORT=$2; shift 2;;
   -b|--branch) BRANCH=$2; shift 2;;
   -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
+  --base-tag) BASE_TAG=$2; shift 2;;
   -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
   -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
   -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
@@ -67,14 +70,16 @@ if [[ "${OSTYPE}" != "darwin"* ]]; then
   COMMAND_FLAGS+=(--gid "${GROUP_ID}")
 fi
 
+IMAGE_NAME=epfl-lasa/control-libraries/python/dependencies:"${BASE_TAG}"
+BUILD_FLAGS+=(--build-arg BASE_TAG="${BASE_TAG}")
+BUILD_FLAGS+=(-t "${IMAGE_NAME}")
+
 echo "Using control libraries branch ${BRANCH}"
 BUILD_FLAGS+=(--build-arg BRANCH="${BRANCH}")
+BUILD_FLAGS+=(--target build)
 
-docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
-DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.python \
-  "${BUILD_FLAGS[@]}" \
-  --target python-install \
-  --tag "${IMAGE_NAME}" || exit 1
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:"${BASE_TAG}" || exit 1
+DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.python "${BUILD_FLAGS[@]}" || exit 1
 
 docker container stop "${CONTAINER_NAME}" >/dev/null 2>&1
 docker rm --force "${CONTAINER_NAME}" >/dev/null 2>&1

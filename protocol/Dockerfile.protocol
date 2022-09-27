@@ -1,4 +1,5 @@
-FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest as dependencies
+ARG BASE_TAG=latest
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:${BASE_TAG} as source
 ARG BRANCH=develop
 
 WORKDIR /source
@@ -12,19 +13,13 @@ WORKDIR /tmp/protocol/protobuf
 RUN make all
 
 
-FROM dependencies as build
-ARG BUILD_TESTING=ON
+FROM source as build
 
 WORKDIR /tmp/protocol/clproto_cpp/build
-RUN cmake -DBUILD_TESTING=${BUILD_TESTING} .. && make -j all
+RUN cmake -DBUILD_TESTING=ON .. && make -j all
 
 
 FROM build as testing
 
 RUN CTEST_OUTPUT_ON_FAILURE=1 make test
-
-
-FROM build as install
-
-RUN make install
 RUN rm -rf /tmp/protocol/

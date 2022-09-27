@@ -65,7 +65,7 @@ ARG PINOCCHIO_TAG=2.6.9
 RUN git clone --depth 1 -b v${PINOCCHIO_TAG} --recursive https://github.com/stack-of-tasks/pinocchio \
     && cd pinocchio && mkdir build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_PYTHON_INTERFACE=OFF \
-    -DBUILD_TESTING=OFF && make -j1 && make install && cd ../.. && rm -r pinocchio || exit 1
+    -DBUILD_TESTING=OFF && make -j $(nproc --ignore=1) && make install && cd ../.. && rm -r pinocchio || exit 1
 
 RUN ldconfig
 

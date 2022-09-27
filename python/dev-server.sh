@@ -70,7 +70,7 @@ if [[ "${OSTYPE}" != "darwin"* ]]; then
   COMMAND_FLAGS+=(--gid "${GROUP_ID}")
 fi
 
-IMAGE_NAME=epfl-lasa/control-libraries/python/dependencies:"${BASE_TAG}"
+IMAGE_NAME=epfl-lasa/control-libraries/python/development:"${BASE_TAG}"
 BUILD_FLAGS+=(--build-arg BASE_TAG="${BASE_TAG}")
 BUILD_FLAGS+=(-t "${IMAGE_NAME}")
 

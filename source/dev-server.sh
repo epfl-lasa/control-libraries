@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=ghcr.io/epfl-lasa/control-libraries/development-dependencies
+BASE_TAG="latest"
 CONTAINER_NAME=control-libraries-development-dependencies-ssh
 
 SSH_PORT=2222
 SSH_KEY_FILE="${HOME}/.ssh/id_rsa.pub"
 
-HELP_MESSAGE="Usage: ./dev-server.sh [-p <port>] [-k <file>]
+HELP_MESSAGE="Usage: ./dev-server.sh [-p <port>] [-k <file>] [--base-tag <base-tag>]
 
 Build and run a docker container as an SSH toolchain server for remote development.
 
@@ -29,18 +29,23 @@ Options:
   -k, --key-file [path]    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
+  --base-tag <base-tag>    Tag of the development image.
+                           (default: ${BASE_TAG})
   -h, --help               Show this help message."
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
   -p|--port) SSH_PORT=$2; shift 2;;
   -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
+  --base-tag) BASE_TAG=$2; shift 2;;
   -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
   *) echo 'Error in command line parsing' >&2
      echo -e "\n${HELP_MESSAGE}"
      exit 1
   esac
 done
+
+IMAGE_NAME=ghcr.io/epfl-lasa/control-libraries/development-dependencies:"${BASE_TAG}"
 
 PUBLIC_KEY=$(cat "${SSH_KEY_FILE}")
 

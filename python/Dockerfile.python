@@ -1,10 +1,14 @@
-FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest as python-install
+ARG BASE_TAG=latest
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:${BASE_TAG} as source
 ARG BRANCH=develop
 
 WORKDIR /source
 RUN git clone --depth 1 --branch ${BRANCH} https://github.com/epfl-lasa/control-libraries
 RUN bash control-libraries/source/install.sh --auto
 RUN bash control-libraries/protocol/install.sh --auto
+
+
+FROM source as build
 
 RUN rm -rf control-libraries/python/include control-libraries/python/source
 COPY include control-libraries/python/include
@@ -14,7 +18,7 @@ ENV OSQP_INCLUDE_DIR /usr/local/include/osqp
 RUN pip3 install control-libraries/python
 
 
-FROM python-install as build-testing
+FROM build as testing
 
 USER developer
 WORKDIR ${HOME}

@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 
-MULTISTAGE_TARGET="testing"
-IMAGE_NAME=epfl-lasa/control-libraries/source
-IMAGE_TAG="${MULTISTAGE_TARGET}"
+BASE_TAG="latest"
 
-BUILD_TESTING="ON"
 BUILD_CONTROLLERS="ON"
 BUILD_DYNAMICAL_SYSTEMS="ON"
 BUILD_ROBOT_MODEL="ON"
 
-HELP_MESSAGE="Usage: build-test.sh [-r] [-v]
+HELP_MESSAGE="Usage: build-test.sh [--base-tag <base-tag>] [-r] [-v]
 Options:
+  --base-tag <base-tag>    Tag of the development image.
+                           (default: ${BASE_TAG})
   -r, --rebuild            Rebuild the image using the docker
                            --no-cache option.
   -v, --verbose            Use the verbose option during the building
@@ -22,6 +21,7 @@ BUILD_FLAGS=()
 while [[ $# -gt 0 ]]; do
   opt="$1"
   case $opt in
+    --base-tag) BASE_TAG=$2; shift 2;;
     -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift ;;
     -v|--verbose) BUILD_FLAGS+=(--progress=plain); shift ;;
     -h|--help) echo "${HELP_MESSAGE}"; exit 0 ;;
@@ -31,12 +31,13 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-BUILD_FLAGS=(--target "${MULTISTAGE_TARGET}")
-BUILD_FLAGS+=(--build-arg "BUILD_TESTING=${BUILD_TESTING}")
+IMAGE_NAME=epfl-lasa/control-libraries/source/testing:"${BASE_TAG}"
+
+BUILD_FLAGS+=(--build-arg "BASE_TAG=${BASE_TAG}")
 BUILD_FLAGS+=(--build-arg "BUILD_CONTROLLERS=${BUILD_CONTROLLERS}")
 BUILD_FLAGS+=(--build-arg "BUILD_DYNAMICAL_SYSTEMS=${BUILD_DYNAMICAL_SYSTEMS}")
 BUILD_FLAGS+=(--build-arg "BUILD_ROBOT_MODEL=${BUILD_ROBOT_MODEL}")
-BUILD_FLAGS+=(-t "${IMAGE_NAME}:${IMAGE_TAG}")
+BUILD_FLAGS+=(-t "${IMAGE_NAME}")
 
-docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:"${BASE_TAG}" || exit 1
 DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.source "${BUILD_FLAGS[@]}"

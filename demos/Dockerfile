@@ -1,4 +1,5 @@
-FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:latest
+ARG BASE_TAG=latest
+FROM ghcr.io/epfl-lasa/control-libraries/development-dependencies:${BASE_TAG} as build
 ARG BRANCH=develop
 
 WORKDIR /source
@@ -8,6 +9,9 @@ RUN bash control-libraries/protocol/install.sh --auto
 RUN pip3 install control-libraries/python
 
 RUN rm -rf /source
+
+
+FROM build as demos
 
 USER developer
 WORKDIR ${HOME}/control_loop_examples

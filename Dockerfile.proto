@@ -23,7 +23,7 @@ RUN wget -O protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
 WORKDIR /tmp/protobuf-3."${PROTOBUF_VERSION}"
 RUN ./autogen.sh \
     && ./configure \
-    && make \
+    && make -j $(nproc --ignore=1) \
     && make install
 
 

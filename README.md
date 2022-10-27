@@ -21,7 +21,7 @@
 A set of libraries to facilitate the creation of full control loop algorithms,
 including trajectory planning, kinematics, dynamics and control.
 
-Documentation is available at <a href="https://epfl-lasa.github.io/control-libraries/versions/">epfl-lasa.github.io/control-libraries</a>.
+Documentation is available at <a href="https://epfl-lasa.github.io/control-libraries">epfl-lasa.github.io/control-libraries</a>.
 
 ## Core libraries
 
@@ -35,13 +35,18 @@ documentation, see the [protocol](./protocol) folder.
 
 ## Python bindings
 
-There exist Python bindings for the control library modules and the protocol module. See the [python](./python)</a>
+There exist Python bindings for the control library modules and the protocol module. See the [python](./python)
 folder for installation instructions.
 
 ## Demos
 
 For examples and demos in C++ and Python, refer to the [demos](./demos) folder.
 TODO link ros demos repo
+
+## License
+
+This project is provided free and open-source under the GPLv3 license.
+See the [licenses](./licenses) folder for more information.
 
 ## External resources
 

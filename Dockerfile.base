@@ -111,7 +111,13 @@ COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/l
 RUN ldconfig
 
 
-FROM proto-dependencies-${BASE_TAG} as ssh-configuration
+FROM proto-dependencies-${BASE_TAG} as license-information
+RUN mkdir -p /usr/share/doc/control-libraries
+COPY ./licenses /usr/share/doc/control-libraries/licenses
+
+
+FROM license-information as ssh-configuration
+
 RUN apt-get update && apt-get install -y \
     sudo \
     libssl-dev \

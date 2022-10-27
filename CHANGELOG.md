@@ -19,6 +19,7 @@ Release Versions:
 - Build and push both 20.04 and 22.04 images (#314, #315, #316)
 - Don't build pinocchio tests in development image (#317)
 - Simplify and consolidate Dockerfiles and scripts (#319)
+- Better license management (#320)
 
 ## 6.2.0
 

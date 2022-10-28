@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=epfl-lasa/control-libraries/protocol-dependencies
-CONTAINER_NAME=epfl-lasa-control-libraries-protocol-dependencies-ssh
+BASE_TAG="latest"
+
+CONTAINER_NAME=epfl-lasa-control-libraries-protocol-development-ssh
 BRANCH=$(git branch --show-current)
 
 SSH_PORT=2244
 SSH_KEY_FILE="${HOME}/.ssh/id_rsa.pub"
 
-HELP_MESSAGE="Usage: ./dev-server.sh [-b <branch>] [-p <port>] [-k <file>] [-r]
+HELP_MESSAGE="Usage: ./dev-server.sh [-b <branch>] [-p <port>] [-k <file>] [--base-tag <base-tag>] [-r]
 
 Build and run a docker container as an SSH toolchain server for remote development.
 
@@ -32,6 +33,8 @@ Options:
   -k, --key-file <path>    Specify the path of the RSA
                            public key file.
                            (default: ${SSH_KEY_FILE})
+  --base-tag <base-tag>    Tag of the development image.
+                           (default: ${BASE_TAG})
   -r, --rebuild            Rebuild the image with the --no-cache option.
   -h, --help               Show this help message."
 
@@ -41,6 +44,7 @@ while [ "$#" -gt 0 ]; do
   -b|--branch) BRANCH=$2; shift 2;;
   -p|--port) SSH_PORT=$2; shift 2;;
   -k|--key-file) SSH_KEY_FILE=$2; shift 2;;
+  --base-tag) BASE_TAG=$2; shift 2;;
   -h|--help) echo "${HELP_MESSAGE}"; exit 0;;
   -r|--rebuild) BUILD_FLAGS+=(--no-cache); shift 1;;
   *) echo 'Error in command line parsing' >&2
@@ -62,11 +66,14 @@ if [[ "${OSTYPE}" != "darwin"* ]]; then
   COMMAND_FLAGS+=(--gid "${GROUP_ID}")
 fi
 
+IMAGE_NAME=epfl-lasa/control-libraries/protocol/development:"${BASE_TAG}"
+BUILD_FLAGS+=(--build-arg BASE_TAG="${BASE_TAG}")
+BUILD_FLAGS+=(-t "${IMAGE_NAME}")
+
 echo "Using control libraries branch ${BRANCH}"
 BUILD_FLAGS+=(--build-arg BRANCH="${BRANCH}")
-BUILD_FLAGS+=(--target dependencies)
-BUILD_FLAGS+=(-t "${IMAGE_NAME}")
-docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies || exit 1
+BUILD_FLAGS+=(--target source)
+docker pull ghcr.io/epfl-lasa/control-libraries/development-dependencies:"${BASE_TAG}" || exit 1
 DOCKER_BUILDKIT=1 docker build . --file ./Dockerfile.protocol "${BUILD_FLAGS[@]}" || exit 1
 
 docker container stop "${CONTAINER_NAME}" >/dev/null 2>&1

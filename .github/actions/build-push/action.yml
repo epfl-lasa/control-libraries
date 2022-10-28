@@ -7,6 +7,12 @@ inputs:
     options:
       - 'Development dependencies'
       - 'Protocol dependencies'
+  base_tag:
+    description: 'The tag of the base ubuntu image.'
+    required: false
+    options:
+      - '22.04'
+      - '20.04'
   secret:
     description: 'GitHub Container Registry secret'
     required: true
@@ -31,13 +37,20 @@ runs:
       run: |
         if [ "${{ inputs.image }}" = "Development dependencies" ]; then
           DOCKERFILE=Dockerfile.base
-          IMAGE_NAME=${{ github.repository }}/development-dependencies:latest
+          IMAGE_NAME=${{ github.repository }}/development-dependencies
         else
           DOCKERFILE=Dockerfile.proto
           IMAGE_NAME=${{ github.repository }}/proto-dependencies
         fi
-        docker buildx build --file "${DOCKERFILE}" \
-          --platform=linux/arm64,linux/amd64 \
-          --push --tag ghcr.io/${IMAGE_NAME} \
-          .
+        if [ "${{ inputs.base_tag }}" == "22.04" ]; then
+          docker buildx build --file ${DOCKERFILE} \
+            --build-arg BASE_TAG=${{ inputs.base_tag }} \
+            --platform=linux/arm64,linux/amd64 \
+            --push -t ghcr.io/${IMAGE_NAME}:22.04 -t ghcr.io/${IMAGE_NAME}:latest .
+        else
+          docker buildx build --file ${DOCKERFILE} \
+            --build-arg BASE_TAG=${{ inputs.base_tag }} \
+            --platform=linux/arm64,linux/amd64 \
+            --push -t ghcr.io/${IMAGE_NAME}:20.04 .
+        fi
       shell: bash

@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [6.3.0](#630)
 - [6.2.0](#620)
 - [6.1.0](#610)
 - [6.0.0](#600)
@@ -13,6 +14,18 @@ Release Versions:
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 6.3.0
+
+Version 6.3.0 contains behind-the-scenes structural improvements to Dockerfiles and GitHub workflows
+and clarifies the license requirements of the library and its dependencies.
+
+### Fixes and improvements
+
+- Build and push both 20.04 and 22.04 images (#314, #315, #316)
+- Don't build pinocchio tests in development image (#317)
+- Simplify and consolidate Dockerfiles and scripts (#319)
+- Better license management (#320)
 
 ## 6.2.0
 

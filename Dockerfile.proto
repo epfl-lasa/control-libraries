@@ -1,4 +1,5 @@
-FROM ubuntu:20.04 as build-stage
+ARG BASE_TAG=22.04
+FROM ubuntu:${BASE_TAG} as build-stage
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
@@ -22,11 +23,11 @@ RUN wget -O protobuf-cpp-"${PROTOBUF_VERSION}".tar.gz \
 WORKDIR /tmp/protobuf-3."${PROTOBUF_VERSION}"
 RUN ./autogen.sh \
     && ./configure \
-    && make \
+    && make -j $(nproc --ignore=1) \
     && make install
 
 
-FROM ubuntu:22.04 as google-dependencies
+FROM ubuntu:${BASE_TAG} as google-dependencies
 COPY --from=build-stage /usr/local/include/google /usr/local/include/google
 COPY --from=build-stage /usr/local/lib/libproto* /usr/local/lib/
 COPY --from=build-stage /usr/local/bin/protoc /usr/local/bin

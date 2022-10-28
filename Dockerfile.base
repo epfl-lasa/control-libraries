@@ -1,4 +1,5 @@
-FROM ubuntu:20.04 as core-build-dependencies
+ARG BASE_TAG=22.04
+FROM ubuntu:${BASE_TAG} as core-build-dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 
 # install core compilation and access dependencies for building the libraries
@@ -47,7 +48,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /tmp
 ARG EIGEN_TAG=3.4.0
 RUN wget -c https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_TAG}/eigen-${EIGEN_TAG}.tar.gz -O - | tar -xz \
-    && cd eigen-${EIGEN_TAG} && mkdir build && cd build && cmake .. && make install \
+    && cd eigen-${EIGEN_TAG} && mkdir build && cd build && cmake -DEIGEN_MPL2_ONLY .. && make install \
     && cd ../.. && rm -r eigen-${EIGEN_TAG} || exit 1
 
 ARG OSQP_TAG=0.6.2
@@ -64,7 +65,7 @@ ARG PINOCCHIO_TAG=2.6.9
 RUN git clone --depth 1 -b v${PINOCCHIO_TAG} --recursive https://github.com/stack-of-tasks/pinocchio \
     && cd pinocchio && mkdir build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_PYTHON_INTERFACE=OFF \
-    && make -j1 && make install && cd ../.. && rm -r pinocchio || exit 1
+    -DBUILD_TESTING=OFF && make -j $(nproc --ignore=1) && make install && cd ../.. && rm -r pinocchio || exit 1
 
 RUN ldconfig
 
@@ -87,13 +88,36 @@ RUN pip3 install numpy setuptools pybind11
 # install google dependencies
 COPY --from=google-dependencies /usr/include/gtest /usr/include/gtest
 COPY --from=google-dependencies /usr/local/lib/libgtest* /usr/local/lib/
-COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/include/google /usr/local/include/google
-COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/lib/libproto* /usr/local/lib/
-COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies /usr/local/bin/protoc /usr/local/bin
+
+
+FROM development-dependencies as proto-dependencies-20.04
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:20.04 /usr/local/bin/protoc /usr/local/bin
 RUN ldconfig
 
 
-FROM development-dependencies as ssh-configuration
+FROM development-dependencies as proto-dependencies-22.04
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:22.04 /usr/local/bin/protoc /usr/local/bin
+RUN ldconfig
+
+
+FROM development-dependencies as proto-dependencies-latest
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/include/google /usr/local/include/google
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/lib/libproto* /usr/local/lib/
+COPY --from=ghcr.io/epfl-lasa/control-libraries/proto-dependencies:latest /usr/local/bin/protoc /usr/local/bin
+RUN ldconfig
+
+
+FROM proto-dependencies-${BASE_TAG} as license-information
+RUN mkdir -p /usr/share/doc/control-libraries
+COPY ./licenses /usr/share/doc/control-libraries/licenses
+
+
+FROM license-information as ssh-configuration
+
 RUN apt-get update && apt-get install -y \
     sudo \
     libssl-dev \

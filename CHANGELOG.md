@@ -15,6 +15,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Fix Eigen installation flags (#323)
+
 ## 6.3.0
 
 Version 6.3.0 contains behind-the-scenes structural improvements to Dockerfiles and GitHub workflows

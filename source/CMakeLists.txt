@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(control_libraries VERSION 6.3.0)
+project(control_libraries VERSION 6.3.1)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)
@@ -27,6 +27,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 find_package(Eigen3 REQUIRED)
+set(EIGEN_MPL2_ONLY 1)
 
 if(BUILD_TESTING)
   enable_testing()

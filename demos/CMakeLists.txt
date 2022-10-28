@@ -15,7 +15,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-find_package(control_libraries 6.2.6 CONFIG REQUIRED)
+find_package(control_libraries 6.3.0 CONFIG REQUIRED)
 
 set(DEMOS_SCRIPTS
   task_space_control_loop

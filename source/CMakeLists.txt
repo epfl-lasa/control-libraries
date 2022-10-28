@@ -27,6 +27,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 find_package(Eigen3 REQUIRED)
+set(EIGEN_MPL2_ONLY 1)
 
 if(BUILD_TESTING)
   enable_testing()

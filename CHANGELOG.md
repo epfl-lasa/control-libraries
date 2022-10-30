@@ -1,6 +1,7 @@
 # CHANGELOG
 
 Release Versions:
+- [6.3.1](#631)
 - [6.3.0](#630)
 - [6.2.0](#620)
 - [6.1.0](#610)
@@ -14,6 +15,14 @@ Release Versions:
 - [3.0.0](#300)
 - [2.0.0](#200)
 - [1.0.0](#100)
+
+## 6.3.1
+
+Version 6.3.1 is a patch release to fix the modified installation instructions for the Eigen library.
+
+### Fixes
+
+- Fix Eigen installation flags (#323)
 
 ## 6.3.0
 

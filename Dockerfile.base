@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /tmp
 ARG EIGEN_TAG=3.4.0
 RUN wget -c https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_TAG}/eigen-${EIGEN_TAG}.tar.gz -O - | tar -xz \
-    && cd eigen-${EIGEN_TAG} && mkdir build && cd build && cmake -DEIGEN_MPL2_ONLY .. && make install \
+    && cd eigen-${EIGEN_TAG} && mkdir build && cd build && env CXXFLAGS=-DEIGEN_MPL2_ONLY cmake .. && make install \
     && cd ../.. && rm -r eigen-${EIGEN_TAG} || exit 1
 
 ARG OSQP_TAG=0.6.2

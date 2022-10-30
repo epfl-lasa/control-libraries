@@ -96,7 +96,7 @@ if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
   echo ">>> INSTALLING EIGEN"
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
-  cd "eigen-${EIGEN_VERSION}" && mkdir -p build && cd build && cmake .. && make install || exit 1
+  cd "eigen-${EIGEN_VERSION}" && mkdir -p build && cd build && env CXXFLAGS=-DEIGEN_MPL2_ONLY cmake .. && make install || exit 1
 fi
 EIGEN_PATH=$(cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE)
 if [ "${EIGEN_PATH::14}" != "-I/usr/include" ]; then

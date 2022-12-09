@@ -12,7 +12,7 @@ RUN cmake -DBUILD_CONTROLLERS="${BUILD_CONTROLLERS}" \
     -DBUILD_DYNAMICAL_SYSTEMS="${BUILD_DYNAMICAL_SYSTEMS}" \
     -DBUILD_ROBOT_MODEL="${BUILD_ROBOT_MODEL}" \
     -DBUILD_TESTING=ON .. \
-  && make -j all
+  && make -j all && make install
 
 
 FROM build as testing

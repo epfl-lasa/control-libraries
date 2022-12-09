@@ -1,5 +1,9 @@
 set(LIBRARY_NAME state_representation)
 
+set(EIGEN3_VERSION 3.4.0)
+find_package(Eigen3 ${EIGEN3_VERSION} REQUIRED)
+set(EIGEN_MPL2_ONLY 1)
+
 set(CORE_SOURCES
   src/MathTools.cpp
   src/State.cpp
@@ -74,3 +78,13 @@ if (BUILD_TESTING)
   )
   add_test(NAME test_${LIBRARY_NAME} COMMAND test_${LIBRARY_NAME})
 endif ()
+
+if(${PKG_CONFIG_FOUND})
+  set(PKG_NAME ${LIBRARY_NAME})
+  set(PKG_DESC "This library provides a set of classes to represent states in Cartesian and joint space.")
+  set(PKG_EXTERNAL_DEPS "eigen3 >= ${EIGEN3_VERSION}")
+  set(pkg_conf_file "state_representation.pc")
+  configure_file("${CMAKE_SOURCE_DIR}/library_template.pc.in" "${CMAKE_BINARY_DIR}/${pkg_conf_file}" @ONLY)
+  install(FILES "${CMAKE_BINARY_DIR}/${pkg_conf_file}"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ COMPONENT pkgconfig)
+endif()

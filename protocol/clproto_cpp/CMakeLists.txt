@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(clproto VERSION 6.3.1)
+project(clproto VERSION 6.3.2)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

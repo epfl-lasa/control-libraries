@@ -16,6 +16,10 @@ Release Versions:
 - [2.0.0](#200)
 - [1.0.0](#100)
 
+## Upcoming changes (in development)
+
+- Add pkg-config files for control libraries (#326)
+
 ## 6.3.1
 
 Version 6.3.1 is a patch release to fix the modified installation instructions for the Eigen library.

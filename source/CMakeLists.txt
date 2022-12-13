@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(control_libraries VERSION 6.3.1)
+project(control_libraries VERSION 6.3.2)
 
 # Build options
 option(BUILD_TESTING "Build all tests." OFF)
@@ -23,11 +23,21 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+macro(add_pkgconfig_library)
+  if(PKGCONFIG_LIBRARIES)
+    set(PKGCONFIG_LIBRARIES "${PKGCONFIG_LIBRARIES}, ${ARGV0} >= ${ARGV1}")
+  else()
+    set(PKGCONFIG_LIBRARIES "${ARGV0} >= ${ARGV1}")
+  endif()
+endmacro()
+
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+include(FindPkgConfig)
 
-find_package(Eigen3 REQUIRED)
-set(EIGEN_MPL2_ONLY 1)
+if(NOT ${PKG_CONFIG_FOUND})
+  message(WARNING "Could not find pkg-config executable, skipping generation of pkg-config files.")
+endif()
 
 if(BUILD_TESTING)
   enable_testing()
@@ -50,6 +60,7 @@ get_target_property(TARGET_INTERFACE_LINK_LIBRARIES state_representation INTERFA
 if(TARGET_INTERFACE_LINK_LIBRARIES)
   list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
 endif()
+add_pkgconfig_library(state_representation ${CMAKE_PROJECT_VERSION})
 
 if(BUILD_DYNAMICAL_SYSTEMS)
   add_subdirectory(dynamical_systems)
@@ -58,6 +69,7 @@ if(BUILD_DYNAMICAL_SYSTEMS)
   if(TARGET_INTERFACE_LINK_LIBRARIES)
     list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
   endif()
+  add_pkgconfig_library(dynamical_systems ${CMAKE_PROJECT_VERSION})
 endif()
 
 if(BUILD_ROBOT_MODEL OR BUILD_CONTROLLERS)
@@ -67,6 +79,7 @@ if(BUILD_ROBOT_MODEL OR BUILD_CONTROLLERS)
   if(TARGET_INTERFACE_LINK_LIBRARIES)
     list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
   endif()
+  add_pkgconfig_library(robot_model ${CMAKE_PROJECT_VERSION})
 endif()
 
 if(BUILD_CONTROLLERS)
@@ -76,6 +89,7 @@ if(BUILD_CONTROLLERS)
   if(TARGET_INTERFACE_LINK_LIBRARIES)
     list(APPEND INSTALL_INTERFACE_LINK_LIBRARIES "${TARGET_INTERFACE_LINK_LIBRARIES}")
   endif()
+  add_pkgconfig_library(controllers ${CMAKE_PROJECT_VERSION})
 endif()
 
 list(REMOVE_DUPLICATES INSTALL_INTERFACE_LINK_LIBRARIES)
@@ -88,7 +102,7 @@ write_basic_package_version_file(
 )
 
 # create config file
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/control_librariesConfig.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
@@ -99,3 +113,13 @@ install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
+
+if(${PKG_CONFIG_FOUND})
+  set(PKG_NAME ${CMAKE_PROJECT_NAME})
+  set(PKG_DESC "control_libraries")
+  set(PKG_EXTERNAL_DEPS "${PKGCONFIG_LIBRARIES}")
+  set(pkg_conf_file "control_libraries.pc")
+  configure_file("${CMAKE_SOURCE_DIR}/library_template.pc.in" "${CMAKE_BINARY_DIR}/${pkg_conf_file}" @ONLY)
+  install(FILES "${CMAKE_BINARY_DIR}/${pkg_conf_file}"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ COMPONENT pkgconfig)
+endif()

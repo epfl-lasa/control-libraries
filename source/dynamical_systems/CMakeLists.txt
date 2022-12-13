@@ -54,7 +54,7 @@ endif ()
 
 if(${PKG_CONFIG_FOUND})
   set(PKG_NAME ${LIBRARY_NAME})
-  set(PKG_DESC "This library provides a set of classes to represent dynamical systems; functions which map a state to a state derivative.")
+  set(PKG_DESC "This library provides a set of classes to represent dynamical systems: functions which map a state to a state derivative.")
   set(PKG_EXTERNAL_DEPS "state_representation >= ${CMAKE_PROJECT_VERSION}")
   set(pkg_conf_file "dynamical_systems.pc")
   configure_file("${CMAKE_SOURCE_DIR}/library_template.pc.in" "${CMAKE_BINARY_DIR}/${pkg_conf_file}" @ONLY)

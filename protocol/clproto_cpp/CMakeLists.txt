@@ -18,6 +18,11 @@ endif()
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+include(FindPkgConfig)
+
+if(NOT ${PKG_CONFIG_FOUND})
+  message(WARNING "Could not find pkg-config executable, skipping generation of pkg-config files.")
+endif()
 
 include(FindProtobuf)
 find_package(Protobuf 3.17 REQUIRED)
@@ -101,7 +106,7 @@ write_basic_package_version_file(
 )
 
 # create config file
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/clprotoConfig.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
@@ -112,3 +117,14 @@ install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
+
+if(${PKG_CONFIG_FOUND})
+  set(PKG_NAME ${CMAKE_PROJECT_NAME})
+  set(PKG_DESC "This library provides a simple interface for encoding and decoding control library type objects to and from a serialized binary string representation (the wire format).")
+  set(PKG_EXTERNAL_DEPS "state_representation >= ${CMAKE_PROJECT_VERSION}")
+  set(PKG_CFLAGS "-lprotobuf")
+  set(pkg_conf_file "clproto.pc")
+  configure_file("${CMAKE_SOURCE_DIR}/${pkg_conf_file}.in" "${CMAKE_BINARY_DIR}/${pkg_conf_file}" @ONLY)
+  install(FILES "${CMAKE_BINARY_DIR}/${pkg_conf_file}"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/ COMPONENT pkgconfig)
+endif()

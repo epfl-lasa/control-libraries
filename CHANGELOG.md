@@ -19,6 +19,7 @@ Release Versions:
 ## Upcoming changes (in development)
 
 - Add pkg-config files for control libraries (#326)
+- Add pkg-config files for clproto (#327)
 
 ## 6.3.1
 

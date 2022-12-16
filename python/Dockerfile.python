@@ -6,24 +6,23 @@ WORKDIR /source
 RUN git clone --depth 1 --branch ${BRANCH} https://github.com/epfl-lasa/control-libraries
 RUN bash control-libraries/source/install.sh --auto
 RUN bash control-libraries/protocol/install.sh --auto
-
+RUN rm -rf control-libraries
 
 FROM source as build
 
-RUN rm -rf control-libraries/python/include control-libraries/python/source
-COPY include control-libraries/python/include
-COPY source control-libraries/python/source
-COPY pyproject.toml setup.py control-libraries/python/
+USER developer
+WORKDIR ${HOME}/python
+# copy these files separately because otherwise any changes in the test directory would trigger the install again
+COPY include include
+COPY source source
+COPY pyproject.toml setup.py .
 ENV OSQP_INCLUDE_DIR /usr/local/include/osqp
-RUN pip3 install control-libraries/python
+RUN pip3 install .
 
 
 FROM build as testing
 
-USER developer
-WORKDIR ${HOME}
-
-COPY test ./test
+COPY test test
 RUN python3 -m unittest
 
 CMD ["/bin/bash"]

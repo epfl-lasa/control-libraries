@@ -16,7 +16,7 @@ RUN make all
 FROM source as build
 
 WORKDIR /tmp/protocol/clproto_cpp/build
-RUN cmake -DBUILD_TESTING=ON .. && make -j all
+RUN cmake -DBUILD_TESTING=ON .. && make -j all && make install
 
 
 FROM build as testing

@@ -1,7 +1,9 @@
 import os
+import sys
 import warnings
 from glob import glob
 
+import pkgconfig
 from pybind11.setup_helpers import ParallelCompile, naive_recompile
 from pybind11.setup_helpers import Pybind11Extension
 from setuptools import setup
@@ -9,7 +11,7 @@ from setuptools import setup
 # names of the environment variables that define osqp and openrobots include directories
 osqp_path_var = 'OSQP_INCLUDE_DIR'
 
-__version__ = "6.3.3"
+__version__ = "6.3.4"
 __libraries__ = ['state_representation', 'clproto', 'controllers', 'dynamical_systems', 'robot_model']
 __include_dirs__ = ['include']
 
@@ -20,16 +22,15 @@ __install_robot_model_module__ = True
 
 # check that necessary libraries can be found
 try:
-    eigen_dir = os.popen(
-        'cmake --find-package -DNAME=Eigen3 -DCOMPILER_ID=GNU -DLANGUAGE=C -DMODE=COMPILE').read().strip()
+    eigen_dir = pkgconfig.cflags('eigen3')
     if eigen_dir.startswith('-I'):
         __include_dirs__.append(eigen_dir.lstrip('-I'))
     else:
         raise Exception('Could not find Eigen3 package!')
 
     for lib in __libraries__:
-        status = os.popen(f'ldconfig -p | grep {lib}').read().strip()
-        if len(status) == 0:
+        status = pkgconfig.installed(lib, f'>= {__version__}')
+        if not status:
             msg = f'Could not find library {lib}!'
             if lib == 'clproto':
                 warnings.warn(f'{msg} The clproto module will not be installed.')
@@ -59,6 +60,7 @@ try:
 except Exception as e:
     msg = f'Error with control library dependencies: {e.args[0]} Ensure the control libraries are properly installed.'
     warnings.warn(msg)
+    sys.exit(1)
 
 ParallelCompile('NPY_NUM_BUILD_JOBS', needs_recompile=naive_recompile).install()
 

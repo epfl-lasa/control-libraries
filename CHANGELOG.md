@@ -20,6 +20,7 @@ Release Versions:
 
 - Add pkg-config files for control libraries (#326)
 - Add pkg-config files for clproto (#327)
+- Use pkg-config to check for dependencies (#328)
 
 ## 6.3.1
 

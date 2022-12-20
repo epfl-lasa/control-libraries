@@ -91,8 +91,8 @@ if [ -z $(which pkg-config) ]; then
   apt-get update && apt-get install "${AUTO_INSTALL}" pkg-config || exit 1
 fi
 
-INSTALLED_EIGEN=$(pkg-config --modversion eigen3) || exit 0
-if [ "${INSTALLED_EIGEN::4}" != "${EIGEN_VERSION::4}" ]; then
+pkg-config eigen3 --atleast-version="${EIGEN_VERSION}"
+if [ "$?" != 0 ]; then
   echo ">>> INSTALLING EIGEN"
   mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
   wget -c "https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz" -O - | tar -xz || exit 1
@@ -108,8 +108,8 @@ if [ "${BUILD_ROBOT_MODEL}" == "ON" ]; then
   echo ">>> INSTALLING ROBOT MODEL DEPENDENCIES"
   apt-get update && apt-get install "${AUTO_INSTALL}" libboost-all-dev liburdfdom-dev || exit 1
 
-  INSTALLED_PINOCCHIO=$(pkg-config --modversion pinocchio)
-  if [ "${INSTALLED_PINOCCHIO}" != "${PINOCCHIO_TAG}" ]; then
+  pkg-config pinocchio --atleast-version=${PINOCCHIO_TAG}
+  if [ "$?" != 0 ]; then
     mkdir -p "${SOURCE_PATH}"/tmp/lib && cd "${SOURCE_PATH}"/tmp/lib || exit 1
 
     echo ">>> INSTALLING OSQP [1/3]"

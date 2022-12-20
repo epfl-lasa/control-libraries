@@ -155,13 +155,18 @@ if [ "${BINDINGS_ONLY}" == true ]; then
 fi
 
 PROTOBUF_INSTALL=$(ldconfig -p | grep libprotobuf)
-if [ -z "${PROTOBUF_INSTALL}" ] ]; then
+if [ -z "${PROTOBUF_INSTALL}" ]; then
   echo ">>> LIBPROTOBUF NOT FOUND"
   install_protobuf || exit 1
 fi
 
-STATE_REPRESENTATION_INSTALL=$(ldconfig -p | grep libstate_representation)
-if [ -z "${STATE_REPRESENTATION_INSTALL}" ]; then
+if [ -z $(which pkg-config) ]; then
+  echo ">>> INSTALLING pkg-config tool"
+  apt-get update && apt-get install "${AUTO_INSTALL}" pkg-config || exit 1
+fi
+
+pkg-config state_representation --atleast-version=$(cat "$(dirname "${SCRIPT_DIR}")"/VERSION)
+if [ "$?" != 0 ]; then
   echo ">>> STATE REPRESENTATION LIBRARY NOT FOUND!"
   install_state_representation
 fi

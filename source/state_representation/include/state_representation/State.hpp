@@ -105,6 +105,11 @@ public:
   virtual void set_name(const std::string& name);
 
   /**
+   * @brief Getter of the time of last modification
+   */
+  const std::chrono::time_point<std::chrono::steady_clock>& get_epoch() const;
+
+  /**
    * @brief Check if the state is deprecated given a certain time delay
    * @param time_delay the time after which to consider the state as deprecated
    */

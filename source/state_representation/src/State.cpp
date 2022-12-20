@@ -37,6 +37,10 @@ void State::reset_timestamp() {
   this->timestamp_ = std::chrono::steady_clock::now();
 }
 
+const std::chrono::time_point<std::chrono::steady_clock>& State::get_epoch() const {
+  return this->timestamp_;
+}
+
 const std::string& State::get_name() const {
   return this->name_;
 }

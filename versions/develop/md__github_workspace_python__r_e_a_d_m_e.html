@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.3.3</span>
+   <div id="projectname">Control Libraries<span id="projectnumber">&#160;6.3.4</span>
    </div>
   </td>
  </tr>
@@ -129,7 +129,7 @@ $(function() {
 <h1>Dockerfile</h1>
 <p >A Dockerfile and run script are provided to test the installation of the bindings.</p>
 <p >The docker image installs the core control libraries and subsequently installs the python bindings.</p>
-<p >The <a href="./run.sh"><code>run.sh</code></a> script will build the docker image and launch an interactive container with the test files in the <a href="./test"><code>test</code></a> directory copied to the local path.</p>
+<p >The <a href="./build-test.sh"><code>build-test.sh</code></a> script will build the docker image and launch an interactive container with the test files in the <a href="./test"><code>test</code></a> directory copied to the local path.</p>
 <p >The run script tries to the clone the current local git branch when installing the control libraries in the Dockerfile. If the local branch does not exist on the remote, or if you want to test the python bindings against a difference control libraries source branch, you can supply a specific branch as the first argument to the run script. For example, <code>./run.sh develop</code> to use the <code>develop</code> branch.</p>
 <p >You can run a single test with <code>python &lt;test_name.py&gt;</code>, or just enter a python shell with <code>python</code>. Run all tests with <code>python -m unittest discover &lt;path_to_test_dir&gt;</code>, or just <code>python -m unittest</code> if the <a href="./test"><code>test</code></a> directory in your current working directory. </p>
 </div></div><!-- contents -->

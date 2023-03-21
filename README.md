@@ -17,7 +17,10 @@
     </tr>
 </table>
 
+!!! The development of this repository is discontinued.
+
 # Control Libraries
+
 A set of libraries to facilitate the creation of full control loop algorithms,
 including trajectory planning, kinematics, dynamics and control.
 
